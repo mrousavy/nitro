@@ -91,6 +91,42 @@ class ArrayBuffer {
   }
 
   /**
+   * Copies the underlying data into a `ByteArray`.
+   * If this `ArrayBuffer` is backed by a GPU-HardwareBuffer,
+   * this performs a GPU-download.
+   */
+  fun toByteArray(): ByteArray {
+    val buffer = this.getBuffer(false)
+    if (buffer.hasArray()) {
+      // It's a CPU-backed array - we can return this directly if the size matches
+      val array = buffer.array()
+      if (array.size == this.size) {
+        // The ByteBuffer is 1:1 mapped to a byte array - return as is!
+        return array
+      }
+      // we had a CPU-backed array, but it's size differs from our ArrayBuffer size.
+      // This might be because the ArrayBuffer has a smaller view of the data, so we need
+      // to resort back to a good ol' copy.
+    }
+    // It's not a 1:1 mapped array (e.g. HardwareBuffer) - we need to copy to the CPU
+    val copy = ByteBuffer.allocate(buffer.capacity())
+    copy.put(buffer)
+    return copy.array()
+  }
+
+  /**
+   * Returns an **owning** version of this `ArrayBuffer`.
+   * If this `ArrayBuffer` already is **owning**, it is returned as-is.
+   * If this `ArrayBuffer` is **non-owning**, it is _copied_.
+   */
+  fun asOwning(): ArrayBuffer {
+    if (!isOwner) {
+      return ArrayBuffer.copy(this)
+    }
+    return this
+  }
+
+  /**
    * Create a new **owning-** `ArrayBuffer` that holds the given `ByteBuffer`.
    * The `ByteBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
    */
@@ -185,6 +221,15 @@ class ArrayBuffer {
       byteBuffer.rewind()
       // 5. Create a new `ArrayBuffer`
       return ArrayBuffer(newBuffer)
+    }
+
+    /**
+     * Copy the given `ByteArray` into a new **owning** `ArrayBuffer`.
+     */
+    fun copy(byteArray: ByteArray): ArrayBuffer {
+      val byteBuffer = ByteBuffer.allocateDirect(byteArray.size)
+      byteBuffer.put(byteArray)
+      return ArrayBuffer.wrap(byteBuffer)
     }
 
     /**

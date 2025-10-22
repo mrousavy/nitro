@@ -42,6 +42,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   func simpleFunc() throws {
     // do nothing
+    var value1: UnsafePointer<UInt8>
+    var value2: UnsafeMutablePointer<UInt8>
+    var value3: UnsafeRawPointer
+    var value4: UnsafeMutableRawPointer
+    ArrayBuffer.copy(of: value1, size: 1)
+    ArrayBuffer.copy(of: value2, size: 1)
+    ArrayBuffer.copy(of: value3, size: 1)
+    ArrayBuffer.copy(of: value4, size: 1)
   }
 
   func addNumbers(a: Double, b: Double) throws -> Double {

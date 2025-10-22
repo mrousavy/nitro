@@ -48,14 +48,14 @@ There's two kinds of `ArrayBuffer`s, **owning** and **non-owning**:
 
 ### Owning
 
-An `ArrayBuffer` that was created on the native side is **owning** (`isOwning = true`), which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
+An `ArrayBuffer` that was created on the native side is **owning** (`isOwner = true`), which means you can safely access it's data as long as the `ArrayBuffer` reference is alive.
 It can be safely held strong for longer, e.g. as a class property/member, and accessed from different Threads.
 
 ```swift
 func doSomething() -> ArrayBuffer {
   // highlight-next-line
   let buffer = ArrayBuffer.allocate(1024 * 10)
-  print(buffer.isOwning)   // <-- ✅ true
+  print(buffer.isOwner)    // <-- ✅ true
   let data = buffer.data   // <-- ✅ safe to do because we own it!
   self.buffer = buffer     // <-- ✅ safe to use it later!
   DispatchQueue.global().async {
@@ -67,12 +67,12 @@ func doSomething() -> ArrayBuffer {
 
 ### Non-owning
 
-An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning** (`isOwning = false`).
+An `ArrayBuffer` that was created in JS cannot be safely kept strong as the JS VM can delete it at any point, hence it is **non-owning** (`isOwner = false`).
 It's data can only be safely accessed before the synchronous function returned, as this will stay within the JS bounds.
 
 ```swift
 func doSomething(buffer: ArrayBuffer) {
-  print(buffer.isOwning)   // <-- ❌ false
+  print(buffer.isOwner)    // <-- ❌ false
   let data = buffer.data   // <-- ✅ safe to do because we're still sync
   DispatchQueue.global().async {
     // code-error
@@ -84,7 +84,7 @@ If you need a non-owning buffer's data for longer, **copy it first**:
 ```swift
 func doSomething(buffer: ArrayBuffer) {
   // diff-add
-  let copy = buffer.isOwning
+  let copy = buffer.isOwner
   // diff-add
       ? buffer
   // diff-add
@@ -99,7 +99,7 @@ func doSomething(buffer: ArrayBuffer) {
 :::note
 Not every `ArrayBuffer` received from JS is **non-owning**, eg if the buffer was created in native and then did a JS-roundtrip it is still **owning**!
 
-Always check the `isOwning` property to prevent unnecessary copies.
+Always check the `isOwner` property to prevent unnecessary copies.
 :::
 
 ## Threading

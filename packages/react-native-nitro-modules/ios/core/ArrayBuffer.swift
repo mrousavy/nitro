@@ -10,7 +10,7 @@ import Foundation
 /// Holds instances of `std::shared_ptr<ArrayBuffer>`, which can be passed
 /// between native and JS **without copy**.
 ///
-/// See `data`, `size` and `isOwning`.
+/// See `data`, `size` and `isOwner`.
 public typealias ArrayBuffer = margelo.nitro.ArrayBufferHolder
 
 @available(*, deprecated, renamed: "ArrayBuffer")
@@ -77,10 +77,10 @@ extension ArrayBuffer {
 
 extension ArrayBuffer {
   /**
-   * Copy the given `UnsafeMutablePointer<UInt8>` into a new **owning** `ArrayBuffer`.
+   * Copy the given `UnsafePointer<UInt8>` into a new **owning** `ArrayBuffer`.
    */
   public static func copy(
-    of other: UnsafeMutablePointer<UInt8>,
+    of other: UnsafePointer<UInt8>,
     size: Int
   ) -> ArrayBuffer {
     // 1. Create new `UnsafeMutablePointer<UInt8>`
@@ -92,18 +92,6 @@ extension ArrayBuffer {
       copy.deallocate()
     }
     return ArrayBuffer.wrap(copy, size, deleteFunc)
-  }
-
-  /**
-   * Copy the given `UnsafeMutableRawPointer` into a new **owning** `ArrayBuffer`.
-   */
-  public static func copy(
-    of other: UnsafeMutableRawPointer,
-    size: Int
-  ) -> ArrayBuffer {
-    return ArrayBuffer.copy(
-      of: other.assumingMemoryBound(to: UInt8.self),
-      size: size)
   }
 
   /**
@@ -159,5 +147,21 @@ extension ArrayBuffer {
           sharedPointer.reset()
         }))
     }
+  }
+}
+
+// pragma MARK: Helper
+
+extension ArrayBuffer {
+  /**
+   * Returns an **owning** version of this `ArrayBuffer`.
+   * If this `ArrayBuffer` already is **owning**, it is returned as-is.
+   * If this `ArrayBuffer` is **non-owning**, it is _copied_.
+   */
+  public func asOwning() -> ArrayBuffer {
+    if !isOwner {
+      return ArrayBuffer.copy(of: self)
+    }
+    return self
   }
 }
