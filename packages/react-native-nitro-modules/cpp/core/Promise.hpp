@@ -270,7 +270,7 @@ public:
 
 public:
   Promise(const Promise&) = delete;
-  Promise(Promise&&) = default;
+  Promise(Promise&&) = delete;
   ~Promise();
 
 private:
