@@ -121,21 +121,11 @@ std::future<void> Promise<void>::await() {
   return promise->get_future();
 }
 
-inline const std::exception_ptr& Promise<void>::getError() {
+const std::exception_ptr& Promise<void>::getError() {
   if (!isRejected()) {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }
   return _error;
-}
-
-inline bool Promise<void>::isResolved() const noexcept {
-  return _isResolved;
-}
-inline bool Promise<void>::isRejected() const noexcept {
-  return _error != nullptr;
-}
-inline bool Promise<void>::isPending() const noexcept {
-  return !isResolved() && !isRejected();
 }
 
 void Promise<void>::didFinish() noexcept {

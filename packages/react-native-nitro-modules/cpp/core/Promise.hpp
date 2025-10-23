@@ -297,12 +297,18 @@ public:
   std::future<void> await();
 
 public:
-  inline const std::exception_ptr& getError();
+  const std::exception_ptr& getError();
 
 public:
-  inline bool isResolved() const noexcept;
-  inline bool isRejected() const noexcept;
-  inline bool isPending() const noexcept;
+  inline bool isResolved() const noexcept {
+    return _isResolved;
+  }
+  inline bool isRejected() const noexcept {
+    return _error != nullptr;
+  }
+  inline bool isPending() const noexcept {
+    return !isResolved() && !isRejected();
+  }
 
 private:
   void didFinish() noexcept;
