@@ -270,20 +270,16 @@ public:
 
 public:
   Promise(const Promise&) = delete;
+  Promise(Promise&&) = default;
+  ~Promise();
 
 private:
   Promise() = default;
 
 public:
-  ~Promise();
-
-public:
   static std::shared_ptr<Promise> create();
-
   static std::shared_ptr<Promise> async(std::function<void()>&& run);
-
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future);
-
   static std::shared_ptr<Promise> resolved();
   static std::shared_ptr<Promise> rejected(const std::exception_ptr& error);
 
@@ -304,11 +300,8 @@ public:
   inline const std::exception_ptr& getError();
 
 public:
-  [[nodiscard]]
   inline bool isResolved() const noexcept;
-  [[nodiscard]]
   inline bool isRejected() const noexcept;
-  [[nodiscard]]
   inline bool isPending() const noexcept;
 
 private:

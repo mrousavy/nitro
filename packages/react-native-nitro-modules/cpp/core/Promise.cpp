@@ -128,15 +128,12 @@ inline const std::exception_ptr& Promise<void>::getError() {
   return _error;
 }
 
-[[nodiscard]]
 inline bool Promise<void>::isResolved() const noexcept {
   return _isResolved;
 }
-[[nodiscard]]
 inline bool Promise<void>::isRejected() const noexcept {
   return _error != nullptr;
 }
-[[nodiscard]]
 inline bool Promise<void>::isPending() const noexcept {
   return !isResolved() && !isRejected();
 }
