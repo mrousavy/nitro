@@ -145,9 +145,12 @@ BorrowingReference<jsi::Function> ObjectUtils::getGlobalFunction(jsi::Runtime& r
     std::string stringKey = key;
     auto iterator = functionCache.find(stringKey);
     if (iterator != functionCache.end()) {
-      // We found it! Copy & return the reference
+      // We found it! Let's check if the reference is still valid...
       BorrowingReference<jsi::Function> function = iterator->second;
-      return function;
+      if (function != nullptr) [[likely]] {
+        // It's still alive - let's use it from cache!
+        return function;
+      }
     }
   }
   // We haven't found the function with the given key in cache - so let's get it:
