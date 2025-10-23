@@ -16,11 +16,11 @@ Promise<void>::~Promise() {
   }
 }
 
-std::shared_ptr<Promise> Promise<void>::create() {
-  return std::shared_ptr<Promise>(new Promise());
+std::shared_ptr<Promise<void>> Promise<void>::create() {
+  return std::shared_ptr<Promise<void>>(new Promise());
 }
 
-std::shared_ptr<Promise> Promise<void>::async(std::function<void()>&& run) {
+std::shared_ptr<Promise<void>> Promise<void>::async(std::function<void()>&& run) {
   auto promise = create();
   ThreadPool::shared().run([run = std::move(run), promise]() {
     try {
@@ -35,17 +35,17 @@ std::shared_ptr<Promise> Promise<void>::async(std::function<void()>&& run) {
   return promise;
 }
 
-std::shared_ptr<Promise> Promise<void>::awaitFuture(std::future<void>&& future) {
+std::shared_ptr<Promise<void>> Promise<void>::awaitFuture(std::future<void>&& future) {
   auto sharedFuture = std::make_shared<std::future<void>>(std::move(future));
   return async([sharedFuture = std::move(sharedFuture)]() { sharedFuture->get(); });
 }
 
-std::shared_ptr<Promise> Promise<void>::resolved() {
+std::shared_ptr<Promise<void>> Promise<void>::resolved() {
   auto promise = create();
   promise->resolve();
   return promise;
 }
-std::shared_ptr<Promise> Promise<void>::rejected(const std::exception_ptr& error) {
+std::shared_ptr<Promise<void>> Promise<void>::rejected(const std::exception_ptr& error) {
   auto promise = create();
   promise->reject(error);
   return promise;
