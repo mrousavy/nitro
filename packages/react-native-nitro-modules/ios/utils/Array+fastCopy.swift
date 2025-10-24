@@ -21,6 +21,9 @@ extension Array {
     -> Array
   {
     let size = Int(vector.size())
+    guard size > 0 else {
+      return [Element]()
+    }
 
     let result = vector.withContiguousStorageIfAvailable { data in
       return [Element](unsafeUninitializedCapacity: size) {
