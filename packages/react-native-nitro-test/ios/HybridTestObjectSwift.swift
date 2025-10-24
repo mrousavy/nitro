@@ -371,7 +371,8 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   func getCar() throws -> Car {
     return Car(
       year: 2018, make: "Lamborghini", model: "Huracán", power: 640, powertrain: .gas, driver: nil,
-      passengers: [], isFast: true, favouriteTrack: nil, performanceScores: [100, 10])
+      passengers: [], isFast: true, favouriteTrack: nil, performanceScores: [100, 10],
+      someVariant: nil)
   }
 
   func isCarElectric(car: Car) throws -> Bool {
@@ -380,6 +381,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   func getDriver(car: Car) throws -> Person? {
     return car.driver
+  }
+
+  func bounceCar(car: Car) -> Car {
+    return car
   }
 
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws {

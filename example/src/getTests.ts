@@ -53,6 +53,7 @@ const TEST_CAR: Car = {
   isFast: true,
   favouriteTrack: undefined,
   performanceScores: [100, 0],
+  someVariant: undefined,
 }
 const TEST_CAR_2: Car = {
   year: 2006,
@@ -68,6 +69,7 @@ const TEST_CAR_2: Car = {
   isFast: true,
   favouriteTrack: 'the road',
   performanceScores: [2, 5],
+  someVariant: 'hello!',
 }
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
@@ -1289,6 +1291,7 @@ export function getTests(
         .toContain('powertrain')
         .toContain('driver')
         .toContain('favouriteTrack')
+        .toContain('someVariant')
     ),
     createTest('isCarElectric(...)', () =>
       it(() =>
@@ -1338,6 +1341,16 @@ export function getTests(
       )
         .didNotThrow()
         .equals({ age: 24, name: 'marc' })
+    ),
+    createTest('bounceCar(...) TEST_CAR_1', () =>
+      it(() => testObject.bounceCar(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('bounceCar(...) TEST_CAR_2', () =>
+      it(() => testObject.bounceCar(TEST_CAR_2))
+        .didNotThrow()
+        .equals(TEST_CAR_2)
     ),
     createTest('jsStyleObjectAsParameters()', async () =>
       (

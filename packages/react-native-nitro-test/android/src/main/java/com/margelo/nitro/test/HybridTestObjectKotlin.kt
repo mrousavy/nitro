@@ -328,7 +328,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun getCar(): Car {
-    return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0))
+    return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0), null)
   }
 
   override fun isCarElectric(car: Car): Boolean {
@@ -337,6 +337,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun getDriver(car: Car): Person? {
     return car.driver
+  }
+
+  override fun bounceCar(car: Car): Car {
+    return car
   }
 
   override fun jsStyleObjectAsParameters(params: JsStyleStruct) {

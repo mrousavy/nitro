@@ -815,6 +815,11 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JCar::fromCpp(car));
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
+  Car JHybridTestObjectSwiftKotlinSpec::bounceCar(const Car& car) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JCar>(jni::alias_ref<JCar> /* car */)>("bounceCar");
+    auto __result = method(_javaPart, JCar::fromCpp(car));
+    return __result->toCpp();
+  }
   void JHybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters(const JsStyleStruct& params) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JJsStyleStruct> /* params */)>("jsStyleObjectAsParameters");
     method(_javaPart, JJsStyleStruct::fromCpp(params));

@@ -24,6 +24,8 @@ data class WrappedJsStruct(
   @Keep
   val items: Array<JsStyleStruct>
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++

@@ -21,6 +21,8 @@ data class OptionalCallback(
   @Keep
   val callback: Variant_______Unit_Double?
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++

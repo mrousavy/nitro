@@ -7,35 +7,52 @@ import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
+interface BridgedProperty {
+  name: string
+  type: KotlinCxxBridgedType
+}
+
 export function createKotlinStruct(structType: StructType): SourceFile[] {
   const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
-  const parameters = structType.properties
-    .map((p) =>
-      `
+
+  const bridgedProperties = structType.properties.map<BridgedProperty>((p) => ({
+    name: p.escapedName,
+    type: new KotlinCxxBridgedType(p),
+  }))
+  //   const parameters = structType.properties
+  //     .map((p) =>
+  //       `
+  // @DoNotStrip
+  // @Keep
+  // val ${p.escapedName}: ${p.getCode('kotlin')}
+  // `.trim()
+  //     )
+  //     .join(',\n')
+  const properties = bridgedProperties
+    .map(({ name, type }) => {
+      return `
 @DoNotStrip
 @Keep
-val ${p.escapedName}: ${p.getCode('kotlin')}
+val ${name}: ${type.getTypeCode('kotlin', false)}
 `.trim()
-    )
+    })
     .join(',\n')
 
-  const cxxCreateFunctionParameters = structType.properties
-    .map((p) => {
-      const bridged = new KotlinCxxBridgedType(p)
-      return `${p.escapedName}: ${bridged.getTypeCode('kotlin', false)}`
+  const cxxCreateFunctionParameters = bridgedProperties
+    .map(({ name, type }) => {
+      return `${name}: ${type.getTypeCode('kotlin', false)}`
     })
     .join(', ')
-  const cxxCreateFunctionForward = structType.properties
-    .map((p) => {
-      const bridged = new KotlinCxxBridgedType(p)
-      return bridged.parseFromCppToKotlin(p.escapedName, 'kotlin', false)
-    })
+  const cxxCreateFunctionForward = bridgedProperties
+    .map((p) => p.name)
     .join(', ')
 
   const extraImports = structType.properties
     .flatMap((t) => t.getRequiredImports('kotlin'))
     .map((i) => `import ${i.name}`)
     .filter(isNotDuplicate)
+
+  const secondaryConstructor = createKotlinConstructor(structType)
 
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
@@ -52,8 +69,10 @@ ${extraImports.join('\n')}
 @DoNotStrip
 @Keep
 data class ${structType.structName}(
-  ${indent(parameters, '  ')}
+  ${indent(properties, '  ')}
 ) {
+  ${indent(secondaryConstructor, '  ')}
+
   private companion object {
     /**
      * Constructor called from C++
@@ -148,6 +167,33 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   return files
+}
+
+function createKotlinConstructor(structType: StructType): string {
+  const bridgedProperties = structType.properties.map<BridgedProperty>((p) => ({
+    name: p.escapedName,
+    type: new KotlinCxxBridgedType(p),
+  }))
+  const needsSpecialHandling = bridgedProperties.some(
+    ({ type }) => type.needsSpecialHandling
+  )
+  if (needsSpecialHandling) {
+    const kotlinParams = structType.properties.map(
+      (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
+    )
+    const paramsForward = bridgedProperties.map(({ name, type }) =>
+      type.parseFromKotlinToCpp(name, 'kotlin')
+    )
+    return `
+/**
+ * Create a new instance of ${structType.structName} from Kotlin
+ */
+constructor(${kotlinParams.join(', ')}):
+       this(${paramsForward.join(', ')})
+      `.trim()
+  } else {
+    return `/* primary constructor */`
+  }
 }
 
 function createJNIStructInitializer(structType: StructType): string {

@@ -18,7 +18,7 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double], someVariant: Variant_String_Double?) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -49,6 +49,19 @@ public extension Car {
         __vector.push_back(__item)
       }
       return __vector
+    }(), { () -> bridge.std__optional_std__variant_std__string__double__ in
+      if let __unwrappedValue = someVariant {
+        return bridge.create_std__optional_std__variant_std__string__double__({ () -> bridge.std__variant_std__string__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_std__string__double_(std.string(__value))
+            case .second(let __value):
+              return bridge.create_std__variant_std__string__double_(__value)
+          }
+        }().variant)
+      } else {
+        return .init()
+      }
     }())
   }
 
@@ -202,6 +215,49 @@ public extension Car {
           __vector.push_back(__item)
         }
         return __vector
+      }()
+    }
+  }
+  
+  var someVariant: Variant_String_Double? {
+    @inline(__always)
+    get {
+      return { () -> Variant_String_Double? in
+        if bridge.has_value_std__optional_std__variant_std__string__double__(self.__someVariant) {
+          let __unwrapped = bridge.get_std__optional_std__variant_std__string__double__(self.__someVariant)
+          return { () -> Variant_String_Double in
+            let __variant = bridge.std__variant_std__string__double_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(String(__actual))
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(__actual)
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__someVariant = { () -> bridge.std__optional_std__variant_std__string__double__ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__variant_std__string__double__({ () -> bridge.std__variant_std__string__double_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_std__string__double_(std.string(__value))
+              case .second(let __value):
+                return bridge.create_std__variant_std__string__double_(__value)
+            }
+          }().variant)
+        } else {
+          return .init()
+        }
       }()
     }
   }

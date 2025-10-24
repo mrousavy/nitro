@@ -24,6 +24,8 @@ data class Person(
   @Keep
   val age: Double
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++

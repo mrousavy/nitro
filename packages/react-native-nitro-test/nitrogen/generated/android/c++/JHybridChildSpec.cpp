@@ -25,6 +25,7 @@ namespace margelo::nitro::test { struct Person; }
 #include <optional>
 #include "JPerson.hpp"
 #include <vector>
+#include "JVariant_String_Double.hpp"
 
 namespace margelo::nitro::test {
 

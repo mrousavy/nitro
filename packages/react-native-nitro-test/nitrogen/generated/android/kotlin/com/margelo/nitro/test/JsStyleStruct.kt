@@ -22,8 +22,14 @@ data class JsStyleStruct(
   val value: Double,
   @DoNotStrip
   @Keep
-  val onChanged: (num: Double) -> Unit
+  val onChanged: Func_void_double
 ) {
+  /**
+   * Create a new instance of JsStyleStruct from Kotlin
+   */
+  constructor(value: Double, onChanged: (num: Double) -> Unit):
+         this(value, Func_void_double_java(onChanged))
+
   private companion object {
     /**
      * Constructor called from C++

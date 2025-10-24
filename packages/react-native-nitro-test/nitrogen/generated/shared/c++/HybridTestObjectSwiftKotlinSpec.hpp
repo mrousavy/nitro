@@ -177,6 +177,7 @@ namespace margelo::nitro::test {
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
+      virtual Car bounceCar(const Car& car) = 0;
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) = 0;
       virtual OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) = 0;
