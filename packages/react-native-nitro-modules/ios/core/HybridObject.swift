@@ -49,9 +49,8 @@ extension HybridObject {
   public var memorySize: Int { return 0 }
   // By default, this does nothing.
   public func dispose() {}
-  // By default, this just returns the instance name
+  // By default, this just returns `[HybridObject]`
   public func toString() -> String {
-    let ownName = String(describing: type(of: self))
-    return "[HybridObject \(ownName)]"
+    return "[HybridObject object]"
   }
 }

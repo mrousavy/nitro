@@ -109,6 +109,13 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
 }
 
+public extension HybridTestObjectSwiftKotlinSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject TestObjectSwiftKotlin]"
+  }
+}
+
 /// See ``HybridTestObjectSwiftKotlinSpec``
 open class HybridTestObjectSwiftKotlinSpec_base {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil

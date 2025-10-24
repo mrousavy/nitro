@@ -36,6 +36,11 @@ abstract class HybridBaseSpec: HybridObject() {
     super.updateNative(hybridData)
   }
 
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject Base]"
+  }
+
   // Properties
   @get:DoNotStrip
   @get:Keep

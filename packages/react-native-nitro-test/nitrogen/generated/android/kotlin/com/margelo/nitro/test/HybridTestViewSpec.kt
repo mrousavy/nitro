@@ -36,6 +36,11 @@ abstract class HybridTestViewSpec: HybridView() {
     super.updateNative(hybridData)
   }
 
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject TestView]"
+  }
+
   // Properties
   @get:DoNotStrip
   @get:Keep
