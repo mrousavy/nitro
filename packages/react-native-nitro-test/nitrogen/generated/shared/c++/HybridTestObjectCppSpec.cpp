@@ -95,6 +95,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectCppSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectCppSpec::getDriver);
+      prototype.registerHybridMethod("bounceCar", &HybridTestObjectCppSpec::bounceCar);
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectCppSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectCppSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectCppSpec::bounceOptionalWrapper);

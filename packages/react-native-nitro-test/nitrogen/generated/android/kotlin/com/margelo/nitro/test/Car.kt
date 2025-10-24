@@ -46,7 +46,10 @@ data class Car(
   val favouriteTrack: String?,
   @DoNotStrip
   @Keep
-  val performanceScores: DoubleArray
+  val performanceScores: DoubleArray,
+  @DoNotStrip
+  @Keep
+  val someVariant: Variant_String_Double?
 ) {
   /* primary constructor */
 
@@ -58,8 +61,8 @@ data class Car(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: Array<Person>, isFast: Boolean?, favouriteTrack: String?, performanceScores: DoubleArray): Car {
-      return Car(year, make, model, power, powertrain, driver, passengers, isFast, favouriteTrack, performanceScores)
+    private fun fromCpp(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: Array<Person>, isFast: Boolean?, favouriteTrack: String?, performanceScores: DoubleArray, someVariant: Variant_String_Double?): Car {
+      return Car(year, make, model, power, powertrain, driver, passengers, isFast, favouriteTrack, performanceScores, someVariant)
     }
   }
 }

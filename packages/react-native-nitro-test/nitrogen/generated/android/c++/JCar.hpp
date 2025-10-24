@@ -12,10 +12,12 @@
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
+#include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace margelo::nitro::test {
@@ -57,6 +59,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JString> favouriteTrack = this->getFieldValue(fieldFavouriteTrack);
       static const auto fieldPerformanceScores = clazz->getField<jni::JArrayDouble>("performanceScores");
       jni::local_ref<jni::JArrayDouble> performanceScores = this->getFieldValue(fieldPerformanceScores);
+      static const auto fieldSomeVariant = clazz->getField<JVariant_String_Double>("someVariant");
+      jni::local_ref<JVariant_String_Double> someVariant = this->getFieldValue(fieldSomeVariant);
       return Car(
         year,
         make->toStdString(),
@@ -81,7 +85,8 @@ namespace margelo::nitro::test {
           std::vector<double> __vector(__size);
           performanceScores->getRegion(0, __size, __vector.data());
           return __vector;
-        }()
+        }(),
+        someVariant != nullptr ? std::make_optional(someVariant->toCpp()) : std::nullopt
       );
     }
 
@@ -91,7 +96,7 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JCar::javaobject> fromCpp(const Car& value) {
-      using JSignature = JCar(double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, double, jni::alias_ref<JPowertrain>, jni::alias_ref<JPerson>, jni::alias_ref<jni::JArrayClass<JPerson>>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayDouble>);
+      using JSignature = JCar(double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, double, jni::alias_ref<JPowertrain>, jni::alias_ref<JPerson>, jni::alias_ref<jni::JArrayClass<JPerson>>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayDouble>, jni::alias_ref<JVariant_String_Double>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -118,7 +123,8 @@ namespace margelo::nitro::test {
           jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
           __array->setRegion(0, __size, value.performanceScores.data());
           return __array;
-        }()
+        }(),
+        value.someVariant.has_value() ? JVariant_String_Double::fromCpp(value.someVariant.value()) : nullptr
       );
     }
   };

@@ -48,6 +48,7 @@ export interface Car {
   isFast?: boolean
   favouriteTrack?: string
   performanceScores: number[]
+  someVariant?: number | string
 }
 
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
@@ -200,6 +201,7 @@ interface SharedTestObjectProps {
   getCar(): Car
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
+  bounceCar(car: Car): Car
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper

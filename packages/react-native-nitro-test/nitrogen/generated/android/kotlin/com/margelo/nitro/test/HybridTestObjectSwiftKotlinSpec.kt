@@ -381,6 +381,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceCar(car: Car): Car
+  
+  @DoNotStrip
+  @Keep
   abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
   
   @DoNotStrip

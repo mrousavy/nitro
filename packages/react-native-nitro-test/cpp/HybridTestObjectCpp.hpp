@@ -153,6 +153,7 @@ public:
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;
+  Car bounceCar(const Car& car) override;
   void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
   WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
   OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
