@@ -22,8 +22,4 @@ class HybridChild: HybridChildSpec {
   func toString() -> String {
     return "HybridChild custom toString() :)"
   }
-  
-  func baseMethod() -> Double {
-    return 13.0
-  }
 }
