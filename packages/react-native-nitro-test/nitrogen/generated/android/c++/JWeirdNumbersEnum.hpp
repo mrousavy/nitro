@@ -44,6 +44,7 @@ namespace margelo::nitro::test {
       static const auto fieldA = clazz->getStaticField<JWeirdNumbersEnum>("A");
       static const auto fieldB = clazz->getStaticField<JWeirdNumbersEnum>("B");
       static const auto fieldC = clazz->getStaticField<JWeirdNumbersEnum>("C");
+      static const auto field_0_INVALID = clazz->getStaticField<JWeirdNumbersEnum>("_0_INVALID");
       
       switch (value) {
         case WeirdNumbersEnum::A:
@@ -52,6 +53,8 @@ namespace margelo::nitro::test {
           return clazz->getStaticFieldValue(fieldB);
         case WeirdNumbersEnum::C:
           return clazz->getStaticFieldValue(fieldC);
+        case WeirdNumbersEnum::_0_INVALID:
+          return clazz->getStaticFieldValue(field_0_INVALID);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::invalid_argument("Invalid enum value (" + stringValue + "!");

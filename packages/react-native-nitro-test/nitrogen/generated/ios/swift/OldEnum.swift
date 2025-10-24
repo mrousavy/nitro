@@ -23,6 +23,8 @@ public extension OldEnum {
         self = .second
       case "THIRD":
         self = .third
+      case "0_INVALID":
+        self = ._0Invalid
       default:
         return nil
     }
@@ -39,6 +41,8 @@ public extension OldEnum {
         return "SECOND"
       case .third:
         return "THIRD"
+      case ._0Invalid:
+        return "0_INVALID"
     }
   }
 }
