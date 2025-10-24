@@ -18,7 +18,7 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: ContiguousArray<Double>) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -185,10 +185,10 @@ public extension Car {
     }
   }
   
-  var performanceScores: ContiguousArray<Double> {
+  var performanceScores: [Double] {
     @inline(__always)
     get {
-      return ContiguousArray.fastCopy(vector: self.__performanceScores)
+      return Array<Double>.fastCopy(vector: self.__performanceScores)
     }
     @inline(__always)
     set {

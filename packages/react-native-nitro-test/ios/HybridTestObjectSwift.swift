@@ -135,7 +135,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func bounceNumbers(array: ContiguousArray<Double>) throws -> ContiguousArray<Double> {
+  func bounceNumbers(array: [Double]) throws -> [Double] {
     return array
   }
 
@@ -162,13 +162,13 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return result
   }
 
-  func bounceEnums(array: ContiguousArray<Powertrain>) throws -> ContiguousArray<Powertrain> {
+  func bounceEnums(array: [Powertrain]) throws -> [Powertrain] {
     return array
   }
 
   func complexEnumCallback(
-    array: ContiguousArray<Powertrain>,
-    callback: @escaping ((_ array: ContiguousArray<Powertrain>) -> Void)
+    array: [Powertrain],
+    callback: @escaping ((_ array: [Powertrain]) -> Void)
   ) throws {
     callback(array)
   }
@@ -268,7 +268,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
-  func passVariant(either: Variant_Bool_ContiguousArray_Double___String__String_Double) throws
+  func passVariant(either: Variant_Bool__Double___String__String_Double) throws
     -> Variant_String_Double
   {
     switch either {

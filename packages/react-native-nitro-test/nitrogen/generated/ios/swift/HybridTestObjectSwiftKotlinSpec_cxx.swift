@@ -512,7 +512,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
-      let __result = try self.__implementation.bounceNumbers(array: ContiguousArray.fastCopy(vector: array))
+      let __result = try self.__implementation.bounceNumbers(array: Array<Double>.fastCopy(vector: array))
       let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
         return bridge.copy_std__vector_double_(__pointer.baseAddress!, __result.count)
       }
@@ -568,7 +568,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: ContiguousArray.fastCopy(vector: array))
+      let __result = try self.__implementation.bounceEnums(array: Array<Powertrain>.fastCopy(vector: array))
       let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
         return bridge.copy_std__vector_Powertrain_(__pointer.baseAddress!, __result.count)
       }
@@ -582,9 +582,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.complexEnumCallback(array: ContiguousArray.fastCopy(vector: array), callback: { () -> (ContiguousArray<Powertrain>) -> Void in
+      try self.__implementation.complexEnumCallback(array: Array<Powertrain>.fastCopy(vector: array), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
-        return { (__array: ContiguousArray<Powertrain>) -> Void in
+        return { (__array: [Powertrain]) -> Void in
           __wrappedFunction.call(__array.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
             return bridge.copy_std__vector_Powertrain_(__pointer.baseAddress!, __array.count)
           })
@@ -1591,7 +1591,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func passVariant(either: bridge.std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_) -> bridge.Result_std__variant_std__string__double__ {
     do {
-      let __result = try self.__implementation.passVariant(either: { () -> Variant_Bool_ContiguousArray_Double___String__String_Double in
+      let __result = try self.__implementation.passVariant(either: { () -> Variant_Bool__Double___String__String_Double in
         let __variant = either
         switch __variant.index() {
           case 0:
@@ -1599,7 +1599,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             return .first(__actual)
           case 1:
             let __actual = __variant.get_1()
-            return .second(ContiguousArray.fastCopy(vector: __actual))
+            return .second(Array<Double>.fastCopy(vector: __actual))
           case 2:
             let __actual = __variant.get_2()
             return .third(__actual.map({ __item in String(__item) }))

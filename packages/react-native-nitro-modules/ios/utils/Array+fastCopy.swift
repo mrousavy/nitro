@@ -1,5 +1,5 @@
 //
-//  ContiguousArray+fastCopy.swift
+//  Array+fastCopy.swift
 //  NitroModules
 //
 //  Created by Marc Rousavy on 24.10.2025.
@@ -8,7 +8,7 @@
 import Cxx
 import Foundation
 
-extension ContiguousArray {
+extension Array {
   ///
   /// Copies the given `vector` into a new `ContiguosArray`.
   ///
@@ -18,12 +18,12 @@ extension ContiguousArray {
   /// Otherwise, a normal copy (= looping over each element) is made.
   ///
   public static func fastCopy(vector: some CxxVector<Element> & Sequence<Element>)
-    -> ContiguousArray
+    -> Array
   {
     let size = Int(vector.size())
 
     let result = vector.withContiguousStorageIfAvailable { data in
-      return ContiguousArray<Element>(unsafeUninitializedCapacity: size) {
+      return [Element](unsafeUninitializedCapacity: size) {
         buffer, initializedCount in
         let bytesCount = size * MemoryLayout<Element>.stride
         memcpy(buffer.baseAddress!, data.baseAddress, bytesCount)
@@ -35,7 +35,7 @@ extension ContiguousArray {
       return result
     } else {
       // SLOW PATH: We need to loop through the Array
-      return ContiguousArray(vector)
+      return Array(vector)
     }
   }
 }
