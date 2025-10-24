@@ -92,7 +92,9 @@ const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalString: 'hello!',
 }
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
-const TEST_LARGE_NUMBERS: number[] = Array(1024).map((_, i) => i * 100000)
+const TEST_LARGE_NUMBERS: number[] = Array(1024)
+  .fill(0)
+  .map((_, i) => i * 100000)
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -442,6 +444,12 @@ export function getTests(
         .didReturn('string')
         .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
     ),
+    // createTest('sumUpAllPerformanceScores(...) equals', () =>
+    //   it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
+    //     .didNotThrow()
+    //     .didReturn('string')
+    //     .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
+    // ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))
         .didNotThrow()
