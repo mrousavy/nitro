@@ -9,24 +9,24 @@ import NitroModules
 
 
 /**
- * Wraps a Swift `(_ array: [Powertrain]) -> Void` as a class.
+ * Wraps a Swift `(_ array: ContiguousArray<Powertrain>) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__vector_Powertrain_ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ array: [Powertrain]) -> Void
+  private let closure: (_ array: ContiguousArray<Powertrain>) -> Void
 
-  public init(_ closure: @escaping (_ array: [Powertrain]) -> Void) {
+  public init(_ closure: @escaping (_ array: ContiguousArray<Powertrain>) -> Void) {
     self.closure = closure
   }
 
   @inline(__always)
   public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    self.closure({ () -> [Powertrain] in
+    self.closure({ () -> ContiguousArray<Powertrain> in
       let __data = bridge.get_data_std__vector_Powertrain_(array)
       let __size = array.size()
-      return Array(UnsafeBufferPointer(start: __data, count: __size))
+      return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
     }())
   }
 

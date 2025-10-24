@@ -1,5 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
+import { isPrimitivelyCopyable } from '../swift/isPrimitivelyCopyable.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class ArrayType implements Type {
@@ -25,7 +26,11 @@ export class ArrayType implements Type {
       case 'c++':
         return `std::vector<${itemCode}>`
       case 'swift':
-        return `[${itemCode}]`
+        if (isPrimitivelyCopyable(this.itemType)) {
+          return `ContiguousArray<${itemCode}>`
+        } else {
+          return `[${itemCode}]`
+        }
       case 'kotlin':
         switch (this.itemType.kind) {
           case 'number':

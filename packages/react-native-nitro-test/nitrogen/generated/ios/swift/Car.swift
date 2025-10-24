@@ -18,7 +18,7 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: ContiguousArray<Double>) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -185,13 +185,13 @@ public extension Car {
     }
   }
   
-  var performanceScores: [Double] {
+  var performanceScores: ContiguousArray<Double> {
     @inline(__always)
     get {
-      return { () -> [Double] in
+      return { () -> ContiguousArray<Double> in
         let __data = bridge.get_data_std__vector_double_(self.__performanceScores)
         let __size = self.__performanceScores.size()
-        return Array(UnsafeBufferPointer(start: __data, count: __size))
+        return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
       }()
     }
     @inline(__always)

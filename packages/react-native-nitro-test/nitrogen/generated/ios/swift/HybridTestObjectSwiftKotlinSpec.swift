@@ -36,11 +36,11 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func addStrings(a: String, b: String) throws -> String
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
   func bounceStrings(array: [String]) throws -> [String]
-  func bounceNumbers(array: [Double]) throws -> [Double]
+  func bounceNumbers(array: ContiguousArray<Double>) throws -> ContiguousArray<Double>
   func bounceStructs(array: [Person]) throws -> [Person]
   func sumUpAllPassengers(cars: [Car]) throws -> String
-  func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
-  func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
+  func bounceEnums(array: ContiguousArray<Powertrain>) throws -> ContiguousArray<Powertrain>
+  func complexEnumCallback(array: ContiguousArray<Powertrain>, callback: @escaping (_ array: ContiguousArray<Powertrain>) -> Void) throws -> Void
   func createMap() throws -> AnyMap
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
@@ -88,7 +88,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBuffer>
   func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
-  func passVariant(either: Variant_Bool__Double___String__String_Double) throws -> Variant_String_Double
+  func passVariant(either: Variant_Bool_ContiguousArray_Double___String__String_Double) throws -> Variant_String_Double
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person

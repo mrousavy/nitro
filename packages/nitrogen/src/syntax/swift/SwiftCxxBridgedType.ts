@@ -498,7 +498,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 { () -> ${array.getCode('swift')} in
   let __data = ${getDataFunc}(${cppParameterName})
   let __size = ${cppParameterName}.size()
-  return Array(UnsafeBufferPointer(start: __data, count: __size))
+  return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
 }()`.trim()
             } else {
               // We have to iterate the element one by one to create a resulting Array (mapped)
