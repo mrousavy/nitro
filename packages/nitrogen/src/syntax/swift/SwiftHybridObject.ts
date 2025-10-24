@@ -3,6 +3,7 @@ import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewM
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
+import { isMemberOverridingFromBase } from '../isOverridingFromBase.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
@@ -10,8 +11,18 @@ import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const protocolName = name.HybridTSpec
-  const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
-  const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
+  const properties = spec.properties
+    .map((p) => {
+      const isOverridingBase = isMemberOverridingFromBase(p.name, spec, 'swift')
+      return p.getCode('swift', { override: isOverridingBase })
+    })
+    .join('\n')
+  const methods = spec.methods
+    .map((m) => {
+      const isOverridingBase = isMemberOverridingFromBase(m.name, spec, 'swift')
+      return m.getCode('swift', { override: isOverridingBase })
+    })
+    .join('\n')
   const extraImports = [
     ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
     ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),

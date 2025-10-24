@@ -4,21 +4,21 @@ import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
+import { isMemberOverridingFromBase } from '../isOverridingFromBase.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
-import { isBaseObjectMethodName } from './isBaseObjectMethodName.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const properties = spec.properties
-    .map((p) => getPropertyForwardImplementation(p))
+    .map((p) => getPropertyForwardImplementation(p, spec))
     .join('\n\n')
   const methods = spec.methods
-    .map((m) => getMethodForwardImplementation(m))
+    .map((m) => getMethodForwardImplementation(m, spec))
     .join('\n\n')
 
   const extraImports: SourceImport[] = [
@@ -136,7 +136,10 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   return files
 }
 
-function getMethodForwardImplementation(method: Method): string {
+function getMethodForwardImplementation(
+  method: Method,
+  hybridObject: HybridObjectSpec
+): string {
   const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
   const requiresBridge =
     bridgedReturn.needsSpecialHandling ||
@@ -145,7 +148,11 @@ function getMethodForwardImplementation(method: Method): string {
       return bridged.needsSpecialHandling
     })
 
-  const isOverridingBase = isBaseObjectMethodName(method)
+  const isOverridingBase = isMemberOverridingFromBase(
+    method.name,
+    hybridObject,
+    'kotlin'
+  )
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -183,7 +190,15 @@ private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.g
   }
 }
 
-function getPropertyForwardImplementation(property: Property): string {
+function getPropertyForwardImplementation(
+  property: Property,
+  hybridObject: HybridObjectSpec
+): string {
+  const isOverridingBase = isMemberOverridingFromBase(
+    property.name,
+    hybridObject,
+    'kotlin'
+  )
   const bridged = new KotlinCxxBridgedType(property.type)
   if (bridged.needsSpecialHandling) {
     let keyword = property.isReadonly ? 'val' : 'var'
@@ -208,7 +223,10 @@ set(value) {
       `.trim()
       )
     }
-    const code = property.getCode('kotlin', { virtual: true })
+    const code = property.getCode('kotlin', {
+      virtual: true,
+      override: isOverridingBase,
+    })
     return `
 ${code}
 
@@ -216,7 +234,11 @@ private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
   ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
-    const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
+    const code = property.getCode('kotlin', {
+      doNotStrip: true,
+      virtual: true,
+      override: isOverridingBase,
+    })
     return code
   }
 }
