@@ -50,6 +50,12 @@ export class Method implements CodeNode {
         `Method names are not allowed to start with two underscores (__)! (In ${this.jsSignature})`
       )
     }
+    if (this.name === 'dispose') {
+      // .dispose() does some special JSI magic that we loose if the user overrides it in his spec.
+      throw new Error(
+        `dispose() must not be overridden from TypeScript! You can override dispose() natively.`
+      )
+    }
   }
 
   get jsSignature(): string {

@@ -15,7 +15,6 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
 
   // Methods
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant
-  func toString() throws -> String
 }
 
 /// See ``HybridChildSpec``

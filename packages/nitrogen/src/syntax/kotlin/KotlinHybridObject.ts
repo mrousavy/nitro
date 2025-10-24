@@ -4,7 +4,6 @@ import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
-import { isMemberOverridingFromBase } from '../isOverridingFromBase.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
@@ -15,10 +14,10 @@ import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const properties = spec.properties
-    .map((p) => getPropertyForwardImplementation(p, spec))
+    .map((p) => getPropertyForwardImplementation(p))
     .join('\n\n')
   const methods = spec.methods
-    .map((m) => getMethodForwardImplementation(m, spec))
+    .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
   const extraImports: SourceImport[] = [
@@ -136,10 +135,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   return files
 }
 
-function getMethodForwardImplementation(
-  method: Method,
-  hybridObject: HybridObjectSpec
-): string {
+function getMethodForwardImplementation(method: Method): string {
   const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
   const requiresBridge =
     bridgedReturn.needsSpecialHandling ||
@@ -148,11 +144,6 @@ function getMethodForwardImplementation(
       return bridged.needsSpecialHandling
     })
 
-  const isOverridingBase = isMemberOverridingFromBase(
-    method.name,
-    hybridObject,
-    'kotlin'
-  )
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -168,7 +159,6 @@ function getMethodForwardImplementation(
     )
     const code = method.getCode('kotlin', {
       virtual: true,
-      override: isOverridingBase,
     })
     return `
 ${code}
@@ -184,21 +174,12 @@ private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.g
     const code = method.getCode('kotlin', {
       doNotStrip: true,
       virtual: true,
-      override: isOverridingBase,
     })
     return code
   }
 }
 
-function getPropertyForwardImplementation(
-  property: Property,
-  hybridObject: HybridObjectSpec
-): string {
-  const isOverridingBase = isMemberOverridingFromBase(
-    property.name,
-    hybridObject,
-    'kotlin'
-  )
+function getPropertyForwardImplementation(property: Property): string {
   const bridged = new KotlinCxxBridgedType(property.type)
   if (bridged.needsSpecialHandling) {
     let keyword = property.isReadonly ? 'val' : 'var'
@@ -225,7 +206,6 @@ set(value) {
     }
     const code = property.getCode('kotlin', {
       virtual: true,
-      override: isOverridingBase,
     })
     return `
 ${code}
@@ -237,7 +217,6 @@ private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
     const code = property.getCode('kotlin', {
       doNotStrip: true,
       virtual: true,
-      override: isOverridingBase,
     })
     return code
   }

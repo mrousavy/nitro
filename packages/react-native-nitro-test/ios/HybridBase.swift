@@ -11,4 +11,8 @@ class HybridBase: HybridBaseSpec {
   var baseValue: Double {
     return 10
   }
+  
+  func baseMethod() -> Double {
+    return 55.0
+  }
 }

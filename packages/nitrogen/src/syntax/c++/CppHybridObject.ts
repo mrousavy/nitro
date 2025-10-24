@@ -5,7 +5,6 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
-import { isMemberOverridingFromBase } from '../isOverridingFromBase.js'
 
 export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // Extra includes
@@ -30,14 +29,10 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cxxNamespace = spec.config.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
-  const properties = spec.properties.map((p) => {
-    const isOverridingBase = isMemberOverridingFromBase(p.name, spec, 'c++')
-    return p.getCode('c++', { virtual: true, override: isOverridingBase })
-  })
-  const methods = spec.methods.map((m) => {
-    const isOverridingBase = isMemberOverridingFromBase(m.name, spec, 'c++')
-    return m.getCode('c++', { virtual: true, override: isOverridingBase })
-  })
+  const properties = spec.properties.map((p) =>
+    p.getCode('c++', { virtual: true })
+  )
+  const methods = spec.methods.map((m) => m.getCode('c++', { virtual: true }))
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {

@@ -82,14 +82,6 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::string toString() override {
-      auto __result = _swiftPart.toString();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
 
   private:
     NitroTest::HybridChildSpec_cxx _swiftPart;
