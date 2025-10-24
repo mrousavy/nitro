@@ -381,6 +381,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun sumPerformanceScores(car: Car): Double
+  
+  @DoNotStrip
+  @Keep
   abstract fun jsStyleObjectAsParameters(params: JsStyleStruct): Unit
   
   @DoNotStrip

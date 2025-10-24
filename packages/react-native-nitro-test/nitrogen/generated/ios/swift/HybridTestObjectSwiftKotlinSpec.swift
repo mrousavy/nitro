@@ -77,6 +77,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
+  func sumPerformanceScores(car: Car) throws -> Double
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
   func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper

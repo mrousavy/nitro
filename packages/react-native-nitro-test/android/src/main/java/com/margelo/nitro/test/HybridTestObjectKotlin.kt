@@ -339,6 +339,15 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return car.driver
   }
 
+  override fun sumPerformanceScores(car: Car): Double {
+    car.performanceScores.forEach {
+      Log.d(TAG, "summing up $it")
+    }
+    val sum = car.performanceScores.sum()
+    Log.d(TAG, "sum $sum")
+    return sum
+  }
+
   override fun jsStyleObjectAsParameters(params: JsStyleStruct) {
     params.onChanged(params.value)
   }

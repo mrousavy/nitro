@@ -1452,6 +1452,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func sumPerformanceScores(car: Car) -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.sumPerformanceScores(car: car)
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func jsStyleObjectAsParameters(params: JsStyleStruct) -> bridge.Result_void_ {
     do {
       try self.__implementation.jsStyleObjectAsParameters(params: params)

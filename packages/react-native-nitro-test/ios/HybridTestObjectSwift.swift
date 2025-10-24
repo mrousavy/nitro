@@ -382,6 +382,15 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return car.driver
   }
 
+  func sumPerformanceScores(car: Car) throws -> Double {
+    car.performanceScores.forEach {
+      print("summing up \($0)")
+    }
+    let sum = car.performanceScores.reduce(0, +)
+    print("sum \(sum)")
+    return sum
+  }
+
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws {
     params.onChanged(params.value)
   }

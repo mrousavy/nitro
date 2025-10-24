@@ -11,6 +11,7 @@
 #include <chrono>
 #include <sstream>
 #include <thread>
+#include <numeric>
 
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
@@ -473,6 +474,10 @@ std::optional<Person> HybridTestObjectCpp::getDriver(const Car& car) {
   } else {
     return std::nullopt;
   }
+}
+
+double HybridTestObjectCpp::sumPerformanceScores(const Car& car) {
+    return std::accumulate(car.performanceScores.begin(), car.performanceScores.end(), 0.0);
 }
 
 void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params) {

@@ -577,6 +577,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline double sumPerformanceScores(const Car& car) override {
+      auto __result = _swiftPart.sumPerformanceScores(std::forward<decltype(car)>(car));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
       auto __result = _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
       if (__result.hasError()) [[unlikely]] {

@@ -200,6 +200,7 @@ interface SharedTestObjectProps {
   getCar(): Car
   isCarElectric(car: Car): boolean
   getDriver(car: Car): Person | undefined
+  sumPerformanceScores(car: Car): number
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper

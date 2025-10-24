@@ -1339,6 +1339,23 @@ export function getTests(
         .didNotThrow()
         .equals({ age: 24, name: 'marc' })
     ),
+    createTest('sumPerformanceScores', () =>
+      it(() =>
+        testObject.sumPerformanceScores({
+          make: 'Lamborghini',
+          year: 2018,
+          model: 'Huracan Performante',
+          power: 640,
+          passengers: [],
+          powertrain: 'gas',
+          driver: { age: 24, name: 'marc' },
+          isFast: true,
+          performanceScores: [100, 0],
+        })
+      )
+        .didNotThrow()
+        .equals(100)
+    ),
     createTest('jsStyleObjectAsParameters()', async () =>
       (
         await it(() => {
