@@ -21,6 +21,8 @@ data class SecondMapWrapper(
   @Keep
   val second: Map<String, String>
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++

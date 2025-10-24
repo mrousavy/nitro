@@ -48,6 +48,8 @@ data class Car(
   @Keep
   val performanceScores: DoubleArray
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++

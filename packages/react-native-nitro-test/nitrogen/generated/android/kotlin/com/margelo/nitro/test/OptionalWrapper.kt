@@ -24,6 +24,8 @@ data class OptionalWrapper(
   @Keep
   val optionalString: String?
 ) {
+  /* primary constructor */
+
   private companion object {
     /**
      * Constructor called from C++
