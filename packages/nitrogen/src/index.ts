@@ -9,7 +9,7 @@ import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
 import { isValidLogLevel, setLogLevel } from './Logger.js'
 import { initNewNitroModule } from './init.js'
-import { NITROGEN_VERSION } from './utils.js'
+import { NITROGEN_VERSION } from './config/nitrogenVersion.js'
 
 const commandName = 'nitrogen'
 
@@ -90,6 +90,7 @@ await yargs(hideBin(process.argv))
   )
   .help()
   .strict()
+  .version(NITROGEN_VERSION)
   .wrap(cliWidth).argv
 
 async function runNitrogenCommand(

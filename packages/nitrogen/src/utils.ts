@@ -7,8 +7,6 @@ import { isNotDuplicate } from './syntax/helpers.js'
 import { readUserConfig } from './config/getConfig.js'
 import { NitroConfig } from './config/NitroConfig.js'
 
-export const NITROGEN_VERSION = process.env.npm_package_version ?? '?.?.?'
-
 export function capitalizeName(name: string): string {
   if (name.length === 0) return name
   return name.charAt(0).toUpperCase() + name.slice(1)
