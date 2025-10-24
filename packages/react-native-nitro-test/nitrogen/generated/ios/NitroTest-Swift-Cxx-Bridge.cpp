@@ -9,6 +9,8 @@
 
 // Include C++ implementation defined types
 #include "HybridBaseSpecSwift.hpp"
+#include "HybridCallbackBuilderSpecSwift.hpp"
+#include "HybridCallbackTesterSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
@@ -222,6 +224,38 @@ namespace margelo::nitro::test::bridge::swift {
   void* NON_NULL get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ cppType) {
     // Implemented in NitroTestExternal
     return margelo::nitro::test::external::bridge::swift::get_std__shared_ptr_HybridSomeExternalObjectSpec_(cppType);
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridCallbackBuilderSpec>
+  std::shared_ptr<HybridCallbackBuilderSpec> create_std__shared_ptr_HybridCallbackBuilderSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridCallbackBuilderSpec_cxx swiftPart = NitroTest::HybridCallbackBuilderSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridCallbackBuilderSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridCallbackBuilderSpec_(std__shared_ptr_HybridCallbackBuilderSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridCallbackBuilderSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridCallbackBuilderSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridCallbackBuilderSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridCallbackBuilderSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridCallbackTesterSpec>
+  std::shared_ptr<HybridCallbackTesterSpec> create_std__shared_ptr_HybridCallbackTesterSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridCallbackTesterSpec_cxx swiftPart = NitroTest::HybridCallbackTesterSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridCallbackTesterSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridCallbackTesterSpec_(std__shared_ptr_HybridCallbackTesterSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridCallbackTesterSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridCallbackTesterSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridCallbackTesterSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridCallbackTesterSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
   }
 
 } // namespace margelo::nitro::test::bridge::swift
