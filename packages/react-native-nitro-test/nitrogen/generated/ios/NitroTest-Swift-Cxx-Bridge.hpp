@@ -261,9 +261,6 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::vector<double> copy_std__vector_double_(const double* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
     return margelo::nitro::FastVectorCopy<double>(data, size);
   }
-  inline const double* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_double_(const std::vector<double>& vector) noexcept {
-    return vector.data();
-  }
   
   // pragma MARK: std::vector<Person>
   /**
@@ -324,9 +321,6 @@ namespace margelo::nitro::test::bridge::swift {
   using std__vector_Powertrain_ = std::vector<Powertrain>;
   inline std::vector<Powertrain> copy_std__vector_Powertrain_(const Powertrain* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
     return margelo::nitro::FastVectorCopy<Powertrain>(data, size);
-  }
-  inline const Powertrain* CONTIGUOUS_MEMORY NON_NULL get_data_std__vector_Powertrain_(const std::vector<Powertrain>& vector) noexcept {
-    return vector.data();
   }
   
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>

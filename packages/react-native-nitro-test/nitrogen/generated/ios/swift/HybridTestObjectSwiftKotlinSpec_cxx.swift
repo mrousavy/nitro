@@ -512,11 +512,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
-      let __result = try self.__implementation.bounceNumbers(array: { () -> ContiguousArray<Double> in
-        let __data = bridge.get_data_std__vector_double_(array)
-        let __size = array.size()
-        return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-      }())
+      let __result = try self.__implementation.bounceNumbers(array: ContiguousArray.fastCopy(vector: array))
       let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
         return bridge.copy_std__vector_double_(__pointer.baseAddress!, __result.count)
       }
@@ -572,11 +568,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: { () -> ContiguousArray<Powertrain> in
-        let __data = bridge.get_data_std__vector_Powertrain_(array)
-        let __size = array.size()
-        return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-      }())
+      let __result = try self.__implementation.bounceEnums(array: ContiguousArray.fastCopy(vector: array))
       let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
         return bridge.copy_std__vector_Powertrain_(__pointer.baseAddress!, __result.count)
       }
@@ -590,11 +582,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.complexEnumCallback(array: { () -> ContiguousArray<Powertrain> in
-        let __data = bridge.get_data_std__vector_Powertrain_(array)
-        let __size = array.size()
-        return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-      }(), callback: { () -> (ContiguousArray<Powertrain>) -> Void in
+      try self.__implementation.complexEnumCallback(array: ContiguousArray.fastCopy(vector: array), callback: { () -> (ContiguousArray<Powertrain>) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: ContiguousArray<Powertrain>) -> Void in
           __wrappedFunction.call(__array.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
@@ -1611,11 +1599,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             return .first(__actual)
           case 1:
             let __actual = __variant.get_1()
-            return .second({ () -> ContiguousArray<Double> in
-              let __data = bridge.get_data_std__vector_double_(__actual)
-              let __size = __actual.size()
-              return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-            }())
+            return .second(ContiguousArray.fastCopy(vector: __actual))
           case 2:
             let __actual = __variant.get_2()
             return .third(__actual.map({ __item in String(__item) }))

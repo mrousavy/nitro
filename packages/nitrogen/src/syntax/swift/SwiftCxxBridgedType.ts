@@ -492,14 +492,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'swift':
             if (isPrimitivelyCopyable(array.itemType)) {
               // We can primitively copy the data, raw:
-              const bridge = this.getBridgeOrThrow()
-              const getDataFunc = `bridge.get_data_${bridge.specializationName}`
-              return `
-{ () -> ${array.getCode('swift')} in
-  let __data = ${getDataFunc}(${cppParameterName})
-  let __size = ${cppParameterName}.size()
-  return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-}()`.trim()
+              return `ContiguousArray.fastCopy(vector: ${cppParameterName})`
             } else {
               // We have to iterate the element one by one to create a resulting Array (mapped)
               return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()

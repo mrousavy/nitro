@@ -281,9 +281,6 @@ using ${name} = ${actualType};
 inline ${actualType} copy_${name}(const ${itemType}* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
   return margelo::nitro::FastVectorCopy<${itemType}>(data, size);
 }
-inline const ${itemType}* CONTIGUOUS_MEMORY NON_NULL get_data_${name}(const ${actualType}& vector) noexcept {
-  return vector.data();
-}
 `.trim()
   } else {
     funcName = `create_${name}`

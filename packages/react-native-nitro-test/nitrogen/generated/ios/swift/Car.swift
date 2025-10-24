@@ -188,11 +188,7 @@ public extension Car {
   var performanceScores: ContiguousArray<Double> {
     @inline(__always)
     get {
-      return { () -> ContiguousArray<Double> in
-        let __data = bridge.get_data_std__vector_double_(self.__performanceScores)
-        let __size = self.__performanceScores.size()
-        return ContiguousArray(UnsafeBufferPointer(start: __data, count: __size))
-      }()
+      return ContiguousArray.fastCopy(vector: self.__performanceScores)
     }
     @inline(__always)
     set {
