@@ -43,13 +43,9 @@ public extension Car {
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__vector_double_ in
-      var __vector = bridge.create_std__vector_double_(performanceScores.count)
-      for __item in performanceScores {
-        __vector.push_back(__item)
-      }
-      return __vector
-    }())
+    }(), performanceScores.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+      return bridge.copy_std__vector_double_(__pointer.baseAddress!, performanceScores.count)
+    })
   }
 
   var year: Double {
@@ -192,17 +188,13 @@ public extension Car {
   var performanceScores: [Double] {
     @inline(__always)
     get {
-      return self.__performanceScores.map({ __item in __item })
+      return Array<Double>.fastCopy(vector: self.__performanceScores)
     }
     @inline(__always)
     set {
-      self.__performanceScores = { () -> bridge.std__vector_double_ in
-        var __vector = bridge.create_std__vector_double_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      self.__performanceScores = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+        return bridge.copy_std__vector_double_(__pointer.baseAddress!, newValue.count)
+      }
     }
   }
 }

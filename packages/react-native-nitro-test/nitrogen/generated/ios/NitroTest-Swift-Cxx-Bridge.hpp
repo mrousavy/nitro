@@ -68,6 +68,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/FastVectorCopy.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -257,10 +258,8 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<double>`.
    */
   using std__vector_double_ = std::vector<double>;
-  inline std::vector<double> create_std__vector_double_(size_t size) noexcept {
-    std::vector<double> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<double> copy_std__vector_double_(const double* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<double>(data, size);
   }
   
   // pragma MARK: std::vector<Person>
@@ -320,10 +319,8 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::vector<Powertrain>`.
    */
   using std__vector_Powertrain_ = std::vector<Powertrain>;
-  inline std::vector<Powertrain> create_std__vector_Powertrain_(size_t size) noexcept {
-    std::vector<Powertrain> vector;
-    vector.reserve(size);
-    return vector;
+  inline std::vector<Powertrain> copy_std__vector_Powertrain_(const Powertrain* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+    return margelo::nitro::FastVectorCopy<Powertrain>(data, size);
   }
   
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>

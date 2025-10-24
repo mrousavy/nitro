@@ -512,14 +512,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceNumbers(array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
-      let __result = try self.__implementation.bounceNumbers(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__vector_double_ in
-        var __vector = bridge.create_std__vector_double_(__result.count)
-        for __item in __result {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      let __result = try self.__implementation.bounceNumbers(array: Array<Double>.fastCopy(vector: array))
+      let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+        return bridge.copy_std__vector_double_(__pointer.baseAddress!, __result.count)
+      }
       return bridge.create_Result_std__vector_double__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -558,16 +554,24 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func sumUpAllPerformanceScores(cars: bridge.std__vector_Car_) -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.sumUpAllPerformanceScores(cars: cars.map({ __item in __item }))
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
-      let __result = try self.__implementation.bounceEnums(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__vector_Powertrain_ in
-        var __vector = bridge.create_std__vector_Powertrain_(__result.count)
-        for __item in __result {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
+      let __result = try self.__implementation.bounceEnums(array: Array<Powertrain>.fastCopy(vector: array))
+      let __resultCpp = __result.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
+        return bridge.copy_std__vector_Powertrain_(__pointer.baseAddress!, __result.count)
+      }
       return bridge.create_Result_std__vector_Powertrain__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -578,16 +582,12 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func complexEnumCallback(array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> ([Powertrain]) -> Void in
+      try self.__implementation.complexEnumCallback(array: Array<Powertrain>.fastCopy(vector: array), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
-          __wrappedFunction.call({ () -> bridge.std__vector_Powertrain_ in
-            var __vector = bridge.create_std__vector_Powertrain_(__array.count)
-            for __item in __array {
-              __vector.push_back(__item)
-            }
-            return __vector
-          }())
+          __wrappedFunction.call(__array.withUnsafeBufferPointer { __pointer -> bridge.std__vector_Powertrain_ in
+            return bridge.copy_std__vector_Powertrain_(__pointer.baseAddress!, __array.count)
+          })
         }
       }())
       return bridge.create_Result_void_()
@@ -1599,7 +1599,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             return .first(__actual)
           case 1:
             let __actual = __variant.get_1()
-            return .second(__actual.map({ __item in __item }))
+            return .second(Array<Double>.fastCopy(vector: __actual))
           case 2:
             let __actual = __variant.get_2()
             return .third(__actual.map({ __item in String(__item) }))

@@ -39,6 +39,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
   func sumUpAllPassengers(cars: [Car]) throws -> String
+  func sumUpAllPerformanceScores(cars: [Car]) throws -> Double
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMap

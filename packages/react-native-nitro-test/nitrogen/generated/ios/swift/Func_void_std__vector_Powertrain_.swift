@@ -23,7 +23,7 @@ public final class Func_void_std__vector_Powertrain_ {
 
   @inline(__always)
   public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    self.closure(array.map({ __item in __item }))
+    self.closure(Array<Powertrain>.fastCopy(vector: array))
   }
 
   /**
