@@ -300,4 +300,6 @@ export interface Child extends Base {
   readonly childValue: number
   // tests if the same variant can be used in a different HybridObject
   bounceVariant(variant: NamedVariant): NamedVariant
+  // we override toString() here
+  toString(): string
 }

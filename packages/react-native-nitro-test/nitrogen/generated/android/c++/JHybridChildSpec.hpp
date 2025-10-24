@@ -56,6 +56,7 @@ namespace margelo::nitro::test {
   public:
     // Methods
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
+    std::string toString() override;
 
   private:
     friend HybridBase;

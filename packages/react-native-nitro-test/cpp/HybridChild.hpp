@@ -29,6 +29,10 @@ public:
   std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override {
     return variant;
   }
+
+  std::string toString() override {
+    return "HybridChild custom toString() :)";
+  }
 };
 
 }; // namespace margelo::nitro::test

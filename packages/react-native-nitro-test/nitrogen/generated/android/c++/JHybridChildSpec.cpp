@@ -66,5 +66,10 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JNamedVariant::fromCpp(variant));
     return __result->toCpp();
   }
+  std::string JHybridChildSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("toString");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
 
 } // namespace margelo::nitro::test

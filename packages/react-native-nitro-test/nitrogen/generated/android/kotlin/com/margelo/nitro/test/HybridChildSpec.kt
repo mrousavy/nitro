@@ -45,6 +45,10 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   @DoNotStrip
   @Keep
   abstract fun bounceVariant(variant: NamedVariant): NamedVariant
+  
+  @DoNotStrip
+  @Keep
+  abstract fun toString(): String
 
   private external fun initHybrid(): HybridData
 

@@ -43,6 +43,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->getMethods()) {
+    // method()
     const std::string& name = method.first;
     ObjectUtils::defineProperty(runtime, object, name.c_str(),
                                 PlainPropertyDescriptor{

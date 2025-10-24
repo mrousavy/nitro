@@ -14,4 +14,8 @@ class HybridChild : HybridChildSpec() {
   override fun bounceVariant(variant: NamedVariant): NamedVariant {
     return variant
   }
+
+  override fun toString(): String {
+    return "HybridChild custom toString() :)"
+  }
 }

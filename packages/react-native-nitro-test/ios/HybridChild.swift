@@ -18,4 +18,8 @@ class HybridChild: HybridChildSpec {
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant {
     return variant
   }
+
+  func toString() -> String {
+    return "HybridChild custom toString() :)"
+  }
 }
