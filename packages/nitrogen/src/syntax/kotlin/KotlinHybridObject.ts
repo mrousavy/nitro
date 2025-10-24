@@ -9,7 +9,6 @@ import { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
-import { isBaseObjectMethodName } from './isBaseObjectMethodName.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -145,7 +144,6 @@ function getMethodForwardImplementation(method: Method): string {
       return bridged.needsSpecialHandling
     })
 
-  const isOverridingBase = isBaseObjectMethodName(method)
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -159,10 +157,7 @@ function getMethodForwardImplementation(method: Method): string {
       '__result',
       'kotlin'
     )
-    const code = method.getCode('kotlin', {
-      virtual: true,
-      override: isOverridingBase,
-    })
+    const code = method.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
@@ -174,11 +169,7 @@ private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.g
 }
     `.trim()
   } else {
-    const code = method.getCode('kotlin', {
-      doNotStrip: true,
-      virtual: true,
-      override: isOverridingBase,
-    })
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
@@ -208,7 +199,9 @@ set(value) {
       `.trim()
       )
     }
-    const code = property.getCode('kotlin', { virtual: true })
+    const code = property.getCode('kotlin', {
+      virtual: true,
+    })
     return `
 ${code}
 
@@ -216,7 +209,10 @@ private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
   ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
-    const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
+    const code = property.getCode('kotlin', {
+      doNotStrip: true,
+      virtual: true,
+    })
     return code
   }
 }

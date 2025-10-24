@@ -19,6 +19,7 @@ import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
 import { getBaseTypes, getHybridObjectNitroModuleConfig } from './utils.js'
 import { NitroConfig } from './config/NitroConfig.js'
+import { isMemberOverridingFromBase } from './syntax/isMemberOverridingFromBase.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
@@ -151,6 +152,21 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     isHybridView: isHybridView(type),
     config: config,
   }
+
+  for (const member of [...properties, ...methods]) {
+    const isOverridingBaseMember = isMemberOverridingFromBase(
+      member.name,
+      spec,
+      language
+    )
+    if (isOverridingBaseMember) {
+      throw new Error(
+        `\`${name}.${member.name}\` is overriding a member of one of it's base classes. ` +
+          `This is unsupported, override on the native side instead!`
+      )
+    }
+  }
+
   return spec
 }
 

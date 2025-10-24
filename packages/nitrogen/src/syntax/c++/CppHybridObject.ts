@@ -29,6 +29,11 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cxxNamespace = spec.config.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
 
+  const properties = spec.properties.map((p) =>
+    p.getCode('c++', { virtual: true })
+  )
+  const methods = spec.methods.map((m) => m.getCode('c++', { virtual: true }))
+
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
     const baseName = getHybridObjectName(base.name).HybridTSpec
@@ -77,11 +82,11 @@ namespace ${cxxNamespace} {
 
     public:
       // Properties
-      ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
+      ${indent(properties.join('\n'), '      ')}
 
     public:
       // Methods
-      ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
+      ${indent(methods.join('\n'), '      ')}
 
     protected:
       // Hybrid Setup

@@ -11,7 +11,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
   const protocolName = name.HybridTSpec
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
-  const methods = spec.methods.map((p) => p.getCode('swift')).join('\n')
+  const methods = spec.methods.map((m) => m.getCode('swift')).join('\n')
   const extraImports = [
     ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
     ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
