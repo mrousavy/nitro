@@ -41,7 +41,7 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    *
    * Nitro prototypes also have a `__type`.
    *
-   * - For actual HybridObject instances, this is `NativeState<...>`
+   * - For actual HybridObject instances, this is `HybridObject<...>`
    * - For prototypes this is `Prototype<...>`.
    *
    * @internal
@@ -76,14 +76,13 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    * ```ts
    * const hybridA = SomeModule.getExistingHybridInstance()
    * const hybridB = SomeModule.getExistingHybridInstance()
-   * console.log(hybridA === hybridB) // false
    * console.log(hybridA.equals(hybridB)) // true
    * ```
    */
   equals(other: HybridObject<Platforms>): boolean
   /**
    * Disposes any resources this {@linkcode HybridObject} might hold natively,
-   * and finally releases this {@linkcode HybridObject}'s `NativeState`.
+   * and releases this {@linkcode HybridObject}'s `NativeState`.
    *
    * After calling {@linkcode dispose()}, this object can no longer be used.
    *
