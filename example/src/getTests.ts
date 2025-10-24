@@ -92,6 +92,7 @@ const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalString: 'hello!',
 }
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
+const TEST_LARGE_NUMBERS: number[] = Array(1024).map((_, i) => i * 100000)
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -392,7 +393,22 @@ export function getTests(
       it(() => testObject.bounceNumbers([1, 2, 13, 42]))
         .didNotThrow()
         .didReturn('object')
+        .toBeArray()
         .equals([1, 2, 13, 42])
+    ),
+    createTest('bounceNumbers(...) equals empty', () =>
+      it(() => testObject.bounceNumbers([]))
+        .didNotThrow()
+        .didReturn('object')
+        .toBeArray()
+        .equals([])
+    ),
+    createTest('bounceNumbers(...) equals TEST_LARGE_NUMBERS', () =>
+      it(() => testObject.bounceNumbers(TEST_LARGE_NUMBERS))
+        .didNotThrow()
+        .didReturn('object')
+        .toBeArray()
+        .equals(TEST_LARGE_NUMBERS)
     ),
     createTest('bounceStrings(...) equals', () =>
       it(() => testObject.bounceStrings(['hello', 'world', '!']))
