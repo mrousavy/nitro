@@ -14,7 +14,6 @@ import {
   deduplicateFiles,
   errorToString,
   indent,
-  NITROGEN_VERSION,
 } from './utils.js'
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
@@ -26,6 +25,7 @@ import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking
 import type { Autolinking } from './autolinking/Autolinking.js'
 import { createGitAttributes } from './createGitAttributes.js'
 import type { PlatformSpec } from 'react-native-nitro-modules'
+import { NITROGEN_VERSION } from './config/nitrogenVersion.js'
 
 interface NitrogenOptions {
   baseDirectory: string
