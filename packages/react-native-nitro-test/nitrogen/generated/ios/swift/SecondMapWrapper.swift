@@ -28,12 +28,12 @@ public extension SecondMapWrapper {
     }())
   }
 
-  var secondCached: Dictionary<String, String>? = nil
+  private var self.__cache__second Dictionary<String, String>? = nil
   var second: Dictionary<String, String> {
     @inline(__always)
     mutating get {
-      if let secondCached {
-        return secondCached
+      if let self.__cache__second {
+        return self.__cache__second
       }
       let __result = { () -> Dictionary<String, String> in
         var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
@@ -44,12 +44,12 @@ public extension SecondMapWrapper {
         }
         return __dictionary
       }()
-      secondCached = __result
+      self.__cache__second = __result
       return __result
     }
     @inline(__always)
     set {
-      secondCached = newValue
+      self.__cache__second = newValue
       self.__second = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var __map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
         for (__k, __v) in newValue {

@@ -34,12 +34,12 @@ public extension OptionalWrapper {
     }())
   }
 
-  var optionalArrayBufferCached: ArrayBuffer?? = nil
+  private var self.__cache__optionalArrayBuffer ArrayBuffer?? = nil
   var optionalArrayBuffer: ArrayBuffer? {
     @inline(__always)
     mutating get {
-      if let optionalArrayBufferCached {
-        return optionalArrayBufferCached
+      if let self.__cache__optionalArrayBuffer {
+        return self.__cache__optionalArrayBuffer
       }
       let __result = { () -> ArrayBuffer? in
         if bridge.has_value_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer) {
@@ -49,12 +49,12 @@ public extension OptionalWrapper {
           return nil
         }
       }()
-      optionalArrayBufferCached = __result
+      self.__cache__optionalArrayBuffer = __result
       return __result
     }
     @inline(__always)
     set {
-      optionalArrayBufferCached = newValue
+      self.__cache__optionalArrayBuffer = newValue
       self.__optionalArrayBuffer = { () -> bridge.std__optional_std__shared_ptr_ArrayBuffer__ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__shared_ptr_ArrayBuffer__(__unwrappedValue.getArrayBuffer())
@@ -65,12 +65,12 @@ public extension OptionalWrapper {
     }
   }
   
-  var optionalStringCached: String?? = nil
+  private var self.__cache__optionalString String?? = nil
   var optionalString: String? {
     @inline(__always)
     mutating get {
-      if let optionalStringCached {
-        return optionalStringCached
+      if let self.__cache__optionalString {
+        return self.__cache__optionalString
       }
       let __result = { () -> String? in
         if bridge.has_value_std__optional_std__string_(self.__optionalString) {
@@ -80,12 +80,12 @@ public extension OptionalWrapper {
           return nil
         }
       }()
-      optionalStringCached = __result
+      self.__cache__optionalString = __result
       return __result
     }
     @inline(__always)
     set {
-      optionalStringCached = newValue
+      self.__cache__optionalString = newValue
       self.__optionalString = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))

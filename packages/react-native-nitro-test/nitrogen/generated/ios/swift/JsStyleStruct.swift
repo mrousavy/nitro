@@ -25,30 +25,30 @@ public extension JsStyleStruct {
     }())
   }
 
-  var valueCached: Double? = nil
+  private var self.__cache__value Double? = nil
   var value: Double {
     @inline(__always)
     mutating get {
-      if let valueCached {
-        return valueCached
+      if let self.__cache__value {
+        return self.__cache__value
       }
       let __result = self.__value
-      valueCached = __result
+      self.__cache__value = __result
       return __result
     }
     @inline(__always)
     set {
-      valueCached = newValue
+      self.__cache__value = newValue
       self.__value = newValue
     }
   }
   
-  var onChangedCached: (_ num: Double) -> Void? = nil
+  private var self.__cache__onChanged (_ num: Double) -> Void? = nil
   var onChanged: (_ num: Double) -> Void {
     @inline(__always)
     mutating get {
-      if let onChangedCached {
-        return onChangedCached
+      if let self.__cache__onChanged {
+        return self.__cache__onChanged
       }
       let __result = { () -> (Double) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_double(self.__onChanged)
@@ -56,12 +56,12 @@ public extension JsStyleStruct {
           __wrappedFunction.call(__num)
         }
       }()
-      onChangedCached = __result
+      self.__cache__onChanged = __result
       return __result
     }
     @inline(__always)
     set {
-      onChangedCached = newValue
+      self.__cache__onChanged = newValue
       self.__onChanged = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(newValue)
         return bridge.create_Func_void_double(__closureWrapper.toUnsafe())

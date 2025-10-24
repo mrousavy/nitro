@@ -52,110 +52,110 @@ public extension Car {
     }())
   }
 
-  var yearCached: Double? = nil
+  private var self.__cache__year Double? = nil
   var year: Double {
     @inline(__always)
     mutating get {
-      if let yearCached {
-        return yearCached
+      if let self.__cache__year {
+        return self.__cache__year
       }
       let __result = self.__year
-      yearCached = __result
+      self.__cache__year = __result
       return __result
     }
     @inline(__always)
     set {
-      yearCached = newValue
+      self.__cache__year = newValue
       self.__year = newValue
     }
   }
   
-  var makeCached: String? = nil
+  private var self.__cache__make String? = nil
   var make: String {
     @inline(__always)
     mutating get {
-      if let makeCached {
-        return makeCached
+      if let self.__cache__make {
+        return self.__cache__make
       }
       let __result = String(self.__make)
-      makeCached = __result
+      self.__cache__make = __result
       return __result
     }
     @inline(__always)
     set {
-      makeCached = newValue
+      self.__cache__make = newValue
       self.__make = std.string(newValue)
     }
   }
   
-  var modelCached: String? = nil
+  private var self.__cache__model String? = nil
   var model: String {
     @inline(__always)
     mutating get {
-      if let modelCached {
-        return modelCached
+      if let self.__cache__model {
+        return self.__cache__model
       }
       let __result = String(self.__model)
-      modelCached = __result
+      self.__cache__model = __result
       return __result
     }
     @inline(__always)
     set {
-      modelCached = newValue
+      self.__cache__model = newValue
       self.__model = std.string(newValue)
     }
   }
   
-  var powerCached: Double? = nil
+  private var self.__cache__power Double? = nil
   var power: Double {
     @inline(__always)
     mutating get {
-      if let powerCached {
-        return powerCached
+      if let self.__cache__power {
+        return self.__cache__power
       }
       let __result = self.__power
-      powerCached = __result
+      self.__cache__power = __result
       return __result
     }
     @inline(__always)
     set {
-      powerCached = newValue
+      self.__cache__power = newValue
       self.__power = newValue
     }
   }
   
-  var powertrainCached: Powertrain? = nil
+  private var self.__cache__powertrain Powertrain? = nil
   var powertrain: Powertrain {
     @inline(__always)
     mutating get {
-      if let powertrainCached {
-        return powertrainCached
+      if let self.__cache__powertrain {
+        return self.__cache__powertrain
       }
       let __result = self.__powertrain
-      powertrainCached = __result
+      self.__cache__powertrain = __result
       return __result
     }
     @inline(__always)
     set {
-      powertrainCached = newValue
+      self.__cache__powertrain = newValue
       self.__powertrain = newValue
     }
   }
   
-  var driverCached: Person?? = nil
+  private var self.__cache__driver Person?? = nil
   var driver: Person? {
     @inline(__always)
     mutating get {
-      if let driverCached {
-        return driverCached
+      if let self.__cache__driver {
+        return self.__cache__driver
       }
       let __result = self.__driver.value
-      driverCached = __result
+      self.__cache__driver = __result
       return __result
     }
     @inline(__always)
     set {
-      driverCached = newValue
+      self.__cache__driver = newValue
       self.__driver = { () -> bridge.std__optional_Person_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -166,20 +166,20 @@ public extension Car {
     }
   }
   
-  var passengersCached: [Person]? = nil
+  private var self.__cache__passengers [Person]? = nil
   var passengers: [Person] {
     @inline(__always)
     mutating get {
-      if let passengersCached {
-        return passengersCached
+      if let self.__cache__passengers {
+        return self.__cache__passengers
       }
       let __result = self.__passengers.map({ __item in __item })
-      passengersCached = __result
+      self.__cache__passengers = __result
       return __result
     }
     @inline(__always)
     set {
-      passengersCached = newValue
+      self.__cache__passengers = newValue
       self.__passengers = { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(newValue.count)
         for __item in newValue {
@@ -190,12 +190,12 @@ public extension Car {
     }
   }
   
-  var isFastCached: Bool?? = nil
+  private var self.__cache__isFast Bool?? = nil
   var isFast: Bool? {
     @inline(__always)
     mutating get {
-      if let isFastCached {
-        return isFastCached
+      if let self.__cache__isFast {
+        return self.__cache__isFast
       }
       let __result = { () -> Bool? in
         if bridge.has_value_std__optional_bool_(self.__isFast) {
@@ -205,12 +205,12 @@ public extension Car {
           return nil
         }
       }()
-      isFastCached = __result
+      self.__cache__isFast = __result
       return __result
     }
     @inline(__always)
     set {
-      isFastCached = newValue
+      self.__cache__isFast = newValue
       self.__isFast = { () -> bridge.std__optional_bool_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_bool_(__unwrappedValue)
@@ -221,12 +221,12 @@ public extension Car {
     }
   }
   
-  var favouriteTrackCached: String?? = nil
+  private var self.__cache__favouriteTrack String?? = nil
   var favouriteTrack: String? {
     @inline(__always)
     mutating get {
-      if let favouriteTrackCached {
-        return favouriteTrackCached
+      if let self.__cache__favouriteTrack {
+        return self.__cache__favouriteTrack
       }
       let __result = { () -> String? in
         if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
@@ -236,12 +236,12 @@ public extension Car {
           return nil
         }
       }()
-      favouriteTrackCached = __result
+      self.__cache__favouriteTrack = __result
       return __result
     }
     @inline(__always)
     set {
-      favouriteTrackCached = newValue
+      self.__cache__favouriteTrack = newValue
       self.__favouriteTrack = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -252,20 +252,20 @@ public extension Car {
     }
   }
   
-  var performanceScoresCached: [Double]? = nil
+  private var self.__cache__performanceScores [Double]? = nil
   var performanceScores: [Double] {
     @inline(__always)
     mutating get {
-      if let performanceScoresCached {
-        return performanceScoresCached
+      if let self.__cache__performanceScores {
+        return self.__cache__performanceScores
       }
       let __result = self.__performanceScores.map({ __item in __item })
-      performanceScoresCached = __result
+      self.__cache__performanceScores = __result
       return __result
     }
     @inline(__always)
     set {
-      performanceScoresCached = newValue
+      self.__cache__performanceScores = newValue
       self.__performanceScores = { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(newValue.count)
         for __item in newValue {
