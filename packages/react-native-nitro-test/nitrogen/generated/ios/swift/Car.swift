@@ -65,6 +65,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      yearCached = newValue
       self.__year = newValue
     }
   }
@@ -82,6 +83,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      makeCached = newValue
       self.__make = std.string(newValue)
     }
   }
@@ -99,6 +101,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      modelCached = newValue
       self.__model = std.string(newValue)
     }
   }
@@ -116,6 +119,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      powerCached = newValue
       self.__power = newValue
     }
   }
@@ -133,6 +137,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      powertrainCached = newValue
       self.__powertrain = newValue
     }
   }
@@ -150,6 +155,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      driverCached = newValue
       self.__driver = { () -> bridge.std__optional_Person_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_Person_(__unwrappedValue)
@@ -173,6 +179,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      passengersCached = newValue
       self.__passengers = { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(newValue.count)
         for __item in newValue {
@@ -203,6 +210,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      isFastCached = newValue
       self.__isFast = { () -> bridge.std__optional_bool_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_bool_(__unwrappedValue)
@@ -233,6 +241,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      favouriteTrackCached = newValue
       self.__favouriteTrack = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -256,6 +265,7 @@ public extension Car {
     }
     @inline(__always)
     set {
+      performanceScoresCached = newValue
       self.__performanceScores = { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(newValue.count)
         for __item in newValue {

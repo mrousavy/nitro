@@ -41,6 +41,7 @@ public extension WrappedJsStruct {
     }
     @inline(__always)
     set {
+      valueCached = newValue
       self.__value = newValue
     }
   }
@@ -58,6 +59,7 @@ public extension WrappedJsStruct {
     }
     @inline(__always)
     set {
+      itemsCached = newValue
       self.__items = { () -> bridge.std__vector_JsStyleStruct_ in
         var __vector = bridge.create_std__vector_JsStyleStruct_(newValue.count)
         for __item in newValue {

@@ -35,6 +35,7 @@ public extension Person {
     }
     @inline(__always)
     set {
+      nameCached = newValue
       self.__name = std.string(newValue)
     }
   }
@@ -52,6 +53,7 @@ public extension Person {
     }
     @inline(__always)
     set {
+      ageCached = newValue
       self.__age = newValue
     }
   }

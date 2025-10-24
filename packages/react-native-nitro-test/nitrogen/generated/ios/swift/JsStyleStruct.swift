@@ -38,6 +38,7 @@ public extension JsStyleStruct {
     }
     @inline(__always)
     set {
+      valueCached = newValue
       self.__value = newValue
     }
   }
@@ -60,6 +61,7 @@ public extension JsStyleStruct {
     }
     @inline(__always)
     set {
+      onChangedCached = newValue
       self.__onChanged = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(newValue)
         return bridge.create_Func_void_double(__closureWrapper.toUnsafe())

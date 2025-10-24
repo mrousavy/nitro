@@ -49,6 +49,7 @@ public extension SecondMapWrapper {
     }
     @inline(__always)
     set {
+      secondCached = newValue
       self.__second = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var __map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
         for (__k, __v) in newValue {

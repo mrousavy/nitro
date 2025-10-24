@@ -33,6 +33,7 @@ var ${p.escapedName}: ${p.getCode('swift')} {
   }
   @inline(__always)
   set {
+    ${p.escapedName}Cached = newValue
     ${cppName} = ${indent(bridge.parseFromSwiftToCpp('newValue', 'swift'), '    ')}
   }
 }
