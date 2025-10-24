@@ -48,7 +48,7 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   
   @DoNotStrip
   @Keep
-  abstract fun toString(): String
+  abstract override fun toString(): String
 
   private external fun initHybrid(): HybridData
 
