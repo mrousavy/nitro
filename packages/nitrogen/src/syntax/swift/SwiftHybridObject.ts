@@ -83,6 +83,13 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   ${indent(methods, '  ')}
 }
 
+public extension ${protocolName}_protocol {
+  /// Default implementation of \`\`HybridObject.toString\`\`
+  func toString() -> String {
+    return "[HybridObject ${name.T}]"
+  }
+}
+
 /// See \`\`${protocolName}\`\`
 open class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
   ${indent(baseMembers.join('\n'), '  ')}

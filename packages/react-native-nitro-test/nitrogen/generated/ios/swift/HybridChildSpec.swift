@@ -17,6 +17,13 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant
 }
 
+public extension HybridChildSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject Child]"
+  }
+}
+
 /// See ``HybridChildSpec``
 open class HybridChildSpec_base: HybridBaseSpec_base {
   private weak var cxxWrapper: HybridChildSpec_cxx? = nil

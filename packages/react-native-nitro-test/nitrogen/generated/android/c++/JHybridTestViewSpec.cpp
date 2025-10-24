@@ -37,6 +37,12 @@ namespace margelo::nitro::test {
     method(_javaPart);
   }
 
+  std::string JHybridTestViewSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
+  }
+
   // Properties
   bool JHybridTestViewSpec::getIsBlue() {
     static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");

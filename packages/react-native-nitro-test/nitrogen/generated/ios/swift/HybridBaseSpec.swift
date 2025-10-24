@@ -17,6 +17,13 @@ public protocol HybridBaseSpec_protocol: HybridObject {
   
 }
 
+public extension HybridBaseSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject Base]"
+  }
+}
+
 /// See ``HybridBaseSpec``
 open class HybridBaseSpec_base {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil

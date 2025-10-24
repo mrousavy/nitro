@@ -94,6 +94,11 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     super.updateNative(hybridData)
   }
 
+  // Default implementation of \`HybridObject.toString()\`
+  override fun toString(): String {
+    return "[HybridObject ${name.T}]"
+  }
+
   // Properties
   ${indent(properties, '  ')}
 

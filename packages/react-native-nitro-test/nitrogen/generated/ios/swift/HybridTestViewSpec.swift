@@ -20,6 +20,13 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   func someMethod() throws -> Void
 }
 
+public extension HybridTestViewSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject TestView]"
+  }
+}
+
 /// See ``HybridTestViewSpec``
 open class HybridTestViewSpec_base {
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil

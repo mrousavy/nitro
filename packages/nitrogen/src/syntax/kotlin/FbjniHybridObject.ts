@@ -113,6 +113,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
   public:
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     inline const jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() const noexcept {
@@ -196,6 +197,12 @@ namespace ${cxxNamespace} {
   void ${name.JHybridTSpec}::dispose() noexcept {
     static const auto method = javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
+  }
+
+  std::string ${name.JHybridTSpec}::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
   }
 
   // Properties

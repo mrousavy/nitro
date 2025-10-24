@@ -56,7 +56,7 @@ On the native side you still start out with a synchronous method, but you can re
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridMiner.swift"
     class HybridMiner : HybridMinerSpec {
-      public func mineOneBitcoin() throws -> Promise<Double> {
+      func mineOneBitcoin() throws -> Promise<Double> {
         // 1. synchronous in here, JS Thread is still blocked
         //    useful e.g. for argument checking before starting async Thread
         return Promise.async {

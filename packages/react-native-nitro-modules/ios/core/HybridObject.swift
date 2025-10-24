@@ -37,6 +37,11 @@ public protocol HybridObject: AnyObject {
    * if required.
    */
   func dispose()
+
+  /**
+   * Get a string representation of this `HybridObject` - useful for logging or debugging.
+   */
+  func toString() -> String
 }
 
 extension HybridObject {
@@ -44,4 +49,8 @@ extension HybridObject {
   public var memorySize: Int { return 0 }
   // By default, this does nothing.
   public func dispose() {}
+  // By default, this just returns `[HybridObject]`
+  public func toString() -> String {
+    return "[HybridObject object]"
+  }
 }

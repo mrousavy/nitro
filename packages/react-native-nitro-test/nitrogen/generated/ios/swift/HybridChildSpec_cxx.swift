@@ -108,6 +108,14 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
     self.__implementation.dispose()
   }
 
+  /**
+   * Call toString() on the Swift class.
+   */
+  @inline(__always)
+  public override func toString() -> String {
+    return self.__implementation.toString()
+  }
+
   // Properties
   public final var childValue: Double {
     @inline(__always)

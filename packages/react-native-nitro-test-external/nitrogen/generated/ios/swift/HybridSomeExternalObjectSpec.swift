@@ -17,6 +17,13 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
   func getValue() throws -> String
 }
 
+public extension HybridSomeExternalObjectSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject SomeExternalObject]"
+  }
+}
+
 /// See ``HybridSomeExternalObjectSpec``
 open class HybridSomeExternalObjectSpec_base {
   private weak var cxxWrapper: HybridSomeExternalObjectSpec_cxx? = nil

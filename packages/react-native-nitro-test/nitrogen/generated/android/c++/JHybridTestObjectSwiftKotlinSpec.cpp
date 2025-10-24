@@ -133,6 +133,12 @@ namespace margelo::nitro::test {
     method(_javaPart);
   }
 
+  std::string JHybridTestObjectSwiftKotlinSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
+  }
+
   // Properties
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>()>("getThisObject");

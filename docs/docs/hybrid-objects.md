@@ -82,6 +82,40 @@ console.log(math.toString()) // "[HybridObject Math]"
 console.log(math.equals(anotherMath)) // true
 ```
 
+### Overriding base methods
+
+In your implementation, you can override `HybridObject`'s base methods like `toString()` or `dispose()`:
+
+<Tabs groupId="native-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridMath.swift"
+    class HybridMath : HybridMathSpec {
+      func toString() -> String {
+        return "{HybridMath}"
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridMath.kt"
+    class HybridMath : HybridMathSpec() {
+      override fun toString(): String {
+        return "{HybridMath}"
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp title="HybridMath.hpp"
+    class HybridMath: public HybridMathSpec {
+      std::string toString() override {
+        return "{HybridMath}";
+      }
+    };
+    ```
+  </TabItem>
+</Tabs>
+
 ### `dispose()`
 
 Additionally, every Hybrid Object has a `dispose()` method.
@@ -120,10 +154,10 @@ Hybrid Objects can be implemented in C++, Swift or Kotlin:
     <TabItem value="swift" label="Swift" default>
       ```swift title="HybridMath.swift"
       class HybridMath : HybridMathSpec {
-        public var pi: Double {
+        var pi: Double {
           return Double.pi
         }
-        public func add(a: Double, b: Double) throws -> Double {
+        func add(a: Double, b: Double) throws -> Double {
           return a + b
         }
       }
@@ -324,7 +358,7 @@ Nitro allows Hybrid Objects to declare their memory size via the `memorySize`/`g
 ```swift
 class HybridImage : HybridImageSpec {
   private var cgImage: CGImage
-  public var memorySize: Int {
+  var memorySize: Int {
     let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
     return imageSize
   }
