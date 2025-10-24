@@ -222,7 +222,7 @@ To let the JavaScript runtime know about a Hybrid Object's actual size in memory
 ```swift
 class HybridImage : HybridImageSpec {
   private var cgImage: CGImage
-  public var memorySize: Int {
+  var memorySize: Int {
     let imageSize = cgImage.width * cgImage.height * cgImage.bytesPerPixel
     return imageSize
   }

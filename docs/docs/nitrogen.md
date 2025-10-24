@@ -207,7 +207,7 @@ To implement `Math` now, you just need to implement the spec:
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridMath.swift"
     class HybridMath : HybridMathSpec {
-      public func add(a: Double, b: Double) throws -> Double {
+      func add(a: Double, b: Double) throws -> Double {
         return a + b
       }
     }

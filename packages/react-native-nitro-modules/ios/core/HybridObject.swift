@@ -37,7 +37,7 @@ public protocol HybridObject: AnyObject {
    * if required.
    */
   func dispose()
-  
+
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
    */

@@ -153,7 +153,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
         ```swift title="HybridMath.swift"
         class HybridMath : HybridMathSpec {
-          public func add(a: Double, b: Double) throws -> Double {
+          func add(a: Double, b: Double) throws -> Double {
             return a + b
           }
         }
