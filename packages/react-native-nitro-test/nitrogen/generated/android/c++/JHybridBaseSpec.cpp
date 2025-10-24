@@ -33,6 +33,12 @@ namespace margelo::nitro::test {
     method(_javaPart);
   }
 
+  std::string JHybridBaseSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto jstring = method(_javaPart);
+    return jstring->toStdString();
+  }
+
   // Properties
   double JHybridBaseSpec::getBaseValue() {
     static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");

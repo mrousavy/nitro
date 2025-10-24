@@ -49,6 +49,12 @@ namespace margelo::nitro::test {
     method(_javaPart);
   }
 
+  std::string JHybridChildSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto jstring = method(_javaPart);
+    return jstring->toStdString();
+  }
+
   // Properties
   double JHybridChildSpec::getChildValue() {
     static const auto method = javaClassStatic()->getMethod<double()>("getChildValue");

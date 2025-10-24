@@ -107,6 +107,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     self.__implementation.dispose()
   }
 
+  /**
+   * Call toString() on the Swift class.
+   */
+  @inline(__always)
+  public func toString() -> String {
+    return self.__implementation.toString()
+  }
+
   // Properties
   public final var thisObject: bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     @inline(__always)

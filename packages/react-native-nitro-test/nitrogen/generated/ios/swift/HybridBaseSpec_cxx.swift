@@ -105,6 +105,14 @@ open class HybridBaseSpec_cxx {
     self.__implementation.dispose()
   }
 
+  /**
+   * Call toString() on the Swift class.
+   */
+  @inline(__always)
+  public func toString() -> String {
+    return self.__implementation.toString()
+  }
+
   // Properties
   public final var baseValue: Double {
     @inline(__always)

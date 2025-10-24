@@ -47,6 +47,16 @@ abstract class HybridObject {
   open fun dispose() { }
 
   /**
+   * Get a string representation of this `HybridObject` - useful for logging or debugging.
+   */
+  @DoNotStrip
+  @Keep
+  override fun toString(): String {
+    val ownName = this::class.simpleName
+    return "[HybridObject $ownName]"
+  }
+
+  /**
    * Holds the native C++ instance.
    * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
    * This is `null`, until `updateNative(..)` is called.

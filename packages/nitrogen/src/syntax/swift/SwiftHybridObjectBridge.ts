@@ -220,6 +220,14 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
     self.__implementation.dispose()
   }
 
+  /**
+   * Call toString() on the Swift class.
+   */
+  @inline(__always)
+  public ${hasBase ? 'override func' : 'func'} toString() -> String {
+    return self.__implementation.toString()
+  }
+
   // Properties
   ${indent(propertiesBridge.join('\n\n'), '  ')}
 
@@ -389,6 +397,9 @@ namespace ${cxxNamespace} {
     }
     void dispose() noexcept override {
       _swiftPart.dispose();
+    }
+    std::string toString() override {
+      return _swiftPart.toString();
     }
 
   public:
