@@ -19,6 +19,7 @@ import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
+import { isPrimitivelyCopyable } from './isPrimitivelyCopyable.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -267,8 +268,26 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  const funcName = `create_${name}`
-  const code = `
+  let code: string
+  let funcName: string
+  if (isPrimitivelyCopyable(type.itemType)) {
+    const itemType = type.itemType.getCode('c++')
+    funcName = `copy_${name}`
+    code = `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} copy_${name}(const ${itemType}* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+  return margelo::nitro::FastVectorCopy<${itemType}>(data, size);
+}
+inline const ${itemType}* CONTIGUOUS_MEMORY NON_NULL get_data_${name}(const ${actualType}& vector) noexcept {
+  return vector.data();
+}
+`.trim()
+  } else {
+    funcName = `create_${name}`
+    code = `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
@@ -278,6 +297,7 @@ inline ${actualType} create_${name}(size_t size) noexcept {
   vector.reserve(size);
   return vector;
 }`.trim()
+  }
 
   return {
     cxxType: actualType,
@@ -288,6 +308,11 @@ inline ${actualType} create_${name}(size_t size) noexcept {
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'NitroModules/FastVectorCopy.hpp',
           space: 'system',
           language: 'c++',
         },
