@@ -81,6 +81,16 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return strings.joinToString(separator = ", ")
   }
 
+  override fun sumUpAllPerformanceScores(cars: Array<Car>): Double {
+    var result = 0.0
+    for (car in cars) {
+      for (score in car.performanceScores) {
+        result += score
+      }
+    }
+    return result
+  }
+
   override fun bounceEnums(array: Array<Powertrain>): Array<Powertrain> {
     return array
   }

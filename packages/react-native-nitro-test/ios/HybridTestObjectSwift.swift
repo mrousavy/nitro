@@ -151,7 +151,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     }
     return stringified.joined(separator: ", ")
   }
-  
+
   func sumUpAllPerformanceScores(cars: [Car]) throws -> Double {
     var result = 0.0
     for car in cars {
@@ -167,7 +167,8 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func complexEnumCallback(
-    array: ContiguousArray<Powertrain>, callback: @escaping ((_ array: ContiguousArray<Powertrain>) -> Void)
+    array: ContiguousArray<Powertrain>,
+    callback: @escaping ((_ array: ContiguousArray<Powertrain>) -> Void)
   ) throws {
     callback(array)
   }
