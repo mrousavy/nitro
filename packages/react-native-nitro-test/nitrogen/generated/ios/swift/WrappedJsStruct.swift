@@ -28,10 +28,16 @@ public extension WrappedJsStruct {
     }())
   }
 
+  var valueCached: JsStyleStruct? = nil
   var value: JsStyleStruct {
     @inline(__always)
-    get {
-      return self.__value
+    mutating get {
+      if let valueCached {
+        return valueCached
+      }
+      let __result = self.__value
+      valueCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -39,10 +45,16 @@ public extension WrappedJsStruct {
     }
   }
   
+  var itemsCached: [JsStyleStruct]? = nil
   var items: [JsStyleStruct] {
     @inline(__always)
-    get {
-      return self.__items.map({ __item in __item })
+    mutating get {
+      if let itemsCached {
+        return itemsCached
+      }
+      let __result = self.__items.map({ __item in __item })
+      itemsCached = __result
+      return __result
     }
     @inline(__always)
     set {

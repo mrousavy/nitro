@@ -22,10 +22,16 @@ public extension Person {
     self.init(std.string(name), age)
   }
 
+  var nameCached: String? = nil
   var name: String {
     @inline(__always)
-    get {
-      return String(self.__name)
+    mutating get {
+      if let nameCached {
+        return nameCached
+      }
+      let __result = String(self.__name)
+      nameCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -33,10 +39,16 @@ public extension Person {
     }
   }
   
+  var ageCached: Double? = nil
   var age: Double {
     @inline(__always)
-    get {
-      return self.__age
+    mutating get {
+      if let ageCached {
+        return ageCached
+      }
+      let __result = self.__age
+      ageCached = __result
+      return __result
     }
     @inline(__always)
     set {

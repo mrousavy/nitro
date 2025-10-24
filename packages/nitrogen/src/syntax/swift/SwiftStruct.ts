@@ -20,10 +20,16 @@ export function createSwiftStructBridge(
       const bridge = new SwiftCxxBridgedType(p, true)
       const cppName = `self.__${p.escapedName}`
       return `
+var ${p.escapedName}Cached: ${p.getCode('swift')}? = nil
 var ${p.escapedName}: ${p.getCode('swift')} {
   @inline(__always)
-  get {
-    return ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '    ')}
+  mutating get {
+    if let ${p.escapedName}Cached {
+      return ${p.escapedName}Cached
+    }
+    let __result = ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '    ')}
+    ${p.escapedName}Cached = __result
+    return __result
   }
   @inline(__always)
   set {

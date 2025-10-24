@@ -52,10 +52,16 @@ public extension Car {
     }())
   }
 
+  var yearCached: Double? = nil
   var year: Double {
     @inline(__always)
-    get {
-      return self.__year
+    mutating get {
+      if let yearCached {
+        return yearCached
+      }
+      let __result = self.__year
+      yearCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -63,10 +69,16 @@ public extension Car {
     }
   }
   
+  var makeCached: String? = nil
   var make: String {
     @inline(__always)
-    get {
-      return String(self.__make)
+    mutating get {
+      if let makeCached {
+        return makeCached
+      }
+      let __result = String(self.__make)
+      makeCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -74,10 +86,16 @@ public extension Car {
     }
   }
   
+  var modelCached: String? = nil
   var model: String {
     @inline(__always)
-    get {
-      return String(self.__model)
+    mutating get {
+      if let modelCached {
+        return modelCached
+      }
+      let __result = String(self.__model)
+      modelCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -85,10 +103,16 @@ public extension Car {
     }
   }
   
+  var powerCached: Double? = nil
   var power: Double {
     @inline(__always)
-    get {
-      return self.__power
+    mutating get {
+      if let powerCached {
+        return powerCached
+      }
+      let __result = self.__power
+      powerCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -96,10 +120,16 @@ public extension Car {
     }
   }
   
+  var powertrainCached: Powertrain? = nil
   var powertrain: Powertrain {
     @inline(__always)
-    get {
-      return self.__powertrain
+    mutating get {
+      if let powertrainCached {
+        return powertrainCached
+      }
+      let __result = self.__powertrain
+      powertrainCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -107,10 +137,16 @@ public extension Car {
     }
   }
   
+  var driverCached: Person?? = nil
   var driver: Person? {
     @inline(__always)
-    get {
-      return self.__driver.value
+    mutating get {
+      if let driverCached {
+        return driverCached
+      }
+      let __result = self.__driver.value
+      driverCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -124,10 +160,16 @@ public extension Car {
     }
   }
   
+  var passengersCached: [Person]? = nil
   var passengers: [Person] {
     @inline(__always)
-    get {
-      return self.__passengers.map({ __item in __item })
+    mutating get {
+      if let passengersCached {
+        return passengersCached
+      }
+      let __result = self.__passengers.map({ __item in __item })
+      passengersCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -141,10 +183,14 @@ public extension Car {
     }
   }
   
+  var isFastCached: Bool?? = nil
   var isFast: Bool? {
     @inline(__always)
-    get {
-      return { () -> Bool? in
+    mutating get {
+      if let isFastCached {
+        return isFastCached
+      }
+      let __result = { () -> Bool? in
         if bridge.has_value_std__optional_bool_(self.__isFast) {
           let __unwrapped = bridge.get_std__optional_bool_(self.__isFast)
           return __unwrapped
@@ -152,6 +198,8 @@ public extension Car {
           return nil
         }
       }()
+      isFastCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -165,10 +213,14 @@ public extension Car {
     }
   }
   
+  var favouriteTrackCached: String?? = nil
   var favouriteTrack: String? {
     @inline(__always)
-    get {
-      return { () -> String? in
+    mutating get {
+      if let favouriteTrackCached {
+        return favouriteTrackCached
+      }
+      let __result = { () -> String? in
         if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
           let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
           return String(__unwrapped)
@@ -176,6 +228,8 @@ public extension Car {
           return nil
         }
       }()
+      favouriteTrackCached = __result
+      return __result
     }
     @inline(__always)
     set {
@@ -189,10 +243,16 @@ public extension Car {
     }
   }
   
+  var performanceScoresCached: [Double]? = nil
   var performanceScores: [Double] {
     @inline(__always)
-    get {
-      return self.__performanceScores.map({ __item in __item })
+    mutating get {
+      if let performanceScoresCached {
+        return performanceScoresCached
+      }
+      let __result = self.__performanceScores.map({ __item in __item })
+      performanceScoresCached = __result
+      return __result
     }
     @inline(__always)
     set {

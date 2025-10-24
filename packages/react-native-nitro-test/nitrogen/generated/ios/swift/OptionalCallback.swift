@@ -38,10 +38,14 @@ public extension OptionalCallback {
     }())
   }
 
+  var callbackCached: Variant_______Void_Double?? = nil
   var callback: Variant_______Void_Double? {
     @inline(__always)
-    get {
-      return { () -> Variant_______Void_Double? in
+    mutating get {
+      if let callbackCached {
+        return callbackCached
+      }
+      let __result = { () -> Variant_______Void_Double? in
         if bridge.has_value_std__optional_std__variant_std__function_void_____double__(self.__callback) {
           let __unwrapped = bridge.get_std__optional_std__variant_std__function_void_____double__(self.__callback)
           return { () -> Variant_______Void_Double in
@@ -66,6 +70,8 @@ public extension OptionalCallback {
           return nil
         }
       }()
+      callbackCached = __result
+      return __result
     }
     @inline(__always)
     set {
