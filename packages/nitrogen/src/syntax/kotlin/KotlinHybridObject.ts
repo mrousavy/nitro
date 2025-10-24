@@ -157,9 +157,7 @@ function getMethodForwardImplementation(method: Method): string {
       '__result',
       'kotlin'
     )
-    const code = method.getCode('kotlin', {
-      virtual: true,
-    })
+    const code = method.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
@@ -171,10 +169,7 @@ private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.g
 }
     `.trim()
   } else {
-    const code = method.getCode('kotlin', {
-      doNotStrip: true,
-      virtual: true,
-    })
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
