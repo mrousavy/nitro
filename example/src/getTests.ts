@@ -1575,6 +1575,16 @@ export function getTests(
         .didNotThrow()
         .equals('Child')
     ),
+    createTest('createChild() has overridden toString()', () =>
+      it(() => testObject.createChild().toString())
+        .didNotThrow()
+        .equals('HybridChild custom toString() :)')
+    ),
+    createTest('createBaseActualChild() has overridden toString()', () =>
+      it(() => testObject.createBaseActualChild().toString())
+        .didNotThrow()
+        .equals('HybridChild custom toString() :)')
+    ),
     createTest('createBaseActualChild() has name "Child"', () =>
       it(() => testObject.createBaseActualChild().name)
         .didNotThrow()
