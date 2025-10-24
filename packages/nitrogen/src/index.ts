@@ -90,6 +90,7 @@ await yargs(hideBin(process.argv))
   )
   .help()
   .strict()
+  .version(NITROGEN_VERSION)
   .wrap(cliWidth).argv
 
 async function runNitrogenCommand(
