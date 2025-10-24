@@ -460,7 +460,8 @@ HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::shared_ptr<
 }
 
 Car HybridTestObjectCpp::getCar() {
-  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, {}, true, std::nullopt, {100, 10}, std::nullopt);
+  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, {}, true, std::nullopt, {100, 10},
+             std::nullopt);
 }
 
 bool HybridTestObjectCpp::isCarElectric(const Car& car) {
