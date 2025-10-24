@@ -558,6 +558,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func sumUpAllPerformanceScores(cars: bridge.std__vector_Car_) -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.sumUpAllPerformanceScores(cars: cars.map({ __item in __item }))
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceEnums(array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
       let __result = try self.__implementation.bounceEnums(array: { () -> ContiguousArray<Powertrain> in

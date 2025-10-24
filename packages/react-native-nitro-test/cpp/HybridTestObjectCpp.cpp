@@ -186,6 +186,16 @@ std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars
   return oss.str();
 }
 
+double HybridTestObjectCpp::sumUpAllPerformanceScores(const std::vector<Car> &cars) {
+  double result = 0;
+  for (const auto& car : cars) {
+    for (const auto& score : car.performanceScores) {
+      result += score;
+    }
+  }
+  return result;
+}
+
 std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {
   return array;
 }

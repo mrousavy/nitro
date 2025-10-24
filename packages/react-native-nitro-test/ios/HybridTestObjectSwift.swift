@@ -151,6 +151,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     }
     return stringified.joined(separator: ", ")
   }
+  
+  func sumUpAllPerformanceScores(cars: [Car]) throws -> Double {
+    var result = 0.0
+    for car in cars {
+      for score in car.performanceScores {
+        result += score
+      }
+    }
+    return result
+  }
 
   func bounceEnums(array: ContiguousArray<Powertrain>) throws -> ContiguousArray<Powertrain> {
     return array

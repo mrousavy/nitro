@@ -385,6 +385,19 @@ namespace margelo::nitro::test {
     }());
     return __result->toStdString();
   }
+  double JHybridTestObjectSwiftKotlinSpec::sumUpAllPerformanceScores(const std::vector<Car>& cars) {
+    static const auto method = javaClassStatic()->getMethod<double(jni::alias_ref<jni::JArrayClass<JCar>> /* cars */)>("sumUpAllPerformanceScores");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = cars.size();
+      jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = cars[__i];
+        __array->setElement(__i, *JCar::fromCpp(__element));
+      }
+      return __array;
+    }());
+    return __result;
+  }
   std::vector<Powertrain> JHybridTestObjectSwiftKotlinSpec::bounceEnums(const std::vector<Powertrain>& array) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JPowertrain>>(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("bounceEnums");
     auto __result = method(_javaPart, [&]() {

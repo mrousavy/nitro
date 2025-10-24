@@ -112,6 +112,15 @@ function sumUpAllPassengers(cars: Car[]): string {
     )
     .join(', ')
 }
+function sumUpAllPerformanceScores(cars: Car[]): number {
+  let result = 0
+  for (const car of cars) {
+    for (const score of car.performanceScores) {
+      result += score
+    }
+  }
+  return result
+}
 
 function createTest<T>(
   name: string,
@@ -444,12 +453,12 @@ export function getTests(
         .didReturn('string')
         .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
     ),
-    // createTest('sumUpAllPerformanceScores(...) equals', () =>
-    //   it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
-    //     .didNotThrow()
-    //     .didReturn('string')
-    //     .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
-    // ),
+    createTest('sumUpAllPerformanceScores(...) equals', () =>
+      it(() => testObject.sumUpAllPerformanceScores([TEST_CAR, TEST_CAR_2]))
+        .didNotThrow()
+        .didReturn('number')
+        .equals(sumUpAllPerformanceScores([TEST_CAR, TEST_CAR_2]))
+    ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))
         .didNotThrow()

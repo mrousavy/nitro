@@ -285,6 +285,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline double sumUpAllPerformanceScores(const std::vector<Car>& cars) override {
+      auto __result = _swiftPart.sumUpAllPerformanceScores(cars);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override {
       auto __result = _swiftPart.bounceEnums(array);
       if (__result.hasError()) [[unlikely]] {
