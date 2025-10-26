@@ -28,7 +28,6 @@ class NitroModulesPackage : BaseReactPackage() {
           NitroModules.NAME,
           canOverrideExistingModule = false,
           needsEagerInit = false,
-          hasConstants = false,
           isCxxModule = false,
           isTurboModule = isTurboModule,
         )
