@@ -191,7 +191,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    */
   public func getCxxPart() -> bridge.${bridge.specializationName} {
     let cachedCxxPart = self.__cxxPart.lock()
-    if cachedCxxPart.__convertToBool() {
+    if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.${bridge.funcName}(self.toUnsafe())

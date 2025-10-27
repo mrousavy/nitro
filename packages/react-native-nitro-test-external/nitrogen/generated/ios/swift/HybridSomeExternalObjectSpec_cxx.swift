@@ -76,7 +76,7 @@ open class HybridSomeExternalObjectSpec_cxx {
    */
   public func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
-    if cachedCxxPart.__convertToBool() {
+    if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(self.toUnsafe())
