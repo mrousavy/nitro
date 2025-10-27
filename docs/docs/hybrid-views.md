@@ -72,16 +72,16 @@ To access the actual underlying object, you can use the `hybridRef`:
 function App() {
   return (
     <Camera
-      hybridRef={{
-        f: (ref) => {
-          console.log(ref.name) // <-- HybridCamera
-          const image = ref.takePhoto()
-        }
-      }}
+      hybridRef={callback((ref) => {
+        console.log(ref.name) // <-- HybridCamera
+        const image = ref.takePhoto()
+      })}
     />
   )
 }
 ```
+
+> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](view-components#callbacks-have-to-be-wrapped).
 
 ## Full Guides
 
