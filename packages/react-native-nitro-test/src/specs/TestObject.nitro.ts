@@ -273,6 +273,7 @@ export interface TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
 
+  // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString
 }
 
