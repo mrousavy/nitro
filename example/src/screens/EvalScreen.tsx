@@ -8,7 +8,6 @@ import {
   Platform,
   TextInput,
   KeyboardAvoidingView,
-  Keyboard,
 } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
