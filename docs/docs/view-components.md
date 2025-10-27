@@ -116,7 +116,7 @@ On Android, you need to register the generated view manager in your React Native
 
 ```kotlin title="CameraPackage.kt"
 // ...
-public class CameraPackage: TurboReactPackage() {
+public class CameraPackage: BaseReactPackage() {
   // ...
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
