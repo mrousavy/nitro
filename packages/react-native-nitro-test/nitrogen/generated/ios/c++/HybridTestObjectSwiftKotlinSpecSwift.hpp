@@ -94,9 +94,9 @@ namespace margelo::nitro::test {
   class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart):
+    explicit HybridTestObjectSwiftKotlinSpecSwift(NitroTest::HybridTestObjectSwiftKotlinSpec_cxx&& swiftPart):
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
-      _swiftPart(swiftPart) { }
+      _swiftPart(std::move(swiftPart)) { }
 
   public:
     // Get the Swift part

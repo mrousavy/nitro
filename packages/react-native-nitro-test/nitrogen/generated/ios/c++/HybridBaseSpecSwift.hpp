@@ -33,9 +33,9 @@ namespace margelo::nitro::test {
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(const NitroTest::HybridBaseSpec_cxx& swiftPart):
+    explicit HybridBaseSpecSwift(NitroTest::HybridBaseSpec_cxx&& swiftPart):
       HybridObject(HybridBaseSpec::TAG),
-      _swiftPart(swiftPart) { }
+      _swiftPart(std::move(swiftPart)) { }
 
   public:
     // Get the Swift part

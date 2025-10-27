@@ -381,9 +381,9 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
+    explicit ${name.HybridTSpecSwift}(${iosModuleName}::${name.HybridTSpecCxx}&& swiftPart):
       ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
-      _swiftPart(swiftPart) { }
+      _swiftPart(std::move(swiftPart)) { }
 
   public:
     // Get the Swift part

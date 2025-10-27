@@ -110,7 +110,7 @@ function createCxxHybridObjectSwiftHelper(
     // We own the implementation - we call into Swift to convert it internally
     createImplementation = `
 ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
-return std::make_shared<${swiftWrappingType}>(swiftPart);
+return std::make_shared<${swiftWrappingType}>(std::move(swiftPart));
     `.trim()
     getImplementation = `
 std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);

@@ -33,9 +33,9 @@ namespace margelo::nitro::test::external {
   class HybridSomeExternalObjectSpecSwift: public virtual HybridSomeExternalObjectSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridSomeExternalObjectSpecSwift(const NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart):
+    explicit HybridSomeExternalObjectSpecSwift(NitroTestExternal::HybridSomeExternalObjectSpec_cxx&& swiftPart):
       HybridObject(HybridSomeExternalObjectSpec::TAG),
-      _swiftPart(swiftPart) { }
+      _swiftPart(std::move(swiftPart)) { }
 
   public:
     // Get the Swift part
