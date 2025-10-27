@@ -15,6 +15,8 @@
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
 
+#include "JHybridBaseSpec.hpp"
+#include "JHybridChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
@@ -27,8 +29,6 @@
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_double.hpp"
-#include "JHybridBaseSpec.hpp"
-#include "JHybridChildSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
@@ -43,6 +43,8 @@ int initialize(JavaVM* vm) {
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
+    margelo::nitro::test::JHybridBaseSpec::registerNatives();
+    margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
@@ -55,8 +57,6 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JFunc_void_std__string_cxx::registerNatives();
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
     margelo::nitro::test::JFunc_double_cxx::registerNatives();
-    margelo::nitro::test::JHybridBaseSpec::registerNatives();
-    margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridTestViewSpec::registerNatives();
     margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
 
