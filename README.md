@@ -18,7 +18,7 @@ It consists of two parts:
 
 Declaration (TypeScript):
 ```ts
-export interface Math extends HybridObject {
+export interface Math extends HybridObject<{ ios: 'c++' }> {
   add(a: number, b: number): number
 }
 ```
@@ -35,6 +35,8 @@ public:
 
 Usage (TypeScript):
 ```ts
+import { NitroModules } from 'react-native-nitro-modules'
+
 const math = NitroModules.createHybridObject<Math>('Math')
 const result = math.add(5, 3)
 ```

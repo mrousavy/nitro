@@ -16,7 +16,8 @@ While Nitro's primary environment is React Native, it also works in any other en
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   readonly pi: number
   add(a: number, b: number): number
 }
@@ -42,6 +43,8 @@ class HybridMath : HybridMathSpec {
 This Hybrid Object can then be accessed directly from JS:
 
 ```ts
+import { NitroModules } from 'react-native-nitro-modules'
+
 const math = NitroModules.createHybridObject<Math>('Math')
 const result = math.add(5, 7)
 ```

@@ -45,7 +45,7 @@ For larger/heavy methods that take a while to execute this can be problematic, b
 To free up the JS Thread while the long-running method is executing, you can make it **asynchronous** by just returning a `Promise`:
 
 ```ts title="MinerSpec.nitro.ts"
-interface Miner extends HybridObject {
+interface Miner extends HybridObject<{ ios: 'c++' }> {
   mineOneBitcoin(): Promise<number>
 }
 ```

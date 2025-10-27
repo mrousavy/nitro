@@ -267,7 +267,8 @@ Codegen is similar to Nitrogen as it also generates native interfaces from TypeS
 <div className="side-by-side-block">
 
 ```ts title="Nitrogen"
-export interface Math extends HybridObject {
+export interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   add(a: number, b: number): Promise<number>
 }
 

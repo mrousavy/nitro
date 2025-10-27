@@ -8,6 +8,13 @@ import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
+import { HybridObject } from 'react-native-nitro-modules'
+
+interface Math //
+  extends HybridObject<{ ios: 'swift' }> {
+  readonly pi: number
+  add(a: number, b: number): number
+}
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')

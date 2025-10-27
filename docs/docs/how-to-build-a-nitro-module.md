@@ -128,11 +128,28 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
     A spec is just a `*.nitro.ts` file that exports an interface, which extends `HybridObject`:
 
-    ```ts title="Math.nitro.ts"
-    export interface Math extends HybridObject {
-      add(a: number, b: number): number
-    }
-    ```
+    <Tabs groupId="native-language">
+      <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
+      ```ts title="Math.nitro.ts"
+      export interface Math extends HybridObject<{
+        ios: 'swift',
+        android: 'kotlin'
+      }> {
+        add(a: number, b: number): number
+      }
+      ```
+      </TabItem>
+      <TabItem value="cpp" label="C++">
+      ```ts title="Math.nitro.ts"
+      export interface Math extends HybridObject<{
+        ios: 'c++',
+        android: 'c++'
+      }> {
+        add(a: number, b: number): number
+      }
+      ```
+      </TabItem>
+    </Tabs>
 
     ### 2.2. Run nitrogen
 
@@ -147,46 +164,71 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
     ### 2.3. Implement the generated native specs
 
     <Tabs groupId="native-language">
-      <TabItem value="swift" label="Swift" default>
+      <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
 
-        Create a new file (e.g. `ios/HybridMath.swift`), and implement the `HybridMathSpec` protocol:
+        <div className="side-by-side-container">
+          <div className="side-by-side-block">
+            Create a new file (e.g. `ios/HybridMath.swift`), and implement the `HybridMathSpec` protocol:
 
-        ```swift title="HybridMath.swift"
-        class HybridMath : HybridMathSpec {
-          func add(a: Double, b: Double) throws -> Double {
-            return a + b
-          }
-        }
-        ```
-      </TabItem>
-      <TabItem value="kotlin" label="Kotlin">
+            ```swift title="HybridMath.swift"
+            import Foundation
 
-        Create a new file (e.g. `android/.../HybridMath.kt`), and implement the `HybridMathSpec` interface:
+            class HybridMath : HybridMathSpec {
+              func add(a: Double,
+                       b: Double) throws -> Double {
+                return a + b
+              }
+            }
+            ```
+          </div>
+          <div className="side-by-side-block">
+            Create a new file (e.g. `android/.../HybridMath.kt`), and implement the `HybridMathSpec` interface:
 
-        ```kotlin title="HybridMath.kt"
-        class HybridMath : HybridMathSpec() {
-          override fun add(a: Double, b: Double): Double {
-            return a + b
-          }
-        }
-        ```
+            ```kotlin title="HybridMath.kt"
+            package com.margelo.nitro.math
+
+            class HybridMath : HybridMathSpec() {
+              override fun add(a: Double,
+                               b: Double): Double {
+                return a + b
+              }
+            }
+            ```
+          </div>
+        </div>
+
       </TabItem>
       <TabItem value="cpp" label="C++">
+        Create a new header and implementation file (e.g. `cpp/HybridMath.hpp` and `cpp/HybridMath.cpp`), and implement the virtual `HybridMathSpec` class:
 
-        Create a new file (e.g. `cpp/HybridMath.hpp`), and implement the virtual `HybridMathSpec` class:
+        <div className="side-by-side-container">
+          <div className="side-by-side-block">
+            ```cpp title="HybridMath.hpp"
+            #include "HybridMathSpec.hpp"
 
-        ```cpp title="HybridMath.hpp"
-        class HybridMath: public HybridMathSpec {
-        public:
-          double add(double a, double b) override {
-            return a + b;
-          }
-        }
-        ```
+            namespace margelo::nitro::math {
+              class HybridMath: public HybridMathSpec {
+              public:
+                double add(double a, double b) override;
+              };
+            }
+            ```
+          </div>
+          <div className="side-by-side-block">
+            ```cpp title="HybridMath.cpp"
+            #include "HybridMath.hpp"
+
+            namespace margelo::nitro::math {
+              double HybridMath::add(double a, double b) {
+                return a + b;
+              }
+            }
+            ```
+          </div>
+        </div>
+
       </TabItem>
     </Tabs>
-
-
   </TabItem>
   <TabItem value="manually" label="Manually">
 
@@ -241,7 +283,7 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
   In your [`nitro.json` config](configuration-nitro-json), you can connect the name of the [Hybrid Object](hybrid-objects) (`"Math"`) with the name of the native C++/Swift/Kotlin class that you used to implement the spec (`HybridMath`) using the `autolinking` section:
 
     <Tabs groupId="native-language">
-      <TabItem value="swift" label="Swift" default>
+      <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
         ```json title="nitro.json"
         {
           ...
@@ -250,19 +292,6 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
             "Math": {
               // diff-add
               "swift": "HybridMath"
-            // diff-add
-            }
-          }
-        }
-        ```
-      </TabItem>
-      <TabItem value="kotlin" label="Kotlin">
-        ```json title="nitro.json"
-        {
-          ...
-          "autolinking": {
-            // diff-add
-            "Math": {
               // diff-add
               "kotlin": "HybridMath"
             // diff-add
@@ -316,7 +345,7 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
 Lastly, you can initialize and use the registered Hybrid Objects from JS. This is what this will ultimately look like:
 
 ```ts
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ ... }> {
   add(a: number, b: number): number
 }
 
