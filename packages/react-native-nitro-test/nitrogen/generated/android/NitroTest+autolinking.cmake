@@ -33,6 +33,7 @@ target_sources(
   # Autolinking Setup
   ../nitrogen/generated/android/NitroTestOnLoad.cpp
   # Shared Nitrogen C++ sources
+  ../nitrogen/generated/shared/c++/HybridPlatformObjectSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
@@ -40,6 +41,7 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
+  ../nitrogen/generated/android/c++/JHybridPlatformObjectSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridTestObjectSwiftKotlinSpec_Person.cpp

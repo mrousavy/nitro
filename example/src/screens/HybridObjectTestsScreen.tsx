@@ -22,6 +22,7 @@ import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { TestCase, TestState } from '../components/TestCase'
+import { KeyboardDismissBackground } from '../components/KeyboardDismissBackground'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -199,6 +200,8 @@ export function HybridObjectTestsScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
+      <KeyboardDismissBackground />
+
       <Text style={styles.header}>HybridObject Tests</Text>
       <View style={styles.topControls}>
         <SegmentedControl

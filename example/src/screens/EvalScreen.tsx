@@ -7,11 +7,13 @@ import {
   Button,
   Platform,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { stringify } from '../utils'
+import { KeyboardDismissBackground } from '../components/KeyboardDismissBackground'
 
 const VIEWS_X = 15
 const VIEWS_Y = 15
@@ -46,36 +48,42 @@ export function EvalScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
+      <KeyboardDismissBackground />
+
       <Text style={styles.header}>Eval</Text>
       <View style={styles.topControls}>
         <View style={styles.flex} />
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
-      <View style={styles.container}>
-        <TextInput
-          onChangeText={setCode}
-          defaultValue={DEFAULT_CODE}
-          multiline={true}
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType="ascii-capable"
-          textAlignVertical="top"
-          style={[
-            styles.textInput,
-            styles.monospace,
-            { backgroundColor: colors.foreground },
-          ]}
-        />
-      </View>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <View style={styles.codeContent}>
+          <TextInput
+            onChangeText={setCode}
+            defaultValue={DEFAULT_CODE}
+            multiline={true}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="ascii-capable"
+            textAlignVertical="top"
+            style={[
+              styles.textInput,
+              styles.monospace,
+              { backgroundColor: colors.foreground },
+            ]}
+          />
+        </View>
 
-      <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text style={styles.resultText} numberOfLines={2}>
-          Result: <Text style={styles.monospace}>{stringify(result)}</Text>
-        </Text>
-        <View style={styles.flex} />
-        <Button title={'Run'} onPress={run} />
-      </View>
+        <View
+          style={[styles.bottomView, { backgroundColor: colors.background }]}
+        >
+          <Text style={styles.resultText} numberOfLines={2}>
+            Result: <Text style={styles.monospace}>{stringify(result)}</Text>
+          </Text>
+          <View style={styles.flex} />
+          <Button title={'Run'} onPress={run} />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {},
+  codeContent: { flexGrow: 1 },
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,

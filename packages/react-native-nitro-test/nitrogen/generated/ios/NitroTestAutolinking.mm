@@ -14,6 +14,7 @@
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
+#include "HybridPlatformObjectSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 
 @interface NitroTestAutolinking : NSObject
@@ -52,6 +53,13 @@
     "Child",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridChildSpec> hybridObject = NitroTest::NitroTestAutolinking::createChild();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "PlatformObject",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridPlatformObjectSpec> hybridObject = NitroTest::NitroTestAutolinking::createPlatformObject();
       return hybridObject;
     }
   );

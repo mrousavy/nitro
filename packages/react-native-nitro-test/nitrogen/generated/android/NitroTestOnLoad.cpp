@@ -15,6 +15,7 @@
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
 
+#include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
 #include "JFunc_void.hpp"
@@ -42,6 +43,7 @@ int initialize(JavaVM* vm) {
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
+    margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::test::JFunc_void_cxx::registerNatives();
@@ -88,6 +90,14 @@ int initialize(JavaVM* vm) {
       "Child",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/test/HybridChild");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "PlatformObject",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridPlatformObjectSpec::javaobject> object("com/margelo/nitro/test/HybridPlatformObject");
         auto instance = object.create();
         return instance->cthis()->shared();
       }

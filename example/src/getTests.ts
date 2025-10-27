@@ -10,6 +10,7 @@ import {
   WeirdNumbersEnum,
   CustomString,
   Base,
+  HybridPlatformObject,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -1764,6 +1765,11 @@ export function getTests(
       )
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('PlatformObject getOSVersion() returns a string', () =>
+      it(() => HybridPlatformObject.getOSVersion())
+        .didNotThrow()
+        .didReturn('string')
     ),
     createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
       it(() => {

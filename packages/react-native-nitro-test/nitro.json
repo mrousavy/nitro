@@ -24,6 +24,10 @@
       "swift": "HybridChild",
       "kotlin": "HybridChild"
     },
+    "PlatformObject": {
+      "swift": "HybridPlatformObject",
+      "kotlin": "HybridPlatformObject"
+    },
     "TestView": {
       "swift": "HybridTestView",
       "kotlin": "HybridTestView"
