@@ -81,7 +81,7 @@ function App() {
 }
 ```
 
-> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
+> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](view-components#callbacks-have-to-be-wrapped).
 
 ## Full Guides
 
