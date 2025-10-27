@@ -154,7 +154,7 @@ export function isAnyHybridSubclass(type: Type): boolean {
  */
 export function getHybridObjectPlatforms(
   declaration: InterfaceDeclaration | TypeAliasDeclaration
-): PlatformSpec | undefined {
+): PlatformSpec {
   const base = getBaseTypes(declaration.getType()).find((t) =>
     isDirectlyHybridObject(t)
   )
@@ -172,7 +172,10 @@ export function getHybridObjectPlatforms(
     platformSpecsArgument.getProperties().length === 0
   ) {
     // it uses `HybridObject` without generic arguments. This defaults to Swift/Kotlin
-    return { ios: 'swift', android: 'kotlin' }
+    throw new Error(
+      `HybridObject ${declaration.getName()} does not declare any platforms in the \`HybridObject\` type argument! ` +
+        `Pass at least one platform (and language) to \`interface ${declaration.getName()} extends HybridObject<{ ... }>\``
+    )
   }
 
   return getPlatformSpec(declaration.getName(), platformSpecsArgument)
@@ -180,7 +183,7 @@ export function getHybridObjectPlatforms(
 
 export function getHybridViewPlatforms(
   view: InterfaceDeclaration | TypeAliasDeclaration
-): PlatformSpec | undefined {
+): PlatformSpec {
   if (Node.isTypeAliasDeclaration(view)) {
     const hybridViewTypeNode = view.getTypeNode()
 
@@ -189,7 +192,9 @@ export function getHybridViewPlatforms(
       hybridViewTypeNode.getTypeName().getText() === 'HybridView'
 
     if (!isHybridViewType) {
-      return
+      throw new Error(
+        `${view.getName()} looks like a HybridView, but doesn't seem to alias HybridView<...>!`
+      )
     }
 
     const genericArguments = hybridViewTypeNode.getTypeArguments()

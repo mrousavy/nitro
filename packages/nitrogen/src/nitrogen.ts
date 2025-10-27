@@ -108,31 +108,20 @@ export async function runNitrogen({
         let platformSpec: PlatformSpec
         if (isHybridView(declaration.getType())) {
           // Hybrid View Props
-          const targetPlatforms = getHybridViewPlatforms(declaration)
-          if (targetPlatforms == null) {
-            // It does not extend HybridView, continue..
-            continue
-          }
-          platformSpec = targetPlatforms
+          platformSpec = getHybridViewPlatforms(declaration)
         } else if (extendsHybridObject(declaration.getType(), true)) {
           // Hybrid View
-          const targetPlatforms = getHybridObjectPlatforms(declaration)
-          if (targetPlatforms == null) {
-            // It does not extend HybridObject, continue..
-            continue
-          }
-          platformSpec = targetPlatforms
+          platformSpec = getHybridObjectPlatforms(declaration)
         } else {
           continue
         }
 
         const platforms = Object.keys(platformSpec) as Platform[]
-
         if (platforms.length === 0) {
-          Logger.warn(
-            `⚠️   ${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated.`
+          throw new Error(
+            `${typeName} does not declare any platforms in HybridObject<T> - nothing can be generated. ` +
+              `For example, to generate a C++ HybridObject, use \`interface ${typeName} extends HybridObject<{ ios: 'c++', android: 'c++' }> { ... }\``
           )
-          continue
         }
 
         targetSpecs++
