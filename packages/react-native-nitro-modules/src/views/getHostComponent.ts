@@ -38,13 +38,15 @@ interface DefaultHybridViewProps<RefType> {
    * function App() {
    *   return (
    *     <HybridScrollView
-   *       hybridRef={{ f: (ref) => {
+   *       hybridRef={callback((ref) => {
    *         ref.current.scrollTo(400)
-   *       }
+   *       })}
    *     />
    *   )
    * }
    * ```
+   * @note If you're wondering about the `callback(...)` syntax, see
+   * ["Callbacks have to be wrapped"](https://nitro.margelo.com/docs/view-components#callbacks-have-to-be-wrapped).
    */
   hybridRef?: (ref: RefType) => void
 }

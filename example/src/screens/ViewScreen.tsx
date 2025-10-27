@@ -21,14 +21,12 @@ export function ViewScreenImpl() {
       [...Array(counter)].map((_, i) => (
         <TestView
           key={i}
-          hybridRef={{
-            f: (ref) => {
-              console.log(`Ref initialized!`)
-              ref.someMethod()
-              const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
-              console.log(`Is View blue: ${isBlue}`)
-            },
-          }}
+          hybridRef={callback((ref) => {
+            console.log(`Ref initialized!`)
+            ref.someMethod()
+            const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
+            console.log(`Is View blue: ${isBlue}`)
+          })}
           style={styles.view}
           isBlue={i % 2 === 0}
           someCallback={callback(() => console.log(`Callback called!`))}
