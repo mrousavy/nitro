@@ -171,8 +171,8 @@ export function getHybridObjectPlatforms(
     platformSpecsArgument == null ||
     platformSpecsArgument.getProperties().length === 0
   ) {
-    // it uses `HybridObject` without generic arguments. This defaults to C++
-    return { android: 'c++', ios: 'c++' }
+    // it uses `HybridObject` without generic arguments. This defaults to Swift/Kotlin
+    return { ios: 'swift', android: 'kotlin' }
   }
 
   return getPlatformSpec(declaration.getName(), platformSpecsArgument)
