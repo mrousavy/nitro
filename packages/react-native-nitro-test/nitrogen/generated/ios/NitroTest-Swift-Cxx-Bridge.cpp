@@ -18,6 +18,38 @@
 
 namespace margelo::nitro::test::bridge::swift {
 
+  // pragma MARK: std::shared_ptr<HybridBaseSpec>
+  std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridBaseSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridBaseSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridBaseSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridBaseSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridBaseSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridChildSpec>
+  std::shared_ptr<HybridChildSpec> create_std__shared_ptr_HybridChildSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridChildSpec_cxx swiftPart = NitroTest::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridChildSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridChildSpec_(std__shared_ptr_HybridChildSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridChildSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridChildSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridChildSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridChildSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   std::shared_ptr<HybridPlatformObjectSpec> create_std__shared_ptr_HybridPlatformObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
     NitroTest::HybridPlatformObjectSpec_cxx swiftPart = NitroTest::HybridPlatformObjectSpec_cxx::fromUnsafe(swiftUnsafePointer);
@@ -172,38 +204,6 @@ namespace margelo::nitro::test::bridge::swift {
       auto __result = swiftClosure.call();
       return __result;
     };
-  }
-  
-  // pragma MARK: std::shared_ptr<HybridBaseSpec>
-  std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridBaseSpecSwift>(swiftPart);
-  }
-  void* NON_NULL get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType) {
-    std::shared_ptr<margelo::nitro::test::HybridBaseSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridBaseSpecSwift>(cppType);
-    #ifdef NITRO_DEBUG
-    if (swiftWrapper == nullptr) [[unlikely]] {
-      throw std::runtime_error("Class \"HybridBaseSpec\" is not implemented in Swift!");
-    }
-    #endif
-    NitroTest::HybridBaseSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
-  }
-  
-  // pragma MARK: std::shared_ptr<HybridChildSpec>
-  std::shared_ptr<HybridChildSpec> create_std__shared_ptr_HybridChildSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridChildSpec_cxx swiftPart = NitroTest::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridChildSpecSwift>(swiftPart);
-  }
-  void* NON_NULL get_std__shared_ptr_HybridChildSpec_(std__shared_ptr_HybridChildSpec_ cppType) {
-    std::shared_ptr<margelo::nitro::test::HybridChildSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridChildSpecSwift>(cppType);
-    #ifdef NITRO_DEBUG
-    if (swiftWrapper == nullptr) [[unlikely]] {
-      throw std::runtime_error("Class \"HybridChildSpec\" is not implemented in Swift!");
-    }
-    #endif
-    NitroTest::HybridChildSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
   }
   
   // pragma MARK: std::function<double()>

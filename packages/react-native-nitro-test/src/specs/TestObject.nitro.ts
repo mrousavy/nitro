@@ -6,6 +6,8 @@ import {
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
+import type { Child } from './Child.nitro'
+import type { Base } from './Base.nitro'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -271,6 +273,7 @@ export interface TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
 
+  // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString
 }
 
@@ -287,19 +290,4 @@ export interface TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
-}
-
-// This is a simple `HybridObject` with just one value.
-export interface Base
-  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
-  readonly baseValue: number
-}
-
-// This is a `HybridObject` that actually inherits from a different `HybridObject`.
-// This will set up an inheritance chain on the native side.
-// The native `Child` Swift/Kotlin class will inherit from the `Base` Swift/Kotlin class.
-export interface Child extends Base {
-  readonly childValue: number
-  // tests if the same variant can be used in a different HybridObject
-  bounceVariant(variant: NamedVariant): NamedVariant
 }
