@@ -1,12 +1,12 @@
 package com.nitroexample.exampleturbomodule
 
-import com.facebook.react.TurboReactPackage
+import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class ExampleTurboModulePackage: TurboReactPackage() {
+class ExampleTurboModulePackage: BaseReactPackage() {
     override fun getModule(name: String, context: ReactApplicationContext): NativeModule? {
         if (name == ExampleTurboModuleModule.NAME) {
             return ExampleTurboModuleModule(context)

@@ -303,7 +303,7 @@ Make sure `HybridMath` is default-constructible and scoped inside the correct na
   Then, to actually load and initialize the C++ part of your library (which calls `JNI_OnLoad` from above), call `initializeNative()` from your library's entry point (`*Package.kt`):
 
   ```kotlin title="NitroMathPackage.kt"
-  public class NitroMathPackage: TurboReactPackage() {
+  public class NitroMathPackage: BaseReactPackage() {
     // ...
     companion object {
       init {
