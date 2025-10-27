@@ -14,6 +14,10 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { enum class ColorScheme; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
+// Forward declaration of `HybridCallbackBuilderSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridCallbackBuilderSpec; }
+// Forward declaration of `HybridCallbackTesterSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridCallbackTesterSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -26,6 +30,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `MyCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct MyCallback; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -47,11 +53,14 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "Car.hpp"
 #include "ColorScheme.hpp"
 #include "HybridBaseSpec.hpp"
+#include "HybridCallbackBuilderSpec.hpp"
+#include "HybridCallbackTesterSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
+#include "MyCallback.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
@@ -87,6 +96,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
+// Forward declaration of `HybridCallbackBuilderSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridCallbackBuilderSpec_cxx; }
+// Forward declaration of `HybridCallbackTesterSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridCallbackTesterSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
