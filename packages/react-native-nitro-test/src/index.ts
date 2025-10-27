@@ -5,6 +5,7 @@ import {
   type TestObjectCpp,
   type TestObjectSwiftKotlin,
 } from './specs/TestObject.nitro'
+import { type PlatformObject } from './specs/PlatformObject.nitro'
 
 export * from './specs/TestObject.nitro'
 
@@ -26,3 +27,6 @@ export const HybridTestObjectSwiftKotlin =
 
 export const HybridBase = NitroModules.createHybridObject<Base>('Base')
 export const HybridChild = NitroModules.createHybridObject<Child>('Child')
+
+export const HybridPlatformObject =
+  NitroModules.createHybridObject<PlatformObject>('PlatformObject')

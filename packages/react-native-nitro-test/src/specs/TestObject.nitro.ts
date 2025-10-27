@@ -303,9 +303,3 @@ export interface Child extends Base {
   // tests if the same variant can be used in a different HybridObject
   bounceVariant(variant: NamedVariant): NamedVariant
 }
-
-// This is a `HybridObject` with no generic type arguments (the platforms)
-// by default it should be a Swift/Kotlin HybridObject.
-export interface DefaultObject extends HybridObject {
-  add(a: number, b: number): number
-}

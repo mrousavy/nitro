@@ -10,6 +10,7 @@
 // Include C++ implementation defined types
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
+#include "HybridPlatformObjectSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
@@ -17,6 +18,22 @@
 
 namespace margelo::nitro::test::bridge::swift {
 
+  // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
+  std::shared_ptr<HybridPlatformObjectSpec> create_std__shared_ptr_HybridPlatformObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridPlatformObjectSpec_cxx swiftPart = NitroTest::HybridPlatformObjectSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridPlatformObjectSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridPlatformObjectSpec_(std__shared_ptr_HybridPlatformObjectSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridPlatformObjectSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridPlatformObjectSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridPlatformObjectSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridPlatformObjectSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::fromUnsafe(swiftUnsafePointer);
