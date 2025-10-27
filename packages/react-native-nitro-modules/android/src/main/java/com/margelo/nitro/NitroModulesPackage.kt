@@ -1,12 +1,12 @@
 package com.margelo.nitro
 
-import com.facebook.react.TurboReactPackage
+import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class NitroModulesPackage : TurboReactPackage() {
+class NitroModulesPackage : BaseReactPackage() {
   override fun getModule(
     name: String,
     reactContext: ReactApplicationContext,
@@ -28,7 +28,6 @@ class NitroModulesPackage : TurboReactPackage() {
           NitroModules.NAME,
           canOverrideExistingModule = false,
           needsEagerInit = false,
-          hasConstants = false,
           isCxxModule = false,
           isTurboModule = isTurboModule,
         )
