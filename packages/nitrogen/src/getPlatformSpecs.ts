@@ -167,7 +167,10 @@ export function getHybridObjectPlatforms(
 
   const genericArguments = base.getTypeArguments()
   const platformSpecsArgument = genericArguments[0]
-  if (platformSpecsArgument == null) {
+  if (
+    platformSpecsArgument == null ||
+    platformSpecsArgument.getProperties().length === 0
+  ) {
     // it uses `HybridObject` without generic arguments. This defaults to C++
     return { android: 'c++', ios: 'c++' }
   }
