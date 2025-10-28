@@ -1,6 +1,7 @@
 export * from './HybridObject'
 export * from './NitroModules'
 export * from './AnyMap'
+export * from './AnyHybridObject'
 export * from './CustomType'
 export * from './getHybridObjectConstructor'
 export * from './Sync'

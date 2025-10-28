@@ -22,11 +22,11 @@ import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
 import {
   isAnyHybridSubclass,
-  isDirectlyHybridObject,
+  isDirectlyAnyHybridObject,
   isHybridView,
   type Language,
 } from '../getPlatformSpecs.js'
-import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { AnyHybridObjectType } from './types/AnyHybridObjectType.js'
 import { ErrorType } from './types/ErrorType.js'
 import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
@@ -324,9 +324,9 @@ export function createType(
       const sourceConfig =
         getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
       return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
-    } else if (isDirectlyHybridObject(type)) {
+    } else if (isDirectlyAnyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
-      return new HybridObjectBaseType()
+      return new AnyHybridObjectType()
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
       const typename = type.getSymbolOrThrow().getName()
