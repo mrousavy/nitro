@@ -5,8 +5,8 @@
  * to platform-specific languages like Swift or Kotlin
  */
 export interface PlatformSpec {
-  ios?: 'swift' | 'c++'
-  android?: 'kotlin' | 'c++'
+  ios?: 'c++' | 'swift'
+  android?: 'c++' | 'kotlin'
 }
 
 /**
@@ -19,9 +19,7 @@ export interface PlatformSpec {
  * All `HybridObject`s are implemented using `NativeState`, and inherit their properties
  * and methods from their prototype, so the actual JS object is empty.
  *
- * @type Platforms: The type of platforms this HybridObject will be implemented in. By default, it is
- * a C++ `HybridObject`.
- * @default { ios: 'swift', android: 'kotlin' }
+ * @type Platforms: The type of platforms this HybridObject will be implemented in.
  * @example
  * ```ts
  * interface Photo extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
@@ -32,9 +30,7 @@ export interface PlatformSpec {
  * }
  * ```
  */
-export interface HybridObject<
-  Platforms extends PlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> {
+export interface HybridObject<Platforms extends PlatformSpec = {}> {
   /**
    * Holds a type-name describing the native `HybridObject` instance.
    *
