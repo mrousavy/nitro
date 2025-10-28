@@ -1,6 +1,5 @@
 import type { HybridObject } from './HybridObject'
 import type { BoxedHybridObject } from './BoxedHybridObject'
-import type { AnyHybridObject } from './AnyHybridObject'
 
 /**
  * The Proxy class that acts as a main entry point for Nitro Modules in React Native.
@@ -82,5 +81,5 @@ export interface NitroModulesProxy
    *
    * This is achieved by just doing a round-trip from JS -> native -> JS.
    */
-  updateMemorySize(obj: AnyHybridObject): AnyHybridObject
+  updateMemorySize<T extends HybridObject<{}>>(obj: T): T
 }
