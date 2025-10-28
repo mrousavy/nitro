@@ -30,7 +30,7 @@ export interface PlatformSpec {
  * }
  * ```
  */
-export interface HybridObject<Platforms extends PlatformSpec = {}> {
+export interface HybridObject<Platforms extends PlatformSpec> {
   /**
    * Holds a type-name describing the native `HybridObject` instance.
    *

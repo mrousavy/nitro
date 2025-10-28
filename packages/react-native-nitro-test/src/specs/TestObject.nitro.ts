@@ -3,6 +3,7 @@ import {
   type AnyMap,
   type Sync,
   type CustomType,
+  type AnyHybridObject,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -257,7 +258,7 @@ interface SharedTestObjectProps {
 // Since it inherited from the `SharedTestObjectProps` interface,
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
-  extends HybridObject<{ ios: 'c++' }>,
+  extends HybridObject<{ ios: 'c++'; android: 'c++' }>,
     SharedTestObjectProps {
   // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
@@ -272,6 +273,9 @@ export interface TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+
+  // Any HybridObject
+  bounceAnyHybrid(object: AnyHybridObject): AnyHybridObject
 
   // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString

@@ -16,7 +16,7 @@ const cache = new Map<string, Function>()
  * image1 instanceof HybridImage // --> true
  * ```
  */
-export function getHybridObjectConstructor<T extends HybridObject>(
+export function getHybridObjectConstructor<T extends HybridObject<{}>>(
   name: string
 ): { new (): T } {
   // Cache functions for performance.

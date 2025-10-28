@@ -999,6 +999,31 @@ export function getTests(
           // Swift/Kotlin Test Object does not have CustomTypes!
         ]),
 
+    // AnyHybridObject test
+    ...('bounceAnyHybrid' in testObject
+      ? [
+          createTest('bounceAnyHybrid(...) works', () =>
+            it(() => testObject.bounceAnyHybrid(HybridSomeExternalObject))
+              .didNotThrow()
+              .equals(HybridSomeExternalObject)
+          ),
+          createTest(
+            'bounceAnyHybrid(...) different object does not equal',
+            () =>
+              it(() => {
+                const external = testObject.bounceAnyHybrid(
+                  HybridSomeExternalObject
+                )
+                return external.equals(testObject)
+              })
+                .didNotThrow()
+                .equals(false)
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have CustomTypes!
+        ]),
+
     createTest('bounceMap(map) === map', () =>
       it(() => testObject.bounceMap(TEST_MAP))
         .didNotThrow()

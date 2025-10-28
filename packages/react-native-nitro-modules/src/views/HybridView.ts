@@ -81,12 +81,14 @@ export interface HybridViewMethods {}
 export type HybridRef<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
-> = HybridObject & Props & Methods
+  Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
+> = HybridObject<Platforms> & Props & Methods
 
 /**
  * This interface acts as a tag for Hybrid Views so nitrogen detects them.
  */
-interface HybridViewTag extends HybridObject {}
+interface HybridViewTag<Platforms extends ViewPlatformSpec>
+  extends HybridObject<Platforms> {}
 
 /**
  * Represents a Nitro Hybrid View.
@@ -112,4 +114,4 @@ export type HybridView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> = HybridViewTag & HybridObject<Platforms> & Props & Methods
+> = HybridViewTag<Platforms> & HybridObject<Platforms> & Props & Methods

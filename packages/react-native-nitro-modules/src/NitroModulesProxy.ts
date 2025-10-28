@@ -1,6 +1,5 @@
 import type { HybridObject } from './HybridObject'
 import type { BoxedHybridObject } from './BoxedHybridObject'
-import type { AnyHybridObject } from './AnyHybridObject'
 
 /**
  * The Proxy class that acts as a main entry point for Nitro Modules in React Native.
@@ -8,7 +7,8 @@ import type { AnyHybridObject } from './AnyHybridObject'
  * This is a `HybridObject` on the native side as well, and is expected to be
  * installed into the runtime's `global` via the NativeModule/TurboModule's `install()` function.
  */
-export interface NitroModulesProxy extends HybridObject {
+export interface NitroModulesProxy
+  extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
   /**
    * Create a new instance of the `HybridObject` {@linkcode T}.
    *
@@ -19,7 +19,7 @@ export interface NitroModulesProxy extends HybridObject {
    * @returns An instance of {@linkcode T}
    * @throws an Error if {@linkcode T} has not been registered under the name {@linkcode name}.
    */
-  createHybridObject<T extends HybridObject>(name: string): T
+  createHybridObject<T extends HybridObject<{}>>(name: string): T
   /**
    * Returns whether a HybridObject under the given {@linkcode name} is registered, or not.
    */
@@ -27,7 +27,7 @@ export interface NitroModulesProxy extends HybridObject {
   /**
    * Returns whether the given {@linkcode object} is a {@linkcode HybridObject}, or not.
    */
-  isHybridObject(object: object): object is HybridObject
+  isHybridObject(object: object): object is HybridObject<{}>
   /**
    * Get a list of all registered Hybrid Objects.
    */
@@ -68,7 +68,7 @@ export interface NitroModulesProxy extends HybridObject {
    * })
    * ```
    */
-  box<T extends HybridObject>(obj: T): BoxedHybridObject<T>
+  box<T extends HybridObject<{}>>(obj: T): BoxedHybridObject<T>
 
   /**
    * Returns whether the given {@linkcode object} has NativeState or not.
@@ -81,5 +81,5 @@ export interface NitroModulesProxy extends HybridObject {
    *
    * This is achieved by just doing a round-trip from JS -> native -> JS.
    */
-  updateMemorySize(obj: AnyHybridObject): AnyHybridObject
+  updateMemorySize<T extends HybridObject<{}>>(obj: T): T
 }
