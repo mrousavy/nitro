@@ -8,7 +8,6 @@ import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
-import { HybridObject } from 'react-native-nitro-modules'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
