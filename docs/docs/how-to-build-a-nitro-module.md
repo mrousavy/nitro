@@ -191,7 +191,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
             ```kotlin title="HybridMath.kt"
             package com.margelo.nitro.math
-
+            import com.margelo.nitro.core.*
 
             class HybridMath : HybridMathSpec() {
               override fun add(a: Double,
@@ -249,29 +249,31 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
     #pragma once
     #include <NitroModules/HybridObject.hpp>
 
-    // diff-add
-    // 1. Public-inherit from HybridObject
-    class HybridMath : public HybridObject {
-    public:
+    namespace margelo::nitro::math {
       // diff-add
-      // 2. Call the HybridObject constructor with the name "Math"
-      HybridMath(): HybridObject("Math") { }
+      // 1. Public-inherit from HybridObject
+      class HybridMath : public HybridObject {
+      public:
+        // diff-add
+        // 2. Call the HybridObject constructor with the name "Math"
+        HybridMath(): HybridObject("Math") { }
 
-      double add(double a, double b) {
-        return a + b;
-      }
+        double add(double a, double b) {
+          return a + b;
+        }
 
-      // diff-add
-      // 3. Override loadHybridMethods()
-      void loadHybridMethods() override {
-        // register base methods (toString, ...)
-        HybridObject::loadHybridMethods();
-        // register custom methods (add)
-        registerHybrids(this, [](Prototype& proto) {
-          proto.registerHybridMethod("add", &HybridMath::add);
-        });
-      }
-    };
+        // diff-add
+        // 3. Override loadHybridMethods()
+        void loadHybridMethods() override {
+          // register base methods (toString, ...)
+          HybridObject::loadHybridMethods();
+          // register custom methods (add)
+          registerHybrids(this, [](Prototype& proto) {
+            proto.registerHybridMethod("add", &HybridMath::add);
+          });
+        }
+      };
+    }
     ```
 
   </TabItem>
