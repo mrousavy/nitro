@@ -1,4 +1,4 @@
-import type { HybridObject } from './HybridObject'
+import type { HybridObject, PlatformSpec } from './HybridObject'
 import { NitroModules } from './NitroModules'
 
 const cache = new Map<string, Function>()
@@ -16,9 +16,10 @@ const cache = new Map<string, Function>()
  * image1 instanceof HybridImage // --> true
  * ```
  */
-export function getHybridObjectConstructor<T extends HybridObject>(
-  name: string
-): { new (): T } {
+export function getHybridObjectConstructor<
+  T extends HybridObject<P>,
+  P extends PlatformSpec,
+>(name: string): { new (): T } {
   // Cache functions for performance.
   if (cache.has(name)) {
     return cache.get(name) as { new (): T }
