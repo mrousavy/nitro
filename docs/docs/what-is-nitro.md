@@ -99,7 +99,8 @@ If a function declares a `number`, you can only implement it on the native side 
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   add(a: number, b: number): number
 }
 ```
@@ -125,7 +126,7 @@ class HybridMath : HybridMathSpec {
 There is no way for a Nitro Module to return a type that is not expected in TypeScript, which also guarantees null-safety.
 
 ```ts
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   getValue(): number
   getValueOrNull(): number | undefined
 }
@@ -136,13 +137,13 @@ interface Math extends HybridObject {
 Every Hybrid Object in Nitro is a native object, which can be created, passed around, and destroyed.
 
 ```ts
-interface Image extends HybridObject {
+interface Image extends HybridObject<{ … }> {
   readonly width: number
   readonly height: number
   saveToFile(path: string): Promise<void>
 }
 
-interface ImageEditor extends HybridObject {
+interface ImageEditor extends HybridObject<{ … }> {
   loadImage(path: string): Promise<Image>
   crop(image: Image, size: Size): Image
 }

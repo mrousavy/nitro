@@ -14,7 +14,8 @@ For example, a JS `number` will always be a `double` on the native side:
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'c++' }> {
   add(a: number, b: number): number
 }
 ```
@@ -24,7 +25,8 @@ interface Math extends HybridObject {
 
 ```cpp title="HybridMath.hpp"
 class HybridMath : public HybridMathSpec {
-  double add(double a, double b);
+public:
+  double add(double a, double b) override;
 }
 ```
 

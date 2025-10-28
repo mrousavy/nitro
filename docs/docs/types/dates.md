@@ -12,7 +12,7 @@ Under the hood, conversions take place using milliseconds, so it's essentially a
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Image extends HybridObject {
+    interface Image extends HybridObject<{ … }> {
       getCreationDate(): Date
     }
     ```

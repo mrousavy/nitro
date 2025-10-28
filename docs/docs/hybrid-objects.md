@@ -57,13 +57,13 @@ const isMath = math instanceof HybridMath
 A Hybrid Object can also create other Hybrid Objects:
 
 ```ts title="Image.nitro.ts"
-interface Image extends HybridObject<{ ios: 'swift' }> {
+interface Image extends HybridObject<{ … }> {
   readonly width: number
   readonly height: number
   saveToFile(path: string): Promise<void>
 }
 
-interface ImageFactory extends HybridObject<{ ios: 'swift' }> {
+interface ImageFactory extends HybridObject<{ … }> {
   loadImageFromWeb(path: string): Promise<Image>
   loadImageFromFile(path: string): Image
   loadImageFromResources(name: string): Image
@@ -258,14 +258,14 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
     <div className="side-by-side-block" style={{ flex: 2 }}>
     <div>
     ```ts
-    interface Media extends HybridObject<{ ios: 'swift' }> {
+    interface Media extends HybridObject<{ … }> {
       readonly width: number
       readonly height: number
       saveToFile(): Promise<void>
     }
 
     type ImageFormat = 'jpg' | 'png'
-    interface Image extends HybridObject<{ ios: 'swift' }>, Media {
+    interface Image extends HybridObject<{ … }>, Media {
       readonly format: ImageFormat
     }
 
@@ -297,8 +297,8 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
     readonly height: number
   }
 
-  interface Image extends HybridObject<{ ios: 'swift' }>, Media {}
-  interface Video extends HybridObject<{ ios: 'swift' }>, Media {}
+  interface Image extends HybridObject<{ … }>, Media {}
+  interface Video extends HybridObject<{ … }>, Media {}
   ```
 
   </TabItem>

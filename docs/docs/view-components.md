@@ -162,7 +162,8 @@ For example, a custom `<ImageView>` component can be used to render custom `Imag
 <div className="side-by-side-block">
 
 ```ts title="Image.nitro.ts"
-export interface Image extends HybridObject {
+export interface Image
+  extends HybridObject<{ ios: 'swift' }> {
   readonly width: number
   readonly height: number
   save(): Promise<string>
@@ -174,7 +175,8 @@ export interface Image extends HybridObject {
 
 ```ts title="ImageView.nitro.ts"
 import { type Image } from './Image.nitro.ts'
-export interface ImageProps extends HybridViewProps {
+export interface ImageProps
+  extends HybridViewProps {
   image: Image
 }
 export type ImageView = HybridView<ImageProps>

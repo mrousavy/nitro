@@ -17,7 +17,8 @@ interface Person {
   age: number
 }
 
-interface Nitro extends HybridObject {
+interface Nitro
+  extends HybridObject<{ ios: 'swift' }> {
   getAuthor(): Person
 }
 ```
@@ -31,9 +32,6 @@ class HybridNitro: HybridNitroSpec {
     return Person(name: "Marc", age: 24)
   }
 }
-
-
-
 ```
 
 </div>

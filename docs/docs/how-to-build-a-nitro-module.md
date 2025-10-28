@@ -131,6 +131,8 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
     <Tabs groupId="native-language">
       <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
       ```ts title="Math.nitro.ts"
+      import { type HybridObject } from 'react-native-nitro-modules'
+
       export interface Math extends HybridObject<{
         ios: 'swift',
         android: 'kotlin'
@@ -141,6 +143,8 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
       </TabItem>
       <TabItem value="cpp" label="C++">
       ```ts title="Math.nitro.ts"
+      import { type HybridObject } from 'react-native-nitro-modules'
+
       export interface Math extends HybridObject<{
         ios: 'c++',
         android: 'c++'
@@ -172,6 +176,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
             ```swift title="HybridMath.swift"
             import Foundation
+            import NitroModules
 
             class HybridMath : HybridMathSpec {
               func add(a: Double,
@@ -186,6 +191,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
             ```kotlin title="HybridMath.kt"
             package com.margelo.nitro.math
+
 
             class HybridMath : HybridMathSpec() {
               override fun add(a: Double,
@@ -209,6 +215,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
             namespace margelo::nitro::math {
               class HybridMath: public HybridMathSpec {
               public:
+                HybridMath(): HybridObject(TAG) {}
                 double add(double a, double b) override;
               };
             }
@@ -345,7 +352,9 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
 Lastly, you can initialize and use the registered Hybrid Objects from JS. This is what this will ultimately look like:
 
 ```ts
-interface Math extends HybridObject<{ ... }> {
+import { type HybridObject, NitroModules } from 'react-native-nitro-modules'
+
+interface Math extends HybridObject<{ … }> {
   add(a: number, b: number): number
 }
 

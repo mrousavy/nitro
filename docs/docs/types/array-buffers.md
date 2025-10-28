@@ -12,10 +12,14 @@ Passing an `ArrayBuffer` between JS and native is zero-copy.
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Image extends HybridObject {
+    interface Image extends HybridObject<{ … }> {
       getData(): ArrayBuffer
     }
     ```
+
+    :::note
+    The `ArrayBuffer` type is built-in in JavaScript.
+    :::
   </TabItem>
   <TabItem value="swift" label="Swift">
     ```swift
@@ -23,6 +27,10 @@ Passing an `ArrayBuffer` between JS and native is zero-copy.
       func getData() -> ArrayBuffer
     }
     ```
+
+    :::note
+    Import ArrayBuffer from Nitro: `import NitroModules`
+    :::
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin
@@ -30,6 +38,10 @@ Passing an `ArrayBuffer` between JS and native is zero-copy.
       fun getData(): ArrayBuffer
     }
     ```
+
+    :::note
+    Import ArrayBuffer from Nitro: `import com.margelo.nitro.core.ArrayBuffer`
+    :::
   </TabItem>
   <TabItem value="cpp" label="C++">
     ```cpp
@@ -37,6 +49,10 @@ Passing an `ArrayBuffer` between JS and native is zero-copy.
       std::shared_ptr<ArrayBuffer> getData();
     }
     ```
+
+    :::note
+    Import ArrayBuffer from Nitro: `#include <NitroModules/ArrayBuffer.hpp>`
+    :::
   </TabItem>
 </Tabs>
 

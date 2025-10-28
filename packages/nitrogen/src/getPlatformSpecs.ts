@@ -175,7 +175,7 @@ export function getHybridObjectPlatforms(
     // it uses `HybridObject` without generic arguments. We throw as we don't know what to generate.
     throw new Error(
       `HybridObject ${declaration.getName()} does not declare any platforms in the \`HybridObject\` type argument! ` +
-        `Pass at least one platform (and language) to \`interface ${declaration.getName()} extends HybridObject<{ ... }>\``
+        `Pass at least one platform (and language) to \`interface ${declaration.getName()} extends HybridObject<{ … }>\``
     )
   }
 

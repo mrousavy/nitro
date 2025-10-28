@@ -11,7 +11,7 @@ Optional or nullable values can be declared either by using the questionmark ope
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Math extends HybridObject {
+    interface Math extends HybridObject<{ … }> {
       a?: number
       b: number | undefined
     }

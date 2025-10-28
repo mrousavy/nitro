@@ -27,6 +27,7 @@ Implementation (C++, Swift or Kotlin):
 ```cpp
 class HybridMath: public HybridMathSpec {
 public:
+  HybridMath(): HybridObject(TAG) {}
   double add(double a, double b) override {
     return a + b;
   }
