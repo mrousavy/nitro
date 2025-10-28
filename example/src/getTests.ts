@@ -1007,15 +1007,17 @@ export function getTests(
               .didNotThrow()
               .equals(HybridSomeExternalObject)
           ),
-          createTest('bounceAnyHybrid(...) works', () =>
-            it(() => {
-              const external = testObject.bounceAnyHybrid(
-                HybridSomeExternalObject
-              )
-              return external.equals(testObject)
-            })
-              .didNotThrow()
-              .equals(false)
+          createTest(
+            'bounceAnyHybrid(...) different object does not equal',
+            () =>
+              it(() => {
+                const external = testObject.bounceAnyHybrid(
+                  HybridSomeExternalObject
+                )
+                return external.equals(testObject)
+              })
+                .didNotThrow()
+                .equals(false)
           ),
         ]
       : [
