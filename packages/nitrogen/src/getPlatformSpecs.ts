@@ -54,30 +54,27 @@ function getPlatformSpec(typeName: string, platformSpecs: Type): PlatformSpec {
     // Property name (ios, android)
     const platform = property.getName()
     if (!isValidPlatform(platform)) {
-      console.warn(
-        `    ⚠️   ${typeName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
+      throw new Error(
+        `${typeName} does not properly extend HybridObject<T> - "${platform}" is not a valid Platform! ` +
           `Valid platforms are: [${allPlatforms.join(', ')}]`
       )
-      continue
     }
 
     // Value (swift, kotlin, c++)
     const language = getLiteralValue(property)
     if (!isValidLanguage(language)) {
-      console.warn(
-        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
+      throw new Error(
+        `${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
-      continue
     }
 
     // Double-check that language works on this platform (android: kotlin/c++, ios: swift/c++)
     if (!isValidLanguageForPlatform(language, platform)) {
-      console.warn(
-        `    ⚠️   ${typeName}: Language ${language} is not a valid language for ${platform}! ` +
+      throw new Error(
+        `${typeName}: Language ${language} is not a valid language for ${platform}! ` +
           `Valid languages are: [${platformLanguages[platform].join(', ')}]`
       )
-      continue
     }
 
     // @ts-expect-error because TypeScript isn't smart enough yet to correctly cast after the `isValidLanguageForPlatform` check.
@@ -171,7 +168,7 @@ export function getHybridObjectPlatforms(
     platformSpecsArgument == null ||
     platformSpecsArgument.getProperties().length === 0
   ) {
-    // it uses `HybridObject` without generic arguments. This defaults to Swift/Kotlin
+    // it uses `HybridObject` without generic arguments. We throw as we don't know what to generate.
     throw new Error(
       `HybridObject ${declaration.getName()} does not declare any platforms in the \`HybridObject\` type argument! ` +
         `Pass at least one platform (and language) to \`interface ${declaration.getName()} extends HybridObject<{ ... }>\``
