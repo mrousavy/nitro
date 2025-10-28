@@ -148,6 +148,10 @@ void HybridTestObjectCpp::simpleFunc() {
   // do nothing
 }
 
+std::shared_ptr<HybridObject> HybridTestObjectCpp::bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) {
+  return object;
+}
+
 CustomString HybridTestObjectCpp::bounceCustomType(CustomString value) {
   return value;
 }

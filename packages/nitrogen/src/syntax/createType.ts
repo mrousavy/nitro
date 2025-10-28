@@ -314,6 +314,9 @@ export function createType(
         const name = type.getAliasSymbol()?.getName()
         return new VariantType(variants, name)
       }
+    } else if (isDirectlyAnyHybridObject(type)) {
+      // It is a HybridObject directly/literally. Base type
+      return new AnyHybridObjectType()
     } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
       const typename = getHybridObjectName(type)
@@ -324,9 +327,6 @@ export function createType(
       const sourceConfig =
         getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
       return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
-    } else if (isDirectlyAnyHybridObject(type)) {
-      // It is a HybridObject directly/literally. Base type
-      return new AnyHybridObjectType()
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
       const typename = type.getSymbolOrThrow().getName()

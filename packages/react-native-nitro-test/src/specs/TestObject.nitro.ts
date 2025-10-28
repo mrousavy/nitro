@@ -3,6 +3,7 @@ import {
   type AnyMap,
   type Sync,
   type CustomType,
+  type AnyHybridObject,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -272,6 +273,9 @@ export interface TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+
+  // Any HybridObject
+  bounceAnyHybrid(object: AnyHybridObject): AnyHybridObject
 
   // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString
