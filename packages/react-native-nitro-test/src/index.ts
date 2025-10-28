@@ -9,13 +9,11 @@ import type { Child } from './specs/Child.nitro'
 import { TestView, type TestViewRef } from './views/TestView'
 
 // Export all Hybrid Object types
-export type {
-  TestObjectCpp,
-  TestObjectSwiftKotlin,
-  Child,
-  Base,
-  PlatformObject,
-}
+export * from './specs/Base.nitro'
+export * from './specs/Child.nitro'
+export * from './specs/PlatformObject.nitro'
+export * from './specs/TestObject.nitro'
+export * from './specs/TestView.nitro'
 
 // Export all HybridObject singleton instances
 export const HybridTestObjectCpp =
