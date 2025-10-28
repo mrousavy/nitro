@@ -112,6 +112,10 @@ export function isDirectlyHybridObject(type: Type): boolean {
   return isDirectlyType(type, 'HybridObject')
 }
 
+export function isDirectlyAnyHybridObject(type: Type): boolean {
+  return isDirectlyType(type, 'AnyHybridObject')
+}
+
 export function extendsHybridObject(type: Type, recursive: boolean): boolean {
   return extendsType(type, 'HybridObject', recursive)
 }

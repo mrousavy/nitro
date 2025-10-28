@@ -3,7 +3,7 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
-export class HybridObjectBaseType implements Type {
+export class AnyHybridObjectType implements Type {
   constructor() {}
 
   get canBePassedByReference(): boolean {
@@ -21,7 +21,7 @@ export class HybridObjectBaseType implements Type {
         return `std::shared_ptr<HybridObject>`
       default:
         throw new Error(
-          `The base type \`HybridObject\` cannot be used directly in ${language} yet. Use a specific derived class of \`HybridObject\` instead!`
+          `\`AnyHybridObject\` cannot be used directly in ${language} yet. Use a specific derived class of \`HybridObject\` instead!`
         )
     }
   }
@@ -49,13 +49,6 @@ export class HybridObjectBaseType implements Type {
             space: 'system',
           }
         )
-        break
-      case 'kotlin':
-        imports.push({
-          name: 'com.margelo.nitro.core.HybridObject',
-          space: 'system',
-          language: 'kotlin',
-        })
         break
     }
     return imports
