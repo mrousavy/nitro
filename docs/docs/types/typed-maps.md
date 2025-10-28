@@ -13,7 +13,7 @@ For example, if your API returns a map of users with their ages, you _could_ use
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Database extends HybridObject {
+    interface Database extends HybridObject<{ … }> {
       getAllUsers(): Record<string, number>
     }
     ```

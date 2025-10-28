@@ -13,7 +13,8 @@ They can have natively implemented methods, as well as properties (get + set).
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   readonly pi: number
   add(a: number, b: number): number
 }
@@ -56,13 +57,13 @@ const isMath = math instanceof HybridMath
 A Hybrid Object can also create other Hybrid Objects:
 
 ```ts title="Image.nitro.ts"
-interface Image extends HybridObject {
+interface Image extends HybridObject<{ … }> {
   readonly width: number
   readonly height: number
   saveToFile(path: string): Promise<void>
 }
 
-interface ImageFactory extends HybridObject {
+interface ImageFactory extends HybridObject<{ … }> {
   loadImageFromWeb(path: string): Promise<Image>
   loadImageFromFile(path: string): Image
   loadImageFromResources(name: string): Image
@@ -257,14 +258,14 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
     <div className="side-by-side-block" style={{ flex: 2 }}>
     <div>
     ```ts
-    interface Media extends HybridObject {
+    interface Media extends HybridObject<{ … }> {
       readonly width: number
       readonly height: number
       saveToFile(): Promise<void>
     }
 
     type ImageFormat = 'jpg' | 'png'
-    interface Image extends HybridObject, Media {
+    interface Image extends HybridObject<{ … }>, Media {
       readonly format: ImageFormat
     }
 
@@ -296,8 +297,8 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
     readonly height: number
   }
 
-  interface Image extends HybridObject, Media {}
-  interface Video extends HybridObject, Media {}
+  interface Image extends HybridObject<{ … }>, Media {}
+  interface Video extends HybridObject<{ … }>, Media {}
   ```
 
   </TabItem>

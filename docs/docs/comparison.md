@@ -267,12 +267,12 @@ Codegen is similar to Nitrogen as it also generates native interfaces from TypeS
 <div className="side-by-side-block">
 
 ```ts title="Nitrogen"
-export interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   add(a: number, b: number): Promise<number>
 }
 
 export const Math =
-  NitroModules.createHybridObject<Math>("Math")
+ NitroModules.createHybridObject<Math>('Math')
 ```
 
 </div>
@@ -284,7 +284,7 @@ export interface Spec extends TurboModule {
 }
 
 export const Math =
-  TurboModuleRegistry.get<Spec>("RTNMath")
+  TurboModuleRegistry.get<Spec>('RTNMath')
     as Spec | null;
 ```
 

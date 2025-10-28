@@ -47,7 +47,8 @@ Then just use it in your methods:
       'float',
       { include: 'JSIConverter+Float.hpp' }
     >
-    interface Math extends HybridObject {
+    interface Math
+      extends HybridObject<{ ios: 'c++' }> {
       add(a: Float, b: Float): Float
     }
     ```
@@ -146,7 +147,8 @@ Then just use the type in your methods:
       'std::shared_ptr<react::ShadowNodeWrapper>',
       { include: 'JSIConverter+ShadowNode.hpp' }
     >
-    interface MyHybrid extends HybridObject {
+    interface MyHybrid
+      extends HybridObject<{ ios: 'c++' }> {
       doSomething(view: ShadowNode): void
     }
     ```

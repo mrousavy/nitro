@@ -6,7 +6,7 @@
 A Variant is a type of either one of the values defined in it's declaration. Example:
 
 ```ts
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   distance(value: number | Point): number
 }
 ```
@@ -15,6 +15,20 @@ interface Math extends HybridObject {
 While variants are still very efficient, they need runtime-checks for type conversions,
 which comes with a tiny overhead compared to all other statically defined types. If possible, **avoid variants**.
 :::
+
+## No literal values
+
+A variant can only consist of types, not of literal values.
+
+```ts
+export interface Person extends HybridObject<{ … }> {
+  // diff-remove
+  getGender(): 'male' | 'female'
+}
+```
+
+If you need variants of literal values, you probably want to use [an enum (_union_)](custom-enums#typescript-union) instead.
+
 
 ## Custom Alias Names
 
@@ -26,7 +40,8 @@ Since the generated names are hard to read, it is recommended to declare type-al
 <div className="side-by-side-block">
 
 ```ts title="Bad ❌"
-export interface Math extends HybridObject {
+
+interface Math extends HybridObject<{ … }> {
   calculate(): string | number
 }
 ```
@@ -35,8 +50,8 @@ export interface Math extends HybridObject {
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-export type MathOutput = string | number
-export interface Math extends HybridObject {
+type MathOutput = string | number
+interface Math extends HybridObject<{ … }> {
   calculate(): MathOutput
 }
 ```

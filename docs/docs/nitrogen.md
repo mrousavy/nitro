@@ -13,7 +13,8 @@ import TabItem from '@theme/TabItem';
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   readonly pi: number
   add(a: number, b: number): number
 }

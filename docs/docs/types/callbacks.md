@@ -17,7 +17,7 @@ Once the callback is no longer used, it will be safely deleted from memory.
     In TypeScript, a callback is represented as an anonymous function:
 
     ```ts
-    interface Server extends HybridObject {
+    interface Server extends HybridObject<{ … }> {
       start(onNewUserJoined: (user: User) => void): void
     }
     ```
@@ -58,11 +58,9 @@ It is simply a function you store in memory and call later, just like in a norma
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
-    In TypeScript, a callback is represented as an anonymous function:
-
     ```ts
     type Orientation = "portrait" | "landscape"
-    interface DeviceInfo extends HybridObject {
+    interface DeviceInfo extends HybridObject<{ … }> {
       listenToOrientation(onChanged: (o: Orientation) => void): void
     }
 
@@ -73,8 +71,6 @@ It is simply a function you store in memory and call later, just like in a norma
     ```
   </TabItem>
   <TabItem value="swift" label="Swift">
-    In Swift, a callback is represented as a closure:
-
     ```swift
     func listenToOrientation(onChanged: (Orientation) -> Void) {
       self.listeners.append(onChanged)
@@ -88,8 +84,6 @@ It is simply a function you store in memory and call later, just like in a norma
     ```
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
-    In Kotlin, a callback is represented as a lambda:
-
     ```kotlin
     fun listenToOrientation(onChanged: (Orientation) -> Unit) {
       this.listeners.add(onChanged)
@@ -103,8 +97,6 @@ It is simply a function you store in memory and call later, just like in a norma
     ```
   </TabItem>
   <TabItem value="cpp" label="C++">
-    In C++, a callback is represented as a function:
-
     ```cpp
     void listenToOrientation(std::function<void(Orientation)> onChanged) {
       this->listeners.push_back(onChanged);
@@ -128,7 +120,8 @@ Nitro safely wraps the result types of callbacks that return a value in **Promis
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   some(getValue: () => number): void
 }
 ```
@@ -160,7 +153,8 @@ To extend the previous example, we can make `getValue()` synchronous by wrapping
 <div className="side-by-side-block">
 
 ```ts title="Math.nitro.ts"
-interface Math extends HybridObject {
+interface Math
+  extends HybridObject<{ ios: 'swift' }> {
   some(getValue: Sync<() => number>): void
 }
 ```

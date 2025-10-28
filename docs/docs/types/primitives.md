@@ -12,7 +12,7 @@ For example, a JS `number` is always a 64-bit `double` in C++, a `Double` in Swi
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Math extends HybridObject {
+    interface Math extends HybridObject<{ … }> {
       add(a: number, b: number): number
     }
     ```

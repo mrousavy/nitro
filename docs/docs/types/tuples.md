@@ -7,7 +7,7 @@ A Tuple is a fixed-length set of items of the given types. Example:
 
 ```ts
 type Point = [number, number]
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   distance(a: Point, b: Point): number
 }
 ```
@@ -19,7 +19,7 @@ Tuples can also have different types per value:
 
 ```ts title="Bad ❌"
 type Values = (number | string | Person)[]
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   calculate(values: Values): void
 }
 ```
@@ -30,7 +30,7 @@ The type in the **Bad ❌** example generates an [array](arrays) of [variants](v
 
 ```ts title="Good ✅"
 type Values = [number, string, Person]
-interface Math extends HybridObject {
+interface Math extends HybridObject<{ … }> {
   calculate(values: Values): void
 }
 ```

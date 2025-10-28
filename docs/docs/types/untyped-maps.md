@@ -11,7 +11,7 @@ An untyped map represents a JSON-like structure with a value that can either be 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Fetch extends HybridObject {
+    interface Fetch extends HybridObject<{ … }> {
       get(url: string): AnyMap
     }
     ```

@@ -25,7 +25,7 @@ export interface CustomTypeConfig {
  * @example
  * ```ts
  * type MyOwnString = CustomType<string, 'MyOwnString', { include: 'MyOwnString.hpp' }>
- * interface MyHybrid extends HybridObject {
+ * interface MyHybrid extends HybridObject<{ … }> {
  *   getValue(): MyOwnString
  * }
  * ```

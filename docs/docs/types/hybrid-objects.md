@@ -10,12 +10,14 @@ This means you can pass around instances of native `HybridObject`s between JS an
 <div className="side-by-side-block">
 
 ```ts title="Camera.nitro.ts"
-interface Image extends HybridObject {
+interface Image
+  extends HybridObject<{ ios: 'swift' }> {
   readonly width: number
   readonly height: number
 }
 
-interface Camera extends HybridObject {
+interface Camera
+  extends HybridObject<{ ios: 'swift' }> {
   takePhoto(): Image
 }
 ```
@@ -25,12 +27,15 @@ interface Camera extends HybridObject {
 
 ```swift title="HybridCamera.swift"
 class HybridImage: HybridImageSpec {
-  var width: Double { get }
-  var height: Double { get }
+  let uiImage: UIImage
+  var width: Double { uiImage.size.width }
+  var height: Double { uiImage.size.height }
 }
 
 class HybridCamera: HybridCameraSpec {
-  func takePhoto() -> HybridImageSpec
+  func takePhoto() -> HybridImageSpec {
+    return HybridImage(uiImage: …)
+  }
 }
 ```
 
@@ -63,7 +68,8 @@ Even if they use different implementations under the hood, they all share a comm
 <div className="side-by-side-block">
 
 ```ts title="Cropper.nitro.ts"
-interface Cropper extends HybridObject {
+interface Cropper
+  extends HybridObject<{ ios: 'swift' }> {
   crop(image: Image, size: Size): Image
 }
 ```
@@ -80,6 +86,41 @@ class HybridCropper: HybridCropperSpec {
     return HybridCGImage(data: croppedData)
   }
 }
+```
+
+</div>
+</div>
+
+## `AnyHybridObject`
+
+If you don't need a specific type of `HybridObject` but instead just want any `HybridObject`, you can use Nitro's `AnyHybridObject` type.
+This type only works in C++.
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Some.nitro.ts"
+import {
+  HybridObject,
+  AnyHybridObject
+} from 'react-native-nitro-modules'
+
+interface Some
+  extends HybridObject<{ ios: 'c++' }> {
+  something(obj: AnyHybridObject): void
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```cpp title="HybridSome.hpp"
+class HybridSome: public HybridSomeSpec {
+public:
+  void something(
+    const std::shared_ptr<HybridObject>& obj
+  ) override;
+};
 ```
 
 </div>

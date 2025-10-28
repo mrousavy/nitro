@@ -32,7 +32,7 @@ body:
       description: Share your Nitro specs (`.nitro.ts` files), ideally stripped down to the core problem so I can reproduce this myself locally.
       render: ts
       placeholder: >
-        interface Math extends HybridObject {
+        interface Math extends HybridObject<{ ios: 'c++' }> {
           // ...
         }
     validations:
@@ -40,14 +40,14 @@ body:
     attributes:
       label: Nitro Modules Version
       description: Which version of react-native-nitro-modules are you using?
-      placeholder: ex. 0.11.0
+      placeholder: ex. 0.31.0
     validations:
       required: true
   - type: input
     attributes:
       label: Nitrogen Version
       description: Which version of nitrogen are you using?
-      placeholder: ex. 0.11.0
+      placeholder: ex. 0.31.0
     validations:
       required: true
   - type: dropdown

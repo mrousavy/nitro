@@ -12,7 +12,7 @@ In C++, a `string` is represented using a UTF-8 `std::string`.
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface MyHybrid extends HybridObject {
+    interface MyHybrid extends HybridObject<{ … }> {
       concat(a: string, b: string): string
     }
     ```

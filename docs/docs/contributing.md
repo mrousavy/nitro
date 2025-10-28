@@ -25,7 +25,7 @@ You need:
 
 - [Bun](https://bun.sh)
 - [CocoaPods](https://cocoapods.org)
-- Xcode 16 or higher
+- Xcode 16.4 or higher
 - Android Studio
 
 ### 2. Clone the repo

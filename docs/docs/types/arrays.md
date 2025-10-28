@@ -12,7 +12,7 @@ Arrays of items are represented with the most common, and most efficient array d
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Contacts extends HybridObject {
+    interface Contacts extends HybridObject<{ … }> {
       getAllUsers(): User[]
     }
     ```

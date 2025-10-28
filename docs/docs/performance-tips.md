@@ -21,7 +21,8 @@ An [untyped map](types/untyped-maps) (`AnyMap`) is not only untyped, but also in
 <div className="side-by-side-block">
 
 ```ts title="Bad ❌"
-interface BadDatabase extends HybridObject {
+interface BadDatabase
+  extends HybridObject<{ … }> {
   getUser(): AnyMap
 }
 ```
@@ -34,7 +35,8 @@ interface User {
   name: string
   age: number
 }
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   getUser(): User
 }
 ```
@@ -54,7 +56,8 @@ Those type-checks are very efficient so this is considered a micro-optimization,
 <div className="side-by-side-block">
 
 ```ts title="Bad ❌"
-interface BadDatabase extends HybridObject {
+interface BadDatabase
+  extends HybridObject<{ … }> {
   set(value: number | string): void
 }
 ```
@@ -63,7 +66,8 @@ interface BadDatabase extends HybridObject {
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   setNumber(value: number): void
   setString(value: string): void
 }
@@ -89,7 +93,8 @@ interface SetPayload {
   value: string
   onCompleted: () => void
 }
-interface BadDatabase extends HybridObject {
+interface BadDatabase
+  extends HybridObject<{ … }> {
   set(payload: SetPayload): void
 }
 ```
@@ -98,7 +103,8 @@ interface BadDatabase extends HybridObject {
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   set(key: string,
       value: string,
       onCompleted: () => void): void
@@ -119,7 +125,8 @@ In such cases, mark your function asynchronous by returning a [`Promise`](types/
 <div className="side-by-side-block">
 
 ```ts title="Bad ❌"
-interface BadDatabase extends HybridObject {
+interface BadDatabase
+  extends HybridObject<{ … }> {
   writeLargeData(data: string): void
 }
 ```
@@ -128,7 +135,8 @@ interface BadDatabase extends HybridObject {
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   writeLargeData(data: string): Promise<void>
 }
 ```
@@ -149,7 +157,8 @@ For example, to return a large list of numbers we could use [array buffers](type
 <div className="side-by-side-block">
 
 ```ts title="Bad ❌"
-interface BadDatabase extends HybridObject {
+interface BadDatabase
+  extends HybridObject<{ … }> {
   getAsBlob(): number[]
 }
 ```
@@ -158,7 +167,8 @@ interface BadDatabase extends HybridObject {
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   getAsBlob(): ArrayBuffer
 }
 ```
@@ -180,7 +190,9 @@ interface AllData {
   rows: DataRow[]
 }
 
-interface BadDatabase extends HybridObject {
+
+interface BadDatabase
+  extends HybridObject<{ … }> {
   getAllData(): AllData
 }
 
@@ -194,11 +206,13 @@ const row = data.rows
 <div className="side-by-side-block">
 
 ```ts title="Good ✅"
-interface AllData extends HybridObject {
+interface AllData
+  extends HybridObject<{ … }> {
   findRowWithName(name: string): DataRow
 }
 
-interface GoodDatabase extends HybridObject {
+interface GoodDatabase
+  extends HybridObject<{ … }> {
   getAllData(): AllData
 }
 
