@@ -22,7 +22,7 @@ An [untyped map](types/untyped-maps) (`AnyMap`) is not only untyped, but also in
 
 ```ts title="Bad ❌"
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getUser(): AnyMap
 }
 ```
@@ -36,7 +36,7 @@ interface User {
   age: number
 }
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getUser(): User
 }
 ```
@@ -57,7 +57,7 @@ Those type-checks are very efficient so this is considered a micro-optimization,
 
 ```ts title="Bad ❌"
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   set(value: number | string): void
 }
 ```
@@ -67,7 +67,7 @@ interface BadDatabase
 
 ```ts title="Good ✅"
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   setNumber(value: number): void
   setString(value: string): void
 }
@@ -94,7 +94,7 @@ interface SetPayload {
   onCompleted: () => void
 }
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   set(payload: SetPayload): void
 }
 ```
@@ -104,7 +104,7 @@ interface BadDatabase
 
 ```ts title="Good ✅"
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   set(key: string,
       value: string,
       onCompleted: () => void): void
@@ -126,7 +126,7 @@ In such cases, mark your function asynchronous by returning a [`Promise`](types/
 
 ```ts title="Bad ❌"
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   writeLargeData(data: string): void
 }
 ```
@@ -136,7 +136,7 @@ interface BadDatabase
 
 ```ts title="Good ✅"
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   writeLargeData(data: string): Promise<void>
 }
 ```
@@ -158,7 +158,7 @@ For example, to return a large list of numbers we could use [array buffers](type
 
 ```ts title="Bad ❌"
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getAsBlob(): number[]
 }
 ```
@@ -168,7 +168,7 @@ interface BadDatabase
 
 ```ts title="Good ✅"
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getAsBlob(): ArrayBuffer
 }
 ```
@@ -192,7 +192,7 @@ interface AllData {
 
 
 interface BadDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getAllData(): AllData
 }
 
@@ -207,12 +207,12 @@ const row = data.rows
 
 ```ts title="Good ✅"
 interface AllData
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   findRowWithName(name: string): DataRow
 }
 
 interface GoodDatabase
-  extends HybridObject<{ ios: 'c++' }> {
+  extends HybridObject<{ … }> {
   getAllData(): AllData
 }
 
