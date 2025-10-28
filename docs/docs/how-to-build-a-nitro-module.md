@@ -11,7 +11,22 @@ import TabItem from '@theme/TabItem';
 A [Nitro Module](nitro-modules) is essentially just a react-native library that depends on react-native-nitro-modules and exposes one or more [Hybrid Objects](hybrid-objects).
 It can either just use react-native-nitro-modules directly from C++, or use [Nitrogen](nitrogen) to generate bindings from TypeScript to native - in this case you can even use Swift and Kotlin.
 
-This is a quick guide to build a Nitro Module from start to finish:
+## YouTube Tutorial
+
+If you prefer YouTube videos to learn, here's a full guide from start to finish to build a Nitro Module:
+
+<iframe
+  className="video"
+  src="https://www.youtube.com/embed/528SxTGnIlc"
+  title="YouTube video player"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
+<br />
+<br />
+
+If you prefer written documentation, here is a quick guide to build a Nitro Module from start to finish:
 
 ## 1. Create a Nitro Module
 
