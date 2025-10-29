@@ -28,7 +28,7 @@ import {
 } from '../getPlatformSpecs.js'
 import { AnyHybridObjectType } from './types/AnyHybridObjectType.js'
 import { ErrorType } from './types/ErrorType.js'
-import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
+import { getBaseTypes, getSourceNitroModuleConfig } from '../utils.js'
 import { DateType } from './types/DateType.js'
 import { NitroConfig } from '../config/NitroConfig.js'
 import { CustomType } from './types/CustomType.js'
@@ -273,7 +273,9 @@ export function createType(
       const enumDeclaration = declaration.asKindOrThrow(
         ts.SyntaxKind.EnumDeclaration
       )
-      return new EnumType(typename, enumDeclaration)
+      const sourceConfig =
+        getSourceNitroModuleConfig(type) ?? NitroConfig.current
+      return new EnumType(typename, enumDeclaration, sourceConfig)
     } else if (type.isUnion()) {
       // It is some kind of union;
       // - of string literals (then it's an enum)
@@ -295,7 +297,9 @@ export function createType(
           )
         }
         const typename = symbol.getEscapedName()
-        return new EnumType(typename, type)
+        const sourceConfig =
+          getSourceNitroModuleConfig(type) ?? NitroConfig.current
+        return new EnumType(typename, type, sourceConfig)
       } else {
         // It consists of different types - that means it's a variant!
         let variants = type
@@ -325,13 +329,15 @@ export function createType(
         .map((b) => createType(language, b, false))
       const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
       const sourceConfig =
-        getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
+        getSourceNitroModuleConfig(type) ?? NitroConfig.current
       return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
       const typename = type.getSymbolOrThrow().getName()
       const properties = getInterfaceProperties(language, type)
-      return new StructType(typename, properties)
+      const sourceConfig =
+        getSourceNitroModuleConfig(type) ?? NitroConfig.current
+      return new StructType(typename, properties, sourceConfig)
     } else if (type.isObject()) {
       // It is an object. If it has a symbol/name, it is a `type T = ...` declaration, so a `struct`.
       // Otherwise, it is an anonymous/inline object, which cannot be represented in native.
@@ -340,7 +346,9 @@ export function createType(
         // it has a `type T = ...` declaration
         const typename = symbol.getName()
         const properties = getInterfaceProperties(language, type)
-        return new StructType(typename, properties)
+        const sourceConfig =
+          getSourceNitroModuleConfig(type) ?? NitroConfig.current
+        return new StructType(typename, properties, sourceConfig)
       } else {
         // It's an anonymous object (`{ ... }`)
         throw new Error(

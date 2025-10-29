@@ -47,8 +47,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
-#include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>

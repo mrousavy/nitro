@@ -127,7 +127,7 @@ export function getBaseTypes(type: Type): Type[] {
   return recursive.filter(isNotDuplicate)
 }
 
-export function getHybridObjectNitroModuleConfig(
+export function getSourceNitroModuleConfig(
   type: Type
 ): NitroConfig | undefined {
   const symbol = type.getSymbol() ?? type.getAliasSymbol()

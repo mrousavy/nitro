@@ -1,7 +1,6 @@
 import { EnumDeclaration } from 'ts-morph'
 import { Type as TSMorphType, type ts } from 'ts-morph'
 import type { Language } from '../../getPlatformSpecs.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 import { createCppEnum } from '../c++/CppEnum.js'
@@ -20,13 +19,24 @@ export class EnumType implements Type {
   readonly enumMembers: EnumMember[]
   readonly jsType: 'enum' | 'union'
   readonly declarationFile: SourceFile
+  readonly sourceConfig: NitroConfig
 
-  constructor(enumName: string, enumDeclaration: EnumDeclaration)
-  constructor(enumName: string, union: TSMorphType<ts.UnionType>)
   constructor(
     enumName: string,
-    declaration: EnumDeclaration | TSMorphType<ts.UnionType>
+    enumDeclaration: EnumDeclaration,
+    sourceConfig: NitroConfig
+  )
+  constructor(
+    enumName: string,
+    union: TSMorphType<ts.UnionType>,
+    sourceConfig: NitroConfig
+  )
+  constructor(
+    enumName: string,
+    declaration: EnumDeclaration | TSMorphType<ts.UnionType>,
+    sourceConfig: NitroConfig
   ) {
+    this.sourceConfig = sourceConfig
     this.enumName = enumName
     if (declaration instanceof EnumDeclaration) {
       // It's a JS enum { ... }
@@ -111,20 +121,11 @@ export class EnumType implements Type {
     return [this.declarationFile]
   }
   getRequiredImports(language: Language): SourceImport[] {
-    const imports: SourceImport[] = []
-    if (language === 'c++') {
-      const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
-      imports.push({
-        name: this.declarationFile.name,
-        language: this.declarationFile.language,
-        forwardDeclaration: getForwardDeclaration(
-          'enum class',
-          this.enumName,
-          cxxNamespace
-        ),
-        space: 'user',
-      })
-    }
+    const imports: SourceImport[] = this.sourceConfig.getRequiredImports(
+      language,
+      'enum class',
+      this.enumName
+    )
     return imports
   }
 }
