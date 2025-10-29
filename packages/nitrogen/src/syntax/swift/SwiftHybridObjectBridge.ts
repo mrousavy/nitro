@@ -104,8 +104,9 @@ public class ${name.HybridTSpecCxx} {
    */
   public typealias bridge = ${bridgeNamespace}
 
+  @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> ${name.HybridTSpec} {
-    return HybridObjectFromUnsafe<${name.HybridTSpec}>(this)
+    return HybridObjectFromUnsafe(this)
   }
 
   /**

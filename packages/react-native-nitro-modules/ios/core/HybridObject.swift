@@ -57,12 +57,21 @@ extension HybridObject {
 }
 
 extension HybridObject {
+  @inline(__always)
   public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 }
 
+@inline(__always)
 public func HybridObjectFromUnsafe<T>(_ unsafe: UnsafeRawPointer) -> T {
   let anyObject = Unmanaged<AnyObject>.fromOpaque(unsafe).takeUnretainedValue()
+  #if DEBUG
+  guard let object = anyObject as? T else {
+    fatalError("Object \(unsafe) cannot be casted to type \(String(describing: T.self))!")
+  }
+  return object
+  #else
   return anyObject as! T
+  #endif
 }

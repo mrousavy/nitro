@@ -25,8 +25,9 @@ public class HybridChildSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.bridge.swift
 
+  @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> HybridChildSpec {
-    return HybridObjectFromUnsafe<HybridChildSpec>(this)
+    return HybridObjectFromUnsafe(this)
   }
 
   /**
