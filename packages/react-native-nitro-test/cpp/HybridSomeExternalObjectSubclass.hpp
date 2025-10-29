@@ -26,7 +26,8 @@ public:
     return value;
   }
 
-  margelo::nitro::test::external::SomeExternalStruct bounceStruct(const margelo::nitro::test::external::SomeExternalStruct& value) override {
+  margelo::nitro::test::external::SomeExternalStruct
+  bounceStruct(const margelo::nitro::test::external::SomeExternalStruct& value) override {
     return value;
   }
 
