@@ -15,7 +15,7 @@ namespace NitroTest { class HybridSomeExternalObjectSubclassSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpecSwift` to properly resolve imports.
 namespace margelo::nitro::test { class HybridSomeExternalObjectSpecSwift; }
 
-#include "HybridSomeExternalObjectSpecSwift.hpp"
+#include <NitroTestExternal/HybridSomeExternalObjectSpecSwift.hpp>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -31,12 +31,14 @@ namespace margelo::nitro::test {
    * the future, HybridSomeExternalObjectSubclassSpec_cxx can directly inherit from the C++ class HybridSomeExternalObjectSubclassSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridSomeExternalObjectSubclassSpecSwift: public virtual HybridSomeExternalObjectSubclassSpec, public virtual HybridSomeExternalObjectSpecSwift {
+  class HybridSomeExternalObjectSubclassSpecSwift:
+    public virtual HybridSomeExternalObjectSubclassSpec,
+    public virtual NitroTest::HybridSomeExternalObjectSpecSwift {
   public:
     // Constructor from a Swift instance
     explicit HybridSomeExternalObjectSubclassSpecSwift(const NitroTest::HybridSomeExternalObjectSubclassSpec_cxx& swiftPart):
       HybridObject(HybridSomeExternalObjectSubclassSpec::TAG),
-      HybridSomeExternalObjectSpecSwift(swiftPart),
+      NitroTest::HybridSomeExternalObjectSpecSwift(swiftPart),
       _swiftPart(swiftPart) { }
 
   public:
