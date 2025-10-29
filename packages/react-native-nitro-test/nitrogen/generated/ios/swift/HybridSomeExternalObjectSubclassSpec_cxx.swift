@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
 /**
  * A class implementation that bridges HybridSomeExternalObjectSubclassSpec over to C++.
@@ -57,7 +58,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public override func toUnsafe() -> UnsafeMutableRawPointer {
+  open override func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -66,7 +67,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * The pointer has to be a retained opaque `Unmanaged<HybridSomeExternalObjectSubclassSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridSomeExternalObjectSubclassSpec_cxx {
+  open override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridSomeExternalObjectSubclassSpec_cxx {
     return Unmanaged<HybridSomeExternalObjectSubclassSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -74,7 +75,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a `std::shared_ptr<HybridSomeExternalObjectSubclassSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSubclassSpec_ {
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSubclassSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -85,7 +86,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
     }
   }
 
-  public override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
+  open override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
     let ownCxxPart: bridge.std__shared_ptr_HybridSomeExternalObjectSubclassSpec_ = getCxxPart()
     return bridge.upcast_SomeExternalObjectSubclass_to_SomeExternalObject(ownCxxPart)
   }
@@ -95,7 +96,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public override var memorySize: Int {
+  open override var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -104,7 +105,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public override func dispose() {
+  open override func dispose() {
     self.__implementation.dispose()
   }
 
@@ -112,7 +113,7 @@ open class HybridSomeExternalObjectSubclassSpec_cxx : HybridSomeExternalObjectSp
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public override func toString() -> String {
+  open override func toString() -> String {
     return self.__implementation.toString()
   }
 

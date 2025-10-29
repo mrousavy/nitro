@@ -19,19 +19,15 @@ public:
 
 public:
   std::string getValue() override {
-    return "subclass!";
+    return "This is overridden!";
   }
 
-  ExternalEnum bounceEnum(ExternalEnum value) override {
+  margelo::nitro::test::external::SomeExternalEnum bounceEnum(margelo::nitro::test::external::SomeExternalEnum value) override {
     return value;
   }
 
-  ExternalStruct bounceStruct(ExternalStruct value) override {
+  margelo::nitro::test::external::SomeExternalStruct bounceStruct(const margelo::nitro::test::external::SomeExternalStruct& value) override {
     return value;
-  }
-
-  bool getIsSubclass() override {
-    return true;
   }
 };
 

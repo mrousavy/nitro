@@ -28,7 +28,7 @@ public extension HybridBaseSpec_protocol {
 open class HybridBaseSpec_base {
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridBaseSpec_cxx {
+  open func getCxxWrapper() -> HybridBaseSpec_cxx {
   #if DEBUG
     guard self is HybridBaseSpec else {
       fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")

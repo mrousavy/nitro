@@ -29,7 +29,7 @@ public extension HybridSomeExternalObjectSubclassSpec_protocol {
 open class HybridSomeExternalObjectSubclassSpec_base: HybridSomeExternalObjectSpec_base {
   private weak var cxxWrapper: HybridSomeExternalObjectSubclassSpec_cxx? = nil
   public override init() { super.init() }
-  public override func getCxxWrapper() -> HybridSomeExternalObjectSubclassSpec_cxx {
+  open override func getCxxWrapper() -> HybridSomeExternalObjectSubclassSpec_cxx {
   #if DEBUG
     guard self is HybridSomeExternalObjectSubclassSpec else {
       fatalError("`self` is not a `HybridSomeExternalObjectSubclassSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSubclassSpec_base` instead of `HybridSomeExternalObjectSubclassSpec`?")

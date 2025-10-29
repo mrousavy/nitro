@@ -33,6 +33,11 @@ export function createSwiftHybridObjectCxxBridge(
   const moduleName = spec.config.getIosModuleName()
   const bridgeNamespace = spec.config.getSwiftBridgeNamespace('swift')
 
+  const externalModules = spec.baseTypes
+    .filter((b) => b.config.isExternalConfig)
+    .map((b) => b.config.getIosModuleName())
+    .filter(isNotDuplicate)
+
   const propertiesBridge = spec.properties.map((p) =>
     getPropertyForwardImplementation(p)
   )
@@ -102,7 +107,7 @@ public final func afterUpdate() {
       )
 
     return `
-public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
+open override func getCxxPart() -> bridge.${baseBridge.specializationName} {
   let ownCxxPart: bridge.${bridge.specializationName} = getCxxPart()
   return bridge.${upcastBridge.funcName}(ownCxxPart)
 }`.trim()
@@ -116,6 +121,7 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
   imports.push(
     ...extraSwiftImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
+  imports.push(...externalModules.map((m) => `import ${m}`))
 
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
@@ -172,7 +178,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
+  open ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -181,7 +187,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
    * This removes one strong reference from the object!
    */
-  public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
+  open ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
     return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -189,7 +195,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a \`${bridge.cxxType}\`.
    */
-  public func getCxxPart() -> bridge.${bridge.specializationName} {
+  open func getCxxPart() -> bridge.${bridge.specializationName} {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -207,7 +213,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public ${hasBase ? 'override var' : 'var'} memorySize: Int {
+  open ${hasBase ? 'override var' : 'var'} memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -216,7 +222,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public ${hasBase ? 'override func' : 'func'} dispose() {
+  open ${hasBase ? 'override func' : 'func'} dispose() {
     self.__implementation.dispose()
   }
 
@@ -224,7 +230,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public ${hasBase ? 'override func' : 'func'} toString() -> String {
+  open ${hasBase ? 'override func' : 'func'} toString() -> String {
     return self.__implementation.toString()
   }
 
