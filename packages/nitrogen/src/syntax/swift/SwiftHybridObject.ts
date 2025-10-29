@@ -56,20 +56,26 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
       `
 public override init() {
   super.init()
-}`
+}
+`.trim()
     )
-    baseMethods.push(`
+    baseMethods.push(
+      `
 open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
   let __child: ${cxxType} = getCxxPart()
   return bridge.${upcastBridge.funcName}(__child)
-}`)
+}
+`.trim()
+    )
   } else {
     baseMethods.push(
       `
-open init() { }`
+public init() { }
+`.trim()
     )
   }
-  baseMethods.push(`
+  baseMethods.push(
+    `
 open func getCxxPart() -> ${cxxType} {
   let cachedCxxPart = self._cxxPart.lock()
   if Bool(fromCxx: cachedCxxPart) {
@@ -81,7 +87,8 @@ open func getCxxPart() -> ${cxxType} {
     return cxxPart
   }
 }
-    `)
+`.trim()
+  )
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }

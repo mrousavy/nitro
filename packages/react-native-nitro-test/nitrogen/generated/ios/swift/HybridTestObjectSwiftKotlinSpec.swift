@@ -121,9 +121,7 @@ open class HybridTestObjectSwiftKotlinSpec_base {
   private var _cxxPart: bridge.std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = .init()
 
   public init() { }
-
   
-
   open func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let cachedCxxPart = self._cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {

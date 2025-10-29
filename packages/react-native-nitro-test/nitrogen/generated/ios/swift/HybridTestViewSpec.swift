@@ -32,9 +32,7 @@ open class HybridTestViewSpec_base {
   private var _cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_ = .init()
 
   public init() { }
-
   
-
   open func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
     let cachedCxxPart = self._cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {

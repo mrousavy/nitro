@@ -29,9 +29,7 @@ open class HybridBaseSpec_base {
   private var _cxxPart: bridge.std__weak_ptr_HybridBaseSpec_ = .init()
 
   public init() { }
-
   
-
   open func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let cachedCxxPart = self._cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {

@@ -28,13 +28,15 @@ open class HybridChildSpec_base: HybridBaseSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridChildSpec_ = .init()
 
-  public override init() { super.init() }
-
+  public override init() {
+    super.init()
+  }
+  
   open override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let __child: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
     return bridge.upcast_Child_to_Base(__child)
   }
-
+  
   open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
     let cachedCxxPart = self._cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
