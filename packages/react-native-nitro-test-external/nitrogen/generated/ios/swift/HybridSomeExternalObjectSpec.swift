@@ -15,6 +15,8 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
 
   // Methods
   func getValue() throws -> String
+  func bounceEnum(value: SomeExternalEnum) throws -> SomeExternalEnum
+  func bounceStruct(value: SomeExternalStruct) throws -> SomeExternalStruct
 }
 
 public extension HybridSomeExternalObjectSpec_protocol {
@@ -28,7 +30,7 @@ public extension HybridSomeExternalObjectSpec_protocol {
 open class HybridSomeExternalObjectSpec_base {
   private weak var cxxWrapper: HybridSomeExternalObjectSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
+  open func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
   #if DEBUG
     guard self is HybridSomeExternalObjectSpec else {
       fatalError("`self` is not a `HybridSomeExternalObjectSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSpec_base` instead of `HybridSomeExternalObjectSpec`?")

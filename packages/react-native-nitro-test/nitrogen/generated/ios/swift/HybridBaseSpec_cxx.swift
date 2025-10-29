@@ -57,7 +57,7 @@ open class HybridBaseSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
+  open func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -66,7 +66,7 @@ open class HybridBaseSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridBaseSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridBaseSpec_cxx {
+  open class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridBaseSpec_cxx {
     return Unmanaged<HybridBaseSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -74,7 +74,7 @@ open class HybridBaseSpec_cxx {
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a `std::shared_ptr<HybridBaseSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -92,7 +92,7 @@ open class HybridBaseSpec_cxx {
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public var memorySize: Int {
+  open var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -101,7 +101,7 @@ open class HybridBaseSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public func dispose() {
+  open func dispose() {
     self.__implementation.dispose()
   }
 
@@ -109,7 +109,7 @@ open class HybridBaseSpec_cxx {
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public func toString() -> String {
+  open func toString() -> String {
     return self.__implementation.toString()
   }
 

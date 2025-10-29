@@ -21,6 +21,15 @@ public:
   std::string getValue() override {
     return "This is overridden!";
   }
+
+  margelo::nitro::test::external::SomeExternalEnum bounceEnum(margelo::nitro::test::external::SomeExternalEnum value) override {
+    return value;
+  }
+
+  margelo::nitro::test::external::SomeExternalStruct
+  bounceStruct(const margelo::nitro::test::external::SomeExternalStruct& value) override {
+    return value;
+  }
 };
 
 }; // namespace margelo::nitro::test

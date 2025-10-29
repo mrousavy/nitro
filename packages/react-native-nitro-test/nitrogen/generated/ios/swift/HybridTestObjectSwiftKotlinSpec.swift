@@ -107,6 +107,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
+  func createExternalObjectInternalSubclass() throws -> (any HybridSomeExternalObjectSubclassSpec)
 }
 
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
@@ -120,7 +121,7 @@ public extension HybridTestObjectSwiftKotlinSpec_protocol {
 open class HybridTestObjectSwiftKotlinSpec_base {
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
+  open func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
     guard self is HybridTestObjectSwiftKotlinSpec else {
       fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")

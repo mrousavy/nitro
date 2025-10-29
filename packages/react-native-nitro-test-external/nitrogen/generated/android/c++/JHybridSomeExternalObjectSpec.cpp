@@ -7,9 +7,18 @@
 
 #include "JHybridSomeExternalObjectSpec.hpp"
 
-
+// Forward declaration of `SomeExternalEnum` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class SomeExternalEnum; }
+// Forward declaration of `SomeExternalStruct` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalStruct; }
 
 #include <string>
+#include "SomeExternalEnum.hpp"
+#include "JSomeExternalEnum.hpp"
+#include "SomeExternalStruct.hpp"
+#include "JSomeExternalStruct.hpp"
+#include <functional>
+#include "JFunc_void.hpp"
 
 namespace margelo::nitro::test::external {
 
@@ -47,6 +56,16 @@ namespace margelo::nitro::test::external {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getValue");
     auto __result = method(_javaPart);
     return __result->toStdString();
+  }
+  SomeExternalEnum JHybridSomeExternalObjectSpec::bounceEnum(SomeExternalEnum value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSomeExternalEnum>(jni::alias_ref<JSomeExternalEnum> /* value */)>("bounceEnum");
+    auto __result = method(_javaPart, JSomeExternalEnum::fromCpp(value));
+    return __result->toCpp();
+  }
+  SomeExternalStruct JHybridSomeExternalObjectSpec::bounceStruct(const SomeExternalStruct& value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSomeExternalStruct>(jni::alias_ref<JSomeExternalStruct> /* value */)>("bounceStruct");
+    auto __result = method(_javaPart, JSomeExternalStruct::fromCpp(value));
+    return __result->toCpp();
   }
 
 } // namespace margelo::nitro::test::external

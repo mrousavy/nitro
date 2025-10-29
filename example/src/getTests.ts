@@ -1716,6 +1716,20 @@ export function getTests(
         .didNotThrow()
         .equals(HybridSomeExternalObject)
     ),
+    createTest('external.bounceEnum(...) works', () =>
+      it(() => HybridSomeExternalObject.bounceEnum('second'))
+        .didNotThrow()
+        .equals('second')
+    ),
+    createTest('external.bounceStruct(...) works', () =>
+      it(() =>
+        HybridSomeExternalObject.bounceStruct({ callback: () => {}, value: 55 })
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('value')
+        .toContain('callback')
+    ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {
         const object = testObject.createInternalObject()
@@ -1723,6 +1737,28 @@ export function getTests(
       })
         .didNotThrow()
         .equals('This is overridden!')
+    ),
+    createTest(
+      'createExternalObjectInternalSubclass(...) returns a subclass',
+      () =>
+        it(() => {
+          const object = testObject.createExternalObjectInternalSubclass()
+          return object.isSubclass
+        })
+          .didNotThrow()
+          .didReturn('boolean')
+          .equals(true)
+    ),
+    createTest(
+      'createExternalObjectInternalSubclass(...) returns a subclass',
+      () =>
+        it(() => {
+          const object = testObject.createExternalObjectInternalSubclass()
+          return object.getValue()
+        })
+          .didNotThrow()
+          .didReturn('string')
+          .equals('subclass!')
     ),
     createTest('new T() works', () =>
       it(() => {

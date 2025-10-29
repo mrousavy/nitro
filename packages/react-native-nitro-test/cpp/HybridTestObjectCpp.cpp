@@ -618,6 +618,10 @@ std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> Hy
   return std::make_shared<HybridSomeInternalObject>();
 }
 
+std::shared_ptr<margelo::nitro::test::HybridSomeExternalObjectSubclassSpec> HybridTestObjectCpp::createExternalObjectInternalSubclass() {
+  return std::make_shared<HybridSomeExternalObjectSubclass>();
+}
+
 void HybridTestObjectCpp::dispose() {
   if (this->_optionalCallback.has_value()) {
     this->_optionalCallback.value()(13.0);

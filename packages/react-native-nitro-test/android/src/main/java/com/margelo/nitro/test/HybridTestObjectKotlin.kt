@@ -500,6 +500,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return HybridSomeInternalObject()
   }
 
+  override fun createExternalObjectInternalSubclass(): HybridSomeExternalObjectSubclassSpec {
+    return HybridSomeExternalObjectSubclass()
+  }
+
   override fun dispose() {
     this.optionalCallback?.let { callback ->
       callback(13.0)

@@ -48,6 +48,14 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun getValue(): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceEnum(value: SomeExternalEnum): SomeExternalEnum
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceStruct(value: SomeExternalStruct): SomeExternalStruct
 
   private external fun initHybrid(): HybridData
 

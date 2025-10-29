@@ -10,11 +10,18 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `SomeExternalEnum` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class SomeExternalEnum; }
+// Forward declaration of `SomeExternalStruct` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalStruct; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
+#include "SomeExternalEnum.hpp"
+#include "SomeExternalStruct.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
+#include <functional>
 #include <memory>
 #include <string>
 

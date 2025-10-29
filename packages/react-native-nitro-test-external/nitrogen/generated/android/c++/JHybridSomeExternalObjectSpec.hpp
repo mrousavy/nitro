@@ -55,6 +55,8 @@ namespace margelo::nitro::test::external {
   public:
     // Methods
     std::string getValue() override;
+    SomeExternalEnum bounceEnum(SomeExternalEnum value) override;
+    SomeExternalStruct bounceStruct(const SomeExternalStruct& value) override;
 
   private:
     friend HybridBase;

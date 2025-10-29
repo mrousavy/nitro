@@ -28,7 +28,7 @@ public extension HybridPlatformObjectSpec_protocol {
 open class HybridPlatformObjectSpec_base {
   private weak var cxxWrapper: HybridPlatformObjectSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridPlatformObjectSpec_cxx {
+  open func getCxxWrapper() -> HybridPlatformObjectSpec_cxx {
   #if DEBUG
     guard self is HybridPlatformObjectSpec else {
       fatalError("`self` is not a `HybridPlatformObjectSpec`! Did you accidentally inherit from `HybridPlatformObjectSpec_base` instead of `HybridPlatformObjectSpec`?")

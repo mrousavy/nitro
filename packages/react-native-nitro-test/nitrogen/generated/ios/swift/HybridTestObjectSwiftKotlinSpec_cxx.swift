@@ -59,7 +59,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
+  open func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -68,7 +68,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridTestObjectSwiftKotlinSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestObjectSwiftKotlinSpec_cxx {
+  open class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestObjectSwiftKotlinSpec_cxx {
     return Unmanaged<HybridTestObjectSwiftKotlinSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -76,7 +76,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -94,7 +94,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public var memorySize: Int {
+  open var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -103,7 +103,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public func dispose() {
+  open func dispose() {
     self.__implementation.dispose()
   }
 
@@ -111,7 +111,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public func toString() -> String {
+  open func toString() -> String {
     return self.__implementation.toString()
   }
 
@@ -2082,6 +2082,21 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func createExternalObjectInternalSubclass() -> bridge.Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__ {
+    do {
+      let __result = try self.__implementation.createExternalObjectInternalSubclass()
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSubclassSpec_ in
+        let __cxxWrapped = __result.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(__exceptionPtr)
     }
   }
 }

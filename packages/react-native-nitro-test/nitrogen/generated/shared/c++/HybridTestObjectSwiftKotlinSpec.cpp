@@ -119,6 +119,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectSwiftKotlinSpec::getIsViewBlue);
       prototype.registerHybridMethod("bounceExternalHybrid", &HybridTestObjectSwiftKotlinSpec::bounceExternalHybrid);
       prototype.registerHybridMethod("createInternalObject", &HybridTestObjectSwiftKotlinSpec::createInternalObject);
+      prototype.registerHybridMethod("createExternalObjectInternalSubclass", &HybridTestObjectSwiftKotlinSpec::createExternalObjectInternalSubclass);
     });
   }
 

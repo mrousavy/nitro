@@ -57,7 +57,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public override func toUnsafe() -> UnsafeMutableRawPointer {
+  open override func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -66,7 +66,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridChildSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
+  open override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
     return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -74,7 +74,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a `std::shared_ptr<HybridChildSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -85,7 +85,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
     }
   }
 
-  public override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+  open override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let ownCxxPart: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
     return bridge.upcast_Child_to_Base(ownCxxPart)
   }
@@ -95,7 +95,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public override var memorySize: Int {
+  open override var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -104,7 +104,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public override func dispose() {
+  open override func dispose() {
     self.__implementation.dispose()
   }
 
@@ -112,7 +112,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public override func toString() -> String {
+  open override func toString() -> String {
     return self.__implementation.toString()
   }
 

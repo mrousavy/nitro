@@ -15,6 +15,8 @@ namespace margelo::nitro::test::external {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("getValue", &HybridSomeExternalObjectSpec::getValue);
+      prototype.registerHybridMethod("bounceEnum", &HybridSomeExternalObjectSpec::bounceEnum);
+      prototype.registerHybridMethod("bounceStruct", &HybridSomeExternalObjectSpec::bounceStruct);
     });
   }
 

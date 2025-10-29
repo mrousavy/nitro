@@ -36,14 +36,14 @@ def add_nitrogen_files(spec)
   spec.public_header_files = current_public_header_files + [
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
+    "nitrogen/generated/ios/**/*.{h,hpp}",
     # Swift to C++ bridging helpers
-    "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Bridge.hpp"
+    "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Bridge.hpp",
+    "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
   ]
 
   current_private_header_files = Array(spec.attributes_hash['private_header_files'])
   spec.private_header_files = current_private_header_files + [
-    # iOS specific specs
-    "nitrogen/generated/ios/c++/**/*.{h,hpp}",
     # Views are framework-specific and should be private
     "nitrogen/generated/shared/**/views/**/*"
   ]
