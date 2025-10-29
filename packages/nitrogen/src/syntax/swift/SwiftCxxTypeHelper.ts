@@ -171,7 +171,7 @@ void* NON_NULL get_${name}(${name} cppType) {
   }
 }
 
-function createCxxUpcastHelper(
+export function createCxxUpcastHelper(
   baseType: HybridObjectType,
   childType: HybridObjectType
 ): SwiftCxxHelper {
@@ -194,7 +194,7 @@ inline ${cppBaseType} ${funcName}(${cppChildType} child) noexcept { return child
   }
 }
 
-function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
+export function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
   const actualType = type.getCode('c++', { mode: 'weak' })
   const specializationName = escapeCppName(actualType)
   const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`

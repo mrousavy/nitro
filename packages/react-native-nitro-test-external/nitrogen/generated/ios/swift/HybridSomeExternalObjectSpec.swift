@@ -26,15 +26,22 @@ public extension HybridSomeExternalObjectSpec_protocol {
 
 open class HybridSomeExternalObjectSpec_base {
   public typealias bridge = margelo.nitro.test.external.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSpec_ = .init()
 
   public init() { }
 
   
 
   open func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
-    let __unsafe = Unmanaged.passRetained(self).toOpaque()
-    let __cxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(__unsafe)
-    return __cxxPart
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
+    } else {
+      let unsafe = Unmanaged.passRetained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(cxxPart)
+      return cxxPart
+    }
   }
 }
 

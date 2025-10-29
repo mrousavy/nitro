@@ -2,19 +2,20 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import {
-  createFileMetadataString,
-  escapeCppName,
-  isNotDuplicate,
-} from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
+import {
+  createCxxUpcastHelper,
+  createCxxWeakPtrHelper,
+} from './SwiftCxxTypeHelper.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
+  const type = new HybridObjectType(spec)
   const protocolName = name.HybridTSpec
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((m) => m.getCode('swift')).join('\n')
@@ -26,10 +27,10 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ),
   ]
   const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
-  const bridgedType = new SwiftCxxBridgedType(new HybridObjectType(spec))
+  const bridgedType = new SwiftCxxBridgedType(type)
   const bridgeFunc = bridgedType.getRequiredBridge()
   const cxxType = bridgedType.getTypeCode('swift')
-  let upcastCxxOverride: string = ''
+  const weakifyBridge = createCxxWeakPtrHelper(type)
 
   if (bridgeFunc == null) {
     throw new Error(`HybridObject's C++ -> Swift Bridge func cannot be null!`)
@@ -37,6 +38,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const protocolBaseClasses = ['HybridObject']
   const baseClasses: string[] = []
+  const baseMethods: string[] = []
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -47,15 +49,39 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const baseName = getHybridObjectName(base.name)
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
     baseClasses.push(`${baseName.HybridTSpec}_base`)
-    const baseBridge = new SwiftCxxBridgedType(new HybridObjectType(base))
-    const upcastFuncName = escapeCppName(`upcast_${name.T}_to_${baseName.T}`)
-    upcastCxxOverride = `
+    const baseType = new HybridObjectType(base)
+    const baseBridge = new SwiftCxxBridgedType(baseType)
+    const upcastBridge = createCxxUpcastHelper(baseType, type)
+    baseMethods.push(
+      `
+public override init() {
+  super.init()
+}`
+    )
+    baseMethods.push(`
 open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
   let __child: ${cxxType} = getCxxPart()
-  return bridge.${upcastFuncName}(__child)
-}
-    `.trim()
+  return bridge.${upcastBridge.funcName}(__child)
+}`)
+  } else {
+    baseMethods.push(
+      `
+open init() { }`
+    )
   }
+  baseMethods.push(`
+open func getCxxPart() -> ${cxxType} {
+  let cachedCxxPart = self._cxxPart.lock()
+  if Bool(fromCxx: cachedCxxPart) {
+    return cachedCxxPart
+  } else {
+    let unsafe = Unmanaged.passRetained(self).toOpaque()
+    let cxxPart = bridge.${bridgeFunc.funcName}(unsafe)
+    _cxxPart = bridge.${weakifyBridge.funcName}(cxxPart)
+    return cxxPart
+  }
+}
+    `)
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }
@@ -66,12 +92,6 @@ open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
   )
 
   const hasBase = baseClasses.length > 0
-  let initializer: string
-  if (hasBase) {
-    initializer = `public override init() { super.init() }`
-  } else {
-    initializer = `public init() { }`
-  }
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -96,16 +116,9 @@ public extension ${protocolName}_protocol {
 
 open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
   public typealias bridge = ${bridgeNamespace}
+  private var _cxxPart: bridge.${weakifyBridge.specializationName} = .init()
 
-  ${indent(initializer, '  ')}
-
-  ${indent(upcastCxxOverride, '  ')}
-
-  open func getCxxPart() -> ${cxxType} {
-    let __unsafe = Unmanaged.passRetained(self).toOpaque()
-    let __cxxPart = bridge.${bridgeFunc.funcName}(__unsafe)
-    return __cxxPart
-  }
+  ${indent(baseMethods.join('\n\n'), '  ')}
 }
 
 public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base

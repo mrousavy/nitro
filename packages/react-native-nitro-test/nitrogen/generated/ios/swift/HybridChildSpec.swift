@@ -26,6 +26,7 @@ public extension HybridChildSpec_protocol {
 
 open class HybridChildSpec_base: HybridBaseSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridChildSpec_ = .init()
 
   public override init() { super.init() }
 
@@ -35,9 +36,15 @@ open class HybridChildSpec_base: HybridBaseSpec_base {
   }
 
   open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
-    let __unsafe = Unmanaged.passRetained(self).toOpaque()
-    let __cxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(__unsafe)
-    return __cxxPart
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
+    } else {
+      let unsafe = Unmanaged.passRetained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridChildSpec_(cxxPart)
+      return cxxPart
+    }
   }
 }
 
