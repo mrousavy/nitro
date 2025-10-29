@@ -500,6 +500,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return HybridSomeInternalObject()
   }
 
+  override fun getNativeRefCount(): Double {
+    // there is no way to get native ref count in Kotlin.
+    return 1.0
+  }
+
   override fun dispose() {
     this.optionalCallback?.let { callback ->
       callback(13.0)

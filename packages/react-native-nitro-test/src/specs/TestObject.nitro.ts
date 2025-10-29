@@ -252,6 +252,9 @@ interface SharedTestObjectProps {
   // External HybridObjects
   bounceExternalHybrid(externalObject: SomeExternalObject): SomeExternalObject
   createInternalObject(): SomeExternalObject
+
+  // Memory: ownership ref count
+  getNativeRefCount(): number
 }
 
 // This is a C++-based `HybridObject`.

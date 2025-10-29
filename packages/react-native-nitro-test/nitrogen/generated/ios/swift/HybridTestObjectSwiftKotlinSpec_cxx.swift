@@ -2108,4 +2108,17 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public static func getNativeRefCount(this: UnsafeRawPointer) -> bridge.Result_double_ {
+    do {
+      let __instance = cast(this)
+      let __result = try __instance.getNativeRefCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
 }

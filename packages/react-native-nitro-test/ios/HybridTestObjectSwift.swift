@@ -489,6 +489,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return HybridSomeInternalObject()
   }
 
+  func getNativeRefCount() -> Double {
+    return Double(CFGetRetainCount(self))
+  }
+
   func dispose() {
     if let optionalCallback {
       optionalCallback(13.0)

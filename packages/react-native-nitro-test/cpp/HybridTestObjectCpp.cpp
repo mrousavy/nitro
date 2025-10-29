@@ -618,6 +618,10 @@ std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> Hy
   return std::make_shared<HybridSomeInternalObject>();
 }
 
+double HybridTestObjectCpp::getNativeRefCount() {
+  return static_cast<double>(shared().use_count());
+}
+
 void HybridTestObjectCpp::dispose() {
   if (this->_optionalCallback.has_value()) {
     this->_optionalCallback.value()(13.0);

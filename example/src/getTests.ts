@@ -1724,6 +1724,21 @@ export function getTests(
         .didNotThrow()
         .equals('This is overridden!')
     ),
+    createTest(
+      'getNativeRefCount() returns same ref-count after roundtrips',
+      () =>
+        it(() => {
+          const refCount = testObject.getNativeRefCount()
+          for (let i = 0; i < 10; i++) {
+            // @ts-expect-error types are stupid
+            testObject.getVariantHybrid(testObject)
+          }
+          const newRefCount = testObject.getNativeRefCount()
+          return newRefCount === refCount
+        })
+          .didNotThrow()
+          .equals(true)
+    ),
     createTest('new T() works', () =>
       it(() => {
         const HybridTestObjectCpp =
