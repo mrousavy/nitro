@@ -10,6 +10,10 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `SomeExternalEnum` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class SomeExternalEnum; }
+// Forward declaration of `SomeExternalStruct` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalStruct; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
@@ -17,8 +21,11 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
+#include "SomeExternalEnum.hpp"
+#include "SomeExternalStruct.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -28,6 +35,28 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
  */
 namespace margelo::nitro::test::external::bridge::swift {
 
+  // pragma MARK: std::function<void()>
+  /**
+   * Specialized version of `std::function<void()>`.
+   */
+  using Func_void = std::function<void()>;
+  /**
+   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
+   */
+  class Func_void_Wrapper final {
+  public:
+    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
+    inline void call() const noexcept {
+      _function->operator()();
+    }
+  private:
+    std::unique_ptr<std::function<void()>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
+    return Func_void_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridSomeExternalObjectSpec>`.
@@ -47,6 +76,24 @@ namespace margelo::nitro::test::external::bridge::swift {
   }
   inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
     return Result<std::string>::withError(error);
+  }
+  
+  // pragma MARK: Result<SomeExternalEnum>
+  using Result_SomeExternalEnum_ = Result<SomeExternalEnum>;
+  inline Result_SomeExternalEnum_ create_Result_SomeExternalEnum_(SomeExternalEnum value) noexcept {
+    return Result<SomeExternalEnum>::withValue(std::move(value));
+  }
+  inline Result_SomeExternalEnum_ create_Result_SomeExternalEnum_(const std::exception_ptr& error) noexcept {
+    return Result<SomeExternalEnum>::withError(error);
+  }
+  
+  // pragma MARK: Result<SomeExternalStruct>
+  using Result_SomeExternalStruct_ = Result<SomeExternalStruct>;
+  inline Result_SomeExternalStruct_ create_Result_SomeExternalStruct_(const SomeExternalStruct& value) noexcept {
+    return Result<SomeExternalStruct>::withValue(value);
+  }
+  inline Result_SomeExternalStruct_ create_Result_SomeExternalStruct_(const std::exception_ptr& error) noexcept {
+    return Result<SomeExternalStruct>::withError(error);
   }
 
 } // namespace margelo::nitro::test::external::bridge::swift

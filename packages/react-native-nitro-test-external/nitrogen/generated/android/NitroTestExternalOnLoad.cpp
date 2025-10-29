@@ -16,6 +16,7 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridSomeExternalObjectSpec.hpp"
+#include "JFunc_void.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::test::external {
@@ -28,6 +29,7 @@ int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
     margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
+    margelo::nitro::test::external::JFunc_void_cxx::registerNatives();
 
     // Register Nitro Hybrid Objects
     HybridObjectRegistry::registerHybridObjectConstructor(

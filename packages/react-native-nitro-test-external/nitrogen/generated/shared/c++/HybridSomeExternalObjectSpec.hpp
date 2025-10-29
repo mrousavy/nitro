@@ -13,9 +13,14 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `SomeExternalEnum` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class SomeExternalEnum; }
+// Forward declaration of `SomeExternalStruct` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalStruct; }
 
 #include <string>
+#include "SomeExternalEnum.hpp"
+#include "SomeExternalStruct.hpp"
 
 namespace margelo::nitro::test::external {
 
@@ -49,6 +54,8 @@ namespace margelo::nitro::test::external {
     public:
       // Methods
       virtual std::string getValue() = 0;
+      virtual SomeExternalEnum bounceEnum(SomeExternalEnum value) = 0;
+      virtual SomeExternalStruct bounceStruct(const SomeExternalStruct& value) = 0;
 
     protected:
       // Hybrid Setup

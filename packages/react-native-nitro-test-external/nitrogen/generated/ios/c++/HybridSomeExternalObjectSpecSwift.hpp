@@ -12,9 +12,15 @@
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
-
+// Forward declaration of `SomeExternalEnum` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class SomeExternalEnum; }
+// Forward declaration of `SomeExternalStruct` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalStruct; }
 
 #include <string>
+#include "SomeExternalEnum.hpp"
+#include "SomeExternalStruct.hpp"
+#include <functional>
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 
@@ -62,6 +68,22 @@ namespace margelo::nitro::test::external {
     // Methods
     inline std::string getValue() override {
       auto __result = _swiftPart.getValue();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline SomeExternalEnum bounceEnum(SomeExternalEnum value) override {
+      auto __result = _swiftPart.bounceEnum(static_cast<int>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline SomeExternalStruct bounceStruct(const SomeExternalStruct& value) override {
+      auto __result = _swiftPart.bounceStruct(std::forward<decltype(value)>(value));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

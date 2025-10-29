@@ -1716,6 +1716,20 @@ export function getTests(
         .didNotThrow()
         .equals(HybridSomeExternalObject)
     ),
+    createTest('external.bounceEnum(...) works', () =>
+      it(() => HybridSomeExternalObject.bounceEnum('second'))
+        .didNotThrow()
+        .equals('second')
+    ),
+    createTest('external.bounceStruct(...) works', () =>
+      it(() =>
+        HybridSomeExternalObject.bounceStruct({ callback: () => {}, value: 55 })
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('value')
+        .toContain('callback')
+    ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {
         const object = testObject.createInternalObject()

@@ -15,6 +15,8 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
 
   // Methods
   func getValue() throws -> String
+  func bounceEnum(value: SomeExternalEnum) throws -> SomeExternalEnum
+  func bounceStruct(value: SomeExternalStruct) throws -> SomeExternalStruct
 }
 
 public extension HybridSomeExternalObjectSpec_protocol {
