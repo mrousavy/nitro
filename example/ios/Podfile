@@ -1,4 +1,5 @@
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
+ENV['USE_FRAMEWORKS'] = 'static'
 
 Pod::UI.puts "Building with RCT_NEW_ARCH_ENABLED = #{ENV['RCT_NEW_ARCH_ENABLED']}..."
 
@@ -20,7 +21,6 @@ end
 
 target 'NitroExample' do
   config = use_native_modules!
-  use_frameworks!
 
   use_react_native!(
     :path => config[:reactNativePath],
