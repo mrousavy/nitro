@@ -89,9 +89,12 @@ namespace margelo::nitro::test {
   class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
-      HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
+    // Destructor calls release in Swift
+    ~HybridTestObjectSwiftKotlinSpecSwift() override;
+    // Copy & Move is deleted
+    HybridTestObjectSwiftKotlinSpecSwift(const HybridTestObjectSwiftKotlinSpecSwift&) = delete;
+    HybridTestObjectSwiftKotlinSpecSwift(HybridTestObjectSwiftKotlinSpecSwift&&) = delete;
 
   public:
     // Get the Swift part

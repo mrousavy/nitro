@@ -28,9 +28,12 @@ namespace margelo::nitro::test {
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
-      HybridObject(HybridBaseSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridBaseSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
+    // Destructor calls release in Swift
+    ~HybridBaseSpecSwift() override;
+    // Copy & Move is deleted
+    HybridBaseSpecSwift(const HybridBaseSpecSwift&) = delete;
+    HybridBaseSpecSwift(HybridBaseSpecSwift&&) = delete;
 
   public:
     // Get the Swift part

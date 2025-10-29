@@ -104,6 +104,13 @@ public class ${name.HybridTSpecCxx} {
    */
   public typealias bridge = ${bridgeNamespace}
 
+  /**
+   * Release one ref count of the given \`UnsafeRawPointer\`
+   */
+  public static func releaseOne(_ this: UnsafeRawPointer) {
+    Unmanaged<AnyObject>.fromOpaque(this).release()
+  }
+
   @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> ${name.HybridTSpec} {
     return HybridObjectFromUnsafe(this)
@@ -277,6 +284,12 @@ if (__result.hasError()) [[unlikely]] {
       ),
     })
   }
+  let destructorCode: string
+  if (hasBase) {
+    destructorCode = `// base destructor will release the Swift object`
+  } else {
+    destructorCode = `${iosModuleName}::${name.HybridTSpecCxx}::releaseOne(_swiftPart);`
+  }
 
   const extraForwardDeclarations = extraImports
     .map((i) => i.forwardDeclaration)
@@ -313,9 +326,12 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart):
-      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
-      _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart);
+    // Destructor calls release in Swift
+    ~${name.HybridTSpecSwift}() override;
+    // Copy & Move is deleted
+    ${name.HybridTSpecSwift}(const ${name.HybridTSpecSwift}&) = delete;
+    ${name.HybridTSpecSwift}(${name.HybridTSpecSwift}&&) = delete;
 
   public:
     // Get the Swift part
@@ -350,6 +366,13 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 #include "${getUmbrellaHeaderName()}"
 
 namespace ${cxxNamespace} {
+
+  ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart):
+    ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
+    _swiftPart(swiftPart) { }
+  ${name.HybridTSpecSwift}::~${name.HybridTSpecSwift}() {
+    ${indent(destructorCode, '    ')}
+  }
 
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
     return ${iosModuleName}::${name.HybridTSpecCxx}::getMemorySize(_swiftPart);

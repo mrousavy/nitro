@@ -28,9 +28,12 @@ namespace margelo::nitro::test::external {
   class HybridSomeExternalObjectSpecSwift: public virtual HybridSomeExternalObjectSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridSomeExternalObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
-      HybridObject(HybridSomeExternalObjectSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridSomeExternalObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
+    // Destructor calls release in Swift
+    ~HybridSomeExternalObjectSpecSwift() override;
+    // Copy & Move is deleted
+    HybridSomeExternalObjectSpecSwift(const HybridSomeExternalObjectSpecSwift&) = delete;
+    HybridSomeExternalObjectSpecSwift(HybridSomeExternalObjectSpecSwift&&) = delete;
 
   public:
     // Get the Swift part

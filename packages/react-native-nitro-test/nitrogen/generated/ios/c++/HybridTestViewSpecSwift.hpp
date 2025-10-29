@@ -30,9 +30,12 @@ namespace margelo::nitro::test {
   class HybridTestViewSpecSwift: public virtual HybridTestViewSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestViewSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
-      HybridObject(HybridTestViewSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridTestViewSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
+    // Destructor calls release in Swift
+    ~HybridTestViewSpecSwift() override;
+    // Copy & Move is deleted
+    HybridTestViewSpecSwift(const HybridTestViewSpecSwift&) = delete;
+    HybridTestViewSpecSwift(HybridTestViewSpecSwift&&) = delete;
 
   public:
     // Get the Swift part

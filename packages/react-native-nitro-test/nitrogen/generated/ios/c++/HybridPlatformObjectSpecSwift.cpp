@@ -10,6 +10,13 @@
 
 namespace margelo::nitro::test {
 
+  HybridPlatformObjectSpecSwift::HybridPlatformObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
+    HybridObject(HybridPlatformObjectSpec::TAG),
+    _swiftPart(swiftPart) { }
+  HybridPlatformObjectSpecSwift::~HybridPlatformObjectSpecSwift() {
+    NitroTest::HybridPlatformObjectSpec_cxx::releaseOne(_swiftPart);
+  }
+
   size_t HybridPlatformObjectSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridPlatformObjectSpec_cxx::getMemorySize(_swiftPart);
   }

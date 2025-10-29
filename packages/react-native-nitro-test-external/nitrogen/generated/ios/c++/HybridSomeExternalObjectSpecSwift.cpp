@@ -10,6 +10,13 @@
 
 namespace margelo::nitro::test::external {
 
+  HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
+    HybridObject(HybridSomeExternalObjectSpec::TAG),
+    _swiftPart(swiftPart) { }
+  HybridSomeExternalObjectSpecSwift::~HybridSomeExternalObjectSpecSwift() {
+    NitroTestExternal::HybridSomeExternalObjectSpec_cxx::releaseOne(_swiftPart);
+  }
+
   size_t HybridSomeExternalObjectSpecSwift::getExternalMemorySize() noexcept {
     return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::getMemorySize(_swiftPart);
   }

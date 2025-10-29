@@ -25,6 +25,13 @@ public class HybridPlatformObjectSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.bridge.swift
 
+  /**
+   * Release one ref count of the given `UnsafeRawPointer`
+   */
+  public static func releaseOne(_ this: UnsafeRawPointer) {
+    Unmanaged<AnyObject>.fromOpaque(this).release()
+  }
+
   @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> HybridPlatformObjectSpec {
     return HybridObjectFromUnsafe(this)

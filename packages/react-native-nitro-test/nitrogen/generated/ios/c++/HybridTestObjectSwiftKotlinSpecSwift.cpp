@@ -10,6 +10,13 @@
 
 namespace margelo::nitro::test {
 
+  HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
+    HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
+    _swiftPart(swiftPart) { }
+  HybridTestObjectSwiftKotlinSpecSwift::~HybridTestObjectSwiftKotlinSpecSwift() {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::releaseOne(_swiftPart);
+  }
+
   size_t HybridTestObjectSwiftKotlinSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getMemorySize(_swiftPart);
   }
