@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridSomeExternalObjectSpec``
-public protocol HybridSomeExternalObjectSpec: HybridObject {
+public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
   // Properties
   
 
@@ -17,9 +17,25 @@ public protocol HybridSomeExternalObjectSpec: HybridObject {
   func getValue() throws -> String
 }
 
-public extension HybridSomeExternalObjectSpec {
+public extension HybridSomeExternalObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject SomeExternalObject]"
   }
 }
+
+open class HybridSomeExternalObjectSpec_base {
+  public typealias bridge = margelo.nitro.test.external.bridge.swift
+
+  public init() { }
+
+  
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridSomeExternalObjectSpec = HybridSomeExternalObjectSpec_protocol & HybridSomeExternalObjectSpec_base

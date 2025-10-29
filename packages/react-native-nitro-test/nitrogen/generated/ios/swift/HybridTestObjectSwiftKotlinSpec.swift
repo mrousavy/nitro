@@ -11,7 +11,7 @@ import NitroModules
 import NitroTestExternal
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-public protocol HybridTestObjectSwiftKotlinSpec: HybridObject {
+public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
@@ -109,9 +109,25 @@ public protocol HybridTestObjectSwiftKotlinSpec: HybridObject {
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
 }
 
-public extension HybridTestObjectSwiftKotlinSpec {
+public extension HybridTestObjectSwiftKotlinSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject TestObjectSwiftKotlin]"
   }
 }
+
+open class HybridTestObjectSwiftKotlinSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
+
+  public init() { }
+
+  
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridTestObjectSwiftKotlinSpec = HybridTestObjectSwiftKotlinSpec_protocol & HybridTestObjectSwiftKotlinSpec_base

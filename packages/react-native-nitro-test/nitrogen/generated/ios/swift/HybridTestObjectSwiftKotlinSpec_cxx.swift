@@ -76,8 +76,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     let __instance = cast(this)
     let __value = __instance.thisObject
     return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-      let __unmanaged = __value.toUnsafe()
-      return bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unmanaged)
+      return __value.getCxxPart()
     }()
   }
   
@@ -88,8 +87,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
     return { () -> bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
       if let __unwrappedValue = __value {
         return bridge.create_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-          let __unmanaged = __unwrappedValue.toUnsafe()
-          return bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unmanaged)
+          return __unwrappedValue.getCxxPart()
         }())
       } else {
         return .init()
@@ -373,8 +371,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __instance = cast(this)
       let __result = try __instance.newTestObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__resultCpp)
     } catch (let __error) {
@@ -407,8 +404,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __result {
           case .first(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-              let __unmanaged = __value.toUnsafe()
-              return bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unmanaged)
+              return __value.getCxxPart()
             }())
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(__value)
@@ -1827,8 +1823,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __result {
           case .first(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_({ () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-              let __unmanaged = __value.toUnsafe()
-              return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
+              return __value.getCxxPart()
             }())
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(__value)
@@ -1934,8 +1929,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __instance = cast(this)
       let __result = try __instance.createChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridChildSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -1950,8 +1944,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __instance = cast(this)
       let __result = try __instance.createBase()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -1966,8 +1959,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __instance = cast(this)
       let __result = try __instance.createBaseActualChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -1985,8 +1977,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return HybridObjectFromUnsafe<HybridChildSpec>(__unsafePointer)
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridChildSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -2004,8 +1995,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return HybridObjectFromUnsafe<HybridBaseSpec>(__unsafePointer)
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2023,8 +2013,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return HybridObjectFromUnsafe<HybridChildSpec>(__unsafePointer)
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2042,8 +2031,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return HybridObjectFromUnsafe<HybridBaseSpec>(__unsafePointer)
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_HybridChildSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -2096,8 +2084,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         return HybridObjectFromUnsafe<HybridSomeExternalObjectSpec>(__unsafePointer)
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
     } catch (let __error) {
@@ -2112,8 +2099,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __instance = cast(this)
       let __result = try __instance.createInternalObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __unmanaged = __result.toUnsafe()
-        return bridge.create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(__unmanaged)
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
     } catch (let __error) {

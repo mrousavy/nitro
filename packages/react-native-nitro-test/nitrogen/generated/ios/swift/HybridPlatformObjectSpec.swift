@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridPlatformObjectSpec``
-public protocol HybridPlatformObjectSpec: HybridObject {
+public protocol HybridPlatformObjectSpec_protocol: HybridObject {
   // Properties
   
 
@@ -17,9 +17,25 @@ public protocol HybridPlatformObjectSpec: HybridObject {
   func getOSVersion() throws -> String
 }
 
-public extension HybridPlatformObjectSpec {
+public extension HybridPlatformObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject PlatformObject]"
   }
 }
+
+open class HybridPlatformObjectSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
+
+  public init() { }
+
+  
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridPlatformObjectSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridPlatformObjectSpec = HybridPlatformObjectSpec_protocol & HybridPlatformObjectSpec_base

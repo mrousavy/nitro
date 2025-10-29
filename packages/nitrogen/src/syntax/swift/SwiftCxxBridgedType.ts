@@ -648,9 +648,9 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __unmanaged = ${swiftParameterName}.toUnsafe()
-  return bridge.${bridge.funcName}(__unmanaged)
-}()`.trim()
+  return ${swiftParameterName}.getCxxPart()
+}()
+            `.trim()
           default:
             return swiftParameterName
         }

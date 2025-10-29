@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridTestViewSpec``
-public protocol HybridTestViewSpec: HybridObject, HybridView {
+public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
   var isBlue: Bool { get set }
   var hasBeenCalled: Bool { get set }
@@ -20,9 +20,25 @@ public protocol HybridTestViewSpec: HybridObject, HybridView {
   func someMethod() throws -> Void
 }
 
-public extension HybridTestViewSpec {
+public extension HybridTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject TestView]"
   }
 }
+
+open class HybridTestViewSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
+
+  public init() { }
+
+  
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridTestViewSpec = HybridTestViewSpec_protocol & HybridTestViewSpec_base

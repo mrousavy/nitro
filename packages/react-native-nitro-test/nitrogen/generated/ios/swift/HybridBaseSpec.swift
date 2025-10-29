@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridBaseSpec``
-public protocol HybridBaseSpec: HybridObject {
+public protocol HybridBaseSpec_protocol: HybridObject {
   // Properties
   var baseValue: Double { get }
 
@@ -17,9 +17,25 @@ public protocol HybridBaseSpec: HybridObject {
   
 }
 
-public extension HybridBaseSpec {
+public extension HybridBaseSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject Base]"
   }
 }
+
+open class HybridBaseSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
+
+  public init() { }
+
+  
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridBaseSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

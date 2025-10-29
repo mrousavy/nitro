@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridChildSpec``
-public protocol HybridChildSpec: HybridObject, HybridBaseSpec {
+public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol {
   // Properties
   var childValue: Double { get }
 
@@ -17,9 +17,29 @@ public protocol HybridChildSpec: HybridObject, HybridBaseSpec {
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant
 }
 
-public extension HybridChildSpec {
+public extension HybridChildSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject Child]"
   }
 }
+
+open class HybridChildSpec_base: HybridBaseSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
+
+  public override init() { super.init() }
+
+  open override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+    let __child: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
+    // TODO: Actually upcast __child to HybridBaseSpec!!!
+    return bridge.create_std__shared_ptr_HybridBaseSpec_(Unmanaged.passRetained(self).toOpaque())
+  }
+
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
+    let __unsafe = Unmanaged.passRetained(self).toOpaque()
+    let __cxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(__unsafe)
+    return __cxxPart
+  }
+}
+
+public typealias HybridChildSpec = HybridChildSpec_protocol & HybridChildSpec_base
