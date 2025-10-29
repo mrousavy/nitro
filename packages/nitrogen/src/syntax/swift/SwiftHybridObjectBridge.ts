@@ -105,8 +105,17 @@ public class ${name.HybridTSpecCxx} {
   public typealias bridge = ${bridgeNamespace}
 
   /**
-   * Release one ref count of the given \`UnsafeRawPointer\`
+   * +1 Retain one ref count of the given \`UnsafeRawPointer\`
    */
+  @inline(__always)
+  public static func retainOne(_ this: UnsafeRawPointer) {
+    let _ = Unmanaged<AnyObject>.fromOpaque(this).retain()
+  }
+
+  /**
+   * -1 Release one ref count of the given \`UnsafeRawPointer\`
+   */
+  @inline(__always)
   public static func releaseOne(_ this: UnsafeRawPointer) {
     Unmanaged<AnyObject>.fromOpaque(this).release()
   }
@@ -284,12 +293,6 @@ if (__result.hasError()) [[unlikely]] {
       ),
     })
   }
-  let destructorCode: string
-  if (hasBase) {
-    destructorCode = `// base destructor will release the Swift object`
-  } else {
-    destructorCode = `${iosModuleName}::${name.HybridTSpecCxx}::releaseOne(_swiftPart);`
-  }
 
   const extraForwardDeclarations = extraImports
     .map((i) => i.forwardDeclaration)
@@ -369,9 +372,11 @@ namespace ${cxxNamespace} {
 
   ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart):
     ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
-    _swiftPart(swiftPart) { }
+    _swiftPart(swiftPart) {
+    ${iosModuleName}::${name.HybridTSpecCxx}::retainOne(_swiftPart);
+  }
   ${name.HybridTSpecSwift}::~${name.HybridTSpecSwift}() {
-    ${indent(destructorCode, '    ')}
+    ${iosModuleName}::${name.HybridTSpecCxx}::releaseOne(_swiftPart);
   }
 
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {

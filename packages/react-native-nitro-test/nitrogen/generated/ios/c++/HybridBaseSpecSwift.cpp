@@ -12,7 +12,9 @@ namespace margelo::nitro::test {
 
   HybridBaseSpecSwift::HybridBaseSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
     HybridObject(HybridBaseSpec::TAG),
-    _swiftPart(swiftPart) { }
+    _swiftPart(swiftPart) {
+    NitroTest::HybridBaseSpec_cxx::retainOne(_swiftPart);
+  }
   HybridBaseSpecSwift::~HybridBaseSpecSwift() {
     NitroTest::HybridBaseSpec_cxx::releaseOne(_swiftPart);
   }

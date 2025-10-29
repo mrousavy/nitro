@@ -58,7 +58,7 @@ extension HybridObject {
 extension HybridObject {
   @inline(__always)
   public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
+    return Unmanaged.passUnretained(self).toOpaque()
   }
 }
 

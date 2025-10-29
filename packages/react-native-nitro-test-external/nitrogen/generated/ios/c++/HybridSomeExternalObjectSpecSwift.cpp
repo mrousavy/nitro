@@ -12,7 +12,9 @@ namespace margelo::nitro::test::external {
 
   HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
     HybridObject(HybridSomeExternalObjectSpec::TAG),
-    _swiftPart(swiftPart) { }
+    _swiftPart(swiftPart) {
+    NitroTestExternal::HybridSomeExternalObjectSpec_cxx::retainOne(_swiftPart);
+  }
   HybridSomeExternalObjectSpecSwift::~HybridSomeExternalObjectSpecSwift() {
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx::releaseOne(_swiftPart);
   }

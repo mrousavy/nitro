@@ -13,9 +13,11 @@ namespace margelo::nitro::test {
   HybridChildSpecSwift::HybridChildSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
     HybridObject(HybridChildSpec::TAG),
     HybridBaseSpecSwift(swiftPart),
-    _swiftPart(swiftPart) { }
+    _swiftPart(swiftPart) {
+    NitroTest::HybridChildSpec_cxx::retainOne(_swiftPart);
+  }
   HybridChildSpecSwift::~HybridChildSpecSwift() {
-    // base destructor will release the Swift object
+    NitroTest::HybridChildSpec_cxx::releaseOne(_swiftPart);
   }
 
   size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
