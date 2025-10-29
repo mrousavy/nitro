@@ -1,16 +1,17 @@
 //
-//  HybridSomeExternalObject
-//  NitroTestExternal
+//  HybridSomeExternalObjectSubclass.swift
+//  NitroTest
 //
-//  Created by Marc Rousavy on 14.08.25.
+//  Created by Marc Rousavy on 11.08.24.
 //
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
-class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
+class HybridSomeExternalObjectSubclass: HybridSomeExternalObjectSubclassSpec {
   func getValue() throws -> String {
-    return "Hello world!"
+    return "subclass!"
   }
 
   func bounceEnum(value: SomeExternalEnum) -> SomeExternalEnum {
@@ -19,5 +20,9 @@ class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
 
   func bounceStruct(value: SomeExternalStruct) -> SomeExternalStruct {
     return value
+  }
+
+  var isSubclass: Bool {
+    return true
   }
 }

@@ -489,6 +489,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return HybridSomeInternalObject()
   }
 
+  func createExternalObjectInternalSubclass() -> any HybridSomeExternalObjectSubclassSpec {
+    return HybridSomeExternalObjectSubclass()
+  }
+
   func dispose() {
     if let optionalCallback {
       optionalCallback(13.0)

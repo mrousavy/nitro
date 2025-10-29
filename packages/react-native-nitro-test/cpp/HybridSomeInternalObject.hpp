@@ -19,7 +19,19 @@ public:
 
 public:
   std::string getValue() override {
-    return "This is overridden!";
+    return "subclass!";
+  }
+
+  ExternalEnum bounceEnum(ExternalEnum value) override {
+    return value;
+  }
+
+  ExternalStruct bounceStruct(ExternalStruct value) override {
+    return value;
+  }
+
+  bool getIsSubclass() override {
+    return true;
   }
 };
 

@@ -46,6 +46,8 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `HybridSomeExternalObjectSubclassSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridSomeExternalObjectSubclassSpec; }
 
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <memory>
@@ -76,6 +78,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include "HybridSomeExternalObjectSubclassSpec.hpp"
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -810,6 +813,14 @@ namespace margelo::nitro::test {
     }
     inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override {
       auto __result = _swiftPart.createInternalObject();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<HybridSomeExternalObjectSubclassSpec> createExternalObjectInternalSubclass() override {
+      auto __result = _swiftPart.createExternalObjectInternalSubclass();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
