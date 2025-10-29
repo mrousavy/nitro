@@ -2,7 +2,11 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
@@ -44,10 +48,11 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
     baseClasses.push(`${baseName.HybridTSpec}_base`)
     const baseBridge = new SwiftCxxBridgedType(new HybridObjectType(base))
+    const upcastFuncName = escapeCppName(`upcast_${name.T}_to_${baseName.T}`)
     upcastCxxOverride = `
 open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
   let __child: ${cxxType} = getCxxPart()
-  return __child
+  return bridge.${upcastFuncName}(__child)
 }
     `.trim()
   }

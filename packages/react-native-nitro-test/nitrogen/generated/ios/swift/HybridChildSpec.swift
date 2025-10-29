@@ -31,8 +31,7 @@ open class HybridChildSpec_base: HybridBaseSpec_base {
 
   open override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let __child: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
-    // TODO: Actually upcast __child to HybridBaseSpec!!!
-    return bridge.create_std__shared_ptr_HybridBaseSpec_(Unmanaged.passRetained(self).toOpaque())
+    return bridge.upcast_Child_to_Base(__child)
   }
 
   open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
