@@ -6,6 +6,59 @@
 ///
 
 #include "HybridTestViewSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
+
+  size_t HybridTestViewSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridTestViewSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridTestViewSpecSwift::dispose() noexcept {
+    return NitroTest::HybridTestViewSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridTestViewSpecSwift::toString() {
+    return NitroTest::HybridTestViewSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridTestViewSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  bool HybridTestViewSpecSwift::getIsBlue() noexcept {
+    return NitroTest::HybridTestViewSpec_cxx::isBlue(_swiftPart);
+  }
+  void HybridTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
+    NitroTest::HybridTestViewSpec_cxx::setIsBlue(_swiftPart, std::forward<decltype(isBlue)>(isBlue));
+  }
+  bool HybridTestViewSpecSwift::getHasBeenCalled() noexcept {
+    return NitroTest::HybridTestViewSpec_cxx::hasBeenCalled(_swiftPart);
+  }
+  void HybridTestViewSpecSwift::setHasBeenCalled(bool hasBeenCalled) noexcept {
+    NitroTest::HybridTestViewSpec_cxx::setHasBeenCalled(_swiftPart, std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
+  }
+  ColorScheme HybridTestViewSpecSwift::getColorScheme() noexcept {
+    auto __result = NitroTest::HybridTestViewSpec_cxx::getColorScheme(_swiftPart);
+    return static_cast<ColorScheme>(__result);
+  }
+  void HybridTestViewSpecSwift::setColorScheme(ColorScheme colorScheme) noexcept {
+    NitroTest::HybridTestViewSpec_cxx::setColorScheme(_swiftPart, static_cast<int>(colorScheme));
+  }
+  std::function<void()> HybridTestViewSpecSwift::getSomeCallback() noexcept {
+    auto __result = NitroTest::HybridTestViewSpec_cxx::getSomeCallback(_swiftPart);
+    return __result;
+  }
+  void HybridTestViewSpecSwift::setSomeCallback(const std::function<void()>& someCallback) noexcept {
+    NitroTest::HybridTestViewSpec_cxx::setSomeCallback(_swiftPart, someCallback);
+  }
+
+  void HybridTestViewSpecSwift::someMethod() {
+    auto __result = NitroTest::HybridTestViewSpec_cxx::someMethod(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+
 } // namespace margelo::nitro::test

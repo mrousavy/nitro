@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
+public class HybridChildSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
@@ -25,69 +25,8 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  /**
-   * Holds an instance of the `HybridChildSpec` Swift protocol.
-   */
-  private var __implementation: any HybridChildSpec
-
-  /**
-   * Holds a weak pointer to the C++ class that wraps the Swift class.
-   */
-  private var __cxxPart: bridge.std__weak_ptr_HybridChildSpec_
-
-  /**
-   * Create a new `HybridChildSpec_cxx` that wraps the given `HybridChildSpec`.
-   * All properties and methods bridge to C++ types.
-   */
-  public init(_ implementation: any HybridChildSpec) {
-    self.__implementation = implementation
-    self.__cxxPart = .init()
-    super.init(implementation)
-  }
-
-  /**
-   * Get the actual `HybridChildSpec` instance this class wraps.
-   */
-  @inline(__always)
-  public func getHybridChildSpec() -> any HybridChildSpec {
-    return __implementation
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public override func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridChildSpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridChildSpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public override class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridChildSpec_cxx {
-    return Unmanaged<HybridChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-
-  /**
-   * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridChildSpec>`.
-   */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
-    let cachedCxxPart = self.__cxxPart.lock()
-    if Bool(fromCxx: cachedCxxPart) {
-      return cachedCxxPart
-    } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_HybridChildSpec_(newCxxPart)
-      return newCxxPart
-    }
-  }
-
-  public override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
-    let ownCxxPart: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
-    return bridge.upcast_Child_to_Base(ownCxxPart)
+  private static func cast(_ this: UnsafeRawPointer) -> HybridChildSpec {
+    return HybridObjectFromUnsafe<HybridChildSpec>(this)
   }
 
   /**
@@ -95,8 +34,9 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public override var memorySize: Int {
-    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
+  public static func getMemorySize(this: UnsafeRawPointer) -> Int {
+    let __instance = cast(this)
+    return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
   /**
@@ -104,31 +44,44 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public override func dispose() {
-    self.__implementation.dispose()
+  public static func dispose(this: UnsafeRawPointer) {
+    let __instance = cast(this)
+    __instance.dispose()
   }
 
   /**
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public override func toString() -> String {
-    return self.__implementation.toString()
+  public static func toString(this: UnsafeRawPointer) -> String {
+    let __instance = cast(this)
+    return __instance.toString()
+  }
+
+  /**
+   * Call equals() on the Swift class.
+   */
+  @inline(__always)
+  public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
+    let __instance = cast(this)
+    let __other = cast(other)
+    return __instance === __other
   }
 
   // Properties
-  public final var childValue: Double {
-    @inline(__always)
-    get {
-      return self.__implementation.childValue
-    }
+  @inline(__always)
+  public static func getChildValue(this: UnsafeRawPointer) -> Double {
+    let __instance = cast(this)
+    let __value = __instance.childValue
+    return __value
   }
 
   // Methods
   @inline(__always)
-  public final func bounceVariant(variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
+  public static func bounceVariant(this: UnsafeRawPointer, variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
-      let __result = try self.__implementation.bounceVariant(variant: { () -> NamedVariant in
+      let __instance = cast(this)
+      let __result = try __instance.bounceVariant(variant: { () -> NamedVariant in
         let __variant = variant
         switch __variant.index() {
           case 0:

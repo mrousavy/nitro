@@ -18,8 +18,8 @@ public final class NitroTestAutolinking {
   public static func createTestObjectSwiftKotlin() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let hybridObject = HybridTestObjectSwift()
     return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(__unmanaged)
     }()
   }
   
@@ -33,8 +33,8 @@ public final class NitroTestAutolinking {
   public static func createBase() -> bridge.std__shared_ptr_HybridBaseSpec_ {
     let hybridObject = HybridBase()
     return { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridBaseSpec_(__unmanaged)
     }()
   }
   
@@ -48,8 +48,8 @@ public final class NitroTestAutolinking {
   public static func createChild() -> bridge.std__shared_ptr_HybridChildSpec_ {
     let hybridObject = HybridChild()
     return { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridChildSpec_(__unmanaged)
     }()
   }
   
@@ -63,8 +63,8 @@ public final class NitroTestAutolinking {
   public static func createPlatformObject() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
     let hybridObject = HybridPlatformObject()
     return { () -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridPlatformObjectSpec_(__unmanaged)
     }()
   }
   
@@ -78,8 +78,8 @@ public final class NitroTestAutolinking {
   public static func createTestView() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
     let hybridObject = HybridTestView()
     return { () -> bridge.std__shared_ptr_HybridTestViewSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridTestViewSpec_(__unmanaged)
     }()
   }
 }

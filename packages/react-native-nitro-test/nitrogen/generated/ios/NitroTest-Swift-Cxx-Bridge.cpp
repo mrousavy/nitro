@@ -20,8 +20,7 @@ namespace margelo::nitro::test::bridge::swift {
 
   // pragma MARK: std::shared_ptr<HybridBaseSpec>
   std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridBaseSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::test::HybridBaseSpecSwift>(swiftUnsafePointer);
   }
   void* NON_NULL get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridBaseSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridBaseSpecSwift>(cppType);
@@ -30,14 +29,12 @@ namespace margelo::nitro::test::bridge::swift {
       throw std::runtime_error("Class \"HybridBaseSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTest::HybridBaseSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftPart();
   }
   
   // pragma MARK: std::shared_ptr<HybridChildSpec>
   std::shared_ptr<HybridChildSpec> create_std__shared_ptr_HybridChildSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridChildSpec_cxx swiftPart = NitroTest::HybridChildSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridChildSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::test::HybridChildSpecSwift>(swiftUnsafePointer);
   }
   void* NON_NULL get_std__shared_ptr_HybridChildSpec_(std__shared_ptr_HybridChildSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridChildSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridChildSpecSwift>(cppType);
@@ -46,14 +43,12 @@ namespace margelo::nitro::test::bridge::swift {
       throw std::runtime_error("Class \"HybridChildSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTest::HybridChildSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftPart();
   }
   
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   std::shared_ptr<HybridPlatformObjectSpec> create_std__shared_ptr_HybridPlatformObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridPlatformObjectSpec_cxx swiftPart = NitroTest::HybridPlatformObjectSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridPlatformObjectSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::test::HybridPlatformObjectSpecSwift>(swiftUnsafePointer);
   }
   void* NON_NULL get_std__shared_ptr_HybridPlatformObjectSpec_(std__shared_ptr_HybridPlatformObjectSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridPlatformObjectSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridPlatformObjectSpecSwift>(cppType);
@@ -62,14 +57,12 @@ namespace margelo::nitro::test::bridge::swift {
       throw std::runtime_error("Class \"HybridPlatformObjectSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTest::HybridPlatformObjectSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftPart();
   }
   
   // pragma MARK: std::shared_ptr<HybridTestObjectSwiftKotlinSpec>
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx swiftPart = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift>(swiftUnsafePointer);
   }
   void* NON_NULL get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridTestObjectSwiftKotlinSpecSwift>(cppType);
@@ -78,8 +71,7 @@ namespace margelo::nitro::test::bridge::swift {
       throw std::runtime_error("Class \"HybridTestObjectSwiftKotlinSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftPart();
   }
   
   // pragma MARK: std::function<void(double /* value */)>
@@ -217,8 +209,7 @@ namespace margelo::nitro::test::bridge::swift {
   
   // pragma MARK: std::shared_ptr<HybridTestViewSpec>
   std::shared_ptr<HybridTestViewSpec> create_std__shared_ptr_HybridTestViewSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
-    NitroTest::HybridTestViewSpec_cxx swiftPart = NitroTest::HybridTestViewSpec_cxx::fromUnsafe(swiftUnsafePointer);
-    return std::make_shared<margelo::nitro::test::HybridTestViewSpecSwift>(swiftPart);
+    return std::make_shared<margelo::nitro::test::HybridTestViewSpecSwift>(swiftUnsafePointer);
   }
   void* NON_NULL get_std__shared_ptr_HybridTestViewSpec_(std__shared_ptr_HybridTestViewSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::HybridTestViewSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridTestViewSpecSwift>(cppType);
@@ -227,8 +218,7 @@ namespace margelo::nitro::test::bridge::swift {
       throw std::runtime_error("Class \"HybridTestViewSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTest::HybridTestViewSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftPart();
   }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>

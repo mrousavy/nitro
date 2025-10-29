@@ -6,6 +6,38 @@
 ///
 
 #include "HybridChildSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
+
+  size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridChildSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridChildSpecSwift::dispose() noexcept {
+    return NitroTest::HybridChildSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridChildSpecSwift::toString() {
+    return NitroTest::HybridChildSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridChildSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridChildSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridChildSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  double HybridChildSpecSwift::getChildValue() noexcept {
+    return NitroTest::HybridChildSpec_cxx::getChildValue(_swiftPart);
+  }
+
+  std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) {
+    auto __result = NitroTest::HybridChildSpec_cxx::bounceVariant(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+
 } // namespace margelo::nitro::test

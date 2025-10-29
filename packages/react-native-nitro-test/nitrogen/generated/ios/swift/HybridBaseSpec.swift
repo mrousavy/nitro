@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridBaseSpec``
-public protocol HybridBaseSpec_protocol: HybridObject {
+public protocol HybridBaseSpec: HybridObject {
   // Properties
   var baseValue: Double { get }
 
@@ -17,40 +17,9 @@ public protocol HybridBaseSpec_protocol: HybridObject {
   
 }
 
-public extension HybridBaseSpec_protocol {
+public extension HybridBaseSpec {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject Base]"
   }
 }
-
-/// See ``HybridBaseSpec``
-open class HybridBaseSpec_base {
-  private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
-  public init() { }
-  public func getCxxWrapper() -> HybridBaseSpec_cxx {
-  #if DEBUG
-    guard self is HybridBaseSpec else {
-      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
-    } else {
-      let cxxWrapper = HybridBaseSpec_cxx(self as! HybridBaseSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
-    }
-  }
-}
-
-/**
- * A Swift base-protocol representing the Base HybridObject.
- * Implement this protocol to create Swift-based instances of Base.
- * ```swift
- * class HybridBase : HybridBaseSpec {
- *   // ...
- * }
- * ```
- */
-public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

@@ -6,6 +6,723 @@
 ///
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
+
+  size_t HybridTestObjectSwiftKotlinSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::dispose() noexcept {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::toString() {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridTestObjectSwiftKotlinSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridTestObjectSwiftKotlinSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::getThisObject() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getThisObject(_swiftPart);
+    return __result;
+  }
+  std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalHybrid() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalHybrid(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalHybrid(_swiftPart, optionalHybrid);
+  }
+  double HybridTestObjectSwiftKotlinSpecSwift::getNumberValue() noexcept {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getNumberValue(_swiftPart);
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setNumberValue(double numberValue) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setNumberValue(_swiftPart, std::forward<decltype(numberValue)>(numberValue));
+  }
+  bool HybridTestObjectSwiftKotlinSpecSwift::getBoolValue() noexcept {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getBoolValue(_swiftPart);
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setBoolValue(bool boolValue) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setBoolValue(_swiftPart, std::forward<decltype(boolValue)>(boolValue));
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::getStringValue() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getStringValue(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setStringValue(const std::string& stringValue) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setStringValue(_swiftPart, stringValue);
+  }
+  int64_t HybridTestObjectSwiftKotlinSpecSwift::getBigintValue() noexcept {
+    return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getBigintValue(_swiftPart);
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setBigintValue(int64_t bigintValue) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setBigintValue(_swiftPart, std::forward<decltype(bigintValue)>(bigintValue));
+  }
+  std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrUndefined() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getStringOrUndefined(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setStringOrUndefined(_swiftPart, stringOrUndefined);
+  }
+  std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrNull() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getStringOrNull(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setStringOrNull(_swiftPart, stringOrNull);
+  }
+  std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalString() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalString(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalString(const std::optional<std::string>& optionalString) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalString(_swiftPart, optionalString);
+  }
+  std::optional<std::vector<std::string>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalArray() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalArray(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalArray(_swiftPart, optionalArray);
+  }
+  std::optional<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::getOptionalEnum() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalEnum(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalEnum(std::optional<Powertrain> optionalEnum) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalEnum(_swiftPart, optionalEnum);
+  }
+  std::optional<OldEnum> HybridTestObjectSwiftKotlinSpecSwift::getOptionalOldEnum() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalOldEnum(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalOldEnum(_swiftPart, optionalOldEnum);
+  }
+  std::optional<std::function<void(double /* value */)>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalCallback() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getOptionalCallback(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setOptionalCallback(_swiftPart, optionalCallback);
+  }
+  std::variant<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::getSomeVariant() noexcept {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getSomeVariant(_swiftPart);
+    return __result;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept {
+    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setSomeVariant(_swiftPart, someVariant);
+  }
+
+  std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::newTestObject() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::newTestObject(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> HybridTestObjectSwiftKotlinSpecSwift::getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getVariantHybrid(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::simpleFunc() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::simpleFunc(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  double HybridTestObjectSwiftKotlinSpecSwift::addNumbers(double a, double b) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::addNumbers(_swiftPart, std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::addStrings(const std::string& a, const std::string& b) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::addStrings(_swiftPart, a, b);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::multipleArguments(double num, const std::string& str, bool boo) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::multipleArguments(_swiftPart, std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceStrings(const std::vector<std::string>& array) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceStrings(_swiftPart, array);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::vector<double> HybridTestObjectSwiftKotlinSpecSwift::bounceNumbers(const std::vector<double>& array) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceNumbers(_swiftPart, array);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::vector<Person> HybridTestObjectSwiftKotlinSpecSwift::bounceStructs(const std::vector<Person>& array) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceStructs(_swiftPart, array);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::sumUpAllPassengers(const std::vector<Car>& cars) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::sumUpAllPassengers(_swiftPart, cars);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::vector<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::bounceEnums(const std::vector<Powertrain>& array) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceEnums(_swiftPart, array);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::complexEnumCallback(_swiftPart, array, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::createMap() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createMap(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::mapRoundtrip(_swiftPart, map);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::getMapKeys(const std::shared_ptr<AnyMap>& map) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getMapKeys(_swiftPart, map);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::unordered_map<std::string, std::variant<bool, double>> HybridTestObjectSwiftKotlinSpecSwift::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceMap(_swiftPart, map);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::unordered_map<std::string, std::string> HybridTestObjectSwiftKotlinSpecSwift::extractMap(const MapWrapper& mapWrapper) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::extractMap(_swiftPart, std::forward<decltype(mapWrapper)>(mapWrapper));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  double HybridTestObjectSwiftKotlinSpecSwift::funcThatThrows() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::funcThatThrows(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::funcThatThrowsBeforePromise() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::funcThatThrowsBeforePromise(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::throwError(const std::exception_ptr& error) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::throwError(_swiftPart, error);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::tryOptionalParams(_swiftPart, std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::string HybridTestObjectSwiftKotlinSpecSwift::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::tryMiddleParam(_swiftPart, std::forward<decltype(num)>(num), boo, str);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::optional<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::tryOptionalEnum(std::optional<Powertrain> value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::tryOptionalEnum(_swiftPart, value);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  bool HybridTestObjectSwiftKotlinSpecSwift::tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::tryTrailingOptional(_swiftPart, std::forward<decltype(num)>(num), str, boo);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::chrono::system_clock::time_point HybridTestObjectSwiftKotlinSpecSwift::add1Hour(std::chrono::system_clock::time_point date) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::add1Hour(_swiftPart, date);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::chrono::system_clock::time_point HybridTestObjectSwiftKotlinSpecSwift::currentDate() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::currentDate(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  int64_t HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciSync(double value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::calculateFibonacciSync(_swiftPart, std::forward<decltype(value)>(value));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<int64_t>> HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciAsync(double value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::calculateFibonacciAsync(_swiftPart, std::forward<decltype(value)>(value));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::wait(double seconds) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::wait(_swiftPart, std::forward<decltype(seconds)>(seconds));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::promiseThrows() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::promiseThrows(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::promiseReturnsInstantly() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::promiseReturnsInstantly(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::promiseReturnsInstantlyAsync() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::promiseReturnsInstantlyAsync(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::awaitAndGetPromise(_swiftPart, promise);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<Car>> HybridTestObjectSwiftKotlinSpecSwift::awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::awaitAndGetComplexPromise(_swiftPart, promise);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::awaitPromise(const std::shared_ptr<Promise<void>>& promise) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::awaitPromise(_swiftPart, promise);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::callCallback(const std::function<void()>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callCallback(_swiftPart, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callAll(_swiftPart, first, second, third);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callWithOptional(_swiftPart, value, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callSumUpNTimes(_swiftPart, callback, std::forward<decltype(n)>(n));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callbackAsyncPromise(_swiftPart, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectSwiftKotlinSpecSwift::callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callbackAsyncPromiseBuffer(_swiftPart, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::function<void(double /* value */)> HybridTestObjectSwiftKotlinSpecSwift::getComplexCallback() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getComplexCallback(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::twoOptionalCallbacks(_swiftPart, std::forward<decltype(value)>(value), first, second);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getValueFromJSCallbackAndWait(_swiftPart, getValue);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getValueFromJsCallback(_swiftPart, callback, andThenCall);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  Car HybridTestObjectSwiftKotlinSpecSwift::getCar() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getCar(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  bool HybridTestObjectSwiftKotlinSpecSwift::isCarElectric(const Car& car) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::isCarElectric(_swiftPart, std::forward<decltype(car)>(car));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::optional<Person> HybridTestObjectSwiftKotlinSpecSwift::getDriver(const Car& car) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getDriver(_swiftPart, std::forward<decltype(car)>(car));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  Car HybridTestObjectSwiftKotlinSpecSwift::bounceCar(const Car& car) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceCar(_swiftPart, std::forward<decltype(car)>(car));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::jsStyleObjectAsParameters(const JsStyleStruct& params) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::jsStyleObjectAsParameters(_swiftPart, std::forward<decltype(params)>(params));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  WrappedJsStruct HybridTestObjectSwiftKotlinSpecSwift::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceWrappedJsStyleStruct(_swiftPart, std::forward<decltype(value)>(value));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  OptionalWrapper HybridTestObjectSwiftKotlinSpecSwift::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceOptionalWrapper(_swiftPart, std::forward<decltype(wrapper)>(wrapper));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  OptionalCallback HybridTestObjectSwiftKotlinSpecSwift::bounceOptionalCallback(const OptionalCallback& value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceOptionalCallback(_swiftPart, std::forward<decltype(value)>(value));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::createArrayBuffer() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createArrayBuffer(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::createArrayBufferFromNativeBuffer(bool copy) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createArrayBufferFromNativeBuffer(_swiftPart, std::forward<decltype(copy)>(copy));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::copyBuffer(_swiftPart, ArrayBufferHolder(buffer));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  double HybridTestObjectSwiftKotlinSpecSwift::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getBufferLastItem(_swiftPart, ArrayBufferHolder(buffer));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  void HybridTestObjectSwiftKotlinSpecSwift::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setAllValuesTo(_swiftPart, ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+  }
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectSwiftKotlinSpecSwift::createArrayBufferAsync() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createArrayBufferAsync(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceArrayBuffer(_swiftPart, ArrayBufferHolder(buffer));
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::passVariant(_swiftPart, either);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<bool, OldEnum> HybridTestObjectSwiftKotlinSpecSwift::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getVariantEnum(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<bool, WeirdNumbersEnum> HybridTestObjectSwiftKotlinSpecSwift::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getVariantWeirdNumbersEnum(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<Car, Person> HybridTestObjectSwiftKotlinSpecSwift::getVariantObjects(const std::variant<Car, Person>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getVariantObjects(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<std::string, Car> HybridTestObjectSwiftKotlinSpecSwift::passNamedVariant(const std::variant<std::string, Car>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::passNamedVariant(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> HybridTestObjectSwiftKotlinSpecSwift::passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::passAllEmptyObjectVariant(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> HybridTestObjectSwiftKotlinSpecSwift::bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceComplexVariant(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::createChild() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createChild(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBase() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createBase(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBaseActualChild() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createBaseActualChild(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChild(const std::shared_ptr<HybridChildSpec>& child) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceChild(_swiftPart, child);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceBase(const std::shared_ptr<HybridBaseSpec>& base) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceBase(_swiftPart, base);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceChildBase(_swiftPart, child);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::castBase(const std::shared_ptr<HybridBaseSpec>& base) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::castBase(_swiftPart, base);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  double HybridTestObjectSwiftKotlinSpecSwift::callbackSync(const std::function<double()>& callback) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::callbackSync(_swiftPart, callback);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  bool HybridTestObjectSwiftKotlinSpecSwift::getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getIsViewBlue(_swiftPart, view);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::bounceExternalHybrid(_swiftPart, externalObject);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectSwiftKotlinSpecSwift::createInternalObject() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createInternalObject(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+
 } // namespace margelo::nitro::test

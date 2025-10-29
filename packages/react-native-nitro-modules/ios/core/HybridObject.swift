@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 /// A base protocol for all Swift-based Hybrid Objects.
 public protocol HybridObject: AnyObject {
   /**
@@ -53,4 +54,15 @@ extension HybridObject {
   public func toString() -> String {
     return "[HybridObject object]"
   }
+}
+
+extension HybridObject {
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+}
+
+public func HybridObjectFromUnsafe<T>(_ unsafe: UnsafeRawPointer) -> T {
+  let anyObject = Unmanaged<AnyObject>.fromOpaque(unsafe).takeUnretainedValue()
+  return anyObject as! T
 }

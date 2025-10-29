@@ -9,14 +9,9 @@
 
 #include "HybridBaseSpec.hpp"
 
-// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridBaseSpec_cxx; }
 
 
 
-
-
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
 
@@ -33,39 +28,32 @@ namespace margelo::nitro::test {
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(const NitroTest::HybridBaseSpec_cxx& swiftPart):
+    explicit HybridBaseSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
       HybridObject(HybridBaseSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridBaseSpec_cxx& getSwiftPart() noexcept {
+    inline void* NON_NULL getSwiftPart() noexcept {
       return _swiftPart;
     }
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
+    std::string toString() override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
 
   public:
     // Properties
-    inline double getBaseValue() noexcept override {
-      return _swiftPart.getBaseValue();
-    }
+    double getBaseValue() noexcept override;
 
   public:
     // Methods
     
 
   private:
-    NitroTest::HybridBaseSpec_cxx _swiftPart;
+    void* NON_NULL /* retain +1 */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test

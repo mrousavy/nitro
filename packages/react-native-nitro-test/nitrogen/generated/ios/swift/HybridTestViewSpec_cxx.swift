@@ -17,7 +17,7 @@ import NitroModules
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-open class HybridTestViewSpec_cxx {
+public class HybridTestViewSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
@@ -25,75 +25,18 @@ open class HybridTestViewSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  /**
-   * Holds an instance of the `HybridTestViewSpec` Swift protocol.
-   */
-  private var __implementation: any HybridTestViewSpec
-
-  /**
-   * Holds a weak pointer to the C++ class that wraps the Swift class.
-   */
-  private var __cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_
-
-  /**
-   * Create a new `HybridTestViewSpec_cxx` that wraps the given `HybridTestViewSpec`.
-   * All properties and methods bridge to C++ types.
-   */
-  public init(_ implementation: any HybridTestViewSpec) {
-    self.__implementation = implementation
-    self.__cxxPart = .init()
-    /* no base class */
+  private static func cast(_ this: UnsafeRawPointer) -> HybridTestViewSpec {
+    return HybridObjectFromUnsafe<HybridTestViewSpec>(this)
   }
-
-  /**
-   * Get the actual `HybridTestViewSpec` instance this class wraps.
-   */
-  @inline(__always)
-  public func getHybridTestViewSpec() -> any HybridTestViewSpec {
-    return __implementation
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridTestViewSpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridTestViewSpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridTestViewSpec_cxx {
-    return Unmanaged<HybridTestViewSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-
-  /**
-   * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridTestViewSpec>`.
-   */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
-    let cachedCxxPart = self.__cxxPart.lock()
-    if Bool(fromCxx: cachedCxxPart) {
-      return cachedCxxPart
-    } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_HybridTestViewSpec_(newCxxPart)
-      return newCxxPart
-    }
-  }
-
-  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public var memorySize: Int {
-    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
+  public static func getMemorySize(this: UnsafeRawPointer) -> Int {
+    let __instance = cast(this)
+    return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
   /**
@@ -101,76 +44,93 @@ open class HybridTestViewSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public func dispose() {
-    self.__implementation.dispose()
+  public static func dispose(this: UnsafeRawPointer) {
+    let __instance = cast(this)
+    __instance.dispose()
   }
 
   /**
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public func toString() -> String {
-    return self.__implementation.toString()
+  public static func toString(this: UnsafeRawPointer) -> String {
+    let __instance = cast(this)
+    return __instance.toString()
+  }
+
+  /**
+   * Call equals() on the Swift class.
+   */
+  @inline(__always)
+  public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
+    let __instance = cast(this)
+    let __other = cast(other)
+    return __instance === __other
   }
 
   // Properties
-  public final var isBlue: Bool {
-    @inline(__always)
-    get {
-      return self.__implementation.isBlue
-    }
-    @inline(__always)
-    set {
-      self.__implementation.isBlue = newValue
-    }
+  @inline(__always)
+  public static func isBlue(this: UnsafeRawPointer) -> Bool {
+    let __instance = cast(this)
+    let __value = __instance.isBlue
+    return __value
+  }
+  @inline(__always)
+  public static func setIsBlue(this: UnsafeRawPointer, newValue: Bool) {
+    let __instance = cast(this)
+    __instance.isBlue = newValue
   }
   
-  public final var hasBeenCalled: Bool {
-    @inline(__always)
-    get {
-      return self.__implementation.hasBeenCalled
-    }
-    @inline(__always)
-    set {
-      self.__implementation.hasBeenCalled = newValue
-    }
+  @inline(__always)
+  public static func hasBeenCalled(this: UnsafeRawPointer) -> Bool {
+    let __instance = cast(this)
+    let __value = __instance.hasBeenCalled
+    return __value
+  }
+  @inline(__always)
+  public static func setHasBeenCalled(this: UnsafeRawPointer, newValue: Bool) {
+    let __instance = cast(this)
+    __instance.hasBeenCalled = newValue
   }
   
-  public final var colorScheme: Int32 {
-    @inline(__always)
-    get {
-      return self.__implementation.colorScheme.rawValue
-    }
-    @inline(__always)
-    set {
-      self.__implementation.colorScheme = margelo.nitro.test.ColorScheme(rawValue: newValue)!
-    }
+  @inline(__always)
+  public static func getColorScheme(this: UnsafeRawPointer) -> Int32 {
+    let __instance = cast(this)
+    let __value = __instance.colorScheme
+    return __value.rawValue
+  }
+  @inline(__always)
+  public static func setColorScheme(this: UnsafeRawPointer, newValue: Int32) {
+    let __instance = cast(this)
+    __instance.colorScheme = margelo.nitro.test.ColorScheme(rawValue: newValue)!
   }
   
-  public final var someCallback: bridge.Func_void {
-    @inline(__always)
-    get {
-      return { () -> bridge.Func_void in
-        let __closureWrapper = Func_void(self.__implementation.someCallback)
-        return bridge.create_Func_void(__closureWrapper.toUnsafe())
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__implementation.someCallback = { () -> () -> Void in
-        let __wrappedFunction = bridge.wrap_Func_void(newValue)
-        return { () -> Void in
-          __wrappedFunction.call()
-        }
-      }()
-    }
+  @inline(__always)
+  public static func getSomeCallback(this: UnsafeRawPointer) -> bridge.Func_void {
+    let __instance = cast(this)
+    let __value = __instance.someCallback
+    return { () -> bridge.Func_void in
+      let __closureWrapper = Func_void(__value)
+      return bridge.create_Func_void(__closureWrapper.toUnsafe())
+    }()
+  }
+  @inline(__always)
+  public static func setSomeCallback(this: UnsafeRawPointer, newValue: bridge.Func_void) {
+    let __instance = cast(this)
+    __instance.someCallback = { () -> () -> Void in
+      let __wrappedFunction = bridge.wrap_Func_void(newValue)
+      return { () -> Void in
+        __wrappedFunction.call()
+      }
+    }()
   }
 
   // Methods
   @inline(__always)
-  public final func someMethod() -> bridge.Result_void_ {
+  public static func someMethod(this: UnsafeRawPointer) -> bridge.Result_void_ {
     do {
-      try self.__implementation.someMethod()
+      let __instance = cast(this)
+      try __instance.someMethod()
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
@@ -178,15 +138,18 @@ open class HybridTestViewSpec_cxx {
     }
   }
   
-  public final func getView() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(__implementation.view).toOpaque()
+  public static func getView(this: UnsafeMutableRawPointer) -> UnsafeMutableRawPointer {
+    let __instance = cast(this)
+    return Unmanaged.passRetained(__instance.view).toOpaque()
   }
   
-  public final func beforeUpdate() {
-    __implementation.beforeUpdate()
+  public static func beforeUpdate(this: UnsafeMutableRawPointer) {
+    let __instance = cast(this)
+    __instance.beforeUpdate()
   }
   
-  public final func afterUpdate() {
-    __implementation.afterUpdate()
+  public static func afterUpdate(this: UnsafeMutableRawPointer) {
+    let __instance = cast(this)
+    __instance.afterUpdate()
   }
 }

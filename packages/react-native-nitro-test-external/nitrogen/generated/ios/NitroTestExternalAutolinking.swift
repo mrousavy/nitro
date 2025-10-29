@@ -18,8 +18,8 @@ public final class NitroTestExternalAutolinking {
   public static func createSomeExternalObject() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
     let hybridObject = HybridSomeExternalObject()
     return { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      let __unmanaged = hybridObject.toUnsafe()
+      return bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(__unmanaged)
     }()
   }
 }

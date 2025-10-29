@@ -21,7 +21,6 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   ]
 
   const protocolBaseClasses = ['HybridObject']
-  const classBaseClasses: string[] = []
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -30,38 +29,11 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     }
     const base = spec.baseTypes[0]!
     const baseName = getHybridObjectName(base.name)
-    protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
-    classBaseClasses.push(`${baseName.HybridTSpec}_base`)
+    protocolBaseClasses.push(`${baseName.HybridTSpec}`)
   }
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }
-
-  const hasBaseClass = classBaseClasses.length > 0
-  const baseMembers: string[] = []
-  baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
-  if (hasBaseClass) {
-    baseMembers.push(`public override init() { super.init() }`)
-  } else {
-    baseMembers.push(`public init() { }`)
-  }
-  baseMembers.push(
-    `
-public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
-#if DEBUG
-  guard self is ${name.HybridTSpec} else {
-    fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
-  }
-#endif
-  if let cxxWrapper = self.cxxWrapper {
-    return cxxWrapper
-  } else {
-    let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
-    self.cxxWrapper = cxxWrapper
-    return cxxWrapper
-  }
-}`.trim()
-  )
 
   const imports = ['import NitroModules']
   imports.push(
@@ -75,7 +47,7 @@ import Foundation
 ${imports.join('\n')}
 
 /// See \`\`${protocolName}\`\`
-public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
+public protocol ${protocolName}: ${protocolBaseClasses.join(', ')} {
   // Properties
   ${indent(properties, '  ')}
 
@@ -83,29 +55,13 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   ${indent(methods, '  ')}
 }
 
-public extension ${protocolName}_protocol {
+public extension ${protocolName} {
   /// Default implementation of \`\`HybridObject.toString\`\`
   func toString() -> String {
     return "[HybridObject ${name.T}]"
   }
 }
-
-/// See \`\`${protocolName}\`\`
-open class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
-  ${indent(baseMembers.join('\n'), '  ')}
-}
-
-/**
- * A Swift base-protocol representing the ${spec.name} HybridObject.
- * Implement this protocol to create Swift-based instances of ${spec.name}.
- * \`\`\`swift
- * class ${name.HybridT} : ${protocolName} {
- *   // ...
- * }
- * \`\`\`
- */
-public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
-  `
+  `.trim()
 
   const swiftBridge = createSwiftHybridObjectCxxBridge(spec)
 

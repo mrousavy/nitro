@@ -69,15 +69,13 @@ function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const modulename = type.sourceConfig.getIosModuleName()
-  const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
+  const { HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName
   )
   const swiftWrappingType = type.sourceConfig.getCxxNamespace(
     'c++',
     HybridTSpecSwift
   )
-  const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
 
   const upcastHelpers = type.baseTypes.map((base) =>
@@ -109,8 +107,7 @@ function createCxxHybridObjectSwiftHelper(
   if (!type.sourceConfig.isExternalConfig) {
     // We own the implementation - we call into Swift to convert it internally
     createImplementation = `
-${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
-return std::make_shared<${swiftWrappingType}>(swiftPart);
+return std::make_shared<${swiftWrappingType}>(swiftUnsafePointer);
     `.trim()
     getImplementation = `
 std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
@@ -119,8 +116,7 @@ if (swiftWrapper == nullptr) [[unlikely]] {
   throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
 }
 #endif
-${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
-return swiftPart.toUnsafe();
+return swiftWrapper->getSwiftPart();
 `.trim()
   } else {
     // It's an external type - we have to delegate the call to the external library's functions

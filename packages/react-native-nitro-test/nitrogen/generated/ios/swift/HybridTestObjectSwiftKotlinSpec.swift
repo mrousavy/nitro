@@ -11,7 +11,7 @@ import NitroModules
 import NitroTestExternal
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
-public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
+public protocol HybridTestObjectSwiftKotlinSpec: HybridObject {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
@@ -109,40 +109,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
 }
 
-public extension HybridTestObjectSwiftKotlinSpec_protocol {
+public extension HybridTestObjectSwiftKotlinSpec {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject TestObjectSwiftKotlin]"
   }
 }
-
-/// See ``HybridTestObjectSwiftKotlinSpec``
-open class HybridTestObjectSwiftKotlinSpec_base {
-  private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
-  public init() { }
-  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
-  #if DEBUG
-    guard self is HybridTestObjectSwiftKotlinSpec else {
-      fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
-    } else {
-      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
-    }
-  }
-}
-
-/**
- * A Swift base-protocol representing the TestObjectSwiftKotlin HybridObject.
- * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
- * ```swift
- * class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
- *   // ...
- * }
- * ```
- */
-public typealias HybridTestObjectSwiftKotlinSpec = HybridTestObjectSwiftKotlinSpec_protocol & HybridTestObjectSwiftKotlinSpec_base

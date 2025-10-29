@@ -9,6 +9,7 @@ import Foundation
 import NitroModules
 
 class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
+  
   func getValue() throws -> String {
     return "Hello world!"
   }

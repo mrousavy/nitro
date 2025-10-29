@@ -6,6 +6,31 @@
 ///
 
 #include "HybridBaseSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
+
+  size_t HybridBaseSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridBaseSpecSwift::dispose() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridBaseSpecSwift::toString() {
+    return NitroTest::HybridBaseSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridBaseSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridBaseSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridBaseSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  double HybridBaseSpecSwift::getBaseValue() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::getBaseValue(_swiftPart);
+  }
+
+  
+
 } // namespace margelo::nitro::test

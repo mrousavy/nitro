@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridPlatformObjectSpec``
-public protocol HybridPlatformObjectSpec_protocol: HybridObject {
+public protocol HybridPlatformObjectSpec: HybridObject {
   // Properties
   
 
@@ -17,40 +17,9 @@ public protocol HybridPlatformObjectSpec_protocol: HybridObject {
   func getOSVersion() throws -> String
 }
 
-public extension HybridPlatformObjectSpec_protocol {
+public extension HybridPlatformObjectSpec {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject PlatformObject]"
   }
 }
-
-/// See ``HybridPlatformObjectSpec``
-open class HybridPlatformObjectSpec_base {
-  private weak var cxxWrapper: HybridPlatformObjectSpec_cxx? = nil
-  public init() { }
-  public func getCxxWrapper() -> HybridPlatformObjectSpec_cxx {
-  #if DEBUG
-    guard self is HybridPlatformObjectSpec else {
-      fatalError("`self` is not a `HybridPlatformObjectSpec`! Did you accidentally inherit from `HybridPlatformObjectSpec_base` instead of `HybridPlatformObjectSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
-    } else {
-      let cxxWrapper = HybridPlatformObjectSpec_cxx(self as! HybridPlatformObjectSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
-    }
-  }
-}
-
-/**
- * A Swift base-protocol representing the PlatformObject HybridObject.
- * Implement this protocol to create Swift-based instances of PlatformObject.
- * ```swift
- * class HybridPlatformObject : HybridPlatformObjectSpec {
- *   // ...
- * }
- * ```
- */
-public typealias HybridPlatformObjectSpec = HybridPlatformObjectSpec_protocol & HybridPlatformObjectSpec_base

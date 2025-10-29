@@ -9,14 +9,9 @@
 
 #include "HybridPlatformObjectSpec.hpp"
 
-// Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
-
 
 
 #include <string>
-
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
 
@@ -33,26 +28,21 @@ namespace margelo::nitro::test {
   class HybridPlatformObjectSpecSwift: public virtual HybridPlatformObjectSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridPlatformObjectSpecSwift(const NitroTest::HybridPlatformObjectSpec_cxx& swiftPart):
+    explicit HybridPlatformObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
       HybridObject(HybridPlatformObjectSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridPlatformObjectSpec_cxx& getSwiftPart() noexcept {
+    inline void* NON_NULL getSwiftPart() noexcept {
       return _swiftPart;
     }
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
+    std::string toString() override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
 
   public:
     // Properties
@@ -60,17 +50,10 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    inline std::string getOSVersion() override {
-      auto __result = _swiftPart.getOSVersion();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
+    std::string getOSVersion() override;
 
   private:
-    NitroTest::HybridPlatformObjectSpec_cxx _swiftPart;
+    void* NON_NULL /* retain +1 */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test

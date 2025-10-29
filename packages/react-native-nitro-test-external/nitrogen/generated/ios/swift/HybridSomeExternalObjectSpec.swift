@@ -9,7 +9,7 @@ import Foundation
 import NitroModules
 
 /// See ``HybridSomeExternalObjectSpec``
-public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
+public protocol HybridSomeExternalObjectSpec: HybridObject {
   // Properties
   
 
@@ -17,40 +17,9 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
   func getValue() throws -> String
 }
 
-public extension HybridSomeExternalObjectSpec_protocol {
+public extension HybridSomeExternalObjectSpec {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
     return "[HybridObject SomeExternalObject]"
   }
 }
-
-/// See ``HybridSomeExternalObjectSpec``
-open class HybridSomeExternalObjectSpec_base {
-  private weak var cxxWrapper: HybridSomeExternalObjectSpec_cxx? = nil
-  public init() { }
-  public func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
-  #if DEBUG
-    guard self is HybridSomeExternalObjectSpec else {
-      fatalError("`self` is not a `HybridSomeExternalObjectSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSpec_base` instead of `HybridSomeExternalObjectSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
-    } else {
-      let cxxWrapper = HybridSomeExternalObjectSpec_cxx(self as! HybridSomeExternalObjectSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
-    }
-  }
-}
-
-/**
- * A Swift base-protocol representing the SomeExternalObject HybridObject.
- * Implement this protocol to create Swift-based instances of SomeExternalObject.
- * ```swift
- * class HybridSomeExternalObject : HybridSomeExternalObjectSpec {
- *   // ...
- * }
- * ```
- */
-public typealias HybridSomeExternalObjectSpec = HybridSomeExternalObjectSpec_protocol & HybridSomeExternalObjectSpec_base
