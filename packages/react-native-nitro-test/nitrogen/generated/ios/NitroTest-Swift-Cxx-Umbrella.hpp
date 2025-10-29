@@ -87,8 +87,6 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include <variant>
 #include <vector>
 
-#include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Umbrella.hpp>
-
 // C++ helpers for Swift
 #include "NitroTest-Swift-Cxx-Bridge.hpp"
 
