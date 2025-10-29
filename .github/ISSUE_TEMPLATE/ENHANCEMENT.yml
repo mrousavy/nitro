@@ -1,0 +1,27 @@
+name: ✨ Enhancement
+description: Request a feature or enhancement to Nitro
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Feature Request/Enhancement
+      description: Explain the feature/enhancement in great detail, and describe the motivation that led to you creating this issue.
+      placeholder: The feature allows us to do XY. Library XY has this, so Nitro should have it too.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Are there any existing workarounds?
+      description: List any workarounds for the requested feature or enhancement so you're not blocked by it.
+      placeholder: >
+        I just did this and that and allthat
+  - type: checkboxes
+    attributes:
+      label: Additional information
+      description: Please check all the boxes that apply
+      options:
+        - label: I checked the [documentation](https://nitro.margelo.com/docs/) and couldn't find this feature.
+          required: true
+        - label: I can create a PR to implement this feature. (See [Contributing](https://nitro.margelo.com/docs/contributing) for more information)
+        - label: I searched for [similar issues in this repository](https://github.com/mrousavy/nitro/issues) and found none.
+          required: true
