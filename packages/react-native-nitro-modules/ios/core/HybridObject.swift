@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// A base protocol for all Swift-based Hybrid Objects.
 public protocol HybridObject: AnyObject {
   /**
@@ -67,11 +66,11 @@ extension HybridObject {
 public func HybridObjectFromUnsafe<T>(_ unsafe: UnsafeRawPointer) -> T {
   let anyObject = Unmanaged<AnyObject>.fromOpaque(unsafe).takeUnretainedValue()
   #if DEBUG
-  guard let object = anyObject as? T else {
-    fatalError("Object \(unsafe) cannot be casted to type \(String(describing: T.self))!")
-  }
-  return object
+    guard let object = anyObject as? T else {
+      fatalError("Object \(unsafe) cannot be casted to type \(String(describing: T.self))!")
+    }
+    return object
   #else
-  return anyObject as! T
+    return anyObject as! T
   #endif
 }
