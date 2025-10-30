@@ -10,12 +10,14 @@ import NitroModules
 
 /**
  * A class implementation that bridges HybridChildSpec over to C++.
- * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * This does multiple things:
  *
- * Also, some Swift types need to be bridged with special handling:
- * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
- * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
- * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
+ * 1. In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * 2. To avoid exposing the whole inheritance chain to C++, we only expose the methods HybridChildSpec defines itself,
+ *    otherwise C++ would see HybridChildSpec's base class and if that's an external symbol the build fails.
+ * 3. We use void* to hold the Swift instance to avoid exposing the class to C++, this way we only see the static funcs.
+ * 4. A lot of types have to be bridged from C++ to Swift and back - e.g. arrays or functions. This does all that.
+ * 5. Since C++ cannot catch Swift errors, we wrap them in a Result<T> type here that holds either T or Error.
  */
 public class HybridChildSpec_cxx {
   /**
