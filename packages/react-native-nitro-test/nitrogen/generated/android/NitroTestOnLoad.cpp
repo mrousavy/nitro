@@ -18,6 +18,7 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
+#include "JHybridSomeExternalObjectSubclassSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
 #include "JFunc_void.hpp"
@@ -46,6 +47,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
+    margelo::nitro::test::JHybridSomeExternalObjectSubclassSpec::registerNatives();
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::test::JFunc_void_cxx::registerNatives();
@@ -98,6 +100,14 @@ int initialize(JavaVM* vm) {
       "PlatformObject",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridPlatformObjectSpec::javaobject> object("com/margelo/nitro/test/HybridPlatformObject");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "SomeExternalObjectSubclass",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridSomeExternalObjectSubclassSpec::javaobject> object("com/margelo/nitro/test/HybridSomeExternalObjectSubclass");
         auto instance = object.create();
         return instance->cthis()->shared();
       }
