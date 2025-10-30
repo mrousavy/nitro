@@ -119,7 +119,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectSwiftKotlinSpec::getIsViewBlue);
       prototype.registerHybridMethod("bounceExternalHybrid", &HybridTestObjectSwiftKotlinSpec::bounceExternalHybrid);
       prototype.registerHybridMethod("createInternalObject", &HybridTestObjectSwiftKotlinSpec::createInternalObject);
-      prototype.registerHybridMethod("getNativeRefCount", &HybridTestObjectSwiftKotlinSpec::getNativeRefCount);
+      prototype.registerHybridMethod("getTotalNumberOfTestObjectsAlive", &HybridTestObjectSwiftKotlinSpec::getTotalNumberOfTestObjectsAlive);
     });
   }
 

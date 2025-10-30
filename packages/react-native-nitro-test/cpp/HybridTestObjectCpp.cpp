@@ -18,6 +18,8 @@
 
 namespace margelo::nitro::test {
 
+double HybridTestObjectCpp::totalObjectsAlive = 0;
+
 // Properties
 double HybridTestObjectCpp::getNumberValue() {
   return _number;
@@ -618,8 +620,8 @@ std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> Hy
   return std::make_shared<HybridSomeInternalObject>();
 }
 
-double HybridTestObjectCpp::getNativeRefCount() {
-  return static_cast<double>(shared().use_count());
+double HybridTestObjectCpp::getTotalNumberOfTestObjectsAlive() {
+  return totalObjectsAlive;
 }
 
 void HybridTestObjectCpp::dispose() {

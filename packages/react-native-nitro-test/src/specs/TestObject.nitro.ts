@@ -254,7 +254,7 @@ interface SharedTestObjectProps {
   createInternalObject(): SomeExternalObject
 
   // Memory: ownership ref count
-  getNativeRefCount(): number
+  getTotalNumberOfTestObjectsAlive(): number
 }
 
 // This is a C++-based `HybridObject`.

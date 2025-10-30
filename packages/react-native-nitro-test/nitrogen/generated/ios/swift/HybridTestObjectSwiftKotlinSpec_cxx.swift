@@ -2112,10 +2112,10 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public static func getNativeRefCount(this: UnsafeRawPointer) -> bridge.Result_double_ {
+  public static func getTotalNumberOfTestObjectsAlive(this: UnsafeRawPointer) -> bridge.Result_double_ {
     do {
       let __instance = cast(this)
-      let __result = try __instance.getNativeRefCount()
+      let __result = try __instance.getTotalNumberOfTestObjectsAlive()
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)
     } catch (let __error) {

@@ -738,8 +738,8 @@ namespace margelo::nitro::test {
     auto __value = std::move(__result.value());
     return __value;
   }
-  double HybridTestObjectSwiftKotlinSpecSwift::getNativeRefCount() {
-    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getNativeRefCount(_swiftPart);
+  double HybridTestObjectSwiftKotlinSpecSwift::getTotalNumberOfTestObjectsAlive() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getTotalNumberOfTestObjectsAlive(_swiftPart);
     if (__result.hasError()) [[unlikely]] {
       std::rethrow_exception(__result.error());
     }

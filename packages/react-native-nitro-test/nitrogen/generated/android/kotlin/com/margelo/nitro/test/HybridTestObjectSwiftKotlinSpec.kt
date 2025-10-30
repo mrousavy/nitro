@@ -511,7 +511,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getNativeRefCount(): Double
+  abstract fun getTotalNumberOfTestObjectsAlive(): Double
 
   private external fun initHybrid(): HybridData
 

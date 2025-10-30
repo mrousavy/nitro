@@ -5,6 +5,21 @@ export function isNativeFunction(func: Function): boolean {
   return func.toString().includes('[native code]')
 }
 
+declare global {
+  var gc: () => void
+  var performance: {
+    now: () => number
+  }
+}
+export function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export async function waitForGc(): Promise<void> {
+  gc()
+  await delay(500)
+}
+
 export function findPrototypeWhere<T extends object>(
   obj: T,
   where: (obj: Partial<T>) => boolean

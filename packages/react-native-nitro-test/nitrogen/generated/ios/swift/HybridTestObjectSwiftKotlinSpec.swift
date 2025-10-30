@@ -107,7 +107,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
-  func getNativeRefCount() throws -> Double
+  func getTotalNumberOfTestObjectsAlive() throws -> Double
 }
 
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
