@@ -21,7 +21,7 @@ import NitroTestExternal
  * 4. A lot of types have to be bridged from C++ to Swift and back - e.g. arrays or functions. This does all that.
  * 5. Since C++ cannot catch Swift errors, we wrap them in a Result<T> type here that holds either T or Error.
  */
-public class HybridTestObjectSwiftKotlinSpec_cxx {
+public final class HybridTestObjectSwiftKotlinSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.

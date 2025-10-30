@@ -19,7 +19,7 @@ import NitroModules
  * 4. A lot of types have to be bridged from C++ to Swift and back - e.g. arrays or functions. This does all that.
  * 5. Since C++ cannot catch Swift errors, we wrap them in a Result<T> type here that holds either T or Error.
  */
-public class HybridSomeExternalObjectSpec_cxx {
+public final class HybridSomeExternalObjectSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::external::bridge::swift`)
    * from `NitroTestExternal-Swift-Cxx-Bridge.hpp`.

@@ -98,7 +98,7 @@ ${imports.join('\n')}
  * 4. A lot of types have to be bridged from C++ to Swift and back - e.g. arrays or functions. This does all that.
  * 5. Since C++ cannot catch Swift errors, we wrap them in a Result<T> type here that holds either T or Error.
  */
-public class ${name.HybridTSpecCxx} {
+public final class ${name.HybridTSpecCxx} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getSwiftBridgeNamespace('c++')}\`)
    * from \`${iosModuleName}-Swift-Cxx-Bridge.hpp\`.
