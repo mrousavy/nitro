@@ -25,25 +25,9 @@ public class HybridChildSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  /**
-   * +1 Retain one ref count of the given `UnsafeRawPointer`
-   */
-  @inline(__always)
-  public static func retainOne(_ this: UnsafeRawPointer) {
-    let _ = Unmanaged<AnyObject>.fromOpaque(this).retain()
-  }
-
-  /**
-   * -1 Release one ref count of the given `UnsafeRawPointer`
-   */
-  @inline(__always)
-  public static func releaseOne(_ this: UnsafeRawPointer) {
-    Unmanaged<AnyObject>.fromOpaque(this).release()
-  }
-
   @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> HybridChildSpec {
-    return HybridObjectFromUnsafe(this)
+    return MemoryHelper.castUnsafe(this)
   }
 
   /**

@@ -27,9 +27,9 @@ namespace margelo::nitro::test {
    */
   class HybridPlatformObjectSpecSwift: public virtual HybridPlatformObjectSpec {
   public:
-    // Constructor from a Swift instance
-    explicit HybridPlatformObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
-    // Destructor calls release in Swift
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit HybridPlatformObjectSpecSwift(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
     ~HybridPlatformObjectSpecSwift() override;
     // Copy & Move is deleted
     HybridPlatformObjectSpecSwift(const HybridPlatformObjectSpecSwift&) = delete;
@@ -56,7 +56,7 @@ namespace margelo::nitro::test {
     std::string getOSVersion() override;
 
   private:
-    void* NON_NULL /* retain +1 */ _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test

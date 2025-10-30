@@ -7,16 +7,17 @@
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/MemoryHelper.hpp>
 
 namespace margelo::nitro::test {
 
-  HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
+  HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
     _swiftPart(swiftPart) {
-    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::retainOne(_swiftPart);
+    MemoryHelper::retainOne(_swiftPart);
   }
   HybridTestObjectSwiftKotlinSpecSwift::~HybridTestObjectSwiftKotlinSpecSwift() {
-    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::releaseOne(_swiftPart);
+    MemoryHelper::releaseOne(_swiftPart);
   }
 
   size_t HybridTestObjectSwiftKotlinSpecSwift::getExternalMemorySize() noexcept {

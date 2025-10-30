@@ -27,9 +27,9 @@ namespace margelo::nitro::test {
    */
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
-    // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
-    // Destructor calls release in Swift
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit HybridBaseSpecSwift(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
     ~HybridBaseSpecSwift() override;
     // Copy & Move is deleted
     HybridBaseSpecSwift(const HybridBaseSpecSwift&) = delete;
@@ -56,7 +56,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    void* NON_NULL /* retain +1 */ _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test

@@ -55,6 +55,7 @@ Pod::Spec.new do |s|
     "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
     "ios/utils/Result.hpp",
     "ios/utils/DateToChronoDate.hpp",
+    "ios/utils/MemoryHelper.hpp",
     "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
   ]

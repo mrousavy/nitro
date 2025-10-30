@@ -104,25 +104,9 @@ public class ${name.HybridTSpecCxx} {
    */
   public typealias bridge = ${bridgeNamespace}
 
-  /**
-   * +1 Retain one ref count of the given \`UnsafeRawPointer\`
-   */
-  @inline(__always)
-  public static func retainOne(_ this: UnsafeRawPointer) {
-    let _ = Unmanaged<AnyObject>.fromOpaque(this).retain()
-  }
-
-  /**
-   * -1 Release one ref count of the given \`UnsafeRawPointer\`
-   */
-  @inline(__always)
-  public static func releaseOne(_ this: UnsafeRawPointer) {
-    Unmanaged<AnyObject>.fromOpaque(this).release()
-  }
-
   @inline(__always)
   private static func cast(_ this: UnsafeRawPointer) -> ${name.HybridTSpec} {
-    return HybridObjectFromUnsafe(this)
+    return MemoryHelper.castUnsafe(this)
   }
 
   /**
@@ -328,9 +312,9 @@ namespace ${cxxNamespace} {
    */
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
-    // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart);
-    // Destructor calls release in Swift
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit ${name.HybridTSpecSwift}(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
     ~${name.HybridTSpecSwift}() override;
     // Copy & Move is deleted
     ${name.HybridTSpecSwift}(const ${name.HybridTSpecSwift}&) = delete;
@@ -357,7 +341,7 @@ namespace ${cxxNamespace} {
     ${indent(cppMethodDeclarations, '    ')}
 
   private:
-    void* NON_NULL /* retain +1 */ _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -367,16 +351,17 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 #include "${name.HybridTSpecSwift}.hpp"
 #include "${getUmbrellaHeaderName()}"
+#include <NitroModules/MemoryHelper.hpp>
 
 namespace ${cxxNamespace} {
 
-  ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* retain +1 */ swiftPart):
+  ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* unretained */ swiftPart):
     ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
     _swiftPart(swiftPart) {
-    ${iosModuleName}::${name.HybridTSpecCxx}::retainOne(_swiftPart);
+    MemoryHelper::retainOne(_swiftPart);
   }
   ${name.HybridTSpecSwift}::~${name.HybridTSpecSwift}() {
-    ${iosModuleName}::${name.HybridTSpecCxx}::releaseOne(_swiftPart);
+    MemoryHelper::releaseOne(_swiftPart);
   }
 
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {

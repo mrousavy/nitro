@@ -7,16 +7,17 @@
 
 #include "HybridSomeExternalObjectSpecSwift.hpp"
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/MemoryHelper.hpp>
 
 namespace margelo::nitro::test::external {
 
-  HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* retain +1 */ swiftPart):
+  HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridSomeExternalObjectSpec::TAG),
     _swiftPart(swiftPart) {
-    NitroTestExternal::HybridSomeExternalObjectSpec_cxx::retainOne(_swiftPart);
+    MemoryHelper::retainOne(_swiftPart);
   }
   HybridSomeExternalObjectSpecSwift::~HybridSomeExternalObjectSpecSwift() {
-    NitroTestExternal::HybridSomeExternalObjectSpec_cxx::releaseOne(_swiftPart);
+    MemoryHelper::releaseOne(_swiftPart);
   }
 
   size_t HybridSomeExternalObjectSpecSwift::getExternalMemorySize() noexcept {

@@ -41,9 +41,9 @@ namespace margelo::nitro::test {
    */
   class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift {
   public:
-    // Constructor from a Swift instance
-    explicit HybridChildSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
-    // Destructor calls release in Swift
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit HybridChildSpecSwift(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
     ~HybridChildSpecSwift() override;
     // Copy & Move is deleted
     HybridChildSpecSwift(const HybridChildSpecSwift&) = delete;
@@ -70,7 +70,7 @@ namespace margelo::nitro::test {
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    void* NON_NULL /* retain +1 */ _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test

@@ -88,9 +88,9 @@ namespace margelo::nitro::test {
    */
   class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
-    // Constructor from a Swift instance
-    explicit HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* retain +1 */ swiftPart);
-    // Destructor calls release in Swift
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
     ~HybridTestObjectSwiftKotlinSpecSwift() override;
     // Copy & Move is deleted
     HybridTestObjectSwiftKotlinSpecSwift(const HybridTestObjectSwiftKotlinSpecSwift&) = delete;
@@ -221,7 +221,7 @@ namespace margelo::nitro::test {
     double getNativeRefCount() override;
 
   private:
-    void* NON_NULL /* retain +1 */ _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test
