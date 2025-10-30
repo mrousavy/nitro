@@ -1638,5 +1638,14 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
   }
+  
+  // pragma MARK: Result<std::shared_ptr<HybridSomeExternalObjectSubclassSpec>>
+  using Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__ = Result<std::shared_ptr<HybridSomeExternalObjectSubclassSpec>>;
+  inline Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__ create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(const std::shared_ptr<HybridSomeExternalObjectSubclassSpec>& value) noexcept {
+    return Result<std::shared_ptr<HybridSomeExternalObjectSubclassSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__ create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<HybridSomeExternalObjectSubclassSpec>>::withError(error);
+  }
 
 } // namespace margelo::nitro::test::bridge::swift

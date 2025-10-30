@@ -9,6 +9,7 @@ import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
 import type { Child } from './Child.nitro'
 import type { Base } from './Base.nitro'
+import type { SomeExternalObjectSubclass } from './SomeExternalObjectSubclass.nitro'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -252,6 +253,7 @@ interface SharedTestObjectProps {
   // External HybridObjects
   bounceExternalHybrid(externalObject: SomeExternalObject): SomeExternalObject
   createInternalObject(): SomeExternalObject
+  createExternalObjectSubclass(): SomeExternalObjectSubclass
 
   // Memory: ownership ref count
   getTotalNumberOfTestObjectsAlive(): number

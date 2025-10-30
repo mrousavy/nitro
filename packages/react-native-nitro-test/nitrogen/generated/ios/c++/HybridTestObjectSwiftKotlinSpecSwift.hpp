@@ -38,6 +38,7 @@
 #include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include "HybridSomeExternalObjectSubclassSpec.hpp"
 
 namespace margelo::nitro::test {
 
@@ -184,6 +185,7 @@ namespace margelo::nitro::test {
     bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
+    std::shared_ptr<HybridSomeExternalObjectSubclassSpec> createExternalObjectSubclass() override;
     double getTotalNumberOfTestObjectsAlive() override;
 
   private:

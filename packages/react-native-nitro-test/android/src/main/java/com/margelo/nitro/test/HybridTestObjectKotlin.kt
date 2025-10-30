@@ -504,6 +504,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return HybridSomeInternalObject()
   }
 
+  override fun createExternalObjectSubclass(): HybridSomeExternalObjectSubclassSpec {
+    return HybridSomeInternalObjectSubclass()
+  }
+
   override fun getTotalNumberOfTestObjectsAlive(): Double {
     return totalObjectsAlive
   }

@@ -33,6 +33,8 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `HybridSomeExternalObjectSubclassSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridSomeExternalObjectSubclassSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -94,6 +96,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JHybridChildSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
+#include "HybridSomeExternalObjectSubclassSpec.hpp"
+#include "JHybridSomeExternalObjectSubclassSpec.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -979,6 +983,11 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>()>("createInternalObject");
     auto __result = method(_javaPart);
     return __result->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
+  }
+  std::shared_ptr<HybridSomeExternalObjectSubclassSpec> JHybridTestObjectSwiftKotlinSpec::createExternalObjectSubclass() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JHybridSomeExternalObjectSubclassSpec::javaobject>()>("createExternalObjectSubclass");
+    auto __result = method(_javaPart);
+    return __result->cthis()->shared_cast<JHybridSomeExternalObjectSubclassSpec>();
   }
   double JHybridTestObjectSwiftKotlinSpec::getTotalNumberOfTestObjectsAlive() {
     static const auto method = javaClassStatic()->getMethod<double()>("getTotalNumberOfTestObjectsAlive");

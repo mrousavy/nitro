@@ -2112,6 +2112,21 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public static func createExternalObjectSubclass(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__ {
+    do {
+      let __instance = cast(this)
+      let __result = try __instance.createExternalObjectSubclass()
+      let __resultCpp = { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSubclassSpec_ in
+        return (__result as! HybridSomeExternalObjectSubclassSpec).getCxxPart()
+      }()
+      return bridge.create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_HybridSomeExternalObjectSubclassSpec__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public static func getTotalNumberOfTestObjectsAlive(this: UnsafeRawPointer) -> bridge.Result_double_ {
     do {
       let __instance = cast(this)

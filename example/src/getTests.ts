@@ -1736,6 +1736,14 @@ export function getTests(
           .didNotThrow()
           .equals('subclassed!')
     ),
+    createTest('createExternalObjectSubclass() returns "subclassed!"', () =>
+      it(() => {
+        const object = testObject.createExternalObjectSubclass()
+        return object.getSubclassedValue()
+      })
+        .didNotThrow()
+        .equals('subclassed!')
+    ),
     createTest(
       'SomeInternalObject.getValue() returns "This is overridden!"',
       () =>

@@ -15,6 +15,7 @@
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
 #include "HybridSomeInternalObject.hpp"
+#include "HybridSomeExternalObjectSubclass.hpp"
 
 namespace margelo::nitro::test {
 
@@ -618,6 +619,10 @@ std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> Hy
 
 std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createInternalObject() {
   return std::make_shared<HybridSomeInternalObject>();
+}
+
+std::shared_ptr<HybridSomeExternalObjectSubclassSpec> HybridTestObjectCpp::createExternalObjectSubclass() {
+  return std::make_shared<HybridSomeExternalObjectSubclass>();
 }
 
 double HybridTestObjectCpp::getTotalNumberOfTestObjectsAlive() {
