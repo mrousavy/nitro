@@ -38,7 +38,7 @@ public:
 
 private:
   JAnyMap() {
-    _map = std::make_shared<AnyMap>();
+    _map = AnyMap::make();
   }
   explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
@@ -161,6 +161,7 @@ protected:
   }
 
 public:
+  [[nodiscard]]
   std::shared_ptr<AnyMap> getMap() const {
     return _map;
   }
