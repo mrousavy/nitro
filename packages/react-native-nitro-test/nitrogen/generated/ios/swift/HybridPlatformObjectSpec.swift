@@ -17,6 +17,7 @@ public protocol HybridPlatformObjectSpec_protocol: HybridObject {
   func getOSVersion() throws -> String
 }
 
+/// See ``HybridPlatformObjectSpec``
 public extension HybridPlatformObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -24,6 +25,7 @@ public extension HybridPlatformObjectSpec_protocol {
   }
 }
 
+/// See ``HybridPlatformObjectSpec``
 open class HybridPlatformObjectSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridPlatformObjectSpec_ = .init()
@@ -43,4 +45,13 @@ open class HybridPlatformObjectSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "PlatformObject".
+ * Implement this protocol to create Swift-based instances of PlatformObject.
+ * ```swift
+ * class HybridPlatformObject: HybridPlatformObjectSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridPlatformObjectSpec = HybridPlatformObjectSpec_protocol & HybridPlatformObjectSpec_base

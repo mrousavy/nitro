@@ -17,6 +17,7 @@ public protocol HybridBaseSpec_protocol: HybridObject {
   
 }
 
+/// See ``HybridBaseSpec``
 public extension HybridBaseSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -24,6 +25,7 @@ public extension HybridBaseSpec_protocol {
   }
 }
 
+/// See ``HybridBaseSpec``
 open class HybridBaseSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridBaseSpec_ = .init()
@@ -43,4 +45,13 @@ open class HybridBaseSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "Base".
+ * Implement this protocol to create Swift-based instances of Base.
+ * ```swift
+ * class HybridBase: HybridBaseSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

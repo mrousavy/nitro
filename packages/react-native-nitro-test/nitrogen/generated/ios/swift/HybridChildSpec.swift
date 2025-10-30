@@ -17,6 +17,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant
 }
 
+/// See ``HybridChildSpec``
 public extension HybridChildSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -24,6 +25,7 @@ public extension HybridChildSpec_protocol {
   }
 }
 
+/// See ``HybridChildSpec``
 open class HybridChildSpec_base: HybridBaseSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridChildSpec_ = .init()
@@ -50,4 +52,13 @@ open class HybridChildSpec_base: HybridBaseSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "Child".
+ * Implement this protocol to create Swift-based instances of Child.
+ * ```swift
+ * class HybridChild: HybridChildSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridChildSpec = HybridChildSpec_protocol & HybridChildSpec_base

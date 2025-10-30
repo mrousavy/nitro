@@ -17,6 +17,7 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
   func getValue() throws -> String
 }
 
+/// See ``HybridSomeExternalObjectSpec``
 public extension HybridSomeExternalObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -24,6 +25,7 @@ public extension HybridSomeExternalObjectSpec_protocol {
   }
 }
 
+/// See ``HybridSomeExternalObjectSpec``
 open class HybridSomeExternalObjectSpec_base {
   public typealias bridge = margelo.nitro.test.external.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSpec_ = .init()
@@ -43,4 +45,13 @@ open class HybridSomeExternalObjectSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "SomeExternalObject".
+ * Implement this protocol to create Swift-based instances of SomeExternalObject.
+ * ```swift
+ * class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridSomeExternalObjectSpec = HybridSomeExternalObjectSpec_protocol & HybridSomeExternalObjectSpec_base

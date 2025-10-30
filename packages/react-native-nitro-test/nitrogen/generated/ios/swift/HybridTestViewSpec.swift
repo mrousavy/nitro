@@ -20,6 +20,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   func someMethod() throws -> Void
 }
 
+/// See ``HybridTestViewSpec``
 public extension HybridTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -27,6 +28,7 @@ public extension HybridTestViewSpec_protocol {
   }
 }
 
+/// See ``HybridTestViewSpec``
 open class HybridTestViewSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_ = .init()
@@ -46,4 +48,13 @@ open class HybridTestViewSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "TestView".
+ * Implement this protocol to create Swift-based instances of TestView.
+ * ```swift
+ * class HybridTestView: HybridTestViewSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridTestViewSpec = HybridTestViewSpec_protocol & HybridTestViewSpec_base

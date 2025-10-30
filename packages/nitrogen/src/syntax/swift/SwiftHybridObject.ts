@@ -114,6 +114,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   ${indent(methods, '  ')}
 }
 
+/// See \`\`${protocolName}\`\`
 public extension ${protocolName}_protocol {
   /// Default implementation of \`\`HybridObject.toString\`\`
   func toString() -> String {
@@ -121,6 +122,7 @@ public extension ${protocolName}_protocol {
   }
 }
 
+/// See \`\`${protocolName}\`\`
 open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
   public typealias bridge = ${bridgeNamespace}
   private var _cxxPart: bridge.${weakifyBridge.specializationName} = .init()
@@ -128,6 +130,15 @@ open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
   ${indent(baseMethods.join('\n\n'), '  ')}
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "${name.T}".
+ * Implement this protocol to create Swift-based instances of ${name.T}.
+ * \`\`\`swift
+ * class ${name.HybridT}: ${protocolName} {
+ *   // ...
+ * }
+ * \`\`\`
+ */
 public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
   `.trim()
 

@@ -110,6 +110,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getTotalNumberOfTestObjectsAlive() throws -> Double
 }
 
+/// See ``HybridTestObjectSwiftKotlinSpec``
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -117,6 +118,7 @@ public extension HybridTestObjectSwiftKotlinSpec_protocol {
   }
 }
 
+/// See ``HybridTestObjectSwiftKotlinSpec``
 open class HybridTestObjectSwiftKotlinSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = .init()
@@ -136,4 +138,13 @@ open class HybridTestObjectSwiftKotlinSpec_base {
   }
 }
 
+/**
+ * A Swift base-protocol (+ base class) representing the HybridObject "TestObjectSwiftKotlin".
+ * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
+ * ```swift
+ * class HybridTestObjectSwiftKotlin: HybridTestObjectSwiftKotlinSpec {
+ *   // ...
+ * }
+ * ```
+ */
 public typealias HybridTestObjectSwiftKotlinSpec = HybridTestObjectSwiftKotlinSpec_protocol & HybridTestObjectSwiftKotlinSpec_base
