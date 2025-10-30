@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
 /**
  * A class implementation that bridges HybridExternalSubclassSpec over to C++.
