@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test {
 
+  // pragma MARK: Constructor / Destructor
   HybridChildSpecSwift::HybridChildSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridChildSpec::TAG),
     HybridBaseSpecSwift(swiftPart),
@@ -21,6 +22,7 @@ namespace margelo::nitro::test {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridChildSpec_cxx::getMemorySize(_swiftPart);
   }
@@ -38,10 +40,12 @@ namespace margelo::nitro::test {
     return NitroTest::HybridChildSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   double HybridChildSpecSwift::getChildValue() noexcept {
     return NitroTest::HybridChildSpec_cxx::getChildValue(_swiftPart);
   }
 
+  // pragma MARK: Methods
   std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) {
     auto __result = NitroTest::HybridChildSpec_cxx::bounceVariant(_swiftPart, variant);
     if (__result.hasError()) [[unlikely]] {

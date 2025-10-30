@@ -9,8 +9,6 @@
 
 #include "HybridPlatformObjectSpec.hpp"
 
-
-
 #include <string>
 
 namespace margelo::nitro::test {
@@ -42,6 +40,7 @@ namespace margelo::nitro::test {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;

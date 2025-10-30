@@ -9,9 +9,6 @@
 
 #include "HybridTestViewSpec.hpp"
 
-// Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::test { enum class ColorScheme; }
-
 #include "ColorScheme.hpp"
 #include <functional>
 
@@ -44,6 +41,7 @@ namespace margelo::nitro::test {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;

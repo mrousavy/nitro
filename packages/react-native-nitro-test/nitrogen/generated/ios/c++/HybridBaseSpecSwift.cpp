@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test {
 
+  // pragma MARK: Constructor / Destructor
   HybridBaseSpecSwift::HybridBaseSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridBaseSpec::TAG),
     _swiftPart(swiftPart) {
@@ -20,6 +21,7 @@ namespace margelo::nitro::test {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t HybridBaseSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridBaseSpec_cxx::getMemorySize(_swiftPart);
   }
@@ -37,10 +39,12 @@ namespace margelo::nitro::test {
     return NitroTest::HybridBaseSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   double HybridBaseSpecSwift::getBaseValue() noexcept {
     return NitroTest::HybridBaseSpec_cxx::getBaseValue(_swiftPart);
   }
 
+  // pragma MARK: Methods
   
 
 } // namespace margelo::nitro::test

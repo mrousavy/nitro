@@ -9,8 +9,6 @@
 
 #include "HybridSomeExternalObjectSpec.hpp"
 
-
-
 #include <string>
 
 namespace margelo::nitro::test::external {
@@ -42,6 +40,7 @@ namespace margelo::nitro::test::external {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;

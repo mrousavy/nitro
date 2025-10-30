@@ -19,21 +19,6 @@ public final class MemoryHelper {
     return malloc_size(Unmanaged.passUnretained(instance).toOpaque())
   }
 
-  /**
-   * Increments the ref-count on the unsafe Swift reference by +1.
-   * The ref-count needs to be decremented again later to avoid leaks.
-   */
-  public static func retainOne(_ unsafe: UnsafeRawPointer) {
-    Unmanaged<AnyObject>.fromOpaque(unsafe).retain()
-  }
-  /**
-   * Decrements the ref-count on the unsafe Swift reference by -1.
-   * If the ref-count reaches 0, the object will be deallocated.
-   */
-  public static func releaseOne(_ unsafe: UnsafeRawPointer) {
-    Unmanaged<AnyObject>.fromOpaque(unsafe).release()
-  }
-
   public static func castUnsafe<T>(_ unsafe: UnsafeRawPointer) -> T {
     let anyObject = Unmanaged<AnyObject>.fromOpaque(unsafe).takeUnretainedValue()
     #if DEBUG

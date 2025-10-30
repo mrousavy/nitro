@@ -9,15 +9,6 @@
 
 #include "HybridChildSpec.hpp"
 
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::test { enum class Powertrain; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::test { class HybridBaseSpecSwift; }
-
 #include <string>
 #include "Car.hpp"
 #include <variant>
@@ -56,6 +47,7 @@ namespace margelo::nitro::test {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;

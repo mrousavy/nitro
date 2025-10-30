@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test {
 
+  // pragma MARK: Constructor / Destructor
   HybridTestObjectSwiftKotlinSpecSwift::HybridTestObjectSwiftKotlinSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
     _swiftPart(swiftPart) {
@@ -20,6 +21,7 @@ namespace margelo::nitro::test {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t HybridTestObjectSwiftKotlinSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getMemorySize(_swiftPart);
   }
@@ -37,6 +39,7 @@ namespace margelo::nitro::test {
     return NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::getThisObject() noexcept {
     auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getThisObject(_swiftPart);
     return __result;
@@ -130,6 +133,7 @@ namespace margelo::nitro::test {
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::setSomeVariant(_swiftPart, someVariant);
   }
 
+  // pragma MARK: Methods
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::newTestObject() {
     auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::newTestObject(_swiftPart);
     if (__result.hasError()) [[unlikely]] {

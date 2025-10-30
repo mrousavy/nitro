@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test {
 
+  // pragma MARK: Constructor / Destructor
   HybridTestViewSpecSwift::HybridTestViewSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridTestViewSpec::TAG),
     _swiftPart(swiftPart) {
@@ -20,6 +21,7 @@ namespace margelo::nitro::test {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t HybridTestViewSpecSwift::getExternalMemorySize() noexcept {
     return NitroTest::HybridTestViewSpec_cxx::getMemorySize(_swiftPart);
   }
@@ -37,6 +39,7 @@ namespace margelo::nitro::test {
     return NitroTest::HybridTestViewSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   bool HybridTestViewSpecSwift::getIsBlue() noexcept {
     return NitroTest::HybridTestViewSpec_cxx::isBlue(_swiftPart);
   }
@@ -64,6 +67,7 @@ namespace margelo::nitro::test {
     NitroTest::HybridTestViewSpec_cxx::setSomeCallback(_swiftPart, someCallback);
   }
 
+  // pragma MARK: Methods
   void HybridTestViewSpecSwift::someMethod() {
     auto __result = NitroTest::HybridTestViewSpec_cxx::someMethod(_swiftPart);
     if (__result.hasError()) [[unlikely]] {

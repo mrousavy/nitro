@@ -278,10 +278,6 @@ if (__result.hasError()) [[unlikely]] {
     })
   }
 
-  const extraForwardDeclarations = extraImports
-    .map((i) => i.forwardDeclaration)
-    .filter((v) => v != null)
-    .filter(isNotDuplicate)
   const extraIncludes = extraImports
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
@@ -293,8 +289,6 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.hpp`)}
 #pragma once
 
 #include "${name.HybridTSpec}.hpp"
-
-${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 
@@ -327,6 +321,7 @@ namespace ${cxxNamespace} {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;
@@ -355,6 +350,7 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 namespace ${cxxNamespace} {
 
+  // pragma MARK: Constructor / Destructor
   ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* unretained */ swiftPart):
     ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
     _swiftPart(swiftPart) {
@@ -364,6 +360,7 @@ namespace ${cxxNamespace} {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
     return ${iosModuleName}::${name.HybridTSpecCxx}::getMemorySize(_swiftPart);
   }
@@ -381,8 +378,10 @@ namespace ${cxxNamespace} {
     return ${iosModuleName}::${name.HybridTSpecCxx}::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   ${indent(cppPropertyImplementations, '  ')}
 
+  // pragma MARK: Methods
   ${indent(cppMethodImplementations, '  ')}
 
 } // namespace ${cxxNamespace}

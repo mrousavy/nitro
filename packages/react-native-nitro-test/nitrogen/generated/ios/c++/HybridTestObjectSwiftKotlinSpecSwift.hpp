@@ -9,41 +9,6 @@
 
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
-// Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::test { enum class Powertrain; }
-// Forward declaration of `OldEnum` to properly resolve imports.
-namespace margelo::nitro::test { enum class OldEnum; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `MapWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct MapWrapper; }
-// Forward declaration of `SecondMapWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct SecondMapWrapper; }
-// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
-namespace NitroModules { class ArrayBufferHolder; }
-// Forward declaration of `JsStyleStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct JsStyleStruct; }
-// Forward declaration of `WrappedJsStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct WrappedJsStruct; }
-// Forward declaration of `OptionalWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalWrapper; }
-// Forward declaration of `OptionalCallback` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalCallback; }
-// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
-namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
-// Forward declaration of `HybridBaseSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridBaseSpec; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
-// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridTestViewSpec; }
-// Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
-namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
-
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
@@ -103,6 +68,7 @@ namespace margelo::nitro::test {
     }
 
   public:
+    // Base HybridObject overrides
     size_t getExternalMemorySize() noexcept override;
     void dispose() noexcept override;
     std::string toString() override;

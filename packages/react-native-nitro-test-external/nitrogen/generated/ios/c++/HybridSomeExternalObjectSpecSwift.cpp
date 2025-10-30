@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test::external {
 
+  // pragma MARK: Constructor / Destructor
   HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridSomeExternalObjectSpec::TAG),
     _swiftPart(swiftPart) {
@@ -20,6 +21,7 @@ namespace margelo::nitro::test::external {
     SwiftReferences::releaseOne(_swiftPart);
   }
 
+  // pragma MARK: Base Methods
   size_t HybridSomeExternalObjectSpecSwift::getExternalMemorySize() noexcept {
     return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::getMemorySize(_swiftPart);
   }
@@ -37,8 +39,10 @@ namespace margelo::nitro::test::external {
     return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
   }
 
+  // pragma MARK: Properties
   
 
+  // pragma MARK: Methods
   std::string HybridSomeExternalObjectSpecSwift::getValue() {
     auto __result = NitroTestExternal::HybridSomeExternalObjectSpec_cxx::getValue(_swiftPart);
     if (__result.hasError()) [[unlikely]] {
