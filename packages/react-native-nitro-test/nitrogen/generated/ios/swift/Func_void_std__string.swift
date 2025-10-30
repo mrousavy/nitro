@@ -26,11 +26,9 @@ public final class Func_void_std__string: UnsafeTransferable {
     self.closure(String(value))
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_std__string from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__string {
     return Self.fromUnsafeRetained(pointer)

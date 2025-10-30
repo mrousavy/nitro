@@ -46,11 +46,9 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
     }())
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
     return Self.fromUnsafeRetained(pointer)

@@ -26,11 +26,9 @@ public final class Func_void_std__exception_ptr: UnsafeTransferable {
     self.closure(RuntimeError.from(cppError: error))
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_std__exception_ptr from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__exception_ptr {
     return Self.fromUnsafeRetained(pointer)

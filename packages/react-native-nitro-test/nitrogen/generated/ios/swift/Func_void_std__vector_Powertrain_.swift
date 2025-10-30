@@ -26,11 +26,9 @@ public final class Func_void_std__vector_Powertrain_: UnsafeTransferable {
     self.closure(array.map({ __item in __item }))
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_std__vector_Powertrain_ from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__vector_Powertrain_ {
     return Self.fromUnsafeRetained(pointer)

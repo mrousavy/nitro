@@ -61,11 +61,9 @@ public final class ${swiftClassName}: UnsafeTransferable {
     ${indent(body, '    ')}
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> ${swiftClassName} from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${swiftClassName} {
     return Self.fromUnsafeRetained(pointer)

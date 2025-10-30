@@ -18,14 +18,14 @@ public extension UnsafeTransferable {
   func toUnsafeRetained() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
-  static func fromUnsafeRetained(_ pointer: UnsafeMutableRawPointer) -> Self {
+  static func fromUnsafeRetained(_ pointer: UnsafeRawPointer) -> Self {
     return Unmanaged<Self>.fromOpaque(pointer).takeRetainedValue()
   }
 
   func toUnsafeUnretained() -> UnsafeMutableRawPointer {
     return Unmanaged.passUnretained(self).toOpaque()
   }
-  static func fromUnsafeUnretained(_ pointer: UnsafeMutableRawPointer) -> Self {
+  static func fromUnsafeUnretained(_ pointer: UnsafeRawPointer) -> Self {
     return Unmanaged<Self>.fromOpaque(pointer).takeUnretainedValue()
   }
 }

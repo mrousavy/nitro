@@ -34,11 +34,9 @@ public final class Func_std__shared_ptr_Promise_double__: UnsafeTransferable {
     }()
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_std__shared_ptr_Promise_double__ from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_double__ {
     return Self.fromUnsafeRetained(pointer)

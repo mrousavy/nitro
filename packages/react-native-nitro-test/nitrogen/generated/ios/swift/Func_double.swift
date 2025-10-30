@@ -27,11 +27,9 @@ public final class Func_double: UnsafeTransferable {
     return __result
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_double from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_double {
     return Self.fromUnsafeRetained(pointer)

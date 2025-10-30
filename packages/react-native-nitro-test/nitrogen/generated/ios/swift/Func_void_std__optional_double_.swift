@@ -26,11 +26,9 @@ public final class Func_void_std__optional_double_: UnsafeTransferable {
     self.closure(maybe.value)
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_std__optional_double_ from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__optional_double_ {
     return Self.fromUnsafeRetained(pointer)

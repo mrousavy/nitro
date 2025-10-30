@@ -26,11 +26,9 @@ public final class Func_void_int64_t: UnsafeTransferable {
     self.closure(value)
   }
 
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return self.toUnsafeRetained()
-  }
-
+  /**
+   * Cast void* -> Func_void_int64_t from C++
+   */
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_int64_t {
     return Self.fromUnsafeRetained(pointer)
