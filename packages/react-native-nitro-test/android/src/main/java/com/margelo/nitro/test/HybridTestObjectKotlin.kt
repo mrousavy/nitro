@@ -523,6 +523,6 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   companion object {
-    private var totalObjectsAlive: Int = 0
+    private var totalObjectsAlive: Double = 0.0
   }
 }
