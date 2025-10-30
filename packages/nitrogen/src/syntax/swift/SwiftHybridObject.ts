@@ -99,6 +99,13 @@ open func getCxxPart() -> ${cxxType} {
   )
 
   const hasBase = baseClasses.length > 0
+  const hasExternalBase = spec.baseTypes.some((b) => b.config.isExternalConfig)
+  // Make the class + typealias internal instead of public to prevent it from being imported in C++.
+  // If a type with an external inheritance clause is imported in C++, it would break the Swift compiler (-Swift.h)
+  // TODO: When Swift gets @_expose(!Cxx), we can avoid making the class `internal`.
+  const classVisibility = hasExternalBase ? 'internal' : 'open'
+  const aliasVisibility = hasExternalBase ? 'internal' : 'public'
+
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -123,7 +130,7 @@ public extension ${protocolName}_protocol {
 }
 
 /// See \`\`${protocolName}\`\`
-open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
+${classVisibility} class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
   public typealias bridge = ${bridgeNamespace}
   private var _cxxPart: bridge.${weakifyBridge.specializationName} = .init()
 
@@ -139,7 +146,7 @@ open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
  * }
  * \`\`\`
  */
-public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
+${aliasVisibility} typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
   `.trim()
 
   const swiftBridge = createSwiftHybridObjectCxxBridge(spec)

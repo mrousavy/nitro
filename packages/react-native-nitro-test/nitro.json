@@ -28,6 +28,10 @@
       "swift": "HybridPlatformObject",
       "kotlin": "HybridPlatformObject"
     },
+    "SomeExternalObjectSubclass": {
+      "swift": "HybridSomeExternalObjectSubclass",
+      "kotlin": "HybridSomeExternalObjectSubclass"
+    },
     "TestView": {
       "swift": "HybridTestView",
       "kotlin": "HybridTestView"

@@ -6,7 +6,6 @@ import type { Method } from '../Method.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
@@ -266,18 +265,25 @@ if (__result.hasError()) [[unlikely]] {
   const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
   for (const base of spec.baseTypes) {
     const baseName = getHybridObjectName(base.name)
-    cppBaseClasses.push(`public virtual ${baseName.HybridTSpecSwift}`)
-    cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
-    extraImports.push({
-      language: 'c++',
-      name: `${baseName.HybridTSpecSwift}.hpp`,
-      space: 'user',
-      forwardDeclaration: getForwardDeclaration(
+    if (base.config.isExternalConfig) {
+      // It needs to be fully qualified
+      const fullyQualifiedName = base.config.getCxxNamespace(
+        'c++',
+        baseName.HybridTSpecSwift
+      )
+      cppBaseClasses.push(`public virtual ${fullyQualifiedName}`)
+      cppBaseCtorCalls.push(`${fullyQualifiedName}(swiftPart)`)
+    } else {
+      cppBaseClasses.push(`public virtual ${baseName.HybridTSpecSwift}`)
+      cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
+    }
+    extraImports.push(
+      ...base.config.getRequiredImports(
+        'c++',
         'class',
-        baseName.HybridTSpecSwift,
-        cxxNamespace
-      ),
-    })
+        baseName.HybridTSpecSwift
+      )
+    )
   }
 
   const extraIncludes = extraImports

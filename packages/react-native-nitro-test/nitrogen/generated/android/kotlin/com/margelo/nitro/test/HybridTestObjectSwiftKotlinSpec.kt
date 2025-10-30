@@ -511,6 +511,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun createExternalObjectSubclass(): HybridSomeExternalObjectSubclassSpec
+  
+  @DoNotStrip
+  @Keep
   abstract fun getTotalNumberOfTestObjectsAlive(): Double
 
   private external fun initHybrid(): HybridData

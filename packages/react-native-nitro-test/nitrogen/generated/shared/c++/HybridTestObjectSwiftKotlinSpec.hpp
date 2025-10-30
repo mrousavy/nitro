@@ -43,9 +43,11 @@ namespace margelo::nitro::test { class HybridChildSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `HybridSomeExternalObjectSubclassSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridSomeExternalObjectSubclassSpec; }
 
-#include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
@@ -71,6 +73,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include "HybridSomeExternalObjectSubclassSpec.hpp"
 
 namespace margelo::nitro::test {
 
@@ -207,6 +210,7 @@ namespace margelo::nitro::test {
       virtual bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() = 0;
+      virtual std::shared_ptr<HybridSomeExternalObjectSubclassSpec> createExternalObjectSubclass() = 0;
       virtual double getTotalNumberOfTestObjectsAlive() = 0;
 
     protected:

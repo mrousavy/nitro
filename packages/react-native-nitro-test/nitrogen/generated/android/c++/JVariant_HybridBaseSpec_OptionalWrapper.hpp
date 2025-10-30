@@ -10,8 +10,8 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <memory>
 #include "HybridBaseSpec.hpp"
+#include <memory>
 #include "OptionalWrapper.hpp"
 #include <variant>
 #include "JHybridBaseSpec.hpp"

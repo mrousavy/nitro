@@ -738,6 +738,14 @@ namespace margelo::nitro::test {
     auto __value = std::move(__result.value());
     return __value;
   }
+  std::shared_ptr<HybridSomeExternalObjectSubclassSpec> HybridTestObjectSwiftKotlinSpecSwift::createExternalObjectSubclass() {
+    auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::createExternalObjectSubclass(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
   double HybridTestObjectSwiftKotlinSpecSwift::getTotalNumberOfTestObjectsAlive() {
     auto __result = NitroTest::HybridTestObjectSwiftKotlinSpec_cxx::getTotalNumberOfTestObjectsAlive(_swiftPart);
     if (__result.hasError()) [[unlikely]] {

@@ -11,6 +11,7 @@ import {
   CustomString,
   Base,
   HybridPlatformObject,
+  HybridSomeExternalObjectSubclass,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -1716,13 +1717,42 @@ export function getTests(
         .didNotThrow()
         .equals(HybridSomeExternalObject)
     ),
-    createTest('createInternalObject(...) returns a different subclass', () =>
+    createTest('SomeExternalObject.getValue() returns "Hello world!"', () =>
+      it(() => HybridSomeExternalObject.getValue())
+        .didNotThrow()
+        .equals('Hello world!')
+    ),
+    createTest(
+      'SomeExternalObjectSubclass.getValue() returns "overridden!"',
+      () =>
+        it(() => HybridSomeExternalObjectSubclass.getValue())
+          .didNotThrow()
+          .equals('overridden!')
+    ),
+    createTest(
+      'SomeExternalObjectSubclass.getSubclassedValue() returns "subclassed!"',
+      () =>
+        it(() => HybridSomeExternalObjectSubclass.getSubclassedValue())
+          .didNotThrow()
+          .equals('subclassed!')
+    ),
+    createTest('createExternalObjectSubclass() returns "subclassed!"', () =>
       it(() => {
-        const object = testObject.createInternalObject()
-        return object.getValue()
+        const object = testObject.createExternalObjectSubclass()
+        return object.getSubclassedValue()
       })
         .didNotThrow()
-        .equals('This is overridden!')
+        .equals('subclassed!')
+    ),
+    createTest(
+      'SomeInternalObject.getValue() returns "This is overridden!"',
+      () =>
+        it(() => {
+          const object = testObject.createInternalObject()
+          return object.getValue()
+        })
+          .didNotThrow()
+          .equals('This is overridden!')
     ),
     createTest(
       'getTotalNumberOfTestObjectsAlive() ref-count increases by 10 after creating 10 objects',
