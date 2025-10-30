@@ -1,5 +1,5 @@
 //
-//  MemoryHelper.hpp
+//  SwiftReferences.hpp
 //  NitroModules
 //
 //  Created by Marc Rousavy on 30.10.25.
@@ -11,7 +11,7 @@
 
 namespace margelo::nitro {
 
-namespace MemoryHelper {
+namespace SwiftReferences {
 
   /**
    * Increments the ref-count on the unsafe Swift reference by +1.
@@ -24,6 +24,6 @@ namespace MemoryHelper {
    */
   void releaseOne(void* NON_NULL ref);
 
-} // namespace MemoryHelper
+} // namespace SwiftReferences
 
 } // namespace margelo::nitro

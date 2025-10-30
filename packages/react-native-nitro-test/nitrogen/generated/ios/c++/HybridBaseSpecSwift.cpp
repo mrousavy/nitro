@@ -7,17 +7,17 @@
 
 #include "HybridBaseSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/MemoryHelper.hpp>
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace margelo::nitro::test {
 
   HybridBaseSpecSwift::HybridBaseSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridBaseSpec::TAG),
     _swiftPart(swiftPart) {
-    MemoryHelper::retainOne(_swiftPart);
+    SwiftReferences::retainOne(_swiftPart);
   }
   HybridBaseSpecSwift::~HybridBaseSpecSwift() {
-    MemoryHelper::releaseOne(_swiftPart);
+    SwiftReferences::releaseOne(_swiftPart);
   }
 
   size_t HybridBaseSpecSwift::getExternalMemorySize() noexcept {

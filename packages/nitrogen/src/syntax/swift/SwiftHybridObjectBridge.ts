@@ -351,17 +351,17 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 #include "${name.HybridTSpecSwift}.hpp"
 #include "${getUmbrellaHeaderName()}"
-#include <NitroModules/MemoryHelper.hpp>
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace ${cxxNamespace} {
 
   ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(void* NON_NULL /* unretained */ swiftPart):
     ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
     _swiftPart(swiftPart) {
-    MemoryHelper::retainOne(_swiftPart);
+    SwiftReferences::retainOne(_swiftPart);
   }
   ${name.HybridTSpecSwift}::~${name.HybridTSpecSwift}() {
-    MemoryHelper::releaseOne(_swiftPart);
+    SwiftReferences::releaseOne(_swiftPart);
   }
 
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
