@@ -11,7 +11,7 @@ class HybridSomeExternalObjectSubclass: HybridSomeExternalObjectSubclassSpec {
   func getValue() throws -> String {
     return "overridden!"
   }
-  
+
   func getSubclassedValue() -> String {
     return "subclassed!"
   }
