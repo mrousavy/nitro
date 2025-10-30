@@ -137,6 +137,16 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return a
   }
 
+  override fun copyAnyValues(map: AnyMap): AnyMap {
+    val keys = map.getAllKeys()
+    var newMap = AnyMap()
+    for (key in keys) {
+      val any = map.getAnyValue(key)
+      newMap.setAnyValue(key, any)
+    }
+    return newMap
+  }
+
   override fun mapRoundtrip(map: AnyMap): AnyMap {
     return map
   }

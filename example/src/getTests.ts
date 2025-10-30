@@ -571,6 +571,11 @@ export function getTests(
         .didNotThrow()
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
+    createTest('copyAnyValues(...) works', () =>
+      it(() => testObject.copyAnyValues(TEST_MAP))
+        .didNotThrow()
+        .equals(TEST_MAP)
+    ),
 
     // Test errors
     createTest('funcThatThrows() throws', () =>

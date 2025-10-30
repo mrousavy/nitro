@@ -77,6 +77,8 @@ class AnyMap {
 
   external fun getAnyObject(key: String): AnyObject
 
+  external fun getAnyValue(key: String): AnyValue
+
   @FastNative
   external fun setNull(key: String)
 
@@ -113,6 +115,17 @@ class AnyMap {
     key: String,
     value: AnyObject,
   )
+
+  external fun setAnyValue(
+    key: String,
+    value: AnyValue,
+  )
+
+  fun setAny(
+    key: String,
+    value: Any,
+  ) {
+  }
 
   external fun merge(other: AnyMap)
 

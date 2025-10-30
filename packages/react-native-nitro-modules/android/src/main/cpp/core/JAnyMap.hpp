@@ -119,6 +119,10 @@ protected:
     }
     return javaMap;
   }
+  jni::alias_ref<JAnyValue::javaobject> getAnyValue(const std::string& key) {
+    const auto& any = _map->getAny(key);
+    return JAnyValue::create(any);
+  }
 
 protected:
   void setNull(const std::string& key) {
@@ -153,6 +157,9 @@ protected:
       map.emplace(entry.first->toStdString(), entry.second->cthis()->getValue());
     }
     _map->setObject(key, map);
+  }
+  void setAnyValue(const std::string& key, const jni::alias_ref<JAnyValue::javaobject>& value) {
+    _map->setAny(key, value->cthis()->getValue());
   }
 
 protected:
@@ -196,6 +203,7 @@ public:
         makeNativeMethod("getString", JAnyMap::getString),
         makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
         makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
+        makeNativeMethod("getAnyValue", JAnyMap::getAnyValue),
         // set
         makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
@@ -204,6 +212,7 @@ public:
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
+        makeNativeMethod("setAnyValue", JAnyMap::setAnyValue),
         // merge
         makeNativeMethod("merge", JAnyMap::merge),
     });
