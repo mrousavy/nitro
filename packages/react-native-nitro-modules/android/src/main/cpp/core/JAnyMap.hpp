@@ -30,6 +30,12 @@ public:
     return makeCxxInstance();
   }
   /**
+   * Create a new, empty `AnyMap` with the given preallocated size from Java.
+   */
+  static jni::local_ref<JAnyMap::jhybriddata> initHybridPreallocatedSize(jni::alias_ref<jhybridobject>, jint preallocatedSize) {
+    return makeCxxInstance(preallocatedSize);
+  }
+  /**
    * Create a new `JAnyMap` from an existing `AnyMap`.
    */
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
@@ -39,6 +45,9 @@ public:
 private:
   JAnyMap() {
     _map = AnyMap::make();
+  }
+  JAnyMap(jint preallocatedSize) {
+    _map = AnyMap::make(static_cast<size_t>(preallocatedSize));
   }
   explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
@@ -183,6 +192,7 @@ public:
     registerHybrid({
         // init
         makeNativeMethod("initHybrid", JAnyMap::initHybrid),
+        makeNativeMethod("initHybrid", JAnyMap::initHybridPreallocatedSize),
         // helpers
         makeNativeMethod("contains", JAnyMap::contains),
         makeNativeMethod("remove", JAnyMap::remove),

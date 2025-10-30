@@ -174,6 +174,28 @@ class AnyValue {
 
   private external fun initHybrid(value: AnyObject): HybridData
 
+  fun toAny(): Any? {
+    if (isNull()) {
+      return null
+    } else if (isDouble()) {
+      return asDouble()
+    } else if (isBigInt()) {
+      return asBigInt()
+    } else if (isBoolean()) {
+      return asBoolean()
+    } else if (isString()) {
+      return asString()
+    } else if (isAnyArray()) {
+      val mapped = asAnyArray().map { it.toAny() }
+      return mapped.toTypedArray()
+    } else if (isAnyObject()) {
+      val mapped = asAnyObject().mapValues { (key, value) -> value.toAny() }
+      return mapped
+    } else {
+      throw Error("AnyValue holds unknown type!")
+    }
+  }
+
   companion object {
     fun fromAny(value: Any?): AnyValue {
       when (value) {

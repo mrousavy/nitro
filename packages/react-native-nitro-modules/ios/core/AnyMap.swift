@@ -454,8 +454,7 @@ extension AnyMap {
     let keys = self.getAllKeys()
     dictionary.reserveCapacity(keys.count)
     for key in keys {
-      let value = self.getAny(key: key)
-      dictionary[key] = value
+      dictionary[key] = self.getAny(key: key)
     }
     return dictionary
   }

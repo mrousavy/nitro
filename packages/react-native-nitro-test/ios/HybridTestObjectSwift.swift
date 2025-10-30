@@ -203,12 +203,8 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func copyAnyValues(map: AnyMap) throws -> AnyMap {
-    let newMap = AnyMap()
-    for key in map.getAllKeys() {
-      let any = map.getAny(key: key)
-      try newMap.setAny(key: key, value: any)
-    }
-    return newMap
+    let dictionary = map.toAnyDictionary()
+    return try AnyMap.fromAnyDictionary(dictionary)
   }
 
   func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
