@@ -17,8 +17,8 @@
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
 #include <string>
-#include <memory>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <memory>
 
 namespace margelo::nitro::test {
 

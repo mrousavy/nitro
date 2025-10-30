@@ -10,8 +10,8 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 #include "Person.hpp"
 #include <variant>
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"

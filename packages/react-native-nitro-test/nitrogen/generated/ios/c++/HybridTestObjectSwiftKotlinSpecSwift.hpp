@@ -9,8 +9,8 @@
 
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 
-#include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>

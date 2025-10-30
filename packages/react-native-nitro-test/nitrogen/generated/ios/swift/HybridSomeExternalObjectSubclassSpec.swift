@@ -27,7 +27,7 @@ public extension HybridSomeExternalObjectSubclassSpec_protocol {
 }
 
 /// See ``HybridSomeExternalObjectSubclassSpec``
-open class HybridSomeExternalObjectSubclassSpec_base: HybridSomeExternalObjectSpec_base {
+internal class HybridSomeExternalObjectSubclassSpec_base: HybridSomeExternalObjectSpec_base {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSubclassSpec_ = .init()
 
@@ -62,4 +62,4 @@ open class HybridSomeExternalObjectSubclassSpec_base: HybridSomeExternalObjectSp
  * }
  * ```
  */
-public typealias HybridSomeExternalObjectSubclassSpec = HybridSomeExternalObjectSubclassSpec_protocol & HybridSomeExternalObjectSubclassSpec_base
+internal typealias HybridSomeExternalObjectSubclassSpec = HybridSomeExternalObjectSubclassSpec_protocol & HybridSomeExternalObjectSubclassSpec_base

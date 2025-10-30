@@ -40,8 +40,8 @@ namespace margelo::nitro::test { struct SecondMapWrapper; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
-#include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <memory>
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>

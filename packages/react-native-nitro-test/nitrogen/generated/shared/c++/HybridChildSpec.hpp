@@ -21,8 +21,8 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 #include <string>
 #include "Car.hpp"
 #include <variant>
-#include <memory>
 #include "HybridBaseSpec.hpp"
+#include <memory>
 
 namespace margelo::nitro::test {
 

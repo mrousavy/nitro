@@ -18,8 +18,8 @@
 
 #include "ColorScheme.hpp"
 #include <functional>
-#include <memory>
 #include "HybridTestViewSpec.hpp"
+#include <memory>
 #include <optional>
 
 namespace margelo::nitro::test::views {

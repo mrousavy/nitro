@@ -1,6 +1,11 @@
 import chalk from 'chalk'
 import { readUserConfig } from './getConfig.js'
 import type { NitroUserConfig } from './NitroUserConfig.js'
+import type { SourceImport } from '../syntax/SourceFile.js'
+import {
+  getForwardDeclaration,
+  type DeclarationKind,
+} from '../syntax/c++/getForwardDeclaration.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
@@ -135,5 +140,79 @@ export class NitroConfig {
 
   getSwiftBridgeNamespace(language: 'c++' | 'swift'): string {
     return this.getCxxNamespace(language, 'bridge', 'swift')
+  }
+
+  private getExternalCxxImportName(): string {
+    // TODO: We currently don't have a xplat way of handling import paths, therefore iosModuleName and androidCxxLibName need to have the same value.
+    if (this.getIosModuleName() !== this.getAndroidCxxLibName()) {
+      throw new Error(
+        `Cannot import external type if it's nitro.json's iosModuleName (${this.getIosModuleName()}) and androidCxxLibName (${this.getAndroidCxxLibName()}) are not the same value!`
+      )
+    }
+    return this.getIosModuleName()
+  }
+
+  getRequiredImports(
+    language: SourceImport['language'],
+    kind: DeclarationKind,
+    className: string
+  ): SourceImport[] {
+    switch (language) {
+      case 'c++':
+        // C++ either uses shorthand ("Header.h") or fully qualified (<Module/Header.h>)
+        const forwardDecl = getForwardDeclaration(
+          kind,
+          className,
+          this.getCxxNamespace('c++')
+        )
+        if (this.isExternalConfig) {
+          const moduleName = this.getExternalCxxImportName()
+          return [
+            {
+              language: 'c++',
+              name: `${moduleName}/${className}.hpp`,
+              space: 'system',
+              forwardDeclaration: forwardDecl,
+            },
+          ]
+        } else {
+          return [
+            {
+              language: 'c++',
+              name: `${className}.hpp`,
+              space: 'user',
+              forwardDeclaration: forwardDecl,
+            },
+          ]
+        }
+      case 'kotlin':
+        // Kotlin namespaces are always fully qualified
+        if (this.isExternalConfig) {
+          return [
+            {
+              language: 'kotlin',
+              name: this.getAndroidPackage('java/kotlin', className),
+              space: 'user',
+            },
+          ]
+        } else {
+          // If it's not an external config, we can just omit it as we are in the same pacakge
+          return []
+        }
+      case 'swift':
+        // Swift namespaces import everything by module
+        if (this.isExternalConfig) {
+          return [
+            {
+              language: 'swift',
+              name: this.getIosModuleName(),
+              space: 'user',
+            },
+          ]
+        } else {
+          // we don't need to import ourself.
+          return []
+        }
+    }
   }
 }

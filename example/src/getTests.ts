@@ -1727,7 +1727,7 @@ export function getTests(
       () =>
         it(() => HybridSomeExternalObjectSubclass.getValue())
           .didNotThrow()
-          .equals('subclassed!')
+          .equals('overridden!')
     ),
     createTest(
       'SomeExternalObjectSubclass.getSubclassedValue() returns "subclassed!"',

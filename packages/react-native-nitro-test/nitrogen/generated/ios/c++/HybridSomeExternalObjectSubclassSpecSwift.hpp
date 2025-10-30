@@ -10,7 +10,7 @@
 #include "HybridSomeExternalObjectSubclassSpec.hpp"
 
 #include <string>
-#include "HybridSomeExternalObjectSpecSwift.hpp"
+#include <NitroTestExternal/HybridSomeExternalObjectSpecSwift.hpp>
 
 namespace margelo::nitro::test {
 
@@ -24,7 +24,7 @@ namespace margelo::nitro::test {
    * the future, HybridSomeExternalObjectSubclassSpec_cxx can directly inherit from the C++ class HybridSomeExternalObjectSubclassSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridSomeExternalObjectSubclassSpecSwift: public virtual HybridSomeExternalObjectSubclassSpec, public virtual HybridSomeExternalObjectSpecSwift {
+  class HybridSomeExternalObjectSubclassSpecSwift: public virtual HybridSomeExternalObjectSubclassSpec, public virtual margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift {
   public:
     // Constructor from an unmanaged Swift instance. This retains +1
     explicit HybridSomeExternalObjectSubclassSpecSwift(void* NON_NULL /* unretained */ swiftPart);

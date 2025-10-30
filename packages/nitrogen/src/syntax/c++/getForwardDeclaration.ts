@@ -1,4 +1,4 @@
-type DeclarationKind = 'class' | 'struct' | 'enum class'
+export type DeclarationKind = 'class' | 'struct' | 'enum class'
 
 export function getForwardDeclaration(
   kind: DeclarationKind,

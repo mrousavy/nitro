@@ -14,7 +14,7 @@ namespace margelo::nitro::test {
   // pragma MARK: Constructor / Destructor
   HybridSomeExternalObjectSubclassSpecSwift::HybridSomeExternalObjectSubclassSpecSwift(void* NON_NULL /* unretained */ swiftPart):
     HybridObject(HybridSomeExternalObjectSubclassSpec::TAG),
-    HybridSomeExternalObjectSpecSwift(swiftPart),
+    margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift(swiftPart),
     _swiftPart(swiftPart) {
     SwiftReferences::retainOne(_swiftPart);
   }
