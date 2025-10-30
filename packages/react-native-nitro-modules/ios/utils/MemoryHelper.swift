@@ -16,7 +16,6 @@ public final class MemoryHelper {
    * total memory footprint.
    */
   @inline(__always)
-  @inlinable
   public static func getSizeOf(_ instance: AnyObject) -> Int {
     return malloc_size(Unmanaged.passUnretained(instance).toOpaque())
   }
