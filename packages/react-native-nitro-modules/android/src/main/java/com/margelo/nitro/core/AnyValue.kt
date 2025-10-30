@@ -31,6 +31,12 @@ class AnyValue {
     mHybridData = initHybrid()
   }
 
+  @DoNotStrip
+  @Keep
+  private constructor(mHybridData: HybridData) {
+    this.mHybridData = mHybridData
+  }
+
   /**
    * Create a new [AnyValue] that holds the given [Double]
    */

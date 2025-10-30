@@ -401,13 +401,10 @@ extension AnyValue {
     case let value as [String: Any]:
       let map = try value.mapValues { try AnyValue.fromAny($0) }
       return AnyValue.object(map)
-    case is AnyValue:
-    case is AnyMap:
-    case is margelo.nitro.AnyValue:
-    case is margelo.nitro.AnyArray:
-    case is margelo.nitro.AnyObject:
+    case is AnyValue, is AnyMap, is margelo.nitro.AnyValue, is margelo.nitro.AnyArray,
+      is margelo.nitro.AnyObject:
       throw RuntimeError.error(
-        withMessage: "Cannot box AnyValue (\(String(describing: value))) twice!")
+        withMessage: "Cannot box AnyValue (\(String(describing: any))) twice!")
     default:
       throw RuntimeError.error(
         withMessage: "Value \(String(describing: any)) cannot be represented as AnyValue!")
