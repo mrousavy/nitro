@@ -108,6 +108,7 @@ extension Promise {
   /**
    * Create a new `Promise<T>` that runs the given `run` function on a parallel Thread/`DispatchQueue`.
    */
+  @preconcurrency
   public static func parallel(
     _ queue: DispatchQueue = .global(),
     _ run: @escaping @Sendable () throws -> T
