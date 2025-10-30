@@ -17,6 +17,7 @@
 
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridExternalSubclassSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
@@ -45,6 +46,7 @@ int initialize(JavaVM* vm) {
     // Register native JNI methods
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
+    margelo::nitro::test::JHybridExternalSubclassSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
