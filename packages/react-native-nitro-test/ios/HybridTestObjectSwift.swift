@@ -196,6 +196,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   func getMapKeys(map: AnyMap) throws -> [String] {
     return map.getAllKeys()
   }
+  
+  func mergeMaps(a: AnyMap, b: AnyMap) throws -> AnyMap {
+    a.merge(other: b)
+    return a
+  }
 
   func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectSwift()

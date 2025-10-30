@@ -193,8 +193,8 @@ const std::unordered_map<std::string, AnyValue>& AnyMap::getMap() const {
   return _map;
 }
 
-void AnyMap::merge(const AnyMap &other) {
-  for (auto& [key, value] : other._map) {
+void AnyMap::merge(const std::shared_ptr<AnyMap>& other) {
+  for (auto& [key, value] : other->_map) {
     _map[key] = value;
   }
 }

@@ -449,6 +449,11 @@ namespace margelo::nitro::test {
       return __vector;
     }();
   }
+  std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* a */, jni::alias_ref<JAnyMap::javaobject> /* b */)>("mergeMaps");
+    auto __result = method(_javaPart, JAnyMap::create(a), JAnyMap::create(b));
+    return __result->cthis()->getMap();
+  }
   std::unordered_map<std::string, std::variant<bool, double>> JHybridTestObjectSwiftKotlinSpec::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_Boolean_Double>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_Boolean_Double>> /* map */)>("bounceMap");
     auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_Boolean_Double>> {
