@@ -155,6 +155,11 @@ protected:
     _map->setObject(key, map);
   }
 
+protected:
+  void merge(jni::alias_ref<JAnyMap::javaobject> other) {
+    _map->merge(other->cthis()->_map);
+  }
+
 public:
   std::shared_ptr<AnyMap> getMap() const {
     return _map;
@@ -198,6 +203,8 @@ public:
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
+        // merge
+        makeNativeMethod("merge", JAnyMap::merge),
     });
   }
 };

@@ -114,5 +114,7 @@ class AnyMap {
     value: AnyObject,
   )
 
+  external fun merge(other: AnyMap)
+
   private external fun initHybrid(): HybridData
 }
