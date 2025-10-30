@@ -9,10 +9,10 @@ import Foundation
 
 public protocol UnsafeTransferable: AnyObject {
   func toUnsafeRetained() -> UnsafeMutableRawPointer
-  static func fromUnsafeRetained(_ pointer: UnsafeMutableRawPointer) -> Self
+  static func fromUnsafeRetained(_ pointer: UnsafeRawPointer) -> Self
 
   func toUnsafeUnretained() -> UnsafeMutableRawPointer
-  static func fromUnsafeUnretained(_ pointer: UnsafeMutableRawPointer) -> Self
+  static func fromUnsafeUnretained(_ pointer: UnsafeRawPointer) -> Self
 }
 public extension UnsafeTransferable {
   func toUnsafeRetained() -> UnsafeMutableRawPointer {
