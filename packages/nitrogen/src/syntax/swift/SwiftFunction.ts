@@ -60,6 +60,16 @@ public final class ${swiftClassName}: UnsafeTransferable {
   public func call(${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} {
     ${indent(body, '    ')}
   }
+
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return self.toUnsafeRetained()
+  }
+
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${swiftClassName} {
+    return Self.fromUnsafeRetained(pointer)
+  }
 }
   `.trim()
 

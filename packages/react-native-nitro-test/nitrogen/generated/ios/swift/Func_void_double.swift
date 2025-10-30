@@ -25,4 +25,14 @@ public final class Func_void_double: UnsafeTransferable {
   public func call(value: Double) -> Void {
     self.closure(value)
   }
+
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return self.toUnsafeRetained()
+  }
+
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_double {
+    return Self.fromUnsafeRetained(pointer)
+  }
 }

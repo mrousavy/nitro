@@ -26,4 +26,14 @@ public final class Func_double: UnsafeTransferable {
     let __result: Double = self.closure()
     return __result
   }
+
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return self.toUnsafeRetained()
+  }
+
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_double {
+    return Self.fromUnsafeRetained(pointer)
+  }
 }

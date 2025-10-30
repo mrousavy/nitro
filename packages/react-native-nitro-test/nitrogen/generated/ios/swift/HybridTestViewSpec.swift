@@ -27,7 +27,7 @@ public extension HybridTestViewSpec_protocol {
   }
 }
 
-open class HybridTestViewSpec_base {
+open class HybridTestViewSpec_base: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_ = .init()
 

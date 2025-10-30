@@ -117,7 +117,7 @@ public extension HybridTestObjectSwiftKotlinSpec_protocol {
   }
 }
 
-open class HybridTestObjectSwiftKotlinSpec_base {
+open class HybridTestObjectSwiftKotlinSpec_base: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = .init()
 

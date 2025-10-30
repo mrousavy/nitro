@@ -24,7 +24,7 @@ public extension HybridSomeExternalObjectSpec_protocol {
   }
 }
 
-open class HybridSomeExternalObjectSpec_base {
+open class HybridSomeExternalObjectSpec_base: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.external.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSpec_ = .init()
 

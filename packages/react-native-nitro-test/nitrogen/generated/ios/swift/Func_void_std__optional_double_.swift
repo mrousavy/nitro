@@ -25,4 +25,14 @@ public final class Func_void_std__optional_double_: UnsafeTransferable {
   public func call(maybe: bridge.std__optional_double_) -> Void {
     self.closure(maybe.value)
   }
+
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return self.toUnsafeRetained()
+  }
+
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__optional_double_ {
+    return Self.fromUnsafeRetained(pointer)
+  }
 }

@@ -68,6 +68,7 @@ open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
 `.trim()
     )
   } else {
+    baseClasses.push('UnsafeTransferable')
     baseMethods.push(
       `
 public init() { }
@@ -98,7 +99,6 @@ open func getCxxPart() -> ${cxxType} {
     ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
 
-  const hasBase = baseClasses.length > 0
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -121,7 +121,7 @@ public extension ${protocolName}_protocol {
   }
 }
 
-open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
+open class ${protocolName}_base: ${baseClasses.join(', ')} {
   public typealias bridge = ${bridgeNamespace}
   private var _cxxPart: bridge.${weakifyBridge.specializationName} = .init()
 

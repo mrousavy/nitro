@@ -24,7 +24,7 @@ public extension HybridPlatformObjectSpec_protocol {
   }
 }
 
-open class HybridPlatformObjectSpec_base {
+open class HybridPlatformObjectSpec_base: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
   private var _cxxPart: bridge.std__weak_ptr_HybridPlatformObjectSpec_ = .init()
 
