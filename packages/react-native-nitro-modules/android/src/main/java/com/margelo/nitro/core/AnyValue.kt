@@ -190,6 +190,9 @@ class AnyValue {
           val mapped = value.map { (k, v) -> k.toString() to AnyValue.fromAny(v) }
           return AnyValue(mapped.toMap())
         }
+        is AnyValue, is AnyMap -> {
+          throw Error("Cannot box AnyValue ($value) twice!")
+        }
         else -> throw Error("Value \"$value\" cannot be represented as AnyValue!")
       }
     }

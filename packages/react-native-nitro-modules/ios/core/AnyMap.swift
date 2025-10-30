@@ -156,9 +156,10 @@ public final class AnyMap: @unchecked Sendable {
    * If no value exists at the given key,
    * this function throws.
    */
-  public func getAny(key: String) -> AnyValue {
+  public func getAny(key: String) -> Any {
     let value = cppPart.pointee.getAny(std.string(key))
-    return AnyValue.create(value)
+    let any = AnyValue.create(value)
+    return any.toAny()
   }
 
   // pragma MARK: Setters
@@ -210,6 +211,15 @@ public final class AnyMap: @unchecked Sendable {
    */
   public func setObject(key: String, value: [String: AnyValue]) {
     cppPart.pointee.setObject(std.string(key), margelo.nitro.AnyObject.create(value))
+  }
+
+  /**
+   * Set the given key to the given any value.
+   */
+  public func setAny(key: String, value: Any) throws {
+    let swiftAny = try AnyValue.fromAny(value)
+    let cppAny = margelo.nitro.AnyValue.create(swiftAny)
+    cppPart.pointee.setAny(std.string(key), cppAny)
   }
 
   // pragma MARK: Is Getters
@@ -391,6 +401,13 @@ extension AnyValue {
     case let value as [String: Any]:
       let map = try value.mapValues { try AnyValue.fromAny($0) }
       return AnyValue.object(map)
+    case is AnyValue:
+    case is AnyMap:
+    case is margelo.nitro.AnyValue:
+    case is margelo.nitro.AnyArray:
+    case is margelo.nitro.AnyObject:
+      throw RuntimeError.error(
+        withMessage: "Cannot box AnyValue (\(String(describing: value))) twice!")
     default:
       throw RuntimeError.error(
         withMessage: "Value \(String(describing: any)) cannot be represented as AnyValue!")
@@ -421,14 +438,14 @@ extension AnyValue {
 
 extension AnyMap {
   public static func fromAnyDictionary(_ dictionary: [String: Any]) throws -> AnyMap {
-    var map = AnyMap(withPreallocatedSize: dictionary.count)
+    let map = AnyMap(withPreallocatedSize: dictionary.count)
     for (key, value) in dictionary {
       try map.setAny(key: key, value: value)
     }
     return map
   }
   public static func fromAnyDictionaryIgnoreIncompatible(_ dictionary: [String: Any]) -> AnyMap {
-    var map = AnyMap(withPreallocatedSize: dictionary.count)
+    let map = AnyMap(withPreallocatedSize: dictionary.count)
     for (key, value) in dictionary {
       try? map.setAny(key: key, value: value)
     }
@@ -441,15 +458,9 @@ extension AnyMap {
     dictionary.reserveCapacity(keys.count)
     for key in keys {
       let value = self.getAny(key: key)
-      dictionary[key] = value.toAny()
+      dictionary[key] = value
     }
     return dictionary
-  }
-
-  public func setAny(key: String, value: Any) throws {
-    let swiftAny = try AnyValue.fromAny(value)
-    let cppAny = margelo.nitro.AnyValue.create(swiftAny)
-    cppPart.pointee.setAny(std.string(key), cppAny)
   }
 }
 
