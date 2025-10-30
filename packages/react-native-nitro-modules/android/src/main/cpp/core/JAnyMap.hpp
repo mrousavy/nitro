@@ -100,7 +100,7 @@ protected:
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
-  jni::alias_ref<JAnyArray> getAnyArray(const std::string& key) {
+  jni::local_ref<JAnyArray> getAnyArray(const std::string& key) {
     const auto& vector = _map->getArray(key);
     auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
     for (size_t i = 0; i < vector.size(); i++) {
@@ -109,7 +109,7 @@ protected:
     }
     return javaArray;
   }
-  jni::alias_ref<JAnyObject> getAnyObject(const std::string& key) {
+  jni::local_ref<JAnyObject> getAnyObject(const std::string& key) {
     const auto& map = _map->getObject(key);
     auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
     for (const auto& entry : map) {
@@ -119,7 +119,7 @@ protected:
     }
     return javaMap;
   }
-  jni::alias_ref<JAnyValue::javaobject> getAnyValue(const std::string& key) {
+  jni::local_ref<JAnyValue::javaobject> getAnyValue(const std::string& key) {
     const auto& any = _map->getAny(key);
     return JAnyValue::create(any);
   }
