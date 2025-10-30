@@ -9,6 +9,7 @@ class HybridSomeExternalObjectSubclass : HybridSomeExternalObjectSubclassSpec() 
   override fun getValue(): String {
     return "overridden!"
   }
+
   override fun getSubclassedValue(): String {
     return "subclassed!"
   }
