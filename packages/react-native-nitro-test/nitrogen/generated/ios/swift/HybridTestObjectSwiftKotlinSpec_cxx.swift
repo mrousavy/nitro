@@ -311,7 +311,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       if let __unwrappedValue = __value {
         return bridge.create_std__optional_std__function_void_double____value______({ () -> bridge.Func_void_double in
           let __closureWrapper = Func_void_double(__unwrappedValue)
-          return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
         }())
       } else {
         return .init()
@@ -969,11 +969,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }
         let __resolverCpp = { () -> bridge.Func_void_double in
           let __closureWrapper = Func_void_double(__resolver)
-          return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
           let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
         }()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(promise)
         __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
@@ -1009,11 +1009,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }
         let __resolverCpp = { () -> bridge.Func_void_Car in
           let __closureWrapper = Func_void_Car(__resolver)
-          return bridge.create_Func_void_Car(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_Car(__closureWrapper.toUnsafeRetained())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
           let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
         }()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_Car__(promise)
         __promiseHolder.addOnResolvedListener(__resolverCpp)
@@ -1047,11 +1047,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
         }
         let __resolverCpp = { () -> bridge.Func_void in
           let __closureWrapper = Func_void(__resolver)
-          return bridge.create_Func_void(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void(__closureWrapper.toUnsafeRetained())
         }()
         let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
           let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
         }()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(promise)
         __promiseHolder.addOnResolvedListener(__resolverCpp)
@@ -1158,11 +1158,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
             }()
             let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__result)
             __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
@@ -1204,11 +1204,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_double__ in
               let __closureWrapper = Func_void_std__shared_ptr_Promise_double__(__resolver)
-              return bridge.create_Func_void_std__shared_ptr_Promise_double__(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__shared_ptr_Promise_double__(__closureWrapper.toUnsafeRetained())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
             }()
             let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(__result)
             __promiseHolder.addOnResolvedListener(__resolverCpp)
@@ -1250,11 +1250,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             }
             let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
               let __closureWrapper = Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__resolver)
-              return bridge.create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__closureWrapper.toUnsafeRetained())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
             }()
             let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(__result)
             __promiseHolder.addOnResolvedListener(__resolverCpp)
@@ -1285,7 +1285,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
       let __result = try __instance.getComplexCallback()
       let __resultCpp = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(__result)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+        return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
       }()
       return bridge.create_Result_std__function_void_double____value______(__resultCpp)
     } catch (let __error) {
@@ -1348,11 +1348,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             }
             let __resolverCpp = { () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__resolver)
-              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
             }()
             let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__result)
             __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
@@ -1394,11 +1394,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
             }
             let __resolverCpp = { () -> bridge.Func_void_std__string in
               let __closureWrapper = Func_void_std__string(__resolver)
-              return bridge.create_Func_void_std__string(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__string(__closureWrapper.toUnsafeRetained())
             }()
             let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
               let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
             }()
             let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__result)
             __promiseHolder.addOnResolvedListener(__resolverCpp)
@@ -1875,11 +1875,11 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
               }
               let __resolverCpp = { () -> bridge.Func_void_double in
                 let __closureWrapper = Func_void_double(__resolver)
-                return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+                return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
               }()
               let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
                 let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-                return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+                return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafeRetained())
               }()
               let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__actual)
               __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
@@ -1900,7 +1900,7 @@ public class HybridTestObjectSwiftKotlinSpec_cxx {
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__({ () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__value)
-              return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+              return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
             }())
           case .third(let __value):
             return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value)

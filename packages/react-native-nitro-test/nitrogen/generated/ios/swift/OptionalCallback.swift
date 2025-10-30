@@ -26,7 +26,7 @@ public extension OptionalCallback {
             case .first(let __value):
               return bridge.create_std__variant_std__function_void_____double_({ () -> bridge.Func_void in
                 let __closureWrapper = Func_void(__value)
-                return bridge.create_Func_void(__closureWrapper.toUnsafe())
+                return bridge.create_Func_void(__closureWrapper.toUnsafeRetained())
               }())
             case .second(let __value):
               return bridge.create_std__variant_std__function_void_____double_(__value)
@@ -76,7 +76,7 @@ public extension OptionalCallback {
               case .first(let __value):
                 return bridge.create_std__variant_std__function_void_____double_({ () -> bridge.Func_void in
                   let __closureWrapper = Func_void(__value)
-                  return bridge.create_Func_void(__closureWrapper.toUnsafe())
+                  return bridge.create_Func_void(__closureWrapper.toUnsafeRetained())
                 }())
               case .second(let __value):
                 return bridge.create_std__variant_std__function_void_____double_(__value)

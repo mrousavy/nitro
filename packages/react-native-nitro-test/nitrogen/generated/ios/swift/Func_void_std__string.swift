@@ -12,7 +12,7 @@ import NitroModules
  * Wraps a Swift `(_ value: String) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
-public final class Func_void_std__string {
+public final class Func_void_std__string: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
   private let closure: (_ value: String) -> Void
@@ -24,24 +24,5 @@ public final class Func_void_std__string {
   @inline(__always)
   public func call(value: std.string) -> Void {
     self.closure(String(value))
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void_std__string`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__string>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__string {
-    return Unmanaged<Func_void_std__string>.fromOpaque(pointer).takeRetainedValue()
   }
 }

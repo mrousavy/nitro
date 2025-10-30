@@ -99,10 +99,10 @@ using namespace ${namespace}::views;
 
 - (void) updateView {
   // 1. Get Swift part
-  void* swiftPart = _hybridView->getSwiftPart();
+  void* NON_NULL swiftPart = _hybridView->getSwiftPart();
 
   // 2. Get UIView*
-  void* viewUnsafe = ${swiftNamespace}::${HybridTSpecCxx}::getView(swiftPart);
+  void* NON_NULL viewUnsafe = ${swiftNamespace}::${HybridTSpecCxx}::getView(swiftPart);
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
   // 3. Update RCTViewComponentView's [contentView]
@@ -114,7 +114,7 @@ using namespace ${namespace}::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
-  void* swiftPart = _hybridView->getSwiftPart();
+  void* NON_NULL swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
   ${swiftNamespace}::${HybridTSpecCxx}::beforeUpdate(swiftPart);

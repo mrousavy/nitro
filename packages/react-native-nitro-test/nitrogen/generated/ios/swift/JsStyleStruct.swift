@@ -21,7 +21,7 @@ public extension JsStyleStruct {
   init(value: Double, onChanged: @escaping (_ num: Double) -> Void) {
     self.init(value, { () -> bridge.Func_void_double in
       let __closureWrapper = Func_void_double(onChanged)
-      return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+      return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
     }())
   }
 
@@ -50,7 +50,7 @@ public extension JsStyleStruct {
     set {
       self.__onChanged = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(newValue)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+        return bridge.create_Func_void_double(__closureWrapper.toUnsafeRetained())
       }()
     }
   }

@@ -12,7 +12,7 @@ import NitroModules
  * Wraps a Swift `() -> Double` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
-public final class Func_double {
+public final class Func_double: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
   private let closure: () -> Double
@@ -25,24 +25,5 @@ public final class Func_double {
   public func call() -> Double {
     let __result: Double = self.closure()
     return __result
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_double`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_double>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_double {
-    return Unmanaged<Func_double>.fromOpaque(pointer).takeRetainedValue()
   }
 }

@@ -12,7 +12,7 @@ import NitroModules
  * Wraps a Swift `() -> Promise<Double>` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
-public final class Func_std__shared_ptr_Promise_double__ {
+public final class Func_std__shared_ptr_Promise_double__: UnsafeTransferable {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
   private let closure: () -> Promise<Double>
@@ -32,24 +32,5 @@ public final class Func_std__shared_ptr_Promise_double__ {
         .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
       return __promise
     }()
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_std__shared_ptr_Promise_double__`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_double__>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_double__ {
-    return Unmanaged<Func_std__shared_ptr_Promise_double__>.fromOpaque(pointer).takeRetainedValue()
   }
 }

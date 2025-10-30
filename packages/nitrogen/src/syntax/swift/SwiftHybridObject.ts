@@ -81,7 +81,7 @@ open func getCxxPart() -> ${cxxType} {
   if Bool(fromCxx: cachedCxxPart) {
     return cachedCxxPart
   } else {
-    let unsafe = Unmanaged.passRetained(self).toOpaque()
+    let unsafe = self.toUnsafeRetained()
     let cxxPart = bridge.${bridgeFunc.funcName}(unsafe)
     _cxxPart = bridge.${weakifyBridge.funcName}(cxxPart)
     return cxxPart

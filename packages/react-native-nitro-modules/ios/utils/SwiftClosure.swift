@@ -10,7 +10,7 @@ import Foundation
 /// Wraps a Swift closure in a Swift class.
 /// This can be used to create unmanaged pointers (`void*`) and
 /// passed to C-style function pointers via `void* context` parameters.
-private final class ClosureWrapper {
+private final class ClosureWrapper: UnsafeTransferable {
   private let closure: () -> Void
 
   init(closure: @escaping () -> Void) {
@@ -32,12 +32,12 @@ extension SwiftClosure {
    */
   public init(wrappingClosure closure: @escaping () -> Void) {
     // Wrap closure in void*, and increment it's ref count so it stays alive.
-    let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
+    let context = ClosureWrapper(closure: closure).toUnsafeRetained()
 
     // Create a C-style Function Pointer, which calls the actual Swift closure.
     func call(context: UnsafeMutableRawPointer) {
       // Unwrap context from void* to closure again. We are assuming that it has not been deleted yet.
-      let closure = Unmanaged<ClosureWrapper>.fromOpaque(context).takeUnretainedValue()
+      let closure = ClosureWrapper.fromUnsafeUnretained(context)
       // Call it!
       closure.invoke()
     }

@@ -841,7 +841,7 @@ case .${label}(let __value):
             return `
 { () -> bridge.${bridge.specializationName} in
   let __closureWrapper = ${bridge.specializationName}(${swiftParameterName})
-  return ${createFunc}(__closureWrapper.toUnsafe())
+  return ${createFunc}(__closureWrapper.toUnsafeRetained())
 }()
   `.trim()
           }

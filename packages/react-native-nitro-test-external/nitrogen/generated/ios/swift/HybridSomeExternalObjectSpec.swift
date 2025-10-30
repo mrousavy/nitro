@@ -35,7 +35,7 @@ open class HybridSomeExternalObjectSpec_base {
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let unsafe = Unmanaged.passRetained(self).toOpaque()
+      let unsafe = self.toUnsafeRetained()
       let cxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(unsafe)
       _cxxPart = bridge.weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(cxxPart)
       return cxxPart

@@ -114,7 +114,7 @@ public class HybridTestViewSpec_cxx {
     let __value = __instance.someCallback
     return { () -> bridge.Func_void in
       let __closureWrapper = Func_void(__value)
-      return bridge.create_Func_void(__closureWrapper.toUnsafe())
+      return bridge.create_Func_void(__closureWrapper.toUnsafeRetained())
     }()
   }
   @inline(__always)

@@ -51,10 +51,10 @@ using namespace margelo::nitro::test::views;
 
 - (void) updateView {
   // 1. Get Swift part
-  void* swiftPart = _hybridView->getSwiftPart();
+  void* NON_NULL swiftPart = _hybridView->getSwiftPart();
 
   // 2. Get UIView*
-  void* viewUnsafe = NitroTest::HybridTestViewSpec_cxx::getView(swiftPart);
+  void* NON_NULL viewUnsafe = NitroTest::HybridTestViewSpec_cxx::getView(swiftPart);
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
   // 3. Update RCTViewComponentView's [contentView]
@@ -66,7 +66,7 @@ using namespace margelo::nitro::test::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
-  void* swiftPart = _hybridView->getSwiftPart();
+  void* NON_NULL swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
   NitroTest::HybridTestViewSpec_cxx::beforeUpdate(swiftPart);
