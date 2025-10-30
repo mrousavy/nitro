@@ -16,6 +16,8 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridExternalSubclassSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridExternalSubclassSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -50,6 +52,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "ColorScheme.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridExternalSubclassSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -92,6 +95,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridExternalSubclassSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridExternalSubclassSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
@@ -100,6 +105,8 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestViewSpec_cxx; }
+
+#include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Umbrella.hpp>
 
 // Include Swift defined types
 #if __has_include("NitroTest-Swift.h")

@@ -29,8 +29,13 @@ def add_nitrogen_files(spec)
     # Generated cross-platform specs
     "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
     # Generated bridges for the cross-platform specs
-    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
+    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}"
   ]
+
+  spec.subspec 'Cxx' do |c|
+    c.source_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+    c.public_header_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+  end
 
   current_public_header_files = Array(spec.attributes_hash['public_header_files'])
   spec.public_header_files = current_public_header_files + [

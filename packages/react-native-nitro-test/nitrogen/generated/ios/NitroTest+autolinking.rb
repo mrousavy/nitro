@@ -29,7 +29,7 @@ def add_nitrogen_files(spec)
     # Generated cross-platform specs
     "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
     # Generated bridges for the cross-platform specs
-    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
+    "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}"
   ]
 
   current_public_header_files = Array(spec.attributes_hash['public_header_files'])
