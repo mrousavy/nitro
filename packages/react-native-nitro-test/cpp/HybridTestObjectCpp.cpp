@@ -226,6 +226,21 @@ std::vector<std::string> HybridTestObjectCpp::getMapKeys(const std::shared_ptr<A
   return map->getAllKeys();
 }
 
+std::shared_ptr<AnyMap> HybridTestObjectCpp::mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) {
+  a->merge(b);
+  return a;
+}
+
+std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyValues(const std::shared_ptr<AnyMap>& map) {
+  auto keys = map->getAllKeys();
+  auto newMap = AnyMap::make();
+  for (const auto& key : keys) {
+    auto any = map->getAny(key);
+    newMap->setAny(key, any);
+  }
+  return newMap;
+}
+
 double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }

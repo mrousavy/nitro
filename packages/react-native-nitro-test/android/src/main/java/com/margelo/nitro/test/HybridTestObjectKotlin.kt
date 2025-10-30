@@ -129,6 +129,19 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return map.getAllKeys()
   }
 
+  override fun mergeMaps(
+    a: AnyMap,
+    b: AnyMap,
+  ): AnyMap {
+    a.merge(b)
+    return a
+  }
+
+  override fun copyAnyValues(map: AnyMap): AnyMap {
+    val copy = map.toMap()
+    return AnyMap.fromMap(copy)
+  }
+
   override fun mapRoundtrip(map: AnyMap): AnyMap {
     return map
   }

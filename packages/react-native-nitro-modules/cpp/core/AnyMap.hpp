@@ -36,15 +36,9 @@ struct AnyValue : VariantType {
  * 3. Objects of primitives
  */
 class AnyMap final {
-public:
-  /**
-   * Create a new instance of AnyMap.
-   */
+private:
   explicit AnyMap() {}
-  /**
-   * Create a new instance of AnyMap with the given amount of spaces pre-allocated.
-   */
-  explicit AnyMap(size_t size) {
+  AnyMap(size_t size) {
     _map.reserve(size);
   }
 
@@ -53,13 +47,13 @@ public:
    * Create a new `shared_ptr` instance of AnyMap.
    */
   static std::shared_ptr<AnyMap> make() {
-    return std::make_shared<AnyMap>();
+    return std::shared_ptr<AnyMap>(new AnyMap());
   }
   /**
    * Create a new `shared_ptr` instance of AnyMap with the given amount of spaces pre-allocated.
    */
   static std::shared_ptr<AnyMap> make(size_t size) {
-    return std::make_shared<AnyMap>(size);
+    return std::shared_ptr<AnyMap>(new AnyMap(size));
   }
 
 public:
@@ -154,6 +148,12 @@ public:
    */
   AnyObject getObject(const std::string& key) const;
 
+  /**
+   * Get the value at the given `key` as it's boxed `AnyValue`.
+   * If no object value exists at the given `key`, this method will throw.
+   */
+  AnyValue getAny(const std::string& key) const;
+
 public:
   /**
    * Set the value at the given key to `null`.
@@ -201,6 +201,12 @@ public:
    * Get the actual C++ map that holds all keys and variant values.
    */
   const std::unordered_map<std::string, AnyValue>& getMap() const;
+
+public:
+  /**
+   * Merge all keys and values from given `other` `AnyMap` into this `AnyMap`.
+   */
+  void merge(const std::shared_ptr<AnyMap>& other);
 
 private:
   std::unordered_map<std::string, AnyValue> _map;

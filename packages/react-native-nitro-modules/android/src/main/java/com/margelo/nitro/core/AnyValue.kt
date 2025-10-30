@@ -31,6 +31,12 @@ class AnyValue {
     mHybridData = initHybrid()
   }
 
+  @DoNotStrip
+  @Keep
+  private constructor(mHybridData: HybridData) {
+    this.mHybridData = mHybridData
+  }
+
   /**
    * Create a new [AnyValue] that holds the given [Double]
    */
@@ -167,4 +173,56 @@ class AnyValue {
   private external fun initHybrid(value: AnyArray): HybridData
 
   private external fun initHybrid(value: AnyObject): HybridData
+
+  fun toAny(): Any? {
+    if (isNull()) {
+      return null
+    } else if (isDouble()) {
+      return asDouble()
+    } else if (isBigInt()) {
+      return asBigInt()
+    } else if (isBoolean()) {
+      return asBoolean()
+    } else if (isString()) {
+      return asString()
+    } else if (isAnyArray()) {
+      val mapped = asAnyArray().map { it.toAny() }
+      return mapped.toTypedArray()
+    } else if (isAnyObject()) {
+      val mapped = asAnyObject().mapValues { (key, value) -> value.toAny() }
+      return mapped
+    } else {
+      throw Error("AnyValue holds unknown type!")
+    }
+  }
+
+  companion object {
+    fun fromAny(value: Any?): AnyValue {
+      when (value) {
+        null -> return AnyValue()
+        is Double -> return AnyValue(value)
+        is Float -> return AnyValue(value.toDouble())
+        is Int -> return AnyValue(value.toDouble())
+        is Boolean -> return AnyValue(value)
+        is Long -> return AnyValue(value)
+        is String -> return AnyValue(value)
+        is Array<*> -> {
+          val mapped = value.map { v -> AnyValue.fromAny(v) }
+          return AnyValue(mapped.toTypedArray())
+        }
+        is List<*> -> {
+          val mapped = value.map { v -> AnyValue.fromAny(v) }
+          return AnyValue(mapped.toTypedArray())
+        }
+        is Map<*, *> -> {
+          val mapped = value.map { (k, v) -> k.toString() to AnyValue.fromAny(v) }
+          return AnyValue(mapped.toMap())
+        }
+        is AnyValue, is AnyMap -> {
+          throw Error("Cannot box AnyValue ($value) twice!")
+        }
+        else -> throw Error("Value \"$value\" cannot be represented as AnyValue!")
+      }
+    }
+  }
 }

@@ -154,6 +154,13 @@ AnyObject AnyMap::getObject(const std::string& key) const {
     throw std::runtime_error("The value at key \"" + key + "\" is not an object!");
   }
 }
+AnyValue AnyMap::getAny(const std::string& key) const {
+  auto found = _map.find(key);
+  if (found == _map.end()) {
+    throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
+  }
+  return found->second;
+}
 
 // Set
 void AnyMap::setNull(const std::string& key) {
@@ -184,6 +191,12 @@ void AnyMap::setAny(const std::string& key, const AnyValue& value) {
 // C++ getter
 const std::unordered_map<std::string, AnyValue>& AnyMap::getMap() const {
   return _map;
+}
+
+void AnyMap::merge(const std::shared_ptr<AnyMap>& other) {
+  for (auto& [key, value] : other->_map) {
+    _map[key] = value;
+  }
 }
 
 } // namespace margelo::nitro

@@ -30,6 +30,12 @@ public:
     return makeCxxInstance();
   }
   /**
+   * Create a new, empty `AnyMap` with the given preallocated size from Java.
+   */
+  static jni::local_ref<JAnyMap::jhybriddata> initHybridPreallocatedSize(jni::alias_ref<jhybridobject>, jint preallocatedSize) {
+    return makeCxxInstance(preallocatedSize);
+  }
+  /**
    * Create a new `JAnyMap` from an existing `AnyMap`.
    */
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
@@ -38,7 +44,10 @@ public:
 
 private:
   JAnyMap() {
-    _map = std::make_shared<AnyMap>();
+    _map = AnyMap::make();
+  }
+  JAnyMap(jint preallocatedSize) {
+    _map = AnyMap::make(static_cast<size_t>(preallocatedSize));
   }
   explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
@@ -100,7 +109,7 @@ protected:
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
-  jni::alias_ref<JAnyArray> getAnyArray(const std::string& key) {
+  jni::local_ref<JAnyArray> getAnyArray(const std::string& key) {
     const auto& vector = _map->getArray(key);
     auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
     for (size_t i = 0; i < vector.size(); i++) {
@@ -109,7 +118,7 @@ protected:
     }
     return javaArray;
   }
-  jni::alias_ref<JAnyObject> getAnyObject(const std::string& key) {
+  jni::local_ref<JAnyObject> getAnyObject(const std::string& key) {
     const auto& map = _map->getObject(key);
     auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
     for (const auto& entry : map) {
@@ -118,6 +127,10 @@ protected:
       javaMap->put(string, value);
     }
     return javaMap;
+  }
+  jni::local_ref<JAnyValue::javaobject> getAnyValue(const std::string& key) {
+    const auto& any = _map->getAny(key);
+    return JAnyValue::create(any);
   }
 
 protected:
@@ -154,8 +167,17 @@ protected:
     }
     _map->setObject(key, map);
   }
+  void setAnyValue(const std::string& key, const jni::alias_ref<JAnyValue::javaobject>& value) {
+    _map->setAny(key, value->cthis()->getValue());
+  }
+
+protected:
+  void merge(jni::alias_ref<JAnyMap::javaobject> other) {
+    _map->merge(other->cthis()->_map);
+  }
 
 public:
+  [[nodiscard]]
   std::shared_ptr<AnyMap> getMap() const {
     return _map;
   }
@@ -170,6 +192,7 @@ public:
     registerHybrid({
         // init
         makeNativeMethod("initHybrid", JAnyMap::initHybrid),
+        makeNativeMethod("initHybrid", JAnyMap::initHybridPreallocatedSize),
         // helpers
         makeNativeMethod("contains", JAnyMap::contains),
         makeNativeMethod("remove", JAnyMap::remove),
@@ -190,6 +213,7 @@ public:
         makeNativeMethod("getString", JAnyMap::getString),
         makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
         makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
+        makeNativeMethod("getAnyValue", JAnyMap::getAnyValue),
         // set
         makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
@@ -198,6 +222,9 @@ public:
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
+        makeNativeMethod("setAnyValue", JAnyMap::setAnyValue),
+        // merge
+        makeNativeMethod("merge", JAnyMap::merge),
     });
   }
 };

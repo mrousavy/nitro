@@ -28,7 +28,7 @@ public indirect enum AnyValue {
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_bigint(value) {
       return .bigint(margelo.nitro.AnyMapUtils.get_AnyValue_bigint(value))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_string(value) {
-      return .string(margelo.nitro.AnyMapUtils.get_AnyValue_string(value).toSwift())
+      return .string(String(margelo.nitro.AnyMapUtils.get_AnyValue_string(value)))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyArray(value) {
       return .array(margelo.nitro.AnyMapUtils.get_AnyValue_AnyArray(value).toSwift())
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyObject(value) {
@@ -151,6 +151,17 @@ public final class AnyMap: @unchecked Sendable {
     return value.toSwift()
   }
 
+  /**
+   * Gets the value value at the given key.
+   * If no value exists at the given key,
+   * this function throws.
+   */
+  public func getAny(key: String) -> Any? {
+    let value = cppPart.pointee.getAny(std.string(key))
+    let any = AnyValue.create(value)
+    return any.toAny()
+  }
+
   // pragma MARK: Setters
 
   /**
@@ -200,6 +211,15 @@ public final class AnyMap: @unchecked Sendable {
    */
   public func setObject(key: String, value: [String: AnyValue]) {
     cppPart.pointee.setObject(std.string(key), margelo.nitro.AnyObject.create(value))
+  }
+
+  /**
+   * Set the given key to the given any value.
+   */
+  public func setAny(key: String, value: Any?) throws {
+    let swiftAny = try AnyValue.fromAny(value)
+    let cppAny = margelo.nitro.AnyValue.create(swiftAny)
+    cppPart.pointee.setAny(std.string(key), cppAny)
   }
 
   // pragma MARK: Is Getters
@@ -252,6 +272,13 @@ public final class AnyMap: @unchecked Sendable {
   public func isObject(key: String) -> Bool {
     return cppPart.pointee.isObject(std.string(key))
   }
+
+  /**
+   * Merges all keys and values from the `other` map into this map.
+   */
+  public func merge(other: AnyMap) {
+    cppPart.pointee.merge(other.cppPart)
+  }
 }
 
 // pragma MARK: margelo.nitro.AnyValue extension
@@ -298,14 +325,6 @@ extension margelo.nitro.AnyValue {
   }
 }
 
-// pragma MARK: std.string extension
-
-extension std.string {
-  func toSwift() -> String {
-    return String(self)
-  }
-}
-
 // pragma MARK: margelo.nitro.AnyArray extension
 
 extension margelo.nitro.AnyArray {
@@ -346,6 +365,104 @@ extension margelo.nitro.AnyObject {
     for key in keys {
       let value = margelo.nitro.AnyMapUtils.getAnyObjectValue(self, key)
       dictionary[String(key)] = AnyValue.create(value)
+    }
+    return dictionary
+  }
+}
+
+// pragma MARK: AnyValue <-> Any extension
+
+extension AnyValue {
+  public static func fromAny(_ any: Any?) throws -> AnyValue {
+    switch any {
+    case nil:
+      return AnyValue.null
+    case let value as String:
+      return AnyValue.string(value)
+    case let value as Double:
+      return AnyValue.number(value)
+    case let value as Int:
+      return AnyValue.number(Double(value))
+    case let value as Float:
+      return AnyValue.number(Double(value))
+    case let value as Int64:
+      return AnyValue.bigint(value)
+    case let value as Bool:
+      return AnyValue.bool(value)
+    case let value as [Any]:
+      let array = try value.map { try AnyValue.fromAny($0) }
+      return AnyValue.array(array)
+    case let value as [String: Any]:
+      let map = try value.mapValues { try AnyValue.fromAny($0) }
+      return AnyValue.object(map)
+    case is AnyValue, is AnyMap, is margelo.nitro.AnyValue, is margelo.nitro.AnyArray,
+      is margelo.nitro.AnyObject:
+      throw RuntimeError.error(
+        withMessage: "Cannot box AnyValue (\(String(describing: any))) twice!")
+    default:
+      throw RuntimeError.error(
+        withMessage: "Value \(String(describing: any)) cannot be represented as AnyValue!")
+    }
+  }
+
+  public func toAny() -> Any? {
+    switch self {
+    case .null:
+      return nil
+    case .bigint(let int):
+      return int
+    case .bool(let bool):
+      return bool
+    case .number(let double):
+      return double
+    case .array(let array):
+      return array.map { $0.toAny() }
+    case .object(let object):
+      return object.mapValues { $0.toAny() }
+    case .string(let string):
+      return string
+    }
+  }
+}
+
+// pragma MARK: AnyMap <-> Any extension
+
+extension AnyMap {
+  /**
+  * Convert the given `Dictionary<String, Any?>` to an `AnyMap`
+  * by copying all keys and values into the C++ container.
+  * If a key cannot be wrapped as any, this will throw.
+  */
+  public static func fromDictionary(_ dictionary: [String: Any?]) throws -> AnyMap {
+    let map = AnyMap(withPreallocatedSize: dictionary.count)
+    for (key, value) in dictionary {
+      try map.setAny(key: key, value: value)
+    }
+    return map
+  }
+  /**
+  * Convert the given `Dictionary<String, Any?>` to an `AnyMap`
+  * by copying all keys and values into the C++ container.
+  * If a key cannot be wrapped as any, it will simply be ignored and omitted.
+  */
+  public static func fromDictionaryIgnoreIncompatible(_ dictionary: [String: Any?]) -> AnyMap {
+    let map = AnyMap(withPreallocatedSize: dictionary.count)
+    for (key, value) in dictionary {
+      try? map.setAny(key: key, value: value)
+    }
+    return map
+  }
+
+  /**
+  * Convert this `AnyMap` instance to a `Dictionary<String, Any?>`
+  * by copying all keys and values into a wrapped Swift container.
+  */
+  public func toDictionary() -> [String: Any?] {
+    var dictionary: [String: Any?] = [:]
+    let keys = self.getAllKeys()
+    dictionary.reserveCapacity(keys.count)
+    for key in keys {
+      dictionary[key] = self.getAny(key: key)
     }
     return dictionary
   }

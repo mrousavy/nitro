@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.FastNative
+import java.util.Dictionary
 
 /**
  * Represents an untyped map of string keys with associated values.
@@ -23,11 +24,47 @@ class AnyMap {
   }
 
   /**
+   * Create a new empty `AnyMap` with the given preallocated size
+   */
+  constructor(preallocatedSize: Int) {
+    mHybridData = initHybrid(preallocatedSize)
+  }
+
+  /**
    * Create a new `AnyMap` from C++, which potentially already holds data.
    */
   @Suppress("unused")
   private constructor(hybridData: HybridData) {
     mHybridData = hybridData
+  }
+
+  companion object {
+    fun fromMap(map: Map<String, Any?>): AnyMap {
+      val anyMap = AnyMap(map.size)
+      for ((key, value) in map) {
+        anyMap.setAny(key, value)
+      }
+      return anyMap
+    }
+  }
+
+  fun toMap(): Map<String, Any?> {
+    val map = HashMap<String, Any?>()
+    for (key in getAllKeys()) {
+      map.put(key, getAny(key))
+    }
+    return map
+  }
+
+  fun setAny(
+    key: String,
+    value: Any?,
+  ) {
+    setAnyValue(key, AnyValue.fromAny(value))
+  }
+
+  fun getAny(key: String): Any? {
+    return getAnyValue(key).toAny()
   }
 
   @FastNative
@@ -77,6 +114,8 @@ class AnyMap {
 
   external fun getAnyObject(key: String): AnyObject
 
+  private external fun getAnyValue(key: String): AnyValue
+
   @FastNative
   external fun setNull(key: String)
 
@@ -114,5 +153,14 @@ class AnyMap {
     value: AnyObject,
   )
 
+  private external fun setAnyValue(
+    key: String,
+    value: AnyValue,
+  )
+
+  external fun merge(other: AnyMap)
+
   private external fun initHybrid(): HybridData
+
+  private external fun initHybrid(preallocatedSize: Int): HybridData
 }
