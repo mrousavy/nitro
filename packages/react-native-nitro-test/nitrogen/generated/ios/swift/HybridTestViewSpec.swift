@@ -38,7 +38,7 @@ open class HybridTestViewSpec_base {
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let unsafe = Unmanaged.passRetained(self).toOpaque()
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
       let cxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(unsafe)
       _cxxPart = bridge.weakify_std__shared_ptr_HybridTestViewSpec_(cxxPart)
       return cxxPart
