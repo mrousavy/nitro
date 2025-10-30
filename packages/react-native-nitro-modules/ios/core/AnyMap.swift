@@ -150,6 +150,16 @@ public final class AnyMap: @unchecked Sendable {
     let value = cppPart.pointee.getObject(std.string(key))
     return value.toSwift()
   }
+  
+  /**
+   * Gets the value value at the given key.
+   * If no value exists at the given key,
+   * this function throws.
+   */
+  public func getAny(key: String) -> AnyValue {
+    let value = cppPart.pointee.getAny(std.string(key))
+    return AnyValue.create(value)
+  }
 
   // pragma MARK: Setters
 
@@ -252,6 +262,13 @@ public final class AnyMap: @unchecked Sendable {
   public func isObject(key: String) -> Bool {
     return cppPart.pointee.isObject(std.string(key))
   }
+  
+  /**
+   * Merges all keys and values from the `other` map into this map.
+   */
+  public func merge(other: AnyMap) {
+    cppPart.pointee.merge(other.cppPart.pointee)
+  }
 }
 
 // pragma MARK: margelo.nitro.AnyValue extension
@@ -348,6 +365,90 @@ extension margelo.nitro.AnyObject {
       dictionary[String(key)] = AnyValue.create(value)
     }
     return dictionary
+  }
+}
+
+// pragma MARK: AnyValue <-> Any extension
+
+public extension AnyValue {
+  static func fromAny(_ any: Any) throws -> AnyValue {
+    switch any {
+    case let value as String:
+      return AnyValue.string(value)
+    case let value as Double:
+      return AnyValue.number(value)
+    case let value as Int:
+      return AnyValue.number(Double(value))
+    case let value as Float:
+      return AnyValue.number(Double(value))
+    case let value as Int64:
+      return AnyValue.bigint(value)
+    case let value as Bool:
+      return AnyValue.bool(value)
+    case let value as [Any]:
+      let array = try value.map { try AnyValue.fromAny($0) }
+      return AnyValue.array(array)
+    case let value as [String: Any]:
+      let map = try value.mapValues { try AnyValue.fromAny($0) }
+      return AnyValue.object(map)
+    default:
+      throw RuntimeError.error(withMessage: "Value \(String(describing: any)) cannot be represented as AnyValue!")
+    }
+  }
+  
+  func toAny() -> Any {
+    switch self {
+    case .array(let array):
+      return array.map { $0.toAny() }
+    case .bigint(let int):
+      return int
+    case .bool(let bool):
+      return bool
+    case .null:
+      return NSNull()
+    case .number(let double):
+      return double
+    case .object(let object):
+      return object.mapValues { $0.toAny() }
+    case .string(let string):
+      return string
+    }
+  }
+}
+
+// pragma MARK: AnyMap <-> Any extension
+
+public extension AnyMap {
+  static func fromAnyDictionary(_ dictionary: [String: Any]) throws -> AnyMap {
+    var map = AnyMap(withPreallocatedSize: dictionary.count)
+    for (key, value) in dictionary {
+      try map.setAny(key: key, value: value)
+    }
+    return map
+  }
+  static func fromAnyDictionaryIgnoreIncompatible(_ dictionary: [String: Any]) -> AnyMap {
+    var map = AnyMap(withPreallocatedSize: dictionary.count)
+    for (key, value) in dictionary {
+      try? map.setAny(key: key, value: value)
+    }
+    return map
+  }
+  
+  func toAnyDictionary() -> [String: Any] {
+    var dictionary: [String: Any] = [:]
+    let keys = self.getAllKeys()
+    dictionary.reserveCapacity(keys.count)
+    for key in keys {
+      let value = self.getAny(key: key)
+      dictionary[key] = value.toAny()
+    }
+    return dictionary
+  }
+  
+  func setAny(key: String, value: Any) throws {
+    let swiftAny = try AnyValue.fromAny(value)
+    let cppAny = margelo.nitro.AnyValue.create(swiftAny)
+    cppPart.pointee.setAny(std.string(key), cppAny)
   }
 }
 

@@ -153,6 +153,12 @@ public:
    * If no object value exists at the given `key`, this method will throw.
    */
   AnyObject getObject(const std::string& key) const;
+  
+  /**
+   * Get the value at the given `key` as it's boxed `AnyValue`.
+   * If no object value exists at the given `key`, this method will throw.
+   */
+  AnyValue getAny(const std::string& key) const;
 
 public:
   /**
@@ -201,6 +207,12 @@ public:
    * Get the actual C++ map that holds all keys and variant values.
    */
   const std::unordered_map<std::string, AnyValue>& getMap() const;
+  
+public:
+  /**
+   * Merge all keys and values from given `other` `AnyMap` into this `AnyMap`.
+   */
+  void merge(const AnyMap& other);
 
 private:
   std::unordered_map<std::string, AnyValue> _map;
