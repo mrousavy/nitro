@@ -51,10 +51,10 @@ using namespace margelo::nitro::test::views;
 
 - (void) updateView {
   // 1. Get Swift part
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  void* swiftPart = _hybridView->getSwiftPart();
 
   // 2. Get UIView*
-  void* viewUnsafe = swiftPart.getView();
+  void* viewUnsafe = NitroTest::HybridTestViewSpec_cxx::getView(swiftPart);
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
   // 3. Update RCTViewComponentView's [contentView]
@@ -66,33 +66,33 @@ using namespace margelo::nitro::test::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  void* swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  NitroTest::HybridTestViewSpec_cxx::beforeUpdate(swiftPart);
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    NitroTest::HybridTestViewSpec_cxx::setIsBlue(swiftPart, newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
+    NitroTest::HybridTestViewSpec_cxx::setHasBeenCalled(swiftPart, newViewProps.hasBeenCalled.value);
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    NitroTest::HybridTestViewSpec_cxx::setColorScheme(swiftPart, static_cast<int>(newViewProps.colorScheme.value));
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
   if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
+    NitroTest::HybridTestViewSpec_cxx::setSomeCallback(swiftPart, newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;
   }
 
-  swiftPart.afterUpdate();
+  NitroTest::HybridTestViewSpec_cxx::afterUpdate(swiftPart);
 
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {

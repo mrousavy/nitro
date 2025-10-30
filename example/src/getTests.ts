@@ -1724,6 +1724,48 @@ export function getTests(
         .didNotThrow()
         .equals('This is overridden!')
     ),
+    createTest(
+      'getTotalNumberOfTestObjectsAlive() ref-count increases by 10 after creating 10 objects',
+      () =>
+        it(() => {
+          // 1. get total number of alive objects before
+          const refCount = testObject.getTotalNumberOfTestObjectsAlive()
+          // 2. create 10 new objects
+          const objects = []
+          for (let i = 0; i < 10; i++) {
+            objects.push(testObject.newTestObject())
+          }
+          // 3. total number of alive objects must be +10
+          const newRefCount = testObject.getTotalNumberOfTestObjectsAlive()
+          return newRefCount === refCount + 10
+        })
+          .didNotThrow()
+          .equals(true)
+    ),
+    createTest(
+      'getTotalNumberOfTestObjectsAlive() ref-count decreases when destroying objects',
+      async () =>
+        (
+          await it(async () => {
+            globalThis.gc() // <-- force old gen gc (sync)
+            // 1. get total number of alive objects before
+            const refCount = testObject.getTotalNumberOfTestObjectsAlive()
+            // 2. create 10 new objects
+            let objects = []
+            for (let i = 0; i < 10; i++) {
+              objects.push(testObject.newTestObject())
+            }
+            // 3. total number of alive objects must be +10 now, start deleting objects again
+            objects.forEach((o) => o.dispose())
+            objects = []
+            globalThis.gc() // <-- force old gen gc (sync)
+            const newRefCount = testObject.getTotalNumberOfTestObjectsAlive()
+            return newRefCount === refCount
+          })
+        )
+          .didNotThrow()
+          .equals(true)
+    ),
     createTest('new T() works', () =>
       it(() => {
         const HybridTestObjectCpp =

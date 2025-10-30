@@ -19,7 +19,12 @@ using ComplexVariant = std::variant<std::shared_ptr<ArrayBuffer>, std::function<
 
 class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
-  HybridTestObjectCpp() : HybridObject(TAG) {}
+  HybridTestObjectCpp() : HybridObject(TAG) {
+    totalObjectsAlive += 1;
+  }
+  ~HybridTestObjectCpp() {
+    totalObjectsAlive -= 1;
+  }
 
 private:
   double _number;
@@ -34,6 +39,7 @@ private:
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
   std::optional<std::function<void(double)>> _optionalCallback;
+  static double totalObjectsAlive;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -182,6 +188,8 @@ public:
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
+
+  double getTotalNumberOfTestObjectsAlive() override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

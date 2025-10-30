@@ -17,6 +17,7 @@ public protocol HybridPlatformObjectSpec_protocol: HybridObject {
   func getOSVersion() throws -> String
 }
 
+/// See ``HybridPlatformObjectSpec``
 public extension HybridPlatformObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -26,29 +27,29 @@ public extension HybridPlatformObjectSpec_protocol {
 
 /// See ``HybridPlatformObjectSpec``
 open class HybridPlatformObjectSpec_base {
-  private weak var cxxWrapper: HybridPlatformObjectSpec_cxx? = nil
+  public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridPlatformObjectSpec_ = .init()
+
   public init() { }
-  public func getCxxWrapper() -> HybridPlatformObjectSpec_cxx {
-  #if DEBUG
-    guard self is HybridPlatformObjectSpec else {
-      fatalError("`self` is not a `HybridPlatformObjectSpec`! Did you accidentally inherit from `HybridPlatformObjectSpec_base` instead of `HybridPlatformObjectSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridPlatformObjectSpec_cxx(self as! HybridPlatformObjectSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridPlatformObjectSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridPlatformObjectSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the PlatformObject HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "PlatformObject".
  * Implement this protocol to create Swift-based instances of PlatformObject.
  * ```swift
- * class HybridPlatformObject : HybridPlatformObjectSpec {
+ * class HybridPlatformObject: HybridPlatformObjectSpec {
  *   // ...
  * }
  * ```

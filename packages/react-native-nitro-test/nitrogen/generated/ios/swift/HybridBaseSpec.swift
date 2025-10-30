@@ -17,6 +17,7 @@ public protocol HybridBaseSpec_protocol: HybridObject {
   
 }
 
+/// See ``HybridBaseSpec``
 public extension HybridBaseSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -26,29 +27,29 @@ public extension HybridBaseSpec_protocol {
 
 /// See ``HybridBaseSpec``
 open class HybridBaseSpec_base {
-  private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
+  public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridBaseSpec_ = .init()
+
   public init() { }
-  public func getCxxWrapper() -> HybridBaseSpec_cxx {
-  #if DEBUG
-    guard self is HybridBaseSpec else {
-      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridBaseSpec_cxx(self as! HybridBaseSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridBaseSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridBaseSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the Base HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "Base".
  * Implement this protocol to create Swift-based instances of Base.
  * ```swift
- * class HybridBase : HybridBaseSpec {
+ * class HybridBase: HybridBaseSpec {
  *   // ...
  * }
  * ```

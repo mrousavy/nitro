@@ -107,8 +107,10 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
+  func getTotalNumberOfTestObjectsAlive() throws -> Double
 }
 
+/// See ``HybridTestObjectSwiftKotlinSpec``
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -118,29 +120,29 @@ public extension HybridTestObjectSwiftKotlinSpec_protocol {
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 open class HybridTestObjectSwiftKotlinSpec_base {
-  private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
+  public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = .init()
+
   public init() { }
-  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
-  #if DEBUG
-    guard self is HybridTestObjectSwiftKotlinSpec else {
-      fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the TestObjectSwiftKotlin HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "TestObjectSwiftKotlin".
  * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
  * ```swift
- * class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
+ * class HybridTestObjectSwiftKotlin: HybridTestObjectSwiftKotlinSpec {
  *   // ...
  * }
  * ```

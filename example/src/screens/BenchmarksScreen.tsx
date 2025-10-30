@@ -16,27 +16,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectSwiftKotlin } from 'react-native-nitro-test'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
-
-declare global {
-  var gc: () => void
-  var performance: {
-    now: () => number
-  }
-}
+import { waitForGc } from '../utils'
 
 interface BenchmarksResult {
   numberOfIterations: number
   nitroExecutionTimeMs: number
   turboExecutionTimeMs: number
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-async function waitForGc(): Promise<void> {
-  gc()
-  await delay(500)
 }
 
 interface BenchmarkableObject {

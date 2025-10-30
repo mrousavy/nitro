@@ -17,6 +17,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
   func bounceVariant(variant: NamedVariant) throws -> NamedVariant
 }
 
+/// See ``HybridChildSpec``
 public extension HybridChildSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -26,29 +27,36 @@ public extension HybridChildSpec_protocol {
 
 /// See ``HybridChildSpec``
 open class HybridChildSpec_base: HybridBaseSpec_base {
-  private weak var cxxWrapper: HybridChildSpec_cxx? = nil
-  public override init() { super.init() }
-  public override func getCxxWrapper() -> HybridChildSpec_cxx {
-  #if DEBUG
-    guard self is HybridChildSpec else {
-      fatalError("`self` is not a `HybridChildSpec`! Did you accidentally inherit from `HybridChildSpec_base` instead of `HybridChildSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridChildSpec_ = .init()
+
+  public override init() {
+    super.init()
+  }
+  
+  open override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+    let __child: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
+    return bridge.upcast_Child_to_Base(__child)
+  }
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridChildSpec_cxx(self as! HybridChildSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridChildSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the Child HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "Child".
  * Implement this protocol to create Swift-based instances of Child.
  * ```swift
- * class HybridChild : HybridChildSpec {
+ * class HybridChild: HybridChildSpec {
  *   // ...
  * }
  * ```

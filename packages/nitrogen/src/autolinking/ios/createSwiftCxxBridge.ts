@@ -9,10 +9,6 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import { getReferencedTypes } from '../../syntax/getReferencedTypes.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 import { filterDuplicateHelperBridges, indent } from '../../utils.js'
-import { getTypeAs } from '../../syntax/types/getTypeAs.js'
-import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
-import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
-import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 
 export function createSwiftCxxBridge(): SourceFile[] {
   const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
@@ -61,23 +57,6 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
 
-  const forwardDeclaredSwiftTypes = types
-    .filter((t) => t.type.kind === 'hybrid-object')
-    .map((t) => {
-      const hybridObject = getTypeAs(t.type, HybridObjectType)
-      const hybridObjectModuleName =
-        hybridObject.sourceConfig.getIosModuleName()
-      const { HybridTSpecCxx } = getHybridObjectName(
-        hybridObject.hybridObjectName
-      )
-      return getForwardDeclaration(
-        'class',
-        HybridTSpecCxx,
-        hybridObjectModuleName
-      )
-    })
-    .filter(isNotDuplicate)
-
   const header = `
 ${createFileMetadataString(`${bridgeName}.hpp`)}
 
@@ -85,9 +64,6 @@ ${createFileMetadataString(`${bridgeName}.hpp`)}
 
 // Forward declarations of C++ defined types
 ${forwardDeclarationsHeader.sort().join('\n')}
-
-// Forward declarations of Swift defined types
-${forwardDeclaredSwiftTypes.sort().join('\n')}
 
 // Include C++ defined types
 ${includesHeader.sort().join('\n')}

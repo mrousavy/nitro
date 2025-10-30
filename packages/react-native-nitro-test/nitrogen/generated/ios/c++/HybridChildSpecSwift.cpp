@@ -6,6 +6,53 @@
 ///
 
 #include "HybridChildSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor / Destructor
+  HybridChildSpecSwift::HybridChildSpecSwift(void* NON_NULL /* unretained */ swiftPart):
+    HybridObject(HybridChildSpec::TAG),
+    HybridBaseSpecSwift(swiftPart),
+    _swiftPart(swiftPart) {
+    SwiftReferences::retainOne(_swiftPart);
+  }
+  HybridChildSpecSwift::~HybridChildSpecSwift() {
+    SwiftReferences::releaseOne(_swiftPart);
+  }
+
+  // pragma MARK: Base Methods
+  size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridChildSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridChildSpecSwift::dispose() noexcept {
+    return NitroTest::HybridChildSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridChildSpecSwift::toString() {
+    return NitroTest::HybridChildSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridChildSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridChildSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridChildSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  // pragma MARK: Properties
+  double HybridChildSpecSwift::getChildValue() noexcept {
+    return NitroTest::HybridChildSpec_cxx::getChildValue(_swiftPart);
+  }
+
+  // pragma MARK: Methods
+  std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) {
+    auto __result = NitroTest::HybridChildSpec_cxx::bounceVariant(_swiftPart, variant);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+
 } // namespace margelo::nitro::test

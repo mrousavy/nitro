@@ -980,5 +980,10 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart);
     return __result->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
   }
+  double JHybridTestObjectSwiftKotlinSpec::getTotalNumberOfTestObjectsAlive() {
+    static const auto method = javaClassStatic()->getMethod<double()>("getTotalNumberOfTestObjectsAlive");
+    auto __result = method(_javaPart);
+    return __result;
+  }
 
 } // namespace margelo::nitro::test

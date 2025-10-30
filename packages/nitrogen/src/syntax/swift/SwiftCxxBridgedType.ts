@@ -345,8 +345,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return `
 { () -> ${name.HybridTSpec} in
   let __unsafePointer = ${getFunc}(${cppParameterName})
-  let __instance = ${name.HybridTSpecCxx}.fromUnsafe(__unsafePointer)
-  return __instance.get${name.HybridTSpec}()
+  return MemoryHelper.castUnsafe(__unsafePointer)
 }()`.trim()
           default:
             return cppParameterName
@@ -649,9 +648,9 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${swiftParameterName}.getCxxWrapper()
-  return __cxxWrapped.getCxxPart()
-}()`.trim()
+  return ${swiftParameterName}.getCxxPart()
+}()
+            `.trim()
           default:
             return swiftParameterName
         }

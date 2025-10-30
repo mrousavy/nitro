@@ -32,6 +32,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var optionalOldEnum: OldEnum? = null
   override var optionalCallback: ((value: Double) -> Unit)? = null
 
+  init {
+    totalObjectsAlive += 1
+  }
+
   override fun simpleFunc() {
     // do nothing
   }
@@ -500,7 +504,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return HybridSomeInternalObject()
   }
 
+  override fun getTotalNumberOfTestObjectsAlive(): Double {
+    return totalObjectsAlive
+  }
+
   override fun dispose() {
+    totalObjectsAlive -= 1
     this.optionalCallback?.let { callback ->
       callback(13.0)
     }
@@ -511,5 +520,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
       .valueOf(value)
       .stripTrailingZeros()
       .toPlainString()
+  }
+
+  companion object {
+    private var totalObjectsAlive: Double = 0.0
   }
 }

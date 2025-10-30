@@ -57,6 +57,7 @@ Pod::Spec.new do |s|
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
+    "ios/utils/SwiftReferences.hpp",
   ]
 
   xcconfig = {

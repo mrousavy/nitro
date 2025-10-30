@@ -1,3 +1,4 @@
+import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -5,10 +6,16 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
+import {
+  createCxxUpcastHelper,
+  createCxxWeakPtrHelper,
+} from './SwiftCxxTypeHelper.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const name = getHybridObjectName(spec.name)
+  const type = new HybridObjectType(spec)
   const protocolName = name.HybridTSpec
   const properties = spec.properties.map((p) => p.getCode('swift')).join('\n')
   const methods = spec.methods.map((m) => m.getCode('swift')).join('\n')
@@ -19,9 +26,19 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
       new HybridObjectType(b).getRequiredImports('swift')
     ),
   ]
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
+  const bridgedType = new SwiftCxxBridgedType(type)
+  const bridgeFunc = bridgedType.getRequiredBridge()
+  const cxxType = bridgedType.getTypeCode('swift')
+  const weakifyBridge = createCxxWeakPtrHelper(type)
+
+  if (bridgeFunc == null) {
+    throw new Error(`HybridObject's C++ -> Swift Bridge func cannot be null!`)
+  }
 
   const protocolBaseClasses = ['HybridObject']
-  const classBaseClasses: string[] = []
+  const baseClasses: string[] = []
+  const baseMethods: string[] = []
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -31,43 +48,57 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const base = spec.baseTypes[0]!
     const baseName = getHybridObjectName(base.name)
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
-    classBaseClasses.push(`${baseName.HybridTSpec}_base`)
+    baseClasses.push(`${baseName.HybridTSpec}_base`)
+    const baseType = new HybridObjectType(base)
+    const baseBridge = new SwiftCxxBridgedType(baseType)
+    const upcastBridge = createCxxUpcastHelper(baseType, type)
+    baseMethods.push(
+      `
+public override init() {
+  super.init()
+}
+`.trim()
+    )
+    baseMethods.push(
+      `
+open override func getCxxPart() -> ${baseBridge.getTypeCode('swift')} {
+  let __child: ${cxxType} = getCxxPart()
+  return bridge.${upcastBridge.funcName}(__child)
+}
+`.trim()
+    )
+  } else {
+    baseMethods.push(
+      `
+public init() { }
+`.trim()
+    )
   }
+  baseMethods.push(
+    `
+open func getCxxPart() -> ${cxxType} {
+  let cachedCxxPart = self._cxxPart.lock()
+  if Bool(fromCxx: cachedCxxPart) {
+    return cachedCxxPart
+  } else {
+    let unsafe = Unmanaged.passUnretained(self).toOpaque()
+    let cxxPart = bridge.${bridgeFunc.funcName}(unsafe)
+    _cxxPart = bridge.${weakifyBridge.funcName}(cxxPart)
+    return cxxPart
+  }
+}
+`.trim()
+  )
   if (spec.isHybridView) {
     protocolBaseClasses.push('HybridView')
   }
-
-  const hasBaseClass = classBaseClasses.length > 0
-  const baseMembers: string[] = []
-  baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
-  if (hasBaseClass) {
-    baseMembers.push(`public override init() { super.init() }`)
-  } else {
-    baseMembers.push(`public init() { }`)
-  }
-  baseMembers.push(
-    `
-public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
-#if DEBUG
-  guard self is ${name.HybridTSpec} else {
-    fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
-  }
-#endif
-  if let cxxWrapper = self.cxxWrapper {
-    return cxxWrapper
-  } else {
-    let cxxWrapper = ${name.HybridTSpecCxx}(self as! ${name.HybridTSpec})
-    self.cxxWrapper = cxxWrapper
-    return cxxWrapper
-  }
-}`.trim()
-  )
 
   const imports = ['import NitroModules']
   imports.push(
     ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
   )
 
+  const hasBase = baseClasses.length > 0
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -83,6 +114,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
   ${indent(methods, '  ')}
 }
 
+/// See \`\`${protocolName}\`\`
 public extension ${protocolName}_protocol {
   /// Default implementation of \`\`HybridObject.toString\`\`
   func toString() -> String {
@@ -91,21 +123,24 @@ public extension ${protocolName}_protocol {
 }
 
 /// See \`\`${protocolName}\`\`
-open class ${protocolName}_base${classBaseClasses.length > 0 ? `: ${classBaseClasses.join(',')}` : ''} {
-  ${indent(baseMembers.join('\n'), '  ')}
+open class ${protocolName}_base${hasBase ? `: ${baseClasses.join(', ')}` : ''} {
+  public typealias bridge = ${bridgeNamespace}
+  private var _cxxPart: bridge.${weakifyBridge.specializationName} = .init()
+
+  ${indent(baseMethods.join('\n\n'), '  ')}
 }
 
 /**
- * A Swift base-protocol representing the ${spec.name} HybridObject.
- * Implement this protocol to create Swift-based instances of ${spec.name}.
+ * A Swift base-protocol (+ base class) representing the HybridObject "${name.T}".
+ * Implement this protocol to create Swift-based instances of ${name.T}.
  * \`\`\`swift
- * class ${name.HybridT} : ${protocolName} {
+ * class ${name.HybridT}: ${protocolName} {
  *   // ...
  * }
  * \`\`\`
  */
 public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_base
-  `
+  `.trim()
 
   const swiftBridge = createSwiftHybridObjectCxxBridge(spec)
 

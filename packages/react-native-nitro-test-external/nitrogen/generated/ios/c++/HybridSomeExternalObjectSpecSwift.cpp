@@ -6,6 +6,50 @@
 ///
 
 #include "HybridSomeExternalObjectSpecSwift.hpp"
+#include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace margelo::nitro::test::external {
+
+  // pragma MARK: Constructor / Destructor
+  HybridSomeExternalObjectSpecSwift::HybridSomeExternalObjectSpecSwift(void* NON_NULL /* unretained */ swiftPart):
+    HybridObject(HybridSomeExternalObjectSpec::TAG),
+    _swiftPart(swiftPart) {
+    SwiftReferences::retainOne(_swiftPart);
+  }
+  HybridSomeExternalObjectSpecSwift::~HybridSomeExternalObjectSpecSwift() {
+    SwiftReferences::releaseOne(_swiftPart);
+  }
+
+  // pragma MARK: Base Methods
+  size_t HybridSomeExternalObjectSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridSomeExternalObjectSpecSwift::dispose() noexcept {
+    return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridSomeExternalObjectSpecSwift::toString() {
+    return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridSomeExternalObjectSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridSomeExternalObjectSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTestExternal::HybridSomeExternalObjectSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  // pragma MARK: Properties
+  
+
+  // pragma MARK: Methods
+  std::string HybridSomeExternalObjectSpecSwift::getValue() {
+    auto __result = NitroTestExternal::HybridSomeExternalObjectSpec_cxx::getValue(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+
 } // namespace margelo::nitro::test::external

@@ -41,20 +41,6 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
-// Forward declarations of Swift defined types
-// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridBaseSpec_cxx; }
-// Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridChildSpec_cxx; }
-// Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
-// Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
-namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
-// Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
-// Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridTestViewSpec_cxx; }
-
 // Include C++ defined types
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"

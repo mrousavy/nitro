@@ -10,6 +10,8 @@ import NitroModules
 import NitroTestExternal
 
 class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
+  private static var totalNumberOfObjectsAlive: Double = 0.0
+
   var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .second(55)
@@ -38,6 +40,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self
+  }
+
+  override init() {
+    super.init()
+    Self.totalNumberOfObjectsAlive += 1
+  }
+  deinit {
+    Self.totalNumberOfObjectsAlive -= 1
   }
 
   func simpleFunc() throws {
@@ -487,6 +497,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   func createInternalObject() -> any HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
+  }
+
+  func getTotalNumberOfTestObjectsAlive() -> Double {
+    return Self.totalNumberOfObjectsAlive
   }
 
   func dispose() {

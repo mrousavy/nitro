@@ -6,6 +6,50 @@
 ///
 
 #include "HybridPlatformObjectSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor / Destructor
+  HybridPlatformObjectSpecSwift::HybridPlatformObjectSpecSwift(void* NON_NULL /* unretained */ swiftPart):
+    HybridObject(HybridPlatformObjectSpec::TAG),
+    _swiftPart(swiftPart) {
+    SwiftReferences::retainOne(_swiftPart);
+  }
+  HybridPlatformObjectSpecSwift::~HybridPlatformObjectSpecSwift() {
+    SwiftReferences::releaseOne(_swiftPart);
+  }
+
+  // pragma MARK: Base Methods
+  size_t HybridPlatformObjectSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridPlatformObjectSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridPlatformObjectSpecSwift::dispose() noexcept {
+    return NitroTest::HybridPlatformObjectSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridPlatformObjectSpecSwift::toString() {
+    return NitroTest::HybridPlatformObjectSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridPlatformObjectSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridPlatformObjectSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridPlatformObjectSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  // pragma MARK: Properties
+  
+
+  // pragma MARK: Methods
+  std::string HybridPlatformObjectSpecSwift::getOSVersion() {
+    auto __result = NitroTest::HybridPlatformObjectSpec_cxx::getOSVersion(_swiftPart);
+    if (__result.hasError()) [[unlikely]] {
+      std::rethrow_exception(__result.error());
+    }
+    auto __value = std::move(__result.value());
+    return __value;
+  }
+
 } // namespace margelo::nitro::test

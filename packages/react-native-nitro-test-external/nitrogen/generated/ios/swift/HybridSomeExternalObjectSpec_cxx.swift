@@ -10,14 +10,16 @@ import NitroModules
 
 /**
  * A class implementation that bridges HybridSomeExternalObjectSpec over to C++.
- * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * This does multiple things:
  *
- * Also, some Swift types need to be bridged with special handling:
- * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
- * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
- * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
+ * 1. In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * 2. To avoid exposing the whole inheritance chain to C++, we only expose the methods HybridSomeExternalObjectSpec defines itself,
+ *    otherwise C++ would see HybridSomeExternalObjectSpec's base class and if that's an external symbol the build fails.
+ * 3. We use void* to hold the Swift instance to avoid exposing the class to C++, this way we only see the static funcs.
+ * 4. A lot of types have to be bridged from C++ to Swift and back - e.g. arrays or functions. This does all that.
+ * 5. Since C++ cannot catch Swift errors, we wrap them in a Result<T> type here that holds either T or Error.
  */
-open class HybridSomeExternalObjectSpec_cxx {
+public final class HybridSomeExternalObjectSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::external::bridge::swift`)
    * from `NitroTestExternal-Swift-Cxx-Bridge.hpp`.
@@ -25,75 +27,19 @@ open class HybridSomeExternalObjectSpec_cxx {
    */
   public typealias bridge = margelo.nitro.test.external.bridge.swift
 
-  /**
-   * Holds an instance of the `HybridSomeExternalObjectSpec` Swift protocol.
-   */
-  private var __implementation: any HybridSomeExternalObjectSpec
-
-  /**
-   * Holds a weak pointer to the C++ class that wraps the Swift class.
-   */
-  private var __cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSpec_
-
-  /**
-   * Create a new `HybridSomeExternalObjectSpec_cxx` that wraps the given `HybridSomeExternalObjectSpec`.
-   * All properties and methods bridge to C++ types.
-   */
-  public init(_ implementation: any HybridSomeExternalObjectSpec) {
-    self.__implementation = implementation
-    self.__cxxPart = .init()
-    /* no base class */
-  }
-
-  /**
-   * Get the actual `HybridSomeExternalObjectSpec` instance this class wraps.
-   */
   @inline(__always)
-  public func getHybridSomeExternalObjectSpec() -> any HybridSomeExternalObjectSpec {
-    return __implementation
+  private static func cast(_ this: UnsafeRawPointer) -> HybridSomeExternalObjectSpec {
+    return MemoryHelper.castUnsafe(this)
   }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `HybridSomeExternalObjectSpec_cxx`.
-   * The pointer has to be a retained opaque `Unmanaged<HybridSomeExternalObjectSpec_cxx>`.
-   * This removes one strong reference from the object!
-   */
-  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridSomeExternalObjectSpec_cxx {
-    return Unmanaged<HybridSomeExternalObjectSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
-  }
-
-  /**
-   * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridSomeExternalObjectSpec>`.
-   */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
-    let cachedCxxPart = self.__cxxPart.lock()
-    if Bool(fromCxx: cachedCxxPart) {
-      return cachedCxxPart
-    } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(self.toUnsafe())
-      __cxxPart = bridge.weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(newCxxPart)
-      return newCxxPart
-    }
-  }
-
-  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public var memorySize: Int {
-    return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
+  public static func getMemorySize(this: UnsafeRawPointer) -> Int {
+    let __instance = cast(this)
+    return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
   /**
@@ -101,16 +47,28 @@ open class HybridSomeExternalObjectSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public func dispose() {
-    self.__implementation.dispose()
+  public static func dispose(this: UnsafeRawPointer) {
+    let __instance = cast(this)
+    __instance.dispose()
   }
 
   /**
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public func toString() -> String {
-    return self.__implementation.toString()
+  public static func toString(this: UnsafeRawPointer) -> String {
+    let __instance = cast(this)
+    return __instance.toString()
+  }
+
+  /**
+   * Call equals() on the Swift class.
+   */
+  @inline(__always)
+  public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
+    let __instance = cast(this)
+    let __other = cast(other)
+    return __instance === __other
   }
 
   // Properties
@@ -118,9 +76,10 @@ open class HybridSomeExternalObjectSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func getValue() -> bridge.Result_std__string_ {
+  public static func getValue(this: UnsafeRawPointer) -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.getValue()
+      let __instance = cast(this)
+      let __result = try __instance.getValue()
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {

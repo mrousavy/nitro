@@ -44,7 +44,7 @@ export function createSwiftHybridViewManager(
     return `
 // ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
-  swiftPart.${setter}(${indent(parse, '  ')});
+  ${swiftNamespace}::${HybridTSpecCxx}::${setter}(swiftPart, ${indent(parse, '  ')});
   newViewProps.${name}.isDirty = false;
 }
 `.trim()
@@ -99,10 +99,10 @@ using namespace ${namespace}::views;
 
 - (void) updateView {
   // 1. Get Swift part
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  void* swiftPart = _hybridView->getSwiftPart();
 
   // 2. Get UIView*
-  void* viewUnsafe = swiftPart.getView();
+  void* viewUnsafe = ${swiftNamespace}::${HybridTSpecCxx}::getView(swiftPart);
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
   // 3. Update RCTViewComponentView's [contentView]
@@ -114,14 +114,14 @@ using namespace ${namespace}::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  void* swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  ${swiftNamespace}::${HybridTSpecCxx}::beforeUpdate(swiftPart);
 
   ${indent(propAssignments.join('\n'), '  ')}
 
-  swiftPart.afterUpdate();
+  ${swiftNamespace}::${HybridTSpecCxx}::afterUpdate(swiftPart);
 
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {

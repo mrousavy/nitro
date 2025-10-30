@@ -11,10 +11,6 @@
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
-// Forward declarations of Swift defined types
-// Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
-namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
-
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
 #include <NitroModules/Result.hpp>

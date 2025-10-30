@@ -20,6 +20,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   func someMethod() throws -> Void
 }
 
+/// See ``HybridTestViewSpec``
 public extension HybridTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -29,29 +30,29 @@ public extension HybridTestViewSpec_protocol {
 
 /// See ``HybridTestViewSpec``
 open class HybridTestViewSpec_base {
-  private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
+  public typealias bridge = margelo.nitro.test.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridTestViewSpec_ = .init()
+
   public init() { }
-  public func getCxxWrapper() -> HybridTestViewSpec_cxx {
-  #if DEBUG
-    guard self is HybridTestViewSpec else {
-      fatalError("`self` is not a `HybridTestViewSpec`! Did you accidentally inherit from `HybridTestViewSpec_base` instead of `HybridTestViewSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridTestViewSpec_cxx(self as! HybridTestViewSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridTestViewSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the TestView HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "TestView".
  * Implement this protocol to create Swift-based instances of TestView.
  * ```swift
- * class HybridTestView : HybridTestViewSpec {
+ * class HybridTestView: HybridTestViewSpec {
  *   // ...
  * }
  * ```

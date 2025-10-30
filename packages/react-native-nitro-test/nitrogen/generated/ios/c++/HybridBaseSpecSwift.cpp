@@ -6,6 +6,45 @@
 ///
 
 #include "HybridBaseSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/SwiftReferences.hpp>
 
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor / Destructor
+  HybridBaseSpecSwift::HybridBaseSpecSwift(void* NON_NULL /* unretained */ swiftPart):
+    HybridObject(HybridBaseSpec::TAG),
+    _swiftPart(swiftPart) {
+    SwiftReferences::retainOne(_swiftPart);
+  }
+  HybridBaseSpecSwift::~HybridBaseSpecSwift() {
+    SwiftReferences::releaseOne(_swiftPart);
+  }
+
+  // pragma MARK: Base Methods
+  size_t HybridBaseSpecSwift::getExternalMemorySize() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::getMemorySize(_swiftPart);
+  }
+  void HybridBaseSpecSwift::dispose() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::dispose(_swiftPart);
+  }
+  std::string HybridBaseSpecSwift::toString() {
+    return NitroTest::HybridBaseSpec_cxx::toString(_swiftPart);
+  }
+  bool HybridBaseSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    const auto& swiftOther = std::dynamic_pointer_cast<HybridBaseSpecSwift>(other);
+    if (swiftOther == nullptr) {
+      return false;
+    }
+    return NitroTest::HybridBaseSpec_cxx::equals(_swiftPart, swiftOther->getSwiftPart());
+  }
+
+  // pragma MARK: Properties
+  double HybridBaseSpecSwift::getBaseValue() noexcept {
+    return NitroTest::HybridBaseSpec_cxx::getBaseValue(_swiftPart);
+  }
+
+  // pragma MARK: Methods
+  
+
 } // namespace margelo::nitro::test

@@ -17,6 +17,7 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
   func getValue() throws -> String
 }
 
+/// See ``HybridSomeExternalObjectSpec``
 public extension HybridSomeExternalObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
@@ -26,29 +27,29 @@ public extension HybridSomeExternalObjectSpec_protocol {
 
 /// See ``HybridSomeExternalObjectSpec``
 open class HybridSomeExternalObjectSpec_base {
-  private weak var cxxWrapper: HybridSomeExternalObjectSpec_cxx? = nil
+  public typealias bridge = margelo.nitro.test.external.bridge.swift
+  private var _cxxPart: bridge.std__weak_ptr_HybridSomeExternalObjectSpec_ = .init()
+
   public init() { }
-  public func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
-  #if DEBUG
-    guard self is HybridSomeExternalObjectSpec else {
-      fatalError("`self` is not a `HybridSomeExternalObjectSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSpec_base` instead of `HybridSomeExternalObjectSpec`?")
-    }
-  #endif
-    if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+  
+  open func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+    let cachedCxxPart = self._cxxPart.lock()
+    if Bool(fromCxx: cachedCxxPart) {
+      return cachedCxxPart
     } else {
-      let cxxWrapper = HybridSomeExternalObjectSpec_cxx(self as! HybridSomeExternalObjectSpec)
-      self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      let unsafe = Unmanaged.passUnretained(self).toOpaque()
+      let cxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(unsafe)
+      _cxxPart = bridge.weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(cxxPart)
+      return cxxPart
     }
   }
 }
 
 /**
- * A Swift base-protocol representing the SomeExternalObject HybridObject.
+ * A Swift base-protocol (+ base class) representing the HybridObject "SomeExternalObject".
  * Implement this protocol to create Swift-based instances of SomeExternalObject.
  * ```swift
- * class HybridSomeExternalObject : HybridSomeExternalObjectSpec {
+ * class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
  *   // ...
  * }
  * ```

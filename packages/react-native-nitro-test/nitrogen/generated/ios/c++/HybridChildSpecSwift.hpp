@@ -9,18 +9,6 @@
 
 #include "HybridChildSpec.hpp"
 
-// Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridChildSpec_cxx; }
-
-// Forward declaration of `Car` to properly resolve imports.
-namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `Powertrain` to properly resolve imports.
-namespace margelo::nitro::test { enum class Powertrain; }
-// Forward declaration of `Person` to properly resolve imports.
-namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
-namespace margelo::nitro::test { class HybridBaseSpecSwift; }
-
 #include <string>
 #include "Car.hpp"
 #include <variant>
@@ -29,8 +17,6 @@ namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 #include <optional>
 #include <vector>
 #include "HybridBaseSpecSwift.hpp"
-
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 namespace margelo::nitro::test {
 
@@ -46,48 +32,37 @@ namespace margelo::nitro::test {
    */
   class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift {
   public:
-    // Constructor from a Swift instance
-    explicit HybridChildSpecSwift(const NitroTest::HybridChildSpec_cxx& swiftPart):
-      HybridObject(HybridChildSpec::TAG),
-      HybridBaseSpecSwift(swiftPart),
-      _swiftPart(swiftPart) { }
+    // Constructor from an unmanaged Swift instance. This retains +1
+    explicit HybridChildSpecSwift(void* NON_NULL /* unretained */ swiftPart);
+    // Destructor calls release -1 in Swift
+    ~HybridChildSpecSwift() override;
+    // Copy & Move is deleted
+    HybridChildSpecSwift(const HybridChildSpecSwift&) = delete;
+    HybridChildSpecSwift(HybridChildSpecSwift&&) = delete;
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridChildSpec_cxx& getSwiftPart() noexcept {
+    inline void* NON_NULL getSwiftPart() noexcept {
       return _swiftPart;
     }
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    // Base HybridObject overrides
+    size_t getExternalMemorySize() noexcept override;
+    void dispose() noexcept override;
+    std::string toString() override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
 
   public:
     // Properties
-    inline double getChildValue() noexcept override {
-      return _swiftPart.getChildValue();
-    }
+    double getChildValue() noexcept override;
 
   public:
     // Methods
-    inline std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override {
-      auto __result = _swiftPart.bounceVariant(variant);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
+    std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    NitroTest::HybridChildSpec_cxx _swiftPart;
+    void* NON_NULL /* retained */ _swiftPart;
   };
 
 } // namespace margelo::nitro::test
