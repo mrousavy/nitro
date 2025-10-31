@@ -23,6 +23,8 @@ public extension Powertrain {
         self = .gas
       case "hybrid":
         self = .hybrid
+      case "0-invalid":
+        self = ._0Invalid
       default:
         return nil
     }
@@ -39,6 +41,8 @@ public extension Powertrain {
         return "gas"
       case .hybrid:
         return "hybrid"
+      case ._0Invalid:
+        return "0-invalid"
     }
   }
 }
