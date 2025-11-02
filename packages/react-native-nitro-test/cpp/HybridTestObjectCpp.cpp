@@ -460,6 +460,10 @@ std::shared_ptr<Promise<double>> HybridTestObjectCpp::promiseReturnsInstantlyAsy
   return Promise<double>::async([=]() { return 55; });
 }
 
+std::shared_ptr<Promise<std::optional<double>>> HybridTestObjectCpp::promiseWithUndefinedResult() {
+  return Promise<std::optional<double>>::resolved(std::nullopt);
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();
