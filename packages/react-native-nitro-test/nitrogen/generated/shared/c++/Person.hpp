@@ -45,8 +45,8 @@ namespace margelo::nitro::test {
 } // namespace margelo::nitro::test
 
 inline bool operator== (const Person& lhs, const Person& rhs) noexcept {
-        return name == other.name && age == other.age;
-      }
+  return name == other.name && age == other.age;
+}
 
 namespace margelo::nitro {
 

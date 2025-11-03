@@ -47,8 +47,8 @@ namespace margelo::nitro::test {
 } // namespace margelo::nitro::test
 
 inline bool operator== (const OptionalWrapper& lhs, const OptionalWrapper& rhs) noexcept {
-        return optionalArrayBuffer == other.optionalArrayBuffer && optionalString == other.optionalString;
-      }
+  return optionalArrayBuffer == other.optionalArrayBuffer && optionalString == other.optionalString;
+}
 
 namespace margelo::nitro {
 
