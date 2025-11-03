@@ -56,8 +56,6 @@ ${extraImports.join('\n')}
 public ${enumDeclaration} ${typename} {
   ${indent(cases, '  ')}
 }
-
-public extension ${enumDeclaration}: Equatable {}
   `.trim()
 
   return {

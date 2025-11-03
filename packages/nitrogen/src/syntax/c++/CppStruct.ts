@@ -25,6 +25,9 @@ export function createCppStruct(
   const cppInitializerParams = properties
     .map((p) => `${p.escapedName}(${p.escapedName})`)
     .join(', ')
+  const equalityChecks = properties
+    .map((p) => `${p.escapedName} == other.${p.escapedName}`)
+    .join(' && ')
   // Get C++ code for converting each member from a jsi::Value
   const codeOptions: GetFunctionCodeOptions = {
     fullyQualified: true,
@@ -89,7 +92,9 @@ namespace ${cxxNamespace} {
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
 
   public:
-    bool equals(const ${typename}& other) const noexcept { return *this == other; }
+    bool operator==(const ${typename}& other) const noexcept {
+      return ${equalityChecks};
+    }
   };
 
 } // namespace ${cxxNamespace}
