@@ -44,7 +44,7 @@ namespace margelo::nitro::test {
     explicit WrappedJsStruct(JsStyleStruct value, std::vector<JsStyleStruct> items): value(value), items(items) {}
 
   public:
-    bool equals(const WrappedJsStruct& other) { return this == other; }
+    bool equals(const WrappedJsStruct& other) const noexcept { return this == other; }
   };
 
 } // namespace margelo::nitro::test

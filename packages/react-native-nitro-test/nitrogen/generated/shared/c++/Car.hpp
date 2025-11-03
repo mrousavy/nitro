@@ -59,7 +59,7 @@ namespace margelo::nitro::test {
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::vector<Person> passengers, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores, std::optional<std::variant<std::string, double>> someVariant): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), passengers(passengers), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores), someVariant(someVariant) {}
 
   public:
-    bool equals(const Car& other) { return this == other; }
+    bool equals(const Car& other) const noexcept { return this == other; }
   };
 
 } // namespace margelo::nitro::test

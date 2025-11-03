@@ -12,7 +12,7 @@ import NitroModules
  */
 public typealias OptionalCallback = margelo.nitro.test.OptionalCallback
 
-public extension OptionalCallback: Equatable {
+extension OptionalCallback: Equatable {
   public static func == (lhs: OptionalCallback, rhs: OptionalCallback) -> Bool {
     return lhs.equals(rhs)
   }

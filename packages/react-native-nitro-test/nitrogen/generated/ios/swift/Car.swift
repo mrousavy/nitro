@@ -12,7 +12,7 @@ import NitroModules
  */
 public typealias Car = margelo.nitro.test.Car
 
-public extension Car: Equatable {
+extension Car: Equatable {
   public static func == (lhs: Car, rhs: Car) -> Bool {
     return lhs.equals(rhs)
   }

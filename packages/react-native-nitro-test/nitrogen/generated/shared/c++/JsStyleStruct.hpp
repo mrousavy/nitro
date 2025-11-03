@@ -42,7 +42,7 @@ namespace margelo::nitro::test {
     explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
 
   public:
-    bool equals(const JsStyleStruct& other) { return this == other; }
+    bool equals(const JsStyleStruct& other) const noexcept { return this == other; }
   };
 
 } // namespace margelo::nitro::test

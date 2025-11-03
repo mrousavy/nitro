@@ -12,7 +12,7 @@ import NitroModules
  */
 public typealias SecondMapWrapper = margelo.nitro.test.SecondMapWrapper
 
-public extension SecondMapWrapper: Equatable {
+extension SecondMapWrapper: Equatable {
   public static func == (lhs: SecondMapWrapper, rhs: SecondMapWrapper) -> Bool {
     return lhs.equals(rhs)
   }
