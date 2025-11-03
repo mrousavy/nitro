@@ -42,7 +42,7 @@ namespace margelo::nitro::test {
     explicit Person(std::string name, double age): name(name), age(age) {}
 
   public:
-    bool equals(const Person& other) const noexcept { return this == other; }
+    bool equals(const Person& other) const noexcept { return *this == other; }
   };
 
 } // namespace margelo::nitro::test
