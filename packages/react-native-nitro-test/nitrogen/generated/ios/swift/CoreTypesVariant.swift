@@ -20,3 +20,5 @@ public indirect enum CoreTypesVariant {
   case fifth(Promise<Double>)
   case sixth(AnyMap)
 }
+
+public extension indirect enum: Equatable {}

@@ -19,3 +19,5 @@ public indirect enum Variant_Bool__Double___String__String_Double {
   case fourth(String)
   case fifth(Double)
 }
+
+public extension indirect enum: Equatable {}

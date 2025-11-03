@@ -16,3 +16,5 @@ public indirect enum Variant__any_HybridTestObjectSwiftKotlinSpec__Person {
   case first((any HybridTestObjectSwiftKotlinSpec))
   case second(Person)
 }
+
+public extension indirect enum: Equatable {}

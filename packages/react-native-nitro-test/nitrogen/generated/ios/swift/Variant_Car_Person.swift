@@ -16,3 +16,5 @@ public indirect enum Variant_Car_Person {
   case first(Car)
   case second(Person)
 }
+
+public extension indirect enum: Equatable {}

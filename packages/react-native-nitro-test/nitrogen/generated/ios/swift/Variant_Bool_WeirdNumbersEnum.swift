@@ -16,3 +16,5 @@ public indirect enum Variant_Bool_WeirdNumbersEnum {
   case first(Bool)
   case second(WeirdNumbersEnum)
 }
+
+public extension indirect enum: Equatable {}
