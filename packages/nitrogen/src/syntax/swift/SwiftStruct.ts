@@ -44,6 +44,12 @@ import NitroModules
  */
 public typealias ${struct.structName} = ${fullName}
 
+public extension ${struct.structName}: Equatable {
+  public static func == (lhs: ${struct.structName}, rhs: ${struct.structName}) -> Bool {
+    return lhs.equals(rhs)
+  }
+}
+
 public extension ${struct.structName} {
   private typealias bridge = ${bridgeNamespace}
 

@@ -42,6 +42,9 @@ namespace margelo::nitro::test {
   public:
     WrappedJsStruct() = default;
     explicit WrappedJsStruct(JsStyleStruct value, std::vector<JsStyleStruct> items): value(value), items(items) {}
+
+  public:
+    bool equals(const WrappedJsStruct& other) { return this == other; }
   };
 
 } // namespace margelo::nitro::test

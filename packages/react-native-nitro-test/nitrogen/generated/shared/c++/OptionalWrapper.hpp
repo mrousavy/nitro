@@ -42,6 +42,9 @@ namespace margelo::nitro::test {
   public:
     OptionalWrapper() = default;
     explicit OptionalWrapper(std::optional<std::shared_ptr<ArrayBuffer>> optionalArrayBuffer, std::optional<std::string> optionalString): optionalArrayBuffer(optionalArrayBuffer), optionalString(optionalString) {}
+
+  public:
+    bool equals(const OptionalWrapper& other) { return this == other; }
   };
 
 } // namespace margelo::nitro::test

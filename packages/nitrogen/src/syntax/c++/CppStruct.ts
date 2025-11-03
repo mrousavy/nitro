@@ -87,6 +87,9 @@ namespace ${cxxNamespace} {
   public:
     ${typename}() = default;
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
+
+  public:
+    bool equals(const ${typename}& other) { return this == other; }
   };
 
 } // namespace ${cxxNamespace}

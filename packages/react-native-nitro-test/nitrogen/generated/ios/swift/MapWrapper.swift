@@ -12,6 +12,12 @@ import NitroModules
  */
 public typealias MapWrapper = margelo.nitro.test.MapWrapper
 
+public extension MapWrapper: Equatable {
+  public static func == (lhs: MapWrapper, rhs: MapWrapper) -> Bool {
+    return lhs.equals(rhs)
+  }
+}
+
 public extension MapWrapper {
   private typealias bridge = margelo.nitro.test.bridge.swift
 

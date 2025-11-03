@@ -40,6 +40,9 @@ namespace margelo::nitro::test {
   public:
     Person() = default;
     explicit Person(std::string name, double age): name(name), age(age) {}
+
+  public:
+    bool equals(const Person& other) { return this == other; }
   };
 
 } // namespace margelo::nitro::test

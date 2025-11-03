@@ -12,6 +12,12 @@ import NitroModules
  */
 public typealias WrappedJsStruct = margelo.nitro.test.WrappedJsStruct
 
+public extension WrappedJsStruct: Equatable {
+  public static func == (lhs: WrappedJsStruct, rhs: WrappedJsStruct) -> Bool {
+    return lhs.equals(rhs)
+  }
+}
+
 public extension WrappedJsStruct {
   private typealias bridge = margelo.nitro.test.bridge.swift
 

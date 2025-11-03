@@ -12,6 +12,12 @@ import NitroModules
  */
 public typealias OptionalWrapper = margelo.nitro.test.OptionalWrapper
 
+public extension OptionalWrapper: Equatable {
+  public static func == (lhs: OptionalWrapper, rhs: OptionalWrapper) -> Bool {
+    return lhs.equals(rhs)
+  }
+}
+
 public extension OptionalWrapper {
   private typealias bridge = margelo.nitro.test.bridge.swift
 
