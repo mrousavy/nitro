@@ -44,7 +44,7 @@ namespace margelo::nitro::test {
 
 } // namespace margelo::nitro::test
 
-// JsStyleStruct is not equatable
+// JsStyleStruct is not equatable because these properties are not equatable: onChanged
 
 namespace margelo::nitro {
 

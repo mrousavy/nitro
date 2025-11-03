@@ -63,7 +63,10 @@ export function createCppStruct(
         return ${equalityChecks};
       }`.trim()
   } else {
-    equatableFunc = `// ${typename} is not equatable`
+    const nonEquatableTypes = properties
+      .filter((p) => !p.isEquatable)
+      .map((p) => p.name)
+    equatableFunc = `// ${typename} is not equatable because these properties are not equatable: ${nonEquatableTypes.join(', ')}`
   }
 
   // Get C++ includes for each extra-file we need to include

@@ -46,7 +46,7 @@ namespace margelo::nitro::test {
 
 } // namespace margelo::nitro::test
 
-// WrappedJsStruct is not equatable
+// WrappedJsStruct is not equatable because these properties are not equatable: value, items
 
 namespace margelo::nitro {
 
