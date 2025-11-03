@@ -88,6 +88,9 @@ export class EnumType implements Type {
   get kind(): TypeKind {
     return 'enum'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language, { fullyQualified }: GetCodeOptions = {}): string {
     switch (language) {

@@ -57,14 +57,13 @@ namespace margelo::nitro::test {
   public:
     Car() = default;
     explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::vector<Person> passengers, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores, std::optional<std::variant<std::string, double>> someVariant): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), passengers(passengers), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores), someVariant(someVariant) {}
-
-  public:
-    bool operator==(const Car& other) const noexcept {
-      return year == other.year && make == other.make && model == other.model && power == other.power && powertrain == other.powertrain && driver == other.driver && passengers == other.passengers && isFast == other.isFast && favouriteTrack == other.favouriteTrack && performanceScores == other.performanceScores && someVariant == other.someVariant;
-    }
   };
 
 } // namespace margelo::nitro::test
+
+inline bool operator== (const Car& lhs, const Car& rhs) noexcept {
+        return year == other.year && make == other.make && model == other.model && power == other.power && powertrain == other.powertrain && driver == other.driver && passengers == other.passengers && isFast == other.isFast && favouriteTrack == other.favouriteTrack && performanceScores == other.performanceScores && someVariant == other.someVariant;
+      }
 
 namespace margelo::nitro {
 

@@ -11,6 +11,9 @@ export class DateType implements Type {
   get kind(): TypeKind {
     return 'date'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

@@ -11,6 +11,9 @@ export class BigIntType implements Type {
   get kind(): TypeKind {
     return 'bigint'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

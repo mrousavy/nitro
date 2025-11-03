@@ -25,9 +25,6 @@ export function createCppStruct(
   const cppInitializerParams = properties
     .map((p) => `${p.escapedName}(${p.escapedName})`)
     .join(', ')
-  const equalityChecks = properties
-    .map((p) => `${p.escapedName} == other.${p.escapedName}`)
-    .join(' && ')
   // Get C++ code for converting each member from a jsi::Value
   const codeOptions: GetFunctionCodeOptions = {
     fullyQualified: true,
@@ -53,6 +50,21 @@ export function createCppStruct(
         `if (!JSIConverter<${p.getCode('c++', codeOptions)}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
     )
     .join('\n')
+
+  // Only equatable types have an operator== overload
+  let equatableFunc: string
+  const isEquatable = properties.every((p) => p.isEquatable)
+  if (isEquatable) {
+    const equalityChecks = properties
+      .map((p) => `${p.escapedName} == other.${p.escapedName}`)
+      .join(' && ')
+    equatableFunc = `
+      inline bool operator== (const ${typename}& lhs, const ${typename}& rhs) noexcept {
+        return ${equalityChecks};
+      }`.trim()
+  } else {
+    equatableFunc = `// ${typename} is not equatable`
+  }
 
   // Get C++ includes for each extra-file we need to include
   const includedTypes = properties.flatMap((r) => r.getRequiredImports('c++'))
@@ -90,14 +102,11 @@ namespace ${cxxNamespace} {
   public:
     ${typename}() = default;
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
-
-  public:
-    bool operator==(const ${typename}& other) const noexcept {
-      return ${equalityChecks};
-    }
   };
 
 } // namespace ${cxxNamespace}
+
+${equatableFunc}
 
 namespace margelo::nitro {
 

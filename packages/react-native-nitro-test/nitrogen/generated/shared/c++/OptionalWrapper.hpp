@@ -42,14 +42,13 @@ namespace margelo::nitro::test {
   public:
     OptionalWrapper() = default;
     explicit OptionalWrapper(std::optional<std::shared_ptr<ArrayBuffer>> optionalArrayBuffer, std::optional<std::string> optionalString): optionalArrayBuffer(optionalArrayBuffer), optionalString(optionalString) {}
-
-  public:
-    bool operator==(const OptionalWrapper& other) const noexcept {
-      return optionalArrayBuffer == other.optionalArrayBuffer && optionalString == other.optionalString;
-    }
   };
 
 } // namespace margelo::nitro::test
+
+inline bool operator== (const OptionalWrapper& lhs, const OptionalWrapper& rhs) noexcept {
+        return optionalArrayBuffer == other.optionalArrayBuffer && optionalString == other.optionalString;
+      }
 
 namespace margelo::nitro {
 

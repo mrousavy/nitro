@@ -42,14 +42,11 @@ namespace margelo::nitro::test {
   public:
     WrappedJsStruct() = default;
     explicit WrappedJsStruct(JsStyleStruct value, std::vector<JsStyleStruct> items): value(value), items(items) {}
-
-  public:
-    bool operator==(const WrappedJsStruct& other) const noexcept {
-      return value == other.value && items == other.items;
-    }
   };
 
 } // namespace margelo::nitro::test
+
+// WrappedJsStruct is not equatable
 
 namespace margelo::nitro {
 

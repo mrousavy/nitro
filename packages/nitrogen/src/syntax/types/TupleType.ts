@@ -17,6 +17,9 @@ export class TupleType implements Type {
   get kind(): TypeKind {
     return 'tuple'
   }
+  get isEquatable(): boolean {
+    return this.itemTypes.every((t) => t.isEquatable)
+  }
 
   getCode(language: Language, options?: GetCodeOptions): string {
     const types = this.itemTypes.map((t) => t.getCode(language, options))

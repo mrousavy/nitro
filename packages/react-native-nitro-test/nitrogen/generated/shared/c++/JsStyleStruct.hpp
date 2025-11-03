@@ -40,14 +40,11 @@ namespace margelo::nitro::test {
   public:
     JsStyleStruct() = default;
     explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
-
-  public:
-    bool operator==(const JsStyleStruct& other) const noexcept {
-      return value == other.value && onChanged == other.onChanged;
-    }
   };
 
 } // namespace margelo::nitro::test
+
+// JsStyleStruct is not equatable
 
 namespace margelo::nitro {
 

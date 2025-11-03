@@ -11,6 +11,9 @@ export class BooleanType implements Type {
   get kind(): TypeKind {
     return 'boolean'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

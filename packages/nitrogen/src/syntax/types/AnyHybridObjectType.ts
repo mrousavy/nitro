@@ -14,6 +14,9 @@ export class AnyHybridObjectType implements Type {
   get kind(): TypeKind {
     return 'hybrid-object-base'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

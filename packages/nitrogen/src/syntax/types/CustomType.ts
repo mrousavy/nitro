@@ -19,6 +19,9 @@ export class CustomType implements Type {
   get kind(): TypeKind {
     return 'custom-type'
   }
+  get isEquatable(): boolean {
+    return false
+  }
 
   getCode(language: Language): string {
     switch (language) {

@@ -17,6 +17,9 @@ export class ArrayType implements Type {
   get kind(): TypeKind {
     return 'array'
   }
+  get isEquatable(): boolean {
+    return this.itemType.isEquatable
+  }
 
   getCode(language: Language, options?: GetCodeOptions): string {
     const itemCode = this.itemType.getCode(language, options)

@@ -41,14 +41,11 @@ namespace margelo::nitro::test {
   public:
     OptionalCallback() = default;
     explicit OptionalCallback(std::optional<std::variant<std::function<void()>, double>> callback): callback(callback) {}
-
-  public:
-    bool operator==(const OptionalCallback& other) const noexcept {
-      return callback == other.callback;
-    }
   };
 
 } // namespace margelo::nitro::test
+
+// OptionalCallback is not equatable
 
 namespace margelo::nitro {
 
