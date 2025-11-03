@@ -59,9 +59,9 @@ export function createCppStruct(
       .map((p) => `${p.escapedName} == other.${p.escapedName}`)
       .join(' && ')
     equatableFunc = `
-      inline bool operator== (const ${typename}& lhs, const ${typename}& rhs) noexcept {
-        return ${equalityChecks};
-      }`.trim()
+inline bool operator== (const ${typename}& lhs, const ${typename}& rhs) noexcept {
+  return ${equalityChecks};
+}`.trim()
   } else {
     const nonEquatableTypes = properties
       .filter((p) => !p.isEquatable)
