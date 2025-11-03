@@ -12,12 +12,6 @@ import NitroModules
  */
 public typealias Person = margelo.nitro.test.Person
 
-extension Person: Equatable {
-  public static func == (lhs: Person, rhs: Person) -> Bool {
-    return lhs.equals(rhs)
-  }
-}
-
 public extension Person {
   private typealias bridge = margelo.nitro.test.bridge.swift
 

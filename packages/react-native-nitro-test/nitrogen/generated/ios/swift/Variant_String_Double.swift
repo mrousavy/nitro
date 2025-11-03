@@ -16,5 +16,3 @@ public enum Variant_String_Double {
   case first(String)
   case second(Double)
 }
-
-public extension enum: Equatable {}

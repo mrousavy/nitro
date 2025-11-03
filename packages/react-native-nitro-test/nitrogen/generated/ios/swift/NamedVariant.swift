@@ -16,5 +16,3 @@ public indirect enum NamedVariant {
   case first(String)
   case second(Car)
 }
-
-public extension indirect enum: Equatable {}

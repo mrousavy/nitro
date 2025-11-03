@@ -16,5 +16,3 @@ public enum Variant_Bool_Double {
   case first(Bool)
   case second(Double)
 }
-
-public extension enum: Equatable {}

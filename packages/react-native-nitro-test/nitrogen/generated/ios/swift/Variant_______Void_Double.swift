@@ -16,5 +16,3 @@ public indirect enum Variant_______Void_Double {
   case first(() -> Void)
   case second(Double)
 }
-
-public extension indirect enum: Equatable {}

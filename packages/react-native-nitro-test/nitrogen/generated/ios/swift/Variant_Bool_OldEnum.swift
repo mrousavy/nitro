@@ -16,5 +16,3 @@ public indirect enum Variant_Bool_OldEnum {
   case first(Bool)
   case second(OldEnum)
 }
-
-public extension indirect enum: Equatable {}

@@ -16,5 +16,3 @@ public indirect enum Variant__any_HybridBaseSpec__OptionalWrapper {
   case first((any HybridBaseSpec))
   case second(OptionalWrapper)
 }
-
-public extension indirect enum: Equatable {}

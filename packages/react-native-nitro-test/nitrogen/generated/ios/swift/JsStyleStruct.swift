@@ -12,12 +12,6 @@ import NitroModules
  */
 public typealias JsStyleStruct = margelo.nitro.test.JsStyleStruct
 
-extension JsStyleStruct: Equatable {
-  public static func == (lhs: JsStyleStruct, rhs: JsStyleStruct) -> Bool {
-    return lhs.equals(rhs)
-  }
-}
-
 public extension JsStyleStruct {
   private typealias bridge = margelo.nitro.test.bridge.swift
 
