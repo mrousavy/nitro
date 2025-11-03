@@ -56,7 +56,7 @@ export function createCppStruct(
   const isEquatable = properties.every((p) => p.isEquatable)
   if (isEquatable) {
     const equalityChecks = properties
-      .map((p) => `${p.escapedName} == other.${p.escapedName}`)
+      .map((p) => `lhs.${p.escapedName} == rhs.${p.escapedName}`)
       .join(' && ')
     equatableFunc = `
 inline bool operator==(const ${typename}& lhs, const ${typename}& rhs) noexcept {
