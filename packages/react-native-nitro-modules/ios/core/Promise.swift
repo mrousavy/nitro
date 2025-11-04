@@ -126,6 +126,16 @@ extension Promise {
   }
 }
 
+/// Void overloads to avoid typing out `()`
+extension Promise where T == Void {
+  public func resolve() {
+    return self.resolve(withResult: ())
+  }
+  public static func resolved() -> Promise {
+    return Self.resolved(withResult: ())
+  }
+}
+
 /// Extensions to support then/catch syntax.
 extension Promise {
   /**
