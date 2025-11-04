@@ -61,7 +61,8 @@ namespace margelo::nitro::test {
 
 } // namespace margelo::nitro::test
 
-inline bool operator==(const Car& lhs, const Car& rhs) noexcept {
+inline bool operator==(const margelo::nitro::test::Car& lhs,
+                       const margelo::nitro::test::Car& rhs) noexcept {
   return lhs.year == rhs.year && lhs.make == rhs.make && lhs.model == rhs.model && lhs.power == rhs.power && lhs.powertrain == rhs.powertrain && lhs.driver == rhs.driver && lhs.passengers == rhs.passengers && lhs.isFast == rhs.isFast && lhs.favouriteTrack == rhs.favouriteTrack && lhs.performanceScores == rhs.performanceScores && lhs.someVariant == rhs.someVariant;
 }
 

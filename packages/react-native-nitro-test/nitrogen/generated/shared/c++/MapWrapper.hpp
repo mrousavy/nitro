@@ -47,7 +47,8 @@ namespace margelo::nitro::test {
 
 } // namespace margelo::nitro::test
 
-inline bool operator==(const MapWrapper& lhs, const MapWrapper& rhs) noexcept {
+inline bool operator==(const margelo::nitro::test::MapWrapper& lhs,
+                       const margelo::nitro::test::MapWrapper& rhs) noexcept {
   return lhs.map == rhs.map && lhs.secondMap == rhs.secondMap;
 }
 

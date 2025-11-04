@@ -59,7 +59,8 @@ export function createCppStruct(
       .map((p) => `lhs.${p.escapedName} == rhs.${p.escapedName}`)
       .join(' && ')
     equatableFunc = `
-inline bool operator==(const ${typename}& lhs, const ${typename}& rhs) noexcept {
+inline bool operator==(const ${fullyQualifiedTypename}& lhs,
+                       const ${fullyQualifiedTypename}& rhs) noexcept {
   return ${equalityChecks};
 }`.trim()
   } else {
