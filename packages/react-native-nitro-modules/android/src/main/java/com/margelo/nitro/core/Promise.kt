@@ -190,7 +190,7 @@ class Promise<T> {
 
 // Void overloads
 fun Promise<Unit>.resolve() {
-  return resolve(Unit)
+  resolve(Unit)
 }
 
 fun Promise<Unit>.Companion.resolved(): Promise<Unit> {
