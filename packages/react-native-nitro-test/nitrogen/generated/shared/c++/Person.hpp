@@ -42,7 +42,7 @@ namespace margelo::nitro::test {
     explicit Person(std::string name, double age): name(name), age(age) {}
 
   public:
-    friend inline bool operator==(const Person& other) const = default;
+    friend bool operator==(const Person& lhs, const Person& rhs) const = default;
   };
 
 } // namespace margelo::nitro::test
