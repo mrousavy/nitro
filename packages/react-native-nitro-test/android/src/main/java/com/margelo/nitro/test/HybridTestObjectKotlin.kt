@@ -8,6 +8,7 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.resolved
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
 import java.math.BigDecimal

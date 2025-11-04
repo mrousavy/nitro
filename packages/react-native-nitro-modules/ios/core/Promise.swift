@@ -128,9 +128,15 @@ extension Promise {
 
 /// Void overloads to avoid typing out `()`
 extension Promise where T == Void {
+  /**
+   * Resolves this `Promise<Void>`.
+   */
   public func resolve() {
     return self.resolve(withResult: ())
   }
+  /**
+   * Create an already resolved `Promise<Void>`.
+   */
   public static func resolved() -> Promise {
     return Self.resolved(withResult: ())
   }

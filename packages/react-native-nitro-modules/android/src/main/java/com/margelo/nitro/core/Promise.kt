@@ -188,11 +188,18 @@ class Promise<T> {
   }
 }
 
-// Void overloads
+/**
+ * Resolves this `Promise<Unit>`.
+ * @since void overload
+ */
 fun Promise<Unit>.resolve() {
   resolve(Unit)
 }
 
-fun Promise<Unit>.Companion.resolved(): Promise<Unit> {
-  return Promise.resolve(Unit)
+/**
+ * Create an already resolved `Promise<Unit>`.
+ * @since void overload
+ */
+fun Promise.Companion.resolved(): Promise<Unit> {
+  return Promise.resolved(Unit)
 }
