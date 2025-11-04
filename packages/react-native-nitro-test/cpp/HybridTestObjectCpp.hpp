@@ -153,6 +153,7 @@ public:
   std::shared_ptr<Promise<void>> promiseThrows() override;
   std::shared_ptr<Promise<double>> promiseReturnsInstantly() override;
   std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() override;
+  std::shared_ptr<Promise<void>> promiseThatResolvesVoidInstantly() override;
   Car getCar() override;
   bool isCarElectric(const Car& car) override;
   std::optional<Person> getDriver(const Car& car) override;

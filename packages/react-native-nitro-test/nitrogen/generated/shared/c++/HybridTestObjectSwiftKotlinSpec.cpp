@@ -75,6 +75,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("promiseThrows", &HybridTestObjectSwiftKotlinSpec::promiseThrows);
       prototype.registerHybridMethod("promiseReturnsInstantly", &HybridTestObjectSwiftKotlinSpec::promiseReturnsInstantly);
       prototype.registerHybridMethod("promiseReturnsInstantlyAsync", &HybridTestObjectSwiftKotlinSpec::promiseReturnsInstantlyAsync);
+      prototype.registerHybridMethod("promiseThatResolvesVoidInstantly", &HybridTestObjectSwiftKotlinSpec::promiseThatResolvesVoidInstantly);
       prototype.registerHybridMethod("awaitAndGetPromise", &HybridTestObjectSwiftKotlinSpec::awaitAndGetPromise);
       prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectSwiftKotlinSpec::awaitAndGetComplexPromise);
       prototype.registerHybridMethod("awaitPromise", &HybridTestObjectSwiftKotlinSpec::awaitPromise);
