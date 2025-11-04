@@ -40,14 +40,12 @@ namespace margelo::nitro::test {
   public:
     Person() = default;
     explicit Person(std::string name, double age): name(name), age(age) {}
+
+  public:
+    friend inline bool operator==(const Person& other) const = default;
   };
 
 } // namespace margelo::nitro::test
-
-inline bool operator==(const margelo::nitro::test::Person& lhs,
-                       const margelo::nitro::test::Person& rhs) noexcept {
-  return lhs.name == rhs.name && lhs.age == rhs.age;
-}
 
 namespace margelo::nitro {
 

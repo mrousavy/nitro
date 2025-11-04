@@ -43,14 +43,12 @@ namespace margelo::nitro::test {
   public:
     MapWrapper() = default;
     explicit MapWrapper(std::unordered_map<std::string, std::string> map, SecondMapWrapper secondMap): map(map), secondMap(secondMap) {}
+
+  public:
+    friend inline bool operator==(const MapWrapper& other) const = default;
   };
 
 } // namespace margelo::nitro::test
-
-inline bool operator==(const margelo::nitro::test::MapWrapper& lhs,
-                       const margelo::nitro::test::MapWrapper& rhs) noexcept {
-  return lhs.map == rhs.map && lhs.secondMap == rhs.secondMap;
-}
 
 namespace margelo::nitro {
 

@@ -40,11 +40,12 @@ namespace margelo::nitro::test {
   public:
     JsStyleStruct() = default;
     explicit JsStyleStruct(double value, std::function<void(double /* num */)> onChanged): value(value), onChanged(onChanged) {}
+
+  public:
+    // JsStyleStruct is not equatable because these properties are not equatable: onChanged
   };
 
 } // namespace margelo::nitro::test
-
-// JsStyleStruct is not equatable because these properties are not equatable: onChanged
 
 namespace margelo::nitro {
 

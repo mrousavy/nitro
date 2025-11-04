@@ -55,14 +55,7 @@ export function createCppStruct(
   let equatableFunc: string
   const isEquatable = properties.every((p) => p.isEquatable)
   if (isEquatable) {
-    const equalityChecks = properties
-      .map((p) => `lhs.${p.escapedName} == rhs.${p.escapedName}`)
-      .join(' && ')
-    equatableFunc = `
-inline bool operator==(const ${fullyQualifiedTypename}& lhs,
-                       const ${fullyQualifiedTypename}& rhs) noexcept {
-  return ${equalityChecks};
-}`.trim()
+    equatableFunc = `friend inline bool operator==(const ${typename}& other) const = default;`
   } else {
     const nonEquatableTypes = properties
       .filter((p) => !p.isEquatable)
@@ -106,11 +99,12 @@ namespace ${cxxNamespace} {
   public:
     ${typename}() = default;
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
+
+  public:
+    ${indent(equatableFunc, '    ')}
   };
 
 } // namespace ${cxxNamespace}
-
-${equatableFunc}
 
 namespace margelo::nitro {
 
