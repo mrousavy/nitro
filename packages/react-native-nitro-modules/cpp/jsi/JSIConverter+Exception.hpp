@@ -11,7 +11,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
-
+#include "NitroError.hpp"
 #include "NitroTypeInfo.hpp"
 #include <exception>
 #include <jsi/jsi.h>
@@ -36,6 +36,9 @@ struct JSIConverter<std::exception_ptr> final {
 
     try {
       std::rethrow_exception(exception);
+    } catch (const NitroError& e) {
+      jsi::JSError error = e.toJS(runtime);
+      return jsi::Value(runtime, error.value());
     } catch (const std::exception& e) {
       jsi::JSError error(runtime, e.what());
       return jsi::Value(runtime, error.value());

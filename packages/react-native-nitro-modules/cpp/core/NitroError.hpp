@@ -12,17 +12,20 @@
 
 namespace margelo::nitro {
 
+using namespace facebook;
+
 class NitroError : public std::exception {
 public:
-  NitroError(std::string typename, std::string message, std::string stacktrace)
-      : _typename(std::move(typename)), _message(std::move(message)), _stacktrace(std::move(stacktrace)) {}
+  NitroError(std::string type, std::string message, std::string stacktrace)
+      : _typename(std::move(type)), _message(std::move(message)), _stacktrace(std::move(stacktrace)) {}
 
 public:
   const char* what() const noexcept override {
     return _message.c_str();
   }
 
-  jsi::Error toJS(jsi::Runtime& runtime) const;
+public:
+  jsi::JSError toJS(jsi::Runtime& runtime) const;
 
 private:
   std::string _typename;

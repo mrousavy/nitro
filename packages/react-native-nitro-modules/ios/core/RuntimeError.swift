@@ -34,7 +34,9 @@ extension Error {
    * Converts this `Error` to a C++ `std::exception`.
    */
   public func toCpp() -> std.exception_ptr {
+    let typename = String(describing: type(of: self))
     let message = String(describing: self)
-    return margelo.nitro.makeException(std.string(message))
+    let stack = Thread.callStackSymbols.joined(separator: "\n")
+    return margelo.nitro.makeException(std.string(typename), std.string(message), std.string(stack))
   }
 }

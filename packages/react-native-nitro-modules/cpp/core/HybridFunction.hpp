@@ -17,6 +17,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
+#include "NitroError.hpp"
 #include <exception>
 #include <functional>
 #include <jsi/jsi.h>
@@ -116,6 +117,9 @@ public:
         // 3. Actually call the method with JSI values as arguments and return a JSI value again.
         //    Internally, this method converts the JSI values to C++ values using `JSIConverter<T>`.
         return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
+      } catch (const NitroError& error) {
+        // A NitroError was thrown - rethrow the JSError
+        throw error.toJS(runtime);
       } catch (const std::exception& exception) {
         // Some exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());

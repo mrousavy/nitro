@@ -11,16 +11,18 @@
 
 namespace margelo::nitro {
 
-jsi::Error NitroError::toJS(jsi::Runtime& runtime) const {
+using namespace facebook;
+
+jsi::JSError NitroError::toJS(jsi::Runtime& runtime) const {
   // 1. Create a base JS Error with a message
-  jsi::Object error = jsi::Error(runtime, _message).value();
-
-  // 2. Set type and stacktrace
-  error.setProperty(runtime, "type", _typename);
-  error.setProperty(runtime, "stacktrace", _stacktrace);
-
-  // 3. Box it back into a jsi::Error
-  return jsi::Error(runtime, error);
+  jsi::JSError error(runtime, _message, _stacktrace);
+  
+  // 2. Set the `type` property on the JS Object -
+  //    it's a reference type, so it should update the underlying `error` instance
+  error.value().asObject(runtime).setProperty(runtime, "type", _typename);
+  
+  // 3. Return it again
+  return error;
 }
 
 } // namespace margelo::nitro
