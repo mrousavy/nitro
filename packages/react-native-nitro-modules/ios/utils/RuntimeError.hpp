@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroError.hpp"
 #include "NitroTypeInfo.hpp"
 #include <exception>
 #include <string>
@@ -15,6 +16,11 @@ namespace margelo::nitro {
 
 static inline std::exception_ptr makeException(const std::string& message) {
   return std::make_exception_ptr(std::runtime_error(message));
+}
+
+static inline std::exception_ptr makeException(const std::string& type, const std::string& message, const std::string& stacktrace) {
+  NitroError error(type, message, stacktrace);
+  return std::make_exception_ptr(std::move(error));
 }
 
 static inline std::string getExceptionMessage(const std::exception_ptr& exception) {
