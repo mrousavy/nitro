@@ -55,7 +55,7 @@ export function createCppStruct(
   let equatableFunc: string
   const isEquatable = properties.every((p) => p.isEquatable)
   if (isEquatable) {
-    equatableFunc = `friend bool operator==(const ${typename}& lhs, const ${typename}& rhs) const = default;`
+    equatableFunc = `friend bool operator==(const ${typename}& lhs, const ${typename}& rhs) = default;`
   } else {
     const nonEquatableTypes = properties
       .filter((p) => !p.isEquatable)
