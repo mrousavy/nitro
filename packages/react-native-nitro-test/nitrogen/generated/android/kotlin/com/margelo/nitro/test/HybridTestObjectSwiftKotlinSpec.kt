@@ -280,6 +280,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun promiseThatResolvesVoidInstantly(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
   abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
   
   @DoNotStrip

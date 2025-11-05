@@ -8,6 +8,7 @@ import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.resolved
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
@@ -231,6 +232,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return Promise.async {
       return@async 55.0
     }
+  }
+
+  override fun promiseThatResolvesVoidInstantly(): Promise<Unit> {
+    return Promise.resolved()
   }
 
   override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {

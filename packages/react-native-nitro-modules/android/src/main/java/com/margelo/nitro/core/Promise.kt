@@ -187,3 +187,19 @@ class Promise<T> {
     }
   }
 }
+
+/**
+ * Resolves this `Promise<Unit>`.
+ * @since void overload
+ */
+fun Promise<Unit>.resolve() {
+  resolve(Unit)
+}
+
+/**
+ * Create an already resolved `Promise<Unit>`.
+ * @since void overload
+ */
+fun Promise.Companion.resolved(): Promise<Unit> {
+  return Promise.resolved(Unit)
+}
