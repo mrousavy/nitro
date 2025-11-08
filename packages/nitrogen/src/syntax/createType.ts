@@ -218,7 +218,7 @@ export function createType(
         .getTupleElements()
         .map((t) => createType(language, t, t.isNullable()))
       return new TupleType(itemTypes)
-    } else if (type.getCallSignatures().length > 0) {
+    } else if (type.getCallSignatures().length > 0 && !type.isObject()) {
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
