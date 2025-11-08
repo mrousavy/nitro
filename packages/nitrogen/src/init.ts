@@ -94,7 +94,7 @@ async function downloadGitHubFolder(
   const tempPath = randomUUID()
   const tempDir = path.join(outputPath, tempPath)
   execSync(
-    `git clone --depth 1 --filter=blob:none -b ${branch} --quiet --sparse ${repoUrl} ${tempDir}`
+    `git clone --depth 1 --filter=blob:none -b ${branch} --quiet --sparse ${repoUrl} "${tempDir}"`
   )
   const prettyOutputPath = prettifyDirectory(outputPath)
 
