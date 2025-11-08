@@ -330,6 +330,11 @@ export function createType(
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
       const typename = type.getSymbolOrThrow().getName()
+      if (type.getConstructSignatures().length > 0) {
+        throw new Error(
+          `Type ${typename} has constructor signatures - this type cannot be represented in native. (From ${type.getText()})`
+        )
+      }
       const properties = getInterfaceProperties(language, type)
       return new StructType(typename, properties)
     } else if (type.isObject()) {
