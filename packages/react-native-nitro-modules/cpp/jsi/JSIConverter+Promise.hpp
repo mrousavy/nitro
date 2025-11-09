@@ -12,6 +12,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "JSIConverter.hpp"
+#include "JSPromise.hpp"
 #include "NitroTypeInfo.hpp"
 #include "Promise.hpp"
 #include <exception>
@@ -31,6 +32,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
+        // note: this has to still take 1 argument (just std::monostate/undefined), because the Promise.then(..) func needs an argument.
         return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
       } else {
         // T: resolve(T)
@@ -50,8 +52,11 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
     if (promise->isPending()) {
-      // Get Promise ctor from global
-      jsi::Function promiseCtor = runtime.global().getPropertyAsFunction(runtime, "Promise");
+      //
+      //
+      // Promise is still pending, we need to attach listeners (.then & .catch)
+      //
+      //
       jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* arguments,
                                                  size_t) -> jsi::Value {
         // Add resolver listener
@@ -71,26 +76,31 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
         return jsi::Value::undefined();
       };
       // Call `Promise` constructor (aka create promise), and pass `executor` function
-      return promiseCtor.callAsConstructor(
-          runtime, jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor));
+      jsi::Function executorFunc =
+          jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor);
+      return JSPromise::create(runtime, std::move(executorFunc));
     } else if (promise->isResolved()) {
+      //
+      //
       // Promise is already resolved - just return immediately
-      jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
-      jsi::Function createResolvedPromise = promiseObject.getPropertyAsFunction(runtime, "resolve");
+      //
+      //
       if constexpr (std::is_void_v<TResult>) {
         // It's resolving to void.
-        return createResolvedPromise.call(runtime);
+        return JSPromise::resolved(runtime);
       } else {
         // It's resolving to a type.
         jsi::Value result = JSIConverter<TResult>::toJSI(runtime, promise->getResult());
-        return createResolvedPromise.call(runtime, std::move(result));
+        return JSPromise::resolved(runtime, std::move(result));
       }
     } else if (promise->isRejected()) {
+      //
+      //
       // Promise is already rejected - just return immediately
-      jsi::Object promiseObject = runtime.global().getPropertyAsObject(runtime, "Promise");
-      jsi::Function createRejectedPromise = promiseObject.getPropertyAsFunction(runtime, "reject");
+      //
+      //
       jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
-      return createRejectedPromise.call(runtime, std::move(error));
+      return JSPromise::rejected(runtime, std::move(error));
     } else {
       std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
       throw std::runtime_error("Promise<" + typeName + "> has invalid state!");
