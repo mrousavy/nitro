@@ -42,6 +42,67 @@ Both `name` and `age` are always part of `Person`, they are never a different ty
 
 This makes the TypeScript definition the **single source of truth**, allowing you to rely on types! 🤩
 
+## Prefer `interface` over `type`
+
+Since TypeScript flattens types (`type`), their symbols or declarations might get lost. Unfortunately Nitro cannot find a struct name for a flattened type, so it is generally recommended to use `interface` instead of `type`:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Bad ❌"
+type Person = {
+  name: string
+  age: number
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```ts title="Good ✅"
+interface Person {
+  name: string
+  age: number
+}
+```
+
+</div>
+</div>
+
+## Combined types (e.g. `Partial`)
+
+In TypeScript, it is a common practice to modify and combine types using [utility types like `Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html).
+
+As mentioned in ["Prefer `interface` over `type`"](#prefer-interface-over-type), you should prefer to use `interface` over `type` for those types too:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="Bad ❌"
+interface Person {
+  name: string
+  age: number
+}
+type PartialPerson = Partial<Person>
+```
+
+</div>
+<div className="side-by-side-block">
+
+```ts title="Good ✅"
+interface Person {
+  name: string
+  age: number
+}
+interface PartialPerson
+  extends Partial<Person> {}
+```
+
+</div>
+</div>
+
+This way TypeScript always keeps the `interface` in-tact, allowing Nitrogen to properly process it.
+
 ## Structs are eagerly converted
 
 Since structs are just flat value types, each key/value is eagerly converted from a JS value to a native value (and vice-versa) when passing them between JS and native.
