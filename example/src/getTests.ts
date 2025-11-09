@@ -424,18 +424,20 @@ export function getTests(
         ])
     ),
     createTest('bouncePartialStruct(...) empty equals', () =>
-      it(() => testObject.bouncePartialStruct({}))
+      it(() =>
+        testObject.bouncePartialStruct({ name: undefined, age: undefined })
+      )
         .didNotThrow()
         .didReturn('object')
-        .equals({})
+        .equals({ name: undefined, age: undefined })
     ),
     createTest('bouncePartialStruct(...) with 1 key equals', () =>
-      it(() => testObject.bouncePartialStruct({ name: 'Marc' }))
+      it(() => testObject.bouncePartialStruct({ name: 'Marc', age: undefined }))
         .didNotThrow()
         .didReturn('object')
-        .equals({ name: 'Marc' })
+        .equals({ name: 'Marc', age: undefined })
     ),
-    createTest('bouncePartialStruct(...) with 1 key equals', () =>
+    createTest('bouncePartialStruct(...) with all keys equals', () =>
       it(() => testObject.bouncePartialStruct({ name: 'Marc', age: 25 }))
         .didNotThrow()
         .didReturn('object')
