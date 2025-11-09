@@ -143,7 +143,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func bouncePartialPerson(person: PartialPerson) throws -> PartialPerson {
+  func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson {
     return person
   }
 

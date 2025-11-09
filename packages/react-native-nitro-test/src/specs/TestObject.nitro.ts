@@ -98,6 +98,7 @@ type CoreTypesVariant =
   | Date
   | AnyMap
 
+// Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
