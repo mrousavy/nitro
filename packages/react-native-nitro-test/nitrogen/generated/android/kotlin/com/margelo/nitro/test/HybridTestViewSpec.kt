@@ -73,6 +73,10 @@ abstract class HybridTestViewSpec: HybridView() {
     set(value) {
       someCallback = value
     }
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val nonSettableProp: Boolean
 
   // Methods
   @DoNotStrip

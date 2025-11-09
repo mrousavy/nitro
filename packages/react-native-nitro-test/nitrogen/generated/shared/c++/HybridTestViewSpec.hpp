@@ -54,6 +54,7 @@ namespace margelo::nitro::test {
       virtual void setColorScheme(ColorScheme colorScheme) = 0;
       virtual std::function<void()> getSomeCallback() = 0;
       virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual bool getNonSettableProp() = 0;
 
     public:
       // Methods

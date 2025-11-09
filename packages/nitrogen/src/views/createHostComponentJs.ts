@@ -7,7 +7,8 @@ import { indent } from '../utils.js'
 export function createHostComponentJs(spec: HybridObjectSpec): SourceFile[] {
   const { T } = getHybridObjectName(spec.name)
 
-  const props = spec.properties.map((p) => `"${p.name}": true`)
+  const settableProps = spec.properties.filter((p) => !p.isReadonly)
+  const props = settableProps.map((p) => `"${p.name}": true`)
   props.push(`"hybridRef": true`)
 
   const code = `

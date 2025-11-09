@@ -91,6 +91,11 @@ using namespace margelo::nitro::test::views;
     swiftPart.setSomeCallback(newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;
   }
+  // nonSettableProp: boolean
+  if (newViewProps.nonSettableProp.isDirty) {
+    swiftPart.setNonSettableProp(newViewProps.nonSettableProp.value);
+    newViewProps.nonSettableProp.isDirty = false;
+  }
 
   swiftPart.afterUpdate();
 

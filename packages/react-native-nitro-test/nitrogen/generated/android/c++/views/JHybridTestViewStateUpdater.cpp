@@ -52,6 +52,10 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     view->setSomeCallback(props.someCallback.value);
     // TODO: Set isDirty = false
   }
+  if (props.nonSettableProp.isDirty) {
+    view->setNonSettableProp(props.nonSettableProp.value);
+    // TODO: Set isDirty = false
+  }
 
   // Update hybridRef if it changed
   if (props.hybridRef.isDirty) {

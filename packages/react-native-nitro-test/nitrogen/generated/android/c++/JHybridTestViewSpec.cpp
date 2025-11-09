@@ -90,6 +90,11 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
   }
+  bool JHybridTestViewSpec::getNonSettableProp() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getNonSettableProp");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
 
   // Methods
   void JHybridTestViewSpec::someMethod() {
