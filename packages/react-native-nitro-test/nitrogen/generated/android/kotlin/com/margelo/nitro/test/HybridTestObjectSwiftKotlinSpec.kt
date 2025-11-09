@@ -175,6 +175,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bouncePartialStruct(person: PartialPerson): PartialPerson
+  
+  @DoNotStrip
+  @Keep
   abstract fun sumUpAllPassengers(cars: Array<Car>): String
   
   @DoNotStrip

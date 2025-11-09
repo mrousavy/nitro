@@ -423,6 +423,24 @@ export function getTests(
           { age: 5, name: 'Ben' },
         ])
     ),
+    createTest('bouncePartialStruct(...) empty equals', () =>
+      it(() => testObject.bouncePartialStruct({}))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({})
+    ),
+    createTest('bouncePartialStruct(...) with 1 key equals', () =>
+      it(() => testObject.bouncePartialStruct({ name: 'Marc' }))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({ name: 'Marc' })
+    ),
+    createTest('bouncePartialStruct(...) with 1 key equals', () =>
+      it(() => testObject.bouncePartialStruct({ name: 'Marc', age: 25 }))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({ name: 'Marc', age: 25 })
+    ),
     createTest('sumUpAllPassengers(...) equals', () =>
       it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
         .didNotThrow()

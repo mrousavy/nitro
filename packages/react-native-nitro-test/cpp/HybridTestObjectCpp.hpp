@@ -109,6 +109,7 @@ public:
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
   std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+  PartialPerson bouncePartialStruct(const PartialPerson& person) override;
   std::string sumUpAllPassengers(const std::vector<Car>& cars) override;
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,

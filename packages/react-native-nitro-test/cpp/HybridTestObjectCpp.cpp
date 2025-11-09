@@ -172,6 +172,10 @@ std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>
   return array;
 }
 
+PartialPerson HybridTestObjectCpp::bouncePartialStruct(const PartialPerson& person) {
+  return person;
+}
+
 std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars) {
   std::ostringstream oss;
   bool first = true;

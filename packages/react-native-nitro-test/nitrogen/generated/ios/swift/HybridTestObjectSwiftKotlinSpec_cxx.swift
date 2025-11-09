@@ -554,6 +554,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bouncePartialStruct(person: PartialPerson) -> bridge.Result_PartialPerson_ {
+    do {
+      let __result = try self.__implementation.bouncePartialStruct(person: person)
+      let __resultCpp = __result
+      return bridge.create_Result_PartialPerson_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_PartialPerson_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func sumUpAllPassengers(cars: bridge.std__vector_Car_) -> bridge.Result_std__string_ {
     do {
       let __result = try self.__implementation.sumUpAllPassengers(cars: cars.map({ __item in __item }))
