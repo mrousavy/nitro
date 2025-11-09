@@ -98,6 +98,9 @@ type CoreTypesVariant =
   | Date
   | AnyMap
 
+// Prefer `interface` + `extends` over `type` so TS doesn't flatten it
+interface PartialPerson extends Partial<Person> {}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -125,6 +128,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
+  bouncePartialStruct(person: PartialPerson): PartialPerson
   sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(

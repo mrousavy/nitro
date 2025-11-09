@@ -32,6 +32,8 @@ namespace margelo::nitro::test { enum class OldEnum; }
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `PartialPerson` to properly resolve imports.
+namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -66,6 +68,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
+#include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
@@ -439,6 +442,21 @@ namespace margelo::nitro::test::bridge::swift {
     return *optional;
   }
   
+  // pragma MARK: std::optional<double>
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
+    return std::optional<double>(value);
+  }
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::vector<Car>
   /**
    * Specialized version of `std::vector<Car>`.
@@ -696,21 +714,6 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_Car create_Func_void_Car(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_Car_Wrapper wrap_Func_void_Car(Func_void_Car value) noexcept {
     return Func_void_Car_Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::optional<double>
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
-    return std::optional<double>(value);
-  }
-  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return *optional;
   }
   
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
@@ -1372,6 +1375,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<PartialPerson>
+  using Result_PartialPerson_ = Result<PartialPerson>;
+  inline Result_PartialPerson_ create_Result_PartialPerson_(const PartialPerson& value) noexcept {
+    return Result<PartialPerson>::withValue(value);
+  }
+  inline Result_PartialPerson_ create_Result_PartialPerson_(const std::exception_ptr& error) noexcept {
+    return Result<PartialPerson>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<Powertrain>>

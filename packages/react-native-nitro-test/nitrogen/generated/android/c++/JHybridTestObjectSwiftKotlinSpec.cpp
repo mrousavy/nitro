@@ -15,6 +15,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `PartialPerson` to properly resolve imports.
+namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -57,6 +59,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
+#include "PartialPerson.hpp"
+#include "JPartialPerson.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -377,6 +381,11 @@ namespace margelo::nitro::test {
       }
       return __vector;
     }();
+  }
+  PartialPerson JHybridTestObjectSwiftKotlinSpec::bouncePartialStruct(const PartialPerson& person) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPartialPerson>(jni::alias_ref<JPartialPerson> /* person */)>("bouncePartialStruct");
+    auto __result = method(_javaPart, JPartialPerson::fromCpp(person));
+    return __result->toCpp();
   }
   std::string JHybridTestObjectSwiftKotlinSpec::sumUpAllPassengers(const std::vector<Car>& cars) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JArrayClass<JCar>> /* cars */)>("sumUpAllPassengers");

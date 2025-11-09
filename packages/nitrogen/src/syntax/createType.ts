@@ -329,7 +329,10 @@ export function createType(
       return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
-      const typename = type.getSymbolOrThrow().getName()
+      const symbol = type.getAliasSymbol() ?? type.getSymbol()
+      if (symbol == null)
+        throw new Error(`Interface "${type.getText()}" does not have a Symbol!`)
+      const typename = symbol.getName()
       const properties = getInterfaceProperties(language, type)
       return new StructType(typename, properties)
     } else if (type.isObject()) {
@@ -350,6 +353,10 @@ export function createType(
     } else if (type.isStringLiteral()) {
       throw new Error(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
+    } else if (type.isAny()) {
+      throw new Error(
+        `The TypeScript type "${type.getText()}" resolved to any - any is not supported in Nitro.`
       )
     } else {
       if (type.getSymbol() == null) {

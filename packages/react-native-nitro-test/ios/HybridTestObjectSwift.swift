@@ -143,6 +143,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson {
+    return person
+  }
+
   func sumUpAllPassengers(cars: [Car]) throws -> String {
     let passengers = cars.flatMap { car in car.passengers }
     let stringified = passengers.map { passenger in

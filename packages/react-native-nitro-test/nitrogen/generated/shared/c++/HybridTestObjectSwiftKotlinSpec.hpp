@@ -21,6 +21,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `PartialPerson` to properly resolve imports.
+namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -54,6 +56,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <functional>
 #include <variant>
 #include "Person.hpp"
+#include "PartialPerson.hpp"
 #include "Car.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
@@ -138,6 +141,7 @@ namespace margelo::nitro::test {
       virtual std::vector<std::string> bounceStrings(const std::vector<std::string>& array) = 0;
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
+      virtual PartialPerson bouncePartialStruct(const PartialPerson& person) = 0;
       virtual std::string sumUpAllPassengers(const std::vector<Car>& cars) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;

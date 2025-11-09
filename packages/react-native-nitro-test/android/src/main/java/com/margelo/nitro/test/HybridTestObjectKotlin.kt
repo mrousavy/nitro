@@ -71,6 +71,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
+  override fun bouncePartialStruct(person: PartialPerson): PartialPerson {
+    return person
+  }
+
   override fun sumUpAllPassengers(cars: Array<Car>): String {
     val strings =
       cars.flatMap { car ->
