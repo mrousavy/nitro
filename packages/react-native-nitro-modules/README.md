@@ -170,6 +170,12 @@ The following C++ / JS types are supported out of the box:
     <td><code>T?</code></td>
   </tr>
   <tr>
+    <td><code>null</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
+  </tr>
+  <tr>
     <td><code>(T...) =&gt; void</code></td>
     <td><code>std::function&lt;void (T...)&gt;</code></td>
     <td><code>@escaping (T...) -&gt; Void</code></td>

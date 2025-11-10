@@ -92,6 +92,12 @@ These are all the types Nitro supports out of the box:
     <td><code>T?</code></td>
   </tr>
   <tr>
+    <td><code>null</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
+  </tr>
+  <tr>
     <td><code>[A, B, ...]</code></td>
     <td><code>std::tuple&lt;A, B, ...&gt;</code></td>
     <td><code>(A, B)</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/38">#38</a>)</td>
