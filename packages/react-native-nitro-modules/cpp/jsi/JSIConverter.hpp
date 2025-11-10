@@ -165,6 +165,20 @@ struct JSIConverter<std::string> final {
   }
 };
 
+// std::monostate <> void/undefined
+template <>
+struct JSIConverter<std::monostate> final {
+  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
+    return std::monostate{};
+  }
+  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
+    return jsi::Value();
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
+    return true;
+  }
+};
+
 } // namespace margelo::nitro
 
 #include "JSIConverter+AnyMap.hpp"

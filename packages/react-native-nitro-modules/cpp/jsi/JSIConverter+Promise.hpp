@@ -32,8 +32,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
-        // TODO: Double check if NullType works here!
-        return JSIConverter<std::function<void(NullType)>>::toJSI(runtime, [=](NullType) { promise->resolve(); });
+        // std::monostate is used as a placeholder for the first argument
+        return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
       } else {
         // T: resolve(T)
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });
