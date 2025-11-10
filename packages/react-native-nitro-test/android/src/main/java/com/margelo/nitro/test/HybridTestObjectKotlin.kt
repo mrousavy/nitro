@@ -7,6 +7,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
+import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.resolved
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
@@ -22,7 +23,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var stringValue: String = ""
   override var bigintValue: Long = 0L
   override var stringOrUndefined: String? = null
-  override var stringOrNull: String? = null
+  override var stringOrNull: Variant_NullType_String = Variant_NullType_String.create(NullType.NULL)
   override var optionalString: String? = null
   override var optionalHybrid: HybridTestObjectSwiftKotlinSpec? = null
   override val thisObject: HybridTestObjectSwiftKotlinSpec

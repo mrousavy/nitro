@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
     if (isInstanceOf(JVariant_NullType_String_impl::First::javaClassStatic())) {
       // It's a `nitro::NullType`
       auto jniValue = static_cast<const JVariant_NullType_String_impl::First*>(this)->getValue();
-      return jniValue;
+      return nitro::null;
     } else if (isInstanceOf(JVariant_NullType_String_impl::Second::javaClassStatic())) {
       // It's a `std::string`
       auto jniValue = static_cast<const JVariant_NullType_String_impl::Second*>(this)->getValue();

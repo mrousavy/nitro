@@ -12,7 +12,7 @@ value class NullType private constructor(
   companion object {
     @DoNotStrip
     @Keep
-    @JvmField
+    @JvmStatic
     val NULL = NullType(0)
   }
 }

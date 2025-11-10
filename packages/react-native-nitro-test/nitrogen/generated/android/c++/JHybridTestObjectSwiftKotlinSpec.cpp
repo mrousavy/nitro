@@ -50,6 +50,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/Null.hpp>
 #include <variant>
 #include "JVariant_NullType_String.hpp"
+#include <NitroModules/JNull.hpp>
 #include <vector>
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"

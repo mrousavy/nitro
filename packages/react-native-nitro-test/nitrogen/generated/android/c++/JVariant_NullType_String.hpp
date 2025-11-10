@@ -13,6 +13,7 @@
 #include <NitroModules/Null.hpp>
 #include <string>
 #include <variant>
+#include <NitroModules/JNull.hpp>
 
 namespace margelo::nitro::test {
 
@@ -25,8 +26,8 @@ namespace margelo::nitro::test {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String;";
 
-    static jni::local_ref<JVariant_NullType_String> create_0(jni::alias_ref<nitro::NullType> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JVariant_NullType_String(jni::alias_ref<nitro::NullType>)>("create");
+    static jni::local_ref<JVariant_NullType_String> create_0(jni::alias_ref<JNull> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariant_NullType_String(jni::alias_ref<JNull>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JVariant_NullType_String> create_1(jni::alias_ref<jni::JString> value) {
@@ -36,7 +37,7 @@ namespace margelo::nitro::test {
 
     static jni::local_ref<JVariant_NullType_String> fromCpp(const std::variant<nitro::NullType, std::string>& variant) {
       switch (variant.index()) {
-        case 0: return create_0(std::get<0>(variant));
+        case 0: return create_0(JNull::null());
         case 1: return create_1(jni::make_jstring(std::get<1>(variant)));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
@@ -50,8 +51,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$First;";
     
-      [[nodiscard]] jni::local_ref<nitro::NullType> getValue() const {
-        static const auto field = javaClassStatic()->getField<nitro::NullType>("value");
+      [[nodiscard]] jni::local_ref<JNull> getValue() const {
+        static const auto field = javaClassStatic()->getField<JNull>("value");
         return getFieldValue(field);
       }
     };

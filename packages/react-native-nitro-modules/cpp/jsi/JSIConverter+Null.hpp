@@ -21,16 +21,16 @@ using namespace facebook;
 // NullType <> null
 template <>
 struct JSIConverter<NullType> final {
-  static inline NullType fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline NullType fromJSI(jsi::Runtime&, const jsi::Value& arg) {
     if (!arg.isNull()) [[unlikely]] {
       throw std::runtime_error("Cannot convert non-null value to NullType!");
     }
     return nitro::null;
   }
-  static inline jsi::Value toJSI(jsi::Runtime& runtime, const NullType& value) {
+  static inline jsi::Value toJSI(jsi::Runtime&, const NullType&) {
     return jsi::Value::null();
   }
-  static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
     return value.isNull();
   }
 };
