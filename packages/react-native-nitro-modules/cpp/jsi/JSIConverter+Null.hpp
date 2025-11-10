@@ -4,8 +4,14 @@
 
 #pragma once
 
+// Forward declare JSIConverter to prevent cyclic includes
+namespace margelo::nitro {
+template <typename T, typename Enable>
+struct JSIConverter;
+} // namespace margelo::nitro
+
 #include "JSIConverter.hpp"
-#include "NullType.hpp"
+#include "Null.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {

@@ -60,11 +60,11 @@ void HybridTestObjectCpp::setStringOrUndefined(const std::optional<std::string>&
 }
 
 std::variant<nitro::NullType, std::string> HybridTestObjectCpp::getStringOrNull() {
-  return _optionalString;
+  return _nullableString;
 }
 
-void HybridTestObjectCpp::setStringOrNull(const std::optional<std::string>& stringOrNull) {
-  _optionalString = stringOrNull;
+void HybridTestObjectCpp::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
+  _nullableString = stringOrNull;
 }
 
 std::optional<std::string> HybridTestObjectCpp::getOptionalString() {

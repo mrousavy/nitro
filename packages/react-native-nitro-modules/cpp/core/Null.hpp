@@ -5,7 +5,8 @@
 #pragma once
 
 #include "NitroDefines.hpp"
-#include <hash>
+#include <functional>
+#include <type_traits>
 
 namespace margelo::nitro {
 
@@ -17,7 +18,7 @@ struct NullType final {
  * Represents an explicit `null` from JS.
  * This is a singleton.
  */
-inline constexpr NullType null{};
+inline NullType null{};
 
 // Equality and ordering: all instances are equal
 constexpr bool operator==(NullType, NullType) noexcept {
@@ -32,8 +33,8 @@ constexpr bool operator!=(NullType, NullType) noexcept {
 // Makes nitro::Null hashable
 namespace std {
 template <>
-struct hash<nitro::explicit_null> {
-  size_t operator()(nitro::explicit_null) const noexcept {
+struct hash<margelo::nitro::NullType> {
+  size_t operator()(margelo::nitro::NullType) const noexcept {
     return 0x9E3779B97F4A7C15ull;
   }
 };

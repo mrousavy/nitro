@@ -174,7 +174,7 @@ struct JSIConverter<std::string> final {
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HostObject.hpp"
 #include "JSIConverter+NativeState.hpp"
-#include "JSIConverter+NullType.hpp"
+#include "JSIConverter+Null.hpp"
 #include "JSIConverter+Optional.hpp"
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"

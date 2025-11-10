@@ -5,7 +5,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
-#include "NullType.hpp"
+#include "Null.hpp"
 #include <map>
 #include <memory>
 #include <string>
