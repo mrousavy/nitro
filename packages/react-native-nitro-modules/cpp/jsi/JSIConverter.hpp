@@ -73,20 +73,6 @@ struct JSIConverter<int> final {
   }
 };
 
-// std::monostate <> null
-template <>
-struct JSIConverter<std::monostate> final {
-  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
-    return std::monostate();
-  }
-  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
-    return jsi::Value::null();
-  }
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    return value.isNull() || value.isUndefined();
-  }
-};
-
 // double <> number
 template <>
 struct JSIConverter<double> final {
@@ -179,6 +165,20 @@ struct JSIConverter<std::string> final {
   }
 };
 
+// std::monostate <> void/undefined
+template <>
+struct JSIConverter<std::monostate> final {
+  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
+    return std::monostate{};
+  }
+  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
+    return jsi::Value();
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
+    return true;
+  }
+};
+
 } // namespace margelo::nitro
 
 #include "JSIConverter+AnyMap.hpp"
@@ -188,6 +188,7 @@ struct JSIConverter<std::string> final {
 #include "JSIConverter+Function.hpp"
 #include "JSIConverter+HostObject.hpp"
 #include "JSIConverter+NativeState.hpp"
+#include "JSIConverter+Null.hpp"
 #include "JSIConverter+Optional.hpp"
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"

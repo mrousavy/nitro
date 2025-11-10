@@ -19,8 +19,8 @@ using TSharedMap = SharedAnyMap;
 
 namespace AnyMapUtils {
 
-  inline AnyValue create_AnyValue() {
-    return AnyValue{std::monostate{}};
+  inline AnyValue create_AnyValue(NullType null) {
+    return AnyValue{null};
   }
   inline AnyValue create_AnyValue(bool boolValue) {
     return AnyValue{boolValue};
@@ -42,7 +42,7 @@ namespace AnyMapUtils {
   }
 
   inline bool is_AnyValue_null(const AnyValue& value) {
-    return std::holds_alternative<std::monostate>(value);
+    return std::holds_alternative<NullType>(value);
   }
   inline bool is_AnyValue_bool(const AnyValue& value) {
     return std::holds_alternative<bool>(value);
@@ -63,8 +63,8 @@ namespace AnyMapUtils {
     return std::holds_alternative<AnyObject>(value);
   }
 
-  inline std::monostate get_AnyValue_null(const AnyValue& value) {
-    return std::get<std::monostate>(value);
+  inline NullType get_AnyValue_null(const AnyValue& value) {
+    return std::get<NullType>(value);
   }
   inline bool get_AnyValue_bool(const AnyValue& value) {
     return std::get<bool>(value);

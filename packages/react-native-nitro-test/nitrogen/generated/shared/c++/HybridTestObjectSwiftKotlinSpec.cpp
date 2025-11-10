@@ -25,12 +25,14 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("stringValue", &HybridTestObjectSwiftKotlinSpec::setStringValue);
       prototype.registerHybridGetter("bigintValue", &HybridTestObjectSwiftKotlinSpec::getBigintValue);
       prototype.registerHybridSetter("bigintValue", &HybridTestObjectSwiftKotlinSpec::setBigintValue);
+      prototype.registerHybridGetter("nullValue", &HybridTestObjectSwiftKotlinSpec::getNullValue);
+      prototype.registerHybridSetter("nullValue", &HybridTestObjectSwiftKotlinSpec::setNullValue);
+      prototype.registerHybridGetter("optionalString", &HybridTestObjectSwiftKotlinSpec::getOptionalString);
+      prototype.registerHybridSetter("optionalString", &HybridTestObjectSwiftKotlinSpec::setOptionalString);
       prototype.registerHybridGetter("stringOrUndefined", &HybridTestObjectSwiftKotlinSpec::getStringOrUndefined);
       prototype.registerHybridSetter("stringOrUndefined", &HybridTestObjectSwiftKotlinSpec::setStringOrUndefined);
       prototype.registerHybridGetter("stringOrNull", &HybridTestObjectSwiftKotlinSpec::getStringOrNull);
       prototype.registerHybridSetter("stringOrNull", &HybridTestObjectSwiftKotlinSpec::setStringOrNull);
-      prototype.registerHybridGetter("optionalString", &HybridTestObjectSwiftKotlinSpec::getOptionalString);
-      prototype.registerHybridSetter("optionalString", &HybridTestObjectSwiftKotlinSpec::setOptionalString);
       prototype.registerHybridGetter("optionalArray", &HybridTestObjectSwiftKotlinSpec::getOptionalArray);
       prototype.registerHybridSetter("optionalArray", &HybridTestObjectSwiftKotlinSpec::setOptionalArray);
       prototype.registerHybridGetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalEnum);
@@ -47,6 +49,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSwiftKotlinSpec::addStrings);
       prototype.registerHybridMethod("multipleArguments", &HybridTestObjectSwiftKotlinSpec::multipleArguments);
+      prototype.registerHybridMethod("bounceNull", &HybridTestObjectSwiftKotlinSpec::bounceNull);
       prototype.registerHybridMethod("bounceStrings", &HybridTestObjectSwiftKotlinSpec::bounceStrings);
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectSwiftKotlinSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectSwiftKotlinSpec::bounceStructs);

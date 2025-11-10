@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Optionals (`T?`)
 
-Optional or nullable values can be declared either by using the questionmark operator (`?`), or by adding an `undefined` variant:
+Optional or undefined values can be declared either by using the questionmark operator (`?`), or by adding an `undefined` variant:
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
@@ -44,3 +44,9 @@ Optional or nullable values can be declared either by using the questionmark ope
 </Tabs>
 
 In Kotlin/Java, nullables have to be boxed in object types.
+
+## Optionals vs `null`
+
+In the same way that JavaScript distinguishes between an optional type/`undefined` and `null`, Nitro also has two separate concepts for the two.
+
+An optional type (or `undefined`) represents a non-declared value, whereas `null` represents an explicit absence of a value. See [Nulls](nulls) for more information.

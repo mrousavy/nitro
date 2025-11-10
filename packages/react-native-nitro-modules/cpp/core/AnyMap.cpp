@@ -31,7 +31,7 @@ bool AnyMap::isNull(const std::string& key) const {
   if (found == _map.end()) {
     return false;
   }
-  return std::holds_alternative<std::monostate>(found->second);
+  return std::holds_alternative<NullType>(found->second);
 }
 bool AnyMap::isDouble(const std::string& key) const {
   auto found = _map.find(key);
@@ -77,12 +77,12 @@ bool AnyMap::isObject(const std::string& key) const {
 }
 
 // Get
-std::monostate AnyMap::getNull(const std::string& key) const {
+NullType AnyMap::getNull(const std::string& key) const {
   auto found = _map.find(key);
   if (found == _map.end()) {
     throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
   }
-  if (auto result = std::get_if<std::monostate>(&found->second)) {
+  if (auto result = std::get_if<NullType>(&found->second)) {
     return *result;
   } else {
     throw std::runtime_error("The value at key \"" + key + "\" is not a null!");
@@ -164,7 +164,7 @@ AnyValue AnyMap::getAny(const std::string& key) const {
 
 // Set
 void AnyMap::setNull(const std::string& key) {
-  _map.emplace(key, std::monostate());
+  _map.emplace(key, nitro::null);
 }
 void AnyMap::setDouble(const std::string& key, double value) {
   _map.emplace(key, value);

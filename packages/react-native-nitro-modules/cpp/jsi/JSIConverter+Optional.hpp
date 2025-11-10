@@ -23,7 +23,7 @@ using namespace facebook;
 template <typename TInner>
 struct JSIConverter<std::optional<TInner>> final {
   static inline std::optional<TInner> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
-    if (arg.isUndefined() || arg.isNull()) {
+    if (arg.isUndefined()) {
       return std::nullopt;
     } else {
       return JSIConverter<TInner>::fromJSI(runtime, arg);
@@ -37,7 +37,7 @@ struct JSIConverter<std::optional<TInner>> final {
     }
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
-    if (value.isUndefined() || value.isNull()) {
+    if (value.isUndefined()) {
       return true;
     }
     if (JSIConverter<TInner>::canConvert(runtime, value)) {

@@ -7,6 +7,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.AnyValue
 import com.margelo.nitro.core.ArrayBuffer
+import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.resolved
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
@@ -21,9 +22,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var boolValue: Boolean = false
   override var stringValue: String = ""
   override var bigintValue: Long = 0L
-  override var stringOrUndefined: String? = null
-  override var stringOrNull: String? = null
   override var optionalString: String? = null
+  override var stringOrUndefined: String? = null
+  override var nullValue: NullType = NullType.NULL
+  override var stringOrNull: Variant_NullType_String = Variant_NullType_String.create(NullType.NULL)
   override var optionalHybrid: HybridTestObjectSwiftKotlinSpec? = null
   override val thisObject: HybridTestObjectSwiftKotlinSpec
     get() = this
@@ -57,6 +59,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     boo: Boolean,
   ) {
     Log.i(TAG, "Arguments received! num: $num | str: $str | boo: $boo")
+  }
+
+  override fun bounceNull(value: NullType): NullType {
+    return value
   }
 
   override fun bounceStrings(array: Array<String>): Array<String> {

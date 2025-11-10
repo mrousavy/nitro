@@ -53,11 +53,12 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>
+#include <NitroModules/Null.hpp>
+#include <variant>
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
-#include <variant>
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
@@ -156,19 +157,12 @@ namespace margelo::nitro::test {
     inline void setBigintValue(int64_t bigintValue) noexcept override {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
-    inline std::optional<std::string> getStringOrUndefined() noexcept override {
-      auto __result = _swiftPart.getStringOrUndefined();
+    inline nitro::NullType getNullValue() noexcept override {
+      auto __result = _swiftPart.getNullValue();
       return __result;
     }
-    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined);
-    }
-    inline std::optional<std::string> getStringOrNull() noexcept override {
-      auto __result = _swiftPart.getStringOrNull();
-      return __result;
-    }
-    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull);
+    inline void setNullValue(nitro::NullType nullValue) noexcept override {
+      _swiftPart.setNullValue(nullValue);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto __result = _swiftPart.getOptionalString();
@@ -176,6 +170,20 @@ namespace margelo::nitro::test {
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
+    }
+    inline std::optional<std::string> getStringOrUndefined() noexcept override {
+      auto __result = _swiftPart.getStringOrUndefined();
+      return __result;
+    }
+    inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
+      _swiftPart.setStringOrUndefined(stringOrUndefined);
+    }
+    inline std::variant<nitro::NullType, std::string> getStringOrNull() noexcept override {
+      auto __result = _swiftPart.getStringOrNull();
+      return __result;
+    }
+    inline void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept override {
+      _swiftPart.setStringOrNull(stringOrNull);
     }
     inline std::optional<std::vector<std::string>> getOptionalArray() noexcept override {
       auto __result = _swiftPart.getOptionalArray();
@@ -258,6 +266,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline nitro::NullType bounceNull(nitro::NullType value) override {
+      auto __result = _swiftPart.bounceNull(value);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
       auto __result = _swiftPart.bounceStrings(array);

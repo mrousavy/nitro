@@ -13,6 +13,7 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 #include "NitroTypeInfo.hpp"
+#include "Null.hpp"
 #include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
@@ -31,6 +32,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
+        // std::monostate is used as a placeholder for the first argument
         return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
       } else {
         // T: resolve(T)

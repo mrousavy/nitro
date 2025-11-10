@@ -76,6 +76,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -347,6 +348,35 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(const Person& value) noexcept {
     return std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(value);
+  }
+  
+  // pragma MARK: std::variant<nitro::NullType, std::string>
+  /**
+   * Wrapper struct for `std::variant<nitro::NullType, std::string>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_nitro__NullType__std__string_ {
+    std::variant<nitro::NullType, std::string> variant;
+    std__variant_nitro__NullType__std__string_(std::variant<nitro::NullType, std::string> variant): variant(variant) { }
+    operator std::variant<nitro::NullType, std::string>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline nitro::NullType get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline std::string get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(nitro::NullType value) noexcept {
+    return std__variant_nitro__NullType__std__string_(value);
+  }
+  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
+    return std__variant_nitro__NullType__std__string_(value);
   }
   
   // pragma MARK: std::vector<std::string>
@@ -1348,6 +1378,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
     return Result<double>::withError(error);
+  }
+  
+  // pragma MARK: Result<nitro::NullType>
+  using Result_nitro__NullType_ = Result<nitro::NullType>;
+  inline Result_nitro__NullType_ create_Result_nitro__NullType_(nitro::NullType value) noexcept {
+    return Result<nitro::NullType>::withValue(std::move(value));
+  }
+  inline Result_nitro__NullType_ create_Result_nitro__NullType_(const std::exception_ptr& error) noexcept {
+    return Result<nitro::NullType>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::string>>

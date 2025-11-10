@@ -78,7 +78,7 @@ protected:
 
 private:
   // Java initializers
-  explicit JAnyValue(/* null */) : _value(std::monostate()) {}
+  explicit JAnyValue(NullType null) : _value(null) {}
   explicit JAnyValue(double value) : _value(value) {}
   explicit JAnyValue(bool value) : _value(value) {}
   explicit JAnyValue(int64_t value) : _value(value) {}
@@ -91,7 +91,7 @@ private:
 
 protected:
   bool isNull() {
-    return std::holds_alternative<std::monostate>(_value);
+    return std::holds_alternative<NullType>(_value);
   }
   bool isDouble() {
     return std::holds_alternative<double>(_value);

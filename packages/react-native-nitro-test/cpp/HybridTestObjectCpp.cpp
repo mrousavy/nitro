@@ -51,20 +51,12 @@ void HybridTestObjectCpp::setBigintValue(int64_t bigintValue) {
   _bigint = bigintValue;
 }
 
-std::optional<std::string> HybridTestObjectCpp::getStringOrUndefined() {
-  return _optionalString;
+NullType HybridTestObjectCpp::getNullValue() {
+  return _null;
 }
 
-void HybridTestObjectCpp::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
-  _optionalString = stringOrUndefined;
-}
-
-std::optional<std::string> HybridTestObjectCpp::getStringOrNull() {
-  return _optionalString;
-}
-
-void HybridTestObjectCpp::setStringOrNull(const std::optional<std::string>& stringOrNull) {
-  _optionalString = stringOrNull;
+void HybridTestObjectCpp::setNullValue(NullType value) {
+  _null = value;
 }
 
 std::optional<std::string> HybridTestObjectCpp::getOptionalString() {
@@ -73,6 +65,22 @@ std::optional<std::string> HybridTestObjectCpp::getOptionalString() {
 
 void HybridTestObjectCpp::setOptionalString(const std::optional<std::string>& optionalString) {
   _optionalString = optionalString;
+}
+
+std::optional<std::string> HybridTestObjectCpp::getStringOrUndefined() {
+  return _optionalString;
+}
+
+void HybridTestObjectCpp::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) {
+  _optionalString = stringOrUndefined;
+}
+
+std::variant<nitro::NullType, std::string> HybridTestObjectCpp::getStringOrNull() {
+  return _nullableString;
+}
+
+void HybridTestObjectCpp::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
+  _nullableString = stringOrNull;
 }
 
 std::optional<std::vector<std::string>> HybridTestObjectCpp::getOptionalArray() {
@@ -160,6 +168,10 @@ void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, 
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
 }
 
+NullType HybridTestObjectCpp::bounceNull(NullType value) {
+  return value;
+}
+
 std::vector<std::string> HybridTestObjectCpp::bounceStrings(const std::vector<std::string>& array) {
   return array;
 }
@@ -217,7 +229,7 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
                             {"bigint", getBigintValue()},
-                            {"null", std::monostate()},
+                            {"null", nitro::null},
                             {"array", nestedArray}});
   return map;
 }

@@ -27,12 +27,14 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("stringValue", &HybridTestObjectCppSpec::setStringValue);
       prototype.registerHybridGetter("bigintValue", &HybridTestObjectCppSpec::getBigintValue);
       prototype.registerHybridSetter("bigintValue", &HybridTestObjectCppSpec::setBigintValue);
+      prototype.registerHybridGetter("nullValue", &HybridTestObjectCppSpec::getNullValue);
+      prototype.registerHybridSetter("nullValue", &HybridTestObjectCppSpec::setNullValue);
+      prototype.registerHybridGetter("optionalString", &HybridTestObjectCppSpec::getOptionalString);
+      prototype.registerHybridSetter("optionalString", &HybridTestObjectCppSpec::setOptionalString);
       prototype.registerHybridGetter("stringOrUndefined", &HybridTestObjectCppSpec::getStringOrUndefined);
       prototype.registerHybridSetter("stringOrUndefined", &HybridTestObjectCppSpec::setStringOrUndefined);
       prototype.registerHybridGetter("stringOrNull", &HybridTestObjectCppSpec::getStringOrNull);
       prototype.registerHybridSetter("stringOrNull", &HybridTestObjectCppSpec::setStringOrNull);
-      prototype.registerHybridGetter("optionalString", &HybridTestObjectCppSpec::getOptionalString);
-      prototype.registerHybridSetter("optionalString", &HybridTestObjectCppSpec::setOptionalString);
       prototype.registerHybridGetter("optionalArray", &HybridTestObjectCppSpec::getOptionalArray);
       prototype.registerHybridSetter("optionalArray", &HybridTestObjectCppSpec::setOptionalArray);
       prototype.registerHybridGetter("optionalEnum", &HybridTestObjectCppSpec::getOptionalEnum);
@@ -54,6 +56,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectCppSpec::addStrings);
       prototype.registerHybridMethod("multipleArguments", &HybridTestObjectCppSpec::multipleArguments);
+      prototype.registerHybridMethod("bounceNull", &HybridTestObjectCppSpec::bounceNull);
       prototype.registerHybridMethod("bounceStrings", &HybridTestObjectCppSpec::bounceStrings);
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectCppSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectCppSpec::bounceStructs);

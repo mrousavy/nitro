@@ -1,6 +1,5 @@
 import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
-import { NullType } from './types/NullType.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
 import { StringType } from './types/StringType.js'
@@ -44,6 +43,7 @@ import {
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
 import { compareLooselyness } from './helpers.js'
+import { NullType } from './types/NullType.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -184,7 +184,7 @@ export function createType(
       return new OptionalType(wrapping)
     }
 
-    if (type.isNull() || type.isUndefined()) {
+    if (type.isNull()) {
       return new NullType()
     } else if (type.isBoolean() || type.isBooleanLiteral()) {
       return new BooleanType()
@@ -222,11 +222,10 @@ export function createType(
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
-      const returnType = createType(
-        language,
-        funcReturnType,
-        funcReturnType.isNullable()
-      )
+      const isReturnOptional = funcReturnType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
+      const returnType = createType(language, funcReturnType, isReturnOptional)
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
@@ -238,10 +237,13 @@ export function createType(
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
+      const isResolvingOptional = promiseResolvingType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
       const resolvingType = createType(
         language,
         promiseResolvingType,
-        promiseResolvingType.isNullable()
+        isResolvingOptional
       )
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
@@ -300,8 +302,8 @@ export function createType(
         // It consists of different types - that means it's a variant!
         let variants = type
           .getUnionTypes()
-          // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
-          .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
+          // Filter out any undefineds/voids, as those are already treated as `isOptional`.
+          .filter((t) => !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
           .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
@@ -353,6 +355,13 @@ export function createType(
     } else if (type.isStringLiteral()) {
       throw new Error(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
+    } else if (type.isUndefined()) {
+      throw new Error(
+        `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
+          `- If you want to make a type optional, add \`?\` to it's name, or make it an union with \`undefined\`.\n` +
+          `- If you want a method that returns nothing, use \`void\` instead.\n` +
+          `- If you want to represent an explicit absence of a value, use \`null\` instead.`
       )
     } else if (type.isAny()) {
       throw new Error(

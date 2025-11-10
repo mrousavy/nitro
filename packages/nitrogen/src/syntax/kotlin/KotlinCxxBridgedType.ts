@@ -29,7 +29,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   get hasType(): boolean {
-    return this.type.kind !== 'void' && this.type.kind !== 'null'
+    return this.type.kind !== 'void'
   }
 
   get canBePassedByReference(): boolean {
@@ -81,6 +81,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             language: 'c++',
             name: `J${functionType.specializationName}.hpp`,
             space: 'user',
+          })
+          break
+        case 'null':
+          imports.push({
+            language: 'c++',
+            name: `NitroModules/JNull.hpp`,
+            space: 'system',
           })
           break
         case 'array-buffer':
@@ -316,6 +323,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'null':
+        switch (language) {
+          case 'c++':
+            return `JNull`
+          default:
+            return this.type.getCode(language)
+        }
       case 'array-buffer':
         switch (language) {
           case 'c++':
@@ -450,6 +464,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const variant = getTypeAs(this.type, VariantType)
             const name = variant.getAliasName('kotlin')
             return `J${name}::fromCpp(${parameterName})`
+          default:
+            return parameterName
+        }
+      }
+      case 'null': {
+        switch (language) {
+          case 'c++':
+            return `JNull::null()`
           default:
             return parameterName
         }
@@ -709,6 +731,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++':
             return `${parameterName}->toChrono()`
+          default:
+            return parameterName
+        }
+      }
+      case 'null': {
+        switch (language) {
+          case 'c++':
+            return `nitro::null`
           default:
             return parameterName
         }
