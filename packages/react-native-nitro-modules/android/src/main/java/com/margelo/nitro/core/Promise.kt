@@ -48,7 +48,7 @@ class Promise<T> {
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
-    nativeResolve(result as Any)
+    nativeResolve(result as Any?)
   }
 
   /**
@@ -95,7 +95,7 @@ class Promise<T> {
   }
 
   // C++ functions
-  private external fun nativeResolve(result: Any)
+  private external fun nativeResolve(result: Any?)
 
   private external fun nativeReject(error: Throwable)
 
@@ -112,7 +112,7 @@ class Promise<T> {
     @Suppress("unused")
     @Keep
     @DoNotStrip
-    fun onResolved(result: Any)
+    fun onResolved(result: Any?)
   }
 
   @Keep
