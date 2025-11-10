@@ -9,21 +9,21 @@ import NitroModules
 
 
 /**
- * Wraps a Swift `(_ maybe: Double?) -> Void` as a class.
+ * Wraps a Swift `(_ value: Double?) -> Void` as a class.
  * This class can be used from C++, e.g. to wrap the Swift closure as a `std::function`.
  */
 public final class Func_void_std__optional_double_ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ maybe: Double?) -> Void
+  private let closure: (_ value: Double?) -> Void
 
-  public init(_ closure: @escaping (_ maybe: Double?) -> Void) {
+  public init(_ closure: @escaping (_ value: Double?) -> Void) {
     self.closure = closure
   }
 
   @inline(__always)
-  public func call(maybe: bridge.std__optional_double_) -> Void {
-    self.closure(maybe.value)
+  public func call(value: bridge.std__optional_double_) -> Void {
+    self.closure(value.value)
   }
 
   /**

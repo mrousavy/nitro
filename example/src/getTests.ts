@@ -1147,6 +1147,11 @@ export function getTests(
         .didNotThrow()
         .didReturn('undefined')
     ),
+    createTest('promiseThatResolvesToUndefined() works', async () =>
+      (await it(() => testObject.promiseThatResolvesToUndefined()))
+        .didNotThrow()
+        .equals(null)
+    ),
     createTest('twoPromises can run in parallel', async () =>
       (
         await it(async () => {

@@ -172,6 +172,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<Promise<double>> promiseReturnsInstantly() = 0;
       virtual std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() = 0;
       virtual std::shared_ptr<Promise<void>> promiseThatResolvesVoidInstantly() = 0;
+      virtual std::shared_ptr<Promise<std::optional<double>>> promiseThatResolvesToUndefined() = 0;
       virtual std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) = 0;
       virtual std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) = 0;

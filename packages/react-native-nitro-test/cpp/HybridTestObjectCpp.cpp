@@ -480,6 +480,10 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThatResolvesVoidInsta
   return Promise<void>::resolved();
 }
 
+std::shared_ptr<Promise<std::optional<double>>> HybridTestObjectCpp::promiseThatResolvesToUndefined() {
+  return Promise<std::optional<double>>::resolved(std::nullopt);
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();
