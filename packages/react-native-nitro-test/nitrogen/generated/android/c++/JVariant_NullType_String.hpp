@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <NitroModules/NullType.hpp>
+#include <NitroModules/Null.hpp>
 #include <string>
 #include <variant>
 

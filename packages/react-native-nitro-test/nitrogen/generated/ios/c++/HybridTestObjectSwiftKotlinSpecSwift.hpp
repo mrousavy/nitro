@@ -53,7 +53,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>
-#include <NitroModules/NullType.hpp>
+#include <NitroModules/Null.hpp>
 #include <variant>
 #include <vector>
 #include "Powertrain.hpp"

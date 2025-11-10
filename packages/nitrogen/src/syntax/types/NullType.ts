@@ -34,7 +34,7 @@ export class NullType implements Type {
       case 'c++':
         imports.push({
           language: language,
-          name: 'NitroModules/NullType.hpp',
+          name: 'NitroModules/Null.hpp',
           space: 'system',
         })
         break

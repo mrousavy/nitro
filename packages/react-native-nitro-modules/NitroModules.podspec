@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     "cpp/core/AnyMap.hpp",
     "cpp/core/ArrayBuffer.hpp",
     "cpp/core/HybridObject.hpp",
-    "cpp/core/NullType.hpp",
+    "cpp/core/Null.hpp",
     "cpp/core/Promise.hpp",
     "cpp/entrypoint/HybridNitroModulesProxy.hpp",
     "cpp/entrypoint/InstallNitro.hpp",

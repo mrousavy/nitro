@@ -47,7 +47,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>
-#include <NitroModules/NullType.hpp>
+#include <NitroModules/Null.hpp>
 #include <variant>
 #include "JVariant_NullType_String.hpp"
 #include <vector>

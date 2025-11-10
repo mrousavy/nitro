@@ -2818,7 +2818,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  NitroModules: bb5eea7f31fcc645cc562029da8eb3187c91aebe
+  NitroModules: ed3b1826254284f508983c527febd849bcb32e02
   NitroTest: a4a0b70708b76748eae94cc0cf06f324ec5e15fd
   NitroTestExternal: d8b50cf57602edc5e0464d45d6a0d41ce6a7b2b3
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
