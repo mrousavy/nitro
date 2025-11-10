@@ -79,9 +79,6 @@ function getTypeLooselyness(type: Type): number {
     case 'null':
       // We have `isNull()`
       return 0
-    case 'undefined':
-      // We have `isUndefined()`
-      return 0
     case 'number':
       // We have `isNumber()` (but it can also be an enum)
       return 1

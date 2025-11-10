@@ -29,7 +29,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   get hasType(): boolean {
-    return this.type.kind !== 'void' && this.type.kind !== 'undefined'
+    return this.type.kind !== 'void'
   }
 
   get canBePassedByReference(): boolean {

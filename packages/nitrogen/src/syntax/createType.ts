@@ -1,6 +1,5 @@
 import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
-import { UndefinedType } from './types/UndefinedType.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
 import { StringType } from './types/StringType.js'
@@ -185,9 +184,7 @@ export function createType(
       return new OptionalType(wrapping)
     }
 
-    if (type.isUndefined()) {
-      return new UndefinedType()
-    } else if (type.isNull()) {
+    if (type.isNull()) {
       return new NullType()
     } else if (type.isBoolean() || type.isBooleanLiteral()) {
       return new BooleanType()
@@ -358,6 +355,13 @@ export function createType(
     } else if (type.isStringLiteral()) {
       throw new Error(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+      )
+    } else if (type.isUndefined()) {
+      throw new Error(
+        `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
+          `- If you want to make a type optional, add \`?\` to it's name, or make it an union with \`undefined\`.\n` +
+          `- If you want a method that returns nothing, use \`void\` instead.\n` +
+          `- If you want to represent an explicit absence of a value, use \`null\` instead.`
       )
     } else if (type.isAny()) {
       throw new Error(
