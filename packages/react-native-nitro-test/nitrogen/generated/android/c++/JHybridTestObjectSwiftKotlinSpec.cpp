@@ -47,6 +47,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>
+#include <variant>
+#include "JVariant_NullType_String.hpp"
 #include <vector>
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
@@ -54,7 +56,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOldEnum.hpp"
 #include <functional>
 #include "JFunc_void_double.hpp"
-#include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
@@ -203,14 +204,14 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* stringOrUndefined */)>("setStringOrUndefined");
     method(_javaPart, stringOrUndefined.has_value() ? jni::make_jstring(stringOrUndefined.value()) : nullptr);
   }
-  std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrNull() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getStringOrNull");
+  std::variant<nitro::NullType, std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrNull() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_NullType_String>()>("getStringOrNull");
     auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
+    return __result->toCpp();
   }
-  void JHybridTestObjectSwiftKotlinSpec::setStringOrNull(const std::optional<std::string>& stringOrNull) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* stringOrNull */)>("setStringOrNull");
-    method(_javaPart, stringOrNull.has_value() ? jni::make_jstring(stringOrNull.value()) : nullptr);
+  void JHybridTestObjectSwiftKotlinSpec::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_String> /* stringOrNull */)>("setStringOrNull");
+    method(_javaPart, JVariant_NullType_String::fromCpp(stringOrNull));
   }
   std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getOptionalString() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOptionalString");

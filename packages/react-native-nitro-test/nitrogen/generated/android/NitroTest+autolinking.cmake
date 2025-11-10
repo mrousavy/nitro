@@ -47,6 +47,7 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
   ../nitrogen/generated/android/c++/JHybridPlatformObjectSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/android/c++/JVariant_NullType_String.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridTestObjectSwiftKotlinSpec_Person.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_______Unit_Double.cpp

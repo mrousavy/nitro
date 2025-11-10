@@ -20,7 +20,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var stringValue: String { get set }
   var bigintValue: Int64 { get set }
   var stringOrUndefined: String? { get set }
-  var stringOrNull: String? { get set }
+  var stringOrNull: Variant_NullType_String { get set }
   var optionalString: String? { get set }
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }

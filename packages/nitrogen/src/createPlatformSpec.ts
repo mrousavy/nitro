@@ -111,11 +111,9 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
     if (Node.isPropertySignature(declaration)) {
       const t = declaration.getType()
-      const propType = createType(
-        language,
-        t,
-        prop.isOptional() || t.isUndefined()
-      )
+      const isOptional =
+        prop.isOptional() || t.getUnionTypes().some((u) => u.isUndefined())
+      const propType = createType(language, t, isOptional)
       properties.push(
         new Property(prop.getName(), propType, declaration.isReadonly())
       )

@@ -225,25 +225,31 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var stringOrNull: bridge.std__optional_std__string_ {
+  public final var stringOrNull: bridge.std__variant_nitro__NullType__std__string_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = self.__implementation.stringOrNull {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
+      return { () -> bridge.std__variant_nitro__NullType__std__string_ in
+        switch self.__implementation.stringOrNull {
+          case .first(let __value):
+            return bridge.create_std__variant_nitro__NullType__std__string_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
         }
       }()
     }
     @inline(__always)
     set {
-      self.__implementation.stringOrNull = { () -> String? in
-        if bridge.has_value_std__optional_std__string_(newValue) {
-          let __unwrapped = bridge.get_std__optional_std__string_(newValue)
-          return String(__unwrapped)
-        } else {
-          return nil
+      self.__implementation.stringOrNull = { () -> Variant_NullType_String in
+        let __variant = newValue
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(String(__actual))
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
         }
       }()
     }

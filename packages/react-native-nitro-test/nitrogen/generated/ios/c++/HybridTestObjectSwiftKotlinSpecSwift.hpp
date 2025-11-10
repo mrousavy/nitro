@@ -53,11 +53,11 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
-#include <variant>
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
@@ -163,11 +163,11 @@ namespace margelo::nitro::test {
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
       _swiftPart.setStringOrUndefined(stringOrUndefined);
     }
-    inline std::optional<std::string> getStringOrNull() noexcept override {
+    inline std::variant<nitro::NullType, std::string> getStringOrNull() noexcept override {
       auto __result = _swiftPart.getStringOrNull();
       return __result;
     }
-    inline void setStringOrNull(const std::optional<std::string>& stringOrNull) noexcept override {
+    inline void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept override {
       _swiftPart.setStringOrNull(stringOrNull);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {

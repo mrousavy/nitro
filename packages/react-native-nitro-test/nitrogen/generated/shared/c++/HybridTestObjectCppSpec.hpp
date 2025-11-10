@@ -53,11 +53,11 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include <memory>
 #include "HybridTestObjectCppSpec.hpp"
 #include <optional>
+#include <variant>
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
-#include <variant>
 #include "Person.hpp"
 #include <NitroModules/HybridObject.hpp>
 #include "CustomString.hpp"
@@ -122,8 +122,8 @@ namespace margelo::nitro::test {
       virtual void setBigintValue(int64_t bigintValue) = 0;
       virtual std::optional<std::string> getStringOrUndefined() = 0;
       virtual void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) = 0;
-      virtual std::optional<std::string> getStringOrNull() = 0;
-      virtual void setStringOrNull(const std::optional<std::string>& stringOrNull) = 0;
+      virtual std::variant<nitro::NullType, std::string> getStringOrNull() = 0;
+      virtual void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual std::optional<std::vector<std::string>> getOptionalArray() = 0;

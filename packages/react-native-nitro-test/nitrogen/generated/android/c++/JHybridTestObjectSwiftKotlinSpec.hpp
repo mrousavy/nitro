@@ -63,8 +63,8 @@ namespace margelo::nitro::test {
     void setBigintValue(int64_t bigintValue) override;
     std::optional<std::string> getStringOrUndefined() override;
     void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) override;
-    std::optional<std::string> getStringOrNull() override;
-    void setStringOrNull(const std::optional<std::string>& stringOrNull) override;
+    std::variant<nitro::NullType, std::string> getStringOrNull() override;
+    void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
     std::optional<std::vector<std::string>> getOptionalArray() override;
