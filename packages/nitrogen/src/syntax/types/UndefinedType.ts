@@ -2,26 +2,22 @@ import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
-export class NullType implements Type {
+export class UndefinedType implements Type {
   get canBePassedByReference(): boolean {
     // It's a primitive.
     return false
   }
   get kind(): TypeKind {
-    return 'null'
+    return 'undefined'
   }
 
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        return 'nitro::NullType'
-      case 'swift':
-        return 'NullType'
-      case 'kotlin':
-        return 'NullType'
+        return 'std::nullopt_t'
       default:
         throw new Error(
-          `Language ${language} is not yet supported for NullType!`
+          `Language ${language} is not yet supported for UndefinedType!`
         )
     }
   }

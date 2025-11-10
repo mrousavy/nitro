@@ -13,6 +13,7 @@ export type TypeKind =
   | 'hybrid-object'
   | 'hybrid-object-base'
   | 'map'
+  | 'undefined'
   | 'null'
   | 'number'
   | 'optional'

@@ -15,6 +15,7 @@ function isPrimitive(type: Type): boolean {
     case 'void':
     case 'result-wrapper':
     case 'null':
+    case 'undefined':
     case 'error':
       return true
     case 'optional':

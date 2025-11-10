@@ -45,7 +45,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
 
   get hasType(): boolean {
-    return this.type.kind !== 'void' && this.type.kind !== 'null'
+    return this.type.kind !== 'void' && this.type.kind !== 'undefined'
   }
 
   get canBePassedByReference(): boolean {

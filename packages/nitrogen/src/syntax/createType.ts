@@ -1,6 +1,6 @@
 import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
-import { NullType } from './types/NullType.js'
+import { UndefinedType } from './types/UndefinedType.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
 import { StringType } from './types/StringType.js'
@@ -44,6 +44,7 @@ import {
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
 import { compareLooselyness } from './helpers.js'
+import { NullType } from './types/NullType.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -184,7 +185,9 @@ export function createType(
       return new OptionalType(wrapping)
     }
 
-    if (type.isNull() || type.isUndefined()) {
+    if (type.isUndefined()) {
+      return new UndefinedType()
+    } else if (type.isNull()) {
       return new NullType()
     } else if (type.isBoolean() || type.isBooleanLiteral()) {
       return new BooleanType()
@@ -222,11 +225,10 @@ export function createType(
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
-      const returnType = createType(
-        language,
-        funcReturnType,
-        funcReturnType.isNullable()
-      )
+      const isReturnOptional = funcReturnType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
+      const returnType = createType(language, funcReturnType, isReturnOptional)
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
@@ -238,10 +240,13 @@ export function createType(
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
+      const isResolvingOptional = promiseResolvingType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
       const resolvingType = createType(
         language,
         promiseResolvingType,
-        promiseResolvingType.isNullable()
+        isResolvingOptional
       )
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
