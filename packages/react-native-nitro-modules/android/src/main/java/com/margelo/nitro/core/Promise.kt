@@ -48,7 +48,7 @@ class Promise<T> {
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
-    nativeResolve(result as Any?)
+    nativeResolve(result)
   }
 
   /**
@@ -64,11 +64,7 @@ class Promise<T> {
    * Once the `Promise<T>` resolves, the [listener] will be called.
    */
   fun then(listener: (result: T) -> Unit): Promise<T> {
-    addOnResolvedListener { boxedResult ->
-      @Suppress("UNCHECKED_CAST")
-      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
-      listener(result)
-    }
+    addOnResolvedListener(listener)
     return this
   }
 
@@ -95,7 +91,7 @@ class Promise<T> {
   }
 
   // C++ functions
-  private external fun nativeResolve(result: Any?)
+  private external fun nativeResolve(result: T /* Object */)
 
   private external fun nativeReject(error: Throwable)
 
@@ -112,7 +108,7 @@ class Promise<T> {
     @Suppress("unused")
     @Keep
     @DoNotStrip
-    fun onResolved(result: Any?)
+    fun onResolved(result: T /* Object */)
   }
 
   @Keep
