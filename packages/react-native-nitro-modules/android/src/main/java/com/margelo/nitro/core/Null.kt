@@ -2,17 +2,23 @@ package com.margelo.nitro.core
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.core.NullType.Companion.NULL
 
 @DoNotStrip
 @Keep
-@JvmInline
-value class NullType private constructor(
-  private val token: Byte,
-) {
+class NullType private constructor() {
   companion object {
     @DoNotStrip
     @Keep
-    @JvmStatic
-    val NULL = NullType(0)
+    @JvmField
+    val NULL = NullType()
+  }
+
+  override fun hashCode(): Int {
+    return 0
+  }
+
+  override fun equals(other: Any?): Boolean {
+    return other is NullType
   }
 }

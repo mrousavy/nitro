@@ -35,7 +35,7 @@ namespace std {
 template <>
 struct hash<margelo::nitro::NullType> {
   size_t operator()(margelo::nitro::NullType) const noexcept {
-    return 0x9E3779B97F4A7C15ull;
+    return 0;
   }
 };
 } // namespace std

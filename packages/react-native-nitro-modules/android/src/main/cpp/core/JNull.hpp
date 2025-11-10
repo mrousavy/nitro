@@ -18,7 +18,7 @@ using namespace facebook;
  */
 struct JNull final : public jni::JavaClass<JNull> {
 public:
-  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/Null;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/NullType;";
 
 public:
   static jni::alias_ref<JNull> null() {
