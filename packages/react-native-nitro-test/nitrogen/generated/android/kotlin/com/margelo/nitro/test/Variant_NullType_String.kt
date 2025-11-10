@@ -8,7 +8,7 @@
 package com.margelo.nitro.test
 
 import com.facebook.proguard.annotations.DoNotStrip
-
+import com.margelo.nitro.core.NullType
 
 /**
  * Represents the TypeScript variant "NullType | String".

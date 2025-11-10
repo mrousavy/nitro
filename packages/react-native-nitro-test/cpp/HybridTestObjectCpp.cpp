@@ -59,7 +59,7 @@ void HybridTestObjectCpp::setStringOrUndefined(const std::optional<std::string>&
   _optionalString = stringOrUndefined;
 }
 
-std::optional<std::string> HybridTestObjectCpp::getStringOrNull() {
+std::variant<nitro::NullType, std::string> HybridTestObjectCpp::getStringOrNull() {
   return _optionalString;
 }
 

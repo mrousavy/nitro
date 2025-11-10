@@ -28,7 +28,31 @@ export class NullType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return []
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    switch (language) {
+      case 'c++':
+        imports.push({
+          language: language,
+          name: 'NitroModules/NullType.hpp',
+          space: 'system',
+        })
+        break
+      case 'swift':
+        imports.push({
+          language: language,
+          name: 'NitroModules',
+          space: 'system',
+        })
+        break
+      case 'kotlin':
+        imports.push({
+          language: language,
+          name: 'com.margelo.nitro.core.NullType',
+          space: 'system',
+        })
+        break
+    }
+    return imports
   }
 }
