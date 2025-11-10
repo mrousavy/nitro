@@ -8,6 +8,10 @@ import com.margelo.nitro.core.NullType.Companion.NULL
 @Keep
 class NullType private constructor() {
   companion object {
+    /**
+     * Represents an explicit `null` from JS.
+     * This is a singleton.
+     */
     @DoNotStrip
     @Keep
     @JvmField

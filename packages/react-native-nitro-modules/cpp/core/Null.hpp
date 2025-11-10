@@ -13,9 +13,7 @@ namespace margelo::nitro {
 /**
  * Represents the type of `null` - which should always be a singleton.
  */
-enum class NullType {
-  null
-};
+enum class NullType { null };
 
 /**
  * Represents an explicit `null` from JS.

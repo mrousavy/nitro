@@ -56,6 +56,7 @@ const sidebars: SidebarsConfig = {
         'types/arrays',
         'types/array-buffers',
         'types/optionals',
+        'types/nulls',
         'types/promises',
         'types/callbacks',
         'types/tuples',

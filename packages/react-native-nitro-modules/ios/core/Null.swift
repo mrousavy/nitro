@@ -9,5 +9,8 @@ import Foundation
 
 @frozen
 public enum NullType: Sendable, Equatable, Hashable {
+  /**
+   * Represents an explicit `null` from JS.
+   */
   case null
 }
