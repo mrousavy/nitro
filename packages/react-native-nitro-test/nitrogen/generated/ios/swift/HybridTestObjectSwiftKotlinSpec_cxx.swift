@@ -201,14 +201,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var nullValue: NullType {
+  public final var nullValue: margelo.nitro.NullType {
     @inline(__always)
     get {
-      return self.__implementation.nullValue
+      return margelo.nitro.NullType.null
     }
     @inline(__always)
     set {
-      self.__implementation.nullValue = newValue
+      self.__implementation.nullValue = NullType.null
     }
   }
   
@@ -266,7 +266,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return { () -> bridge.std__variant_nitro__NullType__std__string_ in
         switch self.__implementation.stringOrNull {
           case .first(let __value):
-            return bridge.create_std__variant_nitro__NullType__std__string_(__value)
+            return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
           case .second(let __value):
             return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
         }
@@ -279,7 +279,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __variant.index() {
           case 0:
             let __actual = __variant.get_0()
-            return .first(__actual)
+            return .first(NullType.null)
           case 1:
             let __actual = __variant.get_1()
             return .second(String(__actual))
@@ -517,10 +517,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceNull(value: NullType) -> bridge.Result_nitro__NullType_ {
+  public final func bounceNull(value: margelo.nitro.NullType) -> bridge.Result_nitro__NullType_ {
     do {
-      let __result = try self.__implementation.bounceNull(value: value)
-      let __resultCpp = __result
+      let __result = try self.__implementation.bounceNull(value: NullType.null)
+      let __resultCpp = margelo.nitro.NullType.null
       return bridge.create_Result_nitro__NullType_(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

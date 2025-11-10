@@ -13,13 +13,15 @@ namespace margelo::nitro {
 /**
  * Represents the type of `null` - which should always be a singleton.
  */
-struct NullType final {};
+enum class NullType {
+  null
+};
 
 /**
  * Represents an explicit `null` from JS.
  * This is a singleton.
  */
-inline NullType null{};
+inline constexpr NullType null = NullType::null;
 
 // Equality and ordering: all instances are equal
 constexpr bool operator==(NullType, NullType) noexcept {

@@ -7,5 +7,7 @@
 
 import Foundation
 
-public typealias NullType = margelo.nitro.NullType
-public let null = margelo.nitro.null
+@frozen
+public enum NullType: Sendable, Equatable, Hashable {
+  case null
+}

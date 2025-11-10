@@ -158,10 +158,11 @@ namespace margelo::nitro::test {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
     inline nitro::NullType getNullValue() noexcept override {
-      return _swiftPart.getNullValue();
+      auto __result = _swiftPart.getNullValue();
+      return __result;
     }
     inline void setNullValue(nitro::NullType nullValue) noexcept override {
-      _swiftPart.setNullValue(std::forward<decltype(nullValue)>(nullValue));
+      _swiftPart.setNullValue(nullValue);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
       auto __result = _swiftPart.getOptionalString();
@@ -267,7 +268,7 @@ namespace margelo::nitro::test {
       }
     }
     inline nitro::NullType bounceNull(nitro::NullType value) override {
-      auto __result = _swiftPart.bounceNull(std::forward<decltype(value)>(value));
+      auto __result = _swiftPart.bounceNull(value);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

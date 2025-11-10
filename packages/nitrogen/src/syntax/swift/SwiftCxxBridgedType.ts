@@ -69,6 +69,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'optional':
         // swift::Optional<T> <> std::optional<T>
         return true
+      case 'null':
+        // NullType <> nitro::null
+        return true
       case 'string':
         // swift::String <> std::string
         return true
@@ -253,6 +256,13 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return 'margelo.nitro.NullType'
+          default:
+            return this.type.getCode(language)
+        }
       case 'array-buffer':
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
@@ -433,6 +443,13 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return `NullType.null`
+          default:
+            return cppParameterName
+        }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
@@ -656,6 +673,13 @@ case ${i}:
             return swiftParameterName
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.NullType.null`
+          default:
+            return swiftParameterName
+        }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)

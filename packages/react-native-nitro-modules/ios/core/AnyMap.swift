@@ -287,7 +287,7 @@ extension margelo.nitro.AnyValue {
   static func create(_ value: AnyValue) -> margelo.nitro.AnyValue {
     switch value {
     case .null:
-      return create(null)
+      return create(NullType.null)
     case .bool(let bool):
       return create(bool)
     case .number(let number):
@@ -303,7 +303,7 @@ extension margelo.nitro.AnyValue {
     }
   }
   static func create(_ null: NullType) -> margelo.nitro.AnyValue {
-    return margelo.nitro.AnyMapUtils.create_AnyValue(null)
+    return margelo.nitro.AnyMapUtils.create_AnyValue(margelo.nitro.NullType.null)
   }
   static func create(_ value: Bool) -> margelo.nitro.AnyValue {
     return margelo.nitro.AnyMapUtils.create_AnyValue(value)

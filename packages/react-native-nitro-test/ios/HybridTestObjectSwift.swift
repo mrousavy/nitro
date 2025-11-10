@@ -22,13 +22,13 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var bigintValue: Int64 = 0
 
-  var nullValue: NullType = null
+  var nullValue: NullType = .null
 
   var optionalString: String? = nil
 
   var stringOrUndefined: String? = nil
 
-  var stringOrNull: Variant_NullType_String = .first(null)
+  var stringOrNull: Variant_NullType_String = .first(.null)
 
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
