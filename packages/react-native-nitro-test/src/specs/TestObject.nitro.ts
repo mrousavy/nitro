@@ -110,9 +110,10 @@ interface SharedTestObjectProps {
   boolValue: boolean
   stringValue: string
   bigintValue: bigint
+  nullValue: null
+  optionalString?: string
   stringOrUndefined: string | undefined
   stringOrNull: string | null
-  optionalString?: string
   optionalArray?: string[]
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
@@ -123,6 +124,7 @@ interface SharedTestObjectProps {
   addNumbers(a: number, b: number): number
   addStrings(a: string, b: string): string
   multipleArguments(num: number, str: string, boo: boolean): void
+  bounceNull(value: null): null
 
   // Arrays
   bounceStrings(array: string[]): string[]

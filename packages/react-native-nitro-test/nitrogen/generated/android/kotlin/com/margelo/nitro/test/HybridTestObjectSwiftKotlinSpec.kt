@@ -85,6 +85,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
+  abstract var nullValue: NullType
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalString: String?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
   abstract var stringOrUndefined: String?
   
   @get:DoNotStrip
@@ -92,12 +104,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:DoNotStrip
   @set:Keep
   abstract var stringOrNull: Variant_NullType_String
-  
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
-  abstract var optionalString: String?
   
   @get:DoNotStrip
   @get:Keep
@@ -161,6 +167,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun multipleArguments(num: Double, str: String, boo: Boolean): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceNull(value: NullType): NullType
   
   @DoNotStrip
   @Keep

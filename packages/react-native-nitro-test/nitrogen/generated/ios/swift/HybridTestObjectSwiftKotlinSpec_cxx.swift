@@ -201,6 +201,41 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var nullValue: NullType {
+    @inline(__always)
+    get {
+      return self.__implementation.nullValue
+    }
+    @inline(__always)
+    set {
+      self.__implementation.nullValue = newValue
+    }
+  }
+  
+  public final var optionalString: bridge.std__optional_std__string_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = self.__implementation.optionalString {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalString = { () -> String? in
+        if bridge.has_value_std__optional_std__string_(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__string_(newValue)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
   public final var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {
@@ -250,30 +285,6 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             return .second(String(__actual))
           default:
             fatalError("Variant can never have index \(__variant.index())!")
-        }
-      }()
-    }
-  }
-  
-  public final var optionalString: bridge.std__optional_std__string_ {
-    @inline(__always)
-    get {
-      return { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = self.__implementation.optionalString {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__implementation.optionalString = { () -> String? in
-        if bridge.has_value_std__optional_std__string_(newValue) {
-          let __unwrapped = bridge.get_std__optional_std__string_(newValue)
-          return String(__unwrapped)
-        } else {
-          return nil
         }
       }()
     }
@@ -502,6 +513,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceNull(value: NullType) -> bridge.Result_nitro__NullType_ {
+    do {
+      let __result = try self.__implementation.bounceNull(value: value)
+      let __resultCpp = __result
+      return bridge.create_Result_nitro__NullType_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_nitro__NullType_(__exceptionPtr)
     }
   }
   

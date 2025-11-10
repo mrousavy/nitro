@@ -26,6 +26,7 @@ private:
   bool _bool;
   std::string _string;
   int64_t _bigint;
+  NullType _null = nitro::null;
   std::optional<std::string> _optionalString;
   std::variant<nitro::NullType, std::string> _nullableString;
   std::variant<std::string, double> _variant;
@@ -56,12 +57,14 @@ public:
   void setStringValue(const std::string& stringValue) override;
   int64_t getBigintValue() override;
   void setBigintValue(int64_t bigintValue) override;
+  NullType getNullValue() override;
+  void setNullValue(NullType value) override;
+  std::optional<std::string> getOptionalString() override;
+  void setOptionalString(const std::optional<std::string>& optionalString) override;
   std::optional<std::string> getStringOrUndefined() override;
   void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) override;
   std::variant<nitro::NullType, std::string> getStringOrNull() override;
   void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) override;
-  std::optional<std::string> getOptionalString() override;
-  void setOptionalString(const std::optional<std::string>& optionalString) override;
   std::optional<std::vector<std::string>> getOptionalArray() override;
   void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
   std::variant<std::string, double> getSomeVariant() override;
@@ -90,6 +93,7 @@ public:
   std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) override;
   CustomString bounceCustomType(CustomString value) override;
   void multipleArguments(double num, const std::string& str, bool boo) override;
+  NullType bounceNull(NullType value) override;
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
   std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;

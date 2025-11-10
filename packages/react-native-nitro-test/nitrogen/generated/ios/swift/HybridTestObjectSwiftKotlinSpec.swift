@@ -19,9 +19,10 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var boolValue: Bool { get set }
   var stringValue: String { get set }
   var bigintValue: Int64 { get set }
+  var nullValue: NullType { get set }
+  var optionalString: String? { get set }
   var stringOrUndefined: String? { get set }
   var stringOrNull: Variant_NullType_String { get set }
-  var optionalString: String? { get set }
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
@@ -35,6 +36,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String
   func multipleArguments(num: Double, str: String, boo: Bool) throws -> Void
+  func bounceNull(value: NullType) throws -> NullType
   func bounceStrings(array: [String]) throws -> [String]
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]

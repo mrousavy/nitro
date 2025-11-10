@@ -157,6 +157,19 @@ namespace margelo::nitro::test {
     inline void setBigintValue(int64_t bigintValue) noexcept override {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
+    inline nitro::NullType getNullValue() noexcept override {
+      return _swiftPart.getNullValue();
+    }
+    inline void setNullValue(nitro::NullType nullValue) noexcept override {
+      _swiftPart.setNullValue(std::forward<decltype(nullValue)>(nullValue));
+    }
+    inline std::optional<std::string> getOptionalString() noexcept override {
+      auto __result = _swiftPart.getOptionalString();
+      return __result;
+    }
+    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+      _swiftPart.setOptionalString(optionalString);
+    }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
       auto __result = _swiftPart.getStringOrUndefined();
       return __result;
@@ -170,13 +183,6 @@ namespace margelo::nitro::test {
     }
     inline void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept override {
       _swiftPart.setStringOrNull(stringOrNull);
-    }
-    inline std::optional<std::string> getOptionalString() noexcept override {
-      auto __result = _swiftPart.getOptionalString();
-      return __result;
-    }
-    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString);
     }
     inline std::optional<std::vector<std::string>> getOptionalArray() noexcept override {
       auto __result = _swiftPart.getOptionalArray();
@@ -259,6 +265,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline nitro::NullType bounceNull(nitro::NullType value) override {
+      auto __result = _swiftPart.bounceNull(std::forward<decltype(value)>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
       auto __result = _swiftPart.bounceStrings(array);

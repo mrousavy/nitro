@@ -246,6 +246,12 @@ export function getTests(
         testObject.stringOrUndefined = undefined
       }).didNotThrow()
     ),
+    createTest('set stringOrUndefined to null throws', () =>
+      it(() => {
+        // @ts-expect-error
+        testObject.stringOrUndefined = null
+      }).didThrow()
+    ),
     createTest('get stringOrUndefined (== undefined)', () =>
       it(() => {
         testObject.stringOrUndefined = undefined
@@ -253,20 +259,6 @@ export function getTests(
       })
         .didNotThrow()
         .equals(undefined)
-    ),
-    createTest('set stringOrNull to string, then undefined', () =>
-      it(() => {
-        testObject.stringOrNull = 'hello'
-        testObject.stringOrNull = null
-      }).didNotThrow()
-    ),
-    createTest('get stringOrNull (== undefined)', () =>
-      it(() => {
-        testObject.stringOrNull = null
-        return testObject.stringOrNull
-      })
-        .didNotThrow()
-        .equals(null)
     ),
     createTest('set optionalString to string, then undefined', () =>
       it(() => {
@@ -281,6 +273,44 @@ export function getTests(
       })
         .didNotThrow()
         .equals(undefined)
+    ),
+    createTest('set nullValue to null', () =>
+      it(() => {
+        testObject.nullValue = null
+      }).didNotThrow()
+    ),
+    createTest('set nullValue to undefined throws', () =>
+      it(() => {
+        // @ts-expect-error
+        testObject.nullValue = undefined
+      }).didThrow()
+    ),
+    createTest('set nullValue to a number throws', () =>
+      it(() => {
+        // @ts-expect-error
+        testObject.nullValue = 19
+      }).didThrow()
+    ),
+    createTest('get nullValue (== null)', () =>
+      it(() => {
+        return testObject.nullValue
+      })
+        .didNotThrow()
+        .equals(null)
+    ),
+    createTest('set stringOrNull to string, then null', () =>
+      it(() => {
+        testObject.stringOrNull = 'hello'
+        testObject.stringOrNull = null
+      }).didNotThrow()
+    ),
+    createTest('get stringOrNull (== null)', () =>
+      it(() => {
+        testObject.stringOrNull = null
+        return testObject.stringOrNull
+      })
+        .didNotThrow()
+        .equals(null)
     ),
     createTest('get optionalArray (== undefined)', () =>
       it(() => {
@@ -388,6 +418,17 @@ export function getTests(
       it(() => testObject.multipleArguments(13, 'hello!', true))
         .didNotThrow()
         .didReturn('undefined')
+    ),
+    createTest('bounceNull(...) works with null', () =>
+      it(() => testObject.bounceNull(null))
+        .didNotThrow()
+        .equals(null)
+    ),
+    createTest('bounceNull(...) throws at undefined', () =>
+      it(() =>
+        // @ts-expect-error
+        testObject.bounceNull(undefined)
+      ).didThrow()
     ),
 
     // Arrays

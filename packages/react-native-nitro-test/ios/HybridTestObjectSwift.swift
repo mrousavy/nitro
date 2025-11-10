@@ -22,11 +22,13 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var bigintValue: Int64 = 0
 
+  var nullValue: NullType = null
+
+  var optionalString: String? = nil
+
   var stringOrUndefined: String? = nil
 
   var stringOrNull: Variant_NullType_String = .first(null)
-
-  var optionalString: String? = nil
 
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
@@ -54,6 +56,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   func multipleArguments(num: Double, str: String, boo: Bool) throws {
     print("Arguments received! num: \(num) | str: \(str) | boo: \(boo)")
+  }
+
+  func bounceNull(value: NullType) -> NullType {
+    return value
   }
 
   func callCallback(callback: @escaping (() -> Void)) throws {

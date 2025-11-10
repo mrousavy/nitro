@@ -48,9 +48,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <optional>
 #include <string>
 #include <NitroModules/Null.hpp>
+#include <NitroModules/JNull.hpp>
 #include <variant>
 #include "JVariant_NullType_String.hpp"
-#include <NitroModules/JNull.hpp>
 #include <vector>
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
@@ -197,6 +197,24 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(int64_t /* bigintValue */)>("setBigintValue");
     method(_javaPart, bigintValue);
   }
+  nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNull>()>("getNullValue");
+    auto __result = method(_javaPart);
+    return nitro::null;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setNullValue(nitro::NullType nullValue) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JNull> /* nullValue */)>("setNullValue");
+    method(_javaPart, JNull::null());
+  }
+  std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getOptionalString() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOptionalString");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalString(const std::optional<std::string>& optionalString) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
+    method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
+  }
   std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrUndefined() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getStringOrUndefined");
     auto __result = method(_javaPart);
@@ -214,15 +232,6 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_String> /* stringOrNull */)>("setStringOrNull");
     method(_javaPart, JVariant_NullType_String::fromCpp(stringOrNull));
-  }
-  std::optional<std::string> JHybridTestObjectSwiftKotlinSpec::getOptionalString() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOptionalString");
-    auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
-  }
-  void JHybridTestObjectSwiftKotlinSpec::setOptionalString(const std::optional<std::string>& optionalString) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
-    method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
   }
   std::optional<std::vector<std::string>> JHybridTestObjectSwiftKotlinSpec::getOptionalArray() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>()>("getOptionalArray");
@@ -325,6 +334,11 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::multipleArguments(double num, const std::string& str, bool boo) {
     static const auto method = javaClassStatic()->getMethod<void(double /* num */, jni::alias_ref<jni::JString> /* str */, jboolean /* boo */)>("multipleArguments");
     method(_javaPart, num, jni::make_jstring(str), boo);
+  }
+  nitro::NullType JHybridTestObjectSwiftKotlinSpec::bounceNull(nitro::NullType value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNull>(jni::alias_ref<JNull> /* value */)>("bounceNull");
+    auto __result = method(_javaPart, JNull::null());
+    return nitro::null;
   }
   std::vector<std::string> JHybridTestObjectSwiftKotlinSpec::bounceStrings(const std::vector<std::string>& array) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<jni::JArrayClass<jni::JString>> /* array */)>("bounceStrings");

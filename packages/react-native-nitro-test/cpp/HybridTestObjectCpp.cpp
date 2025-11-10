@@ -51,6 +51,22 @@ void HybridTestObjectCpp::setBigintValue(int64_t bigintValue) {
   _bigint = bigintValue;
 }
 
+NullType HybridTestObjectCpp::getNullValue() {
+  return _null;
+}
+
+void HybridTestObjectCpp::setNullValue(NullType value) {
+  _null = value;
+}
+
+std::optional<std::string> HybridTestObjectCpp::getOptionalString() {
+  return _optionalString;
+}
+
+void HybridTestObjectCpp::setOptionalString(const std::optional<std::string>& optionalString) {
+  _optionalString = optionalString;
+}
+
 std::optional<std::string> HybridTestObjectCpp::getStringOrUndefined() {
   return _optionalString;
 }
@@ -65,14 +81,6 @@ std::variant<nitro::NullType, std::string> HybridTestObjectCpp::getStringOrNull(
 
 void HybridTestObjectCpp::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
   _nullableString = stringOrNull;
-}
-
-std::optional<std::string> HybridTestObjectCpp::getOptionalString() {
-  return _optionalString;
-}
-
-void HybridTestObjectCpp::setOptionalString(const std::optional<std::string>& optionalString) {
-  _optionalString = optionalString;
 }
 
 std::optional<std::vector<std::string>> HybridTestObjectCpp::getOptionalArray() {
@@ -158,6 +166,10 @@ CustomString HybridTestObjectCpp::bounceCustomType(CustomString value) {
 
 void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, bool boo) {
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
+}
+
+NullType HybridTestObjectCpp::bounceNull(NullType value) {
+  return value;
 }
 
 std::vector<std::string> HybridTestObjectCpp::bounceStrings(const std::vector<std::string>& array) {
