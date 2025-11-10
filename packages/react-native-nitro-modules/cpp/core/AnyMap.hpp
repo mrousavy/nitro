@@ -5,6 +5,7 @@
 #pragma once
 
 #include "NitroDefines.hpp"
+#include "NullType.hpp"
 #include <map>
 #include <memory>
 #include <string>
@@ -18,7 +19,7 @@ struct AnyValue;
 using AnyArray = std::vector<AnyValue>;
 using AnyObject = std::unordered_map<std::string, AnyValue>;
 
-using VariantType = std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>;
+using VariantType = std::variant<NullType, bool, double, int64_t, std::string, AnyArray, AnyObject>;
 struct AnyValue : VariantType {
   using VariantType::variant;
 
@@ -116,7 +117,7 @@ public:
    * Returns the null value at the given `key`.
    * If no `null` value exists at the given `key`, this method will throw.
    */
-  std::monostate getNull(const std::string& key) const;
+  NullType getNull(const std::string& key) const;
   /**
    * Returns the double value at the given `key`.
    * If no `double` value exists at the given `key`, this method will throw.

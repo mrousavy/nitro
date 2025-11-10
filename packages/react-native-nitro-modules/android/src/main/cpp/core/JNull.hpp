@@ -13,7 +13,6 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-
 /**
  * Represents a `Null` from Kotlin.
  */
@@ -24,7 +23,6 @@ public:
 public:
   static jni::alias_ref<JNull> null() {
     static const auto clazz = javaClassStatic();
-
   }
   static jni::local_ref<JInstant> ofEpochMilliseconds(jlong millisecondsSinceEpoch) {
     static const auto clazz = javaClassStatic();

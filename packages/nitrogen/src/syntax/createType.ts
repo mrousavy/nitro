@@ -305,8 +305,8 @@ export function createType(
         // It consists of different types - that means it's a variant!
         let variants = type
           .getUnionTypes()
-          // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
-          .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
+          // Filter out any undefineds/voids, as those are already treated as `isOptional`.
+          .filter((t) => !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
           .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)

@@ -6,7 +6,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 @DoNotStrip
 @Keep
 @JvmInline
-value class NullType private constructor(private val token: Byte) {
+value class NullType private constructor(
+  private val token: Byte,
+) {
   companion object {
     @DoNotStrip
     @Keep

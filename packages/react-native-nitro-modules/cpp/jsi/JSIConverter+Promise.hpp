@@ -13,6 +13,7 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 #include "NitroTypeInfo.hpp"
+#include "NullType.hpp"
 #include "Promise.hpp"
 #include <exception>
 #include <jsi/jsi.h>
@@ -31,7 +32,8 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
     auto thenCallback = [&]() {
       if constexpr (std::is_void_v<TResult>) {
         // void: resolve()
-        return JSIConverter<std::function<void(std::monostate)>>::toJSI(runtime, [=](std::monostate) { promise->resolve(); });
+        // TODO: Double check if NullType works here!
+        return JSIConverter<std::function<void(NullType)>>::toJSI(runtime, [=](NullType) { promise->resolve(); });
       } else {
         // T: resolve(T)
         return JSIConverter<std::function<void(TResult)>>::toJSI(runtime, [=](const TResult& result) { promise->resolve(result); });

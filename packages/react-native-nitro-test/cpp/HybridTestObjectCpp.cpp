@@ -217,7 +217,7 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
                             {"bigint", getBigintValue()},
-                            {"null", std::monostate()},
+                            {"null", nitro::null},
                             {"array", nestedArray}});
   return map;
 }
