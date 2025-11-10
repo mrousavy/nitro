@@ -10,9 +10,10 @@
 
 namespace margelo::nitro {
 
-struct NullType final {
-  constexpr NullType() noexcept = default;
-};
+/**
+ * Represents the type of `null` - which should always be a singleton.
+ */
+struct NullType final {};
 
 /**
  * Represents an explicit `null` from JS.
