@@ -91,11 +91,11 @@ class Promise<T> {
   }
 
   // C++ functions
-  private external fun nativeResolve(result: T /* Object */)
+  private external fun nativeResolve(result: T)
 
   private external fun nativeReject(error: Throwable)
 
-  private external fun addOnResolvedListener(callback: OnResolvedCallback)
+  private external fun addOnResolvedListener(callback: OnResolvedCallback<T>)
 
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
 
@@ -104,11 +104,11 @@ class Promise<T> {
   // Nested callbacks - need to be JavaClasses so we can access them with JNI
   @Keep
   @DoNotStrip
-  private fun interface OnResolvedCallback {
+  private fun interface OnResolvedCallback<T> {
     @Suppress("unused")
     @Keep
     @DoNotStrip
-    fun onResolved(result: T /* Object */)
+    fun onResolved(result: T)
   }
 
   @Keep
