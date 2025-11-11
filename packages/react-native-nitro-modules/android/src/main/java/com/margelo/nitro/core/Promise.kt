@@ -48,7 +48,7 @@ class Promise<T> {
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
-    nativeResolve(result)
+    nativeResolve(result as Any?)
   }
 
   /**
@@ -73,7 +73,11 @@ class Promise<T> {
    * Once the `Promise<T>` rejects, the [listener] will be called with the error.
    */
   fun catch(listener: (throwable: Throwable) -> Unit): Promise<T> {
-    addOnRejectedListener(listener)
+    addOnResolvedListener { boxedResult ->
+      @Suppress("UNCHECKED_CAST")
+      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
+      listener(result)
+    }
     return this
   }
 
@@ -91,11 +95,11 @@ class Promise<T> {
   }
 
   // C++ functions
-  private external fun nativeResolve(result: T)
+  private external fun nativeResolve(result: Any?)
 
   private external fun nativeReject(error: Throwable)
 
-  private external fun addOnResolvedListener(callback: OnResolvedCallback<T>)
+  private external fun addOnResolvedListener(callback: OnResolvedCallback)
 
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
 
@@ -104,11 +108,11 @@ class Promise<T> {
   // Nested callbacks - need to be JavaClasses so we can access them with JNI
   @Keep
   @DoNotStrip
-  private fun interface OnResolvedCallback<T> {
+  private fun interface OnResolvedCallback {
     @Suppress("unused")
     @Keep
     @DoNotStrip
-    fun onResolved(result: T)
+    fun onResolved(result: Any?)
   }
 
   @Keep
