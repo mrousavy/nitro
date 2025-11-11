@@ -64,7 +64,11 @@ class Promise<T> {
    * Once the `Promise<T>` resolves, the [listener] will be called.
    */
   fun then(listener: (result: T) -> Unit): Promise<T> {
-    addOnResolvedListener(listener)
+    addOnResolvedListener { boxedResult ->
+      @Suppress("UNCHECKED_CAST")
+      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
+      listener(result)
+    }
     return this
   }
 
@@ -73,11 +77,7 @@ class Promise<T> {
    * Once the `Promise<T>` rejects, the [listener] will be called with the error.
    */
   fun catch(listener: (throwable: Throwable) -> Unit): Promise<T> {
-    addOnResolvedListener { boxedResult ->
-      @Suppress("UNCHECKED_CAST")
-      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
-      listener(result)
-    }
+    addOnRejectedListener(listener)
     return this
   }
 
