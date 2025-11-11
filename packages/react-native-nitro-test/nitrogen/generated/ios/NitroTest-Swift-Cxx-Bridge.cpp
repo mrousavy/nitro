@@ -10,7 +10,9 @@
 // Include C++ implementation defined types
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
+#include "HybridLatLngSpecSwift.hpp"
 #include "HybridPlatformObjectSpecSwift.hpp"
+#include "HybridProjectLineSpecSwift.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
@@ -239,6 +241,38 @@ namespace margelo::nitro::test::bridge::swift {
   void* NON_NULL get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ cppType) {
     // Implemented in NitroTestExternal
     return margelo::nitro::test::external::bridge::swift::get_std__shared_ptr_HybridSomeExternalObjectSpec_(cppType);
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridLatLngSpec>
+  std::shared_ptr<HybridLatLngSpec> create_std__shared_ptr_HybridLatLngSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridLatLngSpec_cxx swiftPart = NitroTest::HybridLatLngSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridLatLngSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridLatLngSpec_(std__shared_ptr_HybridLatLngSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridLatLngSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridLatLngSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridLatLngSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridLatLngSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridProjectLineSpec>
+  std::shared_ptr<HybridProjectLineSpec> create_std__shared_ptr_HybridProjectLineSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridProjectLineSpec_cxx swiftPart = NitroTest::HybridProjectLineSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridProjectLineSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridProjectLineSpec_(std__shared_ptr_HybridProjectLineSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridProjectLineSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridProjectLineSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridProjectLineSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridProjectLineSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
   }
 
 } // namespace margelo::nitro::test::bridge::swift

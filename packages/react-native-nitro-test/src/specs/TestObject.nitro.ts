@@ -304,3 +304,20 @@ export interface TestObjectSwiftKotlin
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
 }
+
+export interface LatLng
+  extends HybridObject<{
+    ios: 'swift'
+    android: 'kotlin'
+  }> {
+  readonly latitude: number
+  readonly longitude: number
+}
+
+export interface ProjectLine
+  extends HybridObject<{
+    ios: 'swift'
+    android: 'kotlin'
+  }> {
+  coordinates: LatLng[]
+}

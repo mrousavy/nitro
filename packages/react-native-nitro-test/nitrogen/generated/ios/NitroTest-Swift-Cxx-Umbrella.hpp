@@ -16,8 +16,12 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridLatLngSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridLatLngSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
+// Forward declaration of `HybridProjectLineSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridProjectLineSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
@@ -52,7 +56,9 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "ColorScheme.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridLatLngSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
+#include "HybridProjectLineSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
@@ -96,8 +102,12 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridLatLngSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridLatLngSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
+// Forward declaration of `HybridProjectLineSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridProjectLineSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.

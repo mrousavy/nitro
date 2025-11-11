@@ -38,6 +38,8 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridPlatformObjectSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridLatLngSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridProjectLineSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
@@ -57,6 +59,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_HybridBaseSpec_OptionalWrapper.cpp
   ../nitrogen/generated/android/c++/JCoreTypesVariant.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_DoubleArray_Array_String__String_Double.cpp
+  ../nitrogen/generated/android/c++/JHybridLatLngSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridProjectLineSpec.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
 )

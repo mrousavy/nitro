@@ -16,8 +16,12 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridLatLngSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridLatLngSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
+// Forward declaration of `HybridProjectLineSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridProjectLineSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
@@ -48,8 +52,12 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridLatLngSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridLatLngSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
+// Forward declaration of `HybridProjectLineSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridProjectLineSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
@@ -61,7 +69,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridLatLngSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
+#include "HybridProjectLineSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
@@ -1685,5 +1695,40 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
   }
+  
+  // pragma MARK: std::shared_ptr<HybridLatLngSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridLatLngSpec>`.
+   */
+  using std__shared_ptr_HybridLatLngSpec_ = std::shared_ptr<HybridLatLngSpec>;
+  std::shared_ptr<HybridLatLngSpec> create_std__shared_ptr_HybridLatLngSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridLatLngSpec_(std__shared_ptr_HybridLatLngSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridLatLngSpec>
+  using std__weak_ptr_HybridLatLngSpec_ = std::weak_ptr<HybridLatLngSpec>;
+  inline std__weak_ptr_HybridLatLngSpec_ weakify_std__shared_ptr_HybridLatLngSpec_(const std::shared_ptr<HybridLatLngSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: std::vector<std::shared_ptr<HybridLatLngSpec>>
+  /**
+   * Specialized version of `std::vector<std::shared_ptr<HybridLatLngSpec>>`.
+   */
+  using std__vector_std__shared_ptr_HybridLatLngSpec__ = std::vector<std::shared_ptr<HybridLatLngSpec>>;
+  inline std::vector<std::shared_ptr<HybridLatLngSpec>> create_std__vector_std__shared_ptr_HybridLatLngSpec__(size_t size) noexcept {
+    std::vector<std::shared_ptr<HybridLatLngSpec>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridProjectLineSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridProjectLineSpec>`.
+   */
+  using std__shared_ptr_HybridProjectLineSpec_ = std::shared_ptr<HybridProjectLineSpec>;
+  std::shared_ptr<HybridProjectLineSpec> create_std__shared_ptr_HybridProjectLineSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridProjectLineSpec_(std__shared_ptr_HybridProjectLineSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridProjectLineSpec>
+  using std__weak_ptr_HybridProjectLineSpec_ = std::weak_ptr<HybridProjectLineSpec>;
+  inline std__weak_ptr_HybridProjectLineSpec_ weakify_std__shared_ptr_HybridProjectLineSpec_(const std::shared_ptr<HybridProjectLineSpec>& strong) noexcept { return strong; }
 
 } // namespace margelo::nitro::test::bridge::swift
