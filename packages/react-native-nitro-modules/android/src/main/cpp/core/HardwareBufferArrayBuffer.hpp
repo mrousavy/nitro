@@ -43,6 +43,7 @@ public:
   }
 
 public:
+    [[nodiscard]]
   const SafeHardwareBuffer& getHardwareBuffer() const noexcept {
     return _hardwareBuffer;
   }
