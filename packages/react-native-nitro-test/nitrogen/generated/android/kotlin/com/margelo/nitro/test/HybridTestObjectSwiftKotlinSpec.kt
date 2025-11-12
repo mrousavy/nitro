@@ -209,9 +209,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec>
   
+  abstract fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit>
+  
   @DoNotStrip
   @Keep
-  abstract fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit>
+  private fun bounceFunctions_cxx(functions: Array<Func_void>): Array<Func_void> {
+    val __result = bounceFunctions(functions.map { it })
+    return __result
+  }
   
   @DoNotStrip
   @Keep

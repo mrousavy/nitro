@@ -481,7 +481,7 @@ namespace margelo::nitro::test {
     }();
   }
   std::vector<std::function<void()>> JHybridTestObjectSwiftKotlinSpec::bounceFunctions(const std::vector<std::function<void()>>& functions) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JFunc_void::javaobject>>(jni::alias_ref<jni::JArrayClass<JFunc_void::javaobject>> /* functions */)>("bounceFunctions");
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JFunc_void::javaobject>>(jni::alias_ref<jni::JArrayClass<JFunc_void::javaobject>> /* functions */)>("bounceFunctions_cxx");
     auto __result = method(_javaPart, [&]() {
       size_t __size = functions.size();
       jni::local_ref<jni::JArrayClass<JFunc_void::javaobject>> __array = jni::JArrayClass<JFunc_void::javaobject>::newArray(__size);

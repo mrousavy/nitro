@@ -46,6 +46,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const optional = getTypeAs(this.type, OptionalType)
         return new KotlinCxxBridgedType(optional.wrappingType)
           .needsSpecialHandling
+      case 'array':
+        // Arrays need special handling if their item type needs special handling
+        const array = getTypeAs(this.type, ArrayType)
+        return new KotlinCxxBridgedType(array.itemType).needsSpecialHandling
+      case 'record':
+        // Records need special handling if their key or value type needs special handling
+        const record = getTypeAs(this.type, RecordType)
+        const keyType = new KotlinCxxBridgedType(record.keyType)
+        const valueType = new KotlinCxxBridgedType(record.valueType)
+        return keyType.needsSpecialHandling || valueType.needsSpecialHandling
       default:
         break
     }
