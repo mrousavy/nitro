@@ -35,7 +35,7 @@ namespace margelo::nitro::test {
       return method(javaClassStatic(), value);
     }
 
-    static jni::local_ref<JVariant_NullType_String> fromCpp(const std::variant<nitro::NullType, std::string>& variant) {
+    static jni::local_ref<JVariant_NullType_String> fromCpp(const std::variant<[[maybe_unused]] nitro::NullType, std::string>& variant) {
       switch (variant.index()) {
         case 0: return create_0(JNull::null());
         case 1: return create_1(jni::make_jstring(std::get<1>(variant)));
@@ -43,7 +43,7 @@ namespace margelo::nitro::test {
       }
     }
 
-    [[nodiscard]] std::variant<nitro::NullType, std::string> toCpp() const;
+    [[nodiscard]] std::variant<[[maybe_unused]] nitro::NullType, std::string> toCpp() const;
   };
 
   namespace JVariant_NullType_String_impl {
