@@ -10,6 +10,7 @@
 #include "Promise.hpp"
 #include <fbjni/fbjni.h>
 #include <mutex>
+#include <variant>
 
 namespace margelo::nitro {
 
@@ -58,7 +59,7 @@ public:
 
 public:
   ~JPromise() override {
-    if (_result == nullptr && _error == nullptr) [[unlikely]] {
+    if (!hasResult() && !hasError()) [[unlikely]] {
       jni::ThreadScope::WithClassLoader([&]() {
         std::runtime_error error("Timeouted: JPromise was destroyed!");
         this->reject(jni::getJavaExceptionForCppException(std::make_exception_ptr(error)));
@@ -69,25 +70,27 @@ public:
 public:
   void resolve(jni::alias_ref<jni::JObject> result) {
     std::unique_lock lock(_mutex);
-    _result = jni::make_global(result);
+    jni::global_ref<jni::JObject> globalResult = jni::make_global(result);
+    _state = globalResult;
     for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(_result);
+      onResolved(globalResult);
     }
   }
   void reject(jni::alias_ref<jni::JThrowable> error) {
     std::unique_lock lock(_mutex);
-    _error = jni::make_global(error);
+    jni::global_ref<jni::JThrowable> globalError = jni::make_global(error);
+    _state = globalError;
     for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(_error);
+      onRejected(globalError);
     }
   }
 
 public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(_mutex);
-    if (_result != nullptr) {
+    if (hasResult()) {
       // Promise is already resolved! Call the callback immediately
-      onResolved(_result);
+      onResolved(getResult());
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(std::move(onResolved));
@@ -95,9 +98,9 @@ public:
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(_mutex);
-    if (_error != nullptr) {
+    if (hasError()) {
       // Promise is already rejected! Call the callback immediately
-      onRejected(_error);
+      onRejected(getError());
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
@@ -107,9 +110,9 @@ public:
 private:
   void addOnResolvedListenerJava(jni::alias_ref<JOnResolvedCallback> callback) {
     std::unique_lock lock(_mutex);
-    if (_result != nullptr) {
+    if (hasResult()) {
       // Promise is already resolved! Call the callback immediately
-      callback->onResolved(_result);
+      callback->onResolved(getResult());
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       auto sharedCallback = jni::make_global(callback);
@@ -119,9 +122,9 @@ private:
   }
   void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
     std::unique_lock lock(_mutex);
-    if (_error != nullptr) {
+    if (hasError()) {
       // Promise is already rejected! Call the callback immediately
-      callback->onRejected(_error);
+      callback->onRejected(getError());
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       auto sharedCallback = jni::make_global(callback);
@@ -131,13 +134,26 @@ private:
   }
 
 private:
+  bool hasResult() const noexcept {
+    return std::holds_alternative<jni::global_ref<jni::JObject>>(_state);
+  }
+  jni::global_ref<jni::JObject> getResult() const {
+    return std::get<jni::global_ref<jni::JObject>>(_state);
+  }
+  bool hasError() const noexcept {
+    return std::holds_alternative<jni::global_ref<jni::JThrowable>>(_state);
+  }
+  jni::global_ref<jni::JThrowable> getError() const {
+    return std::get<jni::global_ref<jni::JThrowable>>(_state);
+  }
+
+private:
   JPromise() = default;
 
 private:
   friend HybridBase;
   using HybridBase::HybridBase;
-  jni::global_ref<jni::JObject> _result;
-  jni::global_ref<jni::JThrowable> _error;
+  std::variant<std::monostate, jni::global_ref<jni::JObject>, jni::global_ref<jni::JThrowable>> _state;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
   std::mutex _mutex;
