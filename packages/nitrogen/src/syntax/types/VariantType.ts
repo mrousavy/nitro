@@ -34,6 +34,9 @@ export class VariantType implements Type {
   get kind(): TypeKind {
     return 'variant'
   }
+  get isEquatable(): boolean {
+    return this.variants.every((v) => v.isEquatable)
+  }
 
   get jsType(): string {
     return this.variants.map((v) => v.kind).join(' | ')

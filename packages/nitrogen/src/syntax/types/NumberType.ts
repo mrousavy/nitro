@@ -10,6 +10,9 @@ export class NumberType implements Type {
   get kind(): TypeKind {
     return 'number'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

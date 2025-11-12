@@ -18,6 +18,9 @@ export class NamedWrappingType<T extends Type> implements NamedType {
   get kind(): TypeKind {
     return this.type.kind
   }
+  get isEquatable(): boolean {
+    return this.type.isEquatable
+  }
   get canBePassedByReference(): boolean {
     return this.type.canBePassedByReference
   }

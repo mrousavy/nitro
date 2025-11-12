@@ -56,6 +56,9 @@ export class FunctionType implements Type {
   get kind(): TypeKind {
     return 'function'
   }
+  get isEquatable(): boolean {
+    return false
+  }
 
   /**
    * For a function, get the forward recreation of it:
