@@ -667,6 +667,22 @@ namespace margelo::nitro::test {
       return __promise;
     }();
   }
+  std::shared_ptr<Promise<std::optional<double>>> JHybridTestObjectSwiftKotlinSpec::promiseThatResolvesToUndefined() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseThatResolvesToUndefined");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<std::optional<double>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result != nullptr ? std::make_optional(__result->value()) : std::nullopt);
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitAndGetPromise");
     auto __result = method(_javaPart, [&]() {
