@@ -21,18 +21,20 @@ public:
 public:
   static size_t getHardwareBufferSize(AHardwareBuffer* hardwareBuffer);
 
-  static void copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
-                                      jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer);
+  static void copyBoxedHardwareBufferIntoExistingBoxedHardwareBuffer(jni::alias_ref<jni::JClass>,
+                                                                     jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
+                                                                     jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer);
 
-  static jni::local_ref<jni::JObject> copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
-                                                                 jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer);
+  static jni::local_ref<jni::JObject>
+  copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer);
 
   static void copyHardwareBuffer(AHardwareBuffer* sourceHardwareBuffer, AHardwareBuffer* destinationHardwareBuffer);
 
 public:
   static void registerNatives() {
-    javaClassStatic()->registerNatives({makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyHardwareBufferBoxed),
-                                        makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyHardwareBufferBoxedNew)});
+    javaClassStatic()->registerNatives(
+        {makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyBoxedHardwareBufferIntoExistingBoxedHardwareBuffer),
+         makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer)});
   }
 };
 

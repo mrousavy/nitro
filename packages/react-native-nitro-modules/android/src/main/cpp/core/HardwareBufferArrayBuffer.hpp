@@ -28,7 +28,7 @@ public:
    * Create a new `HardwareBufferArrayBuffer` instance that wraps the given `SafeHardwareBuffer`.
    * `SafeHardwareBuffer` is managing the retain count of `AHardwareBuffer*`.
    */
-  explicit HardwareBufferArrayBuffer(SafeHardwareBuffer hardwareBuffer) : _hardwareBuffer(std::move(hardwareBuffer)) {}
+  explicit HardwareBufferArrayBuffer(SafeHardwareBuffer&& hardwareBuffer) : _hardwareBuffer(std::move(hardwareBuffer)) {}
 
 public:
   [[nodiscard]] uint8_t* data() override {

@@ -61,10 +61,6 @@ SafeHardwareBuffer::~SafeHardwareBuffer() {
 #endif
 }
 
-[[nodiscard]] AHardwareBuffer* SafeHardwareBuffer::buffer() const noexcept {
-  return _buffer;
-}
-
 uint8_t* SafeHardwareBuffer::data() {
   if (_isLocked && _dataCached != nullptr) {
     // We are still locked on the AHardwareBuffer* and have a valid buffer.
@@ -102,6 +98,16 @@ uint8_t* SafeHardwareBuffer::data() {
 #else
   throw HardwareBuffersUnavailable();
 #endif
+}
+
+[[nodiscard]] AHardwareBuffer* SafeHardwareBuffer::buffer() const noexcept {
+  return _buffer;
+}
+
+[[nodiscard]] AHardwareBuffer_Desc SafeHardwareBuffer::describe() const noexcept {
+  AHardwareBuffer_Desc description;
+  AHardwareBuffer_describe(_buffer, &description);
+  return description;
 }
 
 } // namespace margelo::nitro

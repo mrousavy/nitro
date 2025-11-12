@@ -51,12 +51,8 @@ public:
    */
   static jni::local_ref<JArrayBuffer::jhybriddata>
   initHybridHardwareBuffer(jni::alias_ref<jhybridobject>, [[maybe_unused]] jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
-#if __ANDROID_API__ >= 26
     SafeHardwareBuffer buffer = SafeHardwareBuffer::fromJava(boxedHardwareBuffer);
-    return makeCxxInstance(hardwareBuffer);
-#else
-    throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
-#endif
+    return makeCxxInstance(buffer);
   }
 
 public:
@@ -152,6 +148,9 @@ private:
   explicit JArrayBuffer(const std::shared_ptr<ArrayBuffer>& arrayBuffer) : _arrayBuffer(arrayBuffer) {}
   explicit JArrayBuffer(const jni::alias_ref<jni::JByteBuffer>& byteBuffer) {
     _arrayBuffer = std::make_shared<ByteBufferArrayBuffer>(byteBuffer);
+  }
+  explicit JArrayBuffer(SafeHardwareBuffer&& hardwareBuffer) {
+    _arrayBuffer = std::make_shared<HardwareBufferArrayBuffer>(std::move(hardwareBuffer));
   }
 
 private:

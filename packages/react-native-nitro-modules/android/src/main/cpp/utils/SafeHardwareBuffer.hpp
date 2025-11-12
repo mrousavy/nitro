@@ -32,15 +32,18 @@ public:
   ~SafeHardwareBuffer();
 
 public:
+  [[nodiscard]] uint8_t* data();
+  [[nodiscard]] size_t size() const;
+  [[nodiscard]] jni::local_ref<jni::JObject> toJava();
+
+public:
   /**
    * Returns the reference to this underlying `AHardwareBuffer*`.
    * The `AHardwareBuffer*` is guaranteed to be alive as long as this
    * `SafeHardwareBuffer` instance is alive. If you want it longer, _acquire it.
    */
   [[nodiscard]] AHardwareBuffer* buffer() const noexcept;
-  [[nodiscard]] uint8_t* data();
-  [[nodiscard]] size_t size() const;
-  [[nodiscard]] jni::local_ref<jni::JObject> toJava();
+  [[nodiscard]] AHardwareBuffer_Desc describe() const;
 
 public:
   static SafeHardwareBuffer fromJava(const jni::alias_ref<jni::JObject>& javaHardwareBuffer) {
@@ -48,6 +51,12 @@ public:
   }
   static SafeHardwareBuffer wrapAlreadyRetainedAHardwareBuffer(AHardwareBuffer* /* +1 retained */ alreadyRetainedHardwareBuffer) {
     return SafeHardwareBuffer(alreadyRetainedHardwareBuffer);
+  }
+  static SafeHardwareBuffer allocate(AHardwareBuffer_Desc* description) {
+    // Allocate with description (create +1 ref)
+    AHardwareBuffer* buffer;
+    AHardwareBuffer_allocate(description, &buffer);
+    return SafeHardwareBuffer(buffer);
   }
 
 private:
