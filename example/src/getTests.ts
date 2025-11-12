@@ -11,6 +11,7 @@ import {
   CustomString,
   Base,
   HybridPlatformObject,
+  HybridChild,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -533,6 +534,11 @@ export function getTests(
       )
         .didNotThrow()
         .equals(['gas', 'electric'])
+    ),
+    createTest('bounceHybridObjects(...)', () =>
+      it(() => testObject.bounceHybridObjects([HybridChild, HybridChild]))
+        .didNotThrow()
+        .equals([HybridChild, HybridChild])
     ),
 
     // Test Dates
@@ -1150,7 +1156,7 @@ export function getTests(
     createTest('promiseThatResolvesToUndefined() works', async () =>
       (await it(() => testObject.promiseThatResolvesToUndefined()))
         .didNotThrow()
-        .equals(null)
+        .equals(undefined)
     ),
     createTest('twoPromises can run in parallel', async () =>
       (
