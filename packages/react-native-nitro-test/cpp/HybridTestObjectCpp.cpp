@@ -220,6 +220,19 @@ HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<Hybri
   return array;
 }
 
+std::vector<std::function<void()>> HybridTestObjectCpp::bounceFunctions(const std::vector<std::function<void()>>& functions) {
+  return functions;
+}
+
+std::vector<std::shared_ptr<AnyMap>> HybridTestObjectCpp::bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) {
+  return maps;
+}
+
+std::vector<std::shared_ptr<Promise<double>>>
+HybridTestObjectCpp::bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promise) {
+  return promise;
+}
+
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   auto map = AnyMap::make();
   map->setDouble("number", getNumberValue());

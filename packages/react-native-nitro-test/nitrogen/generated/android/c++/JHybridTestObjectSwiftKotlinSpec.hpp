@@ -97,6 +97,9 @@ namespace margelo::nitro::test {
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
+    std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
+    std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;
+    std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promise) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
@@ -155,7 +158,7 @@ namespace margelo::nitro::test {
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override;
-    std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) override;
+    std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override;
     std::shared_ptr<HybridChildSpec> createChild() override;
     std::shared_ptr<HybridBaseSpec> createBase() override;
     std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;

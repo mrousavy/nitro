@@ -540,6 +540,23 @@ export function getTests(
         .didNotThrow()
         .equals([HybridChild, HybridChild])
     ),
+    createTest('bounceFunctions(...)', () =>
+      it(() => testObject.bounceFunctions([() => {}, () => {}]))
+        .didNotThrow()
+        .toBeArray()
+    ),
+    createTest('bounceMaps(...)', () =>
+      it(() => testObject.bounceMaps([TEST_MAP, TEST_MAP_2]))
+        .didNotThrow()
+        .equals([TEST_MAP, TEST_MAP_2])
+    ),
+    createTest('bouncePromises(...)', () =>
+      it(() =>
+        testObject.bouncePromises([(async () => 55)(), Promise.resolve(13)])
+      )
+        .didNotThrow()
+        .toBeArray()
+    ),
 
     // Test Dates
     createTest('currentDate(...) is a Date', () =>

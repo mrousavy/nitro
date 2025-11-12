@@ -137,7 +137,12 @@ interface SharedTestObjectProps {
     array: Powertrain[],
     callback: (array: Powertrain[]) => void
   ): void
+
+  // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]
+  bounceFunctions(functions: (() => void)[]): (() => void)[]
+  bounceMaps(maps: AnyMap[]): AnyMap[]
+  bouncePromises(promise: Promise<number>[]): Promise<number>[]
 
   // Maps
   createMap(): AnyMap
