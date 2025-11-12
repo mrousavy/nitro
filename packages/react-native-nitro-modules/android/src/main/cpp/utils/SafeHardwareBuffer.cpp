@@ -24,7 +24,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(const jni::alias_ref<jni::JObject>& javaH
   // Convert jobject to AHardwareBuffer* - this adds +1 retain count (we're at 1 total now)
   _buffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), javaHardwareBuffer.get());
   _dataCached = nullptr;
-  _currentlyLockedFlag = 0;
+  _currentlyLockedFlag = NOT_LOCKED;
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
@@ -33,7 +33,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(const jni::alias_ref<jni::JObject>& javaH
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(AHardwareBuffer* /* +1 retained */ alreadyRetainedHardwareBuffer)
-    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _currentlyLockedFlag(0) {
+    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _currentlyLockedFlag(NOT_LOCKED) {
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
@@ -45,7 +45,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(SafeHardwareBuffer&& move) noexcept
   // remove the buffer pointer from the value moved into `this`
   move._buffer = nullptr;
   move._dataCached = nullptr;
-  move._currentlyLockedFlag = 0;
+  move._currentlyLockedFlag = NOT_LOCKED;
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
@@ -53,7 +53,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(SafeHardwareBuffer&& move) noexcept
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(const SafeHardwareBuffer& copy)
-    : _buffer(copy._buffer), _dataCached(nullptr), _currentlyLockedFlag(0) {
+    : _buffer(copy._buffer), _dataCached(nullptr), _currentlyLockedFlag(NOT_LOCKED) {
 #if __ANDROID_API__ >= 26
   // Add +1 retain count since we copied it now
   AHardwareBuffer_acquire(_buffer);
@@ -116,7 +116,7 @@ void SafeHardwareBuffer::unlock() {
     // If it was locked, unlock it now
     AHardwareBuffer_unlock(_buffer, nullptr);
   }
-  _currentlyLockedFlag = 0;
+  _currentlyLockedFlag = NOT_LOCKED;
   _dataCached = nullptr;
 }
 
@@ -135,7 +135,7 @@ bool SafeHardwareBuffer::isLockedForFlag(LockFlag lockFlag) const noexcept {
   return (_currentlyLockedFlag & targetFlag) == 0;
 }
 bool SafeHardwareBuffer::isLocked() const noexcept {
-  return _currentlyLockedFlag != 0;
+  return _currentlyLockedFlag != NOT_LOCKED;
 }
 AHardwareBufferLockedFlag SafeHardwareBuffer::getHardwareBufferUsageFlag(LockFlag lockFlag) {
   switch (lockFlag) {

@@ -24,6 +24,7 @@ struct HardwareBuffersUnavailable : public std::exception {
 enum class LockFlag { READ, WRITE, READ_AND_WRITE };
 
 using AHardwareBufferLockedFlag = unsigned long long;
+static constexpr AHardwareBufferLockedFlag NOT_LOCKED = -1;
 
 class SafeHardwareBuffer final {
 private:
