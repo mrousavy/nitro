@@ -28,6 +28,9 @@ jobs:
           java-version: 17
           java-package: jdk
 
+      - name: Set minSdk in build.gradle to 26
+        run: sed -i "s/minSdkVersion = 24/minSdkVersion = 26/g" example/android/build.gradle
+
       - name: Run Gradle Build for example/android/
         working-directory: example
         run: bun run build:android-release
