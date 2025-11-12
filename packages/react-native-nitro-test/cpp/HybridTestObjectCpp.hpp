@@ -119,6 +119,8 @@ public:
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+  std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
+
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;

@@ -103,6 +103,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     callback(array)
   }
 
+  override fun bounceHybridObjects(array: Array<HybridChildSpec>):Array<HybridChildSpec> {
+    return array
+  }
+
   override fun currentDate(): java.time.Instant {
     return Instant.now()
   }

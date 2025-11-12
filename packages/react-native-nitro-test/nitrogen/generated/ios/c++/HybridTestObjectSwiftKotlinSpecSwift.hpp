@@ -24,6 +24,8 @@ namespace margelo::nitro::test { struct Person; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -42,8 +44,6 @@ namespace margelo::nitro::test { struct OptionalCallback; }
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -62,6 +62,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
+#include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -77,7 +78,6 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
-#include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
@@ -328,6 +328,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
+      auto __result = _swiftPart.bounceHybridObjects(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline std::shared_ptr<AnyMap> createMap() override {
       auto __result = _swiftPart.createMap();

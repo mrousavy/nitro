@@ -27,6 +27,8 @@ namespace margelo::nitro { class HybridObject; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
@@ -41,8 +43,6 @@ namespace margelo::nitro::test { struct OptionalCallback; }
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -64,6 +64,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "CustomString.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
+#include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -77,7 +78,6 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
-#include "HybridChildSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
@@ -161,6 +161,7 @@ namespace margelo::nitro::test {
       virtual std::string sumUpAllPassengers(const std::vector<Car>& cars) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
+      virtual std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;

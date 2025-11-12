@@ -96,6 +96,7 @@ namespace margelo::nitro::test {
     std::string sumUpAllPassengers(const std::vector<Car>& cars) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+    std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
     std::shared_ptr<AnyMap> createMap() override;
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;

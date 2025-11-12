@@ -17,6 +17,8 @@ namespace margelo::nitro::test { enum class OldEnum; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -31,8 +33,6 @@ namespace margelo::nitro::test { struct OptionalCallback; }
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -64,6 +64,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JPerson.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
+#include "HybridChildSpec.hpp"
+#include "JHybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -97,8 +99,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_HybridBaseSpec_OptionalWrapper.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JCoreTypesVariant.hpp"
-#include "HybridChildSpec.hpp"
-#include "JHybridChildSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
 #include "JFunc_void_std__vector_Powertrain_.hpp"
@@ -450,6 +450,28 @@ namespace margelo::nitro::test {
       }
       return __array;
     }(), JFunc_void_std__vector_Powertrain__cxx::fromCpp(callback));
+  }
+  std::vector<std::shared_ptr<HybridChildSpec>> JHybridTestObjectSwiftKotlinSpec::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JHybridChildSpec::javaobject>>(jni::alias_ref<jni::JArrayClass<JHybridChildSpec::javaobject>> /* array */)>("bounceHybridObjects");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JHybridChildSpec::javaobject>> __array = jni::JArrayClass<JHybridChildSpec::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        __array->setElement(__i, *std::dynamic_pointer_cast<JHybridChildSpec>(__element)->getJavaPart());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::shared_ptr<HybridChildSpec>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->cthis()->shared_cast<JHybridChildSpec>());
+      }
+      return __vector;
+    }();
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");

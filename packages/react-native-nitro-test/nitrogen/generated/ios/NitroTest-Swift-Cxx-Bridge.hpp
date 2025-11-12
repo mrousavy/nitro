@@ -531,6 +531,17 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__vector_Powertrain__Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::vector<std::shared_ptr<HybridChildSpec>>
+  /**
+   * Specialized version of `std::vector<std::shared_ptr<HybridChildSpec>>`.
+   */
+  using std__vector_std__shared_ptr_HybridChildSpec__ = std::vector<std::shared_ptr<HybridChildSpec>>;
+  inline std::vector<std::shared_ptr<HybridChildSpec>> create_std__vector_std__shared_ptr_HybridChildSpec__(size_t size) noexcept {
+    std::vector<std::shared_ptr<HybridChildSpec>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
   // pragma MARK: std::variant<bool, double>
   /**
    * Wrapper struct for `std::variant<bool, double>`.
@@ -1444,6 +1455,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::shared_ptr<HybridChildSpec>>>
+  using Result_std__vector_std__shared_ptr_HybridChildSpec___ = Result<std::vector<std::shared_ptr<HybridChildSpec>>>;
+  inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::vector<std::shared_ptr<HybridChildSpec>>& value) noexcept {
+    return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withValue(value);
+  }
+  inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<AnyMap>>

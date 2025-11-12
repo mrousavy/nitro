@@ -215,6 +215,10 @@ void HybridTestObjectCpp::complexEnumCallback(const std::vector<Powertrain>& arr
   callback(array);
 }
 
+std::vector<std::shared_ptr<HybridChildSpec>> HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
+  return array;
+}
+
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   auto map = AnyMap::make();
   map->setDouble("number", getNumberValue());
