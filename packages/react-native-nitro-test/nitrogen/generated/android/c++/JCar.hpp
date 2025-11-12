@@ -112,7 +112,8 @@ namespace margelo::nitro::test {
           jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
           for (size_t __i = 0; __i < __size; __i++) {
             const auto& __element = value.passengers[__i];
-            __array->setElement(__i, *JPerson::fromCpp(__element));
+            auto __elementJni = JPerson::fromCpp(__element);
+            __array->setElement(__i, *__elementJni);
           }
           return __array;
         }(),

@@ -71,7 +71,8 @@ namespace margelo::nitro::test {
           jni::local_ref<jni::JArrayClass<JJsStyleStruct>> __array = jni::JArrayClass<JJsStyleStruct>::newArray(__size);
           for (size_t __i = 0; __i < __size; __i++) {
             const auto& __element = value.items[__i];
-            __array->setElement(__i, *JJsStyleStruct::fromCpp(__element));
+            auto __elementJni = JJsStyleStruct::fromCpp(__element);
+            __array->setElement(__i, *__elementJni);
           }
           return __array;
         }()

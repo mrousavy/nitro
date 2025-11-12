@@ -254,7 +254,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = optionalArray.value()[__i];
-        __array->setElement(__i, *jni::make_jstring(__element));
+        auto __elementJni = jni::make_jstring(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }() : nullptr);
@@ -347,7 +348,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *jni::make_jstring(__element));
+        auto __elementJni = jni::make_jstring(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -384,7 +386,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPerson::fromCpp(__element));
+        auto __elementJni = JPerson::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -411,7 +414,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = cars[__i];
-        __array->setElement(__i, *JCar::fromCpp(__element));
+        auto __elementJni = JCar::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -424,7 +428,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+        auto __elementJni = JPowertrain::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -446,7 +451,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+        auto __elementJni = JPowertrain::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }(), JFunc_void_std__vector_Powertrain__cxx::fromCpp(callback));
@@ -458,7 +464,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JHybridChildSpec::javaobject>> __array = jni::JArrayClass<JHybridChildSpec::javaobject>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *std::dynamic_pointer_cast<JHybridChildSpec>(__element)->getJavaPart());
+        auto __elementJni = std::dynamic_pointer_cast<JHybridChildSpec>(__element)->getJavaPart();
+        __array->setElement(__i, __elementJni.get());
       }
       return __array;
     }());

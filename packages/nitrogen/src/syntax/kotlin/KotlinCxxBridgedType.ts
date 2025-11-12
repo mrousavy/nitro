@@ -421,6 +421,22 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     }
   }
 
+  dereferenceToJObject(parameterName: string): string {
+    switch (this.type.kind) {
+      // any jni::HybridClass needs to be dereferenced to jobject with .get()
+      case 'array-buffer':
+      case 'function':
+      case 'hybrid-object':
+      case 'hybrid-object-base':
+      case 'map':
+      case 'promise':
+        return `${parameterName}.get()`
+      // anything else can be dereferenced to jobject with *
+      default:
+        return `*${parameterName}`
+    }
+  }
+
   parseFromCppToKotlin(
     parameterName: string,
     language: 'kotlin' | 'c++',
@@ -601,7 +617,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
   for (size_t __i = 0; __i < __size; __i++) {
     const auto& __element = ${parameterName}[__i];
-    __array->setElement(__i, *${indent(bridge.parseFromCppToKotlin('__element', 'c++'), '    ')});
+    auto __elementJni = ${indent(bridge.parseFromCppToKotlin('__element', 'c++'), '    ')};
+    __array->setElement(__i, ${bridge.dereferenceToJObject('__elementJni')});
   }
   return __array;
 }()
