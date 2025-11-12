@@ -103,7 +103,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     callback(array)
   }
 
-  override fun bounceHybridObjects(array: Array<HybridChildSpec>):Array<HybridChildSpec> {
+  override fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec> {
     return array
   }
 

@@ -215,7 +215,8 @@ void HybridTestObjectCpp::complexEnumCallback(const std::vector<Powertrain>& arr
   callback(array);
 }
 
-std::vector<std::shared_ptr<HybridChildSpec>> HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
+std::vector<std::shared_ptr<HybridChildSpec>>
+HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
   return array;
 }
 
