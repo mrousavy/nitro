@@ -32,7 +32,8 @@ public:
 
 public:
   [[nodiscard]] uint8_t* data() override {
-    return _hardwareBuffer.data(LockFlag::READ);
+    void* data = _hardwareBuffer.data(LockFlag::READ);
+    return static_cast<uint8_t*>(data);
   }
   [[nodiscard]] size_t size() const override {
     return _hardwareBuffer.size();

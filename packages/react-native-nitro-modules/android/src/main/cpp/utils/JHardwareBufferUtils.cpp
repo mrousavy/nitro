@@ -31,7 +31,7 @@ JHardwareBufferUtils::copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer(jni::ali
   // 2. Get source buffer info
   AHardwareBuffer_Desc description = source.describe();
   // 3. Allocate new destination buffer
-  SafeHardwareBuffer destination = SafeHardwareBuffer::allocate(&description);
+  SafeHardwareBuffer destination = SafeHardwareBuffer::allocate(description);
   // 4. Copy data over
   copyHardwareBuffer(source, destination);
   // 5. Box it & return to Java
@@ -52,8 +52,8 @@ void JHardwareBufferUtils::copyHardwareBuffer(SafeHardwareBuffer& source, SafeHa
 #endif
 
   // 3. Lock both buffers and get their data pointers
-  uint8_t* sourceData = source.data(LockFlag::READ);
-  uint8_t* destinationData = destination.data(LockFlag::WRITE);
+  void* sourceData = source.data(LockFlag::READ);
+  void* destinationData = destination.data(LockFlag::WRITE);
   // 4. Copy data over via memcpy
   memcpy(destinationData, sourceData, sourceSize);
   // 5. Unlock both buffers again

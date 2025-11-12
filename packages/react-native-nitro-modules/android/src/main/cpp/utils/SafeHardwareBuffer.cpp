@@ -70,7 +70,7 @@ SafeHardwareBuffer::~SafeHardwareBuffer() {
 #endif
 }
 
-uint8_t* SafeHardwareBuffer::data(LockFlag lockFlag) {
+void* SafeHardwareBuffer::data(LockFlag lockFlag) {
   if (isLockedForFlag(lockFlag) && _dataCached != nullptr) {
     // We are still locked on the AHardwareBuffer* and have a valid buffer.
     return _dataCached;
@@ -82,7 +82,7 @@ uint8_t* SafeHardwareBuffer::data(LockFlag lockFlag) {
     ensureCpuReadable(describe());
     throw std::runtime_error("Failed to read HardwareBuffer bytes! Error Code: " + std::to_string(result));
   }
-  _dataCached = static_cast<uint8_t*>(buffer);
+  _dataCached = buffer;
   _currentlyLockedFlag = targetLockFlags;
   return _dataCached;
 }

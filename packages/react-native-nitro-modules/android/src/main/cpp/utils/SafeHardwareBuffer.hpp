@@ -7,10 +7,10 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <android/hardware_buffer.h>
 #include <android/hardware_buffer_jni.h>
 #include <fbjni/fbjni.h>
-#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
@@ -36,7 +36,7 @@ public:
   ~SafeHardwareBuffer();
 
 public:
-  [[nodiscard]] uint8_t* data(LockFlag lockFlag);
+  [[nodiscard]] void* data(LockFlag lockFlag);
   [[nodiscard]] size_t size() const;
   [[nodiscard]] jni::local_ref<jni::JObject> toJava() const;
 
@@ -88,10 +88,10 @@ public:
    * `AHardwareBuffer_Desc` (buffer description).
    * The returned `SafeHardwareBuffer` will retain the `AHardwareBuffer*` retain count via RAII.
    */
-  static SafeHardwareBuffer allocate(AHardwareBuffer_Desc* description) {
+  static SafeHardwareBuffer allocate(AHardwareBuffer_Desc description) {
     // Allocate with description (create +1 ref)
     AHardwareBuffer* buffer;
-    AHardwareBuffer_allocate(description, &buffer);
+    AHardwareBuffer_allocate(&description, &buffer);
     return SafeHardwareBuffer(buffer);
   }
 
@@ -105,7 +105,7 @@ public:
 
 private:
   AHardwareBuffer* _buffer;
-  uint8_t* _dataCached;
+  void* _dataCached;
   AHardwareBufferLockedFlag _currentlyLockedFlag;
 };
 
