@@ -60,7 +60,8 @@ namespace margelo::nitro::test {
           jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
           for (size_t __i = 0; __i < __size; __i++) {
             const auto& __element = std::get<2>(variant)[__i];
-            __array->setElement(__i, *jni::make_jstring(__element));
+            auto __elementJni = jni::make_jstring(__element);
+            __array->setElement(__i, *__elementJni);
           }
           return __array;
         }());

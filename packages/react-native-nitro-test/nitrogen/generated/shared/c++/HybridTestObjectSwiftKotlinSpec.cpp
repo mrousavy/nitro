@@ -57,6 +57,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("sumUpAllPassengers", &HybridTestObjectSwiftKotlinSpec::sumUpAllPassengers);
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectSwiftKotlinSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectSwiftKotlinSpec::complexEnumCallback);
+      prototype.registerHybridMethod("bounceHybridObjects", &HybridTestObjectSwiftKotlinSpec::bounceHybridObjects);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectSwiftKotlinSpec::getMapKeys);

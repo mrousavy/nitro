@@ -17,6 +17,8 @@ namespace margelo::nitro::test { enum class OldEnum; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
+// Forward declaration of `HybridChildSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -31,8 +33,6 @@ namespace margelo::nitro::test { struct OptionalCallback; }
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
-// Forward declaration of `HybridChildSpec` to properly resolve imports.
-namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -64,6 +64,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JPerson.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
+#include "HybridChildSpec.hpp"
+#include "JHybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
 #include <unordered_map>
@@ -97,8 +99,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_HybridBaseSpec_OptionalWrapper.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JCoreTypesVariant.hpp"
-#include "HybridChildSpec.hpp"
-#include "JHybridChildSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
 #include "JFunc_void_std__vector_Powertrain_.hpp"
@@ -254,7 +254,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = optionalArray.value()[__i];
-        __array->setElement(__i, *jni::make_jstring(__element));
+        auto __elementJni = jni::make_jstring(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }() : nullptr);
@@ -347,7 +348,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *jni::make_jstring(__element));
+        auto __elementJni = jni::make_jstring(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -384,7 +386,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPerson::fromCpp(__element));
+        auto __elementJni = JPerson::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -411,7 +414,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JCar>> __array = jni::JArrayClass<JCar>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = cars[__i];
-        __array->setElement(__i, *JCar::fromCpp(__element));
+        auto __elementJni = JCar::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -424,7 +428,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+        auto __elementJni = JPowertrain::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }());
@@ -446,10 +451,34 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
       for (size_t __i = 0; __i < __size; __i++) {
         const auto& __element = array[__i];
-        __array->setElement(__i, *JPowertrain::fromCpp(__element));
+        auto __elementJni = JPowertrain::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
       }
       return __array;
     }(), JFunc_void_std__vector_Powertrain__cxx::fromCpp(callback));
+  }
+  std::vector<std::shared_ptr<HybridChildSpec>> JHybridTestObjectSwiftKotlinSpec::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JHybridChildSpec::javaobject>>(jni::alias_ref<jni::JArrayClass<JHybridChildSpec::javaobject>> /* array */)>("bounceHybridObjects");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JHybridChildSpec::javaobject>> __array = jni::JArrayClass<JHybridChildSpec::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        auto __elementJni = std::dynamic_pointer_cast<JHybridChildSpec>(__element)->getJavaPart();
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::shared_ptr<HybridChildSpec>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->cthis()->shared_cast<JHybridChildSpec>());
+      }
+      return __vector;
+    }();
   }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");

@@ -207,6 +207,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec>
+  
+  @DoNotStrip
+  @Keep
   abstract fun createMap(): AnyMap
   
   @DoNotStrip

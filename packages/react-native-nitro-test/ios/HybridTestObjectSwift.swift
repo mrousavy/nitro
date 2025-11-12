@@ -172,6 +172,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     callback(array)
   }
 
+  func bounceHybridObjects(array: [any HybridChildSpec]) -> [any HybridChildSpec] {
+    return array
+  }
+
   func createMap() throws -> AnyMap {
     let map = AnyMap()
     map.setDouble(key: "number", value: numberValue)

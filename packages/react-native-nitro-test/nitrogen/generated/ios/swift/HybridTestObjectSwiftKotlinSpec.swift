@@ -44,6 +44,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func sumUpAllPassengers(cars: [Car]) throws -> String
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
+  func bounceHybridObjects(array: [(any HybridChildSpec)]) throws -> [(any HybridChildSpec)]
   func createMap() throws -> AnyMap
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
