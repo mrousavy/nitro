@@ -38,7 +38,10 @@ JHardwareBufferUtils::copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
   copyHardwareBuffer(sourceHardwareBuffer, destinationHardwareBuffer);
   // 5. Box it into jobject again
   jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), destinationHardwareBuffer);
-  // 6. We can free the C++ reference since the jobject has +1
+  // 6. We can free the C++ references since AHardwareBuffer_toHardwareBuffer and
+  //    AHardwareBuffer_fromHardwareBuffer both add a +1 retain count and we don't need
+  //    either of the C++ handles to AHardwareBuffer* anymore.
+  AHardwareBuffer_release(sourceHardwareBuffer);
   AHardwareBuffer_release(destinationHardwareBuffer);
   // 7. Return the object to java
   return jni::make_local(boxed);
@@ -57,6 +60,10 @@ void JHardwareBufferUtils::copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>,
       AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), boxedDestinationHardwareBuffer.get());
   // 2. Copy data over from source -> destination
   copyHardwareBuffer(sourceHardwareBuffer, destinationHardwareBuffer);
+  // 3. Release the C++ references again since AHardwareBuffer_fromHardwareBuffer adds +1
+  //    retain count and we don't need the C++ handles to AHardwareBuffer* anymore.
+  AHardwareBuffer_release(sourceHardwareBuffer);
+  AHardwareBuffer_release(destinationHardwareBuffer);
 #else
   throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
