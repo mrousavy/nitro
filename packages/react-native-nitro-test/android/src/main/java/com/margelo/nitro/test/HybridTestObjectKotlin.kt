@@ -107,6 +107,22 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
+  override fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit> {
+    return functions
+  }
+
+  override fun bounceMaps(maps: Array<AnyMap>): Array<AnyMap> {
+    return maps
+  }
+
+  override fun bouncePromises(promises: Array<Promise<Double>>): Array<Promise<Double>> {
+    return promises
+  }
+
+  override fun bounceArrayBuffers(arrayBuffers: Array<ArrayBuffer>): Array<ArrayBuffer> {
+    return arrayBuffers
+  }
+
   override fun currentDate(): java.time.Instant {
     return Instant.now()
   }

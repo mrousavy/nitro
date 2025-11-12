@@ -58,6 +58,10 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectSwiftKotlinSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectSwiftKotlinSpec::complexEnumCallback);
       prototype.registerHybridMethod("bounceHybridObjects", &HybridTestObjectSwiftKotlinSpec::bounceHybridObjects);
+      prototype.registerHybridMethod("bounceFunctions", &HybridTestObjectSwiftKotlinSpec::bounceFunctions);
+      prototype.registerHybridMethod("bounceMaps", &HybridTestObjectSwiftKotlinSpec::bounceMaps);
+      prototype.registerHybridMethod("bouncePromises", &HybridTestObjectSwiftKotlinSpec::bouncePromises);
+      prototype.registerHybridMethod("bounceArrayBuffers", &HybridTestObjectSwiftKotlinSpec::bounceArrayBuffers);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectSwiftKotlinSpec::getMapKeys);

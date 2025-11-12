@@ -209,6 +209,27 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   abstract fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec>
   
+  abstract fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit>
+  
+  @DoNotStrip
+  @Keep
+  private fun bounceFunctions_cxx(functions: Array<Func_void>): Array<Func_void> {
+    val __result = bounceFunctions(Array(functions.size) { i -> functions[i] })
+    return Array(__result.size) { i -> Func_void_java(__result[i]) }
+  }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceMaps(maps: Array<AnyMap>): Array<AnyMap>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bouncePromises(promises: Array<Promise<Double>>): Array<Promise<Double>>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceArrayBuffers(arrayBuffers: Array<ArrayBuffer>): Array<ArrayBuffer>
+  
   @DoNotStrip
   @Keep
   abstract fun createMap(): AnyMap

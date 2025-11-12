@@ -672,6 +672,113 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceFunctions(functions: bridge.std__vector_std__function_void____) -> bridge.Result_std__vector_std__function_void_____ {
+    do {
+      let __result = try self.__implementation.bounceFunctions(functions: functions.map({ __item in { () -> () -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void(__item)
+        return { () -> Void in
+          __wrappedFunction.call()
+        }
+      }() }))
+      let __resultCpp = { () -> bridge.std__vector_std__function_void____ in
+        var __vector = bridge.create_std__vector_std__function_void____(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.Func_void in
+            let __closureWrapper = Func_void(__item)
+            return bridge.create_Func_void(__closureWrapper.toUnsafe())
+          }())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__function_void_____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__function_void_____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceMaps(maps: bridge.std__vector_std__shared_ptr_AnyMap__) -> bridge.Result_std__vector_std__shared_ptr_AnyMap___ {
+    do {
+      let __result = try self.__implementation.bounceMaps(maps: maps.map({ __item in AnyMap(withCppPart: __item) }))
+      let __resultCpp = { () -> bridge.std__vector_std__shared_ptr_AnyMap__ in
+        var __vector = bridge.create_std__vector_std__shared_ptr_AnyMap__(__result.count)
+        for __item in __result {
+          __vector.push_back(__item.cppPart)
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__shared_ptr_AnyMap___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__shared_ptr_AnyMap___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bouncePromises(promises: bridge.std__vector_std__shared_ptr_Promise_double___) -> bridge.Result_std__vector_std__shared_ptr_Promise_double____ {
+    do {
+      let __result = try self.__implementation.bouncePromises(promises: promises.map({ __item in { () -> Promise<Double> in
+        let __promise = Promise<Double>()
+        let __resolver = { (__result: Double) in
+          __promise.resolve(withResult: __result)
+        }
+        let __rejecter = { (__error: Error) in
+          __promise.reject(withError: __error)
+        }
+        let __resolverCpp = { () -> bridge.Func_void_double in
+          let __closureWrapper = Func_void_double(__resolver)
+          return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+        }()
+        let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+          let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+          return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+        }()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__item)
+        __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
+        __promiseHolder.addOnRejectedListener(__rejecterCpp)
+        return __promise
+      }() }))
+      let __resultCpp = { () -> bridge.std__vector_std__shared_ptr_Promise_double___ in
+        var __vector = bridge.create_std__vector_std__shared_ptr_Promise_double___(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.std__shared_ptr_Promise_double__ in
+            let __promise = bridge.create_std__shared_ptr_Promise_double__()
+            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
+            __item
+              .then({ __result in __promiseHolder.resolve(__result) })
+              .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+            return __promise
+          }())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__shared_ptr_Promise_double____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__shared_ptr_Promise_double____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceArrayBuffers(arrayBuffers: bridge.std__vector_std__shared_ptr_ArrayBuffer__) -> bridge.Result_std__vector_std__shared_ptr_ArrayBuffer___ {
+    do {
+      let __result = try self.__implementation.bounceArrayBuffers(arrayBuffers: arrayBuffers.map({ __item in ArrayBuffer(__item) }))
+      let __resultCpp = { () -> bridge.std__vector_std__shared_ptr_ArrayBuffer__ in
+        var __vector = bridge.create_std__vector_std__shared_ptr_ArrayBuffer__(__result.count)
+        for __item in __result {
+          __vector.push_back(__item.getArrayBuffer())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__shared_ptr_ArrayBuffer___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__shared_ptr_ArrayBuffer___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.createMap()
@@ -1945,7 +2052,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceComplexVariant(variant: bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__) -> bridge.Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___ {
+  public final func bounceComplexVariant(variant: bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__) -> bridge.Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ {
     do {
       let __result = try self.__implementation.bounceComplexVariant(variant: { () -> CoreTypesVariant in
         let __variant = variant
@@ -1966,10 +2073,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             return .third(__actual)
           case 3:
             let __actual = __variant.get_3()
-            return .fourth(Date(fromChrono: __actual))
-          case 4:
-            let __actual = __variant.get_4()
-            return .fifth({ () -> Promise<Double> in
+            return .fourth({ () -> Promise<Double> in
               let __promise = Promise<Double>()
               let __resolver = { (__result: Double) in
                 __promise.resolve(withResult: __result)
@@ -1990,6 +2094,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
               __promiseHolder.addOnRejectedListener(__rejecterCpp)
               return __promise
             }())
+          case 4:
+            let __actual = __variant.get_4()
+            return .fifth(Date(fromChrono: __actual))
           case 5:
             let __actual = __variant.get_5()
             return .sixth(AnyMap(withCppPart: __actual))
@@ -1997,21 +2104,19 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
             fatalError("Variant can never have index \(__variant.index())!")
         }
       }())
-      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__ in
+      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__ in
         switch __result {
           case .first(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.getArrayBuffer())
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(__value.getArrayBuffer())
           case .second(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__({ () -> bridge.Func_void_double in
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__({ () -> bridge.Func_void_double in
               let __closureWrapper = Func_void_double(__value)
               return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
             }())
           case .third(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value)
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(__value)
           case .fourth(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.toCpp())
-          case .fifth(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__({ () -> bridge.std__shared_ptr_Promise_double__ in
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__({ () -> bridge.std__shared_ptr_Promise_double__ in
               let __promise = bridge.create_std__shared_ptr_Promise_double__()
               let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(__promise)
               __value
@@ -2019,14 +2124,16 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
                 .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
               return __promise
             }())
+          case .fifth(let __value):
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(__value.toCpp())
           case .sixth(let __value):
-            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__(__value.cppPart)
+            return bridge.create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(__value.cppPart)
         }
       }().variant
-      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___(__resultCpp)
+      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___(__exceptionPtr)
+      return bridge.create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(__exceptionPtr)
     }
   }
   

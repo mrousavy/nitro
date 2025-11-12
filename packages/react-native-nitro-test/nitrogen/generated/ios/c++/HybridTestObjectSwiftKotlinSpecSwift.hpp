@@ -26,12 +26,12 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
+namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
-// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
-namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -64,14 +64,14 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
 #include "SecondMapWrapper.hpp"
-#include <NitroModules/Promise.hpp>
 #include <exception>
 #include <chrono>
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/ArrayBufferHolder.hpp>
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
@@ -331,6 +331,38 @@ namespace margelo::nitro::test {
     }
     inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
       auto __result = _swiftPart.bounceHybridObjects(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override {
+      auto __result = _swiftPart.bounceFunctions(functions);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override {
+      auto __result = _swiftPart.bounceMaps(maps);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override {
+      auto __result = _swiftPart.bouncePromises(promises);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override {
+      auto __result = _swiftPart.bounceArrayBuffers(arrayBuffers);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -787,7 +819,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) override {
+    inline std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override {
       auto __result = _swiftPart.bounceComplexVariant(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

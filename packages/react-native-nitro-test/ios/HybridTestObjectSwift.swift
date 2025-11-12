@@ -176,6 +176,22 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceFunctions(functions: [() -> Void]) throws -> [() -> Void] {
+    return functions
+  }
+
+  func bounceMaps(maps: [AnyMap]) throws -> [AnyMap] {
+    return maps
+  }
+
+  func bouncePromises(promises: [Promise<Double>]) throws -> [Promise<Double>] {
+    return promises
+  }
+
+  func bounceArrayBuffers(arrayBuffers: [ArrayBuffer]) throws -> [ArrayBuffer] {
+    return arrayBuffers
+  }
+
   func createMap() throws -> AnyMap {
     let map = AnyMap()
     map.setDouble(key: "number", value: numberValue)

@@ -13,8 +13,8 @@
 #include <NitroModules/ArrayBuffer.hpp>
 #include <functional>
 #include "WrappedJsStruct.hpp"
-#include <chrono>
 #include <NitroModules/Promise.hpp>
+#include <chrono>
 #include <NitroModules/AnyMap.hpp>
 #include <variant>
 #include <NitroModules/JArrayBuffer.hpp>
@@ -24,8 +24,8 @@
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
 #include <vector>
-#include <NitroModules/JInstant.hpp>
 #include <NitroModules/JPromise.hpp>
+#include <NitroModules/JInstant.hpp>
 #include <NitroModules/JAnyMap.hpp>
 
 namespace margelo::nitro::test {
@@ -51,12 +51,12 @@ namespace margelo::nitro::test {
       static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JWrappedJsStruct>)>("create");
       return method(javaClassStatic(), value);
     }
-    static jni::local_ref<JCoreTypesVariant> create_3(jni::alias_ref<JInstant> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JInstant>)>("create");
+    static jni::local_ref<JCoreTypesVariant> create_3(jni::alias_ref<JPromise::javaobject> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JPromise::javaobject>)>("create");
       return method(javaClassStatic(), value);
     }
-    static jni::local_ref<JCoreTypesVariant> create_4(jni::alias_ref<JPromise::javaobject> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JPromise::javaobject>)>("create");
+    static jni::local_ref<JCoreTypesVariant> create_4(jni::alias_ref<JInstant> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JInstant>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JCoreTypesVariant> create_5(jni::alias_ref<JAnyMap::javaobject> value) {
@@ -64,30 +64,30 @@ namespace margelo::nitro::test {
       return method(javaClassStatic(), value);
     }
 
-    static jni::local_ref<JCoreTypesVariant> fromCpp(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) {
+    static jni::local_ref<JCoreTypesVariant> fromCpp(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) {
       switch (variant.index()) {
         case 0: return create_0(JArrayBuffer::wrap(std::get<0>(variant)));
         case 1: return create_1(JFunc_void_double_cxx::fromCpp(std::get<1>(variant)));
         case 2: return create_2(JWrappedJsStruct::fromCpp(std::get<2>(variant)));
-        case 3: return create_3(JInstant::fromChrono(std::get<3>(variant)));
-        case 4: return create_4([&]() {
+        case 3: return create_3([&]() {
           jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
           jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
-          std::get<4>(variant)->addOnResolvedListener([=](const double& __result) {
+          std::get<3>(variant)->addOnResolvedListener([=](const double& __result) {
             __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
           });
-          std::get<4>(variant)->addOnRejectedListener([=](const std::exception_ptr& __error) {
+          std::get<3>(variant)->addOnRejectedListener([=](const std::exception_ptr& __error) {
             auto __jniError = jni::getJavaExceptionForCppException(__error);
             __promise->cthis()->reject(__jniError);
           });
           return __localPromise;
         }());
+        case 4: return create_4(JInstant::fromChrono(std::get<4>(variant)));
         case 5: return create_5(JAnyMap::create(std::get<5>(variant)));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }
     }
 
-    [[nodiscard]] std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> toCpp() const;
+    [[nodiscard]] std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> toCpp() const;
   };
 
   namespace JCoreTypesVariant_impl {
@@ -125,8 +125,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fourth;";
     
-      [[nodiscard]] jni::local_ref<JInstant> getValue() const {
-        static const auto field = javaClassStatic()->getField<JInstant>("value");
+      [[nodiscard]] jni::local_ref<JPromise::javaobject> getValue() const {
+        static const auto field = javaClassStatic()->getField<JPromise::javaobject>("value");
         return getFieldValue(field);
       }
     };
@@ -135,8 +135,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fifth;";
     
-      [[nodiscard]] jni::local_ref<JPromise::javaobject> getValue() const {
-        static const auto field = javaClassStatic()->getField<JPromise::javaobject>("value");
+      [[nodiscard]] jni::local_ref<JInstant> getValue() const {
+        static const auto field = javaClassStatic()->getField<JInstant>("value");
         return getFieldValue(field);
       }
     };

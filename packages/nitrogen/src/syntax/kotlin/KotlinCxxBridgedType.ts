@@ -46,6 +46,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const optional = getTypeAs(this.type, OptionalType)
         return new KotlinCxxBridgedType(optional.wrappingType)
           .needsSpecialHandling
+      case 'array':
+        // Arrays need special handling if their item type needs special handling
+        const array = getTypeAs(this.type, ArrayType)
+        return new KotlinCxxBridgedType(array.itemType).needsSpecialHandling
+      case 'record':
+        // Records need special handling if their key or value type needs special handling
+        const record = getTypeAs(this.type, RecordType)
+        const keyType = new KotlinCxxBridgedType(record.keyType)
+        const valueType = new KotlinCxxBridgedType(record.valueType)
+        return keyType.needsSpecialHandling || valueType.needsSpecialHandling
       default:
         break
     }
@@ -628,7 +638,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           }
           case 'kotlin':
             if (bridge.needsSpecialHandling) {
-              return `${parameterName}.map { ${bridge.parseFromCppToKotlin('it', language, isBoxed)} }`
+              const variableName = `${parameterName}[i]`
+              const parseCode = bridge.parseFromCppToKotlin(
+                variableName,
+                'kotlin',
+                isBoxed
+              )
+              return `Array(${parameterName}.size) { i -> ${parseCode} }`
             } else {
               return parameterName
             }
@@ -867,10 +883,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         }
       }
       case 'array': {
+        const array = getTypeAs(this.type, ArrayType)
+        const bridge = new KotlinCxxBridgedType(array.itemType)
         switch (language) {
-          case 'c++':
-            const array = getTypeAs(this.type, ArrayType)
-            const bridge = new KotlinCxxBridgedType(array.itemType)
+          case 'c++': {
             const itemType = array.itemType.getCode('c++')
             switch (array.itemType.kind) {
               case 'number':
@@ -902,6 +918,19 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 }()
             `.trim()
               }
+            }
+          }
+          case 'kotlin':
+            if (bridge.needsSpecialHandling) {
+              const variableName = `${parameterName}[i]`
+              const parseCode = bridge.parseFromKotlinToCpp(
+                variableName,
+                'kotlin',
+                isBoxed
+              )
+              return `Array(${parameterName}.size) { i -> ${parseCode} }`
+            } else {
+              return parameterName
             }
           default:
             return parameterName

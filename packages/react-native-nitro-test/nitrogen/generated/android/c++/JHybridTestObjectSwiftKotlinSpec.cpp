@@ -66,19 +66,20 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JFunc_void.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <unordered_map>
-#include "JVariant_Boolean_Double.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/JArrayBuffer.hpp>
+#include <NitroModules/JUnit.hpp>
+#include <unordered_map>
+#include "JVariant_Boolean_Double.hpp"
 #include <chrono>
 #include <NitroModules/JInstant.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/JArrayBuffer.hpp>
-#include <NitroModules/JUnit.hpp>
 #include "WrappedJsStruct.hpp"
 #include "JWrappedJsStruct.hpp"
 #include "JsStyleStruct.hpp"
@@ -88,7 +89,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
-#include "JFunc_void.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -476,6 +476,130 @@ namespace margelo::nitro::test {
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __result->getElement(__i);
         __vector.push_back(__element->cthis()->shared_cast<JHybridChildSpec>());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<std::function<void()>> JHybridTestObjectSwiftKotlinSpec::bounceFunctions(const std::vector<std::function<void()>>& functions) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JFunc_void::javaobject>>(jni::alias_ref<jni::JArrayClass<JFunc_void::javaobject>> /* functions */)>("bounceFunctions_cxx");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = functions.size();
+      jni::local_ref<jni::JArrayClass<JFunc_void::javaobject>> __array = jni::JArrayClass<JFunc_void::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = functions[__i];
+        auto __elementJni = JFunc_void_cxx::fromCpp(__element);
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::function<void()>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back([&]() -> std::function<void()> {
+      if (__element->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__element);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __elementRef = jni::make_global(__element);
+        return [__elementRef]() -> void {
+          return __elementRef->invoke();
+        };
+      }
+    }());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<std::shared_ptr<AnyMap>> JHybridTestObjectSwiftKotlinSpec::bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JAnyMap::javaobject>>(jni::alias_ref<jni::JArrayClass<JAnyMap::javaobject>> /* maps */)>("bounceMaps");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = maps.size();
+      jni::local_ref<jni::JArrayClass<JAnyMap::javaobject>> __array = jni::JArrayClass<JAnyMap::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = maps[__i];
+        auto __elementJni = JAnyMap::create(__element);
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::shared_ptr<AnyMap>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->cthis()->getMap());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<std::shared_ptr<Promise<double>>> JHybridTestObjectSwiftKotlinSpec::bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JPromise::javaobject>>(jni::alias_ref<jni::JArrayClass<JPromise::javaobject>> /* promises */)>("bouncePromises");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = promises.size();
+      jni::local_ref<jni::JArrayClass<JPromise::javaobject>> __array = jni::JArrayClass<JPromise::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = promises[__i];
+        auto __elementJni = [&]() {
+          jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+          jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+          __element->addOnResolvedListener([=](const double& __result) {
+            __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
+          });
+          __element->addOnRejectedListener([=](const std::exception_ptr& __error) {
+            auto __jniError = jni::getJavaExceptionForCppException(__error);
+            __promise->cthis()->reject(__jniError);
+          });
+          return __localPromise;
+        }();
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::shared_ptr<Promise<double>>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back([&]() {
+      auto __promise = Promise<double>::create();
+      __element->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __element->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }());
+      }
+      return __vector;
+    }();
+  }
+  std::vector<std::shared_ptr<ArrayBuffer>> JHybridTestObjectSwiftKotlinSpec::bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JArrayBuffer::javaobject>>(jni::alias_ref<jni::JArrayClass<JArrayBuffer::javaobject>> /* arrayBuffers */)>("bounceArrayBuffers");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = arrayBuffers.size();
+      jni::local_ref<jni::JArrayClass<JArrayBuffer::javaobject>> __array = jni::JArrayClass<JArrayBuffer::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = arrayBuffers[__i];
+        auto __elementJni = JArrayBuffer::wrap(__element);
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::shared_ptr<ArrayBuffer>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back(__element->cthis()->getArrayBuffer());
       }
       return __vector;
     }();
@@ -1016,7 +1140,7 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JVariant_HybridBaseSpec_OptionalWrapper::fromCpp(variant));
     return __result->toCpp();
   }
-  std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> JHybridTestObjectSwiftKotlinSpec::bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) {
+  std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> JHybridTestObjectSwiftKotlinSpec::bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JCoreTypesVariant>(jni::alias_ref<JCoreTypesVariant> /* variant */)>("bounceComplexVariant");
     auto __result = method(_javaPart, JCoreTypesVariant::fromCpp(variant));
     return __result->toCpp();
