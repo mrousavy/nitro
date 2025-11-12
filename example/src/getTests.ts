@@ -544,6 +544,8 @@ export function getTests(
       it(() => testObject.bounceFunctions([() => {}, () => {}]))
         .didNotThrow()
         .toBeArray()
+        .toContain(0)
+        .toContain(1)
     ),
     createTest('bounceMaps(...)', () =>
       it(() => testObject.bounceMaps([TEST_MAP, TEST_MAP_2]))
@@ -556,16 +558,24 @@ export function getTests(
       )
         .didNotThrow()
         .toBeArray()
+        .toContain(0)
+        .toContain(1)
     ),
     createTest('bounceArrayBuffers(...)', () =>
       it(() =>
         testObject.bounceArrayBuffers([
-          new ArrayBuffer(10),
+          testObject.createArrayBuffer(),
+          testObject.createArrayBufferFromNativeBuffer(false),
+          testObject.createArrayBufferFromNativeBuffer(true),
           new ArrayBuffer(50),
         ])
       )
         .didNotThrow()
         .toBeArray()
+        .toContain(0)
+        .toContain(1)
+        .toContain(2)
+        .toContain(3)
     ),
 
     // Test Dates
