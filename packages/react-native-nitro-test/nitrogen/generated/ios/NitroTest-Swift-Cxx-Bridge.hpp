@@ -631,6 +631,17 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::vector<std::shared_ptr<ArrayBuffer>>
+  /**
+   * Specialized version of `std::vector<std::shared_ptr<ArrayBuffer>>`.
+   */
+  using std__vector_std__shared_ptr_ArrayBuffer__ = std::vector<std::shared_ptr<ArrayBuffer>>;
+  inline std::vector<std::shared_ptr<ArrayBuffer>> create_std__vector_std__shared_ptr_ArrayBuffer__(size_t size) noexcept {
+    std::vector<std::shared_ptr<ArrayBuffer>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
   // pragma MARK: std::variant<bool, double>
   /**
    * Wrapper struct for `std::variant<bool, double>`.
@@ -1524,6 +1535,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__shared_ptr_Promise_double____ create_Result_std__vector_std__shared_ptr_Promise_double____(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<Promise<double>>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::shared_ptr<ArrayBuffer>>>
+  using Result_std__vector_std__shared_ptr_ArrayBuffer___ = Result<std::vector<std::shared_ptr<ArrayBuffer>>>;
+  inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::vector<std::shared_ptr<ArrayBuffer>>& value) noexcept {
+    return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withValue(value);
+  }
+  inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<AnyMap>>

@@ -557,6 +557,16 @@ export function getTests(
         .didNotThrow()
         .toBeArray()
     ),
+    createTest('bounceArrayBuffers(...)', () =>
+      it(() =>
+        testObject.bounceArrayBuffers([
+          new ArrayBuffer(10),
+          new ArrayBuffer(50),
+        ])
+      )
+        .didNotThrow()
+        .toBeArray()
+    ),
 
     // Test Dates
     createTest('currentDate(...) is a Date', () =>

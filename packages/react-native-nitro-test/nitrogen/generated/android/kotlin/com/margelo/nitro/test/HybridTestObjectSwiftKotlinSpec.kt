@@ -224,7 +224,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bouncePromises(promise: Array<Promise<Double>>): Array<Promise<Double>>
+  abstract fun bouncePromises(promises: Array<Promise<Double>>): Array<Promise<Double>>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceArrayBuffers(arrayBuffers: Array<ArrayBuffer>): Array<ArrayBuffer>
   
   @DoNotStrip
   @Keep

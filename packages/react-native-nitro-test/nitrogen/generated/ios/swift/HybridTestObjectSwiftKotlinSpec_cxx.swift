@@ -716,9 +716,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bouncePromises(promise: bridge.std__vector_std__shared_ptr_Promise_double___) -> bridge.Result_std__vector_std__shared_ptr_Promise_double____ {
+  public final func bouncePromises(promises: bridge.std__vector_std__shared_ptr_Promise_double___) -> bridge.Result_std__vector_std__shared_ptr_Promise_double____ {
     do {
-      let __result = try self.__implementation.bouncePromises(promise: promise.map({ __item in { () -> Promise<Double> in
+      let __result = try self.__implementation.bouncePromises(promises: promises.map({ __item in { () -> Promise<Double> in
         let __promise = Promise<Double>()
         let __resolver = { (__result: Double) in
           __promise.resolve(withResult: __result)
@@ -757,6 +757,24 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__vector_std__shared_ptr_Promise_double____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceArrayBuffers(arrayBuffers: bridge.std__vector_std__shared_ptr_ArrayBuffer__) -> bridge.Result_std__vector_std__shared_ptr_ArrayBuffer___ {
+    do {
+      let __result = try self.__implementation.bounceArrayBuffers(arrayBuffers: arrayBuffers.map({ __item in ArrayBuffer(__item) }))
+      let __resultCpp = { () -> bridge.std__vector_std__shared_ptr_ArrayBuffer__ in
+        var __vector = bridge.create_std__vector_std__shared_ptr_ArrayBuffer__(__result.count)
+        for __item in __result {
+          __vector.push_back(__item.getArrayBuffer())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__shared_ptr_ArrayBuffer___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__shared_ptr_ArrayBuffer___(__exceptionPtr)
     }
   }
   

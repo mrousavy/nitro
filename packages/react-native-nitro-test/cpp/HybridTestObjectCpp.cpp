@@ -229,8 +229,13 @@ std::vector<std::shared_ptr<AnyMap>> HybridTestObjectCpp::bounceMaps(const std::
 }
 
 std::vector<std::shared_ptr<Promise<double>>>
-HybridTestObjectCpp::bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promise) {
-  return promise;
+HybridTestObjectCpp::bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) {
+  return promises;
+}
+
+std::vector<std::shared_ptr<ArrayBuffer>>
+HybridTestObjectCpp::bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) {
+  return arrayBuffers;
 }
 
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {

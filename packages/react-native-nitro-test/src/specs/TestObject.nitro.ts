@@ -142,7 +142,8 @@ interface SharedTestObjectProps {
   bounceHybridObjects(array: Child[]): Child[]
   bounceFunctions(functions: (() => void)[]): (() => void)[]
   bounceMaps(maps: AnyMap[]): AnyMap[]
-  bouncePromises(promise: Promise<number>[]): Promise<number>[]
+  bouncePromises(promises: Promise<number>[]): Promise<number>[]
+  bounceArrayBuffers(arrayBuffers: ArrayBuffer[]): ArrayBuffer[]
 
   // Maps
   createMap(): AnyMap
