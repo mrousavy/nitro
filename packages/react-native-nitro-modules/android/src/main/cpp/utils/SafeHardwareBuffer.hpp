@@ -20,6 +20,9 @@ struct HardwareBuffersUnavailable : public std::exception {
     return "ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)";
   }
 };
+enum class LockFlag { READ, WRITE, READ_AND_WRITE };
+
+using AHardwareBufferLockedFlag = unsigned long long;
 
 class SafeHardwareBuffer final {
 private:
@@ -32,12 +35,17 @@ public:
   ~SafeHardwareBuffer();
 
 public:
-  [[nodiscard]] uint8_t* data();
+  [[nodiscard]] uint8_t* data(LockFlag lockFlag);
   [[nodiscard]] size_t size() const;
   [[nodiscard]] jni::local_ref<jni::JObject> toJava() const;
 
 public:
-  void clearCache();
+  /**
+   * Unlocks the underlying `AHardwareBuffer`.
+   * The `AHardwareBuffer` will also automatically be unlocked,
+   * but this is safe to call if you want to take ownership.
+   */
+  void unlock();
 
 public:
   /**
@@ -47,6 +55,11 @@ public:
    */
   [[nodiscard]] AHardwareBuffer* buffer() const noexcept;
   [[nodiscard]] AHardwareBuffer_Desc describe() const;
+
+private:
+  bool isLockedForFlag(LockFlag lockFlag) const noexcept;
+  bool isLocked() const noexcept;
+  static AHardwareBufferLockedFlag getHardwareBufferUsageFlag(LockFlag lockFlag);
 
 public:
   /**
@@ -92,7 +105,7 @@ public:
 private:
   AHardwareBuffer* _buffer;
   uint8_t* _dataCached;
-  bool _isLocked;
+  AHardwareBufferLockedFlag _currentlyLockedFlag;
 };
 
 } // namespace margelo::nitro

@@ -24,7 +24,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(const jni::alias_ref<jni::JObject>& javaH
   // Convert jobject to AHardwareBuffer* - this adds +1 retain count (we're at 1 total now)
   _buffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), javaHardwareBuffer.get());
   _dataCached = nullptr;
-  _isLocked = false;
+  _currentlyLockedFlag = 0;
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
@@ -33,7 +33,7 @@ SafeHardwareBuffer::SafeHardwareBuffer(const jni::alias_ref<jni::JObject>& javaH
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(AHardwareBuffer* /* +1 retained */ alreadyRetainedHardwareBuffer)
-    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _isLocked(false) {
+    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _currentlyLockedFlag(0) {
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
@@ -41,18 +41,19 @@ SafeHardwareBuffer::SafeHardwareBuffer(AHardwareBuffer* /* +1 retained */ alread
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(SafeHardwareBuffer&& move) noexcept
-    : _buffer(move._buffer), _dataCached(move._dataCached), _isLocked(move._isLocked) {
+    : _buffer(move._buffer), _dataCached(move._dataCached), _currentlyLockedFlag(move._currentlyLockedFlag) {
   // remove the buffer pointer from the value moved into `this`
   move._buffer = nullptr;
   move._dataCached = nullptr;
-  move._isLocked = false;
+  move._currentlyLockedFlag = 0;
 
 #ifdef NITRO_DEBUG
   ensureCpuReadable(describe());
 #endif
 }
 
-SafeHardwareBuffer::SafeHardwareBuffer(const SafeHardwareBuffer& copy) : _buffer(copy._buffer), _dataCached(nullptr), _isLocked(false) {
+SafeHardwareBuffer::SafeHardwareBuffer(const SafeHardwareBuffer& copy)
+    : _buffer(copy._buffer), _dataCached(nullptr), _currentlyLockedFlag(0) {
 #if __ANDROID_API__ >= 26
   // Add +1 retain count since we copied it now
   AHardwareBuffer_acquire(_buffer);
@@ -62,30 +63,28 @@ SafeHardwareBuffer::SafeHardwareBuffer(const SafeHardwareBuffer& copy) : _buffer
 SafeHardwareBuffer::~SafeHardwareBuffer() {
 #if __ANDROID_API__ >= 26
   if (_buffer != nullptr) {
-    if (_isLocked) {
-      // If it was locked, unlock it now
-      AHardwareBuffer_unlock(_buffer, nullptr);
-    }
+    unlock();
     // Release our 1 retain count of AHardwareBuffer*
     AHardwareBuffer_release(_buffer);
   }
 #endif
 }
 
-uint8_t* SafeHardwareBuffer::data() {
-  if (_isLocked && _dataCached != nullptr) {
+uint8_t* SafeHardwareBuffer::data(LockFlag lockFlag) {
+  if (isLockedForFlag(lockFlag) && _dataCached != nullptr) {
     // We are still locked on the AHardwareBuffer* and have a valid buffer.
     return _dataCached;
   }
+  int targetLockFlags = getHardwareBufferUsageFlag(lockFlag);
   void* buffer;
-  int result = AHardwareBuffer_lock(_buffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &buffer);
+  int result = AHardwareBuffer_lock(_buffer, targetLockFlags, -1, nullptr, &buffer);
   if (result != 0) {
     AHardwareBuffer_Desc description = describe();
     ensureCpuReadable(description);
     throw std::runtime_error("Failed to read HardwareBuffer bytes! Error Code: " + std::to_string(result));
   }
   _dataCached = static_cast<uint8_t*>(buffer);
-  _isLocked = true;
+  _currentlyLockedFlag = targetLockFlags;
   return _dataCached;
 }
 
@@ -113,12 +112,12 @@ uint8_t* SafeHardwareBuffer::data() {
 #endif
 }
 
-void SafeHardwareBuffer::clearCache() {
-  if (_isLocked) {
+void SafeHardwareBuffer::unlock() {
+  if (isLocked()) {
     // If it was locked, unlock it now
     AHardwareBuffer_unlock(_buffer, nullptr);
   }
-  _isLocked = false;
+  _currentlyLockedFlag = 0;
   _dataCached = nullptr;
 }
 
@@ -130,6 +129,24 @@ void SafeHardwareBuffer::clearCache() {
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(_buffer, &description);
   return description;
+}
+
+bool SafeHardwareBuffer::isLockedForFlag(LockFlag lockFlag) const noexcept {
+  AHardwareBufferLockedFlag targetFlag = getHardwareBufferUsageFlag(lockFlag);
+  return (_currentlyLockedFlag & targetFlag) == 0;
+}
+bool SafeHardwareBuffer::isLocked() const noexcept {
+  return _currentlyLockedFlag != 0;
+}
+AHardwareBufferLockedFlag SafeHardwareBuffer::getHardwareBufferUsageFlag(LockFlag lockFlag) {
+  switch (lockFlag) {
+    case LockFlag::READ:
+      return AHARDWAREBUFFER_USAGE_CPU_READ_MASK;
+    case LockFlag::WRITE:
+      return AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK;
+    case LockFlag::READ_AND_WRITE:
+      return AHARDWAREBUFFER_USAGE_CPU_READ_MASK | AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK;
+  }
 }
 
 void SafeHardwareBuffer::ensureCpuReadable(AHardwareBuffer_Desc& description) {

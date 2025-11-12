@@ -52,13 +52,13 @@ void JHardwareBufferUtils::copyHardwareBuffer(SafeHardwareBuffer& source, SafeHa
 #endif
 
   // 3. Lock both buffers and get their data pointers
-  uint8_t* sourceData = source.data();
-  uint8_t* destinationData = destination.data();
+  uint8_t* sourceData = source.data(LockFlag::READ);
+  uint8_t* destinationData = destination.data(LockFlag::WRITE);
   // 4. Copy data over via memcpy
   memcpy(destinationData, sourceData, sourceSize);
   // 5. Unlock both buffers again
-  source.clearCache();
-  destination.clearCache();
+  source.unlock();
+  destination.unlock();
 }
 
 } // namespace margelo::nitro
