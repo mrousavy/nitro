@@ -10,6 +10,7 @@
 #include <android/hardware_buffer.h>
 #include <android/hardware_buffer_jni.h>
 #include <fbjni/fbjni.h>
+#include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
@@ -100,7 +101,7 @@ public:
    * is CPU-readable.
    * If it isn't, this method throws.
    */
-  static void ensureCpuReadable(AHardwareBuffer_Desc& description);
+  static void ensureCpuReadable(const AHardwareBuffer_Desc& description);
 
 private:
   AHardwareBuffer* _buffer;

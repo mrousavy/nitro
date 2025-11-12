@@ -79,8 +79,7 @@ uint8_t* SafeHardwareBuffer::data(LockFlag lockFlag) {
   void* buffer;
   int result = AHardwareBuffer_lock(_buffer, targetLockFlags, -1, nullptr, &buffer);
   if (result != 0) {
-    AHardwareBuffer_Desc description = describe();
-    ensureCpuReadable(description);
+    ensureCpuReadable(describe());
     throw std::runtime_error("Failed to read HardwareBuffer bytes! Error Code: " + std::to_string(result));
   }
   _dataCached = static_cast<uint8_t*>(buffer);
@@ -149,7 +148,7 @@ AHardwareBufferLockedFlag SafeHardwareBuffer::getHardwareBufferUsageFlag(LockFla
   }
 }
 
-void SafeHardwareBuffer::ensureCpuReadable(AHardwareBuffer_Desc& description) {
+void SafeHardwareBuffer::ensureCpuReadable(const AHardwareBuffer_Desc& description) {
   int cpuUsageFlags = description.usage & (AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_READ_RARELY);
   if (cpuUsageFlags == 0) {
     // we don't have any CPU_READ_* flags set! not readable
