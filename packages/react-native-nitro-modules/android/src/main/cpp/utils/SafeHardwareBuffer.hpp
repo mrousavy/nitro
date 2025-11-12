@@ -34,7 +34,10 @@ public:
 public:
   [[nodiscard]] uint8_t* data();
   [[nodiscard]] size_t size() const;
-  [[nodiscard]] jni::local_ref<jni::JObject> toJava();
+  [[nodiscard]] jni::local_ref<jni::JObject> toJava() const;
+
+public:
+  void clearCache();
 
 public:
   /**
@@ -46,12 +49,31 @@ public:
   [[nodiscard]] AHardwareBuffer_Desc describe() const;
 
 public:
+  /**
+   * Wraps the given Java `HardwareBuffer` (boxed to a jobject) in a `SafeHardwareBuffer`.
+   * The returned `SafeHardwareBuffer` will retain the `AHardwareBuffer*` retain count via RAII.
+   * The given Java `HardwareBuffer` does not have to stay alive.
+   */
   static SafeHardwareBuffer fromJava(const jni::alias_ref<jni::JObject>& javaHardwareBuffer) {
     return SafeHardwareBuffer(javaHardwareBuffer);
   }
+  /**
+   * Wraps the given C++ `AHardwareBuffer*` in a `SafeHardwareBuffer`.
+   * The given `AHardwareBuffer*` has to have an already retained ref-count of +1.
+   * This is usually the case when you call one of these methods to get your `AHardwareBuffer*`:
+   * - `AHardwareBuffer_allocate`
+   * - `AHardwareBuffer_fromJava`
+   * - `AHardwareBuffer_acquire`
+   * The returned `SafeHardwareBuffer` will retain the `AHardwareBuffer*` retain count via RAII.
+   */
   static SafeHardwareBuffer wrapAlreadyRetainedAHardwareBuffer(AHardwareBuffer* /* +1 retained */ alreadyRetainedHardwareBuffer) {
     return SafeHardwareBuffer(alreadyRetainedHardwareBuffer);
   }
+  /**
+   * Allocates a new `SafeHardwareBuffer` (and the underlying `AHardwareBuffer*`) from the given
+   * `AHardwareBuffer_Desc` (buffer description).
+   * The returned `SafeHardwareBuffer` will retain the `AHardwareBuffer*` retain count via RAII.
+   */
   static SafeHardwareBuffer allocate(AHardwareBuffer_Desc* description) {
     // Allocate with description (create +1 ref)
     AHardwareBuffer* buffer;

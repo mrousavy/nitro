@@ -87,7 +87,7 @@ uint8_t* SafeHardwareBuffer::data() {
 #endif
 }
 
-[[nodiscard]] jni::local_ref<jni::JObject> SafeHardwareBuffer::toJava() {
+[[nodiscard]] jni::local_ref<jni::JObject> SafeHardwareBuffer::toJava() const {
 #if __ANDROID_API__ >= 26
   // 1. Convert AHardwareBuffer* to jobject - this will now be 2 retain counts
   jobject javaObject = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), _buffer);
@@ -100,11 +100,20 @@ uint8_t* SafeHardwareBuffer::data() {
 #endif
 }
 
+void SafeHardwareBuffer::clearCache() {
+  if (_isLocked) {
+    // If it was locked, unlock it now
+    AHardwareBuffer_unlock(_buffer, nullptr);
+  }
+  _isLocked = false;
+  _dataCached = nullptr;
+}
+
 [[nodiscard]] AHardwareBuffer* SafeHardwareBuffer::buffer() const noexcept {
   return _buffer;
 }
 
-[[nodiscard]] AHardwareBuffer_Desc SafeHardwareBuffer::describe() const noexcept {
+[[nodiscard]] AHardwareBuffer_Desc SafeHardwareBuffer::describe() const {
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(_buffer, &description);
   return description;

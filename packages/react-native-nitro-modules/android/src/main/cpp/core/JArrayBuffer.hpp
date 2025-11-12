@@ -52,7 +52,7 @@ public:
   static jni::local_ref<JArrayBuffer::jhybriddata>
   initHybridHardwareBuffer(jni::alias_ref<jhybridobject>, [[maybe_unused]] jni::alias_ref<jni::JObject> boxedHardwareBuffer) {
     SafeHardwareBuffer buffer = SafeHardwareBuffer::fromJava(boxedHardwareBuffer);
-    return makeCxxInstance(buffer);
+    return makeCxxInstance(std::move(buffer));
   }
 
 public:

@@ -19,7 +19,7 @@ void JHardwareBufferUtils::copyBoxedHardwareBufferIntoExistingBoxedHardwareBuffe
   SafeHardwareBuffer source = SafeHardwareBuffer::fromJava(boxedSourceHardwareBuffer);
   SafeHardwareBuffer destination = SafeHardwareBuffer::fromJava(boxedDestinationHardwareBuffer);
   // 2. Copy AHardwareBuffer* data from source -> destination
-  copyHardwareBuffer(source.getHardwareBuffer(), destination.getHardwareBuffer());
+  copyHardwareBuffer(source, destination);
 }
 
 jni::local_ref<jni::JObject>
@@ -33,20 +33,18 @@ JHardwareBufferUtils::copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer(jni::ali
   // 3. Allocate new destination buffer
   SafeHardwareBuffer destination = SafeHardwareBuffer::allocate(&description);
   // 4. Copy data over
-  copyHardwareBuffer(source.getBuffer(), destination.getBuffer());
+  copyHardwareBuffer(source, destination);
   // 5. Box it & return to Java
   return destination.toJava();
 }
 
-void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* sourceHardwareBuffer,
-                                              [[maybe_unused]] AHardwareBuffer* destinationHardwareBuffer) {
-#if __ANDROID_API__ >= 26
+void JHardwareBufferUtils::copyHardwareBuffer(SafeHardwareBuffer& source, SafeHardwareBuffer& destination) {
   // 1. Get info about source buffer
-  size_t sourceSize = getHardwareBufferSize(sourceHardwareBuffer);
+  size_t sourceSize = source.size();
 
   // 2. Get info about the destination buffer
 #ifdef NITRO_DEBUG
-  size_t destinationSize = getHardwareBufferSize(sourceHardwareBuffer);
+  size_t destinationSize = destination.size();
   if (sourceSize != destinationSize) {
     throw std::runtime_error("Source HardwareBuffer (" + std::to_string(sourceSize) + " bytes) and destination HardwareBuffer (" +
                              std::to_string(destinationSize) + " bytes) are not the same size!");
@@ -54,26 +52,13 @@ void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* 
 #endif
 
   // 3. Lock both buffers and get their data pointers
-  void* sourceData;
-  void* destinationData;
-  int lockSource = AHardwareBuffer_lock(sourceHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &sourceData);
-  if (lockSource != 0) {
-    throw std::runtime_error("Failed to lock source HardwareBuffer! Error: " + std::to_string(lockSource));
-  }
-  int lockDestination =
-      AHardwareBuffer_lock(destinationHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK, -1, nullptr, &destinationData);
-  if (lockDestination != 0) {
-    AHardwareBuffer_unlock(sourceHardwareBuffer, nullptr);
-    throw std::runtime_error("Failed to lock destination HardwareBuffer! Error: " + std::to_string(lockDestination));
-  }
+  uint8_t* sourceData = source.data();
+  uint8_t* destinationData = destination.data();
   // 4. Copy data over via memcpy
   memcpy(destinationData, sourceData, sourceSize);
   // 5. Unlock both buffers again
-  AHardwareBuffer_unlock(sourceHardwareBuffer, nullptr);
-  AHardwareBuffer_unlock(destinationHardwareBuffer, nullptr);
-#else
-  throw HardwareBuffersUnavailable();
-#endif
+  source.clearCache();
+  destination.clearCache();
 }
 
 } // namespace margelo::nitro
