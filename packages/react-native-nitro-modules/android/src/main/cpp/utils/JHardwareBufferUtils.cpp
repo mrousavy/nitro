@@ -38,6 +38,9 @@ JHardwareBufferUtils::copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
   copyHardwareBuffer(sourceHardwareBuffer, destinationHardwareBuffer);
   // 5. Box it into jobject again
   jobject boxed = AHardwareBuffer_toHardwareBuffer(jni::Environment::current(), destinationHardwareBuffer);
+  // 6. We can free the C++ reference since the jobject has +1
+  AHardwareBuffer_release(destinationHardwareBuffer);
+  // 7. Return the object to java
   return jni::make_local(boxed);
 #else
   throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
