@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 11.07.25.
 //
 
-#pragma once
-
 #include "SafeHardwareBuffer.hpp"
 #include <android/hardware_buffer.h>
 #include <android/hardware_buffer_jni.h>
