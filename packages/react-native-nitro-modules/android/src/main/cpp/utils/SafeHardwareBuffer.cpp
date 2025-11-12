@@ -27,11 +27,20 @@ SafeHardwareBuffer::SafeHardwareBuffer(const jni::alias_ref<jni::JObject>& javaH
   _buffer = AHardwareBuffer_fromHardwareBuffer(jni::Environment::current(), javaHardwareBuffer.get());
   _dataCached = nullptr;
   _isLocked = false;
+
+#ifdef NITRO_DEBUG
+  ensureCpuReadable(describe());
+#endif
 #endif
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(AHardwareBuffer* /* +1 retained */ alreadyRetainedHardwareBuffer)
-    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _isLocked(false) {}
+    : _buffer(alreadyRetainedHardwareBuffer), _dataCached(nullptr), _isLocked(false) {
+
+#ifdef NITRO_DEBUG
+  ensureCpuReadable(describe());
+#endif
+}
 
 SafeHardwareBuffer::SafeHardwareBuffer(SafeHardwareBuffer&& move) noexcept
     : _buffer(move._buffer), _dataCached(move._dataCached), _isLocked(move._isLocked) {
@@ -39,6 +48,10 @@ SafeHardwareBuffer::SafeHardwareBuffer(SafeHardwareBuffer&& move) noexcept
   move._buffer = nullptr;
   move._dataCached = nullptr;
   move._isLocked = false;
+
+#ifdef NITRO_DEBUG
+  ensureCpuReadable(describe());
+#endif
 }
 
 SafeHardwareBuffer::SafeHardwareBuffer(const SafeHardwareBuffer& copy) : _buffer(copy._buffer), _dataCached(nullptr), _isLocked(false) {
@@ -69,7 +82,9 @@ uint8_t* SafeHardwareBuffer::data() {
   void* buffer;
   int result = AHardwareBuffer_lock(_buffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &buffer);
   if (result != 0) {
-    throw std::runtime_error("Failed to read HardwareBuffer bytes!");
+    AHardwareBuffer_Desc description = describe();
+    ensureCpuReadable(description);
+    throw std::runtime_error("Failed to read HardwareBuffer bytes! Error Code: " + std::to_string(result));
   }
   _dataCached = static_cast<uint8_t*>(buffer);
   _isLocked = true;
@@ -117,6 +132,21 @@ void SafeHardwareBuffer::clearCache() {
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(_buffer, &description);
   return description;
+}
+
+void SafeHardwareBuffer::ensureCpuReadable(AHardwareBuffer_Desc& description) {
+  int cpuUsageFlags = description.usage & (AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN | AHARDWAREBUFFER_USAGE_CPU_READ_RARELY);
+  if (cpuUsageFlags == 0) {
+    // we don't have any CPU_READ_* flags set! not readable
+    throw std::runtime_error("The given HardwareBuffer is not CPU-readable, because it doesn't contain "
+                             "a AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN or AHARDWAREBUFFER_USAGE_CPU_READ_RARELY flag!");
+  }
+  bool protectedFlags = description.usage & AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT;
+  if (protectedFlags != 0) {
+    // the PROTECTED_CONTENT flag is set! not readable
+    throw std::runtime_error("The given HardwareBuffer is not CPU-readable, because it has the "
+                             "AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT flag!");
+  }
 }
 
 } // namespace margelo::nitro

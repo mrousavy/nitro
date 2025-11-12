@@ -81,6 +81,14 @@ public:
     return SafeHardwareBuffer(buffer);
   }
 
+public:
+  /**
+   * Ensures that a `AHardwareBuffer*` with the given `AHardwareBuffer_Desc`
+   * is CPU-readable.
+   * If it isn't, this method throws.
+   */
+  static void ensureCpuReadable(AHardwareBuffer_Desc& description);
+
 private:
   AHardwareBuffer* _buffer;
   uint8_t* _dataCached;
