@@ -165,6 +165,11 @@ void* NON_NULL get_${name}(${name} cppType) {
         ...includes,
         {
           language: 'c++',
+          name: '<NitroModules/NitroDefines.hpp>',
+          space: 'system',
+        },
+        {
+          language: 'c++',
           // Swift umbrella header
           name: getUmbrellaHeaderName(),
           space: 'user',
