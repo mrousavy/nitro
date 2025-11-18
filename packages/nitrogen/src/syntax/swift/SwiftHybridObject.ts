@@ -63,10 +63,9 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
 }`.trim()
   )
 
-  const imports = ['import NitroModules']
-  imports.push(
-    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
-  )
+  const requiredImports = extraImports.map((i) => `import ${i.name}`)
+  requiredImports.push('import NitroModules')
+  const imports = requiredImports.filter(isNotDuplicate)
 
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
