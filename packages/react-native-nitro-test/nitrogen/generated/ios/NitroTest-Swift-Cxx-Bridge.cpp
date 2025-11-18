@@ -14,7 +14,7 @@
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <<NitroModules/NitroDefines.hpp>>
+#include <NitroModules/NitroDefines.hpp>
 #include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Bridge.hpp>
 
 namespace margelo::nitro::test::bridge::swift {
