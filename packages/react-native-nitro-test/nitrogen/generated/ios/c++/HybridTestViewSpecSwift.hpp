@@ -84,6 +84,9 @@ namespace margelo::nitro::test {
     inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
       _swiftPart.setSomeCallback(someCallback);
     }
+    inline bool getNonSettableProp() noexcept override {
+      return _swiftPart.getNonSettableProp();
+    }
 
   public:
     // Methods
