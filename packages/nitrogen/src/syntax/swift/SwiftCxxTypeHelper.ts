@@ -165,7 +165,7 @@ void* NON_NULL get_${name}(${name} cppType) {
         ...includes,
         {
           language: 'c++',
-          name: '<NitroModules/NitroDefines.hpp>',
+          name: 'NitroModules/NitroDefines.hpp',
           space: 'system',
         },
         {
