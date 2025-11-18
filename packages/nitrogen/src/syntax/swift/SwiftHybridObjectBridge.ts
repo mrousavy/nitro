@@ -108,14 +108,18 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
 }`.trim()
   })
 
-  const imports = ['import NitroModules']
-  const extraSwiftImports = [
-    ...spec.properties.flatMap((p) => p.getRequiredImports('swift')),
-    ...spec.methods.flatMap((m) => m.getRequiredImports('swift')),
-  ]
-  imports.push(
-    ...extraSwiftImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
+  const requiredImports = ['import NitroModules']
+  requiredImports.push(
+    ...spec.properties
+      .flatMap((p) => p.getRequiredImports('swift'))
+      .map((i) => `import ${i.name}`)
   )
+  requiredImports.push(
+    ...spec.methods.flatMap((m) =>
+      m.getRequiredImports('swift').map((i) => `import ${i.name}`)
+    )
+  )
+  const imports = requiredImports.filter(isNotDuplicate)
 
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}

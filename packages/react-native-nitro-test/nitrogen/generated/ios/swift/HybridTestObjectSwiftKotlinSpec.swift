@@ -7,7 +7,6 @@
 
 import Foundation
 import NitroModules
-import NitroModules
 import NitroTestExternal
 
 /// See ``HybridTestObjectSwiftKotlinSpec``

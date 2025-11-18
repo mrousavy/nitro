@@ -5,7 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
-import NitroModules
+import Foundation
 import NitroModules
 
 /**
