@@ -455,6 +455,11 @@ void HybridTestObjectCpp::twoOptionalCallbacks(double value, const std::optional
   }
 }
 
+void HybridTestObjectCpp::errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) {
+  std::runtime_error error("Some Error!");
+  onError(std::make_exception_ptr(error));
+}
+
 std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {

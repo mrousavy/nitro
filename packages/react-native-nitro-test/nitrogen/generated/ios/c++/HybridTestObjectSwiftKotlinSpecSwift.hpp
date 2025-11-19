@@ -639,6 +639,12 @@ namespace margelo::nitro::test {
         std::rethrow_exception(__result.error());
       }
     }
+    inline void errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) override {
+      auto __result = _swiftPart.errorCallback(onError);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
     inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
       auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
       if (__result.hasError()) [[unlikely]] {
