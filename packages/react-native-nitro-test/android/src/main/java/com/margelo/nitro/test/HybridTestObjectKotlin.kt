@@ -379,6 +379,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
+  override fun errorCallback(onError: (error: Throwable) -> Unit) {
+    val error = Error("Some Error!")
+    onError(error)
+  }
+
   override fun getCar(): Car {
     return Car(2018.0, "Lamborghini", "Huracán", 640.0, Powertrain.GAS, null, emptyArray(), true, null, doubleArrayOf(100.0, 10.0), null)
   }

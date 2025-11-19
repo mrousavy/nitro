@@ -1428,6 +1428,17 @@ export function getTests(
     createTest('Calling twoOptionalCallbacks(...) works with undefined', () =>
       it(() => testObject.twoOptionalCallbacks(55)).didNotThrow()
     ),
+    createTest('Calling errorCallback(...) works with error', async () =>
+      (
+        await it(async () => {
+          return new Promise((resolve) => {
+            testObject.errorCallback((err) => resolve(err))
+          })
+        })
+      )
+        .didNotThrow()
+        .isInstanceOf(Error)
+    ),
 
     // Objects
     createTest('getCar()', () =>

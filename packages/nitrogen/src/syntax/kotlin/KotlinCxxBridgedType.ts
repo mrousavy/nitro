@@ -977,7 +977,7 @@ __promise->resolve();
       case 'error':
         switch (language) {
           case 'c++':
-            return `jni::JniException(${parameterName})`
+            return `std::make_exception_ptr(jni::JniException(${parameterName}))`
           default:
             return parameterName
         }

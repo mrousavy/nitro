@@ -137,6 +137,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func errorCallback(onError: @escaping (_ error: Error) -> Void) throws {
+    let error = RuntimeError.error(withMessage: "Some Error!")
+    onError(error)
+  }
+
   func bounceStrings(array: [String]) throws -> [String] {
     return array
   }

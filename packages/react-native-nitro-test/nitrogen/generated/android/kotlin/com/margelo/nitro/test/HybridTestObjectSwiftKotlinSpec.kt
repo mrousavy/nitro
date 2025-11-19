@@ -410,6 +410,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
+  abstract fun errorCallback(onError: (error: Throwable) -> Unit): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun errorCallback_cxx(onError: Func_void_std__exception_ptr): Unit {
+    val __result = errorCallback(onError)
+    return __result
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

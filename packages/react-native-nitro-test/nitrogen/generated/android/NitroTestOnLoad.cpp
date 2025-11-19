@@ -27,6 +27,7 @@
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____.hpp"
 #include "JFunc_void_std__string.hpp"
+#include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_double.hpp"
 #include "JHybridTestViewSpec.hpp"
@@ -55,6 +56,7 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
     margelo::nitro::test::JFunc_void_std__string_cxx::registerNatives();
+    margelo::nitro::test::JFunc_void_std__exception_ptr_cxx::registerNatives();
     margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
     margelo::nitro::test::JFunc_double_cxx::registerNatives();
     margelo::nitro::test::JHybridTestViewSpec::registerNatives();
