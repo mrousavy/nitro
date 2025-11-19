@@ -379,7 +379,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  override fun errorCallback(onError: (error: Throwable) -> Unit): Unit {
+  override fun errorCallback(onError: (error: Throwable) -> Unit) {
     val error = Error("Some Error!")
     onError(error)
   }
