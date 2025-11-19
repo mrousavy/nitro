@@ -49,7 +49,7 @@ namespace margelo::nitro::test {
      * Invokes the C++ `std::function<...>` this `JFunc_void_std__exception_ptr_cxx` instance holds.
      */
     void invoke_cxx(jni::alias_ref<jni::JThrowable> error) {
-      _func(jni::JniException(error));
+      _func(std::make_exception_ptr(jni::JniException(error)));
     }
 
   public:
