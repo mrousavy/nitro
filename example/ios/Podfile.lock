@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.82.0):
     - hermes-engine/Pre-built (= 0.82.0)
   - hermes-engine/Pre-built (0.82.0)
-  - NitroModules (0.31.8):
+  - NitroModules (0.31.9):
     - boost
     - DoubleConversion
     - fast_float
@@ -37,7 +37,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroTest (0.31.8):
+  - NitroTest (0.31.9):
     - boost
     - DoubleConversion
     - fast_float
@@ -68,7 +68,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroTestExternal (0.31.8):
+  - NitroTestExternal (0.31.9):
     - boost
     - DoubleConversion
     - fast_float
@@ -2818,9 +2818,9 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  NitroModules: da2eca03839e97106cbed18ca2af1f0666dbbf45
-  NitroTest: 8c4e006e0e17a01a5a63dc792bb9bcfd58477b14
-  NitroTestExternal: bf1bf0b9c1fabbe2445b221f5ccce62c49c237f5
+  NitroModules: da3bb641b1c956fb37eafda4beda5b2373658c93
+  NitroTest: 97eb5bf447b584c0ee920a45cd5332339a31d69b
+  NitroTestExternal: 41c31ece04cc5d75a219edd45c293623a37b8009
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 22bf66112da540a7d40e536366ddd8557934fca1
   RCTRequired: a0ed4dc41b35f79fbb6d8ba320e06882a8c792cf
