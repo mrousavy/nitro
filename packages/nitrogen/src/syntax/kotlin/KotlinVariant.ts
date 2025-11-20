@@ -140,7 +140,7 @@ static jni::local_ref<J${kotlinName}> create_${i}(${bridge.asJniReferenceType('a
 if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
   // It's a \`${v.getCode('c++')}\`
   auto jniValue = static_cast<const ${namespace}::${innerName}*>(this)->getValue();
-  return ${bridge.parseFromKotlinToCpp('jniValue', 'c++')};
+  return ${indent(bridge.parseFromKotlinToCpp('jniValue', 'c++'), '  ')};
 }
   `.trim()
   })

@@ -217,12 +217,6 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    ~J${name}_cxx() override {
-      // Hermes GC can destroy JS objects on a non-JNI Thread.
-      jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
-    }
-
-  public:
     /**
      * Invokes the C++ \`std::function<...>\` this \`J${name}_cxx\` instance holds.
      */

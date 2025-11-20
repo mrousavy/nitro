@@ -59,12 +59,6 @@ namespace margelo::nitro::test {
     }
 
   public:
-    ~JFunc_std__shared_ptr_Promise_std__string___cxx() override {
-      // Hermes GC can destroy JS objects on a non-JNI Thread.
-      jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
-    }
-
-  public:
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_std__shared_ptr_Promise_std__string___cxx` instance holds.
      */

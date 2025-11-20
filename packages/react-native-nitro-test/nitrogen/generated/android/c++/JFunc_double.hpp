@@ -45,12 +45,6 @@ namespace margelo::nitro::test {
     }
 
   public:
-    ~JFunc_double_cxx() override {
-      // Hermes GC can destroy JS objects on a non-JNI Thread.
-      jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
-    }
-
-  public:
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_double_cxx` instance holds.
      */
