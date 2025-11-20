@@ -35,7 +35,7 @@ public:
   }
 
 public:
-  R operator()(Args... args) const {
+  inline R operator()(Args... args) const {
     if constexpr (std::is_void_v<R>) {
       _func->invoke(std::forward<Args>(args)...);
     } else {
