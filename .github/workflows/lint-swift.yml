@@ -17,7 +17,7 @@ jobs:
     name: Format Swift
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
 
       - name: Run swift format
