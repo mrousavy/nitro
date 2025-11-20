@@ -199,29 +199,56 @@ class AnyValue {
   companion object {
     fun fromAny(value: Any?): AnyValue {
       when (value) {
-        null -> return AnyValue()
-        is Double -> return AnyValue(value)
-        is Float -> return AnyValue(value.toDouble())
-        is Int -> return AnyValue(value.toDouble())
-        is Boolean -> return AnyValue(value)
-        is Long -> return AnyValue(value)
-        is String -> return AnyValue(value)
+        null -> {
+          return AnyValue()
+        }
+
+        is Double -> {
+          return AnyValue(value)
+        }
+
+        is Float -> {
+          return AnyValue(value.toDouble())
+        }
+
+        is Int -> {
+          return AnyValue(value.toDouble())
+        }
+
+        is Boolean -> {
+          return AnyValue(value)
+        }
+
+        is Long -> {
+          return AnyValue(value)
+        }
+
+        is String -> {
+          return AnyValue(value)
+        }
+
         is Array<*> -> {
           val mapped = value.map { v -> AnyValue.fromAny(v) }
           return AnyValue(mapped.toTypedArray())
         }
+
         is List<*> -> {
           val mapped = value.map { v -> AnyValue.fromAny(v) }
           return AnyValue(mapped.toTypedArray())
         }
+
         is Map<*, *> -> {
           val mapped = value.map { (k, v) -> k.toString() to AnyValue.fromAny(v) }
           return AnyValue(mapped.toMap())
         }
+
         is AnyValue, is AnyMap -> {
           throw Error("Cannot box AnyValue ($value) twice!")
         }
-        else -> throw Error("Value \"$value\" cannot be represented as AnyValue!")
+
+        else -> {
+          throw Error("Value \"$value\" cannot be represented as AnyValue!")
+        }
       }
     }
   }
