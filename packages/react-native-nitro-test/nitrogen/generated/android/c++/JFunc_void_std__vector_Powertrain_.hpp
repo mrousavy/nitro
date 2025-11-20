@@ -49,10 +49,16 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_void_std__vector_Powertrain_ that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_void_std__vector_Powertrain__cxx final: public jni::HybridClass<JFunc_void_std__vector_Powertrain__cxx, JFunc_void_std__vector_Powertrain_> {
+  class JFunc_void_std__vector_Powertrain__cxx final: public jni::HybridClass<JFunc_void_std__vector_Powertrain__cxx, JFunc_void_std__vector_Powertrain_> {
   public:
     static jni::local_ref<JFunc_void_std__vector_Powertrain_::javaobject> fromCpp(const std::function<void(const std::vector<Powertrain>& /* array */)>& func) {
       return JFunc_void_std__vector_Powertrain__cxx::newObjectCxxArgs(func);
+    }
+
+  public:
+    ~JFunc_void_std__vector_Powertrain__cxx() override {
+      // Hermes GC can destroy JS objects on a non-JNI Thread.
+      jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
     }
 
   public:

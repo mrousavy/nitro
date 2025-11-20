@@ -52,10 +52,16 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_std__shared_ptr_Promise_std__string__ that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_std__shared_ptr_Promise_std__string___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__string___cxx, JFunc_std__shared_ptr_Promise_std__string__> {
+  class JFunc_std__shared_ptr_Promise_std__string___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_std__string___cxx, JFunc_std__shared_ptr_Promise_std__string__> {
   public:
     static jni::local_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<std::string>>()>& func) {
       return JFunc_std__shared_ptr_Promise_std__string___cxx::newObjectCxxArgs(func);
+    }
+
+  public:
+    ~JFunc_std__shared_ptr_Promise_std__string___cxx() override {
+      // Hermes GC can destroy JS objects on a non-JNI Thread.
+      jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
     }
 
   public:
