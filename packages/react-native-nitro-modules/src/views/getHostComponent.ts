@@ -51,14 +51,28 @@ interface DefaultHybridViewProps<RefType> {
   hybridRef?: (ref: RefType) => void
 }
 
+/**
+ * Wraps a callback function in a Nitro-compatible object format.
+ *
+ * @note Due to a React limitation, functions cannot be passed to native directly
+ * because RN converts them to booleans (`true`). As a workaround,
+ * Nitro requires you to wrap each function using `callback(...)`,
+ * which bypasses React Native's conversion.
+ * Please see the [Callbacks have to be wrapped](https://nitro.margelo.com/docs/view-components#callbacks-have-to-be-wrapped) section for more information.
+ *
+ * @type {Object} NitroViewWrappedCallback
+ * @property {T} f - The wrapped callback function
+ */
+export type NitroViewWrappedCallback<T extends Function | undefined> = { f: T }
+
 // Due to a React limitation, functions cannot be passed to native directly
 // because RN converts them to booleans (`true`). Nitro knows this and just
 // wraps functions as objects - the original function is stored in `f`.
 type WrapFunctionsInObjects<Props> = {
   [K in keyof Props]: Props[K] extends Function
-    ? { f: Props[K] }
+    ? NitroViewWrappedCallback<Props[K]>
     : Props[K] extends Function | undefined
-      ? { f: Props[K] }
+      ? NitroViewWrappedCallback<Props[K]>
       : Props[K]
 }
 
@@ -129,7 +143,7 @@ export function getHostComponent<
  */
 export function callback<T>(
   func: T
-): T extends (...args: any[]) => any ? { f: T } : T
+): T extends (...args: any[]) => any ? NitroViewWrappedCallback<T> : T
 export function callback(func: unknown) {
   if (typeof func === 'function') {
     return { f: func }
