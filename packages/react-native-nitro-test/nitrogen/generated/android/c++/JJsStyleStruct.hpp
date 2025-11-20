@@ -11,6 +11,7 @@
 #include "JsStyleStruct.hpp"
 
 #include "JFunc_void_double.hpp"
+#include <NitroModules/JNICallable.hpp>
 #include <functional>
 
 namespace margelo::nitro::test {
@@ -44,9 +45,7 @@ namespace margelo::nitro::test {
             return downcast->cthis()->getFunction();
           } else {
             auto onChangedRef = jni::make_global(onChanged);
-            return [onChangedRef](double num) -> void {
-              return onChangedRef->invoke(num);
-            };
+            return JNICallable<JFunc_void_double, void(double)>(std::move(onChangedRef));
           }
         }()
       );

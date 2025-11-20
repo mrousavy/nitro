@@ -92,6 +92,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: `J${functionType.specializationName}.hpp`,
             space: 'user',
           })
+          imports.push({
+            language: 'c++',
+            name: `NitroModules/JNICallable.hpp`,
+            space: 'system',
+          })
           break
         case 'null':
           imports.push({
@@ -812,11 +817,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         switch (language) {
           case 'c++': {
             const returnType = functionType.returnType.getCode('c++')
-            const params = functionType.parameters.map(
-              (p) => `${p.getCode('c++')} ${p.escapedName}`
-            )
-            const paramsForward = functionType.parameters.map(
-              (p) => p.escapedName
+            const paramTypes = functionType.parameters.map((p) =>
+              p.getCode('c++')
             )
             const jniType = `J${functionType.specializationName}_cxx`
             return `
@@ -826,9 +828,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return downcast->cthis()->getFunction();
   } else {
     auto ${parameterName}Ref = jni::make_global(${parameterName});
-    return [${parameterName}Ref](${params.join(', ')}) -> ${returnType} {
-      return ${parameterName}Ref->invoke(${paramsForward});
-    };
+    return JNICallable<J${functionType.specializationName}, ${returnType}(${paramTypes.join(', ')})>(std::move(${parameterName}Ref));
   }
 }()
             `.trim()

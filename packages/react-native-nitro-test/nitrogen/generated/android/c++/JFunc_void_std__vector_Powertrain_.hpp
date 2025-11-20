@@ -13,6 +13,7 @@
 #include "Powertrain.hpp"
 #include <vector>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 #include "JPowertrain.hpp"
 
 namespace margelo::nitro::test {

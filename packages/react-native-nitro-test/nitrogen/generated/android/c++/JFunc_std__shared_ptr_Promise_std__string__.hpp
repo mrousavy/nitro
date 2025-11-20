@@ -13,6 +13,7 @@
 #include <string>
 #include <NitroModules/Promise.hpp>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 #include <NitroModules/JPromise.hpp>
 
 namespace margelo::nitro::test {

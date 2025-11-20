@@ -12,6 +12,7 @@
 
 #include <string>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 

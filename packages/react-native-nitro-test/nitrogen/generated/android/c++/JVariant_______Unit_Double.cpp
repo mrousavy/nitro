@@ -21,9 +21,7 @@ namespace margelo::nitro::test {
           return downcast->cthis()->getFunction();
         } else {
           auto jniValueRef = jni::make_global(jniValue);
-          return [jniValueRef]() -> void {
-            return jniValueRef->invoke();
-          };
+          return JNICallable<JFunc_void, void()>(std::move(jniValueRef));
         }
       }();
     } else if (isInstanceOf(JVariant_______Unit_Double_impl::Second::javaClassStatic())) {

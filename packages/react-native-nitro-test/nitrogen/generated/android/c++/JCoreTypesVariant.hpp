@@ -20,6 +20,7 @@
 #include <NitroModules/JArrayBuffer.hpp>
 #include <NitroModules/JUnit.hpp>
 #include "JFunc_void_double.hpp"
+#include <NitroModules/JNICallable.hpp>
 #include "JWrappedJsStruct.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"

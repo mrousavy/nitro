@@ -58,6 +58,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOldEnum.hpp"
 #include <functional>
 #include "JFunc_void_double.hpp"
+#include <NitroModules/JNICallable.hpp>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
@@ -288,9 +289,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __resultRef = jni::make_global(__result);
-        return [__resultRef](double value) -> void {
-          return __resultRef->invoke(value);
-        };
+        return JNICallable<JFunc_void_double, void(double)>(std::move(__resultRef));
       }
     }()) : std::nullopt;
   }
@@ -505,9 +504,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __elementRef = jni::make_global(__element);
-        return [__elementRef]() -> void {
-          return __elementRef->invoke();
-        };
+        return JNICallable<JFunc_void, void()>(std::move(__elementRef));
       }
     }());
       }
@@ -986,9 +983,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __resultRef = jni::make_global(__result);
-        return [__resultRef](double value) -> void {
-          return __resultRef->invoke(value);
-        };
+        return JNICallable<JFunc_void_double, void(double)>(std::move(__resultRef));
       }
     }();
   }
