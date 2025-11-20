@@ -106,6 +106,8 @@ const DATE_PLUS_1H = (() => {
 
 const BASE = NitroModules.createHybridObject<Base>('Base')
 
+let lotsOfCallbacks: ((num: number) => void)[] = []
+
 function sumUpAllPassengers(cars: Car[]): string {
   return cars
     .flatMap((c) =>
@@ -1283,6 +1285,21 @@ export function getTests(
       )
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('createNativeCallback(...) test native GC', () =>
+      it(() => {
+        // This deletes and allocates 10k native callbacks -
+        // effectively this tests if GC works for callbacks that
+        // are bound to native functions.
+        lotsOfCallbacks = []
+        for (let i = 0; i < 10_000; i++) {
+          const cb = testObject.createNativeCallback()
+          lotsOfCallbacks.push(cb)
+        }
+        return lotsOfCallbacks.length
+      })
+        .didNotThrow()
+        .equals(10_000)
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
