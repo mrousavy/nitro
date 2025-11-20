@@ -1672,6 +1672,15 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::function<void(double /* value */)>>::withError(error);
   }
   
+  // pragma MARK: Result<std::function<void(double /* num */)>>
+  using Result_std__function_void_double____num______ = Result<std::function<void(double /* num */)>>;
+  inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::function<void(double /* num */)>& value) noexcept {
+    return Result<std::function<void(double /* num */)>>::withValue(value);
+  }
+  inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::exception_ptr& error) noexcept {
+    return Result<std::function<void(double /* num */)>>::withError(error);
+  }
+  
   // pragma MARK: Result<Car>
   using Result_Car_ = Result<Car>;
   inline Result_Car_ create_Result_Car_(const Car& value) noexcept {

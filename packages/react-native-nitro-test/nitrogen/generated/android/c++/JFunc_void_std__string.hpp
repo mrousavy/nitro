@@ -12,6 +12,7 @@
 
 #include <string>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -38,7 +39,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_void_std__string that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
+  class JFunc_void_std__string_cxx final: public jni::HybridClass<JFunc_void_std__string_cxx, JFunc_void_std__string> {
   public:
     static jni::local_ref<JFunc_void_std__string::javaobject> fromCpp(const std::function<void(const std::string& /* value */)>& func) {
       return JFunc_void_std__string_cxx::newObjectCxxArgs(func);

@@ -66,6 +66,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
+  func createNativeCallback(wrappingJsCallback: @escaping (_ num: Double) -> Void) throws -> (
+    _ num: Double
+  ) -> Void {
+    return { num in
+      wrappingJsCallback(num)
+    }
+  }
+
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws {
     callback(value)
   }

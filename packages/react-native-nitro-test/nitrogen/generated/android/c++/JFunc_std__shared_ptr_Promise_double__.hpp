@@ -12,6 +12,7 @@
 
 #include <NitroModules/Promise.hpp>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 #include <NitroModules/JPromise.hpp>
 
 namespace margelo::nitro::test {
@@ -51,7 +52,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_std__shared_ptr_Promise_double__ that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_std__shared_ptr_Promise_double___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_double___cxx, JFunc_std__shared_ptr_Promise_double__> {
+  class JFunc_std__shared_ptr_Promise_double___cxx final: public jni::HybridClass<JFunc_std__shared_ptr_Promise_double___cxx, JFunc_std__shared_ptr_Promise_double__> {
   public:
     static jni::local_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> fromCpp(const std::function<std::shared_ptr<Promise<double>>()>& func) {
       return JFunc_std__shared_ptr_Promise_double___cxx::newObjectCxxArgs(func);

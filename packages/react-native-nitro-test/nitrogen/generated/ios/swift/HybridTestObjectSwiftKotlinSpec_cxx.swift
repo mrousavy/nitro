@@ -1579,6 +1579,26 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func createNativeCallback(wrappingJsCallback: bridge.Func_void_double) -> bridge.Result_std__function_void_double____num______ {
+    do {
+      let __result = try self.__implementation.createNativeCallback(wrappingJsCallback: { () -> (Double) -> Void in
+        let __wrappedFunction = bridge.wrap_Func_void_double(wrappingJsCallback)
+        return { (__num: Double) -> Void in
+          __wrappedFunction.call(__num)
+        }
+      }())
+      let __resultCpp = { () -> bridge.Func_void_double in
+        let __closureWrapper = Func_void_double(__result)
+        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
+      }()
+      return bridge.create_Result_std__function_void_double____num______(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__function_void_double____num______(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getValueFromJSCallbackAndWait(getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in

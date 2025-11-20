@@ -12,6 +12,7 @@
 
 #include <optional>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -38,7 +39,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_void_std__optional_double_ that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_void_std__optional_double__cxx final: public jni::HybridClass<JFunc_void_std__optional_double__cxx, JFunc_void_std__optional_double_> {
+  class JFunc_void_std__optional_double__cxx final: public jni::HybridClass<JFunc_void_std__optional_double__cxx, JFunc_void_std__optional_double_> {
   public:
     static jni::local_ref<JFunc_void_std__optional_double_::javaobject> fromCpp(const std::function<void(std::optional<double> /* maybe */)>& func) {
       return JFunc_void_std__optional_double__cxx::newObjectCxxArgs(func);

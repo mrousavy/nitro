@@ -14,6 +14,7 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 #include "JColorScheme.hpp"
 #include <functional>
 #include "JFunc_void.hpp"
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -80,9 +81,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __resultRef = jni::make_global(__result);
-        return [__resultRef]() -> void {
-          return __resultRef->invoke();
-        };
+        return JNICallable<JFunc_void, void()>(std::move(__resultRef));
       }
     }();
   }

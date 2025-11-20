@@ -11,6 +11,7 @@
 #include <functional>
 
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -37,7 +38,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_void_double that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_void_double_cxx final: public jni::HybridClass<JFunc_void_double_cxx, JFunc_void_double> {
+  class JFunc_void_double_cxx final: public jni::HybridClass<JFunc_void_double_cxx, JFunc_void_double> {
   public:
     static jni::local_ref<JFunc_void_double::javaobject> fromCpp(const std::function<void(double /* value */)>& func) {
       return JFunc_void_double_cxx::newObjectCxxArgs(func);

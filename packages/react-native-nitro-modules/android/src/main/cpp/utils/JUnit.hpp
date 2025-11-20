@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "NitroLogger.hpp"
+#include "NitroDefines.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {

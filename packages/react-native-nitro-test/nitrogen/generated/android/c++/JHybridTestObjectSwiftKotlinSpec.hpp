@@ -137,6 +137,7 @@ namespace margelo::nitro::test {
     std::function<void(double /* value */)> getComplexCallback() override;
     void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) override;
     void errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) override;
+    std::function<void(double /* num */)> createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) override;
     std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
     std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;

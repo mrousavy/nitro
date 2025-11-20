@@ -11,6 +11,7 @@
 #include <functional>
 
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -38,7 +39,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_double that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_double_cxx final: public jni::HybridClass<JFunc_double_cxx, JFunc_double> {
+  class JFunc_double_cxx final: public jni::HybridClass<JFunc_double_cxx, JFunc_double> {
   public:
     static jni::local_ref<JFunc_double::javaobject> fromCpp(const std::function<double()>& func) {
       return JFunc_double_cxx::newObjectCxxArgs(func);

@@ -13,6 +13,7 @@
 #include "JFunc_void_double.hpp"
 #include "JJsStyleStruct.hpp"
 #include "JsStyleStruct.hpp"
+#include <NitroModules/JNICallable.hpp>
 #include <functional>
 #include <vector>
 

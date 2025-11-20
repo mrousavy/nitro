@@ -13,6 +13,7 @@
 #include <functional>
 #include <variant>
 #include "JFunc_void.hpp"
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 

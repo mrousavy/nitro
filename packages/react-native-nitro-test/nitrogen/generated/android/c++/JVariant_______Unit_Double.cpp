@@ -16,16 +16,14 @@ namespace margelo::nitro::test {
       // It's a `std::function<void()>`
       auto jniValue = static_cast<const JVariant_______Unit_Double_impl::First*>(this)->getValue();
       return [&]() -> std::function<void()> {
-      if (jniValue->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
-        auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(jniValue);
-        return downcast->cthis()->getFunction();
-      } else {
-        auto jniValueRef = jni::make_global(jniValue);
-        return [jniValueRef]() -> void {
-          return jniValueRef->invoke();
-        };
-      }
-    }();
+        if (jniValue->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+          auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(jniValue);
+          return downcast->cthis()->getFunction();
+        } else {
+          auto jniValueRef = jni::make_global(jniValue);
+          return JNICallable<JFunc_void, void()>(std::move(jniValueRef));
+        }
+      }();
     } else if (isInstanceOf(JVariant_______Unit_Double_impl::Second::javaClassStatic())) {
       // It's a `double`
       auto jniValue = static_cast<const JVariant_______Unit_Double_impl::Second*>(this)->getValue();

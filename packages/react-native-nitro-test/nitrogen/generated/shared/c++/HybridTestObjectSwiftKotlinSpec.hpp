@@ -190,6 +190,7 @@ namespace margelo::nitro::test {
       virtual std::function<void(double /* value */)> getComplexCallback() = 0;
       virtual void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) = 0;
       virtual void errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) = 0;
+      virtual std::function<void(double /* num */)> createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) = 0;
       virtual std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) = 0;
       virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;

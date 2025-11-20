@@ -58,6 +58,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOldEnum.hpp"
 #include <functional>
 #include "JFunc_void_double.hpp"
+#include <NitroModules/JNICallable.hpp>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
@@ -288,9 +289,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __resultRef = jni::make_global(__result);
-        return [__resultRef](double value) -> void {
-          return __resultRef->invoke(value);
-        };
+        return JNICallable<JFunc_void_double, void(double)>(std::move(__resultRef));
       }
     }()) : std::nullopt;
   }
@@ -505,9 +504,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __elementRef = jni::make_global(__element);
-        return [__elementRef]() -> void {
-          return __elementRef->invoke();
-        };
+        return JNICallable<JFunc_void, void()>(std::move(__elementRef));
       }
     }());
       }
@@ -986,9 +983,7 @@ namespace margelo::nitro::test {
         return downcast->cthis()->getFunction();
       } else {
         auto __resultRef = jni::make_global(__result);
-        return [__resultRef](double value) -> void {
-          return __resultRef->invoke(value);
-        };
+        return JNICallable<JFunc_void_double, void(double)>(std::move(__resultRef));
       }
     }();
   }
@@ -999,6 +994,19 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_std__exception_ptr::javaobject> /* onError */)>("errorCallback_cxx");
     method(_javaPart, JFunc_void_std__exception_ptr_cxx::fromCpp(onError));
+  }
+  std::function<void(double /* num */)> JHybridTestObjectSwiftKotlinSpec::createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JFunc_void_double::javaobject>(jni::alias_ref<JFunc_void_double::javaobject> /* wrappingJsCallback */)>("createNativeCallback_cxx");
+    auto __result = method(_javaPart, JFunc_void_double_cxx::fromCpp(wrappingJsCallback));
+    return [&]() -> std::function<void(double /* num */)> {
+      if (__result->isInstanceOf(JFunc_void_double_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_double_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return JNICallable<JFunc_void_double, void(double)>(std::move(__resultRef));
+      }
+    }();
   }
   std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait_cxx");

@@ -296,6 +296,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     callback()
   }
 
+  override fun createNativeCallback(wrappingJsCallback: (num: Double) -> Unit): (Double) -> Unit {
+    return { num ->
+      wrappingJsCallback(num)
+    }
+  }
+
   override fun callWithOptional(
     value: Double?,
     callback: (maybe: Double?) -> Unit,

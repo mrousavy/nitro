@@ -210,7 +210,7 @@ namespace ${cxxNamespace} {
   /**
    * An implementation of ${name} that is backed by a C++ implementation (using \`std::function<...>\`)
    */
-  struct J${name}_cxx final: public jni::HybridClass<J${name}_cxx, J${name}> {
+  class J${name}_cxx final: public jni::HybridClass<J${name}_cxx, J${name}> {
   public:
     static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
       return J${name}_cxx::newObjectCxxArgs(func);

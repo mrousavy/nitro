@@ -193,9 +193,10 @@ export function HybridObjectTestsScreen() {
   }
 
   const runAllTests = () => {
-    gc()
     searchFilteredTests.forEach((t) => runTest(t))
-    gc()
+    requestAnimationFrame(() => {
+      gc()
+    })
   }
 
   return (
