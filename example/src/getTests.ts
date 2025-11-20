@@ -1300,6 +1300,7 @@ export function getTests(
           })
           lotsOfCallbacks.push(cb)
         }
+        gc()
         return lotsOfCallbacks.length
       })
         .didNotThrow()
