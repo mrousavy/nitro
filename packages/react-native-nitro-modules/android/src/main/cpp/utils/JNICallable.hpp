@@ -19,8 +19,8 @@ template <typename JFunc, typename Signature>
 class JNICallable;
 
 /**
- * A wrapper for any jni::JavaClass that
- * implements `R invoke(Args...)`.
+ * A wrapper for any jni::JavaClass that implements `R invoke(Args...)` to
+ * make it callable (e.g. conformable to `std::function<R(Args...)>`)
  * The `jni::global_ref` is safely deleted.
  */
 template <typename JFunc, typename R, typename... Args>
@@ -28,7 +28,11 @@ class JNICallable<JFunc, R(Args...)> final {
 public:
   using Signature = R(Args...);
 
-  explicit JNICallable(jni::global_ref<JFunc>&& func): _func(std::move(func)) {}
+  explicit JNICallable(jni::global_ref<JFunc>&& func) : _func(std::move(func)) {}
+  ~JNICallable() {
+    // Hermes GC can destroy JS objects on a non-JNI Thread.
+    jni::ThreadScope::WithClassLoader([&] { _func.reset(); });
+  }
 
 public:
   R operator()(Args... args) const {
