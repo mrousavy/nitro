@@ -401,6 +401,12 @@ void HybridTestObjectCpp::callCallback(const std::function<void()>& callback) {
   callback();
 }
 
+std::function<void(double)> HybridTestObjectCpp::createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) {
+  return [=](double num) {
+    wrappingJsCallback(num);
+  };
+}
+
 void HybridTestObjectCpp::callWithOptional(std::optional<double> value,
                                            const std::function<void(std::optional<double> /* maybe */)>& callback) {
   callback(value);

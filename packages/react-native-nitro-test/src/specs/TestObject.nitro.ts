@@ -210,7 +210,9 @@ interface SharedTestObjectProps {
     second?: (value: string) => void
   ): void
   errorCallback(onError: (error: Error) => void): void
-  createNativeCallback(): (num: number) => void
+  createNativeCallback(
+    wrappingJsCallback: (num: number) => void
+  ): (num: number) => void
 
   // Callbacks that return values
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>

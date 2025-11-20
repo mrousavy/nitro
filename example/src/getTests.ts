@@ -1292,8 +1292,12 @@ export function getTests(
         // effectively this tests if GC works for callbacks that
         // are bound to native functions.
         lotsOfCallbacks = []
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let someNumberWeWillCapture = 0
         for (let i = 0; i < 10_000; i++) {
-          const cb = testObject.createNativeCallback()
+          const cb = testObject.createNativeCallback((num) => {
+            someNumberWeWillCapture += num
+          })
           lotsOfCallbacks.push(cb)
         }
         return lotsOfCallbacks.length
