@@ -84,6 +84,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getComplexCallback() throws -> (_ value: Double) -> Void
   func twoOptionalCallbacks(value: Double, first: ((_ value: Double) -> Void)?, second: ((_ value: String) -> Void)?) throws -> Void
   func errorCallback(onError: @escaping (_ error: Error) -> Void) throws -> Void
+  func createNativeCallback(wrappingJsCallback: @escaping (_ num: Double) -> Void) throws -> (_ num: Double) -> Void
   func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
   func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car

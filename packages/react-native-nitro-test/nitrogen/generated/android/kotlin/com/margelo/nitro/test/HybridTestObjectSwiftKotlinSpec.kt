@@ -419,6 +419,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
+  abstract fun createNativeCallback(wrappingJsCallback: (num: Double) -> Unit): (num: Double) -> Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun createNativeCallback_cxx(wrappingJsCallback: Func_void_double): Func_void_double {
+    val __result = createNativeCallback(wrappingJsCallback)
+    return Func_void_double_java(__result)
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip

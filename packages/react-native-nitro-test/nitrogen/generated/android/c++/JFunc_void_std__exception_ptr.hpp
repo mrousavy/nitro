@@ -12,6 +12,7 @@
 
 #include <exception>
 #include <functional>
+#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 
@@ -38,7 +39,7 @@ namespace margelo::nitro::test {
   /**
    * An implementation of Func_void_std__exception_ptr that is backed by a C++ implementation (using `std::function<...>`)
    */
-  struct JFunc_void_std__exception_ptr_cxx final: public jni::HybridClass<JFunc_void_std__exception_ptr_cxx, JFunc_void_std__exception_ptr> {
+  class JFunc_void_std__exception_ptr_cxx final: public jni::HybridClass<JFunc_void_std__exception_ptr_cxx, JFunc_void_std__exception_ptr> {
   public:
     static jni::local_ref<JFunc_void_std__exception_ptr::javaobject> fromCpp(const std::function<void(const std::exception_ptr& /* error */)>& func) {
       return JFunc_void_std__exception_ptr_cxx::newObjectCxxArgs(func);
