@@ -27,7 +27,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
       new HybridObjectType(b).getRequiredImports('kotlin')
     ),
   ]
-  if (spec.isHybridView) {
+  if (spec.hybridViewConfig != null) {
     extraImports.push({
       name: 'com.margelo.nitro.views.HybridView',
       space: 'system',
@@ -41,7 +41,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     })
   }
 
-  let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
+  let kotlinBase = spec.hybridViewConfig != null ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -132,7 +132,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   files.push(...cppFiles)
   files.push(...extraFiles)
 
-  if (spec.isHybridView) {
+  if (spec.hybridViewConfig != null) {
     const viewFiles = createKotlinHybridViewManager(spec)
     files.push(...viewFiles)
   }

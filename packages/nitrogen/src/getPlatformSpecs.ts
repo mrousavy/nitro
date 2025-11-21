@@ -1,4 +1,4 @@
-import type { PlatformSpec } from 'react-native-nitro-modules'
+import type { HybridViewConfig, PlatformSpec } from 'react-native-nitro-modules'
 import type { InterfaceDeclaration, Type, TypeAliasDeclaration } from 'ts-morph'
 import { Node, Symbol } from 'ts-morph'
 import { getBaseTypes } from './utils.js'
@@ -127,6 +127,10 @@ export function isHybridViewMethods(type: Type): boolean {
   return extendsType(type, 'HybridViewMethods', true)
 }
 
+export function isHybridViewConfig(type: Type): boolean {
+  return extendsType(type, 'HybridViewConfig', true)
+}
+
 export function isHybridView(type: Type): boolean {
   // HybridViews are type aliases for `HybridView`, and `Props & Methods` are just intersected together.
   const unionTypes = type.getIntersectionTypes()
@@ -136,6 +140,72 @@ export function isHybridView(type: Type): boolean {
     return symbol.getName() === 'HybridViewTag'
   }
   return false
+}
+
+export function getHybridViewConfig(type: Type): HybridViewConfig {
+  const unionTypes = type.getIntersectionTypes()
+  for (const union of unionTypes) {
+    const symbol = union.getSymbol()
+    if (symbol == null) continue
+    if (symbol.getName() !== 'HybridViewTag') continue;
+    // Get the second generic argument of HybridViewTag<Platforms, Config>
+    const genericArguments = union.getTypeArguments()
+    console.log("GENERIC ARGUMENTS:", genericArguments.map((arg) => arg.getText()))
+    const configType = genericArguments[1]
+    if (configType == null) {
+      throw new Error(
+        `Could not get HybridViewConfig from type ${type.getText()} - no Config generic argument found!`
+      )
+    }
+    const properties = configType.getProperties()
+    const config: HybridViewConfig = {}
+    for (const prop of properties) {
+      console.log("PROP:", prop.getName())
+      const propName = prop.getName()
+      const declarations = prop.getDeclarations()
+      if (declarations.length === 0) continue
+      const declaration = declarations[0]
+      if (declaration == null) continue
+      const propType = declaration.getType().getText()
+      if (propName === 'shouldRecycle') {
+        config.shouldRecycle = propType === 'true'
+      }
+    }
+    return config
+  }
+
+  // console.log("THERE ARE THIS MANY UNION TYPES:", unionTypes.length)
+  // for (const union of unionTypes) {
+  //   const symbol = union.getSymbol()
+  //   if (symbol == null) {
+  //     console.log("SKIPPING UNION TYPE WITH NO SYMBOL")
+  //     continue
+  //   }
+  //   if (symbol.getName() === 'HybridViewConfig') {
+  //     console.log("FOUND HYBRID VIEW CONFIG TYPE SYMBOL:", symbol.getName())
+  //     const properties = union.getProperties()
+  //     const config: HybridViewConfig = {}
+  //     for (const prop of properties) {
+  //       const propName = prop.getName()
+  //       const declarations = prop.getDeclarations()
+  //       if (declarations.length === 0) continue
+  //       const declaration = declarations[0]
+  //       if (declaration == null) continue
+  //       const propType = declaration.getType().getText()
+  //       if (propName === 'shouldRecycle') {
+  //         console.log("ALJSDHKASHD KAJSHD 🔥🔥🔥🔥🔥🔥")
+  //         config.shouldRecycle = propType === 'true'
+  //       }
+  //     }
+  //     return config
+  //   } else {
+  //     console.log("SKIPPING UNION TYPE SYMBOL:", symbol.getName())
+  //   }
+  // }
+  throw new Error(
+    `Could not get HybridViewConfig from type ${type.getText()} - no HybridViewConfig found!`
+  )
+
 }
 
 export function isAnyHybridSubclass(type: Type): boolean {

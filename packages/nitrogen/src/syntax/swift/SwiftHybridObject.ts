@@ -33,7 +33,7 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     protocolBaseClasses.push(`${baseName.HybridTSpec}_protocol`)
     classBaseClasses.push(`${baseName.HybridTSpec}_base`)
   }
-  if (spec.isHybridView) {
+  if (spec.hybridViewConfig != null) {
     protocolBaseClasses.push('HybridView')
   }
 
@@ -118,7 +118,7 @@ public typealias ${protocolName} = ${protocolName}_protocol & ${protocolName}_ba
   })
   files.push(...swiftBridge)
 
-  if (spec.isHybridView) {
+  if (spec.hybridViewConfig != null) {
     const viewFiles = createSwiftHybridViewManager(spec)
     files.push(...viewFiles)
   }
