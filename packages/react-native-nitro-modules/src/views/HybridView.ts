@@ -56,6 +56,14 @@ export interface HybridViewProps {
  */
 export interface HybridViewMethods {}
 
+// TODO: explain :3
+export interface HybridViewConfig {
+  /**
+   * @default false
+   */
+  shouldRecycle?: boolean
+}
+
 /**
  * The type of a {@linkcode DefaultHybridViewProps.hybridRef hybridRef}.
  * @example
@@ -87,8 +95,11 @@ export type HybridRef<
 /**
  * This interface acts as a tag for Hybrid Views so nitrogen detects them.
  */
-interface HybridViewTag<Platforms extends ViewPlatformSpec>
-  extends HybridObject<Platforms> {}
+interface HybridViewTag<
+  Platforms extends ViewPlatformSpec,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _Config extends HybridViewConfig,
+> extends HybridObject<Platforms> {}
 
 /**
  * Represents a Nitro Hybrid View.
@@ -114,4 +125,9 @@ export type HybridView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods = {},
   Platforms extends ViewPlatformSpec = { ios: 'swift'; android: 'kotlin' },
-> = HybridViewTag<Platforms> & HybridObject<Platforms> & Props & Methods
+  Config extends HybridViewConfig = { shouldRecycle: false },
+> = HybridViewTag<Platforms, Config> &
+  HybridObject<Platforms> &
+  Props &
+  Methods &
+  Config
