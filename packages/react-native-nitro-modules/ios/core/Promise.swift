@@ -124,6 +124,18 @@ extension Promise {
     }
     return promise
   }
+  
+  /**
+   * Create a new `Promise<T>` that runs the given `run` function on the global `DispatchQueue`
+   * with the given `qos` (quality of service).
+   */
+  @preconcurrency
+  public static func parallel(
+    qos: DispatchQoS.QoSClass = .default,
+    _ run: @escaping @Sendable () throws -> T
+  ) -> Promise {
+    return Self.parallel(.global(qos: qos), run)
+  }
 }
 
 /// Void overloads to avoid typing out `()`
