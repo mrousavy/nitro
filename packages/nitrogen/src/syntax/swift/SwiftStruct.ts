@@ -1,7 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
-import { KotlinCxxBridgedType } from '../kotlin/KotlinCxxBridgedType.js'
 import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { StructType } from '../types/StructType.js'
@@ -35,8 +34,7 @@ var ${p.escapedName}: ${p.getCode('swift')} {
     })
     .join('\n\n')
 
-  const bridgedStruct = new KotlinCxxBridgedType(struct)
-  const requiredImports = bridgedStruct
+  const requiredImports = struct
     .getRequiredImports('swift')
     .map((i) => `import ${i.name}`)
   requiredImports.push('import NitroModules')
