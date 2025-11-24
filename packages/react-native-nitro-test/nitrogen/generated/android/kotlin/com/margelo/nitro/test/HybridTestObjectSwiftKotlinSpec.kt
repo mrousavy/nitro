@@ -582,6 +582,23 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun createInternalObject(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceExternalStruct(externalStruct: ExternalObjectStruct): ExternalObjectStruct
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceExternalVariant(variant: StringOrExternal): StringOrExternal
+  
+  abstract fun createExternalVariantFromFunc(factory: () -> com.margelo.nitro.test.external.HybridSomeExternalObjectSpec): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
+  
+  @DoNotStrip
+  @Keep
+  private fun createExternalVariantFromFunc_cxx(factory: Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec {
+    val __result = createExternalVariantFromFunc(factory)
+    return __result
+  }
 
   private external fun initHybrid(): HybridData
 

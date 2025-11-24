@@ -17,6 +17,8 @@ using namespace facebook;
 using ComplexVariant = std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct,
                                     std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>;
 
+using StringOrExternal = std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>;
+
 class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
   HybridTestObjectCpp() : HybridObject(TAG) {}
@@ -199,6 +201,10 @@ public:
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
+  ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override;
+  StringOrExternal bounceExternalVariant(const StringOrExternal& variant) override;
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(
+      const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

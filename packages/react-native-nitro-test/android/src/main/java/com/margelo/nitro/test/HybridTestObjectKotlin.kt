@@ -559,6 +559,19 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return externalObject
   }
 
+  override fun bounceExternalStruct(externalStruct: ExternalObjectStruct): ExternalObjectStruct {
+    return externalStruct
+  }
+
+  override fun bounceExternalVariant(variant: StringOrExternal): StringOrExternal {
+    return variant
+  }
+
+  override fun createExternalVariantFromFunc(factory: () -> HybridSomeExternalObjectSpec): HybridSomeExternalObjectSpec {
+    val obj = factory()
+    return obj
+  }
+
   override fun createInternalObject(): HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

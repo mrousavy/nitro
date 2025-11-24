@@ -170,6 +170,11 @@ return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
     `.trim()
   }
 
+  const fbjniReturnType =
+    functionType.returnType.kind === 'hybrid-object'
+      ? bridgedReturn.asJniReferenceType('global')
+      : bridgedReturn.asJniReferenceType('local')
+
   const bridged = new KotlinCxxBridgedType(functionType)
   const imports = bridged
     .getRequiredImports('c++')
@@ -220,7 +225,7 @@ namespace ${cxxNamespace} {
     /**
      * Invokes the C++ \`std::function<...>\` this \`J${name}_cxx\` instance holds.
      */
-    ${bridgedReturn.asJniReferenceType('local')} invoke_cxx(${cppParams.join(', ')}) {
+    ${fbjniReturnType} invoke_cxx(${cppParams.join(', ')}) {
       ${indent(cppCallBody, '      ')}
     }
 

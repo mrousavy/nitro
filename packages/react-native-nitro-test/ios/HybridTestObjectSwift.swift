@@ -546,6 +546,21 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return externalObject
   }
 
+  func bounceExternalStruct(externalStruct: ExternalObjectStruct) throws -> ExternalObjectStruct {
+    return externalStruct
+  }
+
+  func bounceExternalVariant(variant: StringOrExternal) throws -> StringOrExternal {
+    return variant
+  }
+
+  func createExternalVariantFromFunc(factory: @escaping () -> (any HybridSomeExternalObjectSpec))
+    throws -> (any HybridSomeExternalObjectSpec)
+  {
+    let obj = factory()
+    return obj
+  }
+
   func createInternalObject() -> any HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

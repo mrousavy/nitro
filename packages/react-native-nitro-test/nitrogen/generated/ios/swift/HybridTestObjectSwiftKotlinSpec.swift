@@ -120,6 +120,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
+  func bounceExternalStruct(externalStruct: ExternalObjectStruct) throws -> ExternalObjectStruct
+  func bounceExternalVariant(variant: StringOrExternal) throws -> StringOrExternal
+  func createExternalVariantFromFunc(factory: @escaping () -> (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
 }
 
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
