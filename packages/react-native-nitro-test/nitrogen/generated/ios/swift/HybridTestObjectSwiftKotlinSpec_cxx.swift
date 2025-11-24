@@ -2360,4 +2360,16 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func bounceExternalStruct(externalStruct: ExternalObjectStruct) -> bridge.Result_ExternalObjectStruct_ {
+    do {
+      let __result = try self.__implementation.bounceExternalStruct(externalStruct: externalStruct)
+      let __resultCpp = __result
+      return bridge.create_Result_ExternalObjectStruct_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_ExternalObjectStruct_(__exceptionPtr)
+    }
+  }
 }

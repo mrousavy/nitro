@@ -1873,6 +1873,15 @@ export function getTests(
         .didNotThrow()
         .equals(HybridSomeExternalObject)
     ),
+    createTest('bounceExternalStruct(...) works', () =>
+      it(() => {
+        return testObject.bounceExternalStruct({
+          someExternal: HybridSomeExternalObject,
+        })
+      })
+        .didNotThrow()
+        .equals({ someExternal: HybridSomeExternalObject })
+    ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {
         const object = testObject.createInternalObject()

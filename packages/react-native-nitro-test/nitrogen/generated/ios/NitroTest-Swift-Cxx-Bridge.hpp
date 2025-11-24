@@ -12,6 +12,8 @@
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `ExternalObjectStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct ExternalObjectStruct; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -59,6 +61,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -1814,6 +1817,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<ExternalObjectStruct>
+  using Result_ExternalObjectStruct_ = Result<ExternalObjectStruct>;
+  inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const ExternalObjectStruct& value) noexcept {
+    return Result<ExternalObjectStruct>::withValue(value);
+  }
+  inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const std::exception_ptr& error) noexcept {
+    return Result<ExternalObjectStruct>::withError(error);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

@@ -35,6 +35,8 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `ExternalObjectStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct ExternalObjectStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -102,6 +104,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JCoreTypesVariant.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
+#include "ExternalObjectStruct.hpp"
+#include "JExternalObjectStruct.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -1212,6 +1216,11 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>()>("createInternalObject");
     auto __result = method(_javaPart);
     return __result->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
+  }
+  ExternalObjectStruct JHybridTestObjectSwiftKotlinSpec::bounceExternalStruct(const ExternalObjectStruct& externalStruct) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JExternalObjectStruct>(jni::alias_ref<JExternalObjectStruct> /* externalStruct */)>("bounceExternalStruct");
+    auto __result = method(_javaPart, JExternalObjectStruct::fromCpp(externalStruct));
+    return __result->toCpp();
   }
 
 } // namespace margelo::nitro::test
