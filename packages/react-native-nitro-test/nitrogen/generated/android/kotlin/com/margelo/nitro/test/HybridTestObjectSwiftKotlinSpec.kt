@@ -256,6 +256,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double>
+  
+  @DoNotStrip
+  @Keep
   abstract fun extractMap(mapWrapper: MapWrapper): Map<String, String>
   
   @DoNotStrip

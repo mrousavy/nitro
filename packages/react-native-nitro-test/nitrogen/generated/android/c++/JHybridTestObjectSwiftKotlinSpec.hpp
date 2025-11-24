@@ -107,6 +107,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override;
     std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override;
     std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override;
+    std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;
     std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override;
     double funcThatThrows() override;
     std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
