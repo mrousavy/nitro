@@ -143,6 +143,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("createInternalObject", &HybridTestObjectCppSpec::createInternalObject);
       prototype.registerHybridMethod("bounceExternalStruct", &HybridTestObjectCppSpec::bounceExternalStruct);
       prototype.registerHybridMethod("bounceExternalVariant", &HybridTestObjectCppSpec::bounceExternalVariant);
+      prototype.registerHybridMethod("createExternalVariantFromFunc", &HybridTestObjectCppSpec::createExternalVariantFromFunc);
     });
   }
 

@@ -136,6 +136,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("createInternalObject", &HybridTestObjectSwiftKotlinSpec::createInternalObject);
       prototype.registerHybridMethod("bounceExternalStruct", &HybridTestObjectSwiftKotlinSpec::bounceExternalStruct);
       prototype.registerHybridMethod("bounceExternalVariant", &HybridTestObjectSwiftKotlinSpec::bounceExternalVariant);
+      prototype.registerHybridMethod("createExternalVariantFromFunc", &HybridTestObjectSwiftKotlinSpec::createExternalVariantFromFunc);
     });
   }
 

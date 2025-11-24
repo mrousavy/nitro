@@ -567,6 +567,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
+  override fun createExternalVariantFromFunc(factory: () -> HybridSomeExternalObjectSpec): HybridSomeExternalObjectSpec {
+    val obj = factory()
+    return obj
+  }
+
   override fun createInternalObject(): HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

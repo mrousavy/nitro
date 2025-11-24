@@ -554,6 +554,13 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
+  func createExternalVariantFromFunc(factory: @escaping () -> (any HybridSomeExternalObjectSpec))
+    throws -> (any HybridSomeExternalObjectSpec)
+  {
+    let obj = factory()
+    return obj
+  }
+
   func createInternalObject() -> any HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

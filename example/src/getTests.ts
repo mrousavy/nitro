@@ -1898,6 +1898,15 @@ export function getTests(
         .didReturn('object')
         .equals(HybridSomeExternalObject)
     ),
+    createTest('createExternalVariantFromFunc(...) works', () =>
+      it(() => {
+        const factory = () => HybridSomeExternalObject
+        return testObject.createExternalVariantFromFunc(factory)
+      })
+        .didNotThrow()
+        .didReturn('object')
+        .equals(HybridSomeExternalObject)
+    ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {
         const object = testObject.createInternalObject()

@@ -693,6 +693,12 @@ StringOrExternal HybridTestObjectCpp::bounceExternalVariant(const StringOrExtern
   return variant;
 }
 
+std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createExternalVariantFromFunc(
+    const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) {
+  auto obj = factory();
+  return obj;
+}
+
 std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createInternalObject() {
   return std::make_shared<HybridSomeInternalObject>();
 }

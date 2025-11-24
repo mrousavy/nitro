@@ -281,6 +281,9 @@ interface SharedTestObjectProps {
     externalStruct: ExternalObjectStruct
   ): ExternalObjectStruct
   bounceExternalVariant(variant: StringOrExternal): StringOrExternal
+  createExternalVariantFromFunc(
+    factory: Sync<() => SomeExternalObject>
+  ): SomeExternalObject
 }
 
 // This is a C++-based `HybridObject`.
