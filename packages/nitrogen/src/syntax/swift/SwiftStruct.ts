@@ -34,8 +34,8 @@ var ${p.escapedName}: ${p.getCode('swift')} {
     })
     .join('\n\n')
 
-  const requiredImports = struct
-    .getRequiredImports('swift')
+  const requiredImports = struct.properties
+    .flatMap((p) => p.getRequiredImports('swift'))
     .map((i) => `import ${i.name}`)
   requiredImports.push('import NitroModules')
   const imports = requiredImports.filter(isNotDuplicate)

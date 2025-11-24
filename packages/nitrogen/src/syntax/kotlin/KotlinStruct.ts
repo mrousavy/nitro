@@ -19,15 +19,6 @@ export function createKotlinStruct(structType: StructType): SourceFile[] {
     name: p.escapedName,
     type: new KotlinCxxBridgedType(p),
   }))
-  //   const parameters = structType.properties
-  //     .map((p) =>
-  //       `
-  // @DoNotStrip
-  // @Keep
-  // val ${p.escapedName}: ${p.getCode('kotlin')}
-  // `.trim()
-  //     )
-  //     .join(',\n')
   const properties = bridgedProperties
     .map(({ name, type }) => {
       return `

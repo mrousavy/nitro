@@ -6,6 +6,7 @@
 ///
 
 import Foundation
+import NitroTestExternal
 import NitroModules
 
 /**
