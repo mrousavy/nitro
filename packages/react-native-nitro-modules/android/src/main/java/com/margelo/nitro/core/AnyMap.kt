@@ -39,10 +39,15 @@ class AnyMap {
   }
 
   companion object {
-    fun fromMap(map: Map<String, Any?>): AnyMap {
+    fun fromMap(map: Map<String, Any?>, ignoreIncompatible: Boolean = false): AnyMap {
       val anyMap = AnyMap(map.size)
       for ((key, value) in map) {
-        anyMap.setAny(key, value)
+        try {
+          anyMap.setAny(key, value)
+        } catch (error: Throwable) {
+          if (ignoreIncompatible) continue
+          else throw error
+        }
       }
       return anyMap
     }
