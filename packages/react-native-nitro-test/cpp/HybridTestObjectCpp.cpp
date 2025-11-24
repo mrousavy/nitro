@@ -685,6 +685,10 @@ std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> Hy
   return externalObject;
 }
 
+ExternalObjectStruct HybridTestObjectCpp::bounceExternalStruct(const ExternalObjectStruct& externalStruct) {
+  return externalStruct;
+}
+
 std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createInternalObject() {
   return std::make_shared<HybridSomeInternalObject>();
 }

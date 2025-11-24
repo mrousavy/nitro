@@ -199,6 +199,7 @@ public:
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
+  ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
