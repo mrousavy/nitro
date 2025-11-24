@@ -174,6 +174,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
     ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override;
+    std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) override;
 
   private:
     friend HybridBase;

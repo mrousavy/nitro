@@ -550,6 +550,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return externalStruct
   }
 
+  func bounceExternalVariant(variant: StringOrExternal) throws -> StringOrExternal {
+    return variant
+  }
+
   func createInternalObject() -> any HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

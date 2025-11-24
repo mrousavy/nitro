@@ -75,7 +75,7 @@ export interface OptionalWrapper {
 export interface ExternalObjectStruct {
   someExternal: SomeExternalObject
 }
-// export type StringOrExternal = string | SomeExternalObject
+export type StringOrExternal = string | SomeExternalObject
 
 interface OptionalCallback {
   callback?: (() => void) | number
@@ -280,6 +280,7 @@ interface SharedTestObjectProps {
   bounceExternalStruct(
     externalStruct: ExternalObjectStruct
   ): ExternalObjectStruct
+  bounceExternalVariant(variant: StringOrExternal): StringOrExternal
 }
 
 // This is a C++-based `HybridObject`.

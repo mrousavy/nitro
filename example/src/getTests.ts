@@ -1882,6 +1882,22 @@ export function getTests(
         .didNotThrow()
         .equals({ someExternal: HybridSomeExternalObject })
     ),
+    createTest('bounceExternalVariant(...) works with string', () =>
+      it(() => {
+        return testObject.bounceExternalVariant('Hello!')
+      })
+        .didNotThrow()
+        .didReturn('string')
+        .equals('Hello!')
+    ),
+    createTest('bounceExternalVariant(...) works with external object', () =>
+      it(() => {
+        return testObject.bounceExternalVariant(HybridSomeExternalObject)
+      })
+        .didNotThrow()
+        .didReturn('object')
+        .equals(HybridSomeExternalObject)
+    ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {
         const object = testObject.createInternalObject()

@@ -586,6 +586,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun bounceExternalStruct(externalStruct: ExternalObjectStruct): ExternalObjectStruct
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceExternalVariant(variant: StringOrExternal): StringOrExternal
 
   private external fun initHybrid(): HybridData
 

@@ -563,6 +563,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return externalStruct
   }
 
+  override fun bounceExternalVariant(variant: StringOrExternal): StringOrExternal {
+    return variant
+  }
+
   override fun createInternalObject(): HybridSomeExternalObjectSpec {
     return HybridSomeInternalObject()
   }

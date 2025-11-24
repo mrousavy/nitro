@@ -106,6 +106,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
 #include "ExternalObjectStruct.hpp"
 #include "JExternalObjectStruct.hpp"
+#include "JStringOrExternal.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -1220,6 +1221,11 @@ namespace margelo::nitro::test {
   ExternalObjectStruct JHybridTestObjectSwiftKotlinSpec::bounceExternalStruct(const ExternalObjectStruct& externalStruct) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JExternalObjectStruct>(jni::alias_ref<JExternalObjectStruct> /* externalStruct */)>("bounceExternalStruct");
     auto __result = method(_javaPart, JExternalObjectStruct::fromCpp(externalStruct));
+    return __result->toCpp();
+  }
+  std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> JHybridTestObjectSwiftKotlinSpec::bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JStringOrExternal>(jni::alias_ref<JStringOrExternal> /* variant */)>("bounceExternalVariant");
+    auto __result = method(_javaPart, JStringOrExternal::fromCpp(variant));
     return __result->toCpp();
   }
 

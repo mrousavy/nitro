@@ -2372,4 +2372,42 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_ExternalObjectStruct_(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func bounceExternalVariant(variant: bridge.std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_) -> bridge.Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ {
+    do {
+      let __result = try self.__implementation.bounceExternalVariant(variant: { () -> StringOrExternal in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first({ () -> HybridSomeExternalObjectSpec in
+              let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(__actual)
+              let __instance = HybridSomeExternalObjectSpec_cxx.fromUnsafe(__unsafePointer)
+              return __instance.getHybridSomeExternalObjectSpec()
+            }())
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(String(__actual))
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_({ () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+              let __cxxWrapped = __value.getCxxWrapper()
+              return __cxxWrapped.getCxxPart()
+            }())
+          case .second(let __value):
+            return bridge.create_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_(std.string(__value))
+        }
+      }().variant
+      return bridge.create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(__exceptionPtr)
+    }
+  }
 }

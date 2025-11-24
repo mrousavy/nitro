@@ -242,6 +242,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) = 0;
       virtual std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() = 0;
       virtual ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) = 0;
+      virtual std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) = 0;
 
     protected:
       // Hybrid Setup

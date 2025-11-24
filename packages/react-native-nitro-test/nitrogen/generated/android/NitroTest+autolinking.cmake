@@ -56,6 +56,7 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_Car_Person.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridBaseSpec_OptionalWrapper.cpp
   ../nitrogen/generated/android/c++/JCoreTypesVariant.cpp
+  ../nitrogen/generated/android/c++/JStringOrExternal.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_DoubleArray_Array_String__String_Double.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp

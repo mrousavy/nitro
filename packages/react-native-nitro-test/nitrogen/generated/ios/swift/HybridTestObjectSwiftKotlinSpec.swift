@@ -121,6 +121,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
   func bounceExternalStruct(externalStruct: ExternalObjectStruct) throws -> ExternalObjectStruct
+  func bounceExternalVariant(variant: StringOrExternal) throws -> StringOrExternal
 }
 
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
