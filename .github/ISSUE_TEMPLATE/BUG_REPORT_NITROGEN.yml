@@ -1,5 +1,5 @@
-name: 💅 Nitrogen error
-description: File a bug report that occurred when running nitrogen
+name: 🐛 Bug Report (nitrogen)
+description: File a bug report for nitrogen
 labels: [nitrogen]
 body:
   - type: textarea

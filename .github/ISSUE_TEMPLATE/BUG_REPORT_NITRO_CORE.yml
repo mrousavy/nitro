@@ -1,10 +1,10 @@
-name: 🐛 Bug Report
+name: 🐛 Bug Report (nitro core)
 description: File a bug report for Nitro Modules core
 labels: [nitro-core]
 body:
   - type: textarea
     attributes:
-      label: What's happening?
+      label: What happened?
       description: Explain what you are trying to do and what happened instead. Be as precise as possible, I can't help you if I don't understand your issue.
       placeholder: "I wanted to create a HybridObject, but it crashed at runtime with the error message: 'Cannot default-construct HybridObject'"
     validations:
