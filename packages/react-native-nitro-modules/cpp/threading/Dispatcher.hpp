@@ -18,6 +18,18 @@ using namespace facebook;
 class Dispatcher : public jsi::NativeState {
 public:
   /**
+   * Represents the priority of a function scheduled on the Dispatcher.
+   */
+  enum class Priority {
+    ImmediatePriority,
+    UserBlockingPriority,
+    NormalPriority,
+    LowPriority,
+    IdlePriority,
+  };
+
+public:
+  /**
    Installs the Dispatcher into the given Runtime.
    It can be accessed using `getRuntimeGlobalDispatcher` later.
    */
@@ -39,18 +51,23 @@ public:
   /**
    * Run the given void function asynchronously on the Thread this Dispatcher is managing.
    */
-  virtual void runAsync(std::function<void()>&& function) = 0;
+  virtual void runAsync(Priority priority, std::function<void()>&& function) = 0;
+
+  [[deprecated]]
+  virtual void runAsync(std::function<void()>&& function) {
+    return runAsync(Priority::NormalPriority, std::move(function));
+  }
 
   /**
    * Run the given function asynchronously on the Thread this Dispatcher is managing,
    * and return a `Promise<T>` that will hold the result of the function.
    */
   template <typename T>
-  std::shared_ptr<Promise<T>> runAsyncAwaitable(std::function<T()>&& function) {
+  std::shared_ptr<Promise<T>> runAsyncAwaitable(Priority priority, std::function<T()>&& function) {
     // 1. Create Promise that can be shared between this and dispatcher thread
     auto promise = Promise<T>::create();
 
-    runAsync([function = std::move(function), promise]() {
+    runAsync(priority, [function = std::move(function), promise]() {
       try {
         if constexpr (std::is_void_v<T>) {
           // 4. Call the actual function on the new Thread
