@@ -11,6 +11,9 @@ export class ArrayBufferType implements Type {
   get kind(): TypeKind {
     return 'array-buffer'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {
