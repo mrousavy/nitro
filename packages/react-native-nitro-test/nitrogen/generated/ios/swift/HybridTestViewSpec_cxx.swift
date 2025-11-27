@@ -165,6 +165,13 @@ open class HybridTestViewSpec_cxx {
       }()
     }
   }
+  
+  public final var nonSettableProp: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.nonSettableProp
+    }
+  }
 
   // Methods
   @inline(__always)

@@ -71,7 +71,9 @@ export function createViewComponentShadowNodeFiles(
 
   const namespace = spec.config.getCxxNamespace('c++', 'views')
 
-  const props = [...spec.properties, getHybridRefProperty(spec)]
+  const props = [...spec.properties, getHybridRefProperty(spec)].filter(
+    (p) => !p.isReadonly
+  )
   const properties = props.map(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
