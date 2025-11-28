@@ -332,7 +332,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
     @inline(__always)
     set {
-      self.__implementation.optionalEnum = newValue.has_value() ? newValue.pointee : nil
+      self.__implementation.optionalEnum = newValue.hasValue ? newValue.pointee : nil
     }
   }
   
@@ -989,7 +989,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func tryOptionalEnum(value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
     do {
-      let __result = try self.__implementation.tryOptionalEnum(value: value.has_value() ? value.pointee : nil)
+      let __result = try self.__implementation.tryOptionalEnum(value: value.hasValue ? value.pointee : nil)
       let __resultCpp = { () -> bridge.std__optional_Powertrain_ in
         if let __unwrappedValue = __result {
           return bridge.create_std__optional_Powertrain_(__unwrappedValue)
@@ -1358,7 +1358,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callWithOptional(value: value.has_value() ? value.pointee : nil, callback: { () -> (Double?) -> Void in
+      try self.__implementation.callWithOptional(value: value.hasValue ? value.pointee : nil, callback: { () -> (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
           __wrappedFunction.call({ () -> bridge.std__optional_double_ in

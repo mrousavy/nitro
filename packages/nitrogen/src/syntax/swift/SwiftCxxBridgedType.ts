@@ -471,7 +471,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 
             // TODO: Use `.value` instead of the `.has_value()`/`.pointee` once Swift has better support for `std::optional` bridging
             if (!wrapping.needsSpecialHandling && !swiftBug84848Workaround) {
-              return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
+              return `${cppParameterName}.hasValue ? ${cppParameterName}.pointee : nil`
             }
             return `
 { () -> ${optional.getCode('swift')} in
