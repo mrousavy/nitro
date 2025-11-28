@@ -124,7 +124,7 @@ public extension Car {
   var driver: Person? {
     @inline(__always)
     get {
-      return self.__driver.value
+      return self.__driver.has_value() ? self.__driver.pointee : nil
     }
     @inline(__always)
     set {
@@ -158,14 +158,7 @@ public extension Car {
   var isFast: Bool? {
     @inline(__always)
     get {
-      return { () -> Bool? in
-        if bridge.has_value_std__optional_bool_(self.__isFast) {
-          let __unwrapped = bridge.get_std__optional_bool_(self.__isFast)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }()
+      return self.__isFast.has_value() ? self.__isFast.pointee : nil
     }
     @inline(__always)
     set {
