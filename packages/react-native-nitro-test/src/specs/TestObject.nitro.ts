@@ -60,6 +60,11 @@ export type Person = {
   age: number
 }
 
+interface Point {
+  x: number
+  y: number
+}
+
 interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
@@ -234,6 +239,7 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  bounceSimpleStruct(point: Point): Point
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

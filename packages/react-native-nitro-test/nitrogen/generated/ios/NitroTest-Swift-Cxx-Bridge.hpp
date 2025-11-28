@@ -38,6 +38,8 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Point` to properly resolve imports.
+namespace margelo::nitro::test { struct Point; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
@@ -73,6 +75,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
+#include "Point.hpp"
 #include "Powertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
@@ -1779,6 +1782,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
+  }
+  
+  // pragma MARK: Result<Point>
+  using Result_Point_ = Result<Point>;
+  inline Result_Point_ create_Result_Point_(const Point& value) noexcept {
+    return Result<Point>::withValue(value);
+  }
+  inline Result_Point_ create_Result_Point_(const std::exception_ptr& error) noexcept {
+    return Result<Point>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

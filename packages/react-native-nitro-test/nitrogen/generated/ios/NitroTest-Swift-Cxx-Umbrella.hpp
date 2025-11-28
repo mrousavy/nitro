@@ -40,6 +40,8 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Point` to properly resolve imports.
+namespace margelo::nitro::test { struct Point; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -65,6 +67,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
+#include "Point.hpp"
 #include "Powertrain.hpp"
 #include "SecondMapWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"

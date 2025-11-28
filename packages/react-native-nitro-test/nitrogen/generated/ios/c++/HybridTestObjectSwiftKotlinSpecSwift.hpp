@@ -40,6 +40,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `Point` to properly resolve imports.
+namespace margelo::nitro::test { struct Point; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -78,6 +80,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
+#include "Point.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -728,6 +731,14 @@ namespace margelo::nitro::test {
     }
     inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
       auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline Point bounceSimpleStruct(const Point& point) override {
+      auto __result = _swiftPart.bounceSimpleStruct(std::forward<decltype(point)>(point));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

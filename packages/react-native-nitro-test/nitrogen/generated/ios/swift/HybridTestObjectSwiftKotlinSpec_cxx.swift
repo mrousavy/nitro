@@ -1795,6 +1795,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceSimpleStruct(point: Point) -> bridge.Result_Point_ {
+    do {
+      let __result = try self.__implementation.bounceSimpleStruct(point: point)
+      let __resultCpp = __result
+      return bridge.create_Result_Point_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_Point_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()

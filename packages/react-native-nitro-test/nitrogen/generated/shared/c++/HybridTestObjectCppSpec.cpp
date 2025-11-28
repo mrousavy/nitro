@@ -116,6 +116,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectCppSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectCppSpec::bounceOptionalWrapper);
       prototype.registerHybridMethod("bounceOptionalCallback", &HybridTestObjectCppSpec::bounceOptionalCallback);
+      prototype.registerHybridMethod("bounceSimpleStruct", &HybridTestObjectCppSpec::bounceSimpleStruct);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectCppSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectCppSpec::copyBuffer);
