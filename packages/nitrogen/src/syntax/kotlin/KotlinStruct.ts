@@ -4,7 +4,9 @@ import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getReferencedTypes } from '../getReferencedTypes.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
+import { ArrayType } from '../types/ArrayType.js'
 import type { StructType } from '../types/StructType.js'
+import type { Type } from '../types/Type.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 interface BridgedProperty {
@@ -187,8 +189,51 @@ constructor(${kotlinParams.join(', ')}):
   }
 }
 
+function isJniPrimitive(type: Type): boolean {
+  switch (type.kind) {
+    case 'number':
+    case 'bigint':
+    case 'boolean':
+      return true
+    default:
+      return false
+  }
+}
+
+function canBeFlattenedToPrimitiveArray(structType: StructType): boolean {
+  const firstType = structType.properties[0]
+  if (firstType == null) {
+    // no properties!
+    return false
+  }
+  return structType.properties.every((p) => {
+    return p.kind === firstType.kind && isJniPrimitive(p)
+  })
+}
+
 function createJNIStructInitializer(structType: StructType): string {
   const lines: string[] = ['static const auto clazz = javaClassStatic();']
+
+  if (canBeFlattenedToPrimitiveArray(structType)) {
+    // optimization: pass a primitive array over JNI once instead of accessing individual properties
+    const arrayType = new ArrayType(structType.properties[0]!)
+    const jniArrayType = new KotlinCxxBridgedType(arrayType)
+    const signatureType = `${jniArrayType.getTypeCode('c++')}()`
+    lines.push(
+      `static const auto getPropertiesFlatMethod = clazz->getMethod<${signatureType}>("getPropertiesFlat");`
+    )
+    lines.push(
+      `${jniArrayType.asJniReferenceType('local')} flatData = getPropertiesFlatMethod(this);`
+    )
+    const propsForward = structType.properties.map((_, i) => {
+      return `flatData->getElementAt(${i})`
+    })
+    lines.push(`return ${structType.structName}(`)
+    lines.push(`  ${indent(propsForward.join(',\n'), '  ')}`)
+    lines.push(`);`)
+    return lines.join('\n')
+  }
+
   for (const prop of structType.properties) {
     const fieldName = `field${capitalizeName(prop.escapedName)}`
     const jniType = new KotlinCxxBridgedType(prop)
