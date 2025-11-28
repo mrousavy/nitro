@@ -465,8 +465,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
                 return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
               }
             }
-            // TODO: Use `.value` instead of the `.has_value()` stuff once https://github.com/swiftlang/swift/issues/84848 is fixed.
-            if (!wrapping.needsSpecialHandling) {
+            // TODO: Remove this check for booleans once https://github.com/swiftlang/swift/issues/84848 is fixed.
+            const swiftBug84848Workaround =
+              optional.wrappingType.kind === 'boolean'
+
+            // TODO: Use `.value` instead of the `.has_value()`/`.pointee` once Swift has better support for `std::optional` bridging
+            if (!wrapping.needsSpecialHandling && !swiftBug84848Workaround) {
               return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
             }
             return `
