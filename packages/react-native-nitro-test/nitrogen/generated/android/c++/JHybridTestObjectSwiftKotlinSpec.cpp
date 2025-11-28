@@ -205,12 +205,12 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(int64_t /* bigintValue */)>("setBigintValue");
     method(_javaPart, bigintValue);
   }
-  nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {
+  [[maybe_unused]] nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNull>()>("getNullValue");
     auto __result = method(_javaPart);
     return nitro::null;
   }
-  void JHybridTestObjectSwiftKotlinSpec::setNullValue(nitro::NullType nullValue) {
+  void JHybridTestObjectSwiftKotlinSpec::setNullValue([[maybe_unused]] nitro::NullType nullValue) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JNull> /* nullValue */)>("setNullValue");
     method(_javaPart, JNull::null());
   }
@@ -232,12 +232,12 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* stringOrUndefined */)>("setStringOrUndefined");
     method(_javaPart, stringOrUndefined.has_value() ? jni::make_jstring(stringOrUndefined.value()) : nullptr);
   }
-  std::variant<nitro::NullType, std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrNull() {
+  std::variant<[[maybe_unused]] nitro::NullType, std::string> JHybridTestObjectSwiftKotlinSpec::getStringOrNull() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_NullType_String>()>("getStringOrNull");
     auto __result = method(_javaPart);
     return __result->toCpp();
   }
-  void JHybridTestObjectSwiftKotlinSpec::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) {
+  void JHybridTestObjectSwiftKotlinSpec::setStringOrNull(const std::variant<[[maybe_unused]] nitro::NullType, std::string>& stringOrNull) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_String> /* stringOrNull */)>("setStringOrNull");
     method(_javaPart, JVariant_NullType_String::fromCpp(stringOrNull));
   }
@@ -342,7 +342,7 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(double /* num */, jni::alias_ref<jni::JString> /* str */, jboolean /* boo */)>("multipleArguments");
     method(_javaPart, num, jni::make_jstring(str), boo);
   }
-  nitro::NullType JHybridTestObjectSwiftKotlinSpec::bounceNull(nitro::NullType value) {
+  [[maybe_unused]] nitro::NullType JHybridTestObjectSwiftKotlinSpec::bounceNull([[maybe_unused]] nitro::NullType value) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNull>(jni::alias_ref<JNull> /* value */)>("bounceNull");
     auto __result = method(_javaPart, JNull::null());
     return nitro::null;

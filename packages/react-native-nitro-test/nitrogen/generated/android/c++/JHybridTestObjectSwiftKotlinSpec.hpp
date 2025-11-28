@@ -61,14 +61,14 @@ namespace margelo::nitro::test {
     void setStringValue(const std::string& stringValue) override;
     int64_t getBigintValue() override;
     void setBigintValue(int64_t bigintValue) override;
-    nitro::NullType getNullValue() override;
-    void setNullValue(nitro::NullType nullValue) override;
+    [[maybe_unused]] nitro::NullType getNullValue() override;
+    void setNullValue([[maybe_unused]] nitro::NullType nullValue) override;
     std::optional<std::string> getOptionalString() override;
     void setOptionalString(const std::optional<std::string>& optionalString) override;
     std::optional<std::string> getStringOrUndefined() override;
     void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) override;
-    std::variant<nitro::NullType, std::string> getStringOrNull() override;
-    void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) override;
+    std::variant<[[maybe_unused]] nitro::NullType, std::string> getStringOrNull() override;
+    void setStringOrNull(const std::variant<[[maybe_unused]] nitro::NullType, std::string>& stringOrNull) override;
     std::optional<std::vector<std::string>> getOptionalArray() override;
     void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
     std::optional<Powertrain> getOptionalEnum() override;
@@ -88,7 +88,7 @@ namespace margelo::nitro::test {
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
     void multipleArguments(double num, const std::string& str, bool boo) override;
-    nitro::NullType bounceNull(nitro::NullType value) override;
+    [[maybe_unused]] nitro::NullType bounceNull([[maybe_unused]] nitro::NullType value) override;
     std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
