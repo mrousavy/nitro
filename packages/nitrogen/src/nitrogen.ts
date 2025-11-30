@@ -18,7 +18,7 @@ import {
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
-import { Logger } from './Logger.js'
+import { Logger, type GenerationError } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
@@ -44,6 +44,7 @@ export async function runNitrogen({
 }: NitrogenOptions): Promise<NitrogenResult> {
   let targetSpecs = 0
   let generatedSpecs = 0
+  const errors: GenerationError[] = []
 
   // Create the TS project
   const project = new Project({
@@ -179,6 +180,10 @@ export async function runNitrogen({
             `        ❌  Failed to generate spec for ${typeName}! ${message}`
           )
         )
+        errors.push({
+          typeName,
+          error: errorToString(error),
+        })
         process.exitCode = 1
       }
     }
@@ -225,6 +230,13 @@ export async function runNitrogen({
     filesAfter.push(file)
   } catch {
     Logger.error(`❌  Failed to write ${chalk.dim(`.gitattributes`)}!`)
+  }
+
+  // Display summary
+  if (errors.length > 0) {
+    Logger.summary.failure(errors, generatedSpecs)
+  } else if (targetSpecs > 0) {
+    Logger.summary.success(generatedSpecs, targetSpecs)
   }
 
   return {

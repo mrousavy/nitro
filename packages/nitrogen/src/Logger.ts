@@ -30,6 +30,11 @@ function getIndentation(): string {
   return string
 }
 
+export interface GenerationError {
+  typeName: string
+  error: string
+}
+
 export const Logger = {
   withIndented(callback: () => void) {
     try {
@@ -59,5 +64,31 @@ export const Logger = {
     if (isAtLeast('error')) {
       console.error(getIndentation() + message, ...extra)
     }
+  },
+
+  summary: {
+    success(successCount: number, totalCount: number) {
+      console.log(
+        `\n✅  All specs generated successfully (${successCount}/${totalCount})\n`
+      )
+    },
+
+    failure(errors: GenerationError[], successCount: number) {
+      console.log(`\n❌  Nitrogen generation failed\n`)
+
+      for (const { typeName, error } of errors) {
+        const errorPreview =
+          (error ?? 'Unknown error').split('\n')[0]?.substring(0, 80) ??
+          'Unknown error'
+        console.log(`    • ${typeName}: ${errorPreview}`)
+      }
+
+      if (successCount > 0) {
+        console.log(
+          `\n    ${successCount} spec${successCount === 1 ? '' : 's'} succeeded`
+        )
+      }
+      console.log('')
+    },
   },
 }
