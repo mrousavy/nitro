@@ -67,6 +67,8 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
+    # Enables some experimental Swift features
+    "OTHER_SWIFT_FLAGS" => "-enable-experimental-feature AddressableParameters",
   }
 
   if has_react_native()

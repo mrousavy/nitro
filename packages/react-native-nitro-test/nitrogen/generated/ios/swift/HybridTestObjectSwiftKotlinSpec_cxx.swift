@@ -970,14 +970,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func tryMiddleParam(num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.tryMiddleParam(num: num, boo: { () -> Bool? in
-        if bridge.has_value_std__optional_bool_(boo) {
-          let __unwrapped = bridge.get_std__optional_bool_(boo)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }(), str: String(str))
+      let __result = try self.__implementation.tryMiddleParam(num: num, boo: boo.value, str: String(str))
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {
@@ -1007,14 +1000,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func tryTrailingOptional(num: Double, str: std.string, boo: bridge.std__optional_bool_) -> bridge.Result_bool_ {
     do {
-      let __result = try self.__implementation.tryTrailingOptional(num: num, str: String(str), boo: { () -> Bool? in
-        if bridge.has_value_std__optional_bool_(boo) {
-          let __unwrapped = bridge.get_std__optional_bool_(boo)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }())
+      let __result = try self.__implementation.tryTrailingOptional(num: num, str: String(str), boo: boo.value)
       let __resultCpp = __result
       return bridge.create_Result_bool_(__resultCpp)
     } catch (let __error) {
