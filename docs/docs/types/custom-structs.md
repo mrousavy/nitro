@@ -103,6 +103,25 @@ interface PartialPerson
 
 This way TypeScript always keeps the `interface` in-tact, allowing Nitrogen to properly process it.
 
+## Cyclic references are not supported
+
+Direct or indirect cyclic struct references are not supported:
+
+```ts title="Direct cycle ❌"
+interface Node {
+  child: Node
+}
+```
+
+```ts title="Indirect cycle ❌"
+interface A {
+  b: B
+}
+interface B {
+  a: A
+}
+```
+
 ## Structs are eagerly converted
 
 Since structs are just flat value types, each key/value is eagerly converted from a JS value to a native value (and vice-versa) when passing them between JS and native.

@@ -35,6 +35,14 @@ export function errorToString(error: unknown): string {
   if (typeof error !== 'object') {
     return `${error}`
   }
+  if (error instanceof RangeError && error.message.includes('Maximum call stack size exceeded')) {
+    return (
+      `${error.name}: ${error.message}\n` +
+      `This is likely caused by a direct or indirect cyclic struct reference ` +
+      `(e.g. \`interface Node { child: Node }\` or \`interface A { b: B }\` and \`interface B { a: A }\`).\n` +
+      `See: https://nitro.margelo.com/docs/types/custom-structs#cyclic-references-are-not-supported`
+    )
+  }
   if (error instanceof Error) {
     let message = `${error.name}: ${error.message}`
     if (error.cause != null) {
