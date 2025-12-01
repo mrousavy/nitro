@@ -126,6 +126,48 @@ const knownTypes: Record<Language, Map<TypeId, Type>> = {
   'kotlin': new Map<TypeId, Type>(),
 }
 
+// Tracks types currently being processed to detect cycles
+const processingTypes: Record<Language, Set<TypeId>> = {
+  'c++': new Set<TypeId>(),
+  'swift': new Set<TypeId>(),
+  'kotlin': new Set<TypeId>(),
+}
+
+/**
+ * Creates a struct type with cycle detection.
+ * If the type is already being processed, returns the existing instance.
+ */
+function createStructWithCycleDetection(
+  language: Language,
+  key: TypeId,
+  typename: string,
+  type: TSMorphType<ts.ObjectType>
+): StructType {
+  if (processingTypes[language].has(key)) {
+    const existing = knownTypes[language].get(key)
+    if (existing != null) {
+      return existing as StructType
+    }
+    return new StructType(typename, () =>
+      getInterfaceProperties(language, type)
+    )
+  }
+
+  const struct = new StructType(typename, () =>
+    getInterfaceProperties(language, type)
+  )
+  knownTypes[language].set(key, struct)
+  processingTypes[language].add(key)
+  // Access properties to trigger lazy initialization (see StructType.ensureInitialized).
+  // Use try/finally to ensure we remove from processingTypes even if initialization throws.
+  try {
+    struct.properties
+  } finally {
+    processingTypes[language].delete(key)
+  }
+  return struct
+}
+
 /**
  * Get a list of all currently known complex types.
  */
@@ -335,8 +377,7 @@ export function createType(
       if (symbol == null)
         throw new Error(`Interface "${type.getText()}" does not have a Symbol!`)
       const typename = symbol.getName()
-      const properties = getInterfaceProperties(language, type)
-      return new StructType(typename, properties)
+      return createStructWithCycleDetection(language, key, typename, type)
     } else if (type.isObject()) {
       // It is an object. If it has a symbol/name, it is a `type T = ...` declaration, so a `struct`.
       // Otherwise, it is an anonymous/inline object, which cannot be represented in native.
@@ -344,8 +385,7 @@ export function createType(
       if (symbol != null) {
         // it has a `type T = ...` declaration
         const typename = symbol.getName()
-        const properties = getInterfaceProperties(language, type)
-        return new StructType(typename, properties)
+        return createStructWithCycleDetection(language, key, typename, type)
       } else {
         // It's an anonymous object (`{ ... }`)
         throw new Error(
@@ -385,7 +425,7 @@ export function createType(
   }
 
   const result = get()
-  if (key != null) {
+  if (key != null && !knownTypes[language].has(key)) {
     knownTypes[language].set(key, result)
   }
   return result
