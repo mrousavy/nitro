@@ -16,9 +16,38 @@ While variants are still very efficient, they need runtime-checks for type conve
 which comes with a tiny overhead compared to all other statically defined types. If possible, **avoid variants**.
 :::
 
-## No literal values
+## Variants with String Enums
 
-A variant can only consist of types, not of literal values.
+Variants can contain [string enums (unions)](custom-enums#typescript-union) alongside other types like `boolean` or `number`:
+
+```ts
+type Status = 'pending' | 'complete' | 'failed'
+
+interface Task extends HybridObject<{ … }> {
+  getStatus(): boolean | Status
+}
+```
+
+This generates a proper variant type (`std::variant<bool, Status>` in C++) where `Status` is preserved as an enum.
+
+You can also combine multiple string enums in a single variant:
+
+```ts
+type Color = 'red' | 'green' | 'blue'
+type Size = 'small' | 'medium' | 'large'
+
+interface Item extends HybridObject<{ … }> {
+  getAttribute(): Color | Size
+}
+```
+
+:::warning
+String enums in the same variant must have **distinct values**. Overlapping values (e.g., both enums containing `'default'`) will cause an error because Nitrogen cannot determine which enum a shared value belongs to at runtime.
+:::
+
+## No inline literal values
+
+A variant can only consist of types, not of inline literal values.
 
 ```ts
 export interface Person extends HybridObject<{ … }> {
