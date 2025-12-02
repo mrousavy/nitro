@@ -93,10 +93,7 @@ function doesTypeReferenceStruct(type: Type, structName: string): boolean {
 /**
  * Checks if a type references a function with the given specialization name
  */
-function doesTypeReferenceFunction(
-  type: Type,
-  functionName: string
-): boolean {
+function doesTypeReferenceFunction(type: Type, functionName: string): boolean {
   const referencedTypes = getReferencedTypes(type)
   for (const refType of referencedTypes) {
     if (refType.kind === 'function') {
@@ -107,6 +104,14 @@ function doesTypeReferenceFunction(
     }
   }
   return false
+}
+
+/**
+ * Checks if an import is a JNI wrapper header (starts with "J" and ends with ".hpp")
+ * E.g., "JMyStruct.hpp" -> true, "MyStruct.hpp" -> false
+ */
+function isJniWrapperImport(importName: string): boolean {
+  return importName.startsWith('J') && importName.endsWith('.hpp')
 }
 
 /**
@@ -124,16 +129,59 @@ export function extractTypeNameFromImport(importName: string): string {
 
 /**
  * Filters imports into regular and cyclic categories based on the cyclic names set.
+ * Only JNI wrapper headers (J<TypeName>.hpp) are considered for cyclic filtering.
+ * The shared C++ struct headers (<TypeName>.hpp) are always kept as regular imports.
  */
 export function partitionImportsByCyclicDeps<T extends { name: string }>(
   imports: T[],
   cyclicNames: Set<string>
 ): { regularImports: T[]; cyclicImports: T[] } {
-  const regularImports = imports.filter(
-    (i) => !cyclicNames.has(extractTypeNameFromImport(i.name))
-  )
-  const cyclicImports = imports.filter((i) =>
-    cyclicNames.has(extractTypeNameFromImport(i.name))
-  )
+  const regularImports: T[] = []
+  const cyclicImports: T[] = []
+
+  for (const i of imports) {
+    // Only JNI wrappers (J*.hpp) can be cyclic
+    const isCyclic =
+      isJniWrapperImport(i.name) &&
+      cyclicNames.has(extractTypeNameFromImport(i.name))
+
+    if (isCyclic) {
+      cyclicImports.push(i)
+    } else {
+      regularImports.push(i)
+    }
+  }
+
   return { regularImports, cyclicImports }
+}
+
+/**
+ * Partitions imports into regular and cyclic include strings in a single pass.
+ * Applies a transform function to each import and deduplicates the results.
+ */
+export function partitionAndTransformImports<T extends { name: string }>(
+  imports: T[],
+  cyclicNames: Set<string>,
+  transform: (i: T) => string
+): { regularIncludes: string[]; cyclicIncludes: string[] } {
+  const regularSet = new Set<string>()
+  const cyclicSet = new Set<string>()
+
+  for (const i of imports) {
+    const isCyclic =
+      isJniWrapperImport(i.name) &&
+      cyclicNames.has(extractTypeNameFromImport(i.name))
+    const header = transform(i)
+
+    if (isCyclic) {
+      cyclicSet.add(header)
+    } else {
+      regularSet.add(header)
+    }
+  }
+
+  return {
+    regularIncludes: Array.from(regularSet).sort(),
+    cyclicIncludes: Array.from(cyclicSet).sort(),
+  }
 }

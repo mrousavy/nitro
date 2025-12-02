@@ -4,12 +4,10 @@ import { includeHeader } from '../c++/includeNitroHeader.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
-import { getTypeAs } from '../types/getTypeAs.js'
-import { StructType } from '../types/StructType.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import {
   detectCyclicStructDependencies,
-  partitionImportsByCyclicDeps,
+  partitionAndTransformImports,
 } from './detectCyclicDependencies.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -182,7 +180,7 @@ return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
       : bridgedReturn.asJniReferenceType('local')
 
   const bridged = new KotlinCxxBridgedType(functionType)
-  const allImports = bridged
+  const imports = bridged
     .getRequiredImports('c++')
     .filter((i) => i.name !== `J${name}.hpp`)
 
@@ -191,86 +189,41 @@ return ${bridgedReturn.parseFromKotlinToCpp('__result', 'c++', false)};
   const { cyclicNames: cyclicStructNames, hasCyclicDeps } =
     detectCyclicStructDependencies(functionType)
 
-  // Separate imports into regular (non-cyclic) and cyclic (needs deferred include)
-  const { regularImports, cyclicImports } = partitionImportsByCyclicDeps(
-    allImports,
-    cyclicStructNames
+  // Partition imports into regular and cyclic includes in a single pass
+  const { regularIncludes, cyclicIncludes } = partitionAndTransformImports(
+    imports,
+    cyclicStructNames,
+    includeHeader
   )
 
-  const includes = regularImports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-  const deferredIncludes = cyclicImports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-
-  // Generate forward declarations for cyclic structs
+  // Generate forward declarations for cyclic struct types
   const forwardDeclarations = Array.from(cyclicStructNames)
     .map((structName) => `struct J${structName};`)
-    .join('\n')
+    .join('\n  ')
 
-  let fbjniCode: string
+  // Make sure we register all native JNI methods on app startup
+  addJNINativeRegistration({
+    namespace: cxxNamespace,
+    className: `J${name}_cxx`,
+    import: {
+      name: `J${name}.hpp`,
+      space: 'user',
+      language: 'c++',
+    },
+  })
+
+  const files: SourceFile[] = []
+  files.push({
+    content: kotlinCode,
+    language: 'kotlin',
+    name: `${name}.kt`,
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
+    platform: 'android',
+  })
+
   if (hasCyclicDeps) {
-    // For cyclic dependencies, we need to use raw jobject in declarations
-    // and cast to the proper types in the implementations (after includes)
-    const cppParamsRaw = functionType.parameters.map((p) => {
-      if (p.kind === 'struct') {
-        const structType = getTypeAs(p, StructType)
-        if (cyclicStructNames.has(structType.structName)) {
-          // Use raw jobject for cyclic struct types
-          return `jobject ${p.escapedName}`
-        }
-      }
-      const bridge = new KotlinCxxBridgedType(p)
-      const type = bridge.asJniReferenceType('alias')
-      return `${type} ${p.escapedName}`
-    })
-
-    // Create parameter conversion code for cyclic types (jobject -> alias_ref)
-    const cyclicParamConversions = functionType.parameters
-      .filter((p) => {
-        if (p.kind === 'struct') {
-          const structType = getTypeAs(p, StructType)
-          return cyclicStructNames.has(structType.structName)
-        }
-        return false
-      })
-      .map((p) => {
-        const structType = getTypeAs(p, StructType)
-        return `auto __${p.escapedName} = jni::wrap_alias(static_cast<J${structType.structName}::javaobject>(${p.escapedName}));`
-      })
-
-    // Create modified paramsForward that uses converted params for cyclic types
-    const paramsForwardCyclic = functionType.parameters.map((p) => {
-      if (p.kind === 'struct') {
-        const structType = getTypeAs(p, StructType)
-        if (cyclicStructNames.has(structType.structName)) {
-          // Use the converted alias_ref
-          const bridge = new KotlinCxxBridgedType(p)
-          return bridge.parseFromKotlinToCpp(`__${p.escapedName}`, 'c++', false)
-        }
-      }
-      const bridge = new KotlinCxxBridgedType(p)
-      return bridge.parseFromKotlinToCpp(p.escapedName, 'c++', false)
-    })
-
-    // Create modified call body for cyclic case
-    let cppCallBodyCyclic: string
-    if (functionType.returnType.kind === 'void') {
-      cppCallBodyCyclic = `
-${cyclicParamConversions.join('\n')}
-_func(${indent(paramsForwardCyclic.join(', '), '      ')});
-`.trim()
-    } else {
-      cppCallBodyCyclic = `
-${cyclicParamConversions.join('\n')}
-${functionType.returnType.getCode('c++')} __result = _func(${indent(paramsForwardCyclic.join(', '), '      ')});
-return ${bridgedReturn.parseFromCppToKotlin('__result', 'c++')};
-`.trim()
-    }
-
-    // Generate code with forward declarations and deferred method definitions
-    fbjniCode = `
+    // For cyclic dependencies: header with declarations only, cpp with implementations
+    const fbjniHeader = `
 ${createFileMetadataString(`J${name}.hpp`)}
 
 #pragma once
@@ -278,7 +231,7 @@ ${createFileMetadataString(`J${name}.hpp`)}
 #include <fbjni/fbjni.h>
 #include <functional>
 
-${includes.join('\n')}
+${regularIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -307,16 +260,13 @@ namespace ${cxxNamespace} {
    */
   class J${name}_cxx final: public jni::HybridClass<J${name}_cxx, J${name}> {
   public:
-    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func) {
-      return J${name}_cxx::newObjectCxxArgs(func);
-    }
+    static jni::local_ref<J${name}::javaobject> fromCpp(const ${typename}& func);
 
   public:
     /**
      * Invokes the C++ \`std::function<...>\` this \`J${name}_cxx\` instance holds.
-     * Note: Uses raw jobject to avoid cyclic dependency issues with forward-declared types.
      */
-    ${fbjniReturnType} invoke_cxx(${cppParamsRaw.join(', ')});
+    ${fbjniReturnType} invoke_cxx(${cppParams.join(', ')});
 
   public:
     [[nodiscard]]
@@ -326,9 +276,7 @@ namespace ${cxxNamespace} {
 
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-    static void registerNatives() {
-      registerHybrid({makeNativeMethod("invoke_cxx", J${name}_cxx::invoke_cxx)});
-    }
+    static void registerNatives();
 
   private:
     explicit J${name}_cxx(const ${typename}& func): _func(func) { }
@@ -339,26 +287,56 @@ namespace ${cxxNamespace} {
   };
 
 } // namespace ${cxxNamespace}
+    `.trim()
 
-// Include cyclic dependencies after class declarations
-${deferredIncludes.join('\n')}
+    const fbjniCpp = `
+${createFileMetadataString(`J${name}.cpp`)}
+
+#include "J${name}.hpp"
+
+// Include cyclic dependencies in the .cpp file where all types are complete
+${cyclicIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  // Out-of-line method definitions that depend on cyclic types
-  inline ${functionType.returnType.getCode('c++')} J${name}::invoke(${jniParams.join(', ')}) const {
+  ${functionType.returnType.getCode('c++')} J${name}::invoke(${jniParams.join(', ')}) const {
     ${indent(jniCallBody, '    ')}
   }
 
-  inline ${fbjniReturnType} J${name}_cxx::invoke_cxx(${cppParamsRaw.join(', ')}) {
-    ${indent(cppCallBodyCyclic, '    ')}
+  jni::local_ref<J${name}::javaobject> J${name}_cxx::fromCpp(const ${typename}& func) {
+    return J${name}_cxx::newObjectCxxArgs(func);
+  }
+
+  ${fbjniReturnType} J${name}_cxx::invoke_cxx(${cppParams.join(', ')}) {
+    ${indent(cppCallBody, '    ')}
+  }
+
+  void J${name}_cxx::registerNatives() {
+    registerHybrid({makeNativeMethod("invoke_cxx", J${name}_cxx::invoke_cxx)});
   }
 
 } // namespace ${cxxNamespace}
     `.trim()
+
+    files.push({
+      content: fbjniHeader,
+      language: 'c++',
+      name: `J${name}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
+    files.push({
+      content: fbjniCpp,
+      language: 'c++',
+      name: `J${name}.cpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
   } else {
-    // No cyclic dependencies - use the original inline code
-    fbjniCode = `
+    // No cyclic dependencies - use the original inline header-only code
+    const allIncludes = imports.map((i) => includeHeader(i)).filter(isNotDuplicate)
+
+    const fbjniCode = `
 ${createFileMetadataString(`J${name}.hpp`)}
 
 #pragma once
@@ -366,7 +344,7 @@ ${createFileMetadataString(`J${name}.hpp`)}
 #include <fbjni/fbjni.h>
 #include <functional>
 
-${includes.join('\n')}
+${allIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -428,33 +406,15 @@ namespace ${cxxNamespace} {
 
 } // namespace ${cxxNamespace}
     `.trim()
+
+    files.push({
+      content: fbjniCode,
+      language: 'c++',
+      name: `J${name}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
   }
 
-  // Make sure we register all native JNI methods on app startup
-  addJNINativeRegistration({
-    namespace: cxxNamespace,
-    className: `J${name}_cxx`,
-    import: {
-      name: `J${name}.hpp`,
-      space: 'user',
-      language: 'c++',
-    },
-  })
-
-  const files: SourceFile[] = []
-  files.push({
-    content: kotlinCode,
-    language: 'kotlin',
-    name: `${name}.kt`,
-    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
-    platform: 'android',
-  })
-  files.push({
-    content: fbjniCode,
-    language: 'c++',
-    name: `J${name}.hpp`,
-    subdirectory: [],
-    platform: 'android',
-  })
   return files
 }

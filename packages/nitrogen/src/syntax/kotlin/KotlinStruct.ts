@@ -7,7 +7,7 @@ import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
 import {
   detectCyclicFunctionDependencies,
-  partitionImportsByCyclicDeps,
+  partitionAndTransformImports,
 } from './detectCyclicDependencies.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -97,7 +97,7 @@ data class ${structType.structName}(
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
     .flatMap((t) => t.getRequiredImports('c++'))
-    // Filter out this struct's own JNI header to avoid self-includes
+    // Filter out self-includes
     .filter((i) => i.name !== `J${structType.structName}.hpp`)
 
   // Detect cyclic function references: function types that reference this struct
@@ -105,30 +105,30 @@ data class ${structType.structName}(
   const { cyclicNames: cyclicFunctionNames, hasCyclicDeps } =
     detectCyclicFunctionDependencies(structType)
 
-  // Separate imports into regular (non-cyclic) and cyclic (needs deferred include)
-  const { regularImports, cyclicImports } = partitionImportsByCyclicDeps(
+  // Partition imports into regular and cyclic includes in a single pass
+  const { regularIncludes, cyclicIncludes } = partitionAndTransformImports(
     imports,
-    cyclicFunctionNames
+    cyclicFunctionNames,
+    includeHeader
   )
-
-  const includes = regularImports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-    .sort()
-  const deferredIncludes = cyclicImports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-    .sort()
 
   // Generate forward declarations for cyclic function types
   const forwardDeclarations = Array.from(cyclicFunctionNames)
-    .map((funcName) => `struct J${funcName};\nclass J${funcName}_cxx;`)
-    .join('\n')
+    .map((funcName) => `struct J${funcName};`)
+    .join('\n  ')
 
-  let fbjniCode: string
+  const files: SourceFile[] = []
+  files.push({
+    content: code,
+    language: 'kotlin',
+    name: `${structType.structName}.kt`,
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
+    platform: 'android',
+  })
+
   if (hasCyclicDeps) {
-    // Generate code with forward declarations and deferred method definitions
-    fbjniCode = `
+    // For cyclic dependencies: header with declarations only, cpp with implementations
+    const fbjniHeader = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
 #pragma once
@@ -136,7 +136,7 @@ ${createFileMetadataString(`J${structType.structName}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
 
-${includes.join('\n')}
+${regularIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -169,26 +169,51 @@ namespace ${cxxNamespace} {
   };
 
 } // namespace ${cxxNamespace}
+    `.trim()
 
-// Include cyclic dependencies after class declarations
-${deferredIncludes.join('\n')}
+    const fbjniCpp = `
+${createFileMetadataString(`J${structType.structName}.cpp`)}
+
+#include "J${structType.structName}.hpp"
+
+// Include cyclic dependencies in the .cpp file where all types are complete
+${cyclicIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  // Out-of-line method definitions that depend on cyclic types
-  inline ${structType.structName} J${structType.structName}::toCpp() const {
+  ${structType.structName} J${structType.structName}::toCpp() const {
     ${indent(jniStructInitializerBody, '    ')}
   }
 
-  inline jni::local_ref<J${structType.structName}::javaobject> J${structType.structName}::fromCpp(const ${structType.structName}& value) {
+  jni::local_ref<J${structType.structName}::javaobject> J${structType.structName}::fromCpp(const ${structType.structName}& value) {
     ${indent(cppStructInitializerBody, '    ')}
   }
 
 } // namespace ${cxxNamespace}
     `.trim()
+
+    files.push({
+      content: fbjniHeader,
+      language: 'c++',
+      name: `J${structType.structName}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
+    files.push({
+      content: fbjniCpp,
+      language: 'c++',
+      name: `J${structType.structName}.cpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
   } else {
-    // No cyclic dependencies - use the original inline code
-    fbjniCode = `
+    // No cyclic dependencies - use the original inline header-only code
+    const allIncludes = imports
+      .map((i) => includeHeader(i))
+      .filter(isNotDuplicate)
+      .sort()
+
+    const fbjniCode = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
 #pragma once
@@ -196,7 +221,7 @@ ${createFileMetadataString(`J${structType.structName}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
 
-${includes.join('\n')}
+${allIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -231,23 +256,16 @@ namespace ${cxxNamespace} {
 
 } // namespace ${cxxNamespace}
     `.trim()
+
+    files.push({
+      content: fbjniCode,
+      language: 'c++',
+      name: `J${structType.structName}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
   }
 
-  const files: SourceFile[] = []
-  files.push({
-    content: code,
-    language: 'kotlin',
-    name: `${structType.structName}.kt`,
-    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
-    platform: 'android',
-  })
-  files.push({
-    content: fbjniCode,
-    language: 'c++',
-    name: `J${structType.structName}.hpp`,
-    subdirectory: [],
-    platform: 'android',
-  })
   return files
 }
 
