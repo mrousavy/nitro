@@ -5,6 +5,10 @@ import { getReferencedTypes } from '../getReferencedTypes.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
+import {
+  detectCyclicFunctionDependencies,
+  partitionImportsByCyclicDeps,
+} from './detectCyclicDependencies.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 interface BridgedProperty {
@@ -93,12 +97,98 @@ data class ${structType.structName}(
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
     .flatMap((t) => t.getRequiredImports('c++'))
-  const includes = imports
+    // Filter out this struct's own JNI header to avoid self-includes
+    .filter((i) => i.name !== `J${structType.structName}.hpp`)
+
+  // Detect cyclic function references: function types that reference this struct
+  // These function JNI headers (J<FuncName>.hpp) would create circular includes
+  const { cyclicNames: cyclicFunctionNames, hasCyclicDeps } =
+    detectCyclicFunctionDependencies(structType)
+
+  // Separate imports into regular (non-cyclic) and cyclic (needs deferred include)
+  const { regularImports, cyclicImports } = partitionImportsByCyclicDeps(
+    imports,
+    cyclicFunctionNames
+  )
+
+  const includes = regularImports
+    .map((i) => includeHeader(i))
+    .filter(isNotDuplicate)
+    .sort()
+  const deferredIncludes = cyclicImports
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
     .sort()
 
-  const fbjniCode = `
+  // Generate forward declarations for cyclic function types
+  const forwardDeclarations = Array.from(cyclicFunctionNames)
+    .map((funcName) => `struct J${funcName};\nclass J${funcName}_cxx;`)
+    .join('\n')
+
+  let fbjniCode: string
+  if (hasCyclicDeps) {
+    // Generate code with forward declarations and deferred method definitions
+    fbjniCode = `
+${createFileMetadataString(`J${structType.structName}.hpp`)}
+
+#pragma once
+
+#include <fbjni/fbjni.h>
+#include "${structType.declarationFile.name}"
+
+${includes.join('\n')}
+
+namespace ${cxxNamespace} {
+
+  using namespace facebook;
+
+  // Forward declarations for cyclic dependencies
+  ${forwardDeclarations}
+
+  /**
+   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
+   */
+  struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
+  public:
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+
+  public:
+    /**
+     * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
+     */
+    [[maybe_unused]]
+    [[nodiscard]]
+    ${structType.structName} toCpp() const;
+
+  public:
+    /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    [[maybe_unused]]
+    static jni::local_ref<J${structType.structName}::javaobject> fromCpp(const ${structType.structName}& value);
+  };
+
+} // namespace ${cxxNamespace}
+
+// Include cyclic dependencies after class declarations
+${deferredIncludes.join('\n')}
+
+namespace ${cxxNamespace} {
+
+  // Out-of-line method definitions that depend on cyclic types
+  inline ${structType.structName} J${structType.structName}::toCpp() const {
+    ${indent(jniStructInitializerBody, '    ')}
+  }
+
+  inline jni::local_ref<J${structType.structName}::javaobject> J${structType.structName}::fromCpp(const ${structType.structName}& value) {
+    ${indent(cppStructInitializerBody, '    ')}
+  }
+
+} // namespace ${cxxNamespace}
+    `.trim()
+  } else {
+    // No cyclic dependencies - use the original inline code
+    fbjniCode = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
 #pragma once
@@ -140,7 +230,8 @@ namespace ${cxxNamespace} {
   };
 
 } // namespace ${cxxNamespace}
-  `.trim()
+    `.trim()
+  }
 
   const files: SourceFile[] = []
   files.push({
