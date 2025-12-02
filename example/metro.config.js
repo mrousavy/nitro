@@ -1,9 +1,12 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 const path = require('path')
-const pak = require('../package.json')
+const exclusionList = require('metro-config/private/defaults/exclusionList').default
+const escape = require('escape-string-regexp')
 
 const root = path.resolve(__dirname, '..')
-const modules = Object.keys({ ...pak.peerDependencies })
+
+// Modules that should only be loaded once (from root), not duplicated
+const blockedModules = ['react-native-nitro-modules']
 
 /**
  * Metro configuration
@@ -14,13 +17,15 @@ const modules = Object.keys({ ...pak.peerDependencies })
 const config = {
   watchFolders: [root],
 
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we block them at the root, and alias them to the versions in example's node_modules
+  // Block duplicate copies of react-native-nitro-modules from nested node_modules
+  // to ensure the module is only loaded once (preventing "Nitro linked twice" error)
   resolver: {
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name)
-      return acc
-    }, {}),
+    blockList: exclusionList(
+      blockedModules.flatMap((m) => [
+        // Block from packages/*/node_modules (nested copies)
+        new RegExp(`^${escape(path.join(root, 'packages'))}/.*/node_modules/${escape(m)}\\/.*$`),
+      ])
+    ),
   },
 
   transformer: {
