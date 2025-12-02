@@ -23,7 +23,6 @@ namespace margelo::nitro::test {
 
   // Forward declarations for cyclic dependencies
   struct JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct;
-class JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx;
 
   /**
    * The C++ JNI bridge between the C++ struct "SelfReferentialStruct" and the the Kotlin data class "SelfReferentialStruct".
@@ -47,40 +46,5 @@ class JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruc
     [[maybe_unused]]
     static jni::local_ref<JSelfReferentialStruct::javaobject> fromCpp(const SelfReferentialStruct& value);
   };
-
-} // namespace margelo::nitro::test
-
-// Include cyclic dependencies after class declarations
-#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct.hpp"
-
-namespace margelo::nitro::test {
-
-  // Out-of-line method definitions that depend on cyclic types
-  inline SelfReferentialStruct JSelfReferentialStruct::toCpp() const {
-    static const auto clazz = javaClassStatic();
-    static const auto fieldTransform = clazz->getField<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct::javaobject>("transform");
-    jni::local_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct::javaobject> transform = this->getFieldValue(fieldTransform);
-    return SelfReferentialStruct(
-      transform != nullptr ? std::make_optional([&]() -> std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)> {
-        if (transform->isInstanceOf(JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx::javaClassStatic())) [[likely]] {
-          auto downcast = jni::static_ref_cast<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx::javaobject>(transform);
-          return downcast->cthis()->getFunction();
-        } else {
-          auto transformRef = jni::make_global(transform);
-          return JNICallable<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct, std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(SelfReferentialStruct)>(std::move(transformRef));
-        }
-      }()) : std::nullopt
-    );
-  }
-
-  inline jni::local_ref<JSelfReferentialStruct::javaobject> JSelfReferentialStruct::fromCpp(const SelfReferentialStruct& value) {
-    using JSignature = JSelfReferentialStruct(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct::javaobject>);
-    static const auto clazz = javaClassStatic();
-    static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
-    return create(
-      clazz,
-      value.transform.has_value() ? JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx::fromCpp(value.transform.value()) : nullptr
-    );
-  }
 
 } // namespace margelo::nitro::test
