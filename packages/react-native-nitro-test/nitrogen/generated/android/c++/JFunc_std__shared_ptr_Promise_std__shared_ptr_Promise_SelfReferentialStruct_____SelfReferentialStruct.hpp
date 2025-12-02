@@ -10,17 +10,18 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include "SelfReferentialStruct.hpp"
 #include <NitroModules/Promise.hpp>
 #include <functional>
 #include <NitroModules/JNICallable.hpp>
 #include <NitroModules/JPromise.hpp>
-#include "JSelfReferentialStruct.hpp"
 #include <optional>
 
 namespace margelo::nitro::test {
 
   using namespace facebook;
+
+  // Forward declarations for cyclic dependencies
+  struct JSelfReferentialStruct;
 
   /**
    * Represents the Java/Kotlin callback `(config: SelfReferentialStruct) -> Promise<Promise<SelfReferentialStruct>>`.
@@ -34,33 +35,7 @@ namespace margelo::nitro::test {
     /**
      * Invokes the function this `JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct` instance holds through JNI.
      */
-    std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> invoke(const SelfReferentialStruct& config) const {
-      static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JSelfReferentialStruct> /* config */)>("invoke");
-      auto __result = method(self(), JSelfReferentialStruct::fromCpp(config));
-      return [&]() {
-        auto __promise = Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>::create();
-        __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-          auto __result = jni::static_ref_cast<JPromise::javaobject>(__boxedResult);
-          __promise->resolve([&]() {
-            auto __promise = Promise<SelfReferentialStruct>::create();
-            __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-              auto __result = jni::static_ref_cast<JSelfReferentialStruct>(__boxedResult);
-              __promise->resolve(__result->toCpp());
-            });
-            __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
-              jni::JniException __jniError(__throwable);
-              __promise->reject(std::make_exception_ptr(__jniError));
-            });
-            return __promise;
-          }());
-        });
-        __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
-          jni::JniException __jniError(__throwable);
-          __promise->reject(std::make_exception_ptr(__jniError));
-        });
-        return __promise;
-      }();
-    }
+    std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> invoke(const SelfReferentialStruct& config) const;
   };
 
   /**
@@ -75,33 +50,9 @@ namespace margelo::nitro::test {
   public:
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx` instance holds.
+     * Note: Uses raw jobject to avoid cyclic dependency issues with forward-declared types.
      */
-    jni::local_ref<JPromise::javaobject> invoke_cxx(jni::alias_ref<JSelfReferentialStruct> config) {
-      std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> __result = _func(config->toCpp());
-      return [&]() {
-        jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
-        jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
-        __result->addOnResolvedListener([=](const std::shared_ptr<Promise<SelfReferentialStruct>>& __result) {
-          __promise->cthis()->resolve([&]() {
-            jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
-            jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
-            __result->addOnResolvedListener([=](const SelfReferentialStruct& __result) {
-              __promise->cthis()->resolve(JSelfReferentialStruct::fromCpp(__result));
-            });
-            __result->addOnRejectedListener([=](const std::exception_ptr& __error) {
-              auto __jniError = jni::getJavaExceptionForCppException(__error);
-              __promise->cthis()->reject(__jniError);
-            });
-            return __localPromise;
-          }());
-        });
-        __result->addOnRejectedListener([=](const std::exception_ptr& __error) {
-          auto __jniError = jni::getJavaExceptionForCppException(__error);
-          __promise->cthis()->reject(__jniError);
-        });
-        return __localPromise;
-      }();
-    }
+    jni::local_ref<JPromise::javaobject> invoke_cxx(jobject config);
 
   public:
     [[nodiscard]]
@@ -122,5 +73,70 @@ namespace margelo::nitro::test {
     friend HybridBase;
     std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)> _func;
   };
+
+} // namespace margelo::nitro::test
+
+// Include cyclic dependencies after class declarations
+#include "SelfReferentialStruct.hpp"
+#include "JSelfReferentialStruct.hpp"
+
+namespace margelo::nitro::test {
+
+  // Out-of-line method definitions that depend on cyclic types
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct::invoke(const SelfReferentialStruct& config) const {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JSelfReferentialStruct> /* config */)>("invoke");
+    auto __result = method(self(), JSelfReferentialStruct::fromCpp(config));
+    return [&]() {
+      auto __promise = Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JPromise::javaobject>(__boxedResult);
+        __promise->resolve([&]() {
+          auto __promise = Promise<SelfReferentialStruct>::create();
+          __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+            auto __result = jni::static_ref_cast<JSelfReferentialStruct>(__boxedResult);
+            __promise->resolve(__result->toCpp());
+          });
+          __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+            jni::JniException __jniError(__throwable);
+            __promise->reject(std::make_exception_ptr(__jniError));
+          });
+          return __promise;
+        }());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+
+  inline jni::local_ref<JPromise::javaobject> JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_cxx::invoke_cxx(jobject config) {
+    auto __config = jni::wrap_alias(static_cast<JSelfReferentialStruct::javaobject>(config));
+    std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> __result = _func(__config->toCpp());
+    return [&]() {
+      jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+      jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+      __result->addOnResolvedListener([=](const std::shared_ptr<Promise<SelfReferentialStruct>>& __result) {
+        __promise->cthis()->resolve([&]() {
+          jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+          jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+          __result->addOnResolvedListener([=](const SelfReferentialStruct& __result) {
+            __promise->cthis()->resolve(JSelfReferentialStruct::fromCpp(__result));
+          });
+          __result->addOnRejectedListener([=](const std::exception_ptr& __error) {
+            auto __jniError = jni::getJavaExceptionForCppException(__error);
+            __promise->cthis()->reject(__jniError);
+          });
+          return __localPromise;
+        }());
+      });
+      __result->addOnRejectedListener([=](const std::exception_ptr& __error) {
+        auto __jniError = jni::getJavaExceptionForCppException(__error);
+        __promise->cthis()->reject(__jniError);
+      });
+      return __localPromise;
+    }();
+  }
 
 } // namespace margelo::nitro::test

@@ -10,7 +10,6 @@
 #include <fbjni/fbjni.h>
 #include "TreeNodeMap.hpp"
 
-#include "JTreeNodeMap.hpp"
 #include "TreeNodeMap.hpp"
 #include <string>
 #include <unordered_map>

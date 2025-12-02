@@ -252,7 +252,9 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
-  bounceSelfReferentialStruct(value: SelfReferentialStruct): SelfReferentialStruct
+  bounceSelfReferentialStruct(
+    value: SelfReferentialStruct
+  ): SelfReferentialStruct
   bounceTreeNode(node: TreeNode): TreeNode
   bounceTreeNodeMap(node: TreeNodeMap): TreeNodeMap
 

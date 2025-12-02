@@ -10,7 +10,6 @@
 #include <fbjni/fbjni.h>
 #include "TreeNode.hpp"
 
-#include "JTreeNode.hpp"
 #include "TreeNode.hpp"
 #include <vector>
 
