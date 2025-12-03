@@ -18,7 +18,7 @@ import {
 import { writeFile } from './writeFile.js'
 import chalk from 'chalk'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
-import { Logger, type GenerationError } from './Logger.js'
+import { Logger } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
@@ -36,6 +36,11 @@ interface NitrogenResult {
   generatedFiles: string[]
   targetSpecsCount: number
   generatedSpecsCount: number
+}
+
+interface GenerationError {
+  typeName: string
+  error: string
 }
 
 export async function runNitrogen({
@@ -232,16 +237,39 @@ export async function runNitrogen({
     Logger.error(`❌  Failed to write ${chalk.dim(`.gitattributes`)}!`)
   }
 
-  // Display summary
-  if (errors.length > 0) {
-    Logger.summary.failure(errors, generatedSpecs)
-  } else if (targetSpecs > 0) {
-    Logger.summary.success(generatedSpecs, targetSpecs)
-  }
+  logSummary(errors, generatedSpecs, targetSpecs)
 
   return {
     generatedFiles: filesAfter,
     targetSpecsCount: targetSpecs,
     generatedSpecsCount: generatedSpecs,
+  }
+}
+
+function logSummary(
+  errors: GenerationError[],
+  totalCount: number,
+  successCount: number
+) {
+  if (errors.length > 0) {
+    Logger.error(`\n❌  Nitrogen generation failed\n`)
+
+    for (const { typeName, error } of errors) {
+      const shortenedError =
+        (error ?? 'Unknown error').split('\n')[0]?.substring(0, 80) ??
+        'Unknown error'
+      Logger.error(`    • ${typeName}: ${shortenedError}`)
+    }
+
+    if (successCount > 0) {
+      Logger.info(
+        `\n    ${successCount} spec${successCount === 1 ? '' : 's'} succeeded`
+      )
+    }
+    Logger.info('')
+  } else if (successCount > 0) {
+    Logger.info(
+      `\n✅  All specs generated successfully (${successCount}/${totalCount})\n`
+    )
   }
 }
