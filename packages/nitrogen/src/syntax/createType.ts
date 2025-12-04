@@ -126,6 +126,81 @@ const knownTypes: Record<Language, Map<TypeId, Type>> = {
   'kotlin': new Map<TypeId, Type>(),
 }
 
+// Tracks struct types currently being processed to detect direct property cycles
+const processingStructs: Record<Language, Set<TypeId>> = {
+  'c++': new Set<TypeId>(),
+  'swift': new Set<TypeId>(),
+  'kotlin': new Set<TypeId>(),
+}
+
+// Tracks whether we're inside a reference type (function, promise, array) where
+// struct references are allowed because they become pointers/references in C++
+let insideReferenceType = false
+
+/**
+ * Creates a struct type with cycle detection.
+ * Throws an error if a direct cyclic struct property reference is detected.
+ * References through functions/promises/arrays are allowed (they're reference types).
+ */
+function createStructWithCycleDetection(
+  language: Language,
+  key: TypeId,
+  typename: string,
+  type: TSMorphType<ts.ObjectType>
+): StructType {
+  if (processingStructs[language].has(key) && !insideReferenceType) {
+    // Direct cyclic reference detected - this struct has a property that is the same struct type
+    throw new Error(
+      `Cyclic struct reference detected: "${typename}" references itself directly or indirectly. ` +
+        `Structs cannot have cyclic references because they are value types with fixed size in C++ and Swift. ` +
+        `See: https://nitro.margelo.com/docs/types/custom-structs#cyclic-references-are-not-supported`
+    )
+  }
+
+  // Check if we already have this type fully created
+  const existing = knownTypes[language].get(key)
+  if (existing != null) {
+    return existing as StructType
+  }
+
+  const struct = new StructType(typename, () =>
+    getInterfaceProperties(language, type)
+  )
+  knownTypes[language].set(key, struct)
+  processingStructs[language].add(key)
+  // Access properties to trigger lazy initialization (see StructType.ensureInitialized).
+  // Use try/finally to ensure we clean up even if initialization throws.
+  try {
+    struct.properties
+  } catch (error) {
+    // Remove from knownTypes if cycle detection (or other error) fails,
+    // so it won't appear in umbrella files
+    knownTypes[language].delete(key)
+    throw error
+  } finally {
+    processingStructs[language].delete(key)
+  }
+  return struct
+}
+
+/**
+ * Wraps createType calls that are inside reference types (functions, promises, arrays).
+ * Struct references inside these are allowed because they become pointers in C++.
+ */
+function createTypeInsideReference(
+  language: Language,
+  type: TSMorphType,
+  isOptional: boolean
+): Type {
+  const wasInsideReferenceType = insideReferenceType
+  insideReferenceType = true
+  try {
+    return createType(language, type, isOptional)
+  } finally {
+    insideReferenceType = wasInsideReferenceType
+  }
+}
+
 /**
  * Get a list of all currently known complex types.
  */
@@ -171,9 +246,13 @@ export function createType(
   isOptional: boolean
 ): Type {
   const key = getTypeId(type, isOptional)
+  // Check if we already have this type, but only if it's not a struct that might be cyclic.
+  // For structs, we need to go through createStructWithCycleDetection to detect cycles.
   if (key != null && knownTypes[language].has(key)) {
     const known = knownTypes[language].get(key)!
-    if (isOptional === known instanceof OptionalType) {
+    // Skip the cache if this is a struct currently being processed (potential cycle)
+    const isProcessingStruct = processingStructs[language].has(key)
+    if (!isProcessingStruct && isOptional === known instanceof OptionalType) {
       return known
     }
   }
@@ -210,8 +289,9 @@ export function createType(
     } else if (type.isVoid()) {
       return new VoidType()
     } else if (type.isArray()) {
+      // Arrays are reference types - struct references inside are allowed
       const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = createType(language, arrayElementType, false)
+      const elementType = createTypeInsideReference(language, arrayElementType, false)
       return new ArrayType(elementType)
     } else if (type.isTuple()) {
       const itemTypes = type
@@ -219,28 +299,35 @@ export function createType(
         .map((t) => createType(language, t, t.isNullable()))
       return new TupleType(itemTypes)
     } else if (type.getCallSignatures().length > 0) {
-      // It's a function!
+      // It's a function! Functions are reference types - struct references inside are allowed
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
       const isReturnOptional = funcReturnType
         .getUnionTypes()
         .some((t) => t.isUndefined())
-      const returnType = createType(language, funcReturnType, isReturnOptional)
+      const returnType = createTypeInsideReference(language, funcReturnType, isReturnOptional)
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
         const isNullable = parameterType.isNullable() || p.isOptional()
-        return createNamedType(language, p.getName(), parameterType, isNullable)
+        // Function parameters are also inside the reference type
+        const wasInsideReferenceType = insideReferenceType
+        insideReferenceType = true
+        try {
+          return createNamedType(language, p.getName(), parameterType, isNullable)
+        } finally {
+          insideReferenceType = wasInsideReferenceType
+        }
       })
       const isSync = isSyncFunction(type)
       return new FunctionType(returnType, parameters, isSync)
     } else if (isPromise(type)) {
-      // It's a Promise!
+      // It's a Promise! Promises are reference types - struct references inside are allowed
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
       const isResolvingOptional = promiseResolvingType
         .getUnionTypes()
         .some((t) => t.isUndefined())
-      const resolvingType = createType(
+      const resolvingType = createTypeInsideReference(
         language,
         promiseResolvingType,
         isResolvingOptional
@@ -248,9 +335,10 @@ export function createType(
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
       // Record<K, V> -> unordered_map<K, V>
+      // Records are reference types - struct references inside are allowed
       const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
-      const keyType = createType(language, keyTypeT, false)
-      const valueType = createType(language, valueTypeT, false)
+      const keyType = createTypeInsideReference(language, keyTypeT, false)
+      const valueType = createTypeInsideReference(language, valueTypeT, false)
       return new RecordType(keyType, valueType)
     } else if (isArrayBuffer(type)) {
       // ArrayBuffer
@@ -335,8 +423,7 @@ export function createType(
       if (symbol == null)
         throw new Error(`Interface "${type.getText()}" does not have a Symbol!`)
       const typename = symbol.getName()
-      const properties = getInterfaceProperties(language, type)
-      return new StructType(typename, properties)
+      return createStructWithCycleDetection(language, key, typename, type)
     } else if (type.isObject()) {
       // It is an object. If it has a symbol/name, it is a `type T = ...` declaration, so a `struct`.
       // Otherwise, it is an anonymous/inline object, which cannot be represented in native.
@@ -344,8 +431,7 @@ export function createType(
       if (symbol != null) {
         // it has a `type T = ...` declaration
         const typename = symbol.getName()
-        const properties = getInterfaceProperties(language, type)
-        return new StructType(typename, properties)
+        return createStructWithCycleDetection(language, key, typename, type)
       } else {
         // It's an anonymous object (`{ ... }`)
         throw new Error(
@@ -385,7 +471,7 @@ export function createType(
   }
 
   const result = get()
-  if (key != null) {
+  if (key != null && !knownTypes[language].has(key)) {
     knownTypes[language].set(key, result)
   }
   return result
