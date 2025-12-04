@@ -18,15 +18,15 @@
 namespace margelo::nitro {
 
 /**
- * An `BorrowingReference<T>` is a smart-pointer that holds a strong reference to a pointer.
+ * A `BorrowingReference<T>` is a smart-pointer that holds a strong reference to a pointer.
  * You can have multiple `BorrowingReference<T>` instances point to the same pointer, as they internally keep a ref-count.
- * As opposed to a `shared_ptr<T>`, an `BorrowingReference<T>` can also be imperatively manually deleted, even if there
+ * As opposed to a `shared_ptr<T>`, a `BorrowingReference<T>` can also be imperatively manually deleted, even if there
  * are multiple strong references still holding onto the pointer.
  * This is useful in cases where the `BorrowingReference` might keep a reference alive, but an external value holder
  * is actually responsible for truly deleting the underlying value - like a `jsi::Runtime` for a `jsi::Value`.
  *
- * An `BorrowingReference<T>` can be weakified, which gives the user a `WeakReference<T>`.
- * A `WeakReference<T>` can be locked to get an `BorrowingReference<T>` again, assuming it has not been deleted yet.
+ * A `BorrowingReference<T>` can be weakified, which gives the user a `WeakReference<T>`.
+ * A `WeakReference<T>` can be locked to get a `BorrowingReference<T>` again, assuming it has not been deleted yet.
  */
 template <typename T>
 class BorrowingReference final {
