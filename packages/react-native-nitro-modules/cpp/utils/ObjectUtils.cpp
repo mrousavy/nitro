@@ -159,7 +159,7 @@ BorrowingReference<jsi::Function> ObjectUtils::getGlobalFunction(jsi::Runtime& r
     // Let's throw it in cache!
     JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
     BorrowingReference<jsi::Function> sharedFunction = jsiCache.makeShared(std::move(function));
-    functionCache[std::string(key)] = sharedFunction;
+    functionCache[stringKey] = sharedFunction;
 
     // And now return:
     return sharedFunction;
