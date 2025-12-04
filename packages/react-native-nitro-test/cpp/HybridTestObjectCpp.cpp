@@ -382,6 +382,10 @@ HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::varian
   return map;
 }
 
+std::unordered_map<std::string, double> HybridTestObjectCpp::bounceSimpleMap(const std::unordered_map<std::string, double>& map) {
+  return map;
+}
+
 std::unordered_map<std::string, std::string> HybridTestObjectCpp::extractMap(const MapWrapper& mapWrapper) {
   return mapWrapper.map;
 }

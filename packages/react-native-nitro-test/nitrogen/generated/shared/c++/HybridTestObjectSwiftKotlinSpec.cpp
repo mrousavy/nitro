@@ -68,6 +68,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("mergeMaps", &HybridTestObjectSwiftKotlinSpec::mergeMaps);
       prototype.registerHybridMethod("copyAnyValues", &HybridTestObjectSwiftKotlinSpec::copyAnyValues);
       prototype.registerHybridMethod("bounceMap", &HybridTestObjectSwiftKotlinSpec::bounceMap);
+      prototype.registerHybridMethod("bounceSimpleMap", &HybridTestObjectSwiftKotlinSpec::bounceSimpleMap);
       prototype.registerHybridMethod("extractMap", &HybridTestObjectSwiftKotlinSpec::extractMap);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSwiftKotlinSpec::funcThatThrows);
       prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectSwiftKotlinSpec::funcThatThrowsBeforePromise);

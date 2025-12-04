@@ -420,6 +420,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override {
+      auto __result = _swiftPart.bounceSimpleMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
       auto __result = _swiftPart.extractMap(std::forward<decltype(mapWrapper)>(mapWrapper));
       if (__result.hasError()) [[unlikely]] {
