@@ -152,18 +152,21 @@ BorrowingReference<jsi::Function> ObjectUtils::getGlobalFunction(jsi::Runtime& r
         return function;
       }
     }
-  }
-  // We haven't found the function with the given key in cache - so let's get it:
-  jsi::Function function = getFunction(runtime);
-  if (allowCache) [[likely]] {
+
+    // We haven't found the function with the given key in cache - so let's get it:
+    jsi::Function function = getFunction(runtime);
+
     // Let's throw it in cache!
     FunctionCache& functionCache = _cache[&runtime];
     JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
     BorrowingReference<jsi::Function> sharedFunction = jsiCache.makeShared(std::move(function));
     functionCache[std::string(key)] = sharedFunction;
+
+    // And now return:
     return sharedFunction;
   } else {
     // We are not allowed to use cache - so let's just wrap it in a BorrowingReference to match the return type.
+    jsi::Function function = getFunction(runtime);
     jsi::Function* heapFunction = new jsi::Function(std::move(function));
     return BorrowingReference<jsi::Function>(heapFunction);
   }
