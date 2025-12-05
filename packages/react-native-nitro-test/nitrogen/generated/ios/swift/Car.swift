@@ -124,7 +124,7 @@ public extension Car {
   var driver: Person? {
     @inline(__always)
     get {
-      return self.__driver.value
+      return self.__driver.hasValue ? self.__driver.pointee : nil
     }
     @inline(__always)
     set {
