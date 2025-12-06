@@ -199,4 +199,38 @@ void AnyMap::merge(const std::shared_ptr<AnyMap>& other) {
   }
 }
 
+
+AnyValueType AnyMap::getType(const std::string& key) const {
+  auto found = _map.find(key);
+  if (found == _map.end()) {
+    throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
+  }
+  return getAnyValueType(found->second);
+}
+
+TypedAnyValue AnyMap::getTypedValue(const std::string& key) const {
+  auto found = _map.find(key);
+  if (found == _map.end()) {
+    throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
+  }
+  return TypedAnyValue::fromAnyValue(found->second);
+}
+
+std::vector<std::pair<std::string, AnyValueType>> AnyMap::getAllKeysWithTypes() const {
+  std::vector<std::pair<std::string, AnyValueType>> result;
+  result.reserve(_map.size());
+  for (const auto& pair : _map) {
+    result.emplace_back(pair.first, getAnyValueType(pair.second));
+  }
+  return result;
+}
+
+void AnyMap::setTypedValue(const std::string& key, const TypedAnyValue& value) {
+  _map.emplace(key, value.toAnyValue());
+}
+
+size_t AnyMap::size() const noexcept {
+  return _map.size();
+}
+
 } // namespace margelo::nitro

@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
+import { AnyMapBenchmarkScreen } from './screens/AnyMapBenchmarkScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
 
@@ -45,12 +46,26 @@ export default function App() {
           name="Benchmarks"
           component={BenchmarksScreen}
           options={{
-            tabBarLabel: 'Benchmarks',
+            tabBarLabel: 'Bench',
             tabBarIcon: ({ size, focused }) => (
               <Image
                 source={rocket}
                 tintColor={focused ? undefined : 'grey'}
                 style={{ width: size * 1.4, height: size * 1.4 }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="AnyMap"
+          component={AnyMapBenchmarkScreen}
+          options={{
+            tabBarLabel: 'AnyMap',
+            tabBarIcon: ({ size, focused }) => (
+              <Image
+                source={map}
+                tintColor={focused ? undefined : 'grey'}
+                style={{ width: size, height: size }}
               />
             ),
           }}

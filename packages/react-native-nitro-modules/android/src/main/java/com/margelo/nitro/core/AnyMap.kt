@@ -38,27 +38,6 @@ class AnyMap {
     mHybridData = hybridData
   }
 
-  companion object {
-    fun fromMap(
-      map: Map<String, Any?>,
-      ignoreIncompatible: Boolean = false,
-    ): AnyMap {
-      val anyMap = AnyMap(map.size)
-      for ((key, value) in map) {
-        try {
-          anyMap.setAny(key, value)
-        } catch (error: Throwable) {
-          if (ignoreIncompatible) {
-            continue
-          } else {
-            throw error
-          }
-        }
-      }
-      return anyMap
-    }
-  }
-
   fun toMap(): Map<String, Any?> {
     val map = HashMap<String, Any?>()
     for (key in getAllKeys()) {
@@ -170,6 +149,94 @@ class AnyMap {
   )
 
   external fun merge(other: AnyMap)
+
+
+  /**
+   * Get the type tag for a value at the given key.
+   * Returns: 0=null, 1=boolean, 2=double, 3=bigint, 4=string, 5=array, 6=object
+   */
+  @FastNative
+  external fun getType(key: String): Int
+
+  /**
+   * Get the size of the map in a single call.
+   */
+  @FastNative
+  external fun getSize(): Int
+
+  /**
+   * Get all keys with their type tags in a single JNI call.
+   * Returns an array of [key1, type1, key2, type2, ...]
+   */
+  external fun getAllKeysWithTypes(): Array<String>
+
+  /**
+   * Batch get: Returns all primitive values in a single JNI call.
+   * Returns: Array of [key, typeTag, value, ...] triplets
+   */
+  external fun getAllPrimitiveValues(): Array<String>
+
+  /**
+   * Convert to a Map<String, Any?> using optimized batch operations.
+   * This is much faster than calling getAny() for each key individually.
+   */
+  fun toMapFast(): Map<String, Any?> {
+    val primitives = getAllPrimitiveValues()
+    val result = HashMap<String, Any?>(primitives.size / 3)
+
+    var i = 0
+    while (i < primitives.size) {
+      val key = primitives[i]
+      val typeTag = primitives[i + 1].toInt()
+      val valueStr = primitives[i + 2]
+
+      val value: Any? = when (typeTag) {
+        0 -> null // Null
+        1 -> valueStr == "true" // Boolean
+        2 -> valueStr.toDouble() // Double
+        3 -> valueStr.toLong() // BigInt
+        4 -> valueStr // String
+        5 -> getAnyArray(key).map { it.toAny() }.toTypedArray() // Array - needs separate call
+        6 -> getAnyObject(key).mapValues { (_, v) -> v.toAny() } // Object - needs separate call
+        else -> null
+      }
+      result[key] = value
+      i += 3
+    }
+    return result
+  }
+
+  /**
+   * Type tags for AnyValue
+   */
+  companion object {
+    const val TYPE_NULL = 0
+    const val TYPE_BOOLEAN = 1
+    const val TYPE_DOUBLE = 2
+    const val TYPE_BIGINT = 3
+    const val TYPE_STRING = 4
+    const val TYPE_ARRAY = 5
+    const val TYPE_OBJECT = 6
+
+    fun fromMap(
+      map: Map<String, Any?>,
+      ignoreIncompatible: Boolean = false,
+    ): AnyMap {
+      val anyMap = AnyMap(map.size)
+      for ((key, value) in map) {
+        try {
+          anyMap.setAny(key, value)
+        } catch (error: Throwable) {
+          if (ignoreIncompatible) {
+            continue
+          } else {
+            throw error
+          }
+        }
+      }
+      return anyMap
+    }
+  }
 
   private external fun initHybrid(): HybridData
 

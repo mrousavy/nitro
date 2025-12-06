@@ -279,6 +279,56 @@ public final class AnyMap: @unchecked Sendable {
   public func merge(other: AnyMap) {
     cppPart.pointee.merge(other.cppPart)
   }
+
+  // pragma MARK: P0 Batch Operations
+
+  /**
+   * Get the type tag for a value at the given key.
+   * Returns: 0=null, 1=boolean, 2=double, 3=bigint, 4=string, 5=array, 6=object
+   */
+  public func getType(key: String) -> Int {
+    return Int(cppPart.pointee.getType(std.string(key)).rawValue)
+  }
+
+  /**
+   * Get the size of the map in a single call.
+   */
+  public func getSize() -> Int {
+    return Int(cppPart.pointee.size())
+  }
+
+  /**
+   * Convert to a Dictionary<String, Any?> using optimized operations.
+   * This avoids the sequential isX() + getX() pattern.
+   */
+  public func toDictionaryFast() -> [String: Any?] {
+    var dictionary: [String: Any?] = [:]
+    let keys = self.getAllKeys()
+    dictionary.reserveCapacity(keys.count)
+
+    for key in keys {
+      let typeTag = getType(key: key)
+      switch typeTag {
+      case 0: // Null
+        dictionary[key] = nil
+      case 1: // Boolean
+        dictionary[key] = getBoolean(key: key)
+      case 2: // Double
+        dictionary[key] = getDouble(key: key)
+      case 3: // BigInt
+        dictionary[key] = getBigInt(key: key)
+      case 4: // String
+        dictionary[key] = getString(key: key)
+      case 5: // Array
+        dictionary[key] = getArray(key: key).map { $0.toAny() }
+      case 6: // Object
+        dictionary[key] = getObject(key: key).mapValues { $0.toAny() }
+      default:
+        dictionary[key] = nil
+      }
+    }
+    return dictionary
+  }
 }
 
 // pragma MARK: margelo.nitro.AnyValue extension

@@ -176,6 +176,86 @@ protected:
     _map->merge(other->cthis()->_map);
   }
 
+
+  /**
+   * Get the type tag for a value at the given key.
+   * Returns: 0=null, 1=boolean, 2=double, 3=bigint, 4=string, 5=array, 6=object
+   */
+  jint getType(const std::string& key) {
+    return static_cast<jint>(_map->getType(key));
+  }
+
+  /**
+   * Get the size of the map in a single call.
+   */
+  jint getSize() {
+    return static_cast<jint>(_map->size());
+  }
+
+  /**
+   * Get all keys with their type tags in a single JNI call.
+   * Returns an array of [key1, type1, key2, type2, ...] where type is the string representation of the type tag.
+   */
+  jni::local_ref<jni::JArrayClass<jni::JString>> getAllKeysWithTypes() {
+    auto keysWithTypes = _map->getAllKeysWithTypes();
+    auto array = jni::JArrayClass<jni::JString>::newArray(keysWithTypes.size() * 2);
+    size_t index = 0;
+    for (const auto& pair : keysWithTypes) {
+      auto jKey = jni::make_jstring(pair.first);
+      auto jType = jni::make_jstring(std::to_string(static_cast<int>(pair.second)));
+      array->setElement(index++, *jKey);
+      array->setElement(index++, *jType);
+    }
+    return array;
+  }
+
+  /**
+   * Batch get: Returns primitive values for all keys in a single call.
+   * For primitives (null, bool, double, bigint), values are directly in the result.
+   * For complex types (string, array, object), only type tag is provided.
+   * Returns: Array of [key, typeTag, value (as string), ...] triplets
+   */
+  jni::local_ref<jni::JArrayClass<jni::JString>> getAllPrimitiveValues() {
+    std::vector<std::string> result;
+    result.reserve(_map->size() * 3);
+
+    for (const auto& pair : _map->getMap()) {
+      result.push_back(pair.first); // key
+      auto typeTag = getAnyValueType(pair.second);
+      result.push_back(std::to_string(static_cast<int>(typeTag))); // type
+
+      // Value as string for primitives
+      switch (typeTag) {
+        case AnyValueType::Null:
+          result.push_back("null");
+          break;
+        case AnyValueType::Boolean:
+          result.push_back(std::get<bool>(pair.second) ? "true" : "false");
+          break;
+        case AnyValueType::Double:
+          result.push_back(std::to_string(std::get<double>(pair.second)));
+          break;
+        case AnyValueType::BigInt:
+          result.push_back(std::to_string(std::get<int64_t>(pair.second)));
+          break;
+        case AnyValueType::String:
+          result.push_back(std::get<std::string>(pair.second));
+          break;
+        case AnyValueType::Array:
+        case AnyValueType::Object:
+          result.push_back(""); // Complex types need separate calls
+          break;
+      }
+    }
+
+    auto array = jni::JArrayClass<jni::JString>::newArray(result.size());
+    for (size_t i = 0; i < result.size(); i++) {
+      auto jStr = jni::make_jstring(result[i]);
+      array->setElement(i, *jStr);
+    }
+    return array;
+  }
+
 public:
   [[nodiscard]]
   std::shared_ptr<AnyMap> getMap() const {
@@ -225,6 +305,10 @@ public:
         makeNativeMethod("setAnyValue", JAnyMap::setAnyValue),
         // merge
         makeNativeMethod("merge", JAnyMap::merge),
+        makeNativeMethod("getType", JAnyMap::getType),
+        makeNativeMethod("getSize", JAnyMap::getSize),
+        makeNativeMethod("getAllKeysWithTypes", JAnyMap::getAllKeysWithTypes),
+        makeNativeMethod("getAllPrimitiveValues", JAnyMap::getAllPrimitiveValues),
     });
   }
 };

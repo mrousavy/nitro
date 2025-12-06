@@ -33,6 +33,7 @@ target_sources(
   # Autolinking Setup
   ../nitrogen/generated/android/NitroTestOnLoad.cpp
   # Shared Nitrogen C++ sources
+  ../nitrogen/generated/shared/c++/HybridAnyMapBenchmarkSpec.cpp
   ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
   ../nitrogen/generated/shared/c++/HybridChildSpec.cpp
   ../nitrogen/generated/shared/c++/HybridPlatformObjectSpec.cpp
@@ -41,6 +42,7 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
+  ../nitrogen/generated/android/c++/JHybridAnyMapBenchmarkSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JNamedVariant.cpp

@@ -15,6 +15,7 @@
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
 
+#include "JHybridAnyMapBenchmarkSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
@@ -45,6 +46,7 @@ int initialize(JavaVM* vm) {
 
   return facebook::jni::initialize(vm, [] {
     // Register native JNI methods
+    margelo::nitro::test::JHybridAnyMapBenchmarkSpec::registerNatives();
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
@@ -110,6 +112,14 @@ int initialize(JavaVM* vm) {
       "TestView",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridTestView");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "AnyMapBenchmark",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridAnyMapBenchmarkSpec::javaobject> object("com/margelo/nitro/test/HybridAnyMapBenchmark");
         auto instance = object.create();
         return instance->cthis()->shared();
       }

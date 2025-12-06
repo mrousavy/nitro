@@ -8,6 +8,7 @@
 #include "NitroTest-Swift-Cxx-Bridge.hpp"
 
 // Include C++ implementation defined types
+#include "HybridAnyMapBenchmarkSpecSwift.hpp"
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
 #include "HybridPlatformObjectSpecSwift.hpp"
@@ -19,6 +20,22 @@
 
 namespace margelo::nitro::test::bridge::swift {
 
+  // pragma MARK: std::shared_ptr<HybridAnyMapBenchmarkSpec>
+  std::shared_ptr<HybridAnyMapBenchmarkSpec> create_std__shared_ptr_HybridAnyMapBenchmarkSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
+    NitroTest::HybridAnyMapBenchmarkSpec_cxx swiftPart = NitroTest::HybridAnyMapBenchmarkSpec_cxx::fromUnsafe(swiftUnsafePointer);
+    return std::make_shared<margelo::nitro::test::HybridAnyMapBenchmarkSpecSwift>(swiftPart);
+  }
+  void* NON_NULL get_std__shared_ptr_HybridAnyMapBenchmarkSpec_(std__shared_ptr_HybridAnyMapBenchmarkSpec_ cppType) {
+    std::shared_ptr<margelo::nitro::test::HybridAnyMapBenchmarkSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::HybridAnyMapBenchmarkSpecSwift>(cppType);
+    #ifdef NITRO_DEBUG
+    if (swiftWrapper == nullptr) [[unlikely]] {
+      throw std::runtime_error("Class \"HybridAnyMapBenchmarkSpec\" is not implemented in Swift!");
+    }
+    #endif
+    NitroTest::HybridAnyMapBenchmarkSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
+    return swiftPart.toUnsafe();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridBaseSpec>
   std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
     NitroTest::HybridBaseSpec_cxx swiftPart = NitroTest::HybridBaseSpec_cxx::fromUnsafe(swiftUnsafePointer);

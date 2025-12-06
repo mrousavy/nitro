@@ -8,12 +8,16 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `BenchmarkResult` to properly resolve imports.
+namespace margelo::nitro::test { struct BenchmarkResult; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `HybridAnyMapBenchmarkSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridAnyMapBenchmarkSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -50,9 +54,11 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
+#include "BenchmarkResult.hpp"
 #include "Car.hpp"
 #include "ColorScheme.hpp"
 #include "ExternalObjectStruct.hpp"
+#include "HybridAnyMapBenchmarkSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -95,6 +101,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include <NitroModules/DateToChronoDate.hpp>
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridAnyMapBenchmarkSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridAnyMapBenchmarkSpec_cxx; }
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.

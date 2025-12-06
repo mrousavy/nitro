@@ -10,10 +10,14 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `BenchmarkResult` to properly resolve imports.
+namespace margelo::nitro::test { struct BenchmarkResult; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `HybridAnyMapBenchmarkSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridAnyMapBenchmarkSpec; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -46,6 +50,8 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridAnyMapBenchmarkSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridAnyMapBenchmarkSpec_cxx; }
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
@@ -60,8 +66,10 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
+#include "BenchmarkResult.hpp"
 #include "Car.hpp"
 #include "ExternalObjectStruct.hpp"
+#include "HybridAnyMapBenchmarkSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -100,6 +108,56 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
  */
 namespace margelo::nitro::test::bridge::swift {
 
+  // pragma MARK: std::vector<BenchmarkResult>
+  /**
+   * Specialized version of `std::vector<BenchmarkResult>`.
+   */
+  using std__vector_BenchmarkResult_ = std::vector<BenchmarkResult>;
+  inline std::vector<BenchmarkResult> create_std__vector_BenchmarkResult_(size_t size) noexcept {
+    std::vector<BenchmarkResult> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridAnyMapBenchmarkSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridAnyMapBenchmarkSpec>`.
+   */
+  using std__shared_ptr_HybridAnyMapBenchmarkSpec_ = std::shared_ptr<HybridAnyMapBenchmarkSpec>;
+  std::shared_ptr<HybridAnyMapBenchmarkSpec> create_std__shared_ptr_HybridAnyMapBenchmarkSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridAnyMapBenchmarkSpec_(std__shared_ptr_HybridAnyMapBenchmarkSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridAnyMapBenchmarkSpec>
+  using std__weak_ptr_HybridAnyMapBenchmarkSpec_ = std::weak_ptr<HybridAnyMapBenchmarkSpec>;
+  inline std__weak_ptr_HybridAnyMapBenchmarkSpec_ weakify_std__shared_ptr_HybridAnyMapBenchmarkSpec_(const std::shared_ptr<HybridAnyMapBenchmarkSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: Result<std::shared_ptr<AnyMap>>
+  using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
+    return Result<std::shared_ptr<AnyMap>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<AnyMap>>::withError(error);
+  }
+  
+  // pragma MARK: Result<BenchmarkResult>
+  using Result_BenchmarkResult_ = Result<BenchmarkResult>;
+  inline Result_BenchmarkResult_ create_Result_BenchmarkResult_(const BenchmarkResult& value) noexcept {
+    return Result<BenchmarkResult>::withValue(value);
+  }
+  inline Result_BenchmarkResult_ create_Result_BenchmarkResult_(const std::exception_ptr& error) noexcept {
+    return Result<BenchmarkResult>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<BenchmarkResult>>
+  using Result_std__vector_BenchmarkResult__ = Result<std::vector<BenchmarkResult>>;
+  inline Result_std__vector_BenchmarkResult__ create_Result_std__vector_BenchmarkResult__(const std::vector<BenchmarkResult>& value) noexcept {
+    return Result<std::vector<BenchmarkResult>>::withValue(value);
+  }
+  inline Result_std__vector_BenchmarkResult__ create_Result_std__vector_BenchmarkResult__(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<BenchmarkResult>>::withError(error);
+  }
+  
   // pragma MARK: std::shared_ptr<HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridBaseSpec>`.
@@ -1599,15 +1657,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<AnyMap>>
-  using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
-  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
-    return Result<std::shared_ptr<AnyMap>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<AnyMap>>::withError(error);
   }
   
   // pragma MARK: Result<std::unordered_map<std::string, std::variant<bool, double>>>
