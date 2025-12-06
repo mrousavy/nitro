@@ -47,7 +47,7 @@ export function createSwiftHybridObjectCxxBridge(
   })
   const hasBase = baseClasses.length > 0
 
-  if (spec.isHybridView && !hasBase) {
+  if (spec.hybridViewConfig != null && !hasBase) {
     methodsBridge.push(
       `
 public final func getView() -> UnsafeMutableRawPointer {
