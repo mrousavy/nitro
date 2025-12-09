@@ -24,6 +24,8 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 enum class ${enumType.enumName}(@DoNotStrip @Keep val value: Int) {
   ${indent(members.join(',\n'), '  ')};
+
+  companion object
 }
   `.trim()
 
