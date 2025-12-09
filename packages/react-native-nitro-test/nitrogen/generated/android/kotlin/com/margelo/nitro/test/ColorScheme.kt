@@ -18,4 +18,6 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class ColorScheme(@DoNotStrip @Keep val value: Int) {
   LIGHT(0),
   DARK(1);
+
+  companion object
 }

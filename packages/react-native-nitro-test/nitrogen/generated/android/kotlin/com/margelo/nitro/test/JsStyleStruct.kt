@@ -30,7 +30,7 @@ data class JsStyleStruct(
   constructor(value: Double, onChanged: (num: Double) -> Unit):
          this(value, Func_void_double_java(onChanged))
 
-  private companion object {
+  companion object {
     /**
      * Constructor called from C++
      */

@@ -19,4 +19,6 @@ enum class WeirdNumbersEnum(@DoNotStrip @Keep val value: Int) {
   A(0),
   B(32),
   C(64);
+
+  companion object
 }

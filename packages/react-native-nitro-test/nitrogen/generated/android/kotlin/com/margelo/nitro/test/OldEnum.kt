@@ -19,4 +19,6 @@ enum class OldEnum(@DoNotStrip @Keep val value: Int) {
   FIRST(0),
   SECOND(1),
   THIRD(2);
+
+  companion object
 }
