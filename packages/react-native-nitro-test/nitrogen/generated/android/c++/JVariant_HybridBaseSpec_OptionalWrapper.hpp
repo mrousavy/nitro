@@ -29,7 +29,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_HybridBaseSpec_OptionalWrapper".
    */
-  class JVariant_HybridBaseSpec_OptionalWrapper final: public jni::JavaClass<JVariant_HybridBaseSpec_OptionalWrapper> {
+  class JVariant_HybridBaseSpec_OptionalWrapper: public jni::JavaClass<JVariant_HybridBaseSpec_OptionalWrapper> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper;";
 

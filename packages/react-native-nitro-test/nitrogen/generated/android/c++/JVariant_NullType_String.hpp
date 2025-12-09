@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_NullType_String".
    */
-  class JVariant_NullType_String final: public jni::JavaClass<JVariant_NullType_String> {
+  class JVariant_NullType_String: public jni::JavaClass<JVariant_NullType_String> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String;";
 

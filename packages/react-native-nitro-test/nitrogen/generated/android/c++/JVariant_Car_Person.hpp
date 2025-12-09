@@ -29,7 +29,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_Car_Person".
    */
-  class JVariant_Car_Person final: public jni::JavaClass<JVariant_Car_Person> {
+  class JVariant_Car_Person: public jni::JavaClass<JVariant_Car_Person> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person;";
 

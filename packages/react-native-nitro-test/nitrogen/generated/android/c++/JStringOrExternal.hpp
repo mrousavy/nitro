@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "StringOrExternal".
    */
-  class JStringOrExternal final: public jni::JavaClass<JStringOrExternal> {
+  class JStringOrExternal: public jni::JavaClass<JStringOrExternal> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal;";
 

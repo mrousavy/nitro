@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_Boolean_WeirdNumbersEnum".
    */
-  class JVariant_Boolean_WeirdNumbersEnum final: public jni::JavaClass<JVariant_Boolean_WeirdNumbersEnum> {
+  class JVariant_Boolean_WeirdNumbersEnum: public jni::JavaClass<JVariant_Boolean_WeirdNumbersEnum> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum;";
 

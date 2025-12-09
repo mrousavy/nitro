@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_Boolean_OldEnum".
    */
-  class JVariant_Boolean_OldEnum final: public jni::JavaClass<JVariant_Boolean_OldEnum> {
+  class JVariant_Boolean_OldEnum: public jni::JavaClass<JVariant_Boolean_OldEnum> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum;";
 

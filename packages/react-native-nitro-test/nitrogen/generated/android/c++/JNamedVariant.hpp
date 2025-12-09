@@ -29,7 +29,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "NamedVariant".
    */
-  class JNamedVariant final: public jni::JavaClass<JNamedVariant> {
+  class JNamedVariant: public jni::JavaClass<JNamedVariant> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant;";
 
