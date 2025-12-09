@@ -40,7 +40,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (Car).
    */
-  struct Car {
+  struct Car final {
   public:
     double year     SWIFT_PRIVATE;
     std::string make     SWIFT_PRIVATE;

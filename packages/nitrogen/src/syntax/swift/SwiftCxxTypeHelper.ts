@@ -509,7 +509,7 @@ inline ${t.getCode('c++')} get_${i}() const noexcept {
  * std::variant cannot be used in Swift because of a Swift bug.
  * Not even specializing it works. So we create a wrapper struct.
  */
-struct ${name} {
+struct ${name} final {
   ${actualType} variant;
   ${name}(${actualType} variant): variant(variant) { }
   operator ${actualType}() const noexcept {

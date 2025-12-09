@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_______Unit_Double".
    */
-  class JVariant_______Unit_Double: public jni::JavaClass<JVariant_______Unit_Double> {
+  class JVariant_______Unit_Double final: public jni::JavaClass<JVariant_______Unit_Double> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double;";
 
@@ -47,7 +47,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_______Unit_Double_impl {
-    class First: public jni::JavaClass<First, JVariant_______Unit_Double> {
+    class First final: public jni::JavaClass<First, JVariant_______Unit_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$First;";
     
@@ -57,7 +57,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_______Unit_Double> {
+    class Second final: public jni::JavaClass<Second, JVariant_______Unit_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$Second;";
     

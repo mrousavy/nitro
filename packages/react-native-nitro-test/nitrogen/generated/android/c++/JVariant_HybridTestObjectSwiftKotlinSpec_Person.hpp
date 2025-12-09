@@ -25,7 +25,7 @@ namespace margelo::nitro::test {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "Variant_HybridTestObjectSwiftKotlinSpec_Person".
    */
-  class JVariant_HybridTestObjectSwiftKotlinSpec_Person: public jni::JavaClass<JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
+  class JVariant_HybridTestObjectSwiftKotlinSpec_Person final: public jni::JavaClass<JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person;";
 
@@ -50,7 +50,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl {
-    class First: public jni::JavaClass<First, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
+    class First final: public jni::JavaClass<First, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$First;";
     
@@ -60,7 +60,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
+    class Second final: public jni::JavaClass<Second, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$Second;";
     

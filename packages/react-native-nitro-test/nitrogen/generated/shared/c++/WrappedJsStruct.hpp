@@ -34,7 +34,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (WrappedJsStruct).
    */
-  struct WrappedJsStruct {
+  struct WrappedJsStruct final {
   public:
     JsStyleStruct value     SWIFT_PRIVATE;
     std::vector<JsStyleStruct> items     SWIFT_PRIVATE;

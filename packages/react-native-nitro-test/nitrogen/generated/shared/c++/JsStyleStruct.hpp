@@ -32,7 +32,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (JsStyleStruct).
    */
-  struct JsStyleStruct {
+  struct JsStyleStruct final {
   public:
     double value     SWIFT_PRIVATE;
     std::function<void(double /* num */)> onChanged     SWIFT_PRIVATE;

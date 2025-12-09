@@ -185,7 +185,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__string__double_ {
+  struct std__variant_std__string__double_ final {
     std::variant<std::string, double> variant;
     std__variant_std__string__double_(std::variant<std::string, double> variant): variant(variant) { }
     operator std::variant<std::string, double>() const noexcept {
@@ -229,7 +229,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__string__Car_ {
+  struct std__variant_std__string__Car_ final {
     std::variant<std::string, Car> variant;
     std__variant_std__string__Car_(std::variant<std::string, Car> variant): variant(variant) { }
     operator std::variant<std::string, Car>() const noexcept {
@@ -330,7 +330,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ {
+  struct std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ final {
     std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> variant;
     std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> variant): variant(variant) { }
     operator std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>() const noexcept {
@@ -359,7 +359,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_nitro__NullType__std__string_ {
+  struct std__variant_nitro__NullType__std__string_ final {
     std::variant<nitro::NullType, std::string> variant;
     std__variant_nitro__NullType__std__string_(std::variant<nitro::NullType, std::string> variant): variant(variant) { }
     operator std::variant<nitro::NullType, std::string>() const noexcept {
@@ -651,7 +651,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_bool__double_ {
+  struct std__variant_bool__double_ final {
     std::variant<bool, double> variant;
     std__variant_bool__double_(std::variant<bool, double> variant): variant(variant) { }
     operator std::variant<bool, double>() const noexcept {
@@ -1113,7 +1113,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__function_void_____double_ {
+  struct std__variant_std__function_void_____double_ final {
     std::variant<std::function<void()>, double> variant;
     std__variant_std__function_void_____double_(std::variant<std::function<void()>, double> variant): variant(variant) { }
     operator std::variant<std::function<void()>, double>() const noexcept {
@@ -1157,7 +1157,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_ {
+  struct std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_ final {
     std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double> variant;
     std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_(std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double> variant): variant(variant) { }
     operator std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>() const noexcept {
@@ -1204,7 +1204,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_bool__OldEnum_ {
+  struct std__variant_bool__OldEnum_ final {
     std::variant<bool, OldEnum> variant;
     std__variant_bool__OldEnum_(std::variant<bool, OldEnum> variant): variant(variant) { }
     operator std::variant<bool, OldEnum>() const noexcept {
@@ -1233,7 +1233,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_bool__WeirdNumbersEnum_ {
+  struct std__variant_bool__WeirdNumbersEnum_ final {
     std::variant<bool, WeirdNumbersEnum> variant;
     std__variant_bool__WeirdNumbersEnum_(std::variant<bool, WeirdNumbersEnum> variant): variant(variant) { }
     operator std::variant<bool, WeirdNumbersEnum>() const noexcept {
@@ -1262,7 +1262,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_Car__Person_ {
+  struct std__variant_Car__Person_ final {
     std::variant<Car, Person> variant;
     std__variant_Car__Person_(std::variant<Car, Person> variant): variant(variant) { }
     operator std::variant<Car, Person>() const noexcept {
@@ -1291,7 +1291,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ {
+  struct std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ final {
     std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> variant;
     std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> variant): variant(variant) { }
     operator std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>() const noexcept {
@@ -1320,7 +1320,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__ {
+  struct std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__ final {
     std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> variant;
     std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> variant): variant(variant) { }
     operator std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>() const noexcept {
@@ -1420,7 +1420,7 @@ namespace margelo::nitro::test::bridge::swift {
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_ {
+  struct std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_ final {
     std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> variant;
     std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_(std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> variant): variant(variant) { }
     operator std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>() const noexcept {

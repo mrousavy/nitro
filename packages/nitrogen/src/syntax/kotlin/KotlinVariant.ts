@@ -152,7 +152,7 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
       `${kotlinName}$${innerName}`
     )
     return `
-class ${innerName}: public jni::JavaClass<${innerName}, J${kotlinName}> {
+class ${innerName} final: public jni::JavaClass<${innerName}, J${kotlinName}> {
 public:
   static auto constexpr kJavaDescriptor = "L${descriptor};";
 
@@ -187,7 +187,7 @@ namespace ${cxxNamespace} {
   /**
    * The C++ JNI bridge between the C++ std::variant and the Java class "${kotlinName}".
    */
-  class J${kotlinName}: public jni::JavaClass<J${kotlinName}> {
+  class J${kotlinName} final: public jni::JavaClass<J${kotlinName}> {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 

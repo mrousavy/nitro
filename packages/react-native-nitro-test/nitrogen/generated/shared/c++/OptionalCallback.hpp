@@ -34,7 +34,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (OptionalCallback).
    */
-  struct OptionalCallback {
+  struct OptionalCallback final {
   public:
     std::optional<std::variant<std::function<void()>, double>> callback     SWIFT_PRIVATE;
 

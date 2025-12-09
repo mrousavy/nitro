@@ -34,7 +34,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (OptionalWrapper).
    */
-  struct OptionalWrapper {
+  struct OptionalWrapper final {
   public:
     std::optional<std::shared_ptr<ArrayBuffer>> optionalArrayBuffer     SWIFT_PRIVATE;
     std::optional<std::string> optionalString     SWIFT_PRIVATE;
