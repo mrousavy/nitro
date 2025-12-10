@@ -32,7 +32,14 @@ public extension SomeExternalObjectNumber {
   var number: Double? {
     @inline(__always)
     get {
-      return self.__number.value
+      return { () -> Double? in
+        if bridge.has_value_std__optional_double_(self.__number) {
+          let __unwrapped = bridge.get_std__optional_double_(self.__number)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {
