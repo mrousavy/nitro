@@ -13,9 +13,11 @@ To use Nitro, make sure your app meets the minimum requirements:
   <TabItem value="ios" label="iOS" default>
     - react-native 0.75 or higher
     - Xcode 16.4 or higher
+    - Swift 5.9 or higher
   </TabItem>
   <TabItem value="android" label="Android">
     - react-native 0.75 or higher
     - `compileSdkVersion` 34 or higher
+    - `ndkVersion` 27 or higher
   </TabItem>
 </Tabs>
