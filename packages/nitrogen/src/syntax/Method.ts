@@ -144,16 +144,16 @@ ${signature} {
     }
   }
 
-  getExtraFiles(): SourceFile[] {
-    const returnTypeExtraFiles = this.returnType.getExtraFiles()
-    const paramsExtraFiles = this.parameters.flatMap((p) => p.getExtraFiles())
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    const returnTypeExtraFiles = this.returnType.getExtraFiles(visited)
+    const paramsExtraFiles = this.parameters.flatMap((p) => p.getExtraFiles(visited))
     return [...returnTypeExtraFiles, ...paramsExtraFiles]
   }
 
-  getRequiredImports(language: Language): SourceImport[] {
-    const returnTypeFiles = this.returnType.getRequiredImports(language)
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
+    const returnTypeFiles = this.returnType.getRequiredImports(language, visited)
     const paramsImports = this.parameters.flatMap((p) =>
-      p.getRequiredImports(language)
+      p.getRequiredImports(language, visited)
     )
     return [...returnTypeFiles, ...paramsImports]
   }

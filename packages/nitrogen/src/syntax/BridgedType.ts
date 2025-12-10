@@ -26,12 +26,12 @@ export interface BridgedType<
   /**
    * Get all imports required for this bridge to work
    */
-  getRequiredImports(language: Language): SourceImport[]
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[]
 
   /**
    * Get all extra files that need to be created for this type, as well as the bridge.
    */
-  getExtraFiles(): SourceFile[]
+  getExtraFiles(visited?: Set<Type>): SourceFile[]
 
   /**
    * Get the code for the type itself in the given language
