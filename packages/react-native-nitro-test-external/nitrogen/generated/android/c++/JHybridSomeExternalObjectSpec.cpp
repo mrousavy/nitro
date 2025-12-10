@@ -7,9 +7,13 @@
 
 #include "JHybridSomeExternalObjectSpec.hpp"
 
-
+// Forward declaration of `SomeExternalObjectNumber` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalObjectNumber; }
 
 #include <string>
+#include "SomeExternalObjectNumber.hpp"
+#include "JSomeExternalObjectNumber.hpp"
+#include <optional>
 
 namespace margelo::nitro::test::external {
 
@@ -47,6 +51,11 @@ namespace margelo::nitro::test::external {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getValue");
     auto __result = method(_javaPart);
     return __result->toStdString();
+  }
+  SomeExternalObjectNumber JHybridSomeExternalObjectSpec::getNumber() {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSomeExternalObjectNumber>()>("getNumber");
+    auto __result = method(_javaPart);
+    return __result->toCpp();
   }
 
 } // namespace margelo::nitro::test::external

@@ -10,6 +10,8 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `SomeExternalObjectNumber` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalObjectNumber; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
@@ -17,9 +19,11 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
+#include "SomeExternalObjectNumber.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
+#include <optional>
 #include <string>
 
 /**
@@ -28,6 +32,21 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
  */
 namespace margelo::nitro::test::external::bridge::swift {
 
+  // pragma MARK: std::optional<double>
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
+    return std::optional<double>(value);
+  }
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridSomeExternalObjectSpec>`.
@@ -47,6 +66,15 @@ namespace margelo::nitro::test::external::bridge::swift {
   }
   inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
     return Result<std::string>::withError(error);
+  }
+  
+  // pragma MARK: Result<SomeExternalObjectNumber>
+  using Result_SomeExternalObjectNumber_ = Result<SomeExternalObjectNumber>;
+  inline Result_SomeExternalObjectNumber_ create_Result_SomeExternalObjectNumber_(const SomeExternalObjectNumber& value) noexcept {
+    return Result<SomeExternalObjectNumber>::withValue(value);
+  }
+  inline Result_SomeExternalObjectNumber_ create_Result_SomeExternalObjectNumber_(const std::exception_ptr& error) noexcept {
+    return Result<SomeExternalObjectNumber>::withError(error);
   }
 
 } // namespace margelo::nitro::test::external::bridge::swift

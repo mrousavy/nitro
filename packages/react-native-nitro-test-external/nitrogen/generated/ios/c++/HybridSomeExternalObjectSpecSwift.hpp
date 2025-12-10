@@ -12,9 +12,12 @@
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
-
+// Forward declaration of `SomeExternalObjectNumber` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalObjectNumber; }
 
 #include <string>
+#include "SomeExternalObjectNumber.hpp"
+#include <optional>
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 
@@ -62,6 +65,14 @@ namespace margelo::nitro::test::external {
     // Methods
     inline std::string getValue() override {
       auto __result = _swiftPart.getValue();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline SomeExternalObjectNumber getNumber() override {
+      auto __result = _swiftPart.getNumber();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

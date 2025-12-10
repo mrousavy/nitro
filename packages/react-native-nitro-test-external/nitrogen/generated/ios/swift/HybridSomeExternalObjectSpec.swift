@@ -15,6 +15,7 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
 
   // Methods
   func getValue() throws -> String
+  func getNumber() throws -> SomeExternalObjectNumber
 }
 
 public extension HybridSomeExternalObjectSpec_protocol {

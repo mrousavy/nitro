@@ -21,6 +21,10 @@ public:
   std::string getValue() override {
     return "This is overridden!";
   }
+
+  std::optional<double> getNumberOrUndefined() override {
+    return 10.0;
+  }
 };
 
 }; // namespace margelo::nitro::test

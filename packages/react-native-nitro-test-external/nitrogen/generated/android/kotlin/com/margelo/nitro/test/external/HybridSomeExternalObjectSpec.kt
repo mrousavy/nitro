@@ -48,6 +48,10 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun getValue(): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getNumber(): SomeExternalObjectNumber
 
   private external fun initHybrid(): HybridData
 
