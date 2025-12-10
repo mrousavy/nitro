@@ -9,11 +9,11 @@
 
 namespace margelo::nitro::test {
   /**
-   * Converts JVariant_NullType_String to std::variant<nitro::NullType, std::string>
+   * Converts JVariant_NullType_String to std::variant<[[maybe_unused]] nitro::NullType, std::string>
    */
-  std::variant<nitro::NullType, std::string> JVariant_NullType_String::toCpp() const {
+  std::variant<[[maybe_unused]] nitro::NullType, std::string> JVariant_NullType_String::toCpp() const {
     if (isInstanceOf(JVariant_NullType_String_impl::First::javaClassStatic())) {
-      // It's a `nitro::NullType`
+      // It's a `[[maybe_unused]] nitro::NullType`
       auto jniValue = static_cast<const JVariant_NullType_String_impl::First*>(this)->getValue();
       return nitro::null;
     } else if (isInstanceOf(JVariant_NullType_String_impl::Second::javaClassStatic())) {

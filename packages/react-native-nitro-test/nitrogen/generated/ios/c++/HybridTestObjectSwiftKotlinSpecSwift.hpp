@@ -160,11 +160,11 @@ namespace margelo::nitro::test {
     inline void setBigintValue(int64_t bigintValue) noexcept override {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
-    inline nitro::NullType getNullValue() noexcept override {
+    inline [[maybe_unused]] nitro::NullType getNullValue() noexcept override {
       auto __result = _swiftPart.getNullValue();
       return __result;
     }
-    inline void setNullValue(nitro::NullType nullValue) noexcept override {
+    inline void setNullValue([[maybe_unused]] nitro::NullType nullValue) noexcept override {
       _swiftPart.setNullValue(nullValue);
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
@@ -181,11 +181,11 @@ namespace margelo::nitro::test {
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
       _swiftPart.setStringOrUndefined(stringOrUndefined);
     }
-    inline std::variant<nitro::NullType, std::string> getStringOrNull() noexcept override {
+    inline std::variant<[[maybe_unused]] nitro::NullType, std::string> getStringOrNull() noexcept override {
       auto __result = _swiftPart.getStringOrNull();
       return __result;
     }
-    inline void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept override {
+    inline void setStringOrNull(const std::variant<[[maybe_unused]] nitro::NullType, std::string>& stringOrNull) noexcept override {
       _swiftPart.setStringOrNull(stringOrNull);
     }
     inline std::optional<std::vector<std::string>> getOptionalArray() noexcept override {
@@ -270,7 +270,7 @@ namespace margelo::nitro::test {
         std::rethrow_exception(__result.error());
       }
     }
-    inline nitro::NullType bounceNull(nitro::NullType value) override {
+    inline [[maybe_unused]] nitro::NullType bounceNull([[maybe_unused]] nitro::NullType value) override {
       auto __result = _swiftPart.bounceNull(value);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

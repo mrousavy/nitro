@@ -124,14 +124,14 @@ namespace margelo::nitro::test {
       virtual void setStringValue(const std::string& stringValue) = 0;
       virtual int64_t getBigintValue() = 0;
       virtual void setBigintValue(int64_t bigintValue) = 0;
-      virtual nitro::NullType getNullValue() = 0;
-      virtual void setNullValue(nitro::NullType nullValue) = 0;
+      virtual [[maybe_unused]] nitro::NullType getNullValue() = 0;
+      virtual void setNullValue([[maybe_unused]] nitro::NullType nullValue) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
       virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
       virtual std::optional<std::string> getStringOrUndefined() = 0;
       virtual void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) = 0;
-      virtual std::variant<nitro::NullType, std::string> getStringOrNull() = 0;
-      virtual void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) = 0;
+      virtual std::variant<[[maybe_unused]] nitro::NullType, std::string> getStringOrNull() = 0;
+      virtual void setStringOrNull(const std::variant<[[maybe_unused]] nitro::NullType, std::string>& stringOrNull) = 0;
       virtual std::optional<std::vector<std::string>> getOptionalArray() = 0;
       virtual void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) = 0;
       virtual std::optional<Powertrain> getOptionalEnum() = 0;
@@ -156,7 +156,7 @@ namespace margelo::nitro::test {
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
       virtual void multipleArguments(double num, const std::string& str, bool boo) = 0;
-      virtual nitro::NullType bounceNull(nitro::NullType value) = 0;
+      virtual [[maybe_unused]] nitro::NullType bounceNull([[maybe_unused]] nitro::NullType value) = 0;
       virtual std::vector<std::string> bounceStrings(const std::vector<std::string>& array) = 0;
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;

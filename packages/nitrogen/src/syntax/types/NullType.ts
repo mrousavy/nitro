@@ -14,7 +14,7 @@ export class NullType implements Type {
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
-        return 'nitro::NullType'
+        return '[[maybe_unused]] nitro::NullType'
       case 'swift':
         return 'NullType'
       case 'kotlin':

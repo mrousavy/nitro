@@ -353,33 +353,33 @@ namespace margelo::nitro::test::bridge::swift {
     return std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(value);
   }
   
-  // pragma MARK: std::variant<nitro::NullType, std::string>
+  // pragma MARK: std::variant<[[maybe_unused]] nitro::NullType, std::string>
   /**
-   * Wrapper struct for `std::variant<nitro::NullType, std::string>`.
+   * Wrapper struct for `std::variant<[[maybe_unused]] nitro::NullType, std::string>`.
    * std::variant cannot be used in Swift because of a Swift bug.
    * Not even specializing it works. So we create a wrapper struct.
    */
-  struct std__variant_nitro__NullType__std__string_ {
-    std::variant<nitro::NullType, std::string> variant;
-    std__variant_nitro__NullType__std__string_(std::variant<nitro::NullType, std::string> variant): variant(variant) { }
-    operator std::variant<nitro::NullType, std::string>() const noexcept {
+  struct std__variant___maybe_unused___nitro__NullType__std__string_ {
+    std::variant<[[maybe_unused]] nitro::NullType, std::string> variant;
+    std__variant___maybe_unused___nitro__NullType__std__string_(std::variant<[[maybe_unused]] nitro::NullType, std::string> variant): variant(variant) { }
+    operator std::variant<[[maybe_unused]] nitro::NullType, std::string>() const noexcept {
       return variant;
     }
     inline size_t index() const noexcept {
       return variant.index();
     }
-    inline nitro::NullType get_0() const noexcept {
+    inline [[maybe_unused]] nitro::NullType get_0() const noexcept {
       return std::get<0>(variant);
     }
     inline std::string get_1() const noexcept {
       return std::get<1>(variant);
     }
   };
-  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(nitro::NullType value) noexcept {
-    return std__variant_nitro__NullType__std__string_(value);
+  inline std__variant___maybe_unused___nitro__NullType__std__string_ create_std__variant___maybe_unused___nitro__NullType__std__string_([[maybe_unused]] nitro::NullType value) noexcept {
+    return std__variant___maybe_unused___nitro__NullType__std__string_(value);
   }
-  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
-    return std__variant_nitro__NullType__std__string_(value);
+  inline std__variant___maybe_unused___nitro__NullType__std__string_ create_std__variant___maybe_unused___nitro__NullType__std__string_(const std::string& value) noexcept {
+    return std__variant___maybe_unused___nitro__NullType__std__string_(value);
   }
   
   // pragma MARK: std::vector<std::string>
@@ -1502,13 +1502,13 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<double>::withError(error);
   }
   
-  // pragma MARK: Result<nitro::NullType>
-  using Result_nitro__NullType_ = Result<nitro::NullType>;
-  inline Result_nitro__NullType_ create_Result_nitro__NullType_(nitro::NullType value) noexcept {
-    return Result<nitro::NullType>::withValue(std::move(value));
+  // pragma MARK: Result<[[maybe_unused]] nitro::NullType>
+  using Result___maybe_unused___nitro__NullType_ = Result<[[maybe_unused]] nitro::NullType>;
+  inline Result___maybe_unused___nitro__NullType_ create_Result___maybe_unused___nitro__NullType_([[maybe_unused]] nitro::NullType value) noexcept {
+    return Result<[[maybe_unused]] nitro::NullType>::withValue(std::move(value));
   }
-  inline Result_nitro__NullType_ create_Result_nitro__NullType_(const std::exception_ptr& error) noexcept {
-    return Result<nitro::NullType>::withError(error);
+  inline Result___maybe_unused___nitro__NullType_ create_Result___maybe_unused___nitro__NullType_(const std::exception_ptr& error) noexcept {
+    return Result<[[maybe_unused]] nitro::NullType>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::string>>

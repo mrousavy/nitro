@@ -259,15 +259,15 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var stringOrNull: bridge.std__variant_nitro__NullType__std__string_ {
+  public final var stringOrNull: bridge.std__variant___maybe_unused___nitro__NullType__std__string_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__variant_nitro__NullType__std__string_ in
+      return { () -> bridge.std__variant___maybe_unused___nitro__NullType__std__string_ in
         switch self.__implementation.stringOrNull {
           case .first(let __value):
-            return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            return bridge.create_std__variant___maybe_unused___nitro__NullType__std__string_(margelo.nitro.NullType.null)
           case .second(let __value):
-            return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            return bridge.create_std__variant___maybe_unused___nitro__NullType__std__string_(std.string(__value))
         }
       }()
     }
@@ -516,14 +516,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceNull(value: margelo.nitro.NullType) -> bridge.Result_nitro__NullType_ {
+  public final func bounceNull(value: margelo.nitro.NullType) -> bridge.Result___maybe_unused___nitro__NullType_ {
     do {
       let __result = try self.__implementation.bounceNull(value: NullType.null)
       let __resultCpp = margelo.nitro.NullType.null
-      return bridge.create_Result_nitro__NullType_(__resultCpp)
+      return bridge.create_Result___maybe_unused___nitro__NullType_(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_nitro__NullType_(__exceptionPtr)
+      return bridge.create_Result___maybe_unused___nitro__NullType_(__exceptionPtr)
     }
   }
   
