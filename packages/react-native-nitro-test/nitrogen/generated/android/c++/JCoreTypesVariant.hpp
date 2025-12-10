@@ -92,7 +92,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JCoreTypesVariant_impl {
-    class First: public jni::JavaClass<First, JCoreTypesVariant> {
+    class First final: public jni::JavaClass<First, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$First;";
     
@@ -102,7 +102,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JCoreTypesVariant> {
+    class Second final: public jni::JavaClass<Second, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Second;";
     
@@ -112,7 +112,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Third: public jni::JavaClass<Third, JCoreTypesVariant> {
+    class Third final: public jni::JavaClass<Third, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Third;";
     
@@ -122,7 +122,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Fourth: public jni::JavaClass<Fourth, JCoreTypesVariant> {
+    class Fourth final: public jni::JavaClass<Fourth, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fourth;";
     
@@ -132,7 +132,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Fifth: public jni::JavaClass<Fifth, JCoreTypesVariant> {
+    class Fifth final: public jni::JavaClass<Fifth, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fifth;";
     
@@ -142,7 +142,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Sixth: public jni::JavaClass<Sixth, JCoreTypesVariant> {
+    class Sixth final: public jni::JavaClass<Sixth, JCoreTypesVariant> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Sixth;";
     

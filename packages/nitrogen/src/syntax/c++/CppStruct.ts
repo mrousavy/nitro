@@ -80,7 +80,7 @@ namespace ${cxxNamespace} {
   /**
    * A struct which can be represented as a JavaScript object (${typename}).
    */
-  struct ${typename} {
+  struct ${typename} final {
   public:
     ${indent(cppStructProps, '    ')}
 

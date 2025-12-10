@@ -152,7 +152,7 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
       `${kotlinName}$${innerName}`
     )
     return `
-class ${innerName}: public jni::JavaClass<${innerName}, J${kotlinName}> {
+class ${innerName} final: public jni::JavaClass<${innerName}, J${kotlinName}> {
 public:
   static auto constexpr kJavaDescriptor = "L${descriptor};";
 

@@ -34,7 +34,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (ExternalObjectStruct).
    */
-  struct ExternalObjectStruct {
+  struct ExternalObjectStruct final {
   public:
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> someExternal     SWIFT_PRIVATE;
 

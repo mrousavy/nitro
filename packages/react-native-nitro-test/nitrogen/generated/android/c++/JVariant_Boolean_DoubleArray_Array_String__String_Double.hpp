@@ -75,7 +75,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_Boolean_DoubleArray_Array_String__String_Double_impl {
-    class First: public jni::JavaClass<First, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
+    class First final: public jni::JavaClass<First, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$First;";
     
@@ -85,7 +85,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
+    class Second final: public jni::JavaClass<Second, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Second;";
     
@@ -95,7 +95,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Third: public jni::JavaClass<Third, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
+    class Third final: public jni::JavaClass<Third, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Third;";
     
@@ -105,7 +105,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Fourth: public jni::JavaClass<Fourth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
+    class Fourth final: public jni::JavaClass<Fourth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fourth;";
     
@@ -115,7 +115,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Fifth: public jni::JavaClass<Fifth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
+    class Fifth final: public jni::JavaClass<Fifth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fifth;";
     

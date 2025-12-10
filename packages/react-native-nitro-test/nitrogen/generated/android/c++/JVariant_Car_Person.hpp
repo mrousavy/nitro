@@ -54,7 +54,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_Car_Person_impl {
-    class First: public jni::JavaClass<First, JVariant_Car_Person> {
+    class First final: public jni::JavaClass<First, JVariant_Car_Person> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person$First;";
     
@@ -64,7 +64,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_Car_Person> {
+    class Second final: public jni::JavaClass<Second, JVariant_Car_Person> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Car_Person$Second;";
     

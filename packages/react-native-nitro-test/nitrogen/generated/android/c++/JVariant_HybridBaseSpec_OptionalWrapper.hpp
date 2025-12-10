@@ -54,7 +54,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_HybridBaseSpec_OptionalWrapper_impl {
-    class First: public jni::JavaClass<First, JVariant_HybridBaseSpec_OptionalWrapper> {
+    class First final: public jni::JavaClass<First, JVariant_HybridBaseSpec_OptionalWrapper> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$First;";
     
@@ -64,7 +64,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_HybridBaseSpec_OptionalWrapper> {
+    class Second final: public jni::JavaClass<Second, JVariant_HybridBaseSpec_OptionalWrapper> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$Second;";
     

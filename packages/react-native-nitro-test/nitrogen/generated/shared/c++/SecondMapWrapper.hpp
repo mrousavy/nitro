@@ -33,7 +33,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (SecondMapWrapper).
    */
-  struct SecondMapWrapper {
+  struct SecondMapWrapper final {
   public:
     std::unordered_map<std::string, std::string> second     SWIFT_PRIVATE;
 

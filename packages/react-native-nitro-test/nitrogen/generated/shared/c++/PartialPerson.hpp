@@ -33,7 +33,7 @@ namespace margelo::nitro::test {
   /**
    * A struct which can be represented as a JavaScript object (PartialPerson).
    */
-  struct PartialPerson {
+  struct PartialPerson final {
   public:
     std::optional<std::string> name     SWIFT_PRIVATE;
     std::optional<double> age     SWIFT_PRIVATE;

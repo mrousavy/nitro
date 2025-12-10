@@ -48,7 +48,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JStringOrExternal_impl {
-    class First: public jni::JavaClass<First, JStringOrExternal> {
+    class First final: public jni::JavaClass<First, JStringOrExternal> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$First;";
     
@@ -58,7 +58,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JStringOrExternal> {
+    class Second final: public jni::JavaClass<Second, JStringOrExternal> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$Second;";
     

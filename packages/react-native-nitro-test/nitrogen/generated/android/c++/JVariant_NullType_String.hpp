@@ -47,7 +47,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_NullType_String_impl {
-    class First: public jni::JavaClass<First, JVariant_NullType_String> {
+    class First final: public jni::JavaClass<First, JVariant_NullType_String> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$First;";
     
@@ -57,7 +57,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_NullType_String> {
+    class Second final: public jni::JavaClass<Second, JVariant_NullType_String> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$Second;";
     

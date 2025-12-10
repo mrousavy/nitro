@@ -46,7 +46,7 @@ namespace margelo::nitro::test {
   };
 
   namespace JVariant_Boolean_OldEnum_impl {
-    class First: public jni::JavaClass<First, JVariant_Boolean_OldEnum> {
+    class First final: public jni::JavaClass<First, JVariant_Boolean_OldEnum> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$First;";
     
@@ -56,7 +56,7 @@ namespace margelo::nitro::test {
       }
     };
     
-    class Second: public jni::JavaClass<Second, JVariant_Boolean_OldEnum> {
+    class Second final: public jni::JavaClass<Second, JVariant_Boolean_OldEnum> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$Second;";
     
