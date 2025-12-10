@@ -15,9 +15,9 @@ class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
     return "Hello world!"
   }
     
-  func getNumber() throws -> SomeExternalObjectNumber {
+  func getNumber(number: Double?) throws -> SomeExternalObjectNumber {
     return SomeExternalObjectNumber(
-        number: 10
+        number: number
     )
   }
 }

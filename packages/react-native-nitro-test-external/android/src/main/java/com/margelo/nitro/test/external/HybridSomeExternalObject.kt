@@ -5,7 +5,7 @@ class HybridSomeExternalObject : HybridSomeExternalObjectSpec() {
     return "Hello world!"
   }
   
-  override fun getNumber(): SomeExternalObjectNumber {
-    return SomeExternalObjectNumber(number = null)
+  override fun getNumber(number: Double?): SomeExternalObjectNumber {
+    return SomeExternalObjectNumber(number = number ?: null)
   }
 }

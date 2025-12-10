@@ -51,7 +51,7 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getNumber(): SomeExternalObjectNumber
+  abstract fun getNumber(number: Double?): SomeExternalObjectNumber
 
   private external fun initHybrid(): HybridData
 

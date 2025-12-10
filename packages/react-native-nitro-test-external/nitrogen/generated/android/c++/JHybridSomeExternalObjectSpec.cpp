@@ -52,9 +52,9 @@ namespace margelo::nitro::test::external {
     auto __result = method(_javaPart);
     return __result->toStdString();
   }
-  SomeExternalObjectNumber JHybridSomeExternalObjectSpec::getNumber() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSomeExternalObjectNumber>()>("getNumber");
-    auto __result = method(_javaPart);
+  SomeExternalObjectNumber JHybridSomeExternalObjectSpec::getNumber(std::optional<double> number) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSomeExternalObjectNumber>(jni::alias_ref<jni::JDouble> /* number */)>("getNumber");
+    auto __result = method(_javaPart, number.has_value() ? jni::JDouble::valueOf(number.value()) : nullptr);
     return __result->toCpp();
   }
 

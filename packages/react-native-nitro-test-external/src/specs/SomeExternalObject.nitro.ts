@@ -11,5 +11,5 @@ export interface SomeExternalObjectNumber {
 export interface SomeExternalObject
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   getValue(): string
-  getNumber(): SomeExternalObjectNumber
+  getNumber(number?: number): SomeExternalObjectNumber
 }

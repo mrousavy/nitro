@@ -18,6 +18,7 @@ namespace margelo::nitro::test::external { struct SomeExternalObjectNumber; }
 
 #include <string>
 #include "SomeExternalObjectNumber.hpp"
+#include <optional>
 
 namespace margelo::nitro::test::external {
 
@@ -51,7 +52,7 @@ namespace margelo::nitro::test::external {
     public:
       // Methods
       virtual std::string getValue() = 0;
-      virtual SomeExternalObjectNumber getNumber() = 0;
+      virtual SomeExternalObjectNumber getNumber(std::optional<double> number) = 0;
 
     protected:
       // Hybrid Setup

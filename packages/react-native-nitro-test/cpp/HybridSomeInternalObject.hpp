@@ -23,9 +23,9 @@ public:
     return "This is overridden!";
   }
 
-  SomeExternalObjectNumber getNumber() override {
-    return SomeExternalObjectNumber(10.0);
-  }
+  SomeExternalObjectNumber getNumber(std::optional<double> number = std::nullopt) override {
+    return SomeExternalObjectNumber(number);
+}
 };
 
 }; // namespace margelo::nitro::test

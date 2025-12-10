@@ -71,8 +71,8 @@ namespace margelo::nitro::test::external {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline SomeExternalObjectNumber getNumber() override {
-      auto __result = _swiftPart.getNumber();
+    inline SomeExternalObjectNumber getNumber(std::optional<double> number) override {
+      auto __result = _swiftPart.getNumber(number);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

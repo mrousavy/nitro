@@ -130,9 +130,16 @@ open class HybridSomeExternalObjectSpec_cxx {
   }
   
   @inline(__always)
-  public final func getNumber() -> bridge.Result_SomeExternalObjectNumber_ {
+  public final func getNumber(number: bridge.std__optional_double_) -> bridge.Result_SomeExternalObjectNumber_ {
     do {
-      let __result = try self.__implementation.getNumber()
+      let __result = try self.__implementation.getNumber(number: { () -> Double? in
+        if bridge.has_value_std__optional_double_(number) {
+          let __unwrapped = bridge.get_std__optional_double_(number)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }())
       let __resultCpp = __result
       return bridge.create_Result_SomeExternalObjectNumber_(__resultCpp)
     } catch (let __error) {

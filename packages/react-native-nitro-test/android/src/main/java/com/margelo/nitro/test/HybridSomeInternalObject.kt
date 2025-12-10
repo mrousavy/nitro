@@ -10,7 +10,7 @@ class HybridSomeInternalObject : HybridSomeExternalObjectSpec() {
     return "This is overridden!"
   }
   
-  override fun getNumber(): SomeExternalObjectNumber {
-    return SomeExternalObjectNumber(number = 10.0)
+  override fun getNumber(number: Double?): SomeExternalObjectNumber {
+    return SomeExternalObjectNumber(number = number)
   }
 }

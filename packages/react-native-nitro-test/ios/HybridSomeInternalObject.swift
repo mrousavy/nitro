@@ -15,9 +15,9 @@ class HybridSomeInternalObject: HybridSomeExternalObjectSpec {
     return "This is overridden!"
   }
   
-  func getNumber() throws -> SomeExternalObjectNumber {
-    return  SomeExternalObjectNumber(
-        number: 20
+  func getNumber(number: Double?) throws -> SomeExternalObjectNumber {
+    return SomeExternalObjectNumber(
+        number: number
     )
   }
 }
