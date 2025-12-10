@@ -9,13 +9,15 @@ import Foundation
 import NitroModules
 
 class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
-    func getNumber() throws -> SomeExternalObjectNumber {
-        return SomeExternalObjectNumber(
-            number: 10
-        )
-    }
+
     
   func getValue() throws -> String {
     return "Hello world!"
+  }
+    
+  func getNumber() throws -> SomeExternalObjectNumber {
+    return SomeExternalObjectNumber(
+        number: 10
+    )
   }
 }
