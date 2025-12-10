@@ -12,6 +12,7 @@
 namespace margelo::nitro::test {
 
 using namespace facebook;
+using margelo::nitro::test::external::SomeExternalObjectNumber;
 
 class HybridSomeInternalObject : public virtual margelo::nitro::test::external::HybridSomeExternalObjectSpec {
 public:
@@ -22,8 +23,8 @@ public:
     return "This is overridden!";
   }
 
-  std::optional<double> getNumberOrUndefined() override {
-    return 10.0;
+  SomeExternalObjectNumber getNumber() override {
+    return SomeExternalObjectNumber(10.0);
   }
 };
 
