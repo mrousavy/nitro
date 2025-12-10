@@ -473,7 +473,11 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             const swiftBug85735Workaround =
               optional.wrappingType.kind === 'number'
 
-            if (!wrapping.needsSpecialHandling && !swiftBug84848Workaround && !swiftBug85735Workaround) {
+            if (
+              !wrapping.needsSpecialHandling &&
+              !swiftBug84848Workaround &&
+              !swiftBug85735Workaround
+            ) {
               return `${cppParameterName}.value`
             }
             return `
