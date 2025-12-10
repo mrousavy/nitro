@@ -28,9 +28,14 @@ export function TestCase({
       ]}
     >
       <View style={styles.testBox}>
-        <Text style={[styles.testName, { color: colors.text }]}>{test.runner.name}</Text>
+        <Text style={[styles.testName, { color: colors.text }]}>
+          {test.runner.name}
+        </Text>
         <View style={styles.smallVSpacer} />
-        <Text style={[styles.testStatus, { color: colors.textSecondary }]} numberOfLines={6}>
+        <Text
+          style={[styles.testStatus, { color: colors.textSecondary }]}
+          numberOfLines={6}
+        >
           {test.state} ({test.extraMessage})
         </Text>
       </View>

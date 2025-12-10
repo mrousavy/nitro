@@ -203,7 +203,9 @@ export function HybridObjectTestsScreen() {
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
       <KeyboardDismissBackground />
 
-      <Text style={[styles.header, { color: colors.text }]}>HybridObject Tests</Text>
+      <Text style={[styles.header, { color: colors.text }]}>
+        HybridObject Tests
+      </Text>
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
@@ -214,12 +216,17 @@ export function HybridObjectTestsScreen() {
           }}
         />
         <View style={styles.flex} />
-        <Text style={[styles.buildTypeText, { color: colors.text }]}>{NitroModules.buildType}</Text>
+        <Text style={[styles.buildTypeText, { color: colors.text }]}>
+          {NitroModules.buildType}
+        </Text>
       </View>
 
       <View style={styles.searchContainer}>
         <TextInput
-          style={[styles.searchInput, { color: colors.text, borderColor: colors.border }]}
+          style={[
+            styles.searchInput,
+            { color: colors.text, borderColor: colors.border },
+          ]}
           placeholder="Search tests..."
           placeholderTextColor={colors.textSecondary}
           value={searchQuery}
@@ -229,7 +236,9 @@ export function HybridObjectTestsScreen() {
           clearButtonMode="while-editing"
         />
         {searchQuery.length > 0 && (
-          <Text style={[styles.searchResultsText, { color: colors.textSecondary }]}>
+          <Text
+            style={[styles.searchResultsText, { color: colors.textSecondary }]}
+          >
             Showing {searchFilteredTests.length} of {unfilteredTests.length}{' '}
             tests
           </Text>
@@ -252,7 +261,9 @@ export function HybridObjectTestsScreen() {
         keyExtractor={(test) => test.runner.name}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={{ color: colors.textSecondary }}>Nothing selected.</Text>
+            <Text style={{ color: colors.textSecondary }}>
+              Nothing selected.
+            </Text>
           </View>
         }
         renderItem={({ item: test, index }) => (
@@ -265,7 +276,10 @@ export function HybridObjectTestsScreen() {
       />
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text style={[styles.resultText, { color: colors.text }]} numberOfLines={2}>
+        <Text
+          style={[styles.resultText, { color: colors.text }]}
+          numberOfLines={2}
+        >
           {status}
         </Text>
         <View style={styles.flex} />
