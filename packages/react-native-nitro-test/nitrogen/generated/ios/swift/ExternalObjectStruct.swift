@@ -27,14 +27,12 @@ public extension ExternalObjectStruct {
     }())
   }
 
+  @inline(__always)
   var someExternal: (any HybridSomeExternalObjectSpec) {
-    @inline(__always)
-    get {
-      return { () -> HybridSomeExternalObjectSpec in
-        let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(self.__someExternal)
-        let __instance = HybridSomeExternalObjectSpec_cxx.fromUnsafe(__unsafePointer)
-        return __instance.getHybridSomeExternalObjectSpec()
-      }()
-    }
+    return { () -> HybridSomeExternalObjectSpec in
+      let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(self.__someExternal)
+      let __instance = HybridSomeExternalObjectSpec_cxx.fromUnsafe(__unsafePointer)
+      return __instance.getHybridSomeExternalObjectSpec()
+    }()
   }
 }

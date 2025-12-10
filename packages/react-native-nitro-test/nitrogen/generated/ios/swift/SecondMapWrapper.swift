@@ -29,18 +29,16 @@ public extension SecondMapWrapper {
     }())
   }
 
+  @inline(__always)
   var second: Dictionary<String, String> {
-    @inline(__always)
-    get {
-      return { () -> Dictionary<String, String> in
-        var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
-        let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
-        for __key in __keys {
-          let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__second, __key)
-          __dictionary[String(__key)] = String(__value)
-        }
-        return __dictionary
-      }()
-    }
+    return { () -> Dictionary<String, String> in
+      var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
+      let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
+      for __key in __keys {
+        let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__second, __key)
+        __dictionary[String(__key)] = String(__value)
+      }
+      return __dictionary
+    }()
   }
 }

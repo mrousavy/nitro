@@ -29,17 +29,13 @@ public extension WrappedJsStruct {
     }())
   }
 
+  @inline(__always)
   var value: JsStyleStruct {
-    @inline(__always)
-    get {
-      return self.__value
-    }
+    return self.__value
   }
   
+  @inline(__always)
   var items: [JsStyleStruct] {
-    @inline(__always)
-    get {
-      return self.__items.map({ __item in __item })
-    }
+    return self.__items.map({ __item in __item })
   }
 }

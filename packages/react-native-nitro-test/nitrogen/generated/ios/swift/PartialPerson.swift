@@ -35,24 +35,20 @@ public extension PartialPerson {
     }())
   }
 
+  @inline(__always)
   var name: String? {
-    @inline(__always)
-    get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__name) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__name)
-          return String(__unwrapped)
-        } else {
-          return nil
-        }
-      }()
-    }
+    return { () -> String? in
+      if bridge.has_value_std__optional_std__string_(self.__name) {
+        let __unwrapped = bridge.get_std__optional_std__string_(self.__name)
+        return String(__unwrapped)
+      } else {
+        return nil
+      }
+    }()
   }
   
+  @inline(__always)
   var age: Double? {
-    @inline(__always)
-    get {
-      return self.__age.value
-    }
+    return self.__age.value
   }
 }

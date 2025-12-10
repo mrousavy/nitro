@@ -66,113 +66,91 @@ public extension Car {
     }())
   }
 
+  @inline(__always)
   var year: Double {
-    @inline(__always)
-    get {
-      return self.__year
-    }
+    return self.__year
   }
   
+  @inline(__always)
   var make: String {
-    @inline(__always)
-    get {
-      return String(self.__make)
-    }
+    return String(self.__make)
   }
   
+  @inline(__always)
   var model: String {
-    @inline(__always)
-    get {
-      return String(self.__model)
-    }
+    return String(self.__model)
   }
   
+  @inline(__always)
   var power: Double {
-    @inline(__always)
-    get {
-      return self.__power
-    }
+    return self.__power
   }
   
+  @inline(__always)
   var powertrain: Powertrain {
-    @inline(__always)
-    get {
-      return self.__powertrain
-    }
+    return self.__powertrain
   }
   
+  @inline(__always)
   var driver: Person? {
-    @inline(__always)
-    get {
-      return self.__driver.value
-    }
+    return self.__driver.value
   }
   
+  @inline(__always)
   var passengers: [Person] {
-    @inline(__always)
-    get {
-      return self.__passengers.map({ __item in __item })
-    }
+    return self.__passengers.map({ __item in __item })
   }
   
+  @inline(__always)
   var isFast: Bool? {
-    @inline(__always)
-    get {
-      return { () -> Bool? in
-        if bridge.has_value_std__optional_bool_(self.__isFast) {
-          let __unwrapped = bridge.get_std__optional_bool_(self.__isFast)
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }()
-    }
+    return { () -> Bool? in
+      if bridge.has_value_std__optional_bool_(self.__isFast) {
+        let __unwrapped = bridge.get_std__optional_bool_(self.__isFast)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
   }
   
+  @inline(__always)
   var favouriteTrack: String? {
-    @inline(__always)
-    get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
-          return String(__unwrapped)
-        } else {
-          return nil
-        }
-      }()
-    }
+    return { () -> String? in
+      if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
+        let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
+        return String(__unwrapped)
+      } else {
+        return nil
+      }
+    }()
   }
   
+  @inline(__always)
   var performanceScores: [Double] {
-    @inline(__always)
-    get {
-      return self.__performanceScores.map({ __item in __item })
-    }
+    return self.__performanceScores.map({ __item in __item })
   }
   
+  @inline(__always)
   var someVariant: Variant_String_Double? {
-    @inline(__always)
-    get {
-      return { () -> Variant_String_Double? in
-        if bridge.has_value_std__optional_std__variant_std__string__double__(self.__someVariant) {
-          let __unwrapped = bridge.get_std__optional_std__variant_std__string__double__(self.__someVariant)
-          return { () -> Variant_String_Double in
-            let __variant = bridge.std__variant_std__string__double_(__unwrapped)
-            switch __variant.index() {
-              case 0:
-                let __actual = __variant.get_0()
-                return .first(String(__actual))
-              case 1:
-                let __actual = __variant.get_1()
-                return .second(__actual)
-              default:
-                fatalError("Variant can never have index \(__variant.index())!")
-            }
-          }()
-        } else {
-          return nil
-        }
-      }()
-    }
+    return { () -> Variant_String_Double? in
+      if bridge.has_value_std__optional_std__variant_std__string__double__(self.__someVariant) {
+        let __unwrapped = bridge.get_std__optional_std__variant_std__string__double__(self.__someVariant)
+        return { () -> Variant_String_Double in
+          let __variant = bridge.std__variant_std__string__double_(__unwrapped)
+          switch __variant.index() {
+            case 0:
+              let __actual = __variant.get_0()
+              return .first(String(__actual))
+            case 1:
+              let __actual = __variant.get_1()
+              return .second(__actual)
+            default:
+              fatalError("Variant can never have index \(__variant.index())!")
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
   }
 }
