@@ -27,7 +27,7 @@ int levelToAndroidLevel(LogLevel level) {
 }
 
 void Logger::nativeLog([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* tag, [[maybe_unused]] const std::string& message) {
-#ifdef NITRO_DEBUG
+#if NITRO_ENABLE_LOGS
   int logLevel = levelToAndroidLevel(level);
   std::string combinedTag = "Nitro." + std::string(tag);
   __android_log_print(logLevel, combinedTag.c_str(), "%s", message.c_str());

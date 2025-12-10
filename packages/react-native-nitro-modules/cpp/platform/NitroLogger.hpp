@@ -24,7 +24,7 @@ public:
   template <typename... Args>
   static void log([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* NON_NULL tag, [[maybe_unused]] const char* NON_NULL format,
                   [[maybe_unused]] Args... args) {
-#ifdef NITRO_DEBUG
+#if NITRO_ENABLE_LOGS
     // 1. Make sure args can be passed to sprintf(..)
     static_assert(all_are_trivially_copyable<Args...>(), "All arguments passed to Logger::log(..) must be trivially copyable! "
                                                          "Did you try to pass a complex type, like std::string?");
