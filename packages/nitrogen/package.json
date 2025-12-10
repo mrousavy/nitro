@@ -26,7 +26,6 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun build || exit 0;",
     "build": "bun tsc",
     "start": "tsc && node lib/index.js",
     "typecheck": "tsc --noEmit",
