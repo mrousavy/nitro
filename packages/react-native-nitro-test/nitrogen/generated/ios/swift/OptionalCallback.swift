@@ -68,25 +68,5 @@ public extension OptionalCallback {
         }
       }()
     }
-    @inline(__always)
-    set {
-      self.__callback = { () -> bridge.std__optional_std__variant_std__function_void_____double__ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__variant_std__function_void_____double__({ () -> bridge.std__variant_std__function_void_____double_ in
-            switch __unwrappedValue {
-              case .first(let __value):
-                return bridge.create_std__variant_std__function_void_____double_({ () -> bridge.Func_void in
-                  let __closureWrapper = Func_void(__value)
-                  return bridge.create_Func_void(__closureWrapper.toUnsafe())
-                }())
-              case .second(let __value):
-                return bridge.create_std__variant_std__function_void_____double_(__value)
-            }
-          }().variant)
-        } else {
-          return .init()
-        }
-      }()
-    }
   }
 }

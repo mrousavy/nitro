@@ -25,10 +25,6 @@ var ${p.escapedName}: ${p.getCode('swift')} {
   get {
     return ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '    ')}
   }
-  @inline(__always)
-  set {
-    ${cppName} = ${indent(bridge.parseFromSwiftToCpp('newValue', 'swift'), '    ')}
-  }
 }
     `.trim()
     })

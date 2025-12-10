@@ -31,10 +31,6 @@ public extension JsStyleStruct {
     get {
       return self.__value
     }
-    @inline(__always)
-    set {
-      self.__value = newValue
-    }
   }
   
   var onChanged: (_ num: Double) -> Void {
@@ -45,13 +41,6 @@ public extension JsStyleStruct {
         return { (__num: Double) -> Void in
           __wrappedFunction.call(__num)
         }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__onChanged = { () -> bridge.Func_void_double in
-        let __closureWrapper = Func_void_double(newValue)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
       }()
     }
   }

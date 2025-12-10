@@ -34,26 +34,12 @@ public extension WrappedJsStruct {
     get {
       return self.__value
     }
-    @inline(__always)
-    set {
-      self.__value = newValue
-    }
   }
   
   var items: [JsStyleStruct] {
     @inline(__always)
     get {
       return self.__items.map({ __item in __item })
-    }
-    @inline(__always)
-    set {
-      self.__items = { () -> bridge.std__vector_JsStyleStruct_ in
-        var __vector = bridge.create_std__vector_JsStyleStruct_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
     }
   }
 }

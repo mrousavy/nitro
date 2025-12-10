@@ -36,12 +36,5 @@ public extension ExternalObjectStruct {
         return __instance.getHybridSomeExternalObjectSpec()
       }()
     }
-    @inline(__always)
-    set {
-      self.__someExternal = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __cxxWrapped = newValue.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
-      }()
-    }
   }
 }

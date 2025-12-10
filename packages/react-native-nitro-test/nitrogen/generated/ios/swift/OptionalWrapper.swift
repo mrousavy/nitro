@@ -47,16 +47,6 @@ public extension OptionalWrapper {
         }
       }()
     }
-    @inline(__always)
-    set {
-      self.__optionalArrayBuffer = { () -> bridge.std__optional_std__shared_ptr_ArrayBuffer__ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__shared_ptr_ArrayBuffer__(__unwrappedValue.getArrayBuffer())
-        } else {
-          return .init()
-        }
-      }()
-    }
   }
   
   var optionalString: String? {
@@ -68,16 +58,6 @@ public extension OptionalWrapper {
           return String(__unwrapped)
         } else {
           return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__optionalString = { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
         }
       }()
     }

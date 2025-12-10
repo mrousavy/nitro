@@ -47,32 +47,12 @@ public extension PartialPerson {
         }
       }()
     }
-    @inline(__always)
-    set {
-      self.__name = { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
-        }
-      }()
-    }
   }
   
   var age: Double? {
     @inline(__always)
     get {
       return self.__age.value
-    }
-    @inline(__always)
-    set {
-      self.__age = { () -> bridge.std__optional_double_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
     }
   }
 }

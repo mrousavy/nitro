@@ -28,20 +28,12 @@ public extension Person {
     get {
       return String(self.__name)
     }
-    @inline(__always)
-    set {
-      self.__name = std.string(newValue)
-    }
   }
   
   var age: Double {
     @inline(__always)
     get {
       return self.__age
-    }
-    @inline(__always)
-    set {
-      self.__age = newValue
     }
   }
 }

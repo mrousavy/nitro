@@ -42,26 +42,12 @@ public extension MapWrapper {
         return __dictionary
       }()
     }
-    @inline(__always)
-    set {
-      self.__map = { () -> bridge.std__unordered_map_std__string__std__string_ in
-        var __map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
-        for (__k, __v) in newValue {
-          bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
-        }
-        return __map
-      }()
-    }
   }
   
   var secondMap: SecondMapWrapper {
     @inline(__always)
     get {
       return self.__secondMap
-    }
-    @inline(__always)
-    set {
-      self.__secondMap = newValue
     }
   }
 }

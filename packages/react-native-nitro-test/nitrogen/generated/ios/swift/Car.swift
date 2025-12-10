@@ -71,20 +71,12 @@ public extension Car {
     get {
       return self.__year
     }
-    @inline(__always)
-    set {
-      self.__year = newValue
-    }
   }
   
   var make: String {
     @inline(__always)
     get {
       return String(self.__make)
-    }
-    @inline(__always)
-    set {
-      self.__make = std.string(newValue)
     }
   }
   
@@ -93,20 +85,12 @@ public extension Car {
     get {
       return String(self.__model)
     }
-    @inline(__always)
-    set {
-      self.__model = std.string(newValue)
-    }
   }
   
   var power: Double {
     @inline(__always)
     get {
       return self.__power
-    }
-    @inline(__always)
-    set {
-      self.__power = newValue
     }
   }
   
@@ -115,10 +99,6 @@ public extension Car {
     get {
       return self.__powertrain
     }
-    @inline(__always)
-    set {
-      self.__powertrain = newValue
-    }
   }
   
   var driver: Person? {
@@ -126,32 +106,12 @@ public extension Car {
     get {
       return self.__driver.value
     }
-    @inline(__always)
-    set {
-      self.__driver = { () -> bridge.std__optional_Person_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_Person_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
   }
   
   var passengers: [Person] {
     @inline(__always)
     get {
       return self.__passengers.map({ __item in __item })
-    }
-    @inline(__always)
-    set {
-      self.__passengers = { () -> bridge.std__vector_Person_ in
-        var __vector = bridge.create_std__vector_Person_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
     }
   }
   
@@ -164,16 +124,6 @@ public extension Car {
           return __unwrapped
         } else {
           return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__isFast = { () -> bridge.std__optional_bool_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_bool_(__unwrappedValue)
-        } else {
-          return .init()
         }
       }()
     }
@@ -191,32 +141,12 @@ public extension Car {
         }
       }()
     }
-    @inline(__always)
-    set {
-      self.__favouriteTrack = { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
-        }
-      }()
-    }
   }
   
   var performanceScores: [Double] {
     @inline(__always)
     get {
       return self.__performanceScores.map({ __item in __item })
-    }
-    @inline(__always)
-    set {
-      self.__performanceScores = { () -> bridge.std__vector_double_ in
-        var __vector = bridge.create_std__vector_double_(newValue.count)
-        for __item in newValue {
-          __vector.push_back(__item)
-        }
-        return __vector
-      }()
     }
   }
   
@@ -241,23 +171,6 @@ public extension Car {
           }()
         } else {
           return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__someVariant = { () -> bridge.std__optional_std__variant_std__string__double__ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__variant_std__string__double__({ () -> bridge.std__variant_std__string__double_ in
-            switch __unwrappedValue {
-              case .first(let __value):
-                return bridge.create_std__variant_std__string__double_(std.string(__value))
-              case .second(let __value):
-                return bridge.create_std__variant_std__string__double_(__value)
-            }
-          }().variant)
-        } else {
-          return .init()
         }
       }()
     }
