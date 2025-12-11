@@ -1358,7 +1358,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callWithOptional(value: value.value, callback: { () -> (Double?) -> Void in
+      try self.__implementation.callWithOptional(value: { () -> Double? in
+        if bridge.has_value_std__optional_double_(value) {
+          let __unwrapped = bridge.get_std__optional_double_(value)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), callback: { () -> (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
           __wrappedFunction.call({ () -> bridge.std__optional_double_ in

@@ -62,7 +62,14 @@ public extension PartialPerson {
   var age: Double? {
     @inline(__always)
     get {
-      return self.__age.value
+      return { () -> Double? in
+        if bridge.has_value_std__optional_double_(self.__age) {
+          let __unwrapped = bridge.get_std__optional_double_(self.__age)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
     }
     @inline(__always)
     set {

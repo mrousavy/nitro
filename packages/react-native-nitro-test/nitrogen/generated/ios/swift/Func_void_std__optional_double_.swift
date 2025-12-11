@@ -23,7 +23,14 @@ public final class Func_void_std__optional_double_ {
 
   @inline(__always)
   public func call(value: bridge.std__optional_double_) -> Void {
-    self.closure(value.value)
+    self.closure({ () -> Double? in
+      if bridge.has_value_std__optional_double_(value) {
+        let __unwrapped = bridge.get_std__optional_double_(value)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }())
   }
 
   /**
