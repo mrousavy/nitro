@@ -22,6 +22,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("colorScheme", &HybridTestViewSpec::setColorScheme);
       prototype.registerHybridGetter("someCallback", &HybridTestViewSpec::getSomeCallback);
       prototype.registerHybridSetter("someCallback", &HybridTestViewSpec::setSomeCallback);
+      prototype.registerHybridGetter("nonSettableProp", &HybridTestViewSpec::getNonSettableProp);
       prototype.registerHybridMethod("someMethod", &HybridTestViewSpec::someMethod);
     });
   }

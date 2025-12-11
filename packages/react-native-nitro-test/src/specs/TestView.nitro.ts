@@ -11,6 +11,7 @@ export interface TestViewProps extends HybridViewProps {
   hasBeenCalled: boolean
   colorScheme: ColorScheme
   someCallback: () => void
+  readonly nonSettableProp: boolean
 }
 export interface TestViewMethods extends HybridViewMethods {
   someMethod(): void

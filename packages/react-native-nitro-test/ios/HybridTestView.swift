@@ -21,6 +21,9 @@ class HybridTestView: HybridTestViewSpec {
   var hasBeenCalled: Bool = false
   var colorScheme: ColorScheme = .light
   var someCallback: () -> Void = {}
+  var nonSettableProp: Bool {
+    return true
+  }
 
   // Methods
   func someMethod() throws {

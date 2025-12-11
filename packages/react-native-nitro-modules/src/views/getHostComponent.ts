@@ -76,6 +76,20 @@ type WrapFunctionsInObjects<Props> = {
       : Props[K]
 }
 
+// Returns all settable (non-readonly) props
+type KeyIsWritable<T, K extends keyof T> =
+  (<U>() => U extends { [P in K]: T[P] } ? 1 : 2) extends <U>() => U extends {
+    -readonly [P in K]: T[P]
+  }
+    ? 1
+    : 2
+    ? true
+    : false
+type WritableKeys<T> = {
+  [K in keyof T]-?: KeyIsWritable<T, K> extends true ? K : never
+}[keyof T]
+type Settable<T> = Pick<T, WritableKeys<T>>
+
 /**
  * Represents a React Native view, implemented as a Nitro View, with the given props and methods.
  *
@@ -89,7 +103,7 @@ export type ReactNativeView<
   Methods extends HybridViewMethods,
 > = HostComponent<
   WrapFunctionsInObjects<
-    DefaultHybridViewProps<HybridView<Props, Methods>> & Props
+    DefaultHybridViewProps<HybridView<Props, Methods>> & Settable<Props>
   > &
     ViewProps
 >
@@ -122,7 +136,7 @@ export function getHostComponent<
   Methods extends HybridViewMethods,
 >(
   name: string,
-  getViewConfig: () => ViewConfig<Props>
+  getViewConfig: () => ViewConfig<Settable<Props>>
 ): ReactNativeView<Props, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
