@@ -699,6 +699,31 @@ namespace margelo::nitro::test::bridge::swift {
     map.emplace(key, value);
   }
   
+  // pragma MARK: std::unordered_map<std::string, double>
+  /**
+   * Specialized version of `std::unordered_map<std::string, double>`.
+   */
+  using std__unordered_map_std__string__double_ = std::unordered_map<std::string, double>;
+  inline std::unordered_map<std::string, double> create_std__unordered_map_std__string__double_(size_t size) noexcept {
+    std::unordered_map<std::string, double> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__double__keys(const std__unordered_map_std__string__double_& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline double get_std__unordered_map_std__string__double__value(const std__unordered_map_std__string__double_& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__double_(std__unordered_map_std__string__double_& map, const std::string& key, const double& value) noexcept {
+    map.emplace(key, value);
+  }
+  
   // pragma MARK: std::unordered_map<std::string, std::string>
   /**
    * Specialized version of `std::unordered_map<std::string, std::string>`.
@@ -1617,6 +1642,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, std::variant<bool, double>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, double>>
+  using Result_std__unordered_map_std__string__double__ = Result<std::unordered_map<std::string, double>>;
+  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::unordered_map<std::string, double>& value) noexcept {
+    return Result<std::unordered_map<std::string, double>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::exception_ptr& error) noexcept {
+    return Result<std::unordered_map<std::string, double>>::withError(error);
   }
   
   // pragma MARK: Result<std::unordered_map<std::string, std::string>>
