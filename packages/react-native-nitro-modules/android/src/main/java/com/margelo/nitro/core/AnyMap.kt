@@ -59,13 +59,13 @@ class AnyMap {
     }
   }
 
+  
   fun toMap(): Map<String, Any?> {
-    val map = HashMap<String, Any?>()
-    for (key in getAllKeys()) {
-      map.put(key, getAny(key))
-    }
-    return map
+    @Suppress("UNCHECKED_CAST")
+    return toJavaMap() as Map<String, Any?>
   }
+
+  private external fun toJavaMap(): HashMap<String, Any?>
 
   fun setAny(
     key: String,
