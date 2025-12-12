@@ -26,33 +26,18 @@ public extension JsStyleStruct {
     }())
   }
 
+  @inline(__always)
   var value: Double {
-    @inline(__always)
-    get {
-      return self.__value
-    }
-    @inline(__always)
-    set {
-      self.__value = newValue
-    }
+    return self.__value
   }
   
+  @inline(__always)
   var onChanged: (_ num: Double) -> Void {
-    @inline(__always)
-    get {
-      return { () -> (Double) -> Void in
-        let __wrappedFunction = bridge.wrap_Func_void_double(self.__onChanged)
-        return { (__num: Double) -> Void in
-          __wrappedFunction.call(__num)
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__onChanged = { () -> bridge.Func_void_double in
-        let __closureWrapper = Func_void_double(newValue)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-      }()
-    }
+    return { () -> (Double) -> Void in
+      let __wrappedFunction = bridge.wrap_Func_void_double(self.__onChanged)
+      return { (__num: Double) -> Void in
+        __wrappedFunction.call(__num)
+      }
+    }()
   }
 }

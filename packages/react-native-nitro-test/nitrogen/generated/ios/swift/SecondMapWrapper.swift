@@ -29,28 +29,16 @@ public extension SecondMapWrapper {
     }())
   }
 
+  @inline(__always)
   var second: Dictionary<String, String> {
-    @inline(__always)
-    get {
-      return { () -> Dictionary<String, String> in
-        var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
-        let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
-        for __key in __keys {
-          let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__second, __key)
-          __dictionary[String(__key)] = String(__value)
-        }
-        return __dictionary
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__second = { () -> bridge.std__unordered_map_std__string__std__string_ in
-        var __map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
-        for (__k, __v) in newValue {
-          bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
-        }
-        return __map
-      }()
-    }
+    return { () -> Dictionary<String, String> in
+      var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
+      let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
+      for __key in __keys {
+        let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__second, __key)
+        __dictionary[String(__key)] = String(__value)
+      }
+      return __dictionary
+    }()
   }
 }

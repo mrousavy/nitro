@@ -23,25 +23,13 @@ public extension Person {
     self.init(std.string(name), age)
   }
 
+  @inline(__always)
   var name: String {
-    @inline(__always)
-    get {
-      return String(self.__name)
-    }
-    @inline(__always)
-    set {
-      self.__name = std.string(newValue)
-    }
+    return String(self.__name)
   }
   
+  @inline(__always)
   var age: Double {
-    @inline(__always)
-    get {
-      return self.__age
-    }
-    @inline(__always)
-    set {
-      self.__age = newValue
-    }
+    return self.__age
   }
 }
