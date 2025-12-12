@@ -9,6 +9,7 @@ import {
   type Language,
   isHybridViewProps,
   isHybridViewMethods,
+  getHybridViewConfig,
 } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
@@ -52,9 +53,14 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     const name = symbol.getEscapedName()
 
     // It's a Hybrid View - the `Props & Methods` types are just intersected together.
-    const unions = type.getIntersectionTypes()
-    const props = unions.find((t) => isHybridViewProps(t))
-    const methods = unions.find((t) => isHybridViewMethods(t))
+    const intersections = type.getIntersectionTypes()
+    const props = intersections.find((t) => isHybridViewProps(t))
+    const methods = intersections.find((t) => isHybridViewMethods(t))
+    // console.log("VIEW CONFIG TYPE:", intersections.map((u) => ({
+    //   name: u.getSymbol()?.getName() ?? '<<anonymous>>',
+    //   baseTypes: u.getBaseTypes().map((bt) => bt.getText()),
+
+    // })))
     if (props == null)
       throw new Error(
         `Props cannot be null! ${name}<...> (HybridView) requires type arguments.`
@@ -62,10 +68,13 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     const propsSpec = getHybridObjectSpec(props, language)
     const methodsSpec =
       methods != null ? getHybridObjectSpec(methods, language) : undefined
+    const viewConfigSpec = getHybridViewConfig(type)
+
+    console.log("🔥🔥🔥 HOT VIEW CONFIG 🔥🔥🔥", viewConfigSpec)
 
     return {
       baseTypes: [],
-      isHybridView: true,
+      hybridViewConfig: viewConfigSpec,
       language: language,
       methods: methodsSpec?.methods ?? [],
       properties: propsSpec.properties,
@@ -144,7 +153,7 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     properties: properties,
     methods: methods,
     baseTypes: bases,
-    isHybridView: isHybridView(type),
+    hybridViewConfig: isHybridView(type) ? getHybridViewConfig(type) : null,
     config: config,
   }
 
