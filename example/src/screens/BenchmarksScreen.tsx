@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectSwiftKotlin } from 'react-native-nitro-test'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
+import type { AnyMap } from 'react-native-nitro-modules'
 
 declare global {
   var gc: () => void
@@ -57,6 +58,85 @@ function benchmark(obj: BenchmarkableObject): number {
 }
 
 const ITERATIONS = 100_000
+
+// AnyMap toMap benchmark
+interface AnyMapBenchmarkResult {
+  mapSize: number
+  iterations: number
+  totalTimeMs: number
+  avgTimePerCallMs: number
+}
+
+function createLargeAnyMap(size: number): AnyMap {
+  const map: AnyMap = {}
+  for (let i = 0; i < size; i++) {
+    const key = `key_${i}`
+    // Mix different types to simulate realistic data
+    if (i % 5 === 0) {
+      map[key] = `string_value_${i}`
+    } else if (i % 5 === 1) {
+      map[key] = i * 1.5
+    } else if (i % 5 === 2) {
+      map[key] = i % 2 === 0
+    } else if (i % 5 === 3) {
+      map[key] = { nested: i, value: `nested_${i}` }
+    } else {
+      map[key] = [i, i + 1, i + 2]
+    }
+  }
+  return map
+}
+
+function benchmarkAnyMapToMap(
+  mapSize: number,
+  iterations: number
+): AnyMapBenchmarkResult {
+  // Create a map and pass it through the native bridge via copyAnyValues
+  // This exercises toMap() on the native side
+  const testMap = createLargeAnyMap(mapSize)
+
+  // Warmup
+  HybridTestObjectSwiftKotlin.copyAnyValues(testMap)
+
+  // Benchmark
+  const start = performance.now()
+  for (let i = 0; i < iterations; i++) {
+    // copyAnyValues internally calls toMap() then fromMap()
+    HybridTestObjectSwiftKotlin.copyAnyValues(testMap)
+  }
+  const end = performance.now()
+
+  const totalTimeMs = end - start
+  return {
+    mapSize,
+    iterations,
+    totalTimeMs,
+    avgTimePerCallMs: totalTimeMs / iterations,
+  }
+}
+
+async function runAnyMapBenchmark(): Promise<AnyMapBenchmarkResult> {
+  console.log('Running AnyMap.toMap() benchmark...')
+
+  // Test with different map sizes
+  const MAP_SIZE = 1000 // 100 key-value pairs
+  const ANYMAP_ITERATIONS = 10000
+
+  await waitForGc()
+
+  const result = benchmarkAnyMapToMap(MAP_SIZE, ANYMAP_ITERATIONS)
+
+  console.log(
+    `AnyMap.toMap() benchmark finished!\n` +
+      `  Map size: ${result.mapSize} entries\n` +
+      `  Iterations: ${result.iterations}\n` +
+      `  Total time: ${result.totalTimeMs.toFixed(2)}ms\n` +
+      `  Avg per call: ${result.avgTimePerCallMs.toFixed(4)}ms`
+  )
+
+  return result
+}
+
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
   await waitForGc()
@@ -80,6 +160,8 @@ export function BenchmarksScreen() {
   const dimensions = useWindowDimensions()
   const [status, setStatus] = React.useState('📱 Idle')
   const [results, setResults] = React.useState<BenchmarksResult>()
+  const [anyMapResult, setAnyMapResult] =
+    React.useState<AnyMapBenchmarkResult>()
   const nitroWidth = React.useRef(new Animated.Value(0)).current
   const turboWidth = React.useRef(new Animated.Value(0)).current
 
@@ -110,6 +192,14 @@ export function BenchmarksScreen() {
       tension: 40,
       useNativeDriver: false,
     }).start()
+    setStatus(`📱 Idle`)
+  }
+
+  const runAnyMap = async () => {
+    setAnyMapResult(undefined)
+    setStatus(`⏳ Running AnyMap.toMap() Benchmark`)
+    const r = await runAnyMapBenchmark()
+    setAnyMapResult(r)
     setStatus(`📱 Idle`)
   }
 
@@ -191,7 +281,37 @@ export function BenchmarksScreen() {
         </Text>
         <View style={styles.flex} />
         <Button title="Run" onPress={run} />
+        <View style={{ width: 10 }} />
+        <Button title="AnyMap" onPress={runAnyMap} />
       </View>
+
+      {anyMapResult != null && (
+        <View
+          style={[styles.anyMapResultBox, { backgroundColor: colors.card }]}
+        >
+          <Text style={styles.anyMapTitle}>AnyMap.toMap() Benchmark</Text>
+          <Text style={styles.anyMapText}>
+            Map size: <Text style={styles.bold}>{anyMapResult.mapSize}</Text>{' '}
+            entries
+          </Text>
+          <Text style={styles.anyMapText}>
+            Iterations:{' '}
+            <Text style={styles.bold}>{anyMapResult.iterations}</Text>
+          </Text>
+          <Text style={styles.anyMapText}>
+            Total time:{' '}
+            <Text style={styles.bold}>
+              {anyMapResult.totalTimeMs.toFixed(2)}ms
+            </Text>
+          </Text>
+          <Text style={styles.anyMapText}>
+            Avg per call:{' '}
+            <Text style={styles.bold}>
+              {anyMapResult.avgTimePerCallMs.toFixed(4)}ms
+            </Text>
+          </Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -285,6 +405,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   flex: { flex: 1 },
+  anyMapResultBox: {
+    position: 'absolute',
+    top: 100,
+    left: 20,
+    right: 20,
+    padding: 15,
+    borderRadius: 10,
+  },
+  anyMapTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  anyMapText: {
+    fontSize: 14,
+    marginVertical: 2,
+  },
   bottomView: {
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
