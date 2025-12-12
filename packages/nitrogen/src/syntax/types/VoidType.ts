@@ -10,6 +10,9 @@ export class VoidType implements Type {
   get kind(): TypeKind {
     return 'void'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

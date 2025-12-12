@@ -69,6 +69,9 @@ export class HybridObjectType implements Type {
   get kind(): TypeKind {
     return 'hybrid-object'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(
     language: Language,

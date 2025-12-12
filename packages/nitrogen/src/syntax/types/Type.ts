@@ -47,6 +47,10 @@ export interface Type {
    */
   readonly kind: TypeKind
   /**
+   * `true` if the type is equatable.
+   */
+  readonly isEquatable: boolean
+  /**
    * Get the native code required to represent this type for the given language (C++, Swift, Kotlin).
    *
    * E.g. for a `number` type, this would return `'double'` in C++.

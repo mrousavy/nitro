@@ -51,6 +51,18 @@ export function createCppStruct(
     )
     .join('\n')
 
+  // Only equatable types have an operator== overload
+  let equatableFunc: string
+  const isEquatable = properties.every((p) => p.isEquatable)
+  if (isEquatable) {
+    equatableFunc = `friend bool operator==(const ${typename}& lhs, const ${typename}& rhs) = default;`
+  } else {
+    const nonEquatableTypes = properties
+      .filter((p) => !p.isEquatable)
+      .map((p) => p.name)
+    equatableFunc = `// ${typename} is not equatable because these properties are not equatable: ${nonEquatableTypes.join(', ')}`
+  }
+
   // Get C++ includes for each extra-file we need to include
   const includedTypes = properties.flatMap((r) => r.getRequiredImports('c++'))
   const cppForwardDeclarations = includedTypes
@@ -87,6 +99,9 @@ namespace ${cxxNamespace} {
   public:
     ${typename}() = default;
     explicit ${typename}(${cppConstructorParams}): ${cppInitializerParams} {}
+
+  public:
+    ${indent(equatableFunc, '    ')}
   };
 
 } // namespace ${cxxNamespace}

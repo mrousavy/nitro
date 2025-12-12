@@ -10,6 +10,9 @@ export class NullType implements Type {
   get kind(): TypeKind {
     return 'null'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

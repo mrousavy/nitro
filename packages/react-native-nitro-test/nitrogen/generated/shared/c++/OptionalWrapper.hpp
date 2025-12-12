@@ -42,6 +42,9 @@ namespace margelo::nitro::test {
   public:
     OptionalWrapper() = default;
     explicit OptionalWrapper(std::optional<std::shared_ptr<ArrayBuffer>> optionalArrayBuffer, std::optional<std::string> optionalString): optionalArrayBuffer(optionalArrayBuffer), optionalString(optionalString) {}
+
+  public:
+    friend bool operator==(const OptionalWrapper& lhs, const OptionalWrapper& rhs) = default;
   };
 
 } // namespace margelo::nitro::test
