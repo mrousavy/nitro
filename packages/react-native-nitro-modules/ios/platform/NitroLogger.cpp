@@ -11,7 +11,9 @@
 
 namespace margelo::nitro {
 
-void Logger::nativeLog([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* tag, [[maybe_unused]] const std::string& message) {
+void Logger::nativeLog([[maybe_unused]] LogLevel level,           //
+                       [[maybe_unused]] const char* NON_NULL tag, //
+                       [[maybe_unused]] const std::string& message) {
 #ifdef NITRO_DEBUG
   static os_log_t logger = os_log_create("com.margelo.nitro", "nitro");
 
