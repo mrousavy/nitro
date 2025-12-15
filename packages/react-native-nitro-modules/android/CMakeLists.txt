@@ -47,6 +47,11 @@ find_library(LOG_LIB log)
 find_package(fbjni REQUIRED NitroConfig)
 find_package(ReactAndroid REQUIRED NitroConfig)
 
+# Set max page size to 16KB for older NDK versions
+if(CMAKE_ANDROID_NDK_VERSION VERSION_LESS "27")
+    target_link_options(NitroModules PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
+
 # Link all libraries together
 target_link_libraries(
         NitroModules
