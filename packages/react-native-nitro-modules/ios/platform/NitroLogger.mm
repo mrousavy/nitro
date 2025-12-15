@@ -14,7 +14,7 @@ namespace margelo::nitro {
 void Logger::nativeLog([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* tag, [[maybe_unused]] const std::string& message) {
 #ifdef NITRO_DEBUG
   static os_log_t logger = os_log_create("com.margelo.nitro", "nitro");
-  
+
   switch (level) {
     case LogLevel::Debug:
       os_log_debug(logger, "[%s] %s", tag, message.c_str());
