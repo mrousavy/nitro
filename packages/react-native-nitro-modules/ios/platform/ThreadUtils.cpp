@@ -6,10 +6,10 @@
 //
 
 #include "ThreadUtils.hpp"
+#include <dispatch/dispatch.h>
 #include <pthread.h>
 #include <sstream>
 #include <thread>
-#include <dispatch/dispatch.h>
 
 namespace margelo::nitro {
 
@@ -20,7 +20,7 @@ std::string ThreadUtils::getThreadName() {
     // We are on a DispatchQueue with a name
     return std::string(queueName);
   }
-  
+
   // Try using pthread APIs
   char threadName[64] = {};
   int pthreadResult = pthread_getname_np(pthread_self(), threadName, sizeof(threadName));
