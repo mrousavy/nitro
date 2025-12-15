@@ -4,6 +4,7 @@ export * from './BoxedHybridObject'
 export * from './CustomType'
 export * from './getHybridObjectConstructor'
 export * from './HybridObject'
+export * from './Int32'
 export * from './NitroModules'
 export * from './Sync'
 

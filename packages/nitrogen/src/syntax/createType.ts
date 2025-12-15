@@ -40,10 +40,12 @@ import {
   isMap,
   isPromise,
   isRecord,
+  isInt32,
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
 import { compareLooselyness } from './helpers.js'
 import { NullType } from './types/NullType.js'
+import { Int32Type } from './types/Int32Type.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -201,6 +203,9 @@ export function createType(
         }
         // Call createType(...) now with the enum type.
         return createType(language, baseType, isOptional)
+      }
+      if (isInt32(type)) {
+        return new Int32Type()
       }
       return new NumberType()
     } else if (type.isString()) {

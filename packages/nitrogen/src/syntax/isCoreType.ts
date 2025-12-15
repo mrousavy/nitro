@@ -58,3 +58,9 @@ export function isSyncFunction(type: TSMorphType): boolean {
   const syncTag = type.getProperty('__syncTag')
   return syncTag != null
 }
+
+export function isInt32(type: TSMorphType): boolean {
+  if (!type.isNumber()) return false
+  const int32Tag = type.getProperty('__int32Tag')
+  return int32Tag != null
+}
