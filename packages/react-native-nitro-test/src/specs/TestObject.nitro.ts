@@ -4,6 +4,7 @@ import {
   type Sync,
   type CustomType,
   type AnyHybridObject,
+  type Int32,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -115,6 +116,7 @@ interface SharedTestObjectProps {
   stringValue: string
   bigintValue: bigint
   nullValue: null
+  intValue: Int32
   optionalString?: string
   stringOrUndefined: string | undefined
   stringOrNull: string | null

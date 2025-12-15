@@ -81,6 +81,9 @@ function getTypeLooselyness(type: Type): number {
       return 0
     case 'number':
       // We have `isNumber()` (but it can also be an enum)
+      return 2
+    case 'int32':
+      // We check if it's in range first, then if it's a number.
       return 1
     case 'optional':
       // We have `isUndefined()`

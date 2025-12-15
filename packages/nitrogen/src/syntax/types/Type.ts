@@ -15,6 +15,7 @@ export type TypeKind =
   | 'map'
   | 'null'
   | 'number'
+  | 'int32'
   | 'optional'
   | 'promise'
   | 'record'
