@@ -7,29 +7,28 @@
 
 #include "NitroLogger.hpp"
 #include "NitroDefines.hpp"
-#include <Foundation/Foundation.h>
+#include <os/log.h>
 
 namespace margelo::nitro {
 
-const char* levelToString(LogLevel level) {
-  switch (level) {
-    case LogLevel::Debug:
-      return "DEBUG";
-    case LogLevel::Info:
-      return "INFO";
-    case LogLevel::Warning:
-      return "WARNING";
-    case LogLevel::Error:
-      return "ERROR";
-    default:
-      throw std::invalid_argument("Invalid LogLevel!");
-  }
-}
-
 void Logger::nativeLog([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* tag, [[maybe_unused]] const std::string& message) {
 #ifdef NITRO_DEBUG
-  const char* logLevel = levelToString(level);
-  NSLog(@"[%s] [Nitro.%s] %s", logLevel, tag, message.c_str());
+  static os_log_t logger = os_log_create("com.margelo.nitro", "nitro");
+  
+  switch (level) {
+    case LogLevel::Debug:
+      os_log_debug(logger, "[%s] %s", tag, message.c_str());
+      break;
+    case LogLevel::Info:
+      os_log_info(logger, "[%s] %s", tag, message.c_str());
+      break;
+    case LogLevel::Warning:
+      os_log_error(logger, "[%s] %s", tag, message.c_str());
+      break;
+    case LogLevel::Error:
+      os_log_error(logger, "[%s] %s", tag, message.c_str());
+      break;
+  }
 #endif
 }
 
