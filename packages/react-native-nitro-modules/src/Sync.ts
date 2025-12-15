@@ -5,4 +5,6 @@
  * This allows for fast native -> JS calls and avoids any asynchronous dispatching, but requires careful
  * threading considerations.
  */
-export type Sync<T> = T extends Function ? T & { __syncTag?: never } : never
+export type Sync<T> = T extends Function
+  ? T & { readonly __syncTag?: never }
+  : never
