@@ -123,6 +123,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JPromise.hpp',
             space: 'system',
           })
+          const promiseType = getTypeAs(this.type, PromiseType)
+          if (promiseType.resultingType.kind === 'void') {
+            // Promise<void> uses JUnit::instance() to resolve
+            imports.push({
+              language: 'c++',
+              name: 'NitroModules/JUnit.hpp',
+              space: 'system',
+            })
+          }
           break
         case 'date':
           imports.push({

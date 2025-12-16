@@ -838,6 +838,63 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_Car_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> call() const noexcept {
+      auto __result = _function->operator()();
+      return __result;
+    }
+  private:
+    std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_void____() noexcept {
+    return Promise<std::shared_ptr<Promise<void>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<void>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> promise) noexcept {
+    return PromiseHolder<std::shared_ptr<Promise<void>>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<Promise<void>>&)>`.
+   */
+  using Func_void_std__shared_ptr_Promise_void__ = std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<Promise<void>>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_Promise_void___Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_Promise_void___Wrapper(std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<Promise<void>> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__shared_ptr_Promise_void__ create_Func_void_std__shared_ptr_Promise_void__(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__shared_ptr_Promise_void___Wrapper wrap_Func_void_std__shared_ptr_Promise_void__(Func_void_std__shared_ptr_Promise_void__ value) noexcept {
+    return Func_void_std__shared_ptr_Promise_void___Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<double>>()>`.

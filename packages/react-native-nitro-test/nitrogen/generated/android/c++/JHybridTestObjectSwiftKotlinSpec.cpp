@@ -113,6 +113,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "SecondMapWrapper.hpp"
 #include "JSecondMapWrapper.hpp"
 #include <exception>
+#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_void____.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
 #include "JFunc_std__shared_ptr_Promise_double__.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double____.hpp"
@@ -923,6 +924,10 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* callback */)>("callCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(callback));
+  }
+  void JHybridTestObjectSwiftKotlinSpec::callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_void____::javaobject> /* callback */)>("callCallbackThatReturnsPromiseVoid_cxx");
+    method(_javaPart, JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____cxx::fromCpp(callback));
   }
   void JHybridTestObjectSwiftKotlinSpec::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* first */, jni::alias_ref<JFunc_void::javaobject> /* second */, jni::alias_ref<JFunc_void::javaobject> /* third */)>("callAll_cxx");

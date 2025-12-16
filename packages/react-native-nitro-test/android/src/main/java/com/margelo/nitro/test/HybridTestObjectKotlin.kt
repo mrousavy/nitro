@@ -12,6 +12,7 @@ import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.resolved
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -294,6 +295,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun callCallback(callback: () -> Unit) {
     callback()
+  }
+  override fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>) {
+    runBlocking {
+      val promise = callback().await()
+      promise.await()
+    }
   }
 
   override fun createNativeCallback(wrappingJsCallback: (num: Double) -> Unit): (Double) -> Unit {

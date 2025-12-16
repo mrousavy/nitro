@@ -197,6 +197,7 @@ interface SharedTestObjectProps {
 
   // Callbacks
   callCallback(callback: () => void): void
+  callCallbackThatReturnsPromiseVoid(callback: () => Promise<void>): void
   callAll(first: () => void, second: () => void, third: () => void): void
   callWithOptional(
     value: number | undefined,

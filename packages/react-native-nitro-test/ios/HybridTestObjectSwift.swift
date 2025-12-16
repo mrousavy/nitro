@@ -65,6 +65,32 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   func callCallback(callback: @escaping (() -> Void)) throws {
     callback()
   }
+ 
+    
+  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws {
+    let outerPromise = callback()
+    let semaphore = DispatchSemaphore(value: 0)
+    var promiseError: Error?
+    
+    outerPromise.then { innerPromise in
+      innerPromise.then { _ in
+        semaphore.signal()
+      }.catch { error in
+        promiseError = error
+        semaphore.signal()
+      }
+    }.catch { error in
+      promiseError = error
+      semaphore.signal()
+    }
+    
+    semaphore.wait()
+    
+    if let error = promiseError {
+      throw error
+    }
+  }
+    
 
   func createNativeCallback(wrappingJsCallback: @escaping (_ num: Double) -> Void) throws -> (
     _ num: Double
@@ -583,3 +609,4 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return formatter.string(for: value) ?? "\(value)"
   }
 }
+
