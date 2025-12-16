@@ -94,13 +94,26 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
                                   .value = jsi::String::createFromUtf8(runtime, typeName),
                                   .writable = false,
                               });
+  // 7. Add a constructor property so Hermes can properly name objects in memory snapshots.
+  jsi::Function constructor = jsi::Function::createFromHostFunction(
+      runtime, jsi::PropNameID::forUtf8(runtime, typeName), 0,
+      [typeName](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value {
+        throw jsi::JSError(runtime, "Cannot construct " + typeName + " - use native APIs instead.");
+      });
+  ObjectUtils::defineProperty(runtime, object, "constructor",
+                              PlainPropertyDescriptor{
+                                  .configurable = true,
+                                  .enumerable = false,
+                                  .value = std::move(constructor),
+                                  .writable = false,
+                              });
 #endif
 
-  // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
+  // 8. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
   JSICacheReference cache = JSICache::getOrCreateCache(runtime);
   _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
 
-  // 8. Return it!
+  // 9. Return it!
   return object;
 }
 
