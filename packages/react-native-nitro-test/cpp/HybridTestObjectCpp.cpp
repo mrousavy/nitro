@@ -285,9 +285,7 @@ double HybridTestObjectCpp::funcThatThrows() {
 }
 
 void HybridTestObjectCpp::callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) {
-  std::future<std::shared_ptr<Promise<void>>> future = callback()->await();
-  std::shared_ptr<Promise<void>> promise = future.get();
-  promise->await();
+  callback();
 }
 
 std::shared_ptr<Promise<void>> HybridTestObjectCpp::funcThatThrowsBeforePromise() {

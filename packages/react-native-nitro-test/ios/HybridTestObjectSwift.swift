@@ -68,27 +68,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
  
     
   func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws {
-    let outerPromise = callback()
-    let semaphore = DispatchSemaphore(value: 0)
-    var promiseError: Error?
-    
-    outerPromise.then { innerPromise in
-      innerPromise.then { _ in
-        semaphore.signal()
-      }.catch { error in
-        promiseError = error
-        semaphore.signal()
-      }
-    }.catch { error in
-      promiseError = error
-      semaphore.signal()
-    }
-    
-    semaphore.wait()
-    
-    if let error = promiseError {
-      throw error
-    }
+    callback()
   }
     
 

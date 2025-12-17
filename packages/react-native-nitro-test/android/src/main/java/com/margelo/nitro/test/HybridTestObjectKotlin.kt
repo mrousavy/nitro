@@ -297,10 +297,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     callback()
   }
   override fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>) {
-    runBlocking {
-      val promise = callback().await()
-      promise.await()
-    }
+    callback()
   }
 
   override fun createNativeCallback(wrappingJsCallback: (num: Double) -> Unit): (Double) -> Unit {
