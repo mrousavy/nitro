@@ -5,14 +5,14 @@
 //  Created by Marc Rousavy on 17.10.25.
 //
 
-#pragma once
-
 #include "PropNameIDCache.hpp"
 #include "JSICache.hpp"
 
 namespace margelo::nitro {
 
 using namespace facebook;
+
+std::unordered_map<jsi::Runtime*, PropNameIDCache::CacheMap> PropNameIDCache::_cache;
 
 BorrowingReference<jsi::PropNameID> PropNameIDCache::get(jsi::Runtime& runtime, std::string value) {
   CacheMap& cache = _cache[&runtime];
