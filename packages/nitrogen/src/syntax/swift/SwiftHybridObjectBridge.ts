@@ -503,7 +503,7 @@ function getMethodForwardImplementation(method: Method): string {
   const returnType = new SwiftCxxBridgedType(method.returnType, true)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
-    return `${p.name}: ${bridgedType.getTypeCode('swift')}`
+    return `${p.name}: borrowing ${bridgedType.getTypeCode('swift')}`
   })
   const passParams = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)

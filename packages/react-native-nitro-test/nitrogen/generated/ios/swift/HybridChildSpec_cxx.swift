@@ -126,7 +126,7 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func bounceVariant(variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
+  public final func bounceVariant(variant: borrowing bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
       let __result = try self.__implementation.bounceVariant(variant: { () -> NamedVariant in
         let __variant = variant

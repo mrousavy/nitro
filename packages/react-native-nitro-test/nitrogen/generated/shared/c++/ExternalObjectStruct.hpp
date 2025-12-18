@@ -41,6 +41,9 @@ namespace margelo::nitro::test {
   public:
     ExternalObjectStruct() = default;
     explicit ExternalObjectStruct(std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> someExternal): someExternal(someExternal) {}
+
+  public:
+    friend bool operator==(const ExternalObjectStruct& lhs, const ExternalObjectStruct& rhs) = default;
   };
 
 } // namespace margelo::nitro::test
