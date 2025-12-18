@@ -30,16 +30,16 @@ jsi::Object CommonGlobals::Object::create(jsi::Runtime& runtime, const jsi::Valu
 #ifdef ENABLE_NATIVE_OBJECT_CREATE
   return jsi::Object::create(runtime, prototype);
 #else
-  BorrowingReference<jsi::Function> createFn = getGlobalFunction(runtime, "Object.create", [](jsi::Runtime& runtime) {
+  const jsi::Function& createFn = getGlobalFunction(runtime, "Object.create", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "create");
   });
-  return createFn->call(runtime, prototype).getObject(runtime);
+  return createFn.call(runtime, prototype).getObject(runtime);
 #endif
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                            PlainPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+  const jsi::Function& definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
   });
 
@@ -51,12 +51,12 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   descriptorJs.setProperty(runtime, "value", std::move(descriptor.value));
   descriptorJs.setProperty(runtime, "writable", jsi::Value(descriptor.writable));
 
-  definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                            ComputedReadonlyPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+  const jsi::Function& definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
   });
 
@@ -67,12 +67,12 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   descriptorJs.setProperty(runtime, "enumerable", jsi::Value(descriptor.enumerable));
   descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
 
-  definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
                                            ComputedPropertyDescriptor&& descriptor) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+  const jsi::Function& definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
   });
 
@@ -84,70 +84,70 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
   descriptorJs.setProperty(runtime, "set", std::move(descriptor.set));
 
-  definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
+  definePropertyFn.call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
 void CommonGlobals::Object::freeze(jsi::Runtime& runtime, const jsi::Object& object) {
-  BorrowingReference<jsi::Function> freezeFn = getGlobalFunction(runtime, "Object.freeze", [](jsi::Runtime& runtime) {
+  const jsi::Function& freezeFn = getGlobalFunction(runtime, "Object.freeze", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "freeze");
   });
 
-  freezeFn->call(runtime, object);
+  freezeFn.call(runtime, object);
 }
 
 // pragma MARK: Promise
 
 jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime) {
-  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
+  const jsi::Function& resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
   });
-  return resolvedFunc->call(runtime);
+  return resolvedFunc.call(runtime);
 }
 jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime, jsi::Value&& value) {
-  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
+  const jsi::Function& resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
   });
-  return resolvedFunc->call(runtime, {std::move(value)});
+  return resolvedFunc.call(runtime, {std::move(value)});
 }
 jsi::Value CommonGlobals::Promise::rejected(jsi::Runtime& runtime, jsi::Value&& error) {
-  BorrowingReference<jsi::Function> rejectedFunc = getGlobalFunction(runtime, "Promise.reject", [](jsi::Runtime& runtime) {
+  const jsi::Function& rejectedFunc = getGlobalFunction(runtime, "Promise.reject", [](jsi::Runtime& runtime) {
     return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "reject");
   });
-  return rejectedFunc->call(runtime, {std::move(error)});
+  return rejectedFunc.call(runtime, {std::move(error)});
 }
 
 jsi::Value CommonGlobals::Promise::callConstructor(jsi::Runtime& runtime, jsi::HostFunctionType&& executor) {
-  BorrowingReference<jsi::Function> promiseCtor = getGlobalFunction(
+  const jsi::Function& promiseCtor = getGlobalFunction(
       runtime, "Promise", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Promise"); });
   jsi::Function executorFunc =
       jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forAscii(runtime, "executor"), 2, std::move(executor));
-  return promiseCtor->callAsConstructor(runtime, std::move(executorFunc));
+  return promiseCtor.callAsConstructor(runtime, std::move(executorFunc));
 }
 bool CommonGlobals::Promise::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
-  BorrowingReference<jsi::Function> promiseCtor = getGlobalFunction(
+  const jsi::Function& promiseCtor = getGlobalFunction(
       runtime, "Promise", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Promise"); });
-  return object.instanceOf(runtime, *promiseCtor);
+  return object.instanceOf(runtime, promiseCtor);
 }
 
 // pragma MARK: Date
 
 jsi::Value CommonGlobals::Date::callConstructor(jsi::Runtime& runtime, double msSinceEpoch) {
-  BorrowingReference<jsi::Function> dateCtor =
+  const jsi::Function& dateCtor =
       getGlobalFunction(runtime, "Date", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
-  return dateCtor->callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
+  return dateCtor.callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
 }
 bool CommonGlobals::Date::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
-  BorrowingReference<jsi::Function> dateCtor =
+  const jsi::Function& dateCtor =
       getGlobalFunction(runtime, "Date", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
-  return object.instanceOf(runtime, *dateCtor);
+  return object.instanceOf(runtime, dateCtor);
 }
 
 // pragma MARK: Error
 
 bool CommonGlobals::Error::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
-  BorrowingReference<jsi::Function> errorCtor =
+  const jsi::Function& errorCtor =
       getGlobalFunction(runtime, "Error", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Error"); });
-  return object.instanceOf(runtime, *errorCtor);
+  return object.instanceOf(runtime, errorCtor);
 }
 
 // pragma MARK: CommonGlobals
@@ -185,8 +185,8 @@ const jsi::PropNameID& CommonGlobals::getKnownGlobalPropertyName(jsi::Runtime& r
   return PropNameIDCache::get(runtime, getKnownGlobalPropertyNameString(name));
 }
 
-BorrowingReference<jsi::Function> CommonGlobals::getGlobalFunction(jsi::Runtime& runtime, const char* key,
-                                                                   std::function<jsi::Function(jsi::Runtime&)> getFunction) {
+const jsi::Function& CommonGlobals::getGlobalFunction(jsi::Runtime& runtime, const char* key,
+                                                      std::function<jsi::Function(jsi::Runtime&)> getFunction) {
   // Let's try to find the function in cache
   FunctionCache& functionCache = _cache[&runtime];
   std::string stringKey = key;
@@ -196,7 +196,7 @@ BorrowingReference<jsi::Function> CommonGlobals::getGlobalFunction(jsi::Runtime&
     BorrowingReference<jsi::Function> function = iterator->second;
     if (function != nullptr) [[likely]] {
       // It's still alive - let's use it from cache!
-      return function;
+      return *function;
     }
   }
 
@@ -209,7 +209,7 @@ BorrowingReference<jsi::Function> CommonGlobals::getGlobalFunction(jsi::Runtime&
   functionCache[stringKey] = sharedFunction;
 
   // And now return:
-  return sharedFunction;
+  return *sharedFunction;
 }
 
 } // namespace margelo::nitro

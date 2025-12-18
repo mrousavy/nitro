@@ -142,9 +142,13 @@ private:
 private:
   /**
    * Get a global Function, and optionally cache it in the Runtime via the `key`.
+   *
+   * The returned const-ref to a `jsi::Function` should only be used within the callee's
+   * synchronous scope.
+   * It may no longer be active after the scope ends (function return).
    */
-  static BorrowingReference<jsi::Function> getGlobalFunction(jsi::Runtime& runtime, const char* key,
-                                                             std::function<jsi::Function(jsi::Runtime&)> getFunction);
+  static const jsi::Function& getGlobalFunction(jsi::Runtime& runtime, const char* key,
+                                                std::function<jsi::Function(jsi::Runtime&)> getFunction);
 
 private:
   using FunctionCache = std::unordered_map<std::string, BorrowingReference<jsi::Function>>;
