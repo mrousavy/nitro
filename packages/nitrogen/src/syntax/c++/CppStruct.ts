@@ -33,21 +33,21 @@ export function createCppStruct(
   const cppFromJsiParams = properties
     .map(
       (p) =>
-        `JSIConverter<${p.getCode('c++', codeOptions)}>::fromJSI(runtime, obj.getProperty(runtime, "${p.name}"))`
+        `JSIConverter<${p.getCode('c++', codeOptions)}>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "${p.name}")))`
     )
     .join(',\n')
   // Get C++ code for converting each member to a jsi::Value
   const cppToJsiCalls = properties
     .map(
       (p) =>
-        `obj.setProperty(runtime, "${p.name}", JSIConverter<${p.getCode('c++', codeOptions)}>::toJSI(runtime, arg.${p.escapedName}));`
+        `obj.setProperty(runtime, PropNameIDCache::get(runtime, "${p.name}"), JSIConverter<${p.getCode('c++', codeOptions)}>::toJSI(runtime, arg.${p.escapedName}));`
     )
     .join('\n')
   // Get C++ code for verifying if jsi::Value can be converted to type
   const cppCanConvertCalls = properties
     .map(
       (p) =>
-        `if (!JSIConverter<${p.getCode('c++', codeOptions)}>::canConvert(runtime, obj.getProperty(runtime, "${p.name}"))) return false;`
+        `if (!JSIConverter<${p.getCode('c++', codeOptions)}>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "${p.name}")))) return false;`
     )
     .join('\n')
 
@@ -82,6 +82,7 @@ ${createFileMetadataString(`${typename}.hpp`)}
 ${includeNitroHeader('JSIConverter.hpp')}
 ${includeNitroHeader('NitroDefines.hpp')}
 ${includeNitroHeader('JSIHelpers.hpp')}
+${includeNitroHeader('PropNameIDCache.hpp')}
 
 ${cppForwardDeclarations.join('\n')}
 

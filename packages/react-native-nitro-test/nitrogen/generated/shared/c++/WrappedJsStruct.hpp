@@ -22,6 +22,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/PropNameIDCache.hpp>)
+#include <NitroModules/PropNameIDCache.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
@@ -57,14 +62,14 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::WrappedJsStruct(
-        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value")),
-        JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::fromJSI(runtime, obj.getProperty(runtime, "items"))
+        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "value"))),
+        JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "items")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::WrappedJsStruct& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "value", JSIConverter<margelo::nitro::test::JsStyleStruct>::toJSI(runtime, arg.value));
-      obj.setProperty(runtime, "items", JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::toJSI(runtime, arg.items));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "value"), JSIConverter<margelo::nitro::test::JsStyleStruct>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "items"), JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::toJSI(runtime, arg.items));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -75,8 +80,8 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<margelo::nitro::test::JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
-      if (!JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::canConvert(runtime, obj.getProperty(runtime, "items"))) return false;
+      if (!JSIConverter<margelo::nitro::test::JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "value")))) return false;
+      if (!JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "items")))) return false;
       return true;
     }
   };

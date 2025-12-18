@@ -40,7 +40,7 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
 
     jsi::Object object = arg.asObject(runtime);
 #ifdef NITRO_DEBUG
-    if (!object.hasProperty(runtime, "getTime")) {
+    if (!object.hasProperty(runtime, PropNameIDCache::get(runtime, "getTime"))) {
       throw std::invalid_argument("Object \"" + arg.toString(runtime).utf8(runtime) +
                                   "\" does not have a .getTime() function! "
                                   "It's not a valid Date object.");
