@@ -23,6 +23,8 @@ using namespace facebook;
 
 std::unordered_map<jsi::Runtime*, CommonGlobals::FunctionCache> CommonGlobals::_cache;
 
+// pragma MARK: Object
+
 jsi::Object CommonGlobals::Object::create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache) {
 #ifdef ENABLE_NATIVE_OBJECT_CREATE
   return jsi::Object::create(runtime, prototype);
@@ -34,25 +36,6 @@ jsi::Object CommonGlobals::Object::create(jsi::Runtime& runtime, const jsi::Valu
       },
       allowCache);
   return createFn->call(runtime, prototype).getObject(runtime);
-#endif
-}
-
-void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache) {
-  const char* nameString = getKnownGlobalPropertyNameString(name);
-
-#ifdef NITRO_DEBUG
-  // In debug, let's perform additional safety checks.
-  if (runtime.global().hasProperty(runtime, nameString)) [[unlikely]] {
-    throw std::runtime_error("Failed to set `global." + std::string(nameString) + "` - it already exists for Runtime \"" +
-                             getRuntimeId(runtime) + "\"! Did you call `defineGlobal(\"" + std::string(nameString) +
-                             "\")` twice? Did you link Nitro Modules twice?");
-  }
-  Object::defineProperty(runtime, runtime.global(), nameString,
-                         PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false},
-                         allowCache);
-#else
-  // In release, just set the property.
-  runtime.global().setProperty(runtime, nameString, std::move(value));
 #endif
 }
 
@@ -124,6 +107,82 @@ void CommonGlobals::Object::freeze(jsi::Runtime& runtime, const jsi::Object& obj
       allowCache);
 
   freezeFn->call(runtime, object);
+}
+
+// pragma MARK: Promise
+
+jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime) {
+  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolved", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolved");
+  });
+  return resolvedFunc->call(runtime);
+}
+jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime, jsi::Value&& value) {
+  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolved", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolved");
+  });
+  return resolvedFunc->call(runtime, {std::move(value)});
+}
+jsi::Value CommonGlobals::Promise::rejected(jsi::Runtime& runtime, jsi::Value&& error) {
+  BorrowingReference<jsi::Function> rejectedFunc = getGlobalFunction(runtime, "Promise.rejected", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "rejected");
+  });
+  return rejectedFunc->call(runtime, {std::move(error)});
+}
+
+jsi::Value CommonGlobals::Promise::callConstructor(jsi::Runtime& runtime, jsi::HostFunctionType&& executor) {
+  BorrowingReference<jsi::Function> promiseCtor = getGlobalFunction(
+      runtime, "Promise", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Promise"); });
+  jsi::Function executorFunc =
+      jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forAscii(runtime, "executor"), 2, std::move(executor));
+  return promiseCtor->callAsConstructor(runtime, std::move(executorFunc));
+}
+bool CommonGlobals::Promise::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
+  BorrowingReference<jsi::Function> promiseCtor = getGlobalFunction(
+      runtime, "Promise", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Promise"); });
+  return object.instanceOf(runtime, *promiseCtor);
+}
+
+// pragma MARK: Date
+
+jsi::Value CommonGlobals::Date::callConstructor(jsi::Runtime& runtime, double msSinceEpoch) {
+  BorrowingReference<jsi::Function> dateCtor =
+      getGlobalFunction(runtime, "Date", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
+  return dateCtor->callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
+}
+bool CommonGlobals::Date::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
+  BorrowingReference<jsi::Function> dateCtor =
+      getGlobalFunction(runtime, "Date", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
+  return object.instanceOf(runtime, *dateCtor);
+}
+
+// pragma MARK: Error
+
+bool CommonGlobals::Error::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
+  BorrowingReference<jsi::Function> errorCtor =
+      getGlobalFunction(runtime, "Error", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Error"); });
+  return object.instanceOf(runtime, *errorCtor);
+}
+
+// pragma MARK: CommonGlobals
+
+void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache) {
+  const char* nameString = getKnownGlobalPropertyNameString(name);
+
+#ifdef NITRO_DEBUG
+  // In debug, let's perform additional safety checks.
+  if (runtime.global().hasProperty(runtime, nameString)) [[unlikely]] {
+    throw std::runtime_error("Failed to set `global." + std::string(nameString) + "` - it already exists for Runtime \"" +
+                             getRuntimeId(runtime) + "\"! Did you call `defineGlobal(\"" + std::string(nameString) +
+                             "\")` twice? Did you link Nitro Modules twice?");
+  }
+  Object::defineProperty(runtime, runtime.global(), nameString,
+                         PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false},
+                         allowCache);
+#else
+  // In release, just set the property.
+  runtime.global().setProperty(runtime, nameString, std::move(value));
+#endif
 }
 
 const char* CommonGlobals::getKnownGlobalPropertyNameString(KnownGlobalPropertyName name) {
