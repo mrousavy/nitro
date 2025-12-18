@@ -54,9 +54,10 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<Promise<TResult>>& promise) {
     if (promise->isPending()) {
       // Get Promise ctor from global
-      auto promiseCtor = ObjectUtils::getGlobalFunction(runtime, "Promise", [](jsi::Runtime& runtime) -> jsi::Function {
-        return runtime.global().getPropertyAsFunction(runtime, "Promise");
-      });
+      BorrowingReference<jsi::Function> promiseCtor =
+          ObjectUtils::getGlobalFunction(runtime, "Promise", [](jsi::Runtime& runtime) -> jsi::Function {
+            return runtime.global().getPropertyAsFunction(runtime, "Promise");
+          });
       jsi::HostFunctionType executor = [promise](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* arguments,
                                                  size_t) -> jsi::Value {
         // Add resolver listener
@@ -80,9 +81,10 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
           runtime, jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "executor"), 2, executor));
     } else if (promise->isResolved()) {
       // Promise is already resolved - just return immediately
-      auto createResolvedPromise = ObjectUtils::getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) -> jsi::Function {
-        return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
-      });
+      BorrowingReference<jsi::Function> createResolvedPromise =
+          ObjectUtils::getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) -> jsi::Function {
+            return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
+          });
       if constexpr (std::is_void_v<TResult>) {
         // It's resolving to void.
         return createResolvedPromise->call(runtime);
@@ -93,9 +95,10 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       }
     } else if (promise->isRejected()) {
       // Promise is already rejected - just return immediately
-      auto createRejectedPromise = ObjectUtils::getGlobalFunction(runtime, "Promise.reject", [](jsi::Runtime& runtime) -> jsi::Function {
-        return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "reject");
-      });
+      BorrowingReference<jsi::Function> createRejectedPromise =
+          ObjectUtils::getGlobalFunction(runtime, "Promise.reject", [](jsi::Runtime& runtime) -> jsi::Function {
+            return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "reject");
+          });
       jsi::Value error = JSIConverter<std::exception_ptr>::toJSI(runtime, promise->getError());
       return createRejectedPromise->call(runtime, std::move(error));
     } else {
@@ -109,9 +112,10 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    auto promiseCtor = ObjectUtils::getGlobalFunction(runtime, "Promise", [](jsi::Runtime& runtime) -> jsi::Function {
-      return runtime.global().getPropertyAsFunction(runtime, "Promise");
-    });
+    BorrowingReference<jsi::Function> promiseCtor =
+        ObjectUtils::getGlobalFunction(runtime, "Promise", [](jsi::Runtime& runtime) -> jsi::Function {
+          return runtime.global().getPropertyAsFunction(runtime, "Promise");
+        });
     return object.instanceOf(runtime, *promiseCtor);
   }
 };
