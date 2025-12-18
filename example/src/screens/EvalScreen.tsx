@@ -24,7 +24,34 @@ const NitroModules = globalThis.NitroModulesProxy;
 const DEFAULT_CODE = `
 const testObject = NitroModules.createHybridObject('TestObjectCpp')
 
-JSON.stringify(testObject)
+const start = performance.now()
+
+for (let i = 0; i < 100_000; i++) {
+    testObject.bounceCar({
+    year: 2006,
+    make: 'Mitsubishi',
+    model: 'Evolution IX',
+    power: 280,
+    powertrain: 'gas',
+    driver: {
+      age: 24,
+      name: 'Marc'
+    },
+    passengers: [
+      { age: 18, name: 'Lukas' },
+      { age: 23, name: 'Simon' },
+    ],
+    isFast: true,
+    favouriteTrack: 'the road',
+    performanceScores: [2, 5],
+    someVariant: 'hello!',
+  })
+}
+
+const end = performance.now()
+const time = \`\${(end - start).toFixed(2)}ms\`
+
+time
 `.trim()
 
 export function EvalScreen() {
