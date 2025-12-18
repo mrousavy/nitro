@@ -235,6 +235,8 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  // tests a specific std::optional<double> bug in Swift
+  getPersonAgeOrUndefined(partialPerson: PartialPerson): number | undefined
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

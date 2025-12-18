@@ -96,6 +96,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper
   func bounceOptionalCallback(value: OptionalCallback) throws -> OptionalCallback
+  func getPersonAgeOrUndefined(partialPerson: PartialPerson) throws -> Double?
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer

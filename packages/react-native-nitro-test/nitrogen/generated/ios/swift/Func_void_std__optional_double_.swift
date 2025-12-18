@@ -23,7 +23,7 @@ public final class Func_void_std__optional_double_ {
 
   @inline(__always)
   public func call(value: bridge.std__optional_double_) -> Void {
-    self.closure(value.value)
+    self.closure(value.hasValue ? value.pointee : nil)
   }
 
   /**

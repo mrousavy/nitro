@@ -544,6 +544,16 @@ export function getTests(
         .didNotThrow()
         .didReturn('undefined')
     ),
+    createTest('getPersonAgeOrUndefined(...) works for number', () =>
+      it(() => testObject.getPersonAgeOrUndefined({ age: 57 }))
+        .didNotThrow()
+        .equals(57)
+    ),
+    createTest('getPersonAgeOrUndefined(...) works for undefined', () =>
+      it(() => testObject.getPersonAgeOrUndefined({}))
+        .didNotThrow()
+        .equals(undefined)
+    ),
 
     createTest('complexEnumCallback(...)', async () =>
       (

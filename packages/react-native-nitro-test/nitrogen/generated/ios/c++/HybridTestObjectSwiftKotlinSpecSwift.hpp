@@ -742,6 +742,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::optional<double> getPersonAgeOrUndefined(const PartialPerson& partialPerson) override {
+      auto __result = _swiftPart.getPersonAgeOrUndefined(std::forward<decltype(partialPerson)>(partialPerson));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();
       if (__result.hasError()) [[unlikely]] {

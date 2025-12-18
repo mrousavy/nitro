@@ -484,6 +484,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getPersonAgeOrUndefined(partialPerson: PartialPerson): Double?
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip

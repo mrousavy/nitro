@@ -426,6 +426,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
+  override fun getPersonAgeOrUndefined(partialPerson: PartialPerson): Double? {
+    return partialPerson.age
+  }
+
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(

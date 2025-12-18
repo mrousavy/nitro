@@ -468,6 +468,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func getPersonAgeOrUndefined(partialPerson: PartialPerson) throws -> Double? {
+    return partialPerson.age
+  }
+
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
     let data = Data(count: 1024 * 1024 * 10)  // 10 MB
     if copy {

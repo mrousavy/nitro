@@ -179,6 +179,7 @@ public:
   WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
   OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
   OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override;
+  std::optional<double> getPersonAgeOrUndefined(const PartialPerson& partialPerson) override;
   std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool /* copy */) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;

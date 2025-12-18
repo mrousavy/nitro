@@ -62,7 +62,7 @@ public extension PartialPerson {
   var age: Double? {
     @inline(__always)
     get {
-      return self.__age.value
+      return self.__age.hasValue ? self.__age.pointee : nil
     }
     @inline(__always)
     set {

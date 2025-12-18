@@ -1102,6 +1102,11 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
     return __result->toCpp();
   }
+  std::optional<double> JHybridTestObjectSwiftKotlinSpec::getPersonAgeOrUndefined(const PartialPerson& partialPerson) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>(jni::alias_ref<JPartialPerson> /* partialPerson */)>("getPersonAgeOrUndefined");
+    auto __result = method(_javaPart, JPartialPerson::fromCpp(partialPerson));
+    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
+  }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
     auto __result = method(_javaPart);

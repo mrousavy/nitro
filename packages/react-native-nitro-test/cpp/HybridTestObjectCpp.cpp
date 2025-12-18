@@ -575,6 +575,10 @@ OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallb
   return value;
 }
 
+std::optional<double> HybridTestObjectCpp::getPersonAgeOrUndefined(const PartialPerson& partialPerson) {
+  return partialPerson.age;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
   // Let's just use the move method here for native buffer to test this too.
   std::vector<uint8_t> data;

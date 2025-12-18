@@ -1815,6 +1815,15 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<OptionalCallback>::withError(error);
   }
   
+  // pragma MARK: Result<std::optional<double>>
+  using Result_std__optional_double__ = Result<std::optional<double>>;
+  inline Result_std__optional_double__ create_Result_std__optional_double__(std::optional<double> value) noexcept {
+    return Result<std::optional<double>>::withValue(std::move(value));
+  }
+  inline Result_std__optional_double__ create_Result_std__optional_double__(const std::exception_ptr& error) noexcept {
+    return Result<std::optional<double>>::withError(error);
+  }
+  
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
   using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
   inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
