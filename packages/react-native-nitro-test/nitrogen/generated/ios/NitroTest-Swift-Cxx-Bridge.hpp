@@ -448,7 +448,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_double_Wrapper final {
   public:
-    explicit Func_void_double_Wrapper(std::function<void(double /* value */)>&& func): _function(std::make_unique<std::function<void(double /* value */)>>(std::move(func))) {}
+    explicit Func_void_double_Wrapper(const std::function<void(double /* value */)>& func): _function(std::make_unique<std::function<void(double /* value */)>>(func)) {}
     inline void call(double value) const noexcept {
       _function->operator()(value);
     }
@@ -456,8 +456,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(double /* value */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_double create_Func_void_double(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_double_Wrapper wrap_Func_void_double(Func_void_double value) noexcept {
-    return Func_void_double_Wrapper(std::move(value));
+  inline Func_void_double_Wrapper wrap_Func_void_double(const Func_void_double& value) noexcept {
+    return Func_void_double_Wrapper(value);
   }
   
   // pragma MARK: std::optional<std::function<void(double /* value */)>>
@@ -522,7 +522,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__vector_Powertrain__Wrapper final {
   public:
-    explicit Func_void_std__vector_Powertrain__Wrapper(std::function<void(const std::vector<Powertrain>& /* array */)>&& func): _function(std::make_unique<std::function<void(const std::vector<Powertrain>& /* array */)>>(std::move(func))) {}
+    explicit Func_void_std__vector_Powertrain__Wrapper(const std::function<void(const std::vector<Powertrain>& /* array */)>& func): _function(std::make_unique<std::function<void(const std::vector<Powertrain>& /* array */)>>(func)) {}
     inline void call(std::vector<Powertrain> array) const noexcept {
       _function->operator()(array);
     }
@@ -530,8 +530,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::vector<Powertrain>& /* array */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__vector_Powertrain__Wrapper wrap_Func_void_std__vector_Powertrain_(Func_void_std__vector_Powertrain_ value) noexcept {
-    return Func_void_std__vector_Powertrain__Wrapper(std::move(value));
+  inline Func_void_std__vector_Powertrain__Wrapper wrap_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) noexcept {
+    return Func_void_std__vector_Powertrain__Wrapper(value);
   }
   
   // pragma MARK: std::vector<std::shared_ptr<HybridChildSpec>>
@@ -555,7 +555,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_Wrapper final {
   public:
-    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
+    explicit Func_void_Wrapper(const std::function<void()>& func): _function(std::make_unique<std::function<void()>>(func)) {}
     inline void call() const noexcept {
       _function->operator()();
     }
@@ -563,8 +563,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
-    return Func_void_Wrapper(std::move(value));
+  inline Func_void_Wrapper wrap_Func_void(const Func_void& value) noexcept {
+    return Func_void_Wrapper(value);
   }
   
   // pragma MARK: std::vector<std::function<void()>>
@@ -611,7 +611,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__exception_ptr_Wrapper final {
   public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    explicit Func_void_std__exception_ptr_Wrapper(const std::function<void(const std::exception_ptr& /* error */)>& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(func)) {}
     inline void call(std::exception_ptr error) const noexcept {
       _function->operator()(error);
     }
@@ -619,8 +619,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
-    return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(const Func_void_std__exception_ptr& value) noexcept {
+    return Func_void_std__exception_ptr_Wrapper(value);
   }
   
   // pragma MARK: std::vector<std::shared_ptr<Promise<double>>>
@@ -783,7 +783,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_int64_t_Wrapper final {
   public:
-    explicit Func_void_int64_t_Wrapper(std::function<void(int64_t /* result */)>&& func): _function(std::make_unique<std::function<void(int64_t /* result */)>>(std::move(func))) {}
+    explicit Func_void_int64_t_Wrapper(const std::function<void(int64_t /* result */)>& func): _function(std::make_unique<std::function<void(int64_t /* result */)>>(func)) {}
     inline void call(int64_t result) const noexcept {
       _function->operator()(result);
     }
@@ -791,8 +791,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(int64_t /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_int64_t create_Func_void_int64_t(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_int64_t_Wrapper wrap_Func_void_int64_t(Func_void_int64_t value) noexcept {
-    return Func_void_int64_t_Wrapper(std::move(value));
+  inline Func_void_int64_t_Wrapper wrap_Func_void_int64_t(const Func_void_int64_t& value) noexcept {
+    return Func_void_int64_t_Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::optional<double>>>
@@ -817,7 +817,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__optional_double__Wrapper final {
   public:
-    explicit Func_void_std__optional_double__Wrapper(std::function<void(std::optional<double> /* result */)>&& func): _function(std::make_unique<std::function<void(std::optional<double> /* result */)>>(std::move(func))) {}
+    explicit Func_void_std__optional_double__Wrapper(const std::function<void(std::optional<double> /* result */)>& func): _function(std::make_unique<std::function<void(std::optional<double> /* result */)>>(func)) {}
     inline void call(std::optional<double> result) const noexcept {
       _function->operator()(result);
     }
@@ -825,8 +825,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(std::optional<double> /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__optional_double__Wrapper wrap_Func_void_std__optional_double_(Func_void_std__optional_double_ value) noexcept {
-    return Func_void_std__optional_double__Wrapper(std::move(value));
+  inline Func_void_std__optional_double__Wrapper wrap_Func_void_std__optional_double_(const Func_void_std__optional_double_& value) noexcept {
+    return Func_void_std__optional_double__Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<Car>>
@@ -851,7 +851,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_Car_Wrapper final {
   public:
-    explicit Func_void_Car_Wrapper(std::function<void(const Car& /* result */)>&& func): _function(std::make_unique<std::function<void(const Car& /* result */)>>(std::move(func))) {}
+    explicit Func_void_Car_Wrapper(const std::function<void(const Car& /* result */)>& func): _function(std::make_unique<std::function<void(const Car& /* result */)>>(func)) {}
     inline void call(Car result) const noexcept {
       _function->operator()(result);
     }
@@ -859,8 +859,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const Car& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_Car create_Func_void_Car(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_Car_Wrapper wrap_Func_void_Car(Func_void_Car value) noexcept {
-    return Func_void_Car_Wrapper(std::move(value));
+  inline Func_void_Car_Wrapper wrap_Func_void_Car(const Func_void_Car& value) noexcept {
+    return Func_void_Car_Wrapper(value);
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
@@ -873,7 +873,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_std__shared_ptr_Promise_double___Wrapper final {
   public:
-    explicit Func_std__shared_ptr_Promise_double___Wrapper(std::function<std::shared_ptr<Promise<double>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<double>>()>>(std::move(func))) {}
+    explicit Func_std__shared_ptr_Promise_double___Wrapper(const std::function<std::shared_ptr<Promise<double>>()>& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<double>>()>>(func)) {}
     inline std::shared_ptr<Promise<double>> call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -882,8 +882,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<std::shared_ptr<Promise<double>>()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_std__shared_ptr_Promise_double___Wrapper wrap_Func_std__shared_ptr_Promise_double__(Func_std__shared_ptr_Promise_double__ value) noexcept {
-    return Func_std__shared_ptr_Promise_double___Wrapper(std::move(value));
+  inline Func_std__shared_ptr_Promise_double___Wrapper wrap_Func_std__shared_ptr_Promise_double__(const Func_std__shared_ptr_Promise_double__& value) noexcept {
+    return Func_std__shared_ptr_Promise_double___Wrapper(value);
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
@@ -896,7 +896,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper final {
   public:
-    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>>(std::move(func))) {}
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>>(func)) {}
     inline std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -905,8 +905,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ value) noexcept {
-    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::move(value));
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(const Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____& value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>
@@ -931,7 +931,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__shared_ptr_Promise_double___Wrapper final {
   public:
-    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>>(std::move(func))) {}
+    explicit Func_void_std__shared_ptr_Promise_double___Wrapper(const std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>>(func)) {}
     inline void call(std::shared_ptr<Promise<double>> result) const noexcept {
       _function->operator()(result);
     }
@@ -939,8 +939,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__shared_ptr_Promise_double___Wrapper wrap_Func_void_std__shared_ptr_Promise_double__(Func_void_std__shared_ptr_Promise_double__ value) noexcept {
-    return Func_void_std__shared_ptr_Promise_double___Wrapper(std::move(value));
+  inline Func_void_std__shared_ptr_Promise_double___Wrapper wrap_Func_void_std__shared_ptr_Promise_double__(const Func_void_std__shared_ptr_Promise_double__& value) noexcept {
+    return Func_void_std__shared_ptr_Promise_double___Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
@@ -965,7 +965,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__shared_ptr_ArrayBuffer__Wrapper final {
   public:
-    explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>(std::move(func))) {}
+    explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(const std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>& func): _function(std::make_unique<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>(func)) {}
     inline void call(ArrayBufferHolder result) const noexcept {
       _function->operator()(result.getArrayBuffer());
     }
@@ -973,8 +973,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__shared_ptr_ArrayBuffer__Wrapper wrap_Func_void_std__shared_ptr_ArrayBuffer_(Func_void_std__shared_ptr_ArrayBuffer_ value) noexcept {
-    return Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::move(value));
+  inline Func_void_std__shared_ptr_ArrayBuffer__Wrapper wrap_Func_void_std__shared_ptr_ArrayBuffer_(const Func_void_std__shared_ptr_ArrayBuffer_& value) noexcept {
+    return Func_void_std__shared_ptr_ArrayBuffer__Wrapper(value);
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>
@@ -987,7 +987,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper final {
   public:
-    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>>(std::move(func))) {}
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>>(func)) {}
     inline std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>> call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -996,8 +996,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ value) noexcept {
-    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper(std::move(value));
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(const Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____& value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>
@@ -1022,7 +1022,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper final {
   public:
-    explicit Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>>(std::move(func))) {}
+    explicit Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(const std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>>(func)) {}
     inline void call(std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> result) const noexcept {
       _function->operator()(result);
     }
@@ -1030,8 +1030,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper wrap_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ value) noexcept {
-    return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::move(value));
+  inline Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper wrap_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(const Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___& value) noexcept {
+    return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(value);
   }
   
   // pragma MARK: std::function<void(const std::string& /* value */)>
@@ -1044,7 +1044,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_void_std__string_Wrapper final {
   public:
-    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* value */)>&& func): _function(std::make_unique<std::function<void(const std::string& /* value */)>>(std::move(func))) {}
+    explicit Func_void_std__string_Wrapper(const std::function<void(const std::string& /* value */)>& func): _function(std::make_unique<std::function<void(const std::string& /* value */)>>(func)) {}
     inline void call(std::string value) const noexcept {
       _function->operator()(value);
     }
@@ -1052,8 +1052,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<void(const std::string& /* value */)>> _function;
   } SWIFT_NONCOPYABLE;
   Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
-    return Func_void_std__string_Wrapper(std::move(value));
+  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(const Func_void_std__string& value) noexcept {
+    return Func_void_std__string_Wrapper(value);
   }
   
   // pragma MARK: std::optional<std::function<void(const std::string& /* value */)>>
@@ -1081,7 +1081,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_std__shared_ptr_Promise_std__string___Wrapper final {
   public:
-    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(std::function<std::shared_ptr<Promise<std::string>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::string>>()>>(std::move(func))) {}
+    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(const std::function<std::shared_ptr<Promise<std::string>>()>& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::string>>()>>(func)) {}
     inline std::shared_ptr<Promise<std::string>> call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -1090,8 +1090,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<std::shared_ptr<Promise<std::string>>()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_std__shared_ptr_Promise_std__string___Wrapper wrap_Func_std__shared_ptr_Promise_std__string__(Func_std__shared_ptr_Promise_std__string__ value) noexcept {
-    return Func_std__shared_ptr_Promise_std__string___Wrapper(std::move(value));
+  inline Func_std__shared_ptr_Promise_std__string___Wrapper wrap_Func_std__shared_ptr_Promise_std__string__(const Func_std__shared_ptr_Promise_std__string__& value) noexcept {
+    return Func_std__shared_ptr_Promise_std__string___Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<Promise<std::string>>
@@ -1402,7 +1402,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_double_Wrapper final {
   public:
-    explicit Func_double_Wrapper(std::function<double()>&& func): _function(std::make_unique<std::function<double()>>(std::move(func))) {}
+    explicit Func_double_Wrapper(const std::function<double()>& func): _function(std::make_unique<std::function<double()>>(func)) {}
     inline double call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -1411,8 +1411,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<double()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_double create_Func_double(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_double_Wrapper wrap_Func_double(Func_double value) noexcept {
-    return Func_double_Wrapper(std::move(value));
+  inline Func_double_Wrapper wrap_Func_double(const Func_double& value) noexcept {
+    return Func_double_Wrapper(value);
   }
   
   // pragma MARK: std::shared_ptr<HybridTestViewSpec>
@@ -1478,7 +1478,7 @@ namespace margelo::nitro::test::bridge::swift {
    */
   class Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper final {
   public:
-    explicit Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>>(std::move(func))) {}
+    explicit Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& func): _function(std::make_unique<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>>(func)) {}
     inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> call() const noexcept {
       auto __result = _function->operator()();
       return __result;
@@ -1487,8 +1487,8 @@ namespace margelo::nitro::test::bridge::swift {
     std::unique_ptr<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>> _function;
   } SWIFT_NONCOPYABLE;
   Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ create_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper wrap_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ value) noexcept {
-    return Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(std::move(value));
+  inline Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper wrap_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(const Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_& value) noexcept {
+    return Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(value);
   }
   
   // pragma MARK: Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
