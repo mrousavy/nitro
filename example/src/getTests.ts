@@ -462,11 +462,17 @@ export function getTests(
         .didReturn('object')
         .equals([1, 2, 13, 42])
     ),
-    createTest('bounceStrings(...) equals', () =>
+    createTest('bounceStrings(...) equals simple strings', () =>
       it(() => testObject.bounceStrings(['hello', 'world', '!']))
         .didNotThrow()
         .didReturn('object')
         .equals(['hello', 'world', '!'])
+    ),
+    createTest('bounceStrings(...) equals unicode/emojis', () =>
+      it(() => testObject.bounceStrings(['✨', '🔥', `🥳🥷🏼🥳`]))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['✨', '🔥', `🥳🥷🏼🥳`])
     ),
     createTest('bounceEnums(...) equals', () =>
       it(() => testObject.bounceEnums(['gas', 'hybrid']))
