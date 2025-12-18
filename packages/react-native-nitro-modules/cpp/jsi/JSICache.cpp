@@ -58,10 +58,11 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
   _globalCache[&runtime] = nativeState;
   try {
     // Call Object.defineProperty(global, ...) now with our cache (it internally already uses cache)
-    CommonGlobals::defineGlobal(runtime, KnownGlobalPropertyName::JSI_CACHE, std::move(cache), /* allowCache */ true);
+    CommonGlobals::defineGlobal(runtime, KnownGlobalPropertyName::JSI_CACHE, std::move(cache));
   } catch (...) {
     // If `defineGlobal(...)` failed, we should remove it from `_globalCache` so we don't have invalid caches.
     _globalCache.erase(&runtime);
+    throw;
   }
   // Return it
   return JSICacheReference(nativeState);

@@ -26,28 +26,22 @@ std::unordered_map<jsi::Runtime*, CommonGlobals::FunctionCache> CommonGlobals::_
 
 // pragma MARK: Object
 
-jsi::Object CommonGlobals::Object::create(jsi::Runtime& runtime, const jsi::Value& prototype, bool allowCache) {
+jsi::Object CommonGlobals::Object::create(jsi::Runtime& runtime, const jsi::Value& prototype) {
 #ifdef ENABLE_NATIVE_OBJECT_CREATE
   return jsi::Object::create(runtime, prototype);
 #else
-  BorrowingReference<jsi::Function> createFn = getGlobalFunction(
-      runtime, "Object.create",
-      [](jsi::Runtime& runtime) {
-        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "create");
-      },
-      allowCache);
+  BorrowingReference<jsi::Function> createFn = getGlobalFunction(runtime, "Object.create", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "create");
+  });
   return createFn->call(runtime, prototype).getObject(runtime);
 #endif
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                           PlainPropertyDescriptor&& descriptor, bool allowCache) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
-      runtime, "Object.defineProperty",
-      [](jsi::Runtime& runtime) {
-        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-      },
-      allowCache);
+                                           PlainPropertyDescriptor&& descriptor) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+  });
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -61,13 +55,10 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                           ComputedReadonlyPropertyDescriptor&& descriptor, bool allowCache) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
-      runtime, "Object.defineProperty",
-      [](jsi::Runtime& runtime) {
-        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-      },
-      allowCache);
+                                           ComputedReadonlyPropertyDescriptor&& descriptor) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+  });
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -80,13 +71,10 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
 }
 
 void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Object& object, const char* propertyName,
-                                           ComputedPropertyDescriptor&& descriptor, bool allowCache) {
-  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(
-      runtime, "Object.defineProperty",
-      [](jsi::Runtime& runtime) {
-        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
-      },
-      allowCache);
+                                           ComputedPropertyDescriptor&& descriptor) {
+  BorrowingReference<jsi::Function> definePropertyFn = getGlobalFunction(runtime, "Object.defineProperty", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "defineProperty");
+  });
 
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
@@ -99,13 +87,10 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
 
-void CommonGlobals::Object::freeze(jsi::Runtime& runtime, const jsi::Object& object, bool allowCache) {
-  BorrowingReference<jsi::Function> freezeFn = getGlobalFunction(
-      runtime, "Object.freeze",
-      [](jsi::Runtime& runtime) {
-        return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "freeze");
-      },
-      allowCache);
+void CommonGlobals::Object::freeze(jsi::Runtime& runtime, const jsi::Object& object) {
+  BorrowingReference<jsi::Function> freezeFn = getGlobalFunction(runtime, "Object.freeze", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Object").getPropertyAsFunction(runtime, "freeze");
+  });
 
   freezeFn->call(runtime, object);
 }
@@ -167,7 +152,7 @@ bool CommonGlobals::Error::isInstanceOf(jsi::Runtime& runtime, const jsi::Object
 
 // pragma MARK: CommonGlobals
 
-void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value, bool allowCache) {
+void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value) {
   const char* nameString = getKnownGlobalPropertyNameString(name);
 
 #ifdef NITRO_DEBUG
@@ -178,8 +163,7 @@ void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName 
                              "\")` twice? Did you link Nitro Modules twice?");
   }
   Object::defineProperty(runtime, runtime.global(), nameString,
-                         PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false},
-                         allowCache);
+                         PlainPropertyDescriptor{.configurable = false, .enumerable = true, .value = std::move(value), .writable = false});
 #else
   // In release, just set the property.
   runtime.global().setProperty(runtime, nameString, std::move(value));
@@ -202,38 +186,30 @@ const jsi::PropNameID& CommonGlobals::getKnownGlobalPropertyName(jsi::Runtime& r
 }
 
 BorrowingReference<jsi::Function> CommonGlobals::getGlobalFunction(jsi::Runtime& runtime, const char* key,
-                                                                   std::function<jsi::Function(jsi::Runtime&)> getFunction,
-                                                                   bool allowCache) {
-  if (allowCache) [[likely]] {
-    // Let's try to find the function in cache
-    FunctionCache& functionCache = _cache[&runtime];
-    std::string stringKey = key;
-    auto iterator = functionCache.find(stringKey);
-    if (iterator != functionCache.end()) {
-      // We found it! Let's check if the reference is still valid...
-      BorrowingReference<jsi::Function> function = iterator->second;
-      if (function != nullptr) [[likely]] {
-        // It's still alive - let's use it from cache!
-        return function;
-      }
+                                                                   std::function<jsi::Function(jsi::Runtime&)> getFunction) {
+  // Let's try to find the function in cache
+  FunctionCache& functionCache = _cache[&runtime];
+  std::string stringKey = key;
+  auto iterator = functionCache.find(stringKey);
+  if (iterator != functionCache.end()) {
+    // We found it! Let's check if the reference is still valid...
+    BorrowingReference<jsi::Function> function = iterator->second;
+    if (function != nullptr) [[likely]] {
+      // It's still alive - let's use it from cache!
+      return function;
     }
-
-    // We haven't found the function with the given key in cache - so let's get it:
-    jsi::Function function = getFunction(runtime);
-
-    // Let's throw it in cache!
-    JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
-    BorrowingReference<jsi::Function> sharedFunction = jsiCache.makeShared(std::move(function));
-    functionCache[stringKey] = sharedFunction;
-
-    // And now return:
-    return sharedFunction;
-  } else {
-    // We are not allowed to use cache - so let's just wrap it in a BorrowingReference to match the return type.
-    jsi::Function function = getFunction(runtime);
-    jsi::Function* heapFunction = new jsi::Function(std::move(function));
-    return BorrowingReference<jsi::Function>(heapFunction);
   }
+
+  // We haven't found the function with the given key in cache - so let's get it:
+  jsi::Function function = getFunction(runtime);
+
+  // Let's throw it in cache!
+  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
+  BorrowingReference<jsi::Function> sharedFunction = jsiCache.makeShared(std::move(function));
+  functionCache[stringKey] = sharedFunction;
+
+  // And now return:
+  return sharedFunction;
 }
 
 } // namespace margelo::nitro
