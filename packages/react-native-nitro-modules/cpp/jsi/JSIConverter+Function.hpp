@@ -57,8 +57,10 @@ struct JSIConverter<std::function<R(Args...)>> final {
       }
       return callHybridFunction(function, runtime, args, std::index_sequence_for<Args...>{});
     };
-    const jsi::PropNameID& propName = PropNameIDCache::get(runtime, "hostFunction");
-    return jsi::Function::createFromHostFunction(runtime, propName, sizeof...(Args), std::move(jsFunction));
+    return jsi::Function::createFromHostFunction(runtime,                                       //
+                                                 PropNameIDCache::get(runtime, "hostFunction"), //
+                                                 sizeof...(Args),                               //
+                                                 std::move(jsFunction));
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<R(Args...)>& function) {

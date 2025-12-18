@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include "AnyMap.hpp"
 #include "JSIHelpers.hpp"
+#include "PropNameIDCache.hpp"
 #include <jsi/jsi.h>
 #include <unordered_map>
 
@@ -33,7 +34,7 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
     map.reserve(length);
     for (size_t i = 0; i < length; ++i) {
       std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
-      jsi::Value value = object.getProperty(runtime, key.c_str());
+      jsi::Value value = object.getProperty(runtime, PropNameIDCache::get(runtime, key));
       map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
     }
     return map;

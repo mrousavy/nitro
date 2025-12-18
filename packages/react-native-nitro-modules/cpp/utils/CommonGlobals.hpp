@@ -50,6 +50,10 @@ public:
    * Get a string name for a known global property name.
    */
   static const char* getKnownGlobalPropertyNameString(KnownGlobalPropertyName name);
+  /**
+   * Get a `jsi::PropNameID` for a known global property name.
+   */
+  static const jsi::PropNameID& getKnownGlobalPropertyName(jsi::Runtime& runtime, KnownGlobalPropertyName name);
 
   /**
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object

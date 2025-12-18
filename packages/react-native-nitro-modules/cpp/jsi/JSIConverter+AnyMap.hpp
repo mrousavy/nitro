@@ -18,6 +18,7 @@ struct JSIConverter;
 
 #include "AnyMap.hpp"
 #include "JSIHelpers.hpp"
+#include "PropNameIDCache.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 
@@ -48,9 +49,10 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
     size_t size = propNames.size(runtime);
     std::shared_ptr<AnyMap> map = AnyMap::make();
     for (size_t i = 0; i < size; i++) {
-      jsi::String jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime);
-      jsi::Value jsValue = object.getProperty(runtime, jsKey);
-      map->setAny(jsKey.utf8(runtime), JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
+      std::string jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
+      const jsi::PropNameID& propNameId = PropNameIDCache::get(runtime, jsKey);
+      jsi::Value jsValue = object.getProperty(runtime, propNameId);
+      map->setAny(jsKey, JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
     }
     return map;
   }

@@ -9,6 +9,7 @@
 #include "JSICache.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
+#include "PropNameIDCache.hpp"
 
 #if __has_include(<cxxreact/ReactNativeVersion.h>)
 #include <cxxreact/ReactNativeVersion.h>
@@ -51,10 +52,10 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
   jsi::Object descriptorJs(runtime);
-  descriptorJs.setProperty(runtime, "configurable", jsi::Value(descriptor.configurable));
-  descriptorJs.setProperty(runtime, "enumerable", jsi::Value(descriptor.enumerable));
-  descriptorJs.setProperty(runtime, "value", std::move(descriptor.value));
-  descriptorJs.setProperty(runtime, "writable", jsi::Value(descriptor.writable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "configurable"), jsi::Value(descriptor.configurable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "enumerable"), jsi::Value(descriptor.enumerable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "value"), std::move(descriptor.value));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "writable"), jsi::Value(descriptor.writable));
 
   definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
@@ -71,9 +72,9 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
   jsi::Object descriptorJs(runtime);
-  descriptorJs.setProperty(runtime, "configurable", jsi::Value(descriptor.configurable));
-  descriptorJs.setProperty(runtime, "enumerable", jsi::Value(descriptor.enumerable));
-  descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "configurable"), jsi::Value(descriptor.configurable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "enumerable"), jsi::Value(descriptor.enumerable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "get"), std::move(descriptor.get));
 
   definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
@@ -90,10 +91,10 @@ void CommonGlobals::Object::defineProperty(jsi::Runtime& runtime, const jsi::Obj
   jsi::String nameJs = jsi::String::createFromAscii(runtime, propertyName);
 
   jsi::Object descriptorJs(runtime);
-  descriptorJs.setProperty(runtime, "configurable", jsi::Value(descriptor.configurable));
-  descriptorJs.setProperty(runtime, "enumerable", jsi::Value(descriptor.enumerable));
-  descriptorJs.setProperty(runtime, "get", std::move(descriptor.get));
-  descriptorJs.setProperty(runtime, "set", std::move(descriptor.set));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "configurable"), jsi::Value(descriptor.configurable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "enumerable"), jsi::Value(descriptor.enumerable));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "get"), std::move(descriptor.get));
+  descriptorJs.setProperty(runtime, PropNameIDCache::get(runtime, "set"), std::move(descriptor.set));
 
   definePropertyFn->call(runtime, object, std::move(nameJs), std::move(descriptorJs));
 }
@@ -194,6 +195,10 @@ const char* CommonGlobals::getKnownGlobalPropertyNameString(KnownGlobalPropertyN
     case KnownGlobalPropertyName::NITRO_MODULES_PROXY:
       return "NitroModulesProxy";
   }
+}
+
+const jsi::PropNameID& CommonGlobals::getKnownGlobalPropertyName(jsi::Runtime& runtime, KnownGlobalPropertyName name) {
+  return PropNameIDCache::get(runtime, getKnownGlobalPropertyNameString(name));
 }
 
 BorrowingReference<jsi::Function> CommonGlobals::getGlobalFunction(jsi::Runtime& runtime, const char* key,

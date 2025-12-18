@@ -57,15 +57,15 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
 }
 
 jsi::Value Dispatcher::getRuntimeGlobalDispatcherHolder(jsi::Runtime& runtime) {
-  const char* dispatcherHolderName = CommonGlobals::getKnownGlobalPropertyNameString(KnownGlobalPropertyName::DISPATCHER);
-  if (!runtime.global().hasProperty(runtime, dispatcherHolderName)) [[unlikely]] {
+  const jsi::PropNameID& dispatcherHolderPropName = CommonGlobals::getKnownGlobalPropertyName(runtime, KnownGlobalPropertyName::DISPATCHER);
+  if (!runtime.global().hasProperty(runtime, dispatcherHolderPropName)) [[unlikely]] {
     throw std::runtime_error("The `jsi::Runtime` \"" + getRuntimeId(runtime) +
                              "\" does not support Callbacks or Promises because it does not have a `Dispatcher` installed!\n"
                              "To use Callbacks and Promises follow these steps;\n"
                              "1. Subclass `Dispatcher` with your implementation of `runAsync`/`runSync` for your Thread.\n"
                              "2. Call `Dispatcher::installRuntimeGlobalDispatcher(...)` with your `Runtime` and your `Dispatcher`.");
   }
-  return runtime.global().getProperty(runtime, dispatcherHolderName);
+  return runtime.global().getProperty(runtime, dispatcherHolderPropName);
 }
 
 } // namespace margelo::nitro
