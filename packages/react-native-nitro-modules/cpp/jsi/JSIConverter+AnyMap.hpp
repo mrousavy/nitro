@@ -50,8 +50,7 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
     std::shared_ptr<AnyMap> map = AnyMap::make();
     for (size_t i = 0; i < size; i++) {
       std::string jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
-      const jsi::PropNameID& propNameId = PropNameIDCache::get(runtime, jsKey);
-      jsi::Value jsValue = object.getProperty(runtime, propNameId);
+      jsi::Value jsValue = object.getProperty(runtime, PropNameIDCache::get(runtime, jsKey));
       map->setAny(jsKey, JSIConverter<AnyValue>::fromJSI(runtime, jsValue));
     }
     return map;
