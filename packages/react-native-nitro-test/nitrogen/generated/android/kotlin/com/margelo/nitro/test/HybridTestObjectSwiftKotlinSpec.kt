@@ -347,11 +347,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  abstract fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>): Unit
+  abstract fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>): Promise<Unit>
   
   @DoNotStrip
   @Keep
-  private fun callCallbackThatReturnsPromiseVoid_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____): Unit {
+  private fun callCallbackThatReturnsPromiseVoid_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____): Promise<Unit> {
     val __result = callCallbackThatReturnsPromiseVoid(callback)
     return __result
   }

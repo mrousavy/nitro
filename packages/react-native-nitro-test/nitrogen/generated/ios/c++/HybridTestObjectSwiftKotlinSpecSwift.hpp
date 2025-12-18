@@ -592,11 +592,13 @@ namespace margelo::nitro::test {
         std::rethrow_exception(__result.error());
       }
     }
-    inline void callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override {
+    inline std::shared_ptr<Promise<void>> callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override {
       auto __result = _swiftPart.callCallbackThatReturnsPromiseVoid(callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
       auto __result = _swiftPart.callAll(first, second, third);
