@@ -221,6 +221,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return map
   }
 
+  override fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double> {
+    return map
+  }
+
   override fun extractMap(mapWrapper: MapWrapper): Map<String, String> {
     return mapWrapper.map
   }

@@ -12,6 +12,9 @@ export class ErrorType implements Type {
   get kind(): TypeKind {
     return 'error'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

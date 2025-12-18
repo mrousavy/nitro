@@ -22,6 +22,9 @@ export class PromiseType implements Type {
   get kind(): TypeKind {
     return 'promise'
   }
+  get isEquatable(): boolean {
+    return false
+  }
 
   get resolverFunction(): FunctionType {
     if (this.resultingType.kind === 'void') {

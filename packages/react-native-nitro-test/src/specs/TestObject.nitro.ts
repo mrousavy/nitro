@@ -160,6 +160,7 @@ interface SharedTestObjectProps {
   bounceMap(
     map: Record<string, number | boolean>
   ): Record<string, number | boolean>
+  bounceSimpleMap(map: Record<string, number>): Record<string, number>
   extractMap(mapWrapper: MapWrapper): MapWrapper['map']
 
   // Errors

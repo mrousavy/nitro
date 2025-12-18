@@ -300,6 +300,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return map
   }
 
+  func bounceSimpleMap(map: [String: Double]) throws -> [String: Double] {
+    return map
+  }
+
   func extractMap(mapWrapper: MapWrapper) throws -> [String: String] {
     return mapWrapper.map
   }

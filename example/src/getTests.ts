@@ -86,7 +86,12 @@ const TEST_MAP_2: Record<string, string> = {
   'third-key': 'thirdValue',
 }
 
-const TEST_MAP_3: Record<
+const TEST_MAP_3: Record<string, number> = {
+  first: 14,
+  second: 8247,
+}
+
+const TEST_MAP_4: Record<
   string,
   number | boolean | string | bigint | null | Array<number>
 > = {
@@ -694,9 +699,9 @@ export function getTests(
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
     createTest('copyAnyValues(...) works', () =>
-      it(() => testObject.copyAnyValues(TEST_MAP_3))
+      it(() => testObject.copyAnyValues(TEST_MAP_4))
         .didNotThrow()
-        .equals(TEST_MAP_3)
+        .equals(TEST_MAP_4)
     ),
 
     // Test errors
@@ -1161,6 +1166,12 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP)
+    ),
+    createTest('bounceSimpleMap(map) === map', () =>
+      it(() => testObject.bounceSimpleMap(TEST_MAP_3))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP_3)
     ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
       it(() =>

@@ -38,6 +38,9 @@ export class StructType implements Type {
   get kind(): TypeKind {
     return 'struct'
   }
+  get isEquatable(): boolean {
+    return this.properties.every((p) => p.isEquatable)
+  }
 
   getCode(language: Language, { fullyQualified }: GetCodeOptions = {}): string {
     switch (language) {

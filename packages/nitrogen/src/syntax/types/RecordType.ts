@@ -18,6 +18,9 @@ export class RecordType implements Type {
   get kind(): TypeKind {
     return 'record'
   }
+  get isEquatable(): boolean {
+    return this.keyType.isEquatable && this.valueType.isEquatable
+  }
 
   getCode(language: Language, options?: GetCodeOptions): string {
     const keyCode = this.keyType.getCode(language, options)
