@@ -66,7 +66,9 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
-  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws -> Promise<Void> {
+  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws
+    -> Promise<Void>
+  {
     return Promise.async {
       let callPromise = callback()
       let resultPromise = try await callPromise.await()
@@ -591,4 +593,3 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return formatter.string(for: value) ?? "\(value)"
   }
 }
-

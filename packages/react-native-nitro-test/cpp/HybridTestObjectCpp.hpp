@@ -144,7 +144,8 @@ public:
   std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
   std::shared_ptr<Promise<void>> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
-  std::shared_ptr<Promise<void>> callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override;
+  std::shared_ptr<Promise<void>>
+  callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override;
   std::function<void(double)> createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
   std::shared_ptr<Promise<double>>
