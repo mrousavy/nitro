@@ -45,7 +45,6 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun build || exit 0;",
     "build": "bun tsc",
     "test": "jest",
     "typecheck": "tsc --noEmit",
