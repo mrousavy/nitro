@@ -63,6 +63,7 @@ private:
   std::vector<WeakReference<jsi::Object>> _objectCache;
   std::vector<WeakReference<jsi::Function>> _functionCache;
   std::vector<WeakReference<jsi::WeakObject>> _weakObjectCache;
+  std::vector<WeakReference<jsi::PropNameID>> _propNameIDCache;
   std::vector<WeakReference<jsi::ArrayBuffer>> _arrayBufferCache;
 
 private:
@@ -101,6 +102,11 @@ public:
   BorrowingReference<jsi::WeakObject> makeShared(jsi::WeakObject&& value) {
     BorrowingReference<jsi::WeakObject> owning(new jsi::WeakObject(std::move(value)));
     _strongCache->_weakObjectCache.push_back(owning.weak());
+    return owning;
+  }
+  BorrowingReference<jsi::PropNameID> makeShared(jsi::PropNameID&& value) {
+    BorrowingReference<jsi::PropNameID> owning(new jsi::PropNameID(std::move(value)));
+    _strongCache->_propNameIDCache.push_back(owning.weak());
     return owning;
   }
   BorrowingReference<jsi::ArrayBuffer> makeShared(jsi::ArrayBuffer&& value) {
