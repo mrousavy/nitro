@@ -20,8 +20,8 @@ public:
   PropNameIDCache() = delete;
   ~PropNameIDCache() = delete;
 
-  static BorrowingReference<jsi::PropNameID> get(jsi::Runtime& runtime, std::string value);
-  
+  static const jsi::PropNameID& get(jsi::Runtime& runtime, std::string value);
+
 private:
   using CacheMap = std::unordered_map<std::string, BorrowingReference<jsi::PropNameID>>;
   static std::unordered_map<jsi::Runtime*, CacheMap> _cache;

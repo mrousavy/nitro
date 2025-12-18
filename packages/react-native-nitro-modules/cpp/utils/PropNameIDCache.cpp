@@ -14,24 +14,25 @@ using namespace facebook;
 
 std::unordered_map<jsi::Runtime*, PropNameIDCache::CacheMap> PropNameIDCache::_cache;
 
-BorrowingReference<jsi::PropNameID> PropNameIDCache::get(jsi::Runtime& runtime, std::string value) {
+const jsi::PropNameID& PropNameIDCache::get(jsi::Runtime& runtime, std::string value) {
   CacheMap& cache = _cache[&runtime];
   const auto& cachedName = cache.find(value);
   if (cachedName != cache.end()) {
     // cache warm!
-    return cachedName->second;
+    const BorrowingReference<jsi::PropNameID>& value = cachedName->second;
+    return *value;
   }
-  
+
   // not cached - create the jsi::PropNameID...
   auto propName = jsi::PropNameID::forAscii(runtime, value);
   auto jsiCache = JSICache::getOrCreateCache(runtime);
   auto sharedPropName = jsiCache.makeShared(std::move(propName));
-  
+
   // store it in cache...
   cache.emplace(value, sharedPropName);
-  
+
   // return it!
-  return sharedPropName;
+  return *sharedPropName;
 }
 
 } // namespace margelo::nitro

@@ -16,6 +16,7 @@ struct JSIConverter;
 #include "JSCallback.hpp"
 #include "JSICache.hpp"
 #include "PromiseType.hpp"
+#include "PropNameIDCache.hpp"
 #include <jsi/jsi.h>
 
 namespace margelo::nitro {
@@ -56,8 +57,8 @@ struct JSIConverter<std::function<R(Args...)>> final {
       }
       return callHybridFunction(function, runtime, args, std::index_sequence_for<Args...>{});
     };
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, "hostFunction"), sizeof...(Args),
-                                                 std::move(jsFunction));
+    const jsi::PropNameID& propName = PropNameIDCache::get(runtime, "hostFunction");
+    return jsi::Function::createFromHostFunction(runtime, propName, sizeof...(Args), std::move(jsFunction));
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::function<R(Args...)>& function) {
