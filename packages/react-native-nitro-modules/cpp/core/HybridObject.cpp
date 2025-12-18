@@ -3,9 +3,9 @@
 //
 
 #include "HybridObject.hpp"
+#include "CommonGlobals.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
-#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -75,7 +75,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   jsi::Value prototype = getPrototype(runtime);
 
   // 3. Create the object using Object.create(...)
-  jsi::Object object = ObjectUtils::create(runtime, prototype);
+  jsi::Object object = CommonGlobals::Object::create(runtime, prototype);
 
   // 4. Assign NativeState to the object so the prototype can resolve the native methods
   object.setNativeState(runtime, shared());
@@ -86,14 +86,14 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 #ifdef NITRO_DEBUG
   // 6. Assign a private __type property for debugging - this will be used so users know it's not just an empty object.
   std::string typeName = "HybridObject<" + std::string(_name) + ">";
-  ObjectUtils::defineProperty(runtime, object, "__type",
-                              PlainPropertyDescriptor{
-                                  // .configurable has to be true because this property is non-frozen
-                                  .configurable = true,
-                                  .enumerable = true,
-                                  .value = jsi::String::createFromUtf8(runtime, typeName),
-                                  .writable = false,
-                              });
+  CommonGlobals::Object::defineProperty(runtime, object, "__type",
+                                        PlainPropertyDescriptor{
+                                            // .configurable has to be true because this property is non-frozen
+                                            .configurable = true,
+                                            .enumerable = true,
+                                            .value = jsi::String::createFromUtf8(runtime, typeName),
+                                            .writable = false,
+                                        });
 #endif
 
   // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
