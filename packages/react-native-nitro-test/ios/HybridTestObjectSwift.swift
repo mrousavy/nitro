@@ -66,6 +66,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
+  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws
+    -> Promise<Void>
+  {
+    return Promise.async {
+      let callPromise = callback()
+      let resultPromise = try await callPromise.await()
+      try await resultPromise.await()
+    }
+  }
+
   func createNativeCallback(wrappingJsCallback: @escaping (_ num: Double) -> Void) throws -> (
     _ num: Double
   ) -> Void {

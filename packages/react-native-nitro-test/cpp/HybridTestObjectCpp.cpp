@@ -284,6 +284,17 @@ double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }
 
+std::shared_ptr<Promise<void>> HybridTestObjectCpp::callCallbackThatReturnsPromiseVoid(
+    const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) {
+  return Promise<void>::async([=]() {
+    std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> callPromise = callback();
+    std::future<std::shared_ptr<Promise<void>>> callFuture = callPromise->await();
+    std::shared_ptr<Promise<void>> resultPromise = callFuture.get();
+    std::future<void> future = resultPromise->await();
+    future.wait();
+  });
+}
+
 std::shared_ptr<Promise<void>> HybridTestObjectCpp::funcThatThrowsBeforePromise() {
   throw std::runtime_error("This function will only work after sacrificing eight lambs!");
 }

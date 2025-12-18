@@ -18,7 +18,6 @@
 #include <NitroModules/AnyMap.hpp>
 #include <variant>
 #include <NitroModules/JArrayBuffer.hpp>
-#include <NitroModules/JUnit.hpp>
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>
 #include "JWrappedJsStruct.hpp"

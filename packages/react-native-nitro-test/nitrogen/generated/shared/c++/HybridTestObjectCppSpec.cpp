@@ -98,6 +98,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectCppSpec::awaitAndGetComplexPromise);
       prototype.registerHybridMethod("awaitPromise", &HybridTestObjectCppSpec::awaitPromise);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectCppSpec::callCallback);
+      prototype.registerHybridMethod("callCallbackThatReturnsPromiseVoid", &HybridTestObjectCppSpec::callCallbackThatReturnsPromiseVoid);
       prototype.registerHybridMethod("callAll", &HybridTestObjectCppSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectCppSpec::callSumUpNTimes);

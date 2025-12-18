@@ -111,11 +111,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JArrayBuffer.hpp',
             space: 'system',
           })
-          imports.push({
-            language: 'c++',
-            name: 'NitroModules/JUnit.hpp',
-            space: 'system',
-          })
           break
         case 'promise':
           imports.push({
@@ -123,6 +118,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JPromise.hpp',
             space: 'system',
           })
+          const promiseType = getTypeAs(this.type, PromiseType)
+          if (promiseType.resultingType.kind === 'void') {
+            // Promise<void> uses JUnit
+            imports.push({
+              language: 'c++',
+              name: 'NitroModules/JUnit.hpp',
+              space: 'system',
+            })
+          }
           break
         case 'date':
           imports.push({

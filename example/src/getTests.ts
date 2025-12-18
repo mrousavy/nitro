@@ -1375,6 +1375,15 @@ export function getTests(
         .didNotThrow()
         .equals('hello')
     ),
+    createTest('callCallbackThatReturnsPromiseVoid(...)', async () =>
+      (
+        await it(() =>
+          testObject.callCallbackThatReturnsPromiseVoid(() => Promise.resolve())
+        )
+      )
+        .didNotThrow()
+        .didReturn('undefined')
+    ),
     createTest(
       'Single callback can be called and awaited: getValueFromJSCallbackAndWait(...)',
       async () =>
