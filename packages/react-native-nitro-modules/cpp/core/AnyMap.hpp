@@ -38,8 +38,8 @@ struct AnyValue : VariantType {
  */
 class AnyMap final {
 private:
-  explicit AnyMap() {}
-  AnyMap(size_t size) {
+  AnyMap() = default;
+  explicit AnyMap(size_t size) {
     _map.reserve(size);
   }
 

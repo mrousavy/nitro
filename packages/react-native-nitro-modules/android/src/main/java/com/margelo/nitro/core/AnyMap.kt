@@ -60,7 +60,7 @@ class AnyMap {
   }
 
   fun toMap(): Map<String, Any?> {
-    return toHashMapNative()
+    return toHashMap()
   }
 
   fun setAny(
@@ -74,7 +74,7 @@ class AnyMap {
     return getAnyValue(key).toAny()
   }
 
-  external fun toHashMapNative(): HashMap<String, Any?>
+  external fun toHashMap(): HashMap<String, Any?>
 
   @FastNative
   external fun contains(key: String): Boolean

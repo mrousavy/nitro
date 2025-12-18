@@ -21,7 +21,7 @@ std::string ThreadUtils::getThreadName() {
     // We have a pthread name
     return std::string(threadName);
   }
-  
+
   // Try getting DispatchQueue name
   const char* queueName = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL);
   if (queueName != nullptr && queueName[0] != '\0') {
