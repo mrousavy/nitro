@@ -57,12 +57,12 @@ export class PromiseType implements Type {
         )
     }
   }
-  getExtraFiles(): SourceFile[] {
-    return this.resultingType.getExtraFiles()
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return this.resultingType.getExtraFiles(visited)
   }
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
     const imports: SourceImport[] =
-      this.resultingType.getRequiredImports(language)
+      this.resultingType.getRequiredImports(language, visited)
     switch (language) {
       case 'c++':
         imports.push({

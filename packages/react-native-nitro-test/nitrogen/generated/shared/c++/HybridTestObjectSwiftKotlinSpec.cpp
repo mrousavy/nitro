@@ -111,6 +111,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectSwiftKotlinSpec::bounceOptionalWrapper);
       prototype.registerHybridMethod("bounceOptionalCallback", &HybridTestObjectSwiftKotlinSpec::bounceOptionalCallback);
+      prototype.registerHybridMethod("bounceSelfReferentialStruct", &HybridTestObjectSwiftKotlinSpec::bounceSelfReferentialStruct);
+      prototype.registerHybridMethod("bounceTreeNode", &HybridTestObjectSwiftKotlinSpec::bounceTreeNode);
+      prototype.registerHybridMethod("bounceTreeNodeMap", &HybridTestObjectSwiftKotlinSpec::bounceTreeNodeMap);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectSwiftKotlinSpec::copyBuffer);
