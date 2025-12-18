@@ -15,6 +15,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 
 #include "CommonGlobals.hpp"
+#include "PropNameIDCache.hpp"
 #include <chrono>
 #include <jsi/jsi.h>
 #include <memory>
@@ -39,14 +40,15 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
 
     jsi::Object object = arg.asObject(runtime);
 #ifdef NITRO_DEBUG
-    if (!object.hasProperty(runtime, "getTime")) {
+    if (!object.hasProperty(runtime, PropNameIDCache::get(runtime, "getTime"))) {
       throw std::invalid_argument("Object \"" + arg.toString(runtime).utf8(runtime) +
                                   "\" does not have a .getTime() function! "
                                   "It's not a valid Date object.");
     }
 #endif
 
-    jsi::Function getTimeFunc = object.getPropertyAsFunction(runtime, "getTime");
+    jsi::Function getTimeFunc =
+        object.getProperty(runtime, PropNameIDCache::get(runtime, "getTime")).getObject(runtime).getFunction(runtime);
     double msSinceEpoch = getTimeFunc.callWithThis(runtime, object).getNumber();
 
     // ms -> std::chrono::system_clock::time_point

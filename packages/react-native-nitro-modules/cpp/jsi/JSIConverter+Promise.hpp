@@ -16,6 +16,7 @@ struct JSIConverter;
 #include "NitroTypeInfo.hpp"
 #include "Null.hpp"
 #include "Promise.hpp"
+#include "PropNameIDCache.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 #include <memory>
@@ -45,7 +46,7 @@ struct JSIConverter<std::shared_ptr<Promise<TResult>>> final {
 
     // Chain .then listeners on JS Promise (onResolved and onRejected)
     jsi::Object jsPromise = value.asObject(runtime);
-    jsi::Function thenFn = jsPromise.getPropertyAsFunction(runtime, "then");
+    jsi::Function thenFn = jsPromise.getProperty(runtime, PropNameIDCache::get(runtime, "then")).asObject(runtime).getFunction(runtime);
     thenFn.callWithThis(runtime, jsPromise, thenCallback, catchCallback);
 
     return promise;

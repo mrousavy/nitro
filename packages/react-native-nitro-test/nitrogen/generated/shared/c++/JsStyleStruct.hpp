@@ -22,6 +22,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/PropNameIDCache.hpp>)
+#include <NitroModules/PropNameIDCache.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -55,14 +60,14 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::JsStyleStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::JsStyleStruct(
-        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, "value")),
-        JSIConverter<std::function<void(double)>>::fromJSI(runtime, obj.getProperty(runtime, "onChanged"))
+        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "value"))),
+        JSIConverter<std::function<void(double)>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "onChanged")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::JsStyleStruct& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "value", JSIConverter<double>::toJSI(runtime, arg.value));
-      obj.setProperty(runtime, "onChanged", JSIConverter<std::function<void(double)>>::toJSI(runtime, arg.onChanged));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "value"), JSIConverter<double>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "onChanged"), JSIConverter<std::function<void(double)>>::toJSI(runtime, arg.onChanged));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -73,8 +78,8 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
-      if (!JSIConverter<std::function<void(double)>>::canConvert(runtime, obj.getProperty(runtime, "onChanged"))) return false;
+      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "value")))) return false;
+      if (!JSIConverter<std::function<void(double)>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "onChanged")))) return false;
       return true;
     }
   };
