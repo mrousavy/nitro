@@ -73,7 +73,7 @@ class AnyMap {
   fun getAny(key: String): Any? {
     return getAnyValue(key).toAny()
   }
-  @FastNative
+
   external fun toHashMapNative(): HashMap<String, Any?>
 
   @FastNative

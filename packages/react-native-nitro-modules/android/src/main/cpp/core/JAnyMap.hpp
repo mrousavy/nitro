@@ -39,7 +39,6 @@ inline jni::local_ref<jni::JObject> anyValueToJObject(const AnyValue& value) {
   return nullptr;
 }
 
-
 inline jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyArray& array) {
   auto jList = jni::JArrayList<jni::JObject>::create(static_cast<int>(array.size()));
   for (const auto& item : array) {
@@ -47,7 +46,6 @@ inline jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyAr
   }
   return jList;
 }
-
 
 inline jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> anyObjectToJHashMap(const AnyObject& object) {
   auto jMap = jni::JHashMap<jni::JString, jni::JObject>::create(object.size());
