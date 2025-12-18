@@ -82,13 +82,16 @@ public:
    */
   static const char* getKnownGlobalPropertyNameString(KnownGlobalPropertyName name);
 
-private:
-  using FunctionCache = std::unordered_map<std::string, BorrowingReference<jsi::Function>>;
-  static std::unordered_map<jsi::Runtime*, FunctionCache> _cache;
-
+  /**
+   * Get a global Function, and optionally cache it in the Runtime via the `key`.
+   */
   static BorrowingReference<jsi::Function> getGlobalFunction(jsi::Runtime& runtime, const char* key,
                                                              std::function<jsi::Function(jsi::Runtime&)> getFunction,
                                                              bool allowCache = true);
+
+private:
+  using FunctionCache = std::unordered_map<std::string, BorrowingReference<jsi::Function>>;
+  static std::unordered_map<jsi::Runtime*, FunctionCache> _cache;
 };
 
 } // namespace margelo::nitro

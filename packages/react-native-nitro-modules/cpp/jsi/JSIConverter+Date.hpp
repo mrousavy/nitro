@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include "JSIConverter.hpp"
 
+#include "ObjectUtils.hpp"
 #include <chrono>
 #include <jsi/jsi.h>
 #include <memory>
@@ -62,10 +63,10 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
     auto ms = chrono::duration_cast<chrono::milliseconds>(date.time_since_epoch()).count();
     auto msSinceEpoch = static_cast<double>(ms);
 
-    // TODO: Cache this
-    jsi::Function dateCtor = runtime.global().getPropertyAsFunction(runtime, "Date");
-
-    jsi::Value jsDate = dateCtor.callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
+    // 2. Call `new Date(...)` with the milliseconds since epoch
+    BorrowingReference<jsi::Function> dateCtor = ObjectUtils::getGlobalFunction(
+        runtime, "Date", [](jsi::Runtime& runtime) -> jsi::Function { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
+    jsi::Value jsDate = dateCtor->callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
     return jsDate;
   }
 
@@ -73,8 +74,9 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
     if (value.isObject()) {
       jsi::Object object = value.getObject(runtime);
 
-      jsi::Function dateCtor = runtime.global().getPropertyAsFunction(runtime, "Date");
-      return object.instanceOf(runtime, dateCtor);
+      BorrowingReference<jsi::Function> dateCtor = ObjectUtils::getGlobalFunction(
+          runtime, "Date", [](jsi::Runtime& runtime) -> jsi::Function { return runtime.global().getPropertyAsFunction(runtime, "Date"); });
+      return object.instanceOf(runtime, *dateCtor);
     }
     return false;
   }
