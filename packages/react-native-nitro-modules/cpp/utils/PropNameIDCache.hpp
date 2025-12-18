@@ -15,11 +15,25 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+/**
+ * Allows caching `jsi::PropNameID`s via `std::string`s.
+ * The returned `jsi::PropNameID` can be used for JSI operations like
+ * - `jsi::Object::getProperty(...)`
+ * - `jsi::Object::setProperty(...)`
+ * - `jsi::Object::hasProperty(...)`
+ * And is more efficient than the string equivalent overloads of those
+ * functions due to caching.
+ */
 class PropNameIDCache final {
 public:
   PropNameIDCache() = delete;
   ~PropNameIDCache() = delete;
 
+  /**
+   * Get a `jsi::PropNameID` for the given `std::string` value.
+   * The `jsi::PropNameID` is only valid within the callee's current
+   * synchronous scope, and must be non-escaping.
+   */
   static const jsi::PropNameID& get(jsi::Runtime& runtime, std::string value);
 
 private:
