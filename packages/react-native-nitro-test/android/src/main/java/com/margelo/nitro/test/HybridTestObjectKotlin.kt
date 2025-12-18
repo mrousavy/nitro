@@ -299,7 +299,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>): Promise<Unit> {
     return Promise.async {
       val callPromise = callback()
-      val resultPromise = promise.await()
+      val resultPromise = callPromise.await()
       resultPromise.await()
     }
   }
