@@ -79,11 +79,27 @@ const TEST_MAP: Record<string, number | boolean> = {
   a_bool: true,
   another_bool: false,
 }
+
 const TEST_MAP_2: Record<string, string> = {
   'someKey': 'someValue',
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
+
+const TEST_MAP_3: Record<
+  string,
+  number | boolean | string | bigint | null | Array<number>
+> = {
+  someKey: 55,
+  some_other_key: 123,
+  a_bool: true,
+  another_bool: false,
+  a_string: 'hello',
+  a_bigint: 1234567890n,
+  a_null: null,
+  a_array: [1, 2, 3],
+}
+
 const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
@@ -678,9 +694,9 @@ export function getTests(
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
     createTest('copyAnyValues(...) works', () =>
-      it(() => testObject.copyAnyValues(TEST_MAP))
+      it(() => testObject.copyAnyValues(TEST_MAP_3))
         .didNotThrow()
-        .equals(TEST_MAP)
+        .equals(TEST_MAP_3)
     ),
 
     // Test errors
