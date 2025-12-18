@@ -889,6 +889,32 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceSimpleMap(map: bridge.std__unordered_map_std__string__double_) -> bridge.Result_std__unordered_map_std__string__double__ {
+    do {
+      let __result = try self.__implementation.bounceSimpleMap(map: { () -> Dictionary<String, Double> in
+        var __dictionary = Dictionary<String, Double>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__double__keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__double__value(map, __key)
+          __dictionary[String(__key)] = __value
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__double_ in
+        var __map = bridge.create_std__unordered_map_std__string__double_(__result.count)
+        for (__k, __v) in __result {
+          bridge.emplace_std__unordered_map_std__string__double_(&__map, std.string(__k), __v)
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__double__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__double__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func extractMap(mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
     do {
       let __result = try self.__implementation.extractMap(mapWrapper: mapWrapper)

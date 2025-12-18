@@ -660,6 +660,24 @@ namespace margelo::nitro::test {
       return __map;
     }();
   }
+  std::unordered_map<std::string, double> JHybridTestObjectSwiftKotlinSpec::bounceSimpleMap(const std::unordered_map<std::string, double>& map) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JDouble>>(jni::alias_ref<jni::JMap<jni::JString, jni::JDouble>> /* map */)>("bounceSimpleMap");
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JDouble>> {
+      auto __map = jni::JHashMap<jni::JString, jni::JDouble>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), jni::JDouble::valueOf(__entry.second));
+      }
+      return __map;
+    }());
+    return [&]() {
+      std::unordered_map<std::string, double> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second->value());
+      }
+      return __map;
+    }();
+  }
   std::unordered_map<std::string, std::string> JHybridTestObjectSwiftKotlinSpec::extractMap(const MapWrapper& mapWrapper) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JString>>(jni::alias_ref<JMapWrapper> /* mapWrapper */)>("extractMap");
     auto __result = method(_javaPart, JMapWrapper::fromCpp(mapWrapper));

@@ -84,6 +84,10 @@ const TEST_MAP_2: Record<string, string> = {
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
+const TEST_MAP_3: Record<string, number> = {
+  first: 14,
+  second: 8247,
+}
 const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
@@ -1145,6 +1149,12 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP)
+    ),
+    createTest('bounceSimpleMap(map) === map', () =>
+      it(() => testObject.bounceSimpleMap(TEST_MAP_3))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP_3)
     ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
       it(() =>
