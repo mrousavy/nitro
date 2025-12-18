@@ -112,20 +112,20 @@ void CommonGlobals::Object::freeze(jsi::Runtime& runtime, const jsi::Object& obj
 // pragma MARK: Promise
 
 jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime) {
-  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolved", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolved");
+  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
   });
   return resolvedFunc->call(runtime);
 }
 jsi::Value CommonGlobals::Promise::resolved(jsi::Runtime& runtime, jsi::Value&& value) {
-  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolved", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolved");
+  BorrowingReference<jsi::Function> resolvedFunc = getGlobalFunction(runtime, "Promise.resolve", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "resolve");
   });
   return resolvedFunc->call(runtime, {std::move(value)});
 }
 jsi::Value CommonGlobals::Promise::rejected(jsi::Runtime& runtime, jsi::Value&& error) {
-  BorrowingReference<jsi::Function> rejectedFunc = getGlobalFunction(runtime, "Promise.rejected", [](jsi::Runtime& runtime) {
-    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "rejected");
+  BorrowingReference<jsi::Function> rejectedFunc = getGlobalFunction(runtime, "Promise.reject", [](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsObject(runtime, "Promise").getPropertyAsFunction(runtime, "reject");
   });
   return rejectedFunc->call(runtime, {std::move(error)});
 }
