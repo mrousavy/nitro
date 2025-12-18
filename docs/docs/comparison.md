@@ -618,8 +618,8 @@ Note: It is also possible for Nitro specs to go out of sync, but only if you for
   </tr>
   <tr>
     <td><code>null</code></td>
-    <td>✅</td>
-    <td>✅</td>
+    <td>❌</td>
+    <td>❌</td>
     <td>✅</td>
   </tr>
   <tr>
