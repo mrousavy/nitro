@@ -10,9 +10,9 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
+#include "CommonGlobals.hpp"
 #include "JSIConverter.hpp"
 #include "NitroTypeInfo.hpp"
-#include "ObjectUtils.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 
@@ -51,9 +51,7 @@ struct JSIConverter<std::exception_ptr> final {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    BorrowingReference<jsi::Function> errorCtor = ObjectUtils::getGlobalFunction(
-        runtime, "Error", [](jsi::Runtime& runtime) -> jsi::Function { return runtime.global().getPropertyAsFunction(runtime, "Error"); });
-    return object.instanceOf(runtime, *errorCtor);
+    return CommonGlobals::Error::isInstanceOf(runtime, object);
   }
 };
 
