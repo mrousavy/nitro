@@ -15,7 +15,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// Pre declre functions for recursive conversion
+// Forward declarations of functions for recursive conversion
 jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyArray& array);
 jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> anyObjectToJHashMap(const AnyObject& object);
 
