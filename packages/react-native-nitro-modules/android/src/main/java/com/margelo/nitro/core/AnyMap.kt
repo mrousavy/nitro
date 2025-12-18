@@ -60,11 +60,7 @@ class AnyMap {
   }
 
   fun toMap(): Map<String, Any?> {
-    val map = HashMap<String, Any?>()
-    for (key in getAllKeys()) {
-      map.put(key, getAny(key))
-    }
-    return map
+    return toHashMap()
   }
 
   fun setAny(
@@ -77,6 +73,8 @@ class AnyMap {
   fun getAny(key: String): Any? {
     return getAnyValue(key).toAny()
   }
+
+  external fun toHashMap(): HashMap<String, Any?>
 
   @FastNative
   external fun contains(key: String): Boolean

@@ -61,17 +61,7 @@ protected:
   void clear() {
     _map->clear();
   }
-  jni::local_ref<jni::JArrayClass<jni::JString>> getAllKeys() {
-    auto& map = _map->getMap();
-    auto array = jni::JArrayClass<jni::JString>::newArray(map.size());
-    size_t index = 0;
-    for (const auto& pair : map) {
-      auto jKey = jni::make_jstring(pair.first);
-      array->setElement(index, *jKey);
-      index++;
-    }
-    return array;
-  }
+  jni::local_ref<jni::JArrayClass<jni::JString>> getAllKeys();
 
 protected:
   bool isNull(const std::string& key) {
@@ -109,29 +99,9 @@ protected:
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
-  jni::local_ref<JAnyArray> getAnyArray(const std::string& key) {
-    const auto& vector = _map->getArray(key);
-    auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
-    for (size_t i = 0; i < vector.size(); i++) {
-      auto value = JAnyValue::create(vector[i]);
-      javaArray->setElement(i, value.get());
-    }
-    return javaArray;
-  }
-  jni::local_ref<JAnyObject> getAnyObject(const std::string& key) {
-    const auto& map = _map->getObject(key);
-    auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
-    for (const auto& entry : map) {
-      auto string = jni::make_jstring(entry.first);
-      auto value = JAnyValue::create(entry.second);
-      javaMap->put(string, value);
-    }
-    return javaMap;
-  }
-  jni::local_ref<JAnyValue::javaobject> getAnyValue(const std::string& key) {
-    const auto& any = _map->getAny(key);
-    return JAnyValue::create(any);
-  }
+  jni::local_ref<JAnyArray> getAnyArray(const std::string& key);
+  jni::local_ref<JAnyObject> getAnyObject(const std::string& key);
+  jni::local_ref<JAnyValue::javaobject> getAnyValue(const std::string& key);
 
 protected:
   void setNull(const std::string& key) {
@@ -149,32 +119,24 @@ protected:
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
   }
-  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value) {
-    std::vector<AnyValue> vector;
-    size_t size = value->size();
-    vector.reserve(size);
-    for (size_t i = 0; i < size; i++) {
-      auto anyValue = value->getElement(i);
-      vector.push_back(anyValue->cthis()->getValue());
-    }
-    _map->setArray(key, vector);
-  }
-  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value) {
-    std::unordered_map<std::string, AnyValue> map;
-    map.reserve(value->size());
-    for (const auto& entry : *value) {
-      map.emplace(entry.first->toStdString(), entry.second->cthis()->getValue());
-    }
-    _map->setObject(key, map);
-  }
-  void setAnyValue(const std::string& key, const jni::alias_ref<JAnyValue::javaobject>& value) {
-    _map->setAny(key, value->cthis()->getValue());
-  }
+  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value);
+  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value);
+  void setAnyValue(const std::string& key, const jni::alias_ref<JAnyValue::javaobject>& value);
 
 protected:
   void merge(jni::alias_ref<JAnyMap::javaobject> other) {
     _map->merge(other->cthis()->_map);
   }
+
+  /**
+   * Bulk-converts the entire `JAnyMap` to a Java `HashMap<String, Object>` in a single JNI call.
+   */
+  jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> toHashMap();
+
+private:
+  static jni::local_ref<jni::JObject> anyValueToJObject(const AnyValue& value);
+  static jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyArray& array);
+  static jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> anyObjectToJHashMap(const AnyObject& object);
 
 public:
   [[nodiscard]]
@@ -225,6 +187,8 @@ public:
         makeNativeMethod("setAnyValue", JAnyMap::setAnyValue),
         // merge
         makeNativeMethod("merge", JAnyMap::merge),
+        // bulk conversion
+        makeNativeMethod("toHashMap", JAnyMap::toHashMap),
     });
   }
 };
