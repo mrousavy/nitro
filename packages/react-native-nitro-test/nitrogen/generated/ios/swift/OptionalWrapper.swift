@@ -35,51 +35,27 @@ public extension OptionalWrapper {
     }())
   }
 
+  @inline(__always)
   var optionalArrayBuffer: ArrayBuffer? {
-    @inline(__always)
-    get {
-      return { () -> ArrayBuffer? in
-        if bridge.has_value_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer) {
-          let __unwrapped = bridge.get_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer)
-          return ArrayBuffer(__unwrapped)
-        } else {
-          return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__optionalArrayBuffer = { () -> bridge.std__optional_std__shared_ptr_ArrayBuffer__ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__shared_ptr_ArrayBuffer__(__unwrappedValue.getArrayBuffer())
-        } else {
-          return .init()
-        }
-      }()
-    }
+    return { () -> ArrayBuffer? in
+      if bridge.has_value_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer) {
+        let __unwrapped = bridge.get_std__optional_std__shared_ptr_ArrayBuffer__(self.__optionalArrayBuffer)
+        return ArrayBuffer(__unwrapped)
+      } else {
+        return nil
+      }
+    }()
   }
   
+  @inline(__always)
   var optionalString: String? {
-    @inline(__always)
-    get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__optionalString) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__optionalString)
-          return String(__unwrapped)
-        } else {
-          return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__optionalString = { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-        } else {
-          return .init()
-        }
-      }()
-    }
+    return { () -> String? in
+      if bridge.has_value_std__optional_std__string_(self.__optionalString) {
+        let __unwrapped = bridge.get_std__optional_std__string_(self.__optionalString)
+        return String(__unwrapped)
+      } else {
+        return nil
+      }
+    }()
   }
 }
