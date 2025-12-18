@@ -662,8 +662,8 @@ namespace margelo::nitro::test {
   }
   std::unordered_map<std::string, double> JHybridTestObjectSwiftKotlinSpec::bounceSimpleMap(const std::unordered_map<std::string, double>& map) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JDouble>>(jni::alias_ref<jni::JMap<jni::JString, jni::JDouble>> /* map */)>("bounceSimpleMap");
-    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, double>> {
-      auto __map = jni::JHashMap<jni::JString, double>::create(map.size());
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JDouble>> {
+      auto __map = jni::JHashMap<jni::JString, jni::JDouble>::create(map.size());
       for (const auto& __entry : map) {
         __map->put(jni::make_jstring(__entry.first), jni::JDouble::valueOf(__entry.second));
       }

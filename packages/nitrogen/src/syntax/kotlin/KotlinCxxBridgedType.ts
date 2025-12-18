@@ -593,8 +593,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               'c++',
               true
             )
-            const javaMapType = `jni::JMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
-            const javaHashMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
+            const keyType = key.getTypeCode('c++', true)
+            const valueType = value.getTypeCode('c++', true)
+            const javaMapType = `jni::JMap<${keyType}, ${valueType}>`
+            const javaHashMapType = `jni::JHashMap<${keyType}, ${valueType}>`
             return `
 [&]() -> jni::local_ref<${javaMapType}> {
   auto __map = ${javaHashMapType}::create(${parameterName}.size());
