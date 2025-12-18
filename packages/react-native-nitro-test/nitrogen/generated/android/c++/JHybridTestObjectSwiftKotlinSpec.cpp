@@ -76,9 +76,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/JPromise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
-#include <NitroModules/JUnit.hpp>
 #include <unordered_map>
 #include "JVariant_Boolean_Double.hpp"
+#include <NitroModules/JUnit.hpp>
 #include <chrono>
 #include <NitroModules/JInstant.hpp>
 #include "Car.hpp"

@@ -12,7 +12,6 @@
 
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
-#include <NitroModules/JUnit.hpp>
 #include <optional>
 #include <string>
 

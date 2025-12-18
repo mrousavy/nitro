@@ -111,11 +111,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JArrayBuffer.hpp',
             space: 'system',
           })
-          imports.push({
-            language: 'c++',
-            name: 'NitroModules/JUnit.hpp',
-            space: 'system',
-          })
           break
         case 'promise':
           imports.push({
