@@ -844,6 +844,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func createMapFromObject(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
+    do {
+      let __result = try self.__implementation.createMapFromObject(map: AnyMap(withCppPart: map))
+      let __resultCpp = __result.cppPart
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_AnyMap__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceMap(map: bridge.std__unordered_map_std__string__std__variant_bool__double__) -> bridge.Result_std__unordered_map_std__string__std__variant_bool__double___ {
     do {
       let __result = try self.__implementation.bounceMap(map: { () -> Dictionary<String, Variant_Bool_Double> in

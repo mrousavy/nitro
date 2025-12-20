@@ -101,6 +101,7 @@ public:
   std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
   std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override;
   std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override;
+  std::shared_ptr<AnyMap> createMapFromObject(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
   void throwError(const std::exception_ptr& error) override;

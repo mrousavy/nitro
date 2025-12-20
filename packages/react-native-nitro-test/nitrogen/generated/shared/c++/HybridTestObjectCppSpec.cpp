@@ -74,6 +74,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectCppSpec::getMapKeys);
       prototype.registerHybridMethod("mergeMaps", &HybridTestObjectCppSpec::mergeMaps);
       prototype.registerHybridMethod("copyAnyValues", &HybridTestObjectCppSpec::copyAnyValues);
+      prototype.registerHybridMethod("createMapFromObject", &HybridTestObjectCppSpec::createMapFromObject);
       prototype.registerHybridMethod("bounceMap", &HybridTestObjectCppSpec::bounceMap);
       prototype.registerHybridMethod("bounceSimpleMap", &HybridTestObjectCppSpec::bounceSimpleMap);
       prototype.registerHybridMethod("extractMap", &HybridTestObjectCppSpec::extractMap);

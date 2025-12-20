@@ -412,6 +412,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<AnyMap> createMapFromObject(const std::shared_ptr<AnyMap>& map) override {
+      auto __result = _swiftPart.createMapFromObject(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override {
       auto __result = _swiftPart.bounceMap(map);
       if (__result.hasError()) [[unlikely]] {

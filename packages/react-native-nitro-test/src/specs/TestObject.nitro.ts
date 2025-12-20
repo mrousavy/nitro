@@ -155,6 +155,7 @@ interface SharedTestObjectProps {
   getMapKeys(map: AnyMap): string[]
   mergeMaps(a: AnyMap, b: AnyMap): AnyMap
   copyAnyValues(map: AnyMap): AnyMap
+  createMapFromObject(map: AnyMap): AnyMap
 
   // Typed Maps (records)
   bounceMap(
@@ -190,6 +191,7 @@ interface SharedTestObjectProps {
   promiseReturnsInstantlyAsync(): Promise<number>
   promiseThatResolvesVoidInstantly(): Promise<void>
   promiseThatResolvesToUndefined(): Promise<number | undefined>
+  
 
   // Complex Promises
   awaitAndGetPromise(promise: Promise<number>): Promise<number>

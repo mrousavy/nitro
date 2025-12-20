@@ -260,6 +260,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return try AnyMap.fromDictionary(dictionary)
   }
 
+  func createMapFromObject(map: AnyMap) throws -> AnyMap {
+    let dictionary = map.toDictionary()
+    return try AnyMap.fromDictionary(dictionary)
+  }
+
   func newTestObject() throws -> any HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectSwift()
   }

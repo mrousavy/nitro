@@ -710,6 +710,12 @@ export function getTests(
         .equals(TEST_MAP_4)
     ),
 
+    createTest('createMapFromObject(...) works', () =>
+      it(() => testObject.createMapFromObject(TEST_MAP_4))
+        .didNotThrow()
+        .equals(TEST_MAP_4)
+    ),
+
     // Test errors
     createTest('funcThatThrows() throws', () =>
       it(() => testObject.funcThatThrows())
