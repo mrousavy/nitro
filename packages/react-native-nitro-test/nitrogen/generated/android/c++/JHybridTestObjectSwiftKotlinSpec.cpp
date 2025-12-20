@@ -638,13 +638,8 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JAnyMap::create(a), JAnyMap::create(b));
     return __result->cthis()->getMap();
   }
-  std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::copyAnyValues(const std::shared_ptr<AnyMap>& map) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("copyAnyValues");
-    auto __result = method(_javaPart, JAnyMap::create(map));
-    return __result->cthis()->getMap();
-  }
-  std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMapFromObject(const std::shared_ptr<AnyMap>& map) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("createMapFromObject");
+  std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::copyAnyMap(const std::shared_ptr<AnyMap>& map) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>(jni::alias_ref<JAnyMap::javaobject> /* map */)>("copyAnyMap");
     auto __result = method(_javaPart, JAnyMap::create(map));
     return __result->cthis()->getMap();
   }
