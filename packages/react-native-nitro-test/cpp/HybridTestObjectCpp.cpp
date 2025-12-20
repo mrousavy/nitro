@@ -281,7 +281,7 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyValues(const std::shared_ptr
 }
 
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMapFromObject(const std::shared_ptr<AnyMap>& map) {
-    return map;
+  return map;
 }
 
 double HybridTestObjectCpp::funcThatThrows() {
