@@ -173,7 +173,6 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return AnyMap.fromMap(copy)
   }
 
-
   override fun mapRoundtrip(map: AnyMap): AnyMap {
     return map
   }

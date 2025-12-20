@@ -280,7 +280,6 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyMap(const std::shared_ptr<An
   return newMap;
 }
 
-
 double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
 }

@@ -155,7 +155,6 @@ interface SharedTestObjectProps {
   getMapKeys(map: AnyMap): string[]
   mergeMaps(a: AnyMap, b: AnyMap): AnyMap
   copyAnyMap(map: AnyMap): AnyMap
-  
 
   // Typed Maps (records)
   bounceMap(

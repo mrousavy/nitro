@@ -710,7 +710,6 @@ export function getTests(
         .equals(TEST_MAP_4)
     ),
 
-
     // Test errors
     createTest('funcThatThrows() throws', () =>
       it(() => testObject.funcThatThrows())
