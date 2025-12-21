@@ -22,7 +22,7 @@ using namespace facebook;
 template <typename TCpp>
 struct JNIConverter<std::optional<TCpp>> final {
   template <class TJava>
-  static inline std::optional<TCpp> fromJNI(jni::local_ref<TJava> arg) {
+  static inline std::optional<TCpp> fromJNI(jni::alias_ref<TJava> arg) {
     if (arg == nullptr)
       return std::nullopt;
 
@@ -31,11 +31,11 @@ struct JNIConverter<std::optional<TCpp>> final {
   }
 
   template <class TJava>
-  static inline jni::local_ref<TJava> toJNI(std::optional<TCpp> arg) {
+  static inline jni::alias_ref<TJava> toJNI(std::optional<TCpp> arg) {
     if (!arg.has_value())
       return nullptr;
 
-    jni::local_ref<TJava> javaValue = JNIConverter<TCpp>::template toJNI<TJava>(arg);
+    jni::alias_ref<TJava> javaValue = JNIConverter<TCpp>::template toJNI<TJava>(arg.value());
     return javaValue;
   }
 

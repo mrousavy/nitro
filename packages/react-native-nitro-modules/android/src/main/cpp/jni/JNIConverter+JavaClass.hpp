@@ -19,9 +19,13 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+template <typename T, typename R>
+concept IsJavaRef =
+    std::same_as<T, R> || std::same_as<T, jni::alias_ref<R>> || std::same_as<T, jni::local_ref<R>> || std::same_as<T, jni::global_ref<R>>;
+
 template <class T, class U>
 concept FromCppConvertible = requires(U&& u) {
-  { T::fromCpp(std::forward<U>(u)) } -> std::same_as<T>;
+  { T::fromCpp(std::forward<U>(u)) } -> IsJavaRef<T>;
 };
 template <class T, class U>
 concept ToCppConvertible = requires(T t) {
@@ -33,23 +37,23 @@ template <class CppClass>
 struct JNIConverter<CppClass> final {
   template <typename JavaClass>
     requires ToCppConvertible<JavaClass, CppClass>
-  static inline CppClass fromJNI(jni::local_ref<JavaClass> arg) {
+  static inline CppClass fromJNI(jni::alias_ref<JavaClass> arg) {
     if (arg == nullptr) [[unlikely]] {
-      throw std::runtime_error(std::string("Cannot convert `") + getFriendlyTypename<JavaClass>() + "` to `" +
-                               getFriendlyTypename<CppClass>() + "` - it is null!");
+      throw std::runtime_error(std::string("Cannot convert `") + TypeInfo::getFriendlyTypename<JavaClass>(true) + "` to `" +
+                               TypeInfo::getFriendlyTypename<CppClass>(true) + "` - it is null!");
     }
     return arg->toCpp();
   }
 
   template <typename JavaClass>
     requires FromCppConvertible<JavaClass, CppClass>
-  static inline jni::local_ref<JavaClass> toJNI(CppClass arg) {
+  static inline jni::alias_ref<JavaClass> toJNI(CppClass arg) {
     return JavaClass::fromCpp(arg);
   }
 
   template <typename JavaClass>
     requires ToCppConvertible<JavaClass, CppClass>
-  static inline bool canConvert(jni::local_ref<JavaClass> arg) {
+  static inline bool canConvert(jni::alias_ref<JavaClass> arg) {
     return arg != nullptr;
   }
 };
