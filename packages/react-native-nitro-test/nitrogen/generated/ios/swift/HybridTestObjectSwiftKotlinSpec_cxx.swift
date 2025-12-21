@@ -832,9 +832,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func copyAnyValues(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
+  public final func copyAnyMap(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
-      let __result = try self.__implementation.copyAnyValues(map: AnyMap(withCppPart: map))
+      let __result = try self.__implementation.copyAnyMap(map: AnyMap(withCppPart: map))
       let __resultCpp = __result.cppPart
       return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
     } catch (let __error) {

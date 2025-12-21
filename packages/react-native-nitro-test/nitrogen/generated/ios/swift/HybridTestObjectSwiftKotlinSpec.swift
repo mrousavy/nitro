@@ -52,7 +52,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
   func mergeMaps(a: AnyMap, b: AnyMap) throws -> AnyMap
-  func copyAnyValues(map: AnyMap) throws -> AnyMap
+  func copyAnyMap(map: AnyMap) throws -> AnyMap
   func bounceMap(map: Dictionary<String, Variant_Bool_Double>) throws -> Dictionary<String, Variant_Bool_Double>
   func bounceSimpleMap(map: Dictionary<String, Double>) throws -> Dictionary<String, Double>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>

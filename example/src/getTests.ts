@@ -704,8 +704,8 @@ export function getTests(
         .didNotThrow()
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
-    createTest('copyAnyValues(...) works', () =>
-      it(() => testObject.copyAnyValues(TEST_MAP_4))
+    createTest('copyAnyMap(...) works', () =>
+      it(() => testObject.copyAnyMap(TEST_MAP_4))
         .didNotThrow()
         .equals(TEST_MAP_4)
     ),

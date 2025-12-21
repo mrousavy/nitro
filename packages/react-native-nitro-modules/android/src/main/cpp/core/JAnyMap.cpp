@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 14.07.24.
 //
 
-#pragma once
-
 #include "JAnyMap.hpp"
 
 namespace margelo::nitro {
@@ -115,6 +113,107 @@ jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> JAnyMap::anyObjectToJH
     jMap->put(jni::make_jstring(key), anyValueToJObject(val));
   }
   return jMap;
+}
+
+AnyValue JAnyMap::jObjectToAnyValue(jni::alias_ref<jni::JObject> jObject) {
+  if (!jObject) {
+    return nitro::null;
+  }
+
+  // Check for Double
+  if (jObject->isInstanceOf(jni::JDouble::javaClassStatic())) {
+    auto jDouble = jni::static_ref_cast<jni::JDouble>(jObject);
+    return jDouble->doubleValue();
+  }
+
+  // Check for Float
+  if (jObject->isInstanceOf(jni::JFloat::javaClassStatic())) {
+    auto jFloat = jni::static_ref_cast<jni::JFloat>(jObject);
+    return static_cast<double>(jFloat->floatValue());
+  }
+
+  // Check for Integer
+  if (jObject->isInstanceOf(jni::JInteger::javaClassStatic())) {
+    auto jInt = jni::static_ref_cast<jni::JInteger>(jObject);
+    return static_cast<double>(jInt->intValue());
+  }
+
+  // Check for Boolean
+  if (jObject->isInstanceOf(jni::JBoolean::javaClassStatic())) {
+    auto jBool = jni::static_ref_cast<jni::JBoolean>(jObject);
+    return jBool->booleanValue();
+  }
+
+  // Check for Long (bigint)
+  if (jObject->isInstanceOf(jni::JLong::javaClassStatic())) {
+    auto jLong = jni::static_ref_cast<jni::JLong>(jObject);
+    return jLong->longValue();
+  }
+
+  // Check for String
+  if (jObject->isInstanceOf(jni::JString::javaClassStatic())) {
+    auto jString = jni::static_ref_cast<jni::JString>(jObject);
+    return jString->toStdString();
+  }
+
+  // Check for List (array)
+  if (jObject->isInstanceOf(jni::JList<jni::JObject>::javaClassStatic())) {
+    auto jList = jni::static_ref_cast<jni::JList<jni::JObject>>(jObject);
+    return jListToAnyArray(jList);
+  }
+
+  // Check for Map (object)
+  if (jObject->isInstanceOf(jni::JMap<jni::JString, jni::JObject>::javaClassStatic())) {
+    auto jMap = jni::static_ref_cast<jni::JMap<jni::JString, jni::JObject>>(jObject);
+    return jHashMapToAnyObject(jMap);
+  }
+
+  throw std::runtime_error("Cannot convert JObject to AnyValue - unsupported type!");
+}
+
+AnyArray JAnyMap::jListToAnyArray(jni::alias_ref<jni::JList<jni::JObject>> jList) {
+  AnyArray array;
+  array.reserve(jList->size());
+  for (const auto& item : *jList) {
+    array.push_back(jObjectToAnyValue(item));
+  }
+  return array;
+}
+
+AnyObject JAnyMap::jHashMapToAnyObject(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> jMap) {
+  AnyObject object;
+  object.reserve(jMap->size());
+  for (const auto& entry : *jMap) {
+    object.emplace(entry.first->toStdString(), jObjectToAnyValue(entry.second));
+  }
+  return object;
+}
+
+jni::local_ref<JAnyMap::javaobject> JAnyMap::fromMap(jni::alias_ref<jclass>,
+                                                     jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+                                                     bool ignoreIncompatible) {
+  size_t size = javaMap->size();
+  jni::local_ref<JAnyMap::javaobject> anyMap = JAnyMap::create(size);
+
+  auto& map = anyMap->cthis()->_map->getMap();
+
+  // Bulk convert all entries from Java to C++
+  for (const auto& entry : *javaMap) {
+    try {
+      std::string key = entry.first->toStdString();
+      AnyValue value = jObjectToAnyValue(entry.second);
+      map.emplace(std::move(key), std::move(value));
+    } catch (...) {
+      if (ignoreIncompatible) {
+        // encountered an incompatible key. Ignore it.
+      } else {
+        // encountered an incompatible key - we now throw!
+        throw;
+      }
+    }
+  }
+
+  return anyMap;
 }
 
 } // namespace margelo::nitro

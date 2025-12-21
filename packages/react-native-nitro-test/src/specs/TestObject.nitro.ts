@@ -154,7 +154,7 @@ interface SharedTestObjectProps {
   mapRoundtrip(map: AnyMap): AnyMap
   getMapKeys(map: AnyMap): string[]
   mergeMaps(a: AnyMap, b: AnyMap): AnyMap
-  copyAnyValues(map: AnyMap): AnyMap
+  copyAnyMap(map: AnyMap): AnyMap
 
   // Typed Maps (records)
   bounceMap(

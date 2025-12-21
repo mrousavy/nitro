@@ -255,7 +255,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return a
   }
 
-  func copyAnyValues(map: AnyMap) throws -> AnyMap {
+  func copyAnyMap(map: AnyMap) throws -> AnyMap {
     let dictionary = map.toDictionary()
     return try AnyMap.fromDictionary(dictionary)
   }

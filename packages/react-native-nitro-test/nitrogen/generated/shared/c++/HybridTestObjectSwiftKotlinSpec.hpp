@@ -161,7 +161,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) = 0;
-      virtual std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) = 0;
+      virtual std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) = 0;
       virtual std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) = 0;
       virtual std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) = 0;

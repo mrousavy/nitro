@@ -248,7 +248,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun copyAnyValues(map: AnyMap): AnyMap
+  abstract fun copyAnyMap(map: AnyMap): AnyMap
   
   @DoNotStrip
   @Keep

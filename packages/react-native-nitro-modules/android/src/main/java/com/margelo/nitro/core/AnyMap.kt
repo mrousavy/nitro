@@ -39,29 +39,26 @@ class AnyMap {
   }
 
   companion object {
-    fun fromMap(
+    /**
+     * Converts the given [map] to a new [AnyMap].
+     * @param map The map of keys/value types. Only a number of value types
+     * are supported in [AnyMap] - see Nitro docs for more information.
+     * @param ignoreIncompatible Whether to throw when an incompatible
+     * type is found, or not. If this is `false`, all incompatible key/value
+     * pairs will just be ignored.
+     */
+    @JvmStatic
+    external fun fromMap(
       map: Map<String, Any?>,
-      ignoreIncompatible: Boolean = false,
-    ): AnyMap {
-      val anyMap = AnyMap(map.size)
-      for ((key, value) in map) {
-        try {
-          anyMap.setAny(key, value)
-        } catch (error: Throwable) {
-          if (ignoreIncompatible) {
-            continue
-          } else {
-            throw error
-          }
-        }
-      }
-      return anyMap
-    }
+      ignoreIncompatible: Boolean,
+    ): AnyMap
   }
 
-  fun toMap(): Map<String, Any?> {
-    return toHashMap()
-  }
+  /**
+   * Converts this [AnyMap] to a new [HashMap] by
+   * copying each key/value.
+   */
+  external fun toHashMap(): HashMap<String, Any?>
 
   fun setAny(
     key: String,
@@ -74,7 +71,10 @@ class AnyMap {
     return getAnyValue(key).toAny()
   }
 
-  external fun toHashMap(): HashMap<String, Any?>
+  private external fun fromHashMap(
+    map: Map<String, Any?>,
+    ignoreIncompatible: Boolean,
+  )
 
   @FastNative
   external fun contains(key: String): Boolean

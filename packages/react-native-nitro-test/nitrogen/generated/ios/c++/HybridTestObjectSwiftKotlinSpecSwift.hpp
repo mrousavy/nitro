@@ -404,8 +404,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.copyAnyValues(map);
+    inline std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override {
+      auto __result = _swiftPart.copyAnyMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

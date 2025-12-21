@@ -41,6 +41,18 @@ public:
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
     return newObjectCxxArgs(map);
   }
+  /**
+   * Create a new `JAnyMap` from the given preallocated size.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create(int preallocatedSize) {
+    return newObjectCxxArgs(preallocatedSize);
+  }
+  /**
+   * Create a new empty `JAnyMap`.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create() {
+    return newObjectCxxArgs();
+  }
 
 private:
   JAnyMap() {
@@ -133,10 +145,24 @@ protected:
    */
   jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> toHashMap();
 
+  /**
+   * Bulk-converts a Java `Map<String, Object>` into this `JAnyMap` in a single JNI call.
+   *
+   * When `ignoreIncompatible` is `true`, this will drop keys that can't be converted.
+   * When `ignoreIncompatible` is `false`, this will throw when a key cannot be converted.
+   */
+  static jni::local_ref<JAnyMap::javaobject> fromMap(jni::alias_ref<jclass>,
+                                                     jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+                                                     bool ignoreIncompatible);
+
 private:
   static jni::local_ref<jni::JObject> anyValueToJObject(const AnyValue& value);
   static jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyArray& array);
   static jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> anyObjectToJHashMap(const AnyObject& object);
+
+  static AnyValue jObjectToAnyValue(jni::alias_ref<jni::JObject> jObject);
+  static AnyArray jListToAnyArray(jni::alias_ref<jni::JList<jni::JObject>> jList);
+  static AnyObject jHashMapToAnyObject(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> jMap);
 
 public:
   [[nodiscard]]
@@ -189,6 +215,7 @@ public:
         makeNativeMethod("merge", JAnyMap::merge),
         // bulk conversion
         makeNativeMethod("toHashMap", JAnyMap::toHashMap),
+        makeNativeMethod("fromMap", JAnyMap::fromMap),
     });
   }
 };
