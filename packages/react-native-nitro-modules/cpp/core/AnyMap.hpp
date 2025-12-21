@@ -201,7 +201,7 @@ public:
   /**
    * Get the actual C++ map that holds all keys and variant values.
    */
-  const std::unordered_map<std::string, AnyValue>& getMap() const;
+  std::unordered_map<std::string, AnyValue>& getMap();
 
 public:
   /**

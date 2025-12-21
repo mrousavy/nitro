@@ -39,37 +39,26 @@ class AnyMap {
   }
 
   companion object {
-    fun fromMap(
+    /**
+     * Converts the given [map] to a new [AnyMap].
+     * @param map The map of keys/value types. Only a number of value types
+     * are supported in [AnyMap] - see Nitro docs for more information.
+     * @param ignoreIncompatible Whether to throw when an incompatible
+     * type is found, or not. If this is `false`, all incompatible key/value
+     * pairs will just be ignored.
+     */
+    @JvmStatic
+    external fun fromMap(
       map: Map<String, Any?>,
-      ignoreIncompatible: Boolean = false,
-    ): AnyMap {
-      val anyMap = AnyMap(map.size)
-      if (ignoreIncompatible) {
-        // When ignoring incompatible values, we need to filter them first
-        val compatibleMap = HashMap<String, Any?>(map.size)
-        for ((key, value) in map) {
-          try {
-            // Validate that the value can be converted
-            AnyValue.fromAny(value)
-            compatibleMap[key] = value
-          } catch (error: Throwable) {
-            // Skip incompatible values
-            continue
-          }
-        }
-        anyMap.fromHashMap(compatibleMap)
-      } else {
-        // Fast path: bulk convert the entire map in native code
-        // This is ~70-90% faster than setting keys individually
-        anyMap.fromHashMap(map as? HashMap<String, Any?> ?: HashMap(map))
-      }
-      return anyMap
-    }
+      ignoreIncompatible: Boolean,
+    ): AnyMap
   }
 
-  fun toMap(): Map<String, Any?> {
-    return toHashMap()
-  }
+  /**
+   * Converts this [AnyMap] to a new [HashMap] by
+   * copying each key/value.
+   */
+  external fun toHashMap(): HashMap<String, Any?>
 
   fun setAny(
     key: String,
@@ -82,9 +71,10 @@ class AnyMap {
     return getAnyValue(key).toAny()
   }
 
-  external fun toHashMap(): HashMap<String, Any?>
-
-  private external fun fromHashMap(map: Map<String, Any?>)
+  private external fun fromHashMap(
+    map: Map<String, Any?>,
+    ignoreIncompatible: Boolean,
+  )
 
   @FastNative
   external fun contains(key: String): Boolean

@@ -41,6 +41,18 @@ public:
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
     return newObjectCxxArgs(map);
   }
+  /**
+   * Create a new `JAnyMap` from the given preallocated size.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create(int preallocatedSize) {
+    return newObjectCxxArgs(preallocatedSize);
+  }
+  /**
+   * Create a new empty `JAnyMap`.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create() {
+    return newObjectCxxArgs();
+  }
 
 private:
   JAnyMap() {
@@ -134,11 +146,13 @@ protected:
   jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> toHashMap();
 
   /**
-   * Bulk-converts a Java `HashMap<String, Object>` into this `JAnyMap` in a single JNI call.
-   * This is the reverse operation of `toHashMap()` and provides significant performance benefits
-   * over setting keys individually.
+   * Bulk-converts a Java `Map<String, Object>` into this `JAnyMap` in a single JNI call.
+   *
+   * When `ignoreIncompatible` is `true`, this will drop keys that can't be converted.
+   * When `ignoreIncompatible` is `false`, this will throw when a key cannot be converted.
    */
-  void fromHashMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap);
+  static jni::local_ref<JAnyMap::javaobject> fromMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+                                                     bool ignoreIncompatible);
 
 private:
   static jni::local_ref<jni::JObject> anyValueToJObject(const AnyValue& value);
@@ -200,7 +214,7 @@ public:
         makeNativeMethod("merge", JAnyMap::merge),
         // bulk conversion
         makeNativeMethod("toHashMap", JAnyMap::toHashMap),
-        makeNativeMethod("fromHashMap", JAnyMap::fromHashMap),
+        makeNativeMethod("fromMap", JAnyMap::fromMap),
     });
   }
 };

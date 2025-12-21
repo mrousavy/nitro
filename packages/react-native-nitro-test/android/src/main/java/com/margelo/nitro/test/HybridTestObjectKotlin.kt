@@ -169,8 +169,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun copyAnyMap(map: AnyMap): AnyMap {
-    val copy = map.toMap()
-    return AnyMap.fromMap(copy)
+    val copy = map.toHashMap()
+    return AnyMap.fromMap(copy, false)
   }
 
   override fun mapRoundtrip(map: AnyMap): AnyMap {

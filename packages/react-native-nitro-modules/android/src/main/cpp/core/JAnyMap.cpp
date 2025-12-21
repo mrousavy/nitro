@@ -191,18 +191,30 @@ AnyObject JAnyMap::jHashMapToAnyObject(jni::alias_ref<jni::JMap<jni::JString, jn
   return object;
 }
 
-void JAnyMap::fromHashMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap) {
-  // Clear existing map and reserve space
-  _map->clear();
-  auto& cppMap = const_cast<std::unordered_map<std::string, AnyValue>&>(_map->getMap());
-  cppMap.reserve(javaMap->size());
+jni::local_ref<JAnyMap::javaobject> JAnyMap::fromMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+                                                     bool ignoreIncompatible) {
+  size_t size = javaMap->size();
+  jni::local_ref<JAnyMap::javaobject> anyMap = JAnyMap::create(size);
+
+  auto& map = anyMap->cthis()->_map->getMap();
 
   // Bulk convert all entries from Java to C++
   for (const auto& entry : *javaMap) {
-    std::string key = entry.first->toStdString();
-    AnyValue value = jObjectToAnyValue(entry.second);
-    cppMap.emplace(std::move(key), std::move(value));
+    try {
+      std::string key = entry.first->toStdString();
+      AnyValue value = jObjectToAnyValue(entry.second);
+      map.emplace(std::move(key), std::move(value));
+    } catch (...) {
+      if (ignoreIncompatible) {
+        // encountered an incompatible key. Ignore it.
+      } else {
+        // encountered an incompatible key - we now throw!
+        throw;
+      }
+    }
   }
+
+  return anyMap;
 }
 
 } // namespace margelo::nitro
