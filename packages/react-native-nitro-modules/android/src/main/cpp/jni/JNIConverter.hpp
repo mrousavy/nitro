@@ -75,14 +75,14 @@ struct JNIConverter<int> final {
 // std::string <> jstring
 template <>
 struct JNIConverter<std::string> final {
-  static inline jni::local_ref<jni::JString> fromJNI(const std::string& arg) {
-    return jni::make_jstring(arg);
-  }
-  static inline std::string toJNI(const jni::alias_ref<jni::JString>& arg) {
+  static inline std::string fromJNI(const jni::alias_ref<jni::JString>& arg) {
     if (arg == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to convert jni::alias_ref<jni::JString> to std::string - it is null!");
     }
     return arg->toStdString();
+  }
+  static inline jni::local_ref<jni::JString> toJNI(const std::string& arg) {
+    return jni::make_jstring(arg);
   }
   static inline bool canConvert(const jni::alias_ref<jni::JString>& arg) {
     return arg != nullptr;
