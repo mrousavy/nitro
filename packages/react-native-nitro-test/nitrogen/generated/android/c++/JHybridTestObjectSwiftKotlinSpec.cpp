@@ -6,6 +6,7 @@
 ///
 
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include <NitroModules/JNIConverter.hpp>
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
@@ -152,7 +153,7 @@ namespace margelo::nitro::test {
   std::string JHybridTestObjectSwiftKotlinSpec::toString() {
     static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
-    return javaString->toStdString();
+    return nitro::JNIConverter<std::string>::fromJNI(javaString);
   }
 
   // Properties
