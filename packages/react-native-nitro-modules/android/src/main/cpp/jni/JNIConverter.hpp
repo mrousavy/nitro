@@ -29,7 +29,7 @@ struct JNIConverter final {
   JNIConverter() = delete;
 
   /**
-   * Converts the given `jsi::Value` to type `T`.
+   * Converts the given `jobject` to type `T`.
    * By default, this static-asserts.
    */
   static inline T fromJNI(const jobject&) {
@@ -37,10 +37,10 @@ struct JNIConverter final {
     return T();
   }
   /**
-   * Converts `T` to a `jsi::Value`.
+   * Converts `T` to a `jobject`.
    * By default, this static-asserts.
    */
-  static inline jobject toJSI(T) {
+  static inline jobject toJNI(T) {
     static_assert(always_false<T>::value, "This type is not supported by the JNIConverter!");
     return nullptr;
   }
@@ -61,10 +61,10 @@ private:
 // int <> jint
 template <>
 struct JNIConverter<int> final {
-  static inline int fromJSI(jint arg) {
+  static inline int fromJNI(jint arg) {
     return static_cast<int>(arg);
   }
-  static inline jint toJSI(int arg) {
+  static inline jint toJNI(int arg) {
     return static_cast<jint>(arg);
   }
   static inline bool canConvert(jint arg) {
@@ -75,10 +75,10 @@ struct JNIConverter<int> final {
 // std::string <> jstring
 template <>
 struct JNIConverter<std::string> final {
-  static inline jni::local_ref<jni::JString> fromJSI(const std::string& arg) {
+  static inline jni::local_ref<jni::JString> fromJNI(const std::string& arg) {
     return jni::make_jstring(arg);
   }
-  static inline std::string toJSI(const jni::alias_ref<jni::JString>& arg) {
+  static inline std::string toJNI(const jni::alias_ref<jni::JString>& arg) {
     if (arg == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to convert jni::alias_ref<jni::JString> to std::string - it is null!");
     }
