@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 14.07.24.
 //
 
-#pragma once
-
 #include "JAnyMap.hpp"
 
 namespace margelo::nitro {
@@ -191,7 +189,8 @@ AnyObject JAnyMap::jHashMapToAnyObject(jni::alias_ref<jni::JMap<jni::JString, jn
   return object;
 }
 
-jni::local_ref<JAnyMap::javaobject> JAnyMap::fromMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+jni::local_ref<JAnyMap::javaobject> JAnyMap::fromMap(jni::alias_ref<jclass>,
+                                                     jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
                                                      bool ignoreIncompatible) {
   size_t size = javaMap->size();
   jni::local_ref<JAnyMap::javaobject> anyMap = JAnyMap::create(size);

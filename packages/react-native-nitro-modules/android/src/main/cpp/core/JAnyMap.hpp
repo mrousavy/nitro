@@ -151,7 +151,8 @@ protected:
    * When `ignoreIncompatible` is `true`, this will drop keys that can't be converted.
    * When `ignoreIncompatible` is `false`, this will throw when a key cannot be converted.
    */
-  static jni::local_ref<JAnyMap::javaobject> fromMap(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+  static jni::local_ref<JAnyMap::javaobject> fromMap(jni::alias_ref<jclass>,
+                                                     jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
                                                      bool ignoreIncompatible);
 
 private:
