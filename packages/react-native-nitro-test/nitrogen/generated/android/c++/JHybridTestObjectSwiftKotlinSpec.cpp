@@ -273,11 +273,11 @@ namespace margelo::nitro::test {
   std::optional<Powertrain> JHybridTestObjectSwiftKotlinSpec::getOptionalEnum() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>()>("getOptionalEnum");
     auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+    return JNIConverter<std::optional<Powertrain>>::fromJNI<JPowertrain>(__result);
   }
   void JHybridTestObjectSwiftKotlinSpec::setOptionalEnum(std::optional<Powertrain> optionalEnum) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JPowertrain> /* optionalEnum */)>("setOptionalEnum");
-    method(_javaPart, optionalEnum.has_value() ? JPowertrain::fromCpp(optionalEnum.value()) : nullptr);
+    method(_javaPart, JNIConverter<std::optional<JPowertrain>>::toJNI<JPowertrain>(optionalEnum));
   }
   std::optional<OldEnum> JHybridTestObjectSwiftKotlinSpec::getOptionalOldEnum() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOldEnum>()>("getOptionalOldEnum");

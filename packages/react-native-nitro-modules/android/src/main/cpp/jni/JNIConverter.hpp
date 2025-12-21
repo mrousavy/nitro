@@ -90,3 +90,6 @@ struct JNIConverter<std::string> final {
 };
 
 } // namespace margelo::nitro
+
+#include "JNIConverter+JavaClass.hpp"
+#include "JNIConverter+Optional.hpp"
