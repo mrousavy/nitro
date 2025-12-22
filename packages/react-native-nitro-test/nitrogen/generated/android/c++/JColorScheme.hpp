@@ -41,13 +41,12 @@ namespace margelo::nitro::test {
     [[maybe_unused]]
     static jni::alias_ref<JColorScheme> fromCpp(ColorScheme value) {
       static const auto clazz = javaClassStatic();
-      static const auto fieldLIGHT = clazz->getStaticField<JColorScheme>("LIGHT");
-      static const auto fieldDARK = clazz->getStaticField<JColorScheme>("DARK");
-      
       switch (value) {
         case ColorScheme::LIGHT:
+          static const auto fieldLIGHT = clazz->getStaticField<JColorScheme>("LIGHT");
           return clazz->getStaticFieldValue(fieldLIGHT);
         case ColorScheme::DARK:
+          static const auto fieldDARK = clazz->getStaticField<JColorScheme>("DARK");
           return clazz->getStaticFieldValue(fieldDARK);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
