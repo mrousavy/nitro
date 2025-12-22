@@ -41,16 +41,15 @@ namespace margelo::nitro::test {
     [[maybe_unused]]
     static jni::alias_ref<JOldEnum> fromCpp(OldEnum value) {
       static const auto clazz = javaClassStatic();
-      static const auto fieldFIRST = clazz->getStaticField<JOldEnum>("FIRST");
-      static const auto fieldSECOND = clazz->getStaticField<JOldEnum>("SECOND");
-      static const auto fieldTHIRD = clazz->getStaticField<JOldEnum>("THIRD");
-      
       switch (value) {
         case OldEnum::FIRST:
+          static const auto fieldFIRST = clazz->getStaticField<JOldEnum>("FIRST");
           return clazz->getStaticFieldValue(fieldFIRST);
         case OldEnum::SECOND:
+          static const auto fieldSECOND = clazz->getStaticField<JOldEnum>("SECOND");
           return clazz->getStaticFieldValue(fieldSECOND);
         case OldEnum::THIRD:
+          static const auto fieldTHIRD = clazz->getStaticField<JOldEnum>("THIRD");
           return clazz->getStaticFieldValue(fieldTHIRD);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));

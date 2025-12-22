@@ -41,16 +41,15 @@ namespace margelo::nitro::test {
     [[maybe_unused]]
     static jni::alias_ref<JWeirdNumbersEnum> fromCpp(WeirdNumbersEnum value) {
       static const auto clazz = javaClassStatic();
-      static const auto fieldA = clazz->getStaticField<JWeirdNumbersEnum>("A");
-      static const auto fieldB = clazz->getStaticField<JWeirdNumbersEnum>("B");
-      static const auto fieldC = clazz->getStaticField<JWeirdNumbersEnum>("C");
-      
       switch (value) {
         case WeirdNumbersEnum::A:
+          static const auto fieldA = clazz->getStaticField<JWeirdNumbersEnum>("A");
           return clazz->getStaticFieldValue(fieldA);
         case WeirdNumbersEnum::B:
+          static const auto fieldB = clazz->getStaticField<JWeirdNumbersEnum>("B");
           return clazz->getStaticFieldValue(fieldB);
         case WeirdNumbersEnum::C:
+          static const auto fieldC = clazz->getStaticField<JWeirdNumbersEnum>("C");
           return clazz->getStaticFieldValue(fieldC);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));

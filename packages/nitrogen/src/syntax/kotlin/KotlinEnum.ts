@@ -105,23 +105,17 @@ function getCppToJniConverterCode(
 ): string {
   const jniEnumName = `J${enumType.enumName}`
 
-  const fields = enumType.enumMembers.map((m) => {
-    const fieldName = `field${capitalizeName(m.name)}`
-    return `static const auto ${fieldName} = clazz->getStaticField<${jniEnumName}>("${m.name}");`
-  })
-
   const cases = enumType.enumMembers.map((m) => {
     const fieldName = `field${capitalizeName(m.name)}`
     return `
 case ${enumType.enumName}::${m.name}:
+  static const auto ${fieldName} = clazz->getStaticField<${jniEnumName}>("${m.name}");
   return clazz->getStaticFieldValue(${fieldName});
 `.trim()
   })
 
   return `
 static const auto clazz = javaClassStatic();
-${fields.join('\n')}
-
 switch (${cppValueName}) {
   ${indent(cases.join('\n'), '  ')}
   default:
