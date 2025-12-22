@@ -1872,7 +1872,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-safe-area-context (5.6.1):
+  - react-native-safe-area-context (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -1890,8 +1890,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.1)
-    - react-native-safe-area-context/fabric (= 5.6.1)
+    - react-native-safe-area-context/common (= 5.6.2)
+    - react-native-safe-area-context/fabric (= 5.6.2)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1902,7 +1902,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/common (5.6.1):
+  - react-native-safe-area-context/common (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -1930,7 +1930,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.1):
+  - react-native-safe-area-context/fabric (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -2854,7 +2854,7 @@ SPEC CHECKSUMS:
   React-logger: 2021eb67660b673cc654635832136fbbf2c79103
   React-Mapbuffer: 9bda44c983f9c683047546a338ebe9a21020babd
   React-microtasksnativemodule: 9b52faf56750d7e3c67d9cf96b650f14c31524c2
-  react-native-safe-area-context: 6d8a7b750e496e37bda47c938320bf2c734d441f
+  react-native-safe-area-context: 54d812805f3c4e08a4580ad086cbde1d8780c2e4
   react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
   React-NativeModulesApple: 1b4d9722d8df62e881684abadf320e7a8fa1b7f6
   React-oscompat: 80ca388c4831481cd03a6b45ecfc82739ca9a95e
@@ -2890,7 +2890,7 @@ SPEC CHECKSUMS:
   ReactCommon: 17f21c8e189e290113e40fd8652758ec9694897b
   RNScreens: 74985ca8e102294a60cec7513fa84c936fa0b20b
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  Yoga: edeb9900b9e5bb5b27b9a6a2d5914e4fe4033c1b
+  Yoga: 93bc00d78638987f9ffd928f4a9f895d3e601bc3
 
 PODFILE CHECKSUM: 205a5dcc178bd52bc8f2d549f38ecbb697373aaf
 
