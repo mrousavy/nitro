@@ -11,7 +11,7 @@ export interface HybridObjectName {
   HybridT: string
   /**
    * The name of the C++ class, Kotlin interface or Swift protocol that represents the
-   * specification (all of it's virtual properties and methods) of the Hybrid Object.
+   * specification (all of its virtual properties and methods) of the Hybrid Object.
    * @example "HybridImageSpec"
    */
   HybridTSpec: string

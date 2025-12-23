@@ -27,5 +27,5 @@ export const HybridChild = NitroModules.createHybridObject<Child>('Child')
 export const HybridPlatformObject =
   NitroModules.createHybridObject<PlatformObject>('PlatformObject')
 
-// Export View (+ it's ref type)
+// Export View (+ its ref type)
 export { TestView, type TestViewRef }

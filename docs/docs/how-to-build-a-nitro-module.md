@@ -242,8 +242,8 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
     To create new [Hybrid Objects](hybrid-objects) manually, you simply create a new C++ class that meets the following requirements:
 
     1. It **public**-inherits from `HybridObject`
-    2. It calls the `HybridObject` constructor with it's name
-    3. It overrides `loadHybridMethods()` and registers it's JS-callable methods & properties
+    2. It calls the `HybridObject` constructor with its name
+    3. It overrides `loadHybridMethods()` and registers its JS-callable methods & properties
 
     ```cpp title="HybridMath.hpp"
     #pragma once

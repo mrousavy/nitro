@@ -64,7 +64,7 @@ Pod::Spec.new do |s|
   xcconfig = {
     # Use C++ 20
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
-    # Enables C++ <-> Swift interop (by default it's only C)
+    # Enables C++ <-> Swift interop (by default its only ObjC)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",

@@ -60,14 +60,14 @@ public:
   /**
    * Return the `jsi::Object` that holds this `HybridObject`. (boxed in a `jsi::Value`)
    * This properly assigns (or creates) the base prototype for this type,
-   * and assigns it's NativeState.
+   * and assigns its NativeState.
    * Additionally, this sets the external memory pressure for proper GC memory management.
    */
   jsi::Value toObject(jsi::Runtime& runtime);
 
 public:
   /**
-   * Get the `std::shared_ptr` instance of this HybridObject as it's concrete type.
+   * Get the `std::shared_ptr` instance of this HybridObject as its concrete type.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
   template <typename Derived>
@@ -99,7 +99,7 @@ public:
    * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
    * This method can only be manually called from JS using `dispose()`.
    *
-   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
    * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup

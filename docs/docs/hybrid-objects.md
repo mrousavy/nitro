@@ -353,8 +353,8 @@ A Hybrid Object can either inherit from other Hybrid Objects, or satisfy a commo
 
 ## Memory Size (`memorySize`)
 
-Since it's implementation is in native code, the JavaScript runtime does not know the actual memory size of a Hybrid Object.
-Nitro allows Hybrid Objects to declare their memory size via the `memorySize`/`getExternalMemorySize()` accessors, which can account for any external heap allocations you perform:
+Since a HybridObject's implementation is in native code, the JavaScript runtime does not know the actual memory size of a Hybrid Object.
+Nitro allows Hybrid Objects to declare their memory size by overriding the `memorySize`/`getExternalMemorySize()` accessors, which can account for any external heap allocations you perform:
 
 ```swift
 class HybridImage : HybridImageSpec {
