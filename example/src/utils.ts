@@ -34,7 +34,7 @@ function isHybridObjectSubclass(obj: object): boolean {
     // it doesn't haven have .toString
     return false
   }
-  // If it's .toString function is the same as the HybridObject prototype's
+  // If its .toString function is the same as the HybridObject prototype's
   // .toString function, it means it is inheriting from HybridObject.
   return obj.toString === HybridObjectPrototype?.toString
 }

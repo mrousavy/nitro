@@ -65,7 +65,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
     }
 
     if constexpr (std::is_base_of_v<HybridObject, TPointee>) {
-      // It's a HybridObject - use it's internal constructor which caches jsi::Objects for proper memory management!
+      // It's a HybridObject - use its internal constructor which caches jsi::Objects for proper memory management!
       return arg->toObject(runtime);
     } else {
       // It's any other kind of jsi::NativeState - just create it as normal. This will not have a prototype then!

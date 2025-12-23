@@ -30,7 +30,7 @@ public protocol HybridObject: AnyObject {
    * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
    * This method can only be manually called from JS using `dispose()`.
    *
-   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
    * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup

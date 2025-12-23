@@ -3,7 +3,7 @@
 
 # Variants (`A | B | ...`)
 
-A Variant is a type of either one of the values defined in it's declaration. Example:
+A Variant is a type of either one of the values defined in its declaration. Example:
 
 ```ts
 interface Math extends HybridObject<{ … }> {

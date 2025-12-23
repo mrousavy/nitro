@@ -359,7 +359,7 @@ export function createType(
     } else if (type.isUndefined()) {
       throw new Error(
         `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
-          `- If you want to make a type optional, add \`?\` to it's name, or make it an union with \`undefined\`.\n` +
+          `- If you want to make a type optional, add \`?\` to its name, or make it an union with \`undefined\`.\n` +
           `- If you want a method that returns nothing, use \`void\` instead.\n` +
           `- If you want to represent an explicit absence of a value, use \`null\` instead.`
       )

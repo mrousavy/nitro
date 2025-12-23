@@ -6,7 +6,7 @@ export class ErrorType implements Type {
   constructor() {}
 
   get canBePassedByReference(): boolean {
-    // It's a exception<..>, pass by reference.
+    // It's an exception<..>, pass by reference.
     return true
   }
   get kind(): TypeKind {

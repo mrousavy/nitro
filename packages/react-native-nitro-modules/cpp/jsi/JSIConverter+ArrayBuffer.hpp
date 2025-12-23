@@ -50,7 +50,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     if (!object.isArrayBuffer(runtime)) [[unlikely]] {
       throw std::invalid_argument("Object \"" + arg.toString(runtime).utf8(runtime) +
                                   "\" is not an ArrayBuffer! "
-                                  "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass it's `.buffer` value.");
+                                  "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass its `.buffer` value.");
     }
 #endif
     if (object.hasNativeState<MutableBufferNativeState>(runtime)) {
@@ -69,7 +69,7 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::shared_ptr<jsi::MutableBuffer>& buffer) {
     if (auto jsBuffer = std::dynamic_pointer_cast<JSArrayBuffer>(buffer)) {
-      // It already is a JSBuffer! Let's try to just get it's existing jsi::Value...
+      // It already is a JSBuffer! Let's try to just get its existing jsi::Value...
       auto jsValue = jsBuffer->getJSReference();
       if (jsValue != nullptr) [[likely]] {
         return jsi::Value(runtime, *jsValue);

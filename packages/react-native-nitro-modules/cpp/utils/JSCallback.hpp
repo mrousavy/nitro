@@ -35,7 +35,7 @@ public:
 public:
   /**
    * Calls this `SyncJSCallback` synchronously, and
-   * returns it's result (`R`).
+   * returns its result (`R`).
    * The callee is responsible for ensuring that the
    * underlying `jsi::Function` can actually be called from this Thread.
    * In Debug, sanity checks are made to ensure the `jsi::Function` is still alive.
