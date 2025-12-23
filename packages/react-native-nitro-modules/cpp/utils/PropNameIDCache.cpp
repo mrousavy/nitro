@@ -14,7 +14,7 @@ using namespace facebook;
 
 std::unordered_map<jsi::Runtime*, PropNameIDCache::CacheMap> PropNameIDCache::_cache;
 
-const jsi::PropNameID& PropNameIDCache::get(jsi::Runtime& runtime, std::string value) {
+const jsi::PropNameID& PropNameIDCache::get(jsi::Runtime& runtime, const std::string& value) {
   CacheMap& cache = _cache[&runtime];
   const auto& cachedName = cache.find(value);
   if (cachedName != cache.end()) {

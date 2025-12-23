@@ -34,7 +34,7 @@ public:
    * The `jsi::PropNameID` is only valid within the callee's current
    * synchronous scope, and must be non-escaping.
    */
-  static const jsi::PropNameID& get(jsi::Runtime& runtime, std::string value);
+  static const jsi::PropNameID& get(jsi::Runtime& runtime, const std::string& value);
 
 private:
   using CacheMap = std::unordered_map<std::string, BorrowingReference<jsi::PropNameID>>;

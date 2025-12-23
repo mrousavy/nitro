@@ -120,7 +120,7 @@ jsi::Value CommonGlobals::Promise::callConstructor(jsi::Runtime& runtime, jsi::H
   const jsi::Function& promiseCtor = getGlobalFunction(
       runtime, "Promise", [](jsi::Runtime& runtime) { return runtime.global().getPropertyAsFunction(runtime, "Promise"); });
   jsi::Function executorFunc =
-      jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forAscii(runtime, "executor"), 2, std::move(executor));
+      jsi::Function::createFromHostFunction(runtime, PropNameIDCache::get(runtime, "executor"), 2, std::move(executor));
   return promiseCtor.callAsConstructor(runtime, std::move(executorFunc));
 }
 bool CommonGlobals::Promise::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object) {
