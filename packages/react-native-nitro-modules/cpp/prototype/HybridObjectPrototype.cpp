@@ -62,14 +62,14 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
     if (isReadonly) {
       // get
       CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
-                                            ComputedReadonlyPropertyDescriptor{// readonly
+                                            ComputedReadonlyPropertyDescriptor{// getter
                                                                                .configurable = false,
                                                                                .enumerable = true,
                                                                                .get = getter.second.toJSFunction(runtime)});
     } else {
       // get + set
       CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
-                                            ComputedPropertyDescriptor{// readonly with setter
+                                            ComputedPropertyDescriptor{// getter + setter
                                                                        .configurable = false,
                                                                        .enumerable = false,
                                                                        .get = getter.second.toJSFunction(runtime),
