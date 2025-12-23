@@ -55,25 +55,24 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   }
 
   // 5. Add all properties (getter + setter) to it using defineProperty
-  for (const auto& getter : prototype->getGetters()) {
-    const auto& setter = prototype->getSetters().find(getter.first);
-    bool isReadonly = setter == prototype->getSetters().end();
-    const std::string& name = getter.first;
-    if (isReadonly) {
+  for (const auto& [name, getter] : prototype->getGetters()) {
+    const auto& setterIterator = prototype->getSetters().find(name);
+    if (setterIterator != prototype->getSetters().end()) {
+      // get + set
+      const HybridFunction& setter = setterIterator->second;
+      CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
+                                            ComputedPropertyDescriptor{// getter + setter
+                                                                       .configurable = false,
+                                                                       .enumerable = true,
+                                                                       .get = getter.toJSFunction(runtime),
+                                                                       .set = setter.toJSFunction(runtime)});
+    } else {
       // get
       CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
                                             ComputedReadonlyPropertyDescriptor{// getter
                                                                                .configurable = false,
                                                                                .enumerable = true,
-                                                                               .get = getter.second.toJSFunction(runtime)});
-    } else {
-      // get + set
-      CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
-                                            ComputedPropertyDescriptor{// getter + setter
-                                                                       .configurable = false,
-                                                                       .enumerable = false,
-                                                                       .get = getter.second.toJSFunction(runtime),
-                                                                       .set = setter->second.toJSFunction(runtime)});
+                                                                               .get = getter.toJSFunction(runtime)});
     }
   }
 
