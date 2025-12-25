@@ -53,7 +53,7 @@ function getHybridRefProperty(spec: HybridObjectSpec): Property {
 export function createViewComponentShadowNodeFiles(
   spec: HybridObjectSpec
 ): SourceFile[] {
-  if (!spec.isHybridView) {
+  if (spec.hybridViewConfig == null) {
     throw new Error(
       `Cannot create View Component ShadowNode code for ${spec.name} - it's not a HybridView!`
     )
