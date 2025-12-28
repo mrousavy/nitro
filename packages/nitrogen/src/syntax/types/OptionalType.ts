@@ -51,12 +51,12 @@ export class OptionalType implements Type {
         )
     }
   }
-  getExtraFiles(): SourceFile[] {
-    return this.wrappingType.getExtraFiles()
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return this.wrappingType.getExtraFiles(visited)
   }
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
     const imports: SourceImport[] =
-      this.wrappingType.getRequiredImports(language)
+      this.wrappingType.getRequiredImports(language, visited)
     if (language === 'c++') {
       imports.push({
         language: 'c++',

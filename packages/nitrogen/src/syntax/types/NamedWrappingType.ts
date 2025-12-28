@@ -27,10 +27,10 @@ export class NamedWrappingType<T extends Type> implements NamedType {
   getCode(language: Language, options?: GetCodeOptions): string {
     return this.type.getCode(language, options)
   }
-  getExtraFiles(): SourceFile[] {
-    return this.type.getExtraFiles()
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return this.type.getExtraFiles(visited)
   }
-  getRequiredImports(language: Language): SourceImport[] {
-    return this.type.getRequiredImports(language)
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
+    return this.type.getRequiredImports(language, visited)
   }
 }

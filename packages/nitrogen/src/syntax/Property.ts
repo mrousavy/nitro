@@ -64,12 +64,12 @@ export class Property implements CodeNode {
     return `${this.name}: ${this.type.kind}`
   }
 
-  getExtraFiles(): SourceFile[] {
-    return this.type.getExtraFiles()
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return this.type.getExtraFiles(visited)
   }
 
-  getRequiredImports(language: Language): SourceImport[] {
-    return this.type.getRequiredImports(language)
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
+    return this.type.getRequiredImports(language, visited)
   }
 
   getGetterName(environment: LanguageEnvironment): string {

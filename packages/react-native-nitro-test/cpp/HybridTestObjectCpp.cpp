@@ -586,6 +586,18 @@ OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallb
   return value;
 }
 
+SelfReferentialStruct HybridTestObjectCpp::bounceSelfReferentialStruct(const SelfReferentialStruct& value) {
+  return value;
+}
+
+TreeNode HybridTestObjectCpp::bounceTreeNode(const TreeNode& node) {
+  return node;
+}
+
+TreeNodeMap HybridTestObjectCpp::bounceTreeNodeMap(const TreeNodeMap& node) {
+  return node;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
   // Let's just use the move method here for native buffer to test this too.
   std::vector<uint8_t> data;
