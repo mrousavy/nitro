@@ -90,7 +90,7 @@ public:
    * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
-  bool equals(const std::shared_ptr<HybridObject>& other);
+  virtual bool equals(const std::shared_ptr<HybridObject>& other);
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
    */

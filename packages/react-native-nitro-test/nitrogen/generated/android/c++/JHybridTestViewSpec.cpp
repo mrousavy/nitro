@@ -33,6 +33,13 @@ namespace margelo::nitro::test {
     return method(_javaPart);
   }
 
+  bool JHybridTestViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<JHybridTestViewSpec>(other)) {
+      return _javaPart == otherCast->_javaPart;
+    }
+    return false;
+  }
+
   void JHybridTestViewSpec::dispose() noexcept {
     static const auto method = javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
