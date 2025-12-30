@@ -195,7 +195,21 @@ export function getTests(
         .didReturn('string')
         .toStringContain('[empty-object HybridObject')
     ),
-    createTest('Two HybridObjects are not equal (a == b)', () =>
+    createTest('Same HybridObjects are equal (a == b)', () =>
+      it(
+        () =>
+          // eslint-disable-next-line no-self-compare
+          testObject.thisObject === testObject.thisObject
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('Same HybridObjects are equal (a.equals(b))', () =>
+      it(() => testObject.thisObject.equals(testObject.thisObject))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('Different HybridObjects are not equal (a == b)', () =>
       it(
         () =>
           // eslint-disable-next-line no-self-compare
@@ -204,12 +218,12 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
-    createTest('Two HybridObjects are not equal (a.equals(b))', () =>
+    createTest('Different HybridObjects are not equal (a.equals(b))', () =>
       it(() => testObject.newTestObject().equals(testObject.newTestObject()))
         .didNotThrow()
         .equals(false)
     ),
-    createTest("Two HybridObjects's prototypes are equal", () =>
+    createTest("Different HybridObjects's prototypes are equal", () =>
       it(() => {
         const objA = testObject.newTestObject()
         const objB = testObject.newTestObject()

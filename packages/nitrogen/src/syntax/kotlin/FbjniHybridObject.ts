@@ -112,6 +112,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
 
   public:
     size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
     void dispose() noexcept override;
     std::string toString() override;
 
@@ -192,6 +193,13 @@ namespace ${cxxNamespace} {
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
+  }
+
+  bool ${name.JHybridTSpec}::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<${name.JHybridTSpec}>(other)) {
+      return _javaPart == otherCast->_javaPart;
+    }
+    return false;
   }
 
   void ${name.JHybridTSpec}::dispose() noexcept {

@@ -47,6 +47,12 @@ namespace margelo::nitro::test {
     inline size_t getExternalMemorySize() noexcept override {
       return _swiftPart.getMemorySize();
     }
+    bool equals(const std::shared_ptr<HybridObject>& other) override {
+      if (auto otherCast = std::dynamic_pointer_cast<HybridPlatformObjectSpecSwift>(other)) {
+        return _swiftPart.equals(otherCast->_swiftPart);
+      }
+      return false;
+    }
     void dispose() noexcept override {
       _swiftPart.dispose();
     }

@@ -97,6 +97,14 @@ open class HybridTestViewSpec_cxx {
   }
 
   /**
+   * Compares this object with the given [other] object for reference equality.
+   */
+  @inline(__always)
+  public func equals(other: HybridTestViewSpec_cxx) -> Bool {
+    return self.__implementation === other.__implementation
+  }
+
+  /**
    * Call dispose() on the Swift class.
    * This _may_ be called manually from JS.
    */

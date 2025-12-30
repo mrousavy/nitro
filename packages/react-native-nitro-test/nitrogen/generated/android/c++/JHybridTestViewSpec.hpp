@@ -40,6 +40,7 @@ namespace margelo::nitro::test {
 
   public:
     size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
     void dispose() noexcept override;
     std::string toString() override;
 
