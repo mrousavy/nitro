@@ -52,8 +52,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
   func mergeMaps(a: AnyMap, b: AnyMap) throws -> AnyMap
-  func copyAnyValues(map: AnyMap) throws -> AnyMap
+  func copyAnyMap(map: AnyMap) throws -> AnyMap
   func bounceMap(map: Dictionary<String, Variant_Bool_Double>) throws -> Dictionary<String, Variant_Bool_Double>
+  func bounceSimpleMap(map: Dictionary<String, Double>) throws -> Dictionary<String, Double>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
   func funcThatThrowsBeforePromise() throws -> Promise<Void>
@@ -76,6 +77,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
   func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>
   func callCallback(callback: @escaping () -> Void) throws -> Void
+  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws -> Promise<Void>
   func callAll(first: @escaping () -> Void, second: @escaping () -> Void, third: @escaping () -> Void) throws -> Void
   func callWithOptional(value: Double?, callback: @escaping (_ maybe: Double?) -> Void) throws -> Void
   func callSumUpNTimes(callback: @escaping () -> Promise<Double>, n: Double) throws -> Promise<Double>

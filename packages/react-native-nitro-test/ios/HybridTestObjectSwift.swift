@@ -66,6 +66,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     callback()
   }
 
+  func callCallbackThatReturnsPromiseVoid(callback: @escaping () -> Promise<Promise<Void>>) throws
+    -> Promise<Void>
+  {
+    return Promise.async {
+      let callPromise = callback()
+      let resultPromise = try await callPromise.await()
+      try await resultPromise.await()
+    }
+  }
+
   func createNativeCallback(wrappingJsCallback: @escaping (_ num: Double) -> Void) throws -> (
     _ num: Double
   ) -> Void {
@@ -245,7 +255,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return a
   }
 
-  func copyAnyValues(map: AnyMap) throws -> AnyMap {
+  func copyAnyMap(map: AnyMap) throws -> AnyMap {
     let dictionary = map.toDictionary()
     return try AnyMap.fromDictionary(dictionary)
   }
@@ -297,6 +307,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func bounceMap(map: [String: Variant_Bool_Double]) throws -> [String: Variant_Bool_Double] {
+    return map
+  }
+
+  func bounceSimpleMap(map: [String: Double]) throws -> [String: Double] {
     return map
   }
 

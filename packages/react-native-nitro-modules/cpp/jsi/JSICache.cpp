@@ -6,9 +6,9 @@
 //
 
 #include "JSICache.hpp"
+#include "CommonGlobals.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
-#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -54,11 +54,16 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
   // Wrap it in a jsi::Value using NativeState
   jsi::Object cache(runtime);
   cache.setNativeState(runtime, nativeState);
-  // Inject it into the jsi::Runtime's global so it's memory is managed by it.
-  // We pass `allowCache = false` because we are the JSICache, and this would cause recursion.
-  ObjectUtils::defineGlobal(runtime, KnownGlobalPropertyName::JSI_CACHE, std::move(cache), /* allowCache */ false);
-  // Add it to our map of caches
+  // Add it to our map of caches first, because the next `::defineGlobal(...)` call will already be using it (recursively)
   _globalCache[&runtime] = nativeState;
+  try {
+    // Call Object.defineProperty(global, ...) now with our cache (it internally already uses cache)
+    CommonGlobals::defineGlobal(runtime, KnownGlobalPropertyName::JSI_CACHE, std::move(cache));
+  } catch (...) {
+    // If `defineGlobal(...)` failed, we should remove it from `_globalCache` so we don't have invalid caches.
+    _globalCache.erase(&runtime);
+    throw;
+  }
   // Return it
   return JSICacheReference(nativeState);
 }

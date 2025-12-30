@@ -154,12 +154,13 @@ interface SharedTestObjectProps {
   mapRoundtrip(map: AnyMap): AnyMap
   getMapKeys(map: AnyMap): string[]
   mergeMaps(a: AnyMap, b: AnyMap): AnyMap
-  copyAnyValues(map: AnyMap): AnyMap
+  copyAnyMap(map: AnyMap): AnyMap
 
   // Typed Maps (records)
   bounceMap(
     map: Record<string, number | boolean>
   ): Record<string, number | boolean>
+  bounceSimpleMap(map: Record<string, number>): Record<string, number>
   extractMap(mapWrapper: MapWrapper): MapWrapper['map']
 
   // Errors
@@ -197,6 +198,9 @@ interface SharedTestObjectProps {
 
   // Callbacks
   callCallback(callback: () => void): void
+  callCallbackThatReturnsPromiseVoid(
+    callback: () => Promise<void>
+  ): Promise<void>
   callAll(first: () => void, second: () => void, third: () => void): void
   callWithOptional(
     value: number | undefined,

@@ -105,8 +105,9 @@ namespace margelo::nitro::test {
     std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
     std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
     std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override;
-    std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override;
+    std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override;
     std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override;
+    std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;
     std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override;
     double funcThatThrows() override;
     std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
@@ -129,6 +130,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override;
     std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override;
     void callCallback(const std::function<void()>& callback) override;
+    std::shared_ptr<Promise<void>> callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override;
     void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override;
     void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
     std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override;

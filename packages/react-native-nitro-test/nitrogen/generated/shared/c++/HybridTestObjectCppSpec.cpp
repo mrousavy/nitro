@@ -73,8 +73,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectCppSpec::mapRoundtrip);
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectCppSpec::getMapKeys);
       prototype.registerHybridMethod("mergeMaps", &HybridTestObjectCppSpec::mergeMaps);
-      prototype.registerHybridMethod("copyAnyValues", &HybridTestObjectCppSpec::copyAnyValues);
+      prototype.registerHybridMethod("copyAnyMap", &HybridTestObjectCppSpec::copyAnyMap);
       prototype.registerHybridMethod("bounceMap", &HybridTestObjectCppSpec::bounceMap);
+      prototype.registerHybridMethod("bounceSimpleMap", &HybridTestObjectCppSpec::bounceSimpleMap);
       prototype.registerHybridMethod("extractMap", &HybridTestObjectCppSpec::extractMap);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectCppSpec::funcThatThrows);
       prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectCppSpec::funcThatThrowsBeforePromise);
@@ -97,6 +98,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectCppSpec::awaitAndGetComplexPromise);
       prototype.registerHybridMethod("awaitPromise", &HybridTestObjectCppSpec::awaitPromise);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectCppSpec::callCallback);
+      prototype.registerHybridMethod("callCallbackThatReturnsPromiseVoid", &HybridTestObjectCppSpec::callCallbackThatReturnsPromiseVoid);
       prototype.registerHybridMethod("callAll", &HybridTestObjectCppSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
       prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectCppSpec::callSumUpNTimes);

@@ -404,8 +404,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.copyAnyValues(map);
+    inline std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override {
+      auto __result = _swiftPart.copyAnyMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -414,6 +414,14 @@ namespace margelo::nitro::test {
     }
     inline std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override {
       auto __result = _swiftPart.bounceMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override {
+      auto __result = _swiftPart.bounceSimpleMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -591,6 +599,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline std::shared_ptr<Promise<void>> callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override {
+      auto __result = _swiftPart.callCallbackThatReturnsPromiseVoid(callback);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
       auto __result = _swiftPart.callAll(first, second, third);

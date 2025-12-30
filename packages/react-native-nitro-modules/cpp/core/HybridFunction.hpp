@@ -17,6 +17,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
+#include "PropNameIDCache.hpp"
 #include <exception>
 #include <functional>
 #include <jsi/jsi.h>
@@ -67,7 +68,7 @@ public:
 public:
   // functions
   inline jsi::Function toJSFunction(jsi::Runtime& runtime) const {
-    return jsi::Function::createFromHostFunction(runtime, jsi::PropNameID::forUtf8(runtime, _name), static_cast<unsigned int>(_paramCount),
+    return jsi::Function::createFromHostFunction(runtime, PropNameIDCache::get(runtime, _name), static_cast<unsigned int>(_paramCount),
                                                  _function);
   }
 

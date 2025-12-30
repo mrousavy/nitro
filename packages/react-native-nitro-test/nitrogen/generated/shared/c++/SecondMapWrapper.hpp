@@ -22,6 +22,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/PropNameIDCache.hpp>)
+#include <NitroModules/PropNameIDCache.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -40,6 +45,9 @@ namespace margelo::nitro::test {
   public:
     SecondMapWrapper() = default;
     explicit SecondMapWrapper(std::unordered_map<std::string, std::string> second): second(second) {}
+
+  public:
+    friend bool operator==(const SecondMapWrapper& lhs, const SecondMapWrapper& rhs) = default;
   };
 
 } // namespace margelo::nitro::test
@@ -52,12 +60,12 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::SecondMapWrapper fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::SecondMapWrapper(
-        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, "second"))
+        JSIConverter<std::unordered_map<std::string, std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "second")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::SecondMapWrapper& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "second", JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.second));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "second"), JSIConverter<std::unordered_map<std::string, std::string>>::toJSI(runtime, arg.second));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -68,7 +76,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, "second"))) return false;
+      if (!JSIConverter<std::unordered_map<std::string, std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "second")))) return false;
       return true;
     }
   };

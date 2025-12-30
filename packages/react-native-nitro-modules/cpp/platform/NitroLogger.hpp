@@ -22,7 +22,9 @@ private:
 
 public:
   template <typename... Args>
-  static void log([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* NON_NULL tag, [[maybe_unused]] const char* NON_NULL format,
+  static void log([[maybe_unused]] LogLevel level,              //
+                  [[maybe_unused]] const char* NON_NULL tag,    //
+                  [[maybe_unused]] const char* NON_NULL format, //
                   [[maybe_unused]] Args... args) {
 #ifdef NITRO_DEBUG
     // 1. Make sure args can be passed to sprintf(..)

@@ -49,7 +49,7 @@ In this case, it might make sense to use `ArrayBuffer` or `string`, and parse th
 
 ### Variants
 
-[Variants](types/variants) (`A | B`) are dynamic types. Each time you pass a variant to native, Nitro has to check it's type at runtime - is it `A` or `B`?
+[Variants](types/variants) (`A | B`) are dynamic types. Each time you pass a variant to native, Nitro has to check its type at runtime - is it `A` or `B`?
 Those type-checks are very efficient so this is considered a micro-optimization, but if you can, avoid variants like so:
 
 <div className="side-by-side-container">
@@ -79,7 +79,7 @@ interface GoodDatabase
 ## Avoid unnecessary objects
 
 It is a common pattern to wrap everything in an object in JavaScript.
-In Nitro, every object gets it's own struct and has to be allocated.
+In Nitro, every object gets its own struct and has to be allocated.
 On iOS this performance impact is almost zero, but on Android the struct is a heap-allocation.
 
 If you can, avoid unnecessarily wrapping everything in objects, and flatten the types out in the function signature:

@@ -43,7 +43,7 @@ class ArrayBuffer {
    * - If the `ArrayBuffer` holds a `ByteBuffer`, `getBuffer(false)` can safely be called to
    * get shared access to the underlying data, without performing any copies.
    * - If the `ArrayBuffer` doesn't hold a `ByteBuffer`, it can still be accessed via `getBuffer(false)`,
-   * but the returned `ByteBuffer` is only valid as long as it's parent `ArrayBuffer` is alive.
+   * but the returned `ByteBuffer` is only valid as long as its parent `ArrayBuffer` is alive.
    */
   val isByteBuffer: Boolean
     get() = getIsByteBuffer()
@@ -104,7 +104,7 @@ class ArrayBuffer {
         // The ByteBuffer is 1:1 mapped to a byte array - return as is!
         return array
       }
-      // we had a CPU-backed array, but it's size differs from our ArrayBuffer size.
+      // we had a CPU-backed array, but its size differs from our ArrayBuffer size.
       // This might be because the ArrayBuffer has a smaller view of the data, so we need
       // to resort back to a good ol' copy.
     }

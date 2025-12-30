@@ -1,6 +1,6 @@
 {
   "name": "nitrogen",
-  "version": "0.31.10",
+  "version": "0.32.0",
   "description": "The code-generator for react-native-nitro-modules.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
@@ -26,7 +26,6 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun build || exit 0;",
     "build": "bun tsc",
     "start": "tsc && node lib/index.js",
     "typecheck": "tsc --noEmit",
@@ -36,7 +35,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "^0.31.10",
+    "react-native-nitro-modules": "^0.32.0",
     "ts-morph": "^27.0.0",
     "yargs": "^18.0.0",
     "zod": "^4.0.5"

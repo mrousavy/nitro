@@ -120,7 +120,7 @@ public:
   }
 
   /**
-   * Get a borrowing (or "weak") reference to this owning reference
+   * Get a weak reference to this borrowing reference.
    */
   [[nodiscard]]
   WeakReference<T> weak() const {
@@ -220,4 +220,4 @@ private:
 
 } // namespace margelo::nitro
 
-#include "WeakReference+Owning.hpp"
+#include "WeakReference+Borrowing.hpp"

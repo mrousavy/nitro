@@ -19,7 +19,6 @@
 #include <NitroModules/ArrayBuffer.hpp>
 #include <optional>
 #include <NitroModules/JArrayBuffer.hpp>
-#include <NitroModules/JUnit.hpp>
 #include <string>
 
 namespace margelo::nitro::test {

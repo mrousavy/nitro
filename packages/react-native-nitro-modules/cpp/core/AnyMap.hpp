@@ -38,8 +38,8 @@ struct AnyValue : VariantType {
  */
 class AnyMap final {
 private:
-  explicit AnyMap() {}
-  AnyMap(size_t size) {
+  AnyMap() = default;
+  explicit AnyMap(size_t size) {
     _map.reserve(size);
   }
 
@@ -201,7 +201,7 @@ public:
   /**
    * Get the actual C++ map that holds all keys and variant values.
    */
-  const std::unordered_map<std::string, AnyValue>& getMap() const;
+  std::unordered_map<std::string, AnyValue>& getMap();
 
 public:
   /**

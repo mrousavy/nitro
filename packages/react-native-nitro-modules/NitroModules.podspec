@@ -48,6 +48,7 @@ Pod::Spec.new do |s|
     "cpp/utils/FastVectorCopy.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
+    "cpp/utils/PropNameIDCache.hpp",
     "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
@@ -63,7 +64,7 @@ Pod::Spec.new do |s|
   xcconfig = {
     # Use C++ 20
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
-    # Enables C++ <-> Swift interop (by default it's only C)
+    # Enables C++ <-> Swift interop (by default its only ObjC)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",

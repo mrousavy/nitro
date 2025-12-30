@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.82.0):
     - hermes-engine/Pre-built (= 0.82.0)
   - hermes-engine/Pre-built (0.82.0)
-  - NitroModules (0.31.10):
+  - NitroModules (0.32.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -37,7 +37,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroTest (0.31.10):
+  - NitroTest (0.32.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -68,7 +68,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - NitroTestExternal (0.31.10):
+  - NitroTestExternal (0.32.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -1872,7 +1872,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-safe-area-context (5.6.1):
+  - react-native-safe-area-context (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -1890,8 +1890,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.1)
-    - react-native-safe-area-context/fabric (= 5.6.1)
+    - react-native-safe-area-context/common (= 5.6.2)
+    - react-native-safe-area-context/fabric (= 5.6.2)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -1902,7 +1902,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/common (5.6.1):
+  - react-native-safe-area-context/common (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -1930,7 +1930,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.1):
+  - react-native-safe-area-context/fabric (5.6.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -2818,9 +2818,9 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
-  NitroModules: 22837572f1ecf8f1560f5aac7c9f687825754901
-  NitroTest: 3dc726e4c03ec06bf38d2c4084ed062f45c591c4
-  NitroTestExternal: 2a01332bd513abbfc2633ebf9dd9a2cf7000e07a
+  NitroModules: 1d6b00df1594151aa7be68893bf41afc261bb817
+  NitroTest: 779b311114b6752bc355d973787af90c34c900f9
+  NitroTestExternal: ec2b92b0c6a3f15fb2652fc62eeb34c5a67b74be
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 22bf66112da540a7d40e536366ddd8557934fca1
   RCTRequired: a0ed4dc41b35f79fbb6d8ba320e06882a8c792cf
@@ -2854,7 +2854,7 @@ SPEC CHECKSUMS:
   React-logger: 2021eb67660b673cc654635832136fbbf2c79103
   React-Mapbuffer: 9bda44c983f9c683047546a338ebe9a21020babd
   React-microtasksnativemodule: 9b52faf56750d7e3c67d9cf96b650f14c31524c2
-  react-native-safe-area-context: 6d8a7b750e496e37bda47c938320bf2c734d441f
+  react-native-safe-area-context: 54d812805f3c4e08a4580ad086cbde1d8780c2e4
   react-native-segmented-control: 44d14c6899ee12de3384517f4fa1cf4a66ae105c
   React-NativeModulesApple: 1b4d9722d8df62e881684abadf320e7a8fa1b7f6
   React-oscompat: 80ca388c4831481cd03a6b45ecfc82739ca9a95e

@@ -2,7 +2,7 @@
   "name": "react-native-nitro",
   "packageManager": "bun@1.1.42",
   "private": true,
-  "version": "0.31.10",
+  "version": "0.32.0",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "workspaces": [
@@ -14,6 +14,7 @@
     "docs"
   ],
   "scripts": {
+    "postinstall": "bun run build",
     "build": "bun nitro build && bun nitrogen build && bun nitro-test-external build && bun nitro-test build",
     "bootstrap": "bun i && bun run build && cd example && bundle install && bun pods",
     "typecheck": "bun --filter=\"**\" typecheck",

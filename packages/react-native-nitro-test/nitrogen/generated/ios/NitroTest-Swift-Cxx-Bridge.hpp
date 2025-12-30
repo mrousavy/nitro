@@ -699,6 +699,31 @@ namespace margelo::nitro::test::bridge::swift {
     map.emplace(key, value);
   }
   
+  // pragma MARK: std::unordered_map<std::string, double>
+  /**
+   * Specialized version of `std::unordered_map<std::string, double>`.
+   */
+  using std__unordered_map_std__string__double_ = std::unordered_map<std::string, double>;
+  inline std::unordered_map<std::string, double> create_std__unordered_map_std__string__double_(size_t size) noexcept {
+    std::unordered_map<std::string, double> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__double__keys(const std__unordered_map_std__string__double_& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline double get_std__unordered_map_std__string__double__value(const std__unordered_map_std__string__double_& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__double_(std__unordered_map_std__string__double_& map, const std::string& key, const double& value) noexcept {
+    map.emplace(key, value);
+  }
+  
   // pragma MARK: std::unordered_map<std::string, std::string>
   /**
    * Specialized version of `std::unordered_map<std::string, std::string>`.
@@ -836,6 +861,63 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_Car create_Func_void_Car(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_Car_Wrapper wrap_Func_void_Car(Func_void_Car value) noexcept {
     return Func_void_Car_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> call() const noexcept {
+      auto __result = _function->operator()();
+      return __result;
+    }
+  private:
+    std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_void____() noexcept {
+    return Promise<std::shared_ptr<Promise<void>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<void>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> promise) noexcept {
+    return PromiseHolder<std::shared_ptr<Promise<void>>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<Promise<void>>&)>`.
+   */
+  using Func_void_std__shared_ptr_Promise_void__ = std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<Promise<void>>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_Promise_void___Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_Promise_void___Wrapper(std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<Promise<void>> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__shared_ptr_Promise_void__ create_Func_void_std__shared_ptr_Promise_void__(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__shared_ptr_Promise_void___Wrapper wrap_Func_void_std__shared_ptr_Promise_void__(Func_void_std__shared_ptr_Promise_void__ value) noexcept {
+    return Func_void_std__shared_ptr_Promise_void___Wrapper(std::move(value));
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
@@ -1617,6 +1699,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, std::variant<bool, double>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, double>>
+  using Result_std__unordered_map_std__string__double__ = Result<std::unordered_map<std::string, double>>;
+  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::unordered_map<std::string, double>& value) noexcept {
+    return Result<std::unordered_map<std::string, double>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::exception_ptr& error) noexcept {
+    return Result<std::unordered_map<std::string, double>>::withError(error);
   }
   
   // pragma MARK: Result<std::unordered_map<std::string, std::string>>

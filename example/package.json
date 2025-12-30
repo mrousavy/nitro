@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.31.10",
+  "version": "0.32.0",
   "private": true,
   "scripts": {
     "start": "react-native start --client-logs",
@@ -27,12 +27,12 @@
     "react-native-nitro-test": "*",
     "react-native-nitro-test-external": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.6.0",
+    "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
     "@babel/runtime": "^7.28.4",
     "@react-native-community/cli": "20.0.2",
     "@react-native-community/cli-platform-android": "20.0.2",

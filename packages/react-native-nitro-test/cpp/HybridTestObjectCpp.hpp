@@ -100,7 +100,7 @@ public:
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
   std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override;
   std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override;
-  std::shared_ptr<AnyMap> copyAnyValues(const std::shared_ptr<AnyMap>& map) override;
+  std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override;
   double funcThatThrows() override;
   std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override;
   void throwError(const std::exception_ptr& error) override;
@@ -124,6 +124,7 @@ public:
   std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
   std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
   std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;
+  std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;
   std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override;
   std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override;
 
@@ -144,6 +145,8 @@ public:
   std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override;
   std::shared_ptr<Promise<void>> wait(double seconds) override;
   void callCallback(const std::function<void()>& callback) override;
+  std::shared_ptr<Promise<void>>
+  callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override;
   std::function<void(double)> createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) override;
   void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override;
   std::shared_ptr<Promise<double>>

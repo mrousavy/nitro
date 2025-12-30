@@ -79,11 +79,32 @@ const TEST_MAP: Record<string, number | boolean> = {
   a_bool: true,
   another_bool: false,
 }
+
 const TEST_MAP_2: Record<string, string> = {
   'someKey': 'someValue',
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
+
+const TEST_MAP_3: Record<string, number> = {
+  first: 14,
+  second: 8247,
+}
+
+const TEST_MAP_4: Record<
+  string,
+  number | boolean | string | bigint | null | Array<number>
+> = {
+  someKey: 55,
+  some_other_key: 123,
+  a_bool: true,
+  another_bool: false,
+  a_string: 'hello',
+  a_bigint: 1234567890n,
+  a_null: null,
+  a_array: [1, 2, 3],
+}
+
 const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
@@ -441,11 +462,17 @@ export function getTests(
         .didReturn('object')
         .equals([1, 2, 13, 42])
     ),
-    createTest('bounceStrings(...) equals', () =>
+    createTest('bounceStrings(...) equals simple strings', () =>
       it(() => testObject.bounceStrings(['hello', 'world', '!']))
         .didNotThrow()
         .didReturn('object')
         .equals(['hello', 'world', '!'])
+    ),
+    createTest('bounceStrings(...) equals unicode/emojis', () =>
+      it(() => testObject.bounceStrings(['✨', '🔥', `🥳🥷🏼🥳`]))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['✨', '🔥', `🥳🥷🏼🥳`])
     ),
     createTest('bounceEnums(...) equals', () =>
       it(() => testObject.bounceEnums(['gas', 'hybrid']))
@@ -677,10 +704,10 @@ export function getTests(
         .didNotThrow()
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
-    createTest('copyAnyValues(...) works', () =>
-      it(() => testObject.copyAnyValues(TEST_MAP))
+    createTest('copyAnyMap(...) works', () =>
+      it(() => testObject.copyAnyMap(TEST_MAP_4))
         .didNotThrow()
-        .equals(TEST_MAP)
+        .equals(TEST_MAP_4)
     ),
 
     // Test errors
@@ -1146,6 +1173,12 @@ export function getTests(
         .didReturn('object')
         .equals(TEST_MAP)
     ),
+    createTest('bounceSimpleMap(map) === map', () =>
+      it(() => testObject.bounceSimpleMap(TEST_MAP_3))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP_3)
+    ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
       it(() =>
         testObject.extractMap({
@@ -1347,6 +1380,15 @@ export function getTests(
       )
         .didNotThrow()
         .equals('hello')
+    ),
+    createTest('callCallbackThatReturnsPromiseVoid(...)', async () =>
+      (
+        await it(() =>
+          testObject.callCallbackThatReturnsPromiseVoid(() => Promise.resolve())
+        )
+      )
+        .didNotThrow()
+        .didReturn('undefined')
     ),
     createTest(
       'Single callback can be called and awaited: getValueFromJSCallbackAndWait(...)',

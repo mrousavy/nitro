@@ -22,6 +22,11 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/PropNameIDCache.hpp>)
+#include <NitroModules/PropNameIDCache.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 
 
@@ -41,6 +46,9 @@ namespace margelo::nitro::test {
   public:
     OptionalCallback() = default;
     explicit OptionalCallback(std::optional<std::variant<std::function<void()>, double>> callback): callback(callback) {}
+
+  public:
+    // OptionalCallback is not equatable because these properties are not equatable: callback
   };
 
 } // namespace margelo::nitro::test
@@ -53,12 +61,12 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::OptionalCallback fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::OptionalCallback(
-        JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::fromJSI(runtime, obj.getProperty(runtime, "callback"))
+        JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "callback")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::OptionalCallback& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "callback", JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::toJSI(runtime, arg.callback));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "callback"), JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::toJSI(runtime, arg.callback));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -69,7 +77,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::canConvert(runtime, obj.getProperty(runtime, "callback"))) return false;
+      if (!JSIConverter<std::optional<std::variant<std::function<void()>, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "callback")))) return false;
       return true;
     }
   };

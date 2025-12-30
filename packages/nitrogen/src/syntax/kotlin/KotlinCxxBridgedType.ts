@@ -111,11 +111,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JArrayBuffer.hpp',
             space: 'system',
           })
-          imports.push({
-            language: 'c++',
-            name: 'NitroModules/JUnit.hpp',
-            space: 'system',
-          })
           break
         case 'promise':
           imports.push({
@@ -123,6 +118,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             name: 'NitroModules/JPromise.hpp',
             space: 'system',
           })
+          const promiseType = getTypeAs(this.type, PromiseType)
+          if (promiseType.resultingType.kind === 'void') {
+            // Promise<void> uses JUnit
+            imports.push({
+              language: 'c++',
+              name: 'NitroModules/JUnit.hpp',
+              space: 'system',
+            })
+          }
           break
         case 'date':
           imports.push({
@@ -293,10 +297,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const recordType = getTypeAs(this.type, RecordType)
             const keyType = new KotlinCxxBridgedType(
               recordType.keyType
-            ).getTypeCode(language)
+            ).getTypeCode(language, true)
             const valueType = new KotlinCxxBridgedType(
               recordType.valueType
-            ).getTypeCode(language)
+            ).getTypeCode(language, true)
             return `jni::JMap<${keyType}, ${valueType}>`
           default:
             return this.type.getCode(language)
@@ -583,13 +587,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const record = getTypeAs(this.type, RecordType)
             const key = new KotlinCxxBridgedType(record.keyType)
             const value = new KotlinCxxBridgedType(record.valueType)
-            const parseKey = key.parseFromCppToKotlin('__entry.first', 'c++')
+            const parseKey = key.parseFromCppToKotlin(
+              '__entry.first',
+              'c++',
+              true
+            )
             const parseValue = value.parseFromCppToKotlin(
               '__entry.second',
-              'c++'
+              'c++',
+              true
             )
-            const javaMapType = `jni::JMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
-            const javaHashMapType = `jni::JHashMap<${key.getTypeCode('c++')}, ${value.getTypeCode('c++')}>`
+            const keyType = key.getTypeCode('c++', true)
+            const valueType = value.getTypeCode('c++', true)
+            const javaMapType = `jni::JMap<${keyType}, ${valueType}>`
+            const javaHashMapType = `jni::JHashMap<${keyType}, ${valueType}>`
             return `
 [&]() -> jni::local_ref<${javaMapType}> {
   auto __map = ${javaHashMapType}::create(${parameterName}.size());
@@ -862,10 +873,15 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             const record = getTypeAs(this.type, RecordType)
             const key = new KotlinCxxBridgedType(record.keyType)
             const value = new KotlinCxxBridgedType(record.valueType)
-            const parseKey = key.parseFromKotlinToCpp('__entry.first', 'c++')
+            const parseKey = key.parseFromKotlinToCpp(
+              '__entry.first',
+              'c++',
+              true
+            )
             const parseValue = value.parseFromKotlinToCpp(
               '__entry.second',
-              'c++'
+              'c++',
+              true
             )
             const cxxType = this.type.getCode('c++')
             return `

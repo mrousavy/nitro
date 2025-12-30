@@ -28,7 +28,7 @@ using DeleteFn = std::function<void()>;
  * - `NativeArrayBuffer`: Created from native (C++), and can either own the memory (`isOwner()`), or borrow it.
  * - `JSArrayBuffer`: Received from JS, and will only be alive for as long as the JS Runtime is actually alive.
  *
- * Also, an `ArrayBuffer` can either own it's memory, or just borrow it's memory.
+ * Also, an `ArrayBuffer` can either own its memory, or just borrow its memory.
  * - Owning = the `ArrayBuffer`'s `data()` is alive as long as the `ArrayBuffer` is alive.
  *   When this `ArrayBuffer` gets deleted, it will free the memory.
  * - Borrowed = the `ArrayBuffer`'s `data()` might be deleted at any point from an external source (e.g. the JS garbage collector).
@@ -116,13 +116,13 @@ private:
 /**
  * Represents a JS-based `ArrayBuffer`.
  *
- * While it's underlying data might have been allocated on the native side (`NativeArrayBuffer`),
+ * While its underlying data might have been allocated on the native side (`NativeArrayBuffer`),
  * we only have a JS reference to the `ArrayBuffer` object so it is considered a "borrowed"-resource.
  *
  * `data()` and `size()` can only be accessed synchronously on the JS Runtime Thread.
  * If you want to access it elsewhere, copy the buffer first.
  *
- * If the JS ArrayBuffer (or it's JS Runtime) have already been deleted, `data()` returns `nullptr`.
+ * If the JS ArrayBuffer (or its JS Runtime) have already been deleted, `data()` returns `nullptr`.
  */
 class JSArrayBuffer final : public ArrayBuffer {
 public:

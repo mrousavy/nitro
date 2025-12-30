@@ -832,9 +832,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func copyAnyValues(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
+  public final func copyAnyMap(map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
-      let __result = try self.__implementation.copyAnyValues(map: AnyMap(withCppPart: map))
+      let __result = try self.__implementation.copyAnyMap(map: AnyMap(withCppPart: map))
       let __resultCpp = __result.cppPart
       return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
     } catch (let __error) {
@@ -885,6 +885,32 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__unordered_map_std__string__std__variant_bool__double___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceSimpleMap(map: bridge.std__unordered_map_std__string__double_) -> bridge.Result_std__unordered_map_std__string__double__ {
+    do {
+      let __result = try self.__implementation.bounceSimpleMap(map: { () -> Dictionary<String, Double> in
+        var __dictionary = Dictionary<String, Double>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__double__keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__double__value(map, __key)
+          __dictionary[String(__key)] = __value
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__double_ in
+        var __map = bridge.create_std__unordered_map_std__string__double_(__result.count)
+        for (__k, __v) in __result {
+          bridge.emplace_std__unordered_map_std__string__double_(&__map, std.string(__k), __v)
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__double__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__double__(__exceptionPtr)
     }
   }
   
@@ -1326,6 +1352,51 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func callCallbackThatReturnsPromiseVoid(callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____) -> bridge.Result_std__shared_ptr_Promise_void___ {
+    do {
+      let __result = try self.__implementation.callCallbackThatReturnsPromiseVoid(callback: { () -> () -> Promise<Promise<Void>> in
+        let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(callback)
+        return { () -> Promise<Promise<Void>> in
+          let __result = __wrappedFunction.call()
+          return { () -> Promise<Promise<Void>> in
+            let __promise = Promise<Promise<Void>>()
+            let __resolver = { (__result: Promise<Void>) in
+              __promise.resolve(withResult: __result)
+            }
+            let __rejecter = { (__error: Error) in
+              __promise.reject(withError: __error)
+            }
+            let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_Promise_void__ in
+              let __closureWrapper = Func_void_std__shared_ptr_Promise_void__(__resolver)
+              return bridge.create_Func_void_std__shared_ptr_Promise_void__(__closureWrapper.toUnsafe())
+            }()
+            let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+              let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+              return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+            }()
+            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(__result)
+            __promiseHolder.addOnResolvedListener(__resolverCpp)
+            __promiseHolder.addOnRejectedListener(__rejecterCpp)
+            return __promise
+          }()
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_void__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve() })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_void___(__exceptionPtr)
     }
   }
   

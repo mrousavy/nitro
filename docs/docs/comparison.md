@@ -3,7 +3,7 @@
 
 # Comparison with other frameworks
 
-Nitro is not the only one of it's kind. There's multiple ways to build native modules for React Native:
+Nitro is not the only one of its kind. There's multiple ways to build native modules for React Native:
 
 - Nitro Modules
 - [Turbo Modules](#turbo-modules)
@@ -618,8 +618,8 @@ Note: It is also possible for Nitro specs to go out of sync, but only if you for
   </tr>
   <tr>
     <td><code>null</code></td>
-    <td>✅</td>
-    <td>✅</td>
+    <td>❌</td>
+    <td>❌</td>
     <td>✅</td>
   </tr>
   <tr>

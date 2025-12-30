@@ -248,11 +248,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun copyAnyValues(map: AnyMap): AnyMap
+  abstract fun copyAnyMap(map: AnyMap): AnyMap
   
   @DoNotStrip
   @Keep
   abstract fun bounceMap(map: Map<String, Variant_Boolean_Double>): Map<String, Variant_Boolean_Double>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double>
   
   @DoNotStrip
   @Keep
@@ -344,6 +348,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   private fun callCallback_cxx(callback: Func_void): Unit {
     val __result = callCallback(callback)
+    return __result
+  }
+  
+  abstract fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  private fun callCallbackThatReturnsPromiseVoid_cxx(callback: Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____): Promise<Unit> {
+    val __result = callCallbackThatReturnsPromiseVoid(callback)
     return __result
   }
   
