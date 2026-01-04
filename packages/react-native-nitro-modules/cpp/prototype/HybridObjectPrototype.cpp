@@ -108,7 +108,7 @@ void HybridObjectPrototype::ensureInitialized() {
     // lock in case we try to create `HybridObject`s in parallel Runtimes
     static std::mutex mutex;
     std::unique_lock lock(mutex);
-    if (_didLoadMethods) {
+    if (_didLoadMethods) [[unlikely]] {
       // another call to `ensureInitialized()` has initialized in the meantime. abort.
       return;
     }
