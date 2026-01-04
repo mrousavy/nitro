@@ -103,6 +103,21 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   return jsi::Value(runtime, *sharedObject);
 }
 
+void HybridObjectPrototype::ensureInitialized() {
+  if (!_didLoadMethods) {
+    // lock in case we try to create `HybridObject`s in parallel Runtimes
+    static std::mutex mutex;
+    std::unique_lock lock(mutex);
+    if (_didLoadMethods) {
+      // another call to `ensureInitialized()` has initialized in the meantime. abort.
+      return;
+    }
+    // lazy-load all exposed methods
+    loadHybridMethods();
+    _didLoadMethods = true;
+  }
+}
+
 jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {
   ensureInitialized();
 
