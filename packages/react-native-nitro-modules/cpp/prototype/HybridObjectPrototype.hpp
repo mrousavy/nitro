@@ -30,11 +30,6 @@ using namespace facebook;
  * as long as it has a valid NativeState (`this`).
  */
 class HybridObjectPrototype {
-private:
-  PrototypeChain _prototypeChain;
-  bool _didLoadMethods = false;
-  static constexpr auto TAG = "HybridObjectPrototype";
-
 public:
   HybridObjectPrototype() {}
 
@@ -62,13 +57,12 @@ private:
   /**
    * Ensures that all Hybrid Methods, Getters and Setters are initialized by calling loadHybridMethods().
    */
-  inline void ensureInitialized() {
-    if (!_didLoadMethods) [[unlikely]] {
-      // lazy-load all exposed methods
-      loadHybridMethods();
-      _didLoadMethods = true;
-    }
-  }
+  void ensureInitialized();
+
+private:
+  PrototypeChain _prototypeChain;
+  volatile bool _didLoadMethods = false;
+  static constexpr auto TAG = "HybridObjectPrototype";
 
 protected:
   using RegisterFn = void (*NON_NULL)(Prototype&);
