@@ -1,12 +1,10 @@
 import { Platform, type HostComponent, type ViewProps } from 'react-native'
-// @ts-expect-error this unfortunately isn't typed or default-exported.
-// eslint-disable-next-line @react-native/no-deep-imports
-import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 import type {
   HybridView,
   HybridViewMethods,
   HybridViewProps,
 } from './HybridView'
+import { ReactNativeComponentRegistry } from './ReactNativeComponentRegistry'
 
 type AttributeValue<T, V = T> =
   | boolean
@@ -124,12 +122,12 @@ export function getHostComponent<
   name: string,
   getViewConfig: () => ViewConfig<Props>
 ): ReactNativeView<Props, Methods> {
-  if (NativeComponentRegistry == null) {
+  if (ReactNativeComponentRegistry == null) {
     throw new Error(
       `NativeComponentRegistry is not available on ${Platform.OS}!`
     )
   }
-  return NativeComponentRegistry.get(name, () => {
+  return ReactNativeComponentRegistry.get(name, () => {
     const config = getViewConfig()
     config.validAttributes = wrapValidAttributes(config.validAttributes)
     return config
