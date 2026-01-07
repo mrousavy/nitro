@@ -2,7 +2,7 @@ name: Harness iOS
 
 concurrency:
   group: harness-ios-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 on:
   workflow_dispatch:
