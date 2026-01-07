@@ -81,6 +81,12 @@ open class ${manager}: SimpleViewManager<View>() {
     // 2. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
+
+  protected override fun setupViewRecycling() {
+    // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
+    // By not calling \`super.setupViewRecycling()\`, we effectively
+    // disable view recycling for now.
+  }
 }
   `.trim()
 
