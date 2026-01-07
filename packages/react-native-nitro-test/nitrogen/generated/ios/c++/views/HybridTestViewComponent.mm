@@ -25,6 +25,7 @@ using namespace margelo::nitro::test::views;
  * Represents the React Native View holder for the Nitro "TestView" HybridView.
  */
 @interface HybridTestViewComponent: RCTViewComponentView
++ (BOOL)shouldBeRecycled;
 @end
 
 @implementation HybridTestViewComponent {
@@ -38,6 +39,11 @@ using namespace margelo::nitro::test::views;
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
   return react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
+}
+
++ (BOOL)shouldBeRecycled {
+  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
+  return NO;
 }
 
 - (instancetype) init {

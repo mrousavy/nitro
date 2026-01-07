@@ -73,6 +73,7 @@ using namespace ${namespace}::views;
  * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
  */
 @interface ${component}: RCTViewComponentView
++ (BOOL)shouldBeRecycled;
 @end
 
 @implementation ${component} {
@@ -86,6 +87,11 @@ using namespace ${namespace}::views;
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
   return react::concreteComponentDescriptorProvider<${descriptorClassName}>();
+}
+
++ (BOOL)shouldBeRecycled {
+  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
+  return NO;
 }
 
 - (instancetype) init {
