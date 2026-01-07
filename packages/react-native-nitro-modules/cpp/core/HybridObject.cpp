@@ -91,7 +91,7 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
                                             // .configurable has to be true because this property is non-frozen
                                             .configurable = true,
                                             .enumerable = true,
-                                            .value = jsi::String::createFromUtf8(runtime, typeName),
+                                            .value = jsi::String::createFromAscii(runtime, typeName),
                                             .writable = false,
                                         });
 #endif

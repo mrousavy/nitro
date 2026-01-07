@@ -31,8 +31,9 @@ public:
 
   /**
    * Get a `jsi::PropNameID` for the given `std::string` value.
-   * The `jsi::PropNameID` is only valid within the callee's current
-   * synchronous scope, and must be non-escaping.
+   * - The `std::string` must be an ASCII string.
+   * - The `jsi::PropNameID` is only valid within the callee's current
+   *   synchronous scope, and must be non-escaping.
    */
   static const jsi::PropNameID& get(jsi::Runtime& runtime, const std::string& value);
 

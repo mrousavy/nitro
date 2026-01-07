@@ -6,6 +6,7 @@
 //
 
 #include "BoxedHybridObject.hpp"
+#include "PropNameIDCache.hpp"
 
 namespace margelo::nitro {
 
@@ -18,7 +19,7 @@ jsi::Value BoxedHybridObject::get(jsi::Runtime& runtime, const jsi::PropNameID& 
 
   if (name == "unbox") {
     return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forUtf8(runtime, "unbox"), 0,
+        runtime, PropNameIDCache::get(runtime, "unbox"), 0,
         [hybridObject = _hybridObject](jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value {
           return hybridObject->toObject(runtime);
         });
