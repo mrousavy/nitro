@@ -83,7 +83,7 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
                                         PlainPropertyDescriptor{
                                             .configurable = false,
                                             .enumerable = true,
-                                            .value = jsi::String::createFromUtf8(runtime, prototypeName),
+                                            .value = jsi::String::createFromAscii(runtime, prototypeName),
                                             .writable = false,
                                         });
 #endif
