@@ -32,6 +32,44 @@ export function isArrayBuffer(type: TSMorphType): boolean {
   return isSymbol(type, 'ArrayBuffer')
 }
 
+/**
+ * List of TypedArray type names in JavaScript/TypeScript.
+ */
+export const TYPED_ARRAY_NAMES = [
+  'Int8Array',
+  'Uint8Array',
+  'Int16Array',
+  'Uint16Array',
+  'Int32Array',
+  'Uint32Array',
+  'Float32Array',
+  'Float64Array',
+  'BigInt64Array',
+  'BigUint64Array',
+] as const
+
+export type TypedArrayName = (typeof TYPED_ARRAY_NAMES)[number]
+
+export function isTypedArray(type: TSMorphType): boolean {
+  const symbol = type.getSymbol()
+  if (symbol != null) {
+    const name = symbol.getName()
+    return TYPED_ARRAY_NAMES.includes(name as TypedArrayName)
+  }
+  return false
+}
+
+export function getTypedArrayName(type: TSMorphType): TypedArrayName | null {
+  const symbol = type.getSymbol()
+  if (symbol != null) {
+    const name = symbol.getName()
+    if (TYPED_ARRAY_NAMES.includes(name as TypedArrayName)) {
+      return name as TypedArrayName
+    }
+  }
+  return null
+}
+
 export function isDate(type: TSMorphType): boolean {
   return isSymbol(type, 'Date')
 }

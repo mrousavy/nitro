@@ -8,6 +8,7 @@
 #pragma once
 
 #include "HybridTestObjectCppSpec.hpp"
+#include <NitroModules/TypedArray.hpp>
 #include <jsi/jsi.h>
 
 namespace margelo::nitro::test {
@@ -208,6 +209,14 @@ public:
   StringOrExternal bounceExternalVariant(const StringOrExternal& variant) override;
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(
       const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
+
+  // TypedArrays - efficient numeric array transfer
+  Float64Array createFloat64Array(double size) override;
+  Float64Array bounceFloat64Array(const Float64Array& array) override;
+  double sumFloat64Array(const Float64Array& array) override;
+  Int32Array createInt32Array(const std::vector<double>& values) override;
+  Uint8Array bounceUint8Array(const Uint8Array& array) override;
+  std::vector<double> float64ArrayToNumberArray(const Float64Array& array) override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

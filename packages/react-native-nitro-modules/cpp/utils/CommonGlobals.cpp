@@ -150,6 +150,34 @@ bool CommonGlobals::Error::isInstanceOf(jsi::Runtime& runtime, const jsi::Object
   return object.instanceOf(runtime, errorCtor);
 }
 
+// pragma MARK: TypedArray
+
+jsi::Value CommonGlobals::TypedArray::create(jsi::Runtime& runtime, const char* typedArrayName, const jsi::Value& arrayBuffer) {
+  const jsi::Function& ctor = getGlobalFunction(runtime, typedArrayName, [typedArrayName](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsFunction(runtime, typedArrayName);
+  });
+  return ctor.callAsConstructor(runtime, arrayBuffer);
+}
+
+bool CommonGlobals::TypedArray::isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object, const char* typedArrayName) {
+  const jsi::Function& ctor = getGlobalFunction(runtime, typedArrayName, [typedArrayName](jsi::Runtime& runtime) {
+    return runtime.global().getPropertyAsFunction(runtime, typedArrayName);
+  });
+  return object.instanceOf(runtime, ctor);
+}
+
+jsi::Value CommonGlobals::TypedArray::getBuffer(jsi::Runtime& runtime, const jsi::Object& typedArray) {
+  return typedArray.getProperty(runtime, PropNameIDCache::get(runtime, "buffer"));
+}
+
+size_t CommonGlobals::TypedArray::getByteOffset(jsi::Runtime& runtime, const jsi::Object& typedArray) {
+  return static_cast<size_t>(typedArray.getProperty(runtime, PropNameIDCache::get(runtime, "byteOffset")).asNumber());
+}
+
+size_t CommonGlobals::TypedArray::getLength(jsi::Runtime& runtime, const jsi::Object& typedArray) {
+  return static_cast<size_t>(typedArray.getProperty(runtime, PropNameIDCache::get(runtime, "length")).asNumber());
+}
+
 // pragma MARK: CommonGlobals
 
 void CommonGlobals::defineGlobal(jsi::Runtime& runtime, KnownGlobalPropertyName name, jsi::Value&& value) {

@@ -315,6 +315,13 @@ export interface TestObjectCpp
 
   // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString
+
+  createFloat64Array(size: number): Float64Array
+  bounceFloat64Array(array: Float64Array): Float64Array
+  sumFloat64Array(array: Float64Array): number
+  createInt32Array(values: number[]): Int32Array
+  bounceUint8Array(array: Uint8Array): Uint8Array
+  float64ArrayToNumberArray(array: Float64Array): number[]
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.

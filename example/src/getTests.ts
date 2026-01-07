@@ -2129,5 +2129,143 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+
+
+    ...('createFloat64Array' in testObject
+      ? [
+          createTest('createFloat64Array(10) creates Float64Array', () =>
+            it(() => testObject.createFloat64Array(10))
+              .didNotThrow()
+              .didReturn('object')
+              .isInstanceOf(Float64Array)
+          ),
+          createTest('createFloat64Array(10).length === 10', () =>
+            it(() => testObject.createFloat64Array(10).length)
+              .didNotThrow()
+              .equals(10)
+          ),
+          createTest('createFloat64Array(5) has sequential values', () =>
+            it(() => {
+              const arr = testObject.createFloat64Array(5)
+              return arr[0] === 0 && arr[1] === 1 && arr[2] === 2
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('bounceFloat64Array(...) returns same data', () =>
+            it(() => {
+              const original = new Float64Array([1.5, 2.5, 3.5])
+              const bounced = testObject.bounceFloat64Array(original)
+              return (
+                bounced[0] === 1.5 && bounced[1] === 2.5 && bounced[2] === 3.5
+              )
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('sumFloat64Array(...) sums correctly', () =>
+            it(() => {
+              const arr = new Float64Array([1, 2, 3, 4, 5])
+              return testObject.sumFloat64Array(arr)
+            })
+              .didNotThrow()
+              .equals(15)
+          ),
+          createTest('createInt32Array([1,2,3]) creates Int32Array', () =>
+            it(() => testObject.createInt32Array([1, 2, 3]))
+              .didNotThrow()
+              .didReturn('object')
+              .isInstanceOf(Int32Array)
+          ),
+          createTest('bounceUint8Array(...) works', () =>
+            it(() => {
+              const original = new Uint8Array([255, 128, 0])
+              const bounced = testObject.bounceUint8Array(original)
+              return (
+                bounced[0] === 255 && bounced[1] === 128 && bounced[2] === 0
+              )
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('float64ArrayToNumberArray(...) converts correctly', () =>
+            it(() => {
+              const arr = new Float64Array([1.1, 2.2, 3.3])
+              return testObject.float64ArrayToNumberArray(arr)
+            })
+              .didNotThrow()
+              .didReturn('object')
+              .toBeArray()
+          ),
+          createTest('bounceFloat64Array(...) is zero-copy (same buffer)', () =>
+            it(() => {
+              const original = new Float64Array([1, 2, 3])
+              const bounced = testObject.bounceFloat64Array(original)
+              return bounced.buffer === original.buffer
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('bounceUint8Array(...) is zero-copy (same buffer)', () =>
+            it(() => {
+              const original = new Uint8Array([1, 2, 3])
+              const bounced = testObject.bounceUint8Array(original)
+              return bounced.buffer === original.buffer
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('createFloat64Array(0) creates empty array', () =>
+            it(() => testObject.createFloat64Array(0).length)
+              .didNotThrow()
+              .equals(0)
+          ),
+          createTest('createFloat64Array(1000) creates large array', () =>
+            it(() => testObject.createFloat64Array(1000).length)
+              .didNotThrow()
+              .equals(1000)
+          ),
+          createTest('createInt32Array([]) creates empty Int32Array', () =>
+            it(() => testObject.createInt32Array([]).length)
+              .didNotThrow()
+              .equals(0)
+          ),
+          createTest('createInt32Array preserves values', () =>
+            it(() => {
+              const arr = testObject.createInt32Array([100, -50, 0, 255])
+              return (
+                arr[0] === 100 && arr[1] === -50 && arr[2] === 0 && arr[3] === 255
+              )
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('sumFloat64Array([]) returns 0', () =>
+            it(() => testObject.sumFloat64Array(new Float64Array([])))
+              .didNotThrow()
+              .equals(0)
+          ),
+          createTest('sumFloat64Array with negative numbers', () =>
+            it(() => testObject.sumFloat64Array(new Float64Array([-1, -2, 3])))
+              .didNotThrow()
+              .equals(0)
+          ),
+          createTest('float64ArrayToNumberArray preserves precision', () =>
+            it(() => {
+              const result = testObject.float64ArrayToNumberArray(
+                new Float64Array([1.123456789, 2.987654321])
+              )
+              return (
+                Math.abs(result[0]! - 1.123456789) < 1e-9 &&
+                Math.abs(result[1]! - 2.987654321) < 1e-9
+              )
+            })
+              .didNotThrow()
+              .equals(true)
+          ),
+        ]
+      : [
+         // I will code swift kotlin later
+        ]),
   ]
 }

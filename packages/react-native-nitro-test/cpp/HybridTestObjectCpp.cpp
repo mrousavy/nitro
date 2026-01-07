@@ -724,4 +724,46 @@ void HybridTestObjectCpp::dispose() {
   }
 }
 
+// TypedArray implementations - efficient numeric array transfer
+Float64Array HybridTestObjectCpp::createFloat64Array(double size) {
+  size_t count = static_cast<size_t>(size);
+  auto array = Float64Array::allocate(count);
+  // Fill with sequential values for testing
+  for (size_t i = 0; i < count; i++) {
+    array[i] = static_cast<double>(i);
+  }
+  return array;
+}
+
+Float64Array HybridTestObjectCpp::bounceFloat64Array(const Float64Array& array) {
+  // Simply return the same array - demonstrates zero-copy when possible
+  return array;
+}
+
+double HybridTestObjectCpp::sumFloat64Array(const Float64Array& array) {
+  double sum = 0.0;
+  for (size_t i = 0; i < array.size(); i++) {
+    sum += array[i];
+  }
+  return sum;
+}
+
+Int32Array HybridTestObjectCpp::createInt32Array(const std::vector<double>& values) {
+  // Convert from number[] to Int32Array - demonstrates the optimization
+  auto array = Int32Array::allocate(values.size());
+  for (size_t i = 0; i < values.size(); i++) {
+    array[i] = static_cast<int32_t>(values[i]);
+  }
+  return array;
+}
+
+Uint8Array HybridTestObjectCpp::bounceUint8Array(const Uint8Array& array) {
+  return array;
+}
+
+std::vector<double> HybridTestObjectCpp::float64ArrayToNumberArray(const Float64Array& array) {
+  // Convert from Float64Array to number[] - useful for comparison tests
+  return array.toVector();
+}
+
 } // namespace margelo::nitro::test

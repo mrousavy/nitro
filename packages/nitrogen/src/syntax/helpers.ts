@@ -116,6 +116,9 @@ function getTypeLooselyness(type: Type): number {
     case 'promise':
       // We have `instanceof Promise`
       return 2
+    case 'typed-array':
+      // We have `instanceof Float64Array` etc.
+      return 2
     case 'custom-type':
       // Up to the user
       return 1

@@ -24,7 +24,19 @@ const NitroModules = globalThis.NitroModulesProxy;
 const DEFAULT_CODE = `
 const testObject = NitroModules.createHybridObject('TestObjectCpp')
 
-JSON.stringify(testObject)
+const numbers = []
+for (let i = 0; i < 10000; i++) {
+  numbers.push(i)
+}
+
+const original = new Float64Array(numbers)
+const start = performance.now()
+for(let i = 0; i < 100_000; i++) {
+  
+  const bounced = testObject.bounceFloat64Array(original)
+}
+const end = performance.now()
+end-start + "ms"
 `.trim()
 
 export function EvalScreen() {

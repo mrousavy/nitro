@@ -21,6 +21,7 @@ export type TypeKind =
   | 'string'
   | 'struct'
   | 'tuple'
+  | 'typed-array'
   | 'variant'
   | 'result-wrapper'
   | 'date'

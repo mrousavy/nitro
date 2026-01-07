@@ -64,6 +64,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Person.hpp"
 #include <NitroModules/HybridObject.hpp>
 #include "CustomString.hpp"
+#include <NitroModules/TypedArray.hpp>
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -152,6 +153,12 @@ namespace margelo::nitro::test {
       virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) = 0;
       virtual CustomString bounceCustomType(CustomString value) = 0;
+      virtual TypedArray<double> createFloat64Array(double size) = 0;
+      virtual TypedArray<double> bounceFloat64Array(const TypedArray<double>& array) = 0;
+      virtual double sumFloat64Array(const TypedArray<double>& array) = 0;
+      virtual TypedArray<int32_t> createInt32Array(const std::vector<double>& values) = 0;
+      virtual TypedArray<uint8_t> bounceUint8Array(const TypedArray<uint8_t>& array) = 0;
+      virtual std::vector<double> float64ArrayToNumberArray(const TypedArray<double>& array) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;

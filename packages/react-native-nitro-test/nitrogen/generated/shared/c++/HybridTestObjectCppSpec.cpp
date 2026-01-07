@@ -52,6 +52,12 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
       prototype.registerHybridMethod("bounceAnyHybrid", &HybridTestObjectCppSpec::bounceAnyHybrid);
       prototype.registerHybridMethod("bounceCustomType", &HybridTestObjectCppSpec::bounceCustomType);
+      prototype.registerHybridMethod("createFloat64Array", &HybridTestObjectCppSpec::createFloat64Array);
+      prototype.registerHybridMethod("bounceFloat64Array", &HybridTestObjectCppSpec::bounceFloat64Array);
+      prototype.registerHybridMethod("sumFloat64Array", &HybridTestObjectCppSpec::sumFloat64Array);
+      prototype.registerHybridMethod("createInt32Array", &HybridTestObjectCppSpec::createInt32Array);
+      prototype.registerHybridMethod("bounceUint8Array", &HybridTestObjectCppSpec::bounceUint8Array);
+      prototype.registerHybridMethod("float64ArrayToNumberArray", &HybridTestObjectCppSpec::float64ArrayToNumberArray);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectCppSpec::addStrings);

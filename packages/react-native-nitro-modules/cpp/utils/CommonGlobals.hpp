@@ -133,11 +133,46 @@ public:
     static bool isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object);
   };
 
+  /**
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray
+   */
+  class TypedArray final {
+  public:
+    TypedArray() = delete;
+    ~TypedArray() = delete;
+
+    /**
+     * Create a TypedArray of the given kind from an ArrayBuffer.
+     */
+    static jsi::Value create(jsi::Runtime& runtime, const char* typedArrayName, const jsi::Value& arrayBuffer);
+
+    /**
+     * Check if an object is an instance of a specific TypedArray kind.
+     */
+    static bool isInstanceOf(jsi::Runtime& runtime, const jsi::Object& object, const char* typedArrayName);
+
+    /**
+     * Get the underlying ArrayBuffer from a TypedArray.
+     */
+    static jsi::Value getBuffer(jsi::Runtime& runtime, const jsi::Object& typedArray);
+
+    /**
+     * Get the byte offset of a TypedArray.
+     */
+    static size_t getByteOffset(jsi::Runtime& runtime, const jsi::Object& typedArray);
+
+    /**
+     * Get the length (element count) of a TypedArray.
+     */
+    static size_t getLength(jsi::Runtime& runtime, const jsi::Object& typedArray);
+  };
+
 private:
   friend Object;
   friend Promise;
   friend Date;
   friend Error;
+  friend TypedArray;
 
 private:
   /**

@@ -183,6 +183,7 @@ struct JSIConverter<std::monostate> final {
 
 #include "JSIConverter+AnyMap.hpp"
 #include "JSIConverter+ArrayBuffer.hpp"
+#include "JSIConverter+TypedArray.hpp"
 #include "JSIConverter+Date.hpp"
 #include "JSIConverter+Exception.hpp"
 #include "JSIConverter+Function.hpp"

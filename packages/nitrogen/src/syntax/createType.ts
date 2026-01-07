@@ -10,6 +10,7 @@ import { FunctionType } from './types/FunctionType.js'
 import { PromiseType } from './types/PromiseType.js'
 import { RecordType } from './types/RecordType.js'
 import { ArrayBufferType } from './types/ArrayBufferType.js'
+import { TypedArrayType, TYPED_ARRAY_MAP } from './types/TypedArrayType.js'
 import { EnumType } from './types/EnumType.js'
 import { HybridObjectType } from './types/HybridObjectType.js'
 import { StructType } from './types/StructType.js'
@@ -40,6 +41,8 @@ import {
   isMap,
   isPromise,
   isRecord,
+  isTypedArray,
+  getTypedArrayName,
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
 import { compareLooselyness } from './helpers.js'
@@ -255,6 +258,21 @@ export function createType(
     } else if (isArrayBuffer(type)) {
       // ArrayBuffer
       return new ArrayBufferType()
+    } else if (isTypedArray(type)) {
+      // TypedArray (Float64Array, Int32Array, etc.)
+      const typedArrayName = getTypedArrayName(type)
+      if (typedArrayName == null) {
+        throw new Error(
+          `Failed to get TypedArray name for type "${type.getText()}"`
+        )
+      }
+      const elementType = TYPED_ARRAY_MAP[typedArrayName]
+      if (elementType == null) {
+        throw new Error(
+          `Unknown TypedArray type "${typedArrayName}" for type "${type.getText()}"`
+        )
+      }
+      return new TypedArrayType(elementType)
     } else if (isMap(type)) {
       // Map
       return new MapType()
