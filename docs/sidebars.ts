@@ -75,6 +75,7 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Resources',
       items: [
+        'awesome-nitro-modules',
         'comparison',
         'for-library-users',
         'contributing',
