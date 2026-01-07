@@ -31,7 +31,6 @@ A curated collection of community-built Nitro Modules.
 |--------|-------------|-------|
 | **react-native-nitro-audio-manager** | Audio session and routing management | [GitHub](https://github.com/ChristopherGabba/react-native-nitro-audio-manager) |
 | **react-native-video** | Video playback component | [GitHub](https://github.com/TheWidlarzGroup/react-native-video) |
-| **react-native-fast-tflite** | TensorFlow Lite for React Native | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
 | **react-native-nitro-screen-recorder** | Screen recording capabilities | [GitHub](https://github.com/ChristopherGabba/react-native-nitro-screen-recorder) |
 | **react-native-nitro-image** | Superfast in-memory Image type | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
 | **@corasan/image-compressor** | Image compression using OpenCV | [GitHub](https://github.com/corasan/image-compressor) |
@@ -61,7 +60,6 @@ A curated collection of community-built Nitro Modules.
 |--------|-------------|-------|
 | **react-native-nitro-fs** | High-performance file system operations | [GitHub](https://github.com/patrickkabwe/react-native-nitro-fs) |
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
-| **op-sqlite** | SQLite with encryption | [GitHub](https://github.com/OP-Engineering/op-sqlite) |
 | **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
 
 ### Networking
