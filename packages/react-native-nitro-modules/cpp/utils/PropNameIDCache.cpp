@@ -20,7 +20,13 @@ const jsi::PropNameID& PropNameIDCache::get(jsi::Runtime& runtime, const std::st
   if (cachedName != cache.end()) {
     // cache warm!
     const BorrowingReference<jsi::PropNameID>& value = cachedName->second;
-    return *value;
+
+    if (value != nullptr) {
+      return *value;
+    }
+
+    // Cached value was destroyed (e.g. runtime reload); drop it and recreate.
+    cache.erase(cachedName);
   }
 
   // not cached - create the jsi::PropNameID...

@@ -31,6 +31,7 @@ JSICache::~JSICache() {
   destroyReferences(_objectCache);
   destroyReferences(_functionCache);
   destroyReferences(_weakObjectCache);
+  destroyReferences(_propNameIDCache);
   destroyReferences(_arrayBufferCache);
 }
 
