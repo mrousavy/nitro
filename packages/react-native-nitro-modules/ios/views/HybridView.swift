@@ -37,12 +37,6 @@
   }
 
   extension HybridView {
-    public static var isRecyclable: Bool {
-      return Self.self is any RecyclableView.Type
-    }
-  }
-
-  extension HybridView {
     // In a View, this could be the size of the UIView.
     public var memorySize: Int {
       return MemoryHelper.getSizeOf(self.view)
