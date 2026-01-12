@@ -30,14 +30,14 @@ open class HybridSomeExternalObjectSpec_base {
   public init() { }
   public func getCxxWrapper() -> HybridSomeExternalObjectSpec_cxx {
   #if DEBUG
-    guard self is HybridSomeExternalObjectSpec else {
+    guard self is any HybridSomeExternalObjectSpec else {
       fatalError("`self` is not a `HybridSomeExternalObjectSpec`! Did you accidentally inherit from `HybridSomeExternalObjectSpec_base` instead of `HybridSomeExternalObjectSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
       return cxxWrapper
     } else {
-      let cxxWrapper = HybridSomeExternalObjectSpec_cxx(self as! HybridSomeExternalObjectSpec)
+      let cxxWrapper = HybridSomeExternalObjectSpec_cxx(self as! any HybridSomeExternalObjectSpec)
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }

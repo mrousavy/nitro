@@ -30,14 +30,14 @@ open class HybridChildSpec_base: HybridBaseSpec_base {
   public override init() { super.init() }
   public override func getCxxWrapper() -> HybridChildSpec_cxx {
   #if DEBUG
-    guard self is HybridChildSpec else {
+    guard self is any HybridChildSpec else {
       fatalError("`self` is not a `HybridChildSpec`! Did you accidentally inherit from `HybridChildSpec_base` instead of `HybridChildSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
       return cxxWrapper
     } else {
-      let cxxWrapper = HybridChildSpec_cxx(self as! HybridChildSpec)
+      let cxxWrapper = HybridChildSpec_cxx(self as! any HybridChildSpec)
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }

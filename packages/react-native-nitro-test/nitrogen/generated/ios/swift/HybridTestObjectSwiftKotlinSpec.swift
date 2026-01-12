@@ -140,14 +140,14 @@ open class HybridTestObjectSwiftKotlinSpec_base {
   public init() { }
   public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
   #if DEBUG
-    guard self is HybridTestObjectSwiftKotlinSpec else {
+    guard self is any HybridTestObjectSwiftKotlinSpec else {
       fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
       return cxxWrapper
     } else {
-      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
+      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! any HybridTestObjectSwiftKotlinSpec)
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }

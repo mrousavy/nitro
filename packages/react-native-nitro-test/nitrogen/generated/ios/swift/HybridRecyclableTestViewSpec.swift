@@ -30,14 +30,14 @@ open class HybridRecyclableTestViewSpec_base {
   public init() { }
   public func getCxxWrapper() -> HybridRecyclableTestViewSpec_cxx {
   #if DEBUG
-    guard self is HybridRecyclableTestViewSpec else {
+    guard self is any HybridRecyclableTestViewSpec else {
       fatalError("`self` is not a `HybridRecyclableTestViewSpec`! Did you accidentally inherit from `HybridRecyclableTestViewSpec_base` instead of `HybridRecyclableTestViewSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
       return cxxWrapper
     } else {
-      let cxxWrapper = HybridRecyclableTestViewSpec_cxx(self as! HybridRecyclableTestViewSpec)
+      let cxxWrapper = HybridRecyclableTestViewSpec_cxx(self as! any HybridRecyclableTestViewSpec)
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }

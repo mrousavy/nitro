@@ -33,14 +33,14 @@ open class HybridTestViewSpec_base {
   public init() { }
   public func getCxxWrapper() -> HybridTestViewSpec_cxx {
   #if DEBUG
-    guard self is HybridTestViewSpec else {
+    guard self is any HybridTestViewSpec else {
       fatalError("`self` is not a `HybridTestViewSpec`! Did you accidentally inherit from `HybridTestViewSpec_base` instead of `HybridTestViewSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
       return cxxWrapper
     } else {
-      let cxxWrapper = HybridTestViewSpec_cxx(self as! HybridTestViewSpec)
+      let cxxWrapper = HybridTestViewSpec_cxx(self as! any HybridTestViewSpec)
       self.cxxWrapper = cxxWrapper
       return cxxWrapper
     }
