@@ -12,16 +12,20 @@ import UIKit
 class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   // UIView
   var view: UIView = UIView()
+  private var isRecycled = false
 
   // Props
   var isBlue: Bool = false {
     didSet {
-      view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      if !isRecycled {
+        view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      }
     }
   }
 
   // Recycling conformance
   func prepareForRecycle() {
     view.backgroundColor = .yellow
+    isRecycled = true
   }
 }
