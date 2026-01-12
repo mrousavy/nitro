@@ -91,7 +91,7 @@ import NitroModules
 public final class ${autolinkingClassName} {
   public typealias bridge = ${bridgeNamespace}
 
-  protocol AutolinkedClass {
+  private protocol AutolinkedClass {
     associatedtype T
     /**
      * Creates an instance of the Swift class that implements the HybridObject's spec,

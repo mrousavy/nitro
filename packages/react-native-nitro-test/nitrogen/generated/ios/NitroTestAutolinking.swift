@@ -10,7 +10,7 @@ import NitroModules
 public final class NitroTestAutolinking {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  protocol AutolinkedClass {
+  private protocol AutolinkedClass {
     associatedtype T
     /**
      * Creates an instance of the Swift class that implements the HybridObject's spec,
