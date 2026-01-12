@@ -35,8 +35,8 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
-      - name: Select Xcode 16.4
-        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
 
       - run: |
           bun install
