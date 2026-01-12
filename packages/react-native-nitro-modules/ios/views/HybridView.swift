@@ -29,21 +29,11 @@
      * React props are updated in a single batch/transaction.
      */
     func afterUpdate()
-
-    /**
-     * Called when the view is going to be recycled to
-     * be re-used later on with different props.
-     *
-     * This is a good place to reset any internal state
-     * to it's default value.
-     */
-    func prepareForRecycle()
   }
 
   extension HybridView {
     public func beforeUpdate() { /* noop */  }
     public func afterUpdate() { /* noop */  }
-    public func prepareForRecycle() { /* noop */ }
   }
 
   extension HybridView {

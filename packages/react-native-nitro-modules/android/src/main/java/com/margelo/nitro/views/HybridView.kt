@@ -32,13 +32,4 @@ abstract class HybridView : HybridObject() {
    * React props are updated in a single batch/transaction.
    */
   open fun afterUpdate() { /* noop */ }
-
-  /**
-   * Called when the view is going to be recycled to
-   * be re-used later on with different props.
-   *
-   * This is a good place to reset any internal state
-   * to it's default value.
-   */
-  open fun prepareForRecycle() { /* noop */ }
 }

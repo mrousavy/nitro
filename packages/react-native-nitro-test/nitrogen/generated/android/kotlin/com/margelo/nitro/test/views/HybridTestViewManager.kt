@@ -49,18 +49,27 @@ open class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   protected override fun setupViewRecycling() {
-    // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
-    // By not calling `super.setupViewRecycling()`, we effectively
-    // disable view recycling for now.
+    if (RecyclableView::class.java.isAssignableFrom(HybridTestView::class.java)) {
+      // The base class enables view recycling:
+      super.setupViewRecycling();
+    } else {
+      // Not calling super disables view recycling.
+    }
   }
 
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
     val hybridView = views[view] ?: return null
 
-    hybridView.prepareForRecycle()
+    if (hybridView is RecyclableView) {
+      // Recycle in it's implementation
+      hybridView.prepareForRecycle()
 
-    val maybeNewView = hybridView.view
-    views[maybeNewView] = hybridView
-    return maybeNewView
+      // Maybe update the view if it changed
+      val maybeNewView = hybridView.view
+      views[maybeNewView] = hybridView
+      return maybeNewView
+    } else {
+      return null
+    }
   }
 }

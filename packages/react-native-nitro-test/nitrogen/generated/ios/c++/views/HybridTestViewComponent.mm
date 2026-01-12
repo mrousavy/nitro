@@ -41,11 +41,6 @@ using namespace margelo::nitro::test::views;
   return react::concreteComponentDescriptorProvider<HybridTestViewComponentDescriptor>();
 }
 
-+ (BOOL)shouldBeRecycled {
-  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
-  return NO;
-}
-
 - (instancetype) init {
   if (self = [super init]) {
     std::shared_ptr<HybridTestViewSpec> hybridView = NitroTest::NitroTestAutolinking::createTestView();
@@ -112,6 +107,11 @@ using namespace margelo::nitro::test::views;
 
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
+}
+
++ (BOOL)shouldBeRecycled {
+  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
+  return NO;
 }
 
 - (void)prepareForRecycle {

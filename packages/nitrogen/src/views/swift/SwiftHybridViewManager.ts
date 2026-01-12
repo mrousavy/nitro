@@ -89,11 +89,6 @@ using namespace ${namespace}::views;
   return react::concreteComponentDescriptorProvider<${descriptorClassName}>();
 }
 
-+ (BOOL)shouldBeRecycled {
-  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
-  return NO;
-}
-
 - (instancetype) init {
   if (self = [super init]) {
     std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
@@ -141,6 +136,11 @@ using namespace ${namespace}::views;
 
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
+}
+
++ (BOOL)shouldBeRecycled {
+  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
+  return NO;
 }
 
 - (void)prepareForRecycle {
