@@ -1,25 +1,18 @@
 package com.margelo.nitro.views
 
 import android.view.View
-import androidx.annotation.Keep
-import com.facebook.jni.HybridData
-import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.HybridObject
 
 /**
  * A base class for all Kotlin-based Hybrid Views.
  */
-@Keep
-@DoNotStrip
-abstract class HybridView<ViewType: View = View> : HybridObject() {
+abstract class HybridView : HybridObject() {
   /**
    * Get the `View` this HybridView is holding.
    *
    * This value should not change during the lifetime of this `HybridView`.
    */
-  @get:DoNotStrip
-  @get:Keep
-  abstract val view: ViewType
+  abstract val view: View
 
   /**
    * Called right before updating props.
