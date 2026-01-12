@@ -43,9 +43,9 @@ package ${javaSubNamespace}
 
 import android.view.View
 import com.facebook.react.uimanager.ReactStylesDiffMap
-import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.margelo.nitro.R.id.associated_hybrid_view_tag
 import com.margelo.nitro.views.RecyclableView
 import ${javaNamespace}.*
@@ -53,7 +53,7 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-open class ${manager}: SimpleViewManager<View>() {
+open class ${manager}: ViewGroupManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(${viewImplementation}::class.java)) {
       // Enable view recycling
