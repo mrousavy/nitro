@@ -87,6 +87,16 @@ open class ${manager}: SimpleViewManager<View>() {
     // By not calling \`super.setupViewRecycling()\`, we effectively
     // disable view recycling for now.
   }
+
+  protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
+    val hybridView = views[view] ?: return null
+
+    hybridView.prepareForRecycle()
+
+    val maybeNewView = hybridView.view
+    views[maybeNewView] = hybridView
+    return maybeNewView
+  }
 }
   `.trim()
 

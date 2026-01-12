@@ -143,6 +143,11 @@ using namespace ${namespace}::views;
   [super updateProps:props oldProps:oldProps];
 }
 
+- (void)prepareForRecycle {
+  [super prepareForRecycle];
+  swiftPart.prepareForRecycle();
+}
+
 @end
   `
 
