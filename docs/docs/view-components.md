@@ -257,7 +257,6 @@ We are working on a fix here: [facebook/react #32119](https://github.com/faceboo
 ### Recycling
 
 For improved performance and lower memory footprint, Nitro Views can be _recycled_.
-
 To allow your view to be recycled, implement the `RecyclableView` interface/protocol from Nitro:
 
 <Tabs groupId="native-view-language">
@@ -294,6 +293,7 @@ class HybridImageView: HybridImageViewSpec, RecyclableView {
   private var imageView = UIImageView()
 
   func prepareForRecycle() {
+    // highlight-next-line
     imageView.image = nil
   }
 }
