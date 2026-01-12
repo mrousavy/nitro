@@ -5,29 +5,31 @@ import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.uimanager.ThemedReactContext
+import com.margelo.nitro.views.RecyclableView
 
 @Keep
 @DoNotStrip
-class HybridTestView(
+class HybridRecyclableTestView(
   val context: ThemedReactContext,
-) : HybridTestViewSpec() {
+) : HybridRecyclableTestViewSpec(),
+  RecyclableView {
   // View
   override val view: View = View(context)
+  private var isRecycled = false
 
   // Props
   override var isBlue: Boolean = false
     set(value) {
       field = value
-      val color = if (value) Color.BLUE else Color.RED
-      view.setBackgroundColor(color)
+      if (!isRecycled) {
+        val color = if (value) Color.BLUE else Color.RED
+        view.setBackgroundColor(color)
+      }
     }
-  override var hasBeenCalled: Boolean = false
-  override var colorScheme: ColorScheme = ColorScheme.LIGHT
-  override var someCallback: () -> Unit = {}
 
-  // Methods
-  override fun someMethod() {
-    hasBeenCalled = true
-    someCallback()
+  // Recycling conformance
+  override fun prepareForRecycle() {
+    view.setBackgroundColor(Color.YELLOW)
+    isRecycled = true
   }
 }

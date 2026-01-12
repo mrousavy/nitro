@@ -4,7 +4,11 @@ import { StyleSheet, View, Text, Button, Platform } from 'react-native'
 import { callback, NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
-import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
+import {
+  HybridTestObjectSwiftKotlin,
+  RecyclableTestView,
+  TestView,
+} from 'react-native-nitro-test'
 import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
@@ -18,25 +22,40 @@ export function ViewScreenImpl() {
 
   const views = React.useMemo(
     () =>
-      [...Array(counter)].map((_, i) => (
-        <TestView
-          key={i}
-          hybridRef={callback((ref) => {
-            console.log(`Ref initialized!`)
-            ref.someMethod()
-            const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
-            console.log(`Is View blue: ${isBlue}`)
-          })}
-          style={styles.view}
-          isBlue={i % 2 === 0}
-          someCallback={callback(() => console.log(`Callback called!`))}
-          colorScheme="dark"
-          hasBeenCalled={false}
-          onTouchEnd={() => {
-            console.log(`Touched View #${i}!`)
-          }}
-        />
-      )),
+      [...Array(counter)].map((_, i) => {
+        if (i % 3 === 0) {
+          return (
+            <TestView
+              key={i}
+              hybridRef={callback((ref) => {
+                console.log(`Ref initialized!`)
+                ref.someMethod()
+                const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
+                console.log(`Is View blue: ${isBlue}`)
+              })}
+              style={styles.view}
+              isBlue={i % 2 === 0}
+              someCallback={callback(() => console.log(`Callback called!`))}
+              colorScheme="dark"
+              hasBeenCalled={false}
+              onTouchEnd={() => {
+                console.log(`Touched View #${i}!`)
+              }}
+            />
+          )
+        } else {
+          return (
+            <RecyclableTestView
+              key={i}
+              style={styles.view}
+              isBlue={i % 2 === 0}
+              onTouchEnd={() => {
+                console.log(`Touched View #${i}!`)
+              }}
+            />
+          )
+        }
+      }),
     [counter]
   )
 

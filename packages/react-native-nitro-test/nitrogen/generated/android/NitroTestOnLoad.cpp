@@ -18,6 +18,8 @@
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
+#include "JHybridRecyclableTestViewSpec.hpp"
+#include "views/JHybridRecyclableTestViewStateUpdater.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
 #include "JFunc_void.hpp"
@@ -49,6 +51,8 @@ int initialize(JavaVM* vm) {
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
+    margelo::nitro::test::JHybridRecyclableTestViewSpec::registerNatives();
+    margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
     margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
     margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
     margelo::nitro::test::JFunc_void_cxx::registerNatives();
@@ -112,6 +116,14 @@ int initialize(JavaVM* vm) {
       "TestView",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridTestView");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
+      "RecyclableTestView",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridRecyclableTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridRecyclableTestView");
         auto instance = object.create();
         return instance->cthis()->shared();
       }
