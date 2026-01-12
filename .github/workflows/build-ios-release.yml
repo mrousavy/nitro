@@ -55,7 +55,7 @@ jobs:
             -configuration Release \
             -destination 'generic/platform=iOS Simulator' \
             build \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO | xcbeautify
 
       - name: Package .app for Simulator
         run: |

@@ -110,16 +110,18 @@ jobs:
 
       - name: Build iOS app
         working-directory: example/ios
-        run: "set -o pipefail && xcodebuild \
-          CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
-          -derivedDataPath build -UseModernBuildSystem=YES \
-          -workspace NitroExample.xcworkspace \
-          -scheme NitroExample \
-          -sdk iphonesimulator \
-          -configuration Debug \
-          -destination 'platform=iOS Simulator,name=${{ env.DEVICE_MODEL }}' \
-          build \
-          CODE_SIGNING_ALLOWED=NO"
+        run: |
+          set -o pipefail
+          xcodebuild \
+            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            -derivedDataPath build -UseModernBuildSystem=YES \
+            -workspace NitroExample.xcworkspace \
+            -scheme NitroExample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=${{ env.DEVICE_MODEL }}' \
+            build \
+            CODE_SIGNING_ALLOWED=NO | xcbeautify
 
       - name: Setup iOS Simulator
         uses: futureware-tech/simulator-action@v4
