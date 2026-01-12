@@ -91,4 +91,17 @@ public final class NitroTestAutolinking {
       return HybridTestView.self is any RecyclableView.Type
     }
   }
+  
+  public final class RecyclableTestView: AutolinkedClass {
+    public static func create() -> bridge.std__shared_ptr_HybridRecyclableTestViewSpec_ {
+      let hybridObject = HybridRecyclableTestView()
+      return { () -> bridge.std__shared_ptr_HybridRecyclableTestViewSpec_ in
+        let __cxxWrapped = hybridObject.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+    }
+    public static var isRecyclableHybridView: Bool {
+      return HybridRecyclableTestView.self is any RecyclableView.Type
+    }
+  }
 }

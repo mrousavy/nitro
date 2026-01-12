@@ -47,6 +47,7 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import ${javaNamespace}.*
+import com.margelo.nitro.views.RecyclableView
 
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.

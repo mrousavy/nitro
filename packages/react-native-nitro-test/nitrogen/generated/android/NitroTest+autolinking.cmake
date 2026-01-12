@@ -36,6 +36,8 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
   ../nitrogen/generated/shared/c++/HybridChildSpec.cpp
   ../nitrogen/generated/shared/c++/HybridPlatformObjectSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridRecyclableTestViewSpec.cpp
+  ../nitrogen/generated/shared/c++/views/HybridRecyclableTestViewComponent.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
@@ -46,6 +48,8 @@ target_sources(
   ../nitrogen/generated/android/c++/JNamedVariant.cpp
   ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
   ../nitrogen/generated/android/c++/JHybridPlatformObjectSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridRecyclableTestViewSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridRecyclableTestViewStateUpdater.cpp
   ../nitrogen/generated/android/c++/JHybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/android/c++/JVariant_NullType_String.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridTestObjectSwiftKotlinSpec_Person.cpp

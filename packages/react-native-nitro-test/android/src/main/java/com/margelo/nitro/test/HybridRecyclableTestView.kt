@@ -8,9 +8,9 @@ import com.facebook.react.uimanager.ThemedReactContext
 
 @Keep
 @DoNotStrip
-class HybridTestView(
+class HybridRecyclableTestView(
   val context: ThemedReactContext,
-) : HybridTestViewSpec() {
+) : HybridRecyclableTestViewSpec(), RecyclableView {
   // View
   override val view: View = View(context)
 
@@ -21,13 +21,9 @@ class HybridTestView(
       val color = if (value) Color.BLUE else Color.RED
       view.setBackgroundColor(color)
     }
-  override var hasBeenCalled: Boolean = false
-  override var colorScheme: ColorScheme = ColorScheme.LIGHT
-  override var someCallback: () -> Unit = {}
 
-  // Methods
-  override fun someMethod() {
-    hasBeenCalled = true
-    someCallback()
+  // Recycling conformance
+  override fun prepareForRecycle() {
+    view.setBackgroundColor(Color.YELLOW)
   }
 }

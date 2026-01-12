@@ -1,5 +1,5 @@
 //
-//  HybridTestView.swift
+//  HybridRecyclableTestView.swift
 //  react-native-nitro-test
 //
 //  Created by Marc Rousavy on 03.10.24.
@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import NitroModules
 
-class HybridTestView: HybridTestViewSpec {
+class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   // UIView
   var view: UIView = UIView()
 
@@ -19,13 +19,9 @@ class HybridTestView: HybridTestViewSpec {
       view.backgroundColor = isBlue ? .systemBlue : .systemRed
     }
   }
-  var hasBeenCalled: Bool = false
-  var colorScheme: ColorScheme = .light
-  var someCallback: () -> Void = {}
 
-  // Methods
-  func someMethod() throws {
-    hasBeenCalled = true
-    someCallback()
+  // Recycling conformance
+  func prepareForRecycle() {
+    view.backgroundColor = .yellow
   }
 }
