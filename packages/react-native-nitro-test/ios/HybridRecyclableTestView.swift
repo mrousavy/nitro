@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import UIKit
 import NitroModules
+import UIKit
 
 class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   // UIView

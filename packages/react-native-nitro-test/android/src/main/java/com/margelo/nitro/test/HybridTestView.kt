@@ -15,7 +15,7 @@ class HybridTestView(
   override val view: View = View(context)
 
   // Props
-  override var isBlue: Boolean
+  override var isBlue: Boolean = false
     set(value) {
       field = value
       val color = if (value) Color.BLUE else Color.RED

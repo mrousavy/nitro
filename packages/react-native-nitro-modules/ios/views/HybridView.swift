@@ -36,11 +36,11 @@
     public func afterUpdate() { /* noop */  }
   }
 
-extension HybridView {
-  public static var isRecyclable: Bool {
-    return Self.self is any RecyclableView.Type
+  extension HybridView {
+    public static var isRecyclable: Bool {
+      return Self.self is any RecyclableView.Type
+    }
   }
-}
 
   extension HybridView {
     // In a View, this could be the size of the UIView.
