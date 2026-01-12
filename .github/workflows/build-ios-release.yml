@@ -10,7 +10,7 @@ on:
 jobs:
   build_release:
     name: Build iOS Example App (release, new architecture)
-    runs-on: macos-latest
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
@@ -28,8 +28,8 @@ jobs:
           bundler-cache: true
           working-directory: example
 
-      - name: Select Xcode 16.4
-        run: sudo xcode-select -s "/Applications/Xcode_16.4.app/Contents/Developer"
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
 
       - name: Restore Pods cache
         uses: actions/cache@v5
@@ -55,7 +55,7 @@ jobs:
             -configuration Release \
             -destination 'generic/platform=iOS Simulator' \
             build \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO | xcbeautify
 
       - name: Package .app for Simulator
         run: |
