@@ -21,6 +21,13 @@ import com.margelo.nitro.views.RecyclableView
 open class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
   private val views = hashMapOf<View, HybridRecyclableTestView>()
 
+  init {
+    if (RecyclableView::class.java.isAssignableFrom(HybridRecyclableTestView::class.java)) {
+      // Enable view recycling
+      super.setupViewRecycling()
+    }
+  }
+
   override fun getName(): String {
     return "RecyclableTestView"
   }
@@ -49,18 +56,11 @@ open class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
     return super.updateState(view, props, stateWrapper)
   }
 
-  protected override fun setupViewRecycling() {
-    if (RecyclableView::class.java.isAssignableFrom(HybridRecyclableTestView::class.java)) {
-      // The base class enables view recycling:
-      super.setupViewRecycling();
-    } else {
-      // Not calling super disables view recycling.
-    }
-  }
-
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
+    super.prepareToRecycleView(reactContext, view)
     val hybridView = views[view] ?: return null
 
+    @Suppress("USELESS_IS_CHECK")
     if (hybridView is RecyclableView) {
       // Recycle in it's implementation
       hybridView.prepareForRecycle()
