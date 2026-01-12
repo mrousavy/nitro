@@ -63,6 +63,12 @@ public final func beforeUpdate() {
 public final func afterUpdate() {
   __implementation.afterUpdate()
 }
+`.trim(),
+      `
+public final func maybePrepareForRecycle() {
+  guard let recyclable = __implementation as? RecyclableView else { return }
+  recyclable.prepareForRecycle()
+}
 `.trim()
     )
   }

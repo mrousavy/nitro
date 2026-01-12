@@ -146,7 +146,7 @@ using namespace ${namespace}::views;
 - (void)prepareForRecycle {
   [super prepareForRecycle];
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
-  swiftPart.prepareForRecycle();
+  swiftPart.maybePrepareForRecycle();
 }
 
 @end
