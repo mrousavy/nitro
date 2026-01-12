@@ -74,6 +74,14 @@ jobs:
         working-directory: example
         run: bun pods
 
+      - name: Restore DerivedData cache
+        uses: actions/cache@v5
+        with:
+          path: example/ios/build
+          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
+          restore-keys: |
+            ${{ runner.os }}-dd-
+
       - name: Build App
         working-directory: example/ios
         run: |
@@ -85,6 +93,8 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -showBuildTimingSummary
+            ONLY_ACTIVE_ARCH=YES \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify
