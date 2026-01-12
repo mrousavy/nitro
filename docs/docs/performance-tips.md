@@ -245,6 +245,37 @@ class HybridImage : HybridImageSpec {
 
 That way the JS garbage collector knows how big an `Image` is exactly in memory, and can delete any unused `Image` objects sooner to free up the native memory (`cgImage`), potentially avoiding memory warnings or garbage collector panics.
 
+## Implement view recycling (`RecyclableView`)
+
+If a view is rendered multiple times throughout an app's lifetime, Fabric can recycle old views and re-use them to display new views.
+This requires you to reset your internal state to it's default values, otherwise stale views may show up, so recycling is disabled by default.
+To enable recycling, implement the `RecyclableView` interface/protocol, and override the `prepareForRecycle()` method:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridMyView.swift"
+    import NitroModules
+
+    class HybridMyView: HybridMyViewSpec, RecyclableView {
+      // ...
+      func prepareForRecycle() {}
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridMyView.kt"
+    import com.margelo.nitro.views.RecyclableView
+
+    class HybridMyView: HybridMyViewSpec(), RecyclableView {
+      // ...
+      override fun prepareForRecycle() {}
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+See [View Components: Recycling](view-components#recycling) for more information.
+
 ## Avoid too many native calls
 
 While Nitro is insanely fast, there is still an unavoidable overhead associated with calling native code from JS.
