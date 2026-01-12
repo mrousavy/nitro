@@ -114,4 +114,9 @@ using namespace margelo::nitro::test::views;
   [super updateProps:props oldProps:oldProps];
 }
 
+- (void)prepareForRecycle {
+  [super prepareForRecycle];
+  swiftPart.prepareForRecycle();
+}
+
 @end
