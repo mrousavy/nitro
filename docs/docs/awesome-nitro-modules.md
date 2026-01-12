@@ -7,22 +7,6 @@ A curated collection of community-built Nitro Modules.
 
 > **Want to add your module?** PRs are welcome!
 
----
-
-## Contents
-
-- [Published Modules](#published-modules)
-  - [Audio & Media](#audio--media)
-  - [Cryptography & Security](#cryptography--security)
-  - [Device & Hardware](#device--hardware)
-  - [File System & Storage](#file-system--storage)
-  - [Networking](#networking)
-  - [UI & Styling](#ui--styling)
-  - [Utilities](#utilities)
-- [Work In Progress](#work-in-progress)
-
----
-
 ## Published Modules
 
 ### Audio & Media
