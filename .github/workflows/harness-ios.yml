@@ -10,7 +10,7 @@ on:
       device_model:
         description: "iOS Simulator device model"
         required: false
-        default: "iPhone 16 Pro"
+        default: "iPhone 17 Pro"
         type: string
       ios_version:
         description: "iOS version"
