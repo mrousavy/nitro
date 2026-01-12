@@ -10,7 +10,10 @@ import {
 } from '../../syntax/helpers.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
-import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
+import {
+  getAutolinkingNamespace,
+  getHybridObjectConstructorCall,
+} from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 
@@ -139,8 +142,7 @@ using namespace ${namespace}::views;
 }
 
 + (BOOL)shouldBeRecycled {
-  // TODO: Recycling should be controllable by the user. WIP, but disabled for now.
-  return NO;
+  return ${getAutolinkingNamespace()}::${spec.name}::isRecyclableHybridView();
 }
 
 - (void)prepareForRecycle {

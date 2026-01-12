@@ -24,7 +24,7 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridSomeExternalObjectSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createSomeExternalObject();
+      std::shared_ptr<HybridSomeExternalObjectSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::SomeExternalObject::create();
       return hybridObject;
     }
   );
