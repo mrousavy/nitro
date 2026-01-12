@@ -12,12 +12,13 @@
 
   /// A base protocol for all Swift-based Hybrid Views.
   public protocol HybridView: HybridObject {
+    associatedtype ViewType: UIView
     /**
      * Get the ``UIView`` this HybridView is holding.
      *
      * This value should not change during the lifetime of this ``HybridView``.
      */
-    var view: UIView { get }
+    var view: ViewType { get }
 
     /**
      * Called right before updating props.

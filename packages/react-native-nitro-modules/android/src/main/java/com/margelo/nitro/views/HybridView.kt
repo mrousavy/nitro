@@ -11,15 +11,15 @@ import com.margelo.nitro.core.HybridObject
  */
 @Keep
 @DoNotStrip
-abstract class HybridView : HybridObject() {
+abstract class HybridView<ViewType: View = View> : HybridObject() {
   /**
-   * Get the `UIView` this HybridView is holding.
+   * Get the `View` this HybridView is holding.
    *
    * This value should not change during the lifetime of this `HybridView`.
    */
   @get:DoNotStrip
   @get:Keep
-  abstract val view: View
+  abstract val view: ViewType
 
   /**
    * Called right before updating props.
