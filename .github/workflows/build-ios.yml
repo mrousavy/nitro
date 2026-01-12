@@ -42,7 +42,7 @@ env:
 jobs:
   build:
     name: Build iOS Example App
-    runs-on: macOS-latest
+    runs-on: macOS-26
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2

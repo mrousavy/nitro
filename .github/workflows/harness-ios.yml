@@ -72,7 +72,7 @@ env:
 jobs:
   harness_ios_new:
     name: Harness iOS (new architecture)
-    runs-on: macOS-latest
+    runs-on: macOS-26
     steps:
       - uses: actions/checkout@v6
         with:

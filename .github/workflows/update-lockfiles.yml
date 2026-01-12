@@ -19,7 +19,7 @@ jobs:
   update-lockfiles:
     name: "Update lockfiles (Podfile.lock)"
     if: github.actor == 'dependabot[bot]'
-    runs-on: macOS-latest
+    runs-on: macOS-26
     steps:
       - uses: actions/checkout@v6
         with:
