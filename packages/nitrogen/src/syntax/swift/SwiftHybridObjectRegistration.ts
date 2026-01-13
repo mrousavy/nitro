@@ -22,6 +22,10 @@ interface SwiftHybridObjectRegistration {
   requiredImports: SourceImport[]
 }
 
+export function getAutolinkingClassName(hybridObjectName: string): string {
+  return `Autolinked${hybridObjectName}`
+}
+
 export function getAutolinkingNamespace() {
   const swiftNamespace = NitroConfig.current.getIosModuleName()
   const autolinkingClassName = `${swiftNamespace}Autolinking`
@@ -32,7 +36,8 @@ export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
   const namespace = getAutolinkingNamespace()
-  return `${namespace}::${hybridObjectName}::create();`
+  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
+  return `${namespace}::${autolinkingClassName}::create();`
 }
 
 export function createSwiftHybridObjectRegistration({
@@ -48,10 +53,11 @@ export function createSwiftHybridObjectRegistration({
     NitroConfig.current
   )
   const bridge = new SwiftCxxBridgedType(type)
+  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
 
   return {
     swiftRegistrationClass: `
-public final class ${hybridObjectName}: AutolinkedClass {
+public final class ${autolinkingClassName}: AutolinkedClass {
   public static func create() -> ${bridge.getTypeCode('swift')} {
     let hybridObject = ${swiftClassName}()
     return ${indent(bridge.parseFromSwiftToCpp('hybridObject', 'swift'), '    ')}
