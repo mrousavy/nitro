@@ -22,7 +22,7 @@ interface SwiftHybridObjectRegistration {
   requiredImports: SourceImport[]
 }
 
-function getAutolinkingClassName(hybridObjectName: string): string {
+export function getAutolinkingClassName(hybridObjectName: string): string {
   return `Autolinked${hybridObjectName}`
 }
 

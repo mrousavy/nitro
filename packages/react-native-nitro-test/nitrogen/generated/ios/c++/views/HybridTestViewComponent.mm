@@ -110,7 +110,7 @@ using namespace margelo::nitro::test::views;
 }
 
 + (BOOL)shouldBeRecycled {
-  return NitroTest::NitroTestAutolinking::TestView::isRecyclableHybridView();
+  return NitroTest::NitroTestAutolinking::AutolinkedTestView::isRecyclableHybridView();
 }
 
 - (void)prepareForRecycle {
