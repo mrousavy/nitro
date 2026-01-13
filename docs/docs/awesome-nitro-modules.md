@@ -18,6 +18,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-screen-recorder** | Screen recording capabilities | [GitHub](https://github.com/ChristopherGabba/react-native-nitro-screen-recorder) |
 | **react-native-nitro-image** | Superfast in-memory Image type | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
 | **@corasan/image-compressor** | Image compression using OpenCV | [GitHub](https://github.com/corasan/image-compressor) |
+| **react-native-nitro-player** | A powerful audio player library for React Native | [GitHub](https://github.com/riteshshukla04/react-native-nitro-player) |
 
 ### Cryptography & Security
 
@@ -51,6 +52,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-nitro-in-app-browser** | In-app browser with native UI | [GitHub](https://github.com/patrickkabwe/react-native-nitro-in-app-browser) |
+| **react-native-nitro-fetch** | super-fast network fetching library | [GitHub](https://github.com/margelo/react-native-nitro-fetch) |
 
 ### UI & Styling
 
@@ -65,7 +67,7 @@ A curated collection of community-built Nitro Modules.
 | **@bernagl/react-native-date** | High-performance native date library | [GitHub](https://github.com/bbernag/react-native-date) |
 | **react-native-clusterer** | Marker clustering for maps | [GitHub](https://github.com/JiriHoffmann/react-native-clusterer) |
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
-
+| **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
 ---
 
 ## Work In Progress
