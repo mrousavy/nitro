@@ -29,7 +29,7 @@ public final class NitroTestAutolinking {
     static var isRecyclableHybridView: Bool { get }
   }
 
-  public final class TestObjectSwiftKotlin: AutolinkedClass {
+  public final class AutolinkedTestObjectSwiftKotlin: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
       let hybridObject = HybridTestObjectSwift()
       return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
@@ -42,7 +42,7 @@ public final class NitroTestAutolinking {
     }
   }
   
-  public final class Base: AutolinkedClass {
+  public final class AutolinkedBase: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridBaseSpec_ {
       let hybridObject = HybridBase()
       return { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
@@ -55,7 +55,7 @@ public final class NitroTestAutolinking {
     }
   }
   
-  public final class Child: AutolinkedClass {
+  public final class AutolinkedChild: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridChildSpec_ {
       let hybridObject = HybridChild()
       return { () -> bridge.std__shared_ptr_HybridChildSpec_ in
@@ -68,7 +68,7 @@ public final class NitroTestAutolinking {
     }
   }
   
-  public final class PlatformObject: AutolinkedClass {
+  public final class AutolinkedPlatformObject: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
       let hybridObject = HybridPlatformObject()
       return { () -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ in
@@ -81,7 +81,7 @@ public final class NitroTestAutolinking {
     }
   }
   
-  public final class TestView: AutolinkedClass {
+  public final class AutolinkedTestView: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
       let hybridObject = HybridTestView()
       return { () -> bridge.std__shared_ptr_HybridTestViewSpec_ in
@@ -94,7 +94,7 @@ public final class NitroTestAutolinking {
     }
   }
   
-  public final class RecyclableTestView: AutolinkedClass {
+  public final class AutolinkedRecyclableTestView: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridRecyclableTestViewSpec_ {
       let hybridObject = HybridRecyclableTestView()
       return { () -> bridge.std__shared_ptr_HybridRecyclableTestViewSpec_ in
