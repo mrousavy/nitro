@@ -83,8 +83,18 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install
 
-      - name: Restore ccache
+      - name: Install Ccache
         uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 1.5G
+          key: ${{ runner.os }}-ccache-example-ios
+          create-symlink: true
+      - name: Setup ccache behavior
+        run: |
+          echo "CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros" >> $GITHUB_ENV
+          echo "CCACHE_FILECLONE=true" >> $GITHUB_ENV
+          echo "CCACHE_DEPEND=true" >> $GITHUB_ENV
+          echo "CCACHE_INODECACHE=true" >> $GITHUB_ENV
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
