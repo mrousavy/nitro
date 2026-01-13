@@ -130,7 +130,7 @@ jobs:
             -showBuildTimingSummary
             ONLY_ACTIVE_ARCH=YES \
             build \
-            CODE_SIGNING_ALLOWED=NO | xcbeautify
+            CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 
       - name: Setup iOS Simulator
         uses: futureware-tech/simulator-action@v4
