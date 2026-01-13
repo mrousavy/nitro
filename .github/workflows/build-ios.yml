@@ -94,7 +94,7 @@ jobs:
             -sdk iphonesimulator \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
-            -showBuildTimingSummary
+            -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions

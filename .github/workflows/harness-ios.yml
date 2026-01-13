@@ -127,7 +127,7 @@ jobs:
             -sdk iphonesimulator \
             -configuration Debug \
             -destination 'platform=iOS Simulator,name=${{ env.DEVICE_MODEL }}' \
-            -showBuildTimingSummary
+            -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
