@@ -62,12 +62,14 @@ export interface Type {
    * Get all required extra files that need to be **created** for this type to properly work.
    *
    * E.g. for `type Gender = 'male' | 'female'`, the enum `Gender` needs to be created first (as a separate file).
+   * @param visited Optional set of already visited types to prevent infinite recursion with cyclic types.
    */
-  getExtraFiles(): SourceFile[]
+  getExtraFiles(visited?: Set<Type>): SourceFile[]
   /**
    * Get all required extra imports that need to be **imported** for this type to properly work.
+   * @param visited Optional set of already visited types to prevent infinite recursion with cyclic types.
    */
-  getRequiredImports(language: Language): SourceImport[]
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[]
 }
 
 export interface NamedType extends Type {

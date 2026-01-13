@@ -15,34 +15,40 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `PartialPerson` to properly resolve imports.
-namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `WrappedJsStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
-// Forward declaration of `OptionalWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalWrapper; }
-// Forward declaration of `OptionalCallback` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
+// Forward declaration of `OptionalWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `WrappedJsStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
-// Forward declaration of `ExternalObjectStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `PartialPerson` to properly resolve imports.
+namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `SelfReferentialStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct SelfReferentialStruct; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
+// Forward declaration of `TreeNodeMap` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNodeMap; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `ExternalObjectStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct ExternalObjectStruct; }
 
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -65,7 +71,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
-#include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
@@ -83,15 +88,16 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <NitroModules/JInstant.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
-#include "WrappedJsStruct.hpp"
 #include "JWrappedJsStruct.hpp"
 #include "JsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
-#include "OptionalWrapper.hpp"
 #include "JOptionalWrapper.hpp"
-#include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
+#include "JSelfReferentialStruct.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct.hpp"
+#include "JTreeNode.hpp"
+#include "JTreeNodeMap.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -99,14 +105,16 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_Car_Person.hpp"
 #include "JNamedVariant.hpp"
 #include "HybridBaseSpec.hpp"
+#include "OptionalWrapper.hpp"
 #include "JVariant_HybridBaseSpec_OptionalWrapper.hpp"
 #include "JHybridBaseSpec.hpp"
+#include "WrappedJsStruct.hpp"
 #include "JCoreTypesVariant.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
-#include "ExternalObjectStruct.hpp"
 #include "JExternalObjectStruct.hpp"
 #include "JStringOrExternal.hpp"
+#include "PartialPerson.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -121,10 +129,15 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "OptionalCallback.hpp"
+#include "SelfReferentialStruct.hpp"
+#include "TreeNode.hpp"
+#include "TreeNodeMap.hpp"
 #include "JVariant_Boolean_DoubleArray_Array_String__String_Double.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
+#include "ExternalObjectStruct.hpp"
 #include "JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_.hpp"
 
 namespace margelo::nitro::test {
@@ -1123,6 +1136,21 @@ namespace margelo::nitro::test {
   OptionalCallback JHybridTestObjectSwiftKotlinSpec::bounceOptionalCallback(const OptionalCallback& value) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
+    return __result->toCpp();
+  }
+  SelfReferentialStruct JHybridTestObjectSwiftKotlinSpec::bounceSelfReferentialStruct(const SelfReferentialStruct& value) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JSelfReferentialStruct>(jni::alias_ref<JSelfReferentialStruct> /* value */)>("bounceSelfReferentialStruct");
+    auto __result = method(_javaPart, JSelfReferentialStruct::fromCpp(value));
+    return __result->toCpp();
+  }
+  TreeNode JHybridTestObjectSwiftKotlinSpec::bounceTreeNode(const TreeNode& node) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JTreeNode>(jni::alias_ref<JTreeNode> /* node */)>("bounceTreeNode");
+    auto __result = method(_javaPart, JTreeNode::fromCpp(node));
+    return __result->toCpp();
+  }
+  TreeNodeMap JHybridTestObjectSwiftKotlinSpec::bounceTreeNodeMap(const TreeNodeMap& node) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JTreeNodeMap>(jni::alias_ref<JTreeNodeMap> /* node */)>("bounceTreeNodeMap");
+    auto __result = method(_javaPart, JTreeNodeMap::fromCpp(node));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {

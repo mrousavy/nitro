@@ -40,6 +40,12 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `SelfReferentialStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct SelfReferentialStruct; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
+// Forward declaration of `TreeNodeMap` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNodeMap; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -78,6 +84,9 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
+#include "SelfReferentialStruct.hpp"
+#include "TreeNode.hpp"
+#include "TreeNodeMap.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -750,6 +759,30 @@ namespace margelo::nitro::test {
     }
     inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
       auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline SelfReferentialStruct bounceSelfReferentialStruct(const SelfReferentialStruct& value) override {
+      auto __result = _swiftPart.bounceSelfReferentialStruct(std::forward<decltype(value)>(value));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline TreeNode bounceTreeNode(const TreeNode& node) override {
+      auto __result = _swiftPart.bounceTreeNode(std::forward<decltype(node)>(node));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline TreeNodeMap bounceTreeNodeMap(const TreeNodeMap& node) override {
+      auto __result = _swiftPart.bounceTreeNodeMap(std::forward<decltype(node)>(node));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
