@@ -43,6 +43,7 @@ env:
   CCACHE_MAXSIZE: 10G
   CCACHE_COMPRESS: "1"
   CCACHE_CPP2: "1"
+  CCACHE_PREFIX: ccache
 
 jobs:
   build:
