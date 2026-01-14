@@ -25,6 +25,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-quick-crypto** | Fast crypto (Node.js compatible) | [GitHub](https://github.com/margelo/react-native-quick-crypto) |
+| **react-native-nitro-crypto** | Node.js `crypto` implementation using Rust | [GitHub](https://github.com/iwater/react-native-nitro-crypto) |
 | **react-native-nitro-bip39** | BIP39 mnemonic implementation | [GitHub](https://github.com/ronickg/react-native-nitro-bip39) |
 | **react-native-nitro-totp** | TOTP/HOTP generation | [GitHub](https://github.com/4cc3ssX/react-native-nitro-totp) |
 | **react-native-nitro-tor** | Tor daemon and onion routing | [GitHub](https://github.com/niteshbalusu11/react-native-nitro-tor) |
@@ -44,6 +45,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-nitro-fs** | High-performance file system operations | [GitHub](https://github.com/patrickkabwe/react-native-nitro-fs) |
+| **react-native-nitro-file-system** | Node.js-compatible `fs` with zero-copy binary data | [GitHub](https://github.com/iwater/react-native-nitro-file-system) |
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
 | **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
 
@@ -53,6 +55,10 @@ A curated collection of community-built Nitro Modules.
 |--------|-------------|-------|
 | **react-native-nitro-in-app-browser** | In-app browser with native UI | [GitHub](https://github.com/patrickkabwe/react-native-nitro-in-app-browser) |
 | **react-native-nitro-fetch** | super-fast network fetching library | [GitHub](https://github.com/margelo/react-native-nitro-fetch) |
+| **react-native-nitro-dns** | Fast Node.js `dns` supporting DoH/DoT/DoQ | [GitHub](https://github.com/iwater/react-native-nitro-dns) |
+| **react-native-nitro-http-server** | High-performance HTTP Server | [GitHub](https://github.com/iwater/react-native-nitro-http-server) |
+| **react-native-nitro-net** | Node.js-compatible `net`, `tls`, `http(s)` | [GitHub](https://github.com/iwater/react-native-nitro-net) |
+| **react-native-nitro-dgram** | High-performance Node.js `dgram` (UDP) | [GitHub](https://github.com/iwater/react-native-nitro-dgram) |
 
 ### UI & Styling
 
@@ -65,6 +71,8 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **@bernagl/react-native-date** | High-performance native date library | [GitHub](https://github.com/bbernag/react-native-date) |
+| **react-native-nitro-buffer** | 100% Node.js-compatible `Buffer` | [GitHub](https://github.com/iwater/react-native-nitro-buffer) |
+| **react-native-nitro-zlib** | Node.js `zlib` implementation | [GitHub](https://github.com/iwater/react-native-nitro-zlib) |
 | **react-native-clusterer** | Marker clustering for maps | [GitHub](https://github.com/JiriHoffmann/react-native-clusterer) |
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
 | **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
