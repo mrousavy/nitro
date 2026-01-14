@@ -11,10 +11,7 @@
 namespace margelo::nitro {
 
 std::vector<jsi::PropNameID> BoxedHybridObject::getPropertyNames(jsi::Runtime& runtime) {
-  std::vector<jsi::PropNameID> names;
-  names.reserve(1);
-  names.push_back(jsi::PropNameID(runtime, PropNameIDCache::get(runtime, "unbox")));
-  return names;
+  return PropNameIDCache::names(runtime, "unbox");
 }
 
 jsi::Value BoxedHybridObject::get(jsi::Runtime& runtime, const jsi::PropNameID& propName) {
