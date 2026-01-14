@@ -37,6 +37,18 @@ public:
    */
   static const jsi::PropNameID& get(jsi::Runtime& runtime, const std::string& value);
 
+  /**
+   * Get a list of `jsi::PropNameID`s for the given strings.
+   * Useful for `jsi::HostObject::getPropertyNames(...)`.
+   */
+  static std::vector<jsi::PropNameID> names(jsi::Runtime& runtime, const std::string& first, auto&&... rest) {
+    std::vector<jsi::PropNameID> out;
+    out.reserve(1 + sizeof...(rest));
+    out.emplace_back(runtime, PropNameIDCache::get(runtime, first));
+    (out.emplace_back(runtime, PropNameIDCache::get(runtime, std::forward<decltype(rest)>(rest))), ...);
+    return out;
+  }
+
 private:
   using CacheMap = std::unordered_map<std::string, BorrowingReference<jsi::PropNameID>>;
   static std::unordered_map<jsi::Runtime*, CacheMap> _cache;
