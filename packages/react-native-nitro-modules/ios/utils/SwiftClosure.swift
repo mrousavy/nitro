@@ -31,7 +31,7 @@ extension SwiftClosure {
    * This can then be called from both C++ and Swift.
    */
   public init(wrappingClosure closure: @escaping () -> Void) {
-    // Wrap closure in void*, and increment it's ref count so it stays alive.
+    // Wrap closure in void*, and increment its ref count so it stays alive.
     let context = Unmanaged.passRetained(ClosureWrapper(closure: closure)).toOpaque()
 
     // Create a C-style Function Pointer, which calls the actual Swift closure.

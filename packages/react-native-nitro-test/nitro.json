@@ -31,6 +31,10 @@
     "TestView": {
       "swift": "HybridTestView",
       "kotlin": "HybridTestView"
+    },
+    "RecyclableTestView": {
+      "swift": "HybridRecyclableTestView",
+      "kotlin": "HybridRecyclableTestView"
     }
   },
   "ignorePaths": [

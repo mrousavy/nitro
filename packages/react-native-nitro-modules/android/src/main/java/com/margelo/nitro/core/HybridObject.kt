@@ -35,7 +35,7 @@ abstract class HybridObject {
    * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
    * This method can only be manually called from JS using `dispose()`.
    *
-   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
    * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
@@ -58,13 +58,13 @@ abstract class HybridObject {
 
   /**
    * Holds the native C++ instance.
-   * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of it's specs.
+   * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of its specs.
    * This is `null`, until `updateNative(..)` is called.
    */
   private var mHybridData: HybridData? = null
 
   /**
-   * If `HybridObject` is subclassed, the sub-class needs to create it's own `HybridData`
+   * If `HybridObject` is subclassed, the sub-class needs to create its own `HybridData`
    * with a C++ `jni::HybridClass` representing the subclass directly.
    * Then, that `HybridData` must be passed upwards to `HybridObject` using `updateNative(..)`.
    *

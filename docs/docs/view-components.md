@@ -19,7 +19,7 @@ Nitro Views require **react-native 0.78.0** or higher, and require the new archi
 
 ### 1. Declaration
 
-To create a new Nitro View, declare it's props and methods in a `*.nitro.ts` file, and create a type that specializes `HybridView<P, M>` - here `CameraView`:
+To create a new Nitro View, declare its props and methods in a `*.nitro.ts` file, and create a type that specializes `HybridView<P, M>` - here `CameraView`:
 
 ```ts title="Camera.nitro.ts"
 import type { HybridView, HybridViewProps, HybridViewMethods } from 'react-native-nitro-modules'
@@ -207,7 +207,7 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
 <Tabs groupId="native-view-language">
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridCameraView.swift"
-    class HybridCameraView : HybridCameraViewSpec {
+    class HybridCameraView: HybridCameraViewSpec {
       // View
       var view: UIView = UIView()
 
@@ -218,7 +218,7 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin title="HybridCameraView.kt"
-    class HybridCameraView : HybridCameraViewSpec() {
+    class HybridCameraView: HybridCameraViewSpec() {
       // View
       override val view: View = View(NitroModules.applicationContext)
 
@@ -253,6 +253,51 @@ function App() {
 :::info
 We are working on a fix here: [facebook/react #32119](https://github.com/facebook/react/pull/32119)
 :::
+
+### Recycling
+
+For improved performance and lower memory footprint, Nitro Views can be _recycled_.
+To allow your view to be recycled, implement the `RecyclableView` interface/protocol from Nitro:
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridMyView.swift"
+    import NitroModules
+
+    class HybridMyView: HybridMyViewSpec, RecyclableView {
+      // ...
+      func prepareForRecycle() {}
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridMyView.kt"
+    import com.margelo.nitro.views.RecyclableView
+
+    class HybridMyView: HybridMyViewSpec(), RecyclableView {
+      // ...
+      override fun prepareForRecycle() {}
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+When Fabric decides to re-use a previously created view, the `prepareForRecycle()` method will be called.
+Inside that method you should reset any internal state to it's default values.
+
+For example, an asynchronous Image component should reset it's displayed image when it is being recycled, otherwise it would display an old image while the new one is still loading:
+
+```swift
+class HybridImageView: HybridImageViewSpec, RecyclableView {
+  var view: UIView { imageView }
+  private var imageView = UIImageView()
+
+  func prepareForRecycle() {
+    // highlight-next-line
+    imageView.image = nil
+  }
+}
+```
 
 ## Methods
 

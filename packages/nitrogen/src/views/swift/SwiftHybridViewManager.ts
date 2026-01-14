@@ -10,7 +10,11 @@ import {
 } from '../../syntax/helpers.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
-import { getHybridObjectConstructorCall } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
+import {
+  getAutolinkingClassName,
+  getAutolinkingNamespace,
+  getHybridObjectConstructorCall,
+} from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 
@@ -73,6 +77,7 @@ using namespace ${namespace}::views;
  * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
  */
 @interface ${component}: RCTViewComponentView
++ (BOOL)shouldBeRecycled;
 @end
 
 @implementation ${component} {
@@ -135,6 +140,16 @@ using namespace ${namespace}::views;
 
   // 4. Continue in base class
   [super updateProps:props oldProps:oldProps];
+}
+
++ (BOOL)shouldBeRecycled {
+  return ${getAutolinkingNamespace()}::${getAutolinkingClassName(spec.name)}::isRecyclableHybridView();
+}
+
+- (void)prepareForRecycle {
+  [super prepareForRecycle];
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.maybePrepareForRecycle();
 }
 
 @end

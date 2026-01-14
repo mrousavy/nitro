@@ -189,7 +189,7 @@ void AnyMap::setAny(const std::string& key, const AnyValue& value) {
 }
 
 // C++ getter
-const std::unordered_map<std::string, AnyValue>& AnyMap::getMap() const {
+std::unordered_map<std::string, AnyValue>& AnyMap::getMap() {
   return _map;
 }
 

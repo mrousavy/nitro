@@ -19,6 +19,9 @@ export class ResultWrappingType implements Type {
   get kind(): TypeKind {
     return 'result-wrapper'
   }
+  get isEquatable(): boolean {
+    return this.result.isEquatable && this.error.isEquatable
+  }
 
   getCode(language: Language, options?: GetCodeOptions): string {
     const type = this.result.getCode(language, options)

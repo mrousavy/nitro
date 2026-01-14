@@ -10,9 +10,10 @@ template <typename T, typename Enable>
 struct JSIConverter;
 } // namespace margelo::nitro
 
+#include "CommonGlobals.hpp"
 #include "JSIConverter.hpp"
-
 #include "NitroTypeInfo.hpp"
+#include "PropNameIDCache.hpp"
 #include <exception>
 #include <jsi/jsi.h>
 
@@ -25,8 +26,8 @@ template <>
 struct JSIConverter<std::exception_ptr> final {
   static inline std::exception_ptr fromJSI(jsi::Runtime& runtime, const jsi::Value& error) {
     jsi::Object object = error.asObject(runtime);
-    std::string name = object.getProperty(runtime, "name").asString(runtime).utf8(runtime);
-    std::string message = object.getProperty(runtime, "message").asString(runtime).utf8(runtime);
+    std::string name = object.getProperty(runtime, PropNameIDCache::get(runtime, "name")).asString(runtime).utf8(runtime);
+    std::string message = object.getProperty(runtime, PropNameIDCache::get(runtime, "message")).asString(runtime).utf8(runtime);
     return std::make_exception_ptr(std::runtime_error(name + ": " + message));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception_ptr& exception) {
@@ -51,8 +52,7 @@ struct JSIConverter<std::exception_ptr> final {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    jsi::Function errorCtor = runtime.global().getPropertyAsFunction(runtime, "Error");
-    return object.instanceOf(runtime, errorCtor);
+    return CommonGlobals::Error::isInstanceOf(runtime, object);
   }
 };
 

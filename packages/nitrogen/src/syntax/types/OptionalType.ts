@@ -16,6 +16,9 @@ export class OptionalType implements Type {
   get kind(): TypeKind {
     return 'optional'
   }
+  get isEquatable(): boolean {
+    return this.wrappingType.isEquatable
+  }
   get needsBraces(): boolean {
     switch (this.wrappingType.kind) {
       case 'function':

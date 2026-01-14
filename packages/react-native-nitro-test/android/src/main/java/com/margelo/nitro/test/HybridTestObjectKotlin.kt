@@ -168,9 +168,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return a
   }
 
-  override fun copyAnyValues(map: AnyMap): AnyMap {
-    val copy = map.toMap()
-    return AnyMap.fromMap(copy)
+  override fun copyAnyMap(map: AnyMap): AnyMap {
+    val copy = map.toHashMap()
+    return AnyMap.fromMap(copy, false)
   }
 
   override fun mapRoundtrip(map: AnyMap): AnyMap {
@@ -218,6 +218,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun bounceMap(map: Map<String, Variant_Boolean_Double>): Map<String, Variant_Boolean_Double> {
+    return map
+  }
+
+  override fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double> {
     return map
   }
 
@@ -294,6 +298,14 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun callCallback(callback: () -> Unit) {
     callback()
+  }
+
+  override fun callCallbackThatReturnsPromiseVoid(callback: () -> Promise<Promise<Unit>>): Promise<Unit> {
+    return Promise.async {
+      val callPromise = callback()
+      val resultPromise = callPromise.await()
+      resultPromise.await()
+    }
   }
 
   override fun createNativeCallback(wrappingJsCallback: (num: Double) -> Unit): (Double) -> Unit {

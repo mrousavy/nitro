@@ -72,7 +72,7 @@ public:
   }
 
   /**
-   Try to lock the borrowing reference to an owning reference, or `nullptr` if it has already been deleted.
+   * Try to lock the weak reference to a borrowing reference, or `nullptr` if it has already been deleted.
    */
   [[nodiscard]]
   BorrowingReference<T> lock() const;

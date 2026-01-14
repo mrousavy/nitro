@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NitroModules
 import UIKit
 
 class HybridTestView: HybridTestViewSpec {

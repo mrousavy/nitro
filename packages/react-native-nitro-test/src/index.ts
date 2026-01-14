@@ -6,7 +6,6 @@ import {
 import { type PlatformObject } from './specs/PlatformObject.nitro'
 import type { Base } from './specs/Base.nitro'
 import type { Child } from './specs/Child.nitro'
-import { TestView, type TestViewRef } from './views/TestView'
 
 // Export all Hybrid Object types
 export * from './specs/Base.nitro'
@@ -27,5 +26,9 @@ export const HybridChild = NitroModules.createHybridObject<Child>('Child')
 export const HybridPlatformObject =
   NitroModules.createHybridObject<PlatformObject>('PlatformObject')
 
-// Export View (+ it's ref type)
-export { TestView, type TestViewRef }
+// Export View (+ its ref type)
+export { TestView, type TestViewRef } from './views/TestView'
+export {
+  RecyclableTestView,
+  type RecyclableTestViewRef,
+} from './views/RecyclableTestView'

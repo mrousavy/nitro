@@ -6,10 +6,10 @@
 //
 
 #include "HybridObjectPrototype.hpp"
+#include "CommonGlobals.hpp"
 #include "NitroDefines.hpp"
 #include "NitroLogger.hpp"
 #include "NitroTypeInfo.hpp"
-#include "ObjectUtils.hpp"
 
 namespace margelo::nitro {
 
@@ -39,69 +39,83 @@ jsi::Value HybridObjectPrototype::createPrototype(jsi::Runtime& runtime, const s
   std::string typeName = TypeInfo::getFriendlyTypename(prototype->getNativeInstanceId(), true);
   Logger::log(LogLevel::Info, TAG, "Creating new JS prototype for C++ instance type \"%s\"...", typeName.c_str());
   jsi::Value basePrototype = createPrototype(runtime, prototype->getBase());
-  jsi::Object object = ObjectUtils::create(runtime, basePrototype);
+  jsi::Object object = CommonGlobals::Object::create(runtime, basePrototype);
 
   // 4. Add all Hybrid Methods to it
   for (const auto& method : prototype->getMethods()) {
     // method()
     const std::string& name = method.first;
-    ObjectUtils::defineProperty(runtime, object, name.c_str(),
-                                PlainPropertyDescriptor{
-                                    .configurable = false,
-                                    .enumerable = true,
-                                    .value = method.second.toJSFunction(runtime),
-                                    .writable = false,
-                                });
+    CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
+                                          PlainPropertyDescriptor{
+                                              .configurable = false,
+                                              .enumerable = true,
+                                              .value = method.second.toJSFunction(runtime),
+                                              .writable = false,
+                                          });
   }
 
   // 5. Add all properties (getter + setter) to it using defineProperty
-  for (const auto& getter : prototype->getGetters()) {
-    const auto& setter = prototype->getSetters().find(getter.first);
-    bool isReadonly = setter == prototype->getSetters().end();
-    const std::string& name = getter.first;
-    if (isReadonly) {
-      // get
-      ObjectUtils::defineProperty(runtime, object, name.c_str(),
-                                  ComputedReadonlyPropertyDescriptor{// readonly
-                                                                     .configurable = false,
-                                                                     .enumerable = true,
-                                                                     .get = getter.second.toJSFunction(runtime)});
-    } else {
+  for (const auto& [name, getter] : prototype->getGetters()) {
+    const auto& setterIterator = prototype->getSetters().find(name);
+    if (setterIterator != prototype->getSetters().end()) {
       // get + set
-      ObjectUtils::defineProperty(runtime, object, name.c_str(),
-                                  ComputedPropertyDescriptor{// readonly with setter
-                                                             .configurable = false,
-                                                             .enumerable = false,
-                                                             .get = getter.second.toJSFunction(runtime),
-                                                             .set = setter->second.toJSFunction(runtime)});
+      const HybridFunction& setter = setterIterator->second;
+      CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
+                                            ComputedPropertyDescriptor{// getter + setter
+                                                                       .configurable = false,
+                                                                       .enumerable = true,
+                                                                       .get = getter.toJSFunction(runtime),
+                                                                       .set = setter.toJSFunction(runtime)});
+    } else {
+      // get
+      CommonGlobals::Object::defineProperty(runtime, object, name.c_str(),
+                                            ComputedReadonlyPropertyDescriptor{// getter
+                                                                               .configurable = false,
+                                                                               .enumerable = true,
+                                                                               .get = getter.toJSFunction(runtime)});
     }
   }
 
   // 6. In DEBUG, add a __type info to the prototype object.
 #ifdef NITRO_DEBUG
   std::string prototypeName = "Prototype<" + typeName + ">";
-  ObjectUtils::defineProperty(runtime, object, "__type",
-                              PlainPropertyDescriptor{
-                                  .configurable = false,
-                                  .enumerable = true,
-                                  .value = jsi::String::createFromUtf8(runtime, prototypeName),
-                                  .writable = false,
-                              });
+  CommonGlobals::Object::defineProperty(runtime, object, "__type",
+                                        PlainPropertyDescriptor{
+                                            .configurable = false,
+                                            .enumerable = true,
+                                            .value = jsi::String::createFromAscii(runtime, prototypeName),
+                                            .writable = false,
+                                        });
 #endif
 
   // 7. In DEBUG, freeze the prototype.
 #ifdef NITRO_DEBUG
-  ObjectUtils::freeze(runtime, object);
+  CommonGlobals::Object::freeze(runtime, object);
 #endif
 
   // 8. Throw it into our cache so the next lookup can be cached and therefore faster
   JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
   BorrowingReference<jsi::Object> sharedObject = jsiCache.makeShared(std::move(object));
-  auto instanceId = prototype->getNativeInstanceId();
+  const NativeInstanceId& instanceId = prototype->getNativeInstanceId();
   prototypeCache[instanceId] = sharedObject;
 
   // 9. Return it!
   return jsi::Value(runtime, *sharedObject);
+}
+
+void HybridObjectPrototype::ensureInitialized() {
+  if (!_didLoadMethods) {
+    // lock in case we try to create `HybridObject`s in parallel Runtimes
+    static std::mutex mutex;
+    std::unique_lock lock(mutex);
+    if (_didLoadMethods) [[unlikely]] {
+      // another call to `ensureInitialized()` has initialized in the meantime. abort.
+      return;
+    }
+    // lazy-load all exposed methods
+    loadHybridMethods();
+    _didLoadMethods = true;
+  }
 }
 
 jsi::Value HybridObjectPrototype::getPrototype(jsi::Runtime& runtime) {

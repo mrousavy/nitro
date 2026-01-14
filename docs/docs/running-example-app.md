@@ -74,7 +74,7 @@ To run the `.apk` on a physical Android device, simply download the `.apk` from 
 
 To run the example app yourself, make sure you have a [working React Native environment](https://reactnative.dev/docs/environment-setup) set up, and have installed [Bun](https://bun.com).
 
-Then, simply clone (potentially also fork?) the Nitro repository and install it's dependencies:
+Then, simply clone (potentially also fork?) the Nitro repository and install its dependencies:
 
 
 <Tabs groupId="host-os">

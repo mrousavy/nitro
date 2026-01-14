@@ -270,7 +270,7 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::mergeMaps(const std::shared_ptr<Any
   return a;
 }
 
-std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyValues(const std::shared_ptr<AnyMap>& map) {
+std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyMap(const std::shared_ptr<AnyMap>& map) {
   auto keys = map->getAllKeys();
   auto newMap = AnyMap::make();
   for (const auto& key : keys) {
@@ -282,6 +282,17 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyValues(const std::shared_ptr
 
 double HybridTestObjectCpp::funcThatThrows() {
   throw std::runtime_error("This function will only work after sacrificing seven lambs!");
+}
+
+std::shared_ptr<Promise<void>> HybridTestObjectCpp::callCallbackThatReturnsPromiseVoid(
+    const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) {
+  return Promise<void>::async([=]() {
+    std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> callPromise = callback();
+    std::future<std::shared_ptr<Promise<void>>> callFuture = callPromise->await();
+    std::shared_ptr<Promise<void>> resultPromise = callFuture.get();
+    std::future<void> future = resultPromise->await();
+    future.wait();
+  });
 }
 
 std::shared_ptr<Promise<void>> HybridTestObjectCpp::funcThatThrowsBeforePromise() {
@@ -379,6 +390,10 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
 
 std::unordered_map<std::string, std::variant<bool, double>>
 HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
+  return map;
+}
+
+std::unordered_map<std::string, double> HybridTestObjectCpp::bounceSimpleMap(const std::unordered_map<std::string, double>& map) {
   return map;
 }
 

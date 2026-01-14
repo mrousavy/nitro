@@ -11,6 +11,9 @@ export class MapType implements Type {
   get kind(): TypeKind {
     return 'map'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {

@@ -5,7 +5,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.13.1"
+    classpath "com.android.tools.build:gradle:8.13.2"
   }
 }
 
@@ -75,6 +75,7 @@ android {
             "META-INF",
             "META-INF/**",
             "**/libc++_shared.so",
+            "**/libNitroModules.so",
             "**/libfbjni.so",
             "**/libjsi.so",
             "**/libfolly_json.so",

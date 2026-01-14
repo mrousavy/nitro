@@ -46,13 +46,20 @@ import com.facebook.react.uimanager.ReactStylesDiffMap
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
+import com.margelo.nitro.R.id.associated_hybrid_view_tag
+import com.margelo.nitro.views.RecyclableView
 import ${javaNamespace}.*
 
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
 open class ${manager}: SimpleViewManager<View>() {
-  private val views = hashMapOf<View, ${viewImplementation}>()
+  init {
+    if (RecyclableView::class.java.isAssignableFrom(${viewImplementation}::class.java)) {
+      // Enable view recycling
+      super.setupViewRecycling()
+    }
+  }
 
   override fun getName(): String {
     return "${spec.name}"
@@ -61,17 +68,13 @@ open class ${manager}: SimpleViewManager<View>() {
   override fun createViewInstance(reactContext: ThemedReactContext): View {
     val hybridView = ${viewImplementation}(reactContext)
     val view = hybridView.view
-    views[view] = hybridView
+    view.setTag(associated_hybrid_view_tag, hybridView)
     return view
   }
 
-  override fun onDropViewInstance(view: View) {
-    super.onDropViewInstance(view)
-    views.remove(view)
-  }
-
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    val hybridView = views[view] ?: throw Error("Couldn't find view $view in local views table!")
+    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+      ?: throw Error("Couldn't find view $view in local views table!")
 
     // 1. Update each prop individually
     hybridView.beforeUpdate()
@@ -80,6 +83,23 @@ open class ${manager}: SimpleViewManager<View>() {
 
     // 2. Continue in base View props
     return super.updateState(view, props, stateWrapper)
+  }
+
+  protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
+    super.prepareToRecycleView(reactContext, view)
+    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+      ?: return null
+
+    @Suppress("USELESS_IS_CHECK")
+    if (hybridView is RecyclableView) {
+      // Recycle in it's implementation
+      hybridView.prepareForRecycle()
+
+      // Maybe update the view if it changed
+      return hybridView.view
+    } else {
+      return null
+    }
   }
 }
   `.trim()

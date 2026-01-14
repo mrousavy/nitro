@@ -13,8 +13,12 @@ import {
   HybridPlatformObject,
   HybridChild,
 } from 'react-native-nitro-test'
-import type { State } from './Testers'
-import { it } from './Testers'
+import {
+  type AssertionBackend,
+  type State,
+  createTestRunner,
+  throwingBackend,
+} from './testing'
 import { stringify } from './utils'
 import {
   getHybridObjectConstructor,
@@ -35,6 +39,16 @@ type TestResult =
 export interface TestRunner {
   name: string
   run: () => Promise<TestResult>
+}
+
+/**
+ * Options for getTests function
+ */
+export interface GetTestsOptions {
+  /**
+   * The assertion backend to use. Defaults to throwingBackend for in-app testing.
+   */
+  backend?: AssertionBackend
 }
 
 const TEST_PERSON: Person = {
@@ -79,11 +93,32 @@ const TEST_MAP: Record<string, number | boolean> = {
   a_bool: true,
   another_bool: false,
 }
+
 const TEST_MAP_2: Record<string, string> = {
   'someKey': 'someValue',
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
+
+const TEST_MAP_3: Record<string, number> = {
+  first: 14,
+  second: 8247,
+}
+
+const TEST_MAP_4: Record<
+  string,
+  number | boolean | string | bigint | null | Array<number>
+> = {
+  someKey: 55,
+  some_other_key: 123,
+  a_bool: true,
+  another_bool: false,
+  a_string: 'hello',
+  a_bigint: 1234567890n,
+  a_null: null,
+  a_array: [1, 2, 3],
+}
+
 const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
@@ -116,29 +151,31 @@ function sumUpAllPassengers(cars: Car[]): string {
     .join(', ')
 }
 
-function createTest<T>(
-  name: string,
-  run: () => State<T> | Promise<State<T>>
-): TestRunner {
-  return {
-    name: name,
-    run: async (): Promise<TestResult> => {
-      try {
-        console.log(`⏳ Test "${name}" started...`)
-        const state = await run()
-        console.log(`✅ Test "${name}" passed!`)
-        return {
-          status: 'successful',
-          result: stringify(state.result ?? state.errorThrown ?? '(void)'),
+function createCreateTest<T>() {
+  return function createTest(
+    name: string,
+    run: () => State<T> | Promise<State<T>>
+  ): TestRunner {
+    return {
+      name: name,
+      run: async (): Promise<TestResult> => {
+        try {
+          console.log(`⏳ Test "${name}" started...`)
+          const state = await run()
+          console.log(`✅ Test "${name}" passed!`)
+          return {
+            status: 'successful',
+            result: stringify(state.result ?? state.errorThrown ?? '(void)'),
+          }
+        } catch (e) {
+          console.log(`❌ Test "${name}" failed! ${e}`)
+          return {
+            status: 'failed',
+            message: stringify(e),
+          }
         }
-      } catch (e) {
-        console.log(`❌ Test "${name}" failed! ${e}`)
-        return {
-          status: 'failed',
-          message: stringify(e),
-        }
-      }
-    },
+      },
+    }
   }
 }
 
@@ -151,8 +188,13 @@ function debugOnly(string: string): string {
 }
 
 export function getTests(
-  testObject: TestObjectCpp | TestObjectSwiftKotlin
+  testObject: TestObjectCpp | TestObjectSwiftKotlin,
+  options: GetTestsOptions = {}
 ): TestRunner[] {
+  const backend = options.backend ?? throwingBackend
+  const { it } = createTestRunner(backend)
+  const createTest = createCreateTest(it)
+
   return [
     // Basic prototype tests
     createTest('HybridObject.prototype is valid', () =>
@@ -174,7 +216,21 @@ export function getTests(
         .didReturn('string')
         .toStringContain('[empty-object HybridObject')
     ),
-    createTest('Two HybridObjects are not equal (a == b)', () =>
+    createTest('Same HybridObjects are equal (a == b)', () =>
+      it(
+        () =>
+          // eslint-disable-next-line no-self-compare
+          testObject.thisObject === testObject.thisObject
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('Same HybridObjects are equal (a.equals(b))', () =>
+      it(() => testObject.thisObject.equals(testObject.thisObject))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('Different HybridObjects are not equal (a == b)', () =>
       it(
         () =>
           // eslint-disable-next-line no-self-compare
@@ -183,12 +239,12 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
-    createTest('Two HybridObjects are not equal (a.equals(b))', () =>
+    createTest('Different HybridObjects are not equal (a.equals(b))', () =>
       it(() => testObject.newTestObject().equals(testObject.newTestObject()))
         .didNotThrow()
         .equals(false)
     ),
-    createTest("Two HybridObjects's prototypes are equal", () =>
+    createTest("Different HybridObjects's prototypes are equal", () =>
       it(() => {
         const objA = testObject.newTestObject()
         const objB = testObject.newTestObject()
@@ -441,11 +497,17 @@ export function getTests(
         .didReturn('object')
         .equals([1, 2, 13, 42])
     ),
-    createTest('bounceStrings(...) equals', () =>
+    createTest('bounceStrings(...) equals simple strings', () =>
       it(() => testObject.bounceStrings(['hello', 'world', '!']))
         .didNotThrow()
         .didReturn('object')
         .equals(['hello', 'world', '!'])
+    ),
+    createTest('bounceStrings(...) equals unicode/emojis', () =>
+      it(() => testObject.bounceStrings(['✨', '🔥', `🥳🥷🏼🥳`]))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['✨', '🔥', `🥳🥷🏼🥳`])
     ),
     createTest('bounceEnums(...) equals', () =>
       it(() => testObject.bounceEnums(['gas', 'hybrid']))
@@ -677,10 +739,10 @@ export function getTests(
         .didNotThrow()
         .equals({ ...TEST_MAP, ...TEST_MAP_2 })
     ),
-    createTest('copyAnyValues(...) works', () =>
-      it(() => testObject.copyAnyValues(TEST_MAP))
+    createTest('copyAnyMap(...) works', () =>
+      it(() => testObject.copyAnyMap(TEST_MAP_4))
         .didNotThrow()
-        .equals(TEST_MAP)
+        .equals(TEST_MAP_4)
     ),
 
     // Test errors
@@ -1146,6 +1208,12 @@ export function getTests(
         .didReturn('object')
         .equals(TEST_MAP)
     ),
+    createTest('bounceSimpleMap(map) === map', () =>
+      it(() => testObject.bounceSimpleMap(TEST_MAP_3))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_MAP_3)
+    ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
       it(() =>
         testObject.extractMap({
@@ -1347,6 +1415,15 @@ export function getTests(
       )
         .didNotThrow()
         .equals('hello')
+    ),
+    createTest('callCallbackThatReturnsPromiseVoid(...)', async () =>
+      (
+        await it(() =>
+          testObject.callCallbackThatReturnsPromiseVoid(() => Promise.resolve())
+        )
+      )
+        .didNotThrow()
+        .didReturn('undefined')
     ),
     createTest(
       'Single callback can be called and awaited: getValueFromJSCallbackAndWait(...)',
