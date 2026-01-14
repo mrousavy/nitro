@@ -37,7 +37,7 @@ def add_nitrogen_files(spec)
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
     # Swift to C++ bridging helpers
-    "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Bridge.hpp"
+    "nitrogen/generated/ios/**/*.hpp"
   ]
 
   current_private_header_files = Array(spec.attributes_hash['private_header_files'])
@@ -54,6 +54,8 @@ def add_nitrogen_files(spec)
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     # Enables C++ <-> Swift interop (by default it's only ObjC)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
+    # Makes the -Swift.h header public
+    "SWIFT_INSTALL_OBJC_HEADER" => "YES",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
   })
