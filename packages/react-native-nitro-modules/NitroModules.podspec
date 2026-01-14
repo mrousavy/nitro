@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
     # Public C++ headers will be exposed in modulemap (for Swift)
     "cpp/core/AnyMap.hpp",
     "cpp/core/ArrayBuffer.hpp",
+    "cpp/core/Error.hpp",
     "cpp/core/HybridObject.hpp",
     "cpp/core/Null.hpp",
     "cpp/core/Promise.hpp",
