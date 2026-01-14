@@ -51,10 +51,6 @@ jobs:
     runs-on: macOS-26
     steps:
       - uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v2
-
-      - name: Install npm dependencies (bun)
-        run: bun install
 
       - name: Restore ccache
         uses: actions/cache@v5
@@ -63,16 +59,31 @@ jobs:
           key: ccache-${{ runner.os }}-${{ hashFiles('**/*.pbxproj', '**/Podfile.lock') }}
           restore-keys: |
             ccache-${{ runner.os }}-
+      - name: Restore Pods cache
+        uses: actions/cache@v5
+        with:
+          path: example/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Restore DerivedData cache
+        uses: actions/cache@v5
+        with:
+          path: example/ios/build
+          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
+          restore-keys: |
+            ${{ runner.os }}-dd-
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
 
       - name: Install ccache
         run: brew install ccache
-
-      - name: ccache sanity check
-        run: |
-          which ccache || true
-          which clang || true
-          which clang++ || true
-          ccache -s || true
+      - name: Enable ccache wrappers
+        run: echo "$(brew --prefix)/opt/ccache/libexec" >> $GITHUB_PATH
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
@@ -84,24 +95,9 @@ jobs:
       - name: Select Xcode 26.2
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
 
-      - name: Restore Pods cache
-        uses: actions/cache@v5
-        with:
-          path: example/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
       - name: Install Pods
         working-directory: example
         run: bun pods
-
-      - name: Restore DerivedData cache
-        uses: actions/cache@v5
-        with:
-          path: example/ios/build
-          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
-          restore-keys: |
-            ${{ runner.os }}-dd-
 
       - name: Build App
         working-directory: example/ios
