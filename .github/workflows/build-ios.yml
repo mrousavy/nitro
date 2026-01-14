@@ -38,6 +38,11 @@ on:
 
 env:
   USE_CCACHE: 1
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_MAXSIZE: 10G
+  CCACHE_COMPRESS: "1"
+  CCACHE_CPP2: "1"
 
 jobs:
   build:
@@ -50,12 +55,16 @@ jobs:
       - name: Install npm dependencies (bun)
         run: bun install
 
-      - name: Install Ccache
-        uses: hendrikmuhs/ccache-action@v1.2
+      - name: Restore ccache
+        uses: actions/cache@v4
         with:
-          max-size: 1.5G
-          key: ${{ runner.os }}-ccache-example-ios
-          create-symlink: true
+          path: .ccache
+          key: ccache-${{ runner.os }}-${{ hashFiles('**/*.pbxproj', '**/Podfile.lock') }}
+          restore-keys: |
+            ccache-${{ runner.os }}-
+
+      - name: Install ccache
+        run: brew install ccache
 
       - name: ccache sanity check
         run: |
@@ -113,3 +122,6 @@ jobs:
             ONLY_ACTIVE_ARCH=YES \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
+
+      - name: Log ccache stats
+        run: ccache -s
