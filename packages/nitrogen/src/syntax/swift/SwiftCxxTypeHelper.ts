@@ -68,7 +68,7 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
 function createCxxHybridObjectSwiftHelper(
   type: HybridObjectType
 ): SwiftCxxHelper {
-  const actualType = type.getCode('c++')
+  const actualType = type.getCode('c++', { fullyQualified: true })
   const modulename = type.sourceConfig.getIosModuleName()
   const { HybridTSpecCxx, HybridTSpecSwift, HybridTSpec } = getHybridObjectName(
     type.hybridObjectName

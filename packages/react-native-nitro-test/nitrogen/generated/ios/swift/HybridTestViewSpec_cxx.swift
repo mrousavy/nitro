@@ -72,14 +72,14 @@ open class HybridTestViewSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridTestViewSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridTestViewSpec_(self.toUnsafe())
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridTestViewSpec_(self.toUnsafe())
       __cxxPart = bridge.weakify_std__shared_ptr_HybridTestViewSpec_(newCxxPart)
       return newCxxPart
     }

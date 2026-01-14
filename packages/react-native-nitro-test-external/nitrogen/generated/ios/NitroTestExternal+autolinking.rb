@@ -32,6 +32,11 @@ def add_nitrogen_files(spec)
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
   ]
 
+  spec.subspec 'Cxx' do |c|
+    c.source_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+    c.public_header_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+  end
+
   current_public_header_files = Array(spec.attributes_hash['public_header_files'])
   spec.public_header_files = current_public_header_files + [
     # Generated specs
@@ -54,6 +59,8 @@ def add_nitrogen_files(spec)
     "CLANG_CXX_LANGUAGE_STANDARD" => "c++20",
     # Enables C++ <-> Swift interop (by default it's only ObjC)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
+    # Makes the -Swift.h header public
+    "SWIFT_INSTALL_OBJC_HEADER" => "YES",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
   })

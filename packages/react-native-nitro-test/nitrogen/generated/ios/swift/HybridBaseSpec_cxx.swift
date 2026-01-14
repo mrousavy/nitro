@@ -72,14 +72,14 @@ open class HybridBaseSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridBaseSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridBaseSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridBaseSpec_(self.toUnsafe())
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridBaseSpec_(self.toUnsafe())
       __cxxPart = bridge.weakify_std__shared_ptr_HybridBaseSpec_(newCxxPart)
       return newCxxPart
     }
