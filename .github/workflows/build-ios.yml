@@ -56,7 +56,7 @@ jobs:
         run: bun install
 
       - name: Restore ccache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .ccache
           key: ccache-${{ runner.os }}-${{ hashFiles('**/*.pbxproj', '**/Podfile.lock') }}
