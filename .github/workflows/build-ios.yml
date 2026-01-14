@@ -95,10 +95,14 @@ jobs:
 
       - name: Build App
         working-directory: example/ios
+        env:
+          CC: "ccache clang"
+          CPLUSPLUS: "ccache clang++"
+          LD: clang
+          LDPLUSPLUS: clang++
         run: |
           set -o pipefail
           xcodebuild \
-            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
             -derivedDataPath build -UseModernBuildSystem=YES \
             -workspace NitroExample.xcworkspace \
             -scheme NitroExample \
