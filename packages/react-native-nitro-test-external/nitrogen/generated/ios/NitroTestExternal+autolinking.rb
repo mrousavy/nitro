@@ -32,12 +32,17 @@ def add_nitrogen_files(spec)
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
   ]
 
+  spec.subspec 'Cxx' do |c|
+    c.source_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+    c.public_header_files = "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+  end
+
   current_public_header_files = Array(spec.attributes_hash['public_header_files'])
   spec.public_header_files = current_public_header_files + [
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
     # Swift to C++ bridging helpers
-    "nitrogen/generated/ios/**/*.hpp"
+    "nitrogen/generated/ios/NitroTestExternal-Swift-Cxx-Bridge.hpp"
   ]
 
   current_private_header_files = Array(spec.attributes_hash['private_header_files'])

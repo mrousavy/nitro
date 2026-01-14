@@ -76,6 +76,37 @@ PODS:
     - glog
     - hermes-engine
     - NitroModules
+    - NitroTestExternal/Cxx (= 0.33.1)
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
+  - NitroTestExternal/Cxx (0.33.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - NitroModules
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2820,7 +2851,7 @@ SPEC CHECKSUMS:
   hermes-engine: 8642d8f14a548ab718ec112e9bebdfdd154138b5
   NitroModules: 5adf2d25a8fdcdc6ed09e40db88d57a1fe6ceb57
   NitroTest: f6b6c7d8d8dc2e73ca035820247fffee1dddbf31
-  NitroTestExternal: 2ed0556ddd5f30fa17a018a46c4f2ae650dad699
+  NitroTestExternal: 3ef25fa9f9c20cace5ca39df4449b3e0f5b5358d
   RCT-Folly: 59ec0ac1f2f39672a0c6e6cecdd39383b764646f
   RCTDeprecation: 22bf66112da540a7d40e536366ddd8557934fca1
   RCTRequired: a0ed4dc41b35f79fbb6d8ba320e06882a8c792cf

@@ -113,11 +113,7 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
-#ifdef FRAMEWORKS
 #include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Umbrella.hpp>
-#else
-#error NitroTest requires frameworks to be enabled (`use_frameworks!`) in order to import NitroTestExternal.
-#endif
 
 // Include Swift defined types
 #if __has_include("NitroTest-Swift.h")
