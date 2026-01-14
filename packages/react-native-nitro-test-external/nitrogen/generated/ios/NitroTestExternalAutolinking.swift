@@ -30,9 +30,9 @@ public final class NitroTestExternalAutolinking {
   }
 
   public final class AutolinkedSomeExternalObject: AutolinkedClass {
-    public static func create() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+    public static func create() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
       let hybridObject = HybridSomeExternalObject()
-      return { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ in
+      return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
         let __cxxWrapped = hybridObject.getCxxWrapper()
         return __cxxWrapped.getCxxPart()
       }()

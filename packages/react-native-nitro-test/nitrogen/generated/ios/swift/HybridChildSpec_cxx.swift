@@ -72,21 +72,21 @@ open class HybridChildSpec_cxx : HybridBaseSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridChildSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::HybridChildSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridChildSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridChildSpec_(self.toUnsafe())
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__HybridChildSpec_(self.toUnsafe())
       __cxxPart = bridge.weakify_std__shared_ptr_HybridChildSpec_(newCxxPart)
       return newCxxPart
     }
   }
 
-  public override func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
-    let ownCxxPart: bridge.std__shared_ptr_HybridChildSpec_ = getCxxPart()
+  public override func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__HybridBaseSpec_ {
+    let ownCxxPart: bridge.std__shared_ptr_margelo__nitro__test__HybridChildSpec_ = getCxxPart()
     return bridge.upcast_Child_to_Base(ownCxxPart)
   }
 

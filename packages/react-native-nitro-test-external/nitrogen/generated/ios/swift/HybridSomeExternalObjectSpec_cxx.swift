@@ -72,14 +72,14 @@ open class HybridSomeExternalObjectSpec_cxx {
 
   /**
    * Gets (or creates) the C++ part of this Hybrid Object.
-   * The C++ part is a `std::shared_ptr<HybridSomeExternalObjectSpec>`.
+   * The C++ part is a `std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>`.
    */
-  public func getCxxPart() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
     } else {
-      let newCxxPart = bridge.create_std__shared_ptr_HybridSomeExternalObjectSpec_(self.toUnsafe())
+      let newCxxPart = bridge.create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(self.toUnsafe())
       __cxxPart = bridge.weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(newCxxPart)
       return newCxxPart
     }
