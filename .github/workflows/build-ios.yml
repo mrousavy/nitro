@@ -112,6 +112,9 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
+            C_COMPILER_LAUNCHER=ccache \
+            CPLUSPLUS_COMPILER_LAUNCHER=ccache \
+            CLANG_ENABLE_EXPLICIT_MODULES_WITH_COMPILER_LAUNCHER=YES \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 
