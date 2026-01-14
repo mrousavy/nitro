@@ -38,10 +38,6 @@ on:
 
 env:
   USE_CCACHE: 1
-  CCACHE_SLOPPINESS: clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros
-  CCACHE_FILECLONE: true
-  CCACHE_DEPEND: true
-  CCACHE_INODECACHE: true
 
 jobs:
   build:
@@ -60,6 +56,13 @@ jobs:
           max-size: 1.5G
           key: ${{ runner.os }}-ccache-example-ios
           create-symlink: true
+
+      - name: ccache sanity check
+        run: |
+          which ccache || true
+          which clang || true
+          which clang++ || true
+          ccache -s || true
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
