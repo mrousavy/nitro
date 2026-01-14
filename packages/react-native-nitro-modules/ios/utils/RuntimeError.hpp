@@ -12,8 +12,8 @@
 
 namespace margelo::nitro {
 
-static inline std::exception_ptr makeException(const std::string& message, const std::string& stacktrace);
-static std::string getExceptionMessage(const std::exception_ptr& exception);
-static std::string getExceptionStacktrace(const std::exception_ptr& exception);
+std::exception_ptr makeException(const std::string& message, const std::string& stacktrace);
+std::string getExceptionMessage(const std::exception_ptr& exception);
+std::string getExceptionStacktrace(const std::exception_ptr& exception);
 
 } // namespace margelo::nitro

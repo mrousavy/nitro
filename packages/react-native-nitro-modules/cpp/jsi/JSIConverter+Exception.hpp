@@ -14,6 +14,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 #include "NitroTypeInfo.hpp"
 #include "PropNameIDCache.hpp"
+#include <NitroModules/Error.hpp>
 #include <exception>
 #include <jsi/jsi.h>
 
@@ -28,7 +29,11 @@ struct JSIConverter<std::exception_ptr> final {
     jsi::Object object = error.asObject(runtime);
     std::string name = object.getProperty(runtime, PropNameIDCache::get(runtime, "name")).asString(runtime).utf8(runtime);
     std::string message = object.getProperty(runtime, PropNameIDCache::get(runtime, "message")).asString(runtime).utf8(runtime);
-    return std::make_exception_ptr(std::runtime_error(name + ": " + message));
+    if (object.hasProperty(runtime, PropNameIDCache::get(runtime, "stack"))) [[likely]] {
+      std::string stacktrace = object.getProperty(runtime, PropNameIDCache::get(runtime, "stack")).asString(runtime).utf8(runtime);
+      return std::make_exception_ptr(nitro::Error(name + ": " + message, stacktrace));
+    }
+    return std::make_exception_ptr(nitro::Error(name + ": " + message, ""));
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::exception_ptr& exception) {
     if (exception == nullptr) [[unlikely]] {
@@ -37,7 +42,12 @@ struct JSIConverter<std::exception_ptr> final {
 
     try {
       std::rethrow_exception(exception);
+    } catch (const nitro::Error& e) {
+      // nitro::Error: Message Stacktrace
+      jsi::JSError error(runtime, e.what(), e.stacktrace());
+      return jsi::Value(runtime, error.value());
     } catch (const std::exception& e) {
+      // any std::exception: Message only
       jsi::JSError error(runtime, e.what());
       return jsi::Value(runtime, error.value());
     } catch (...) {
