@@ -20,14 +20,14 @@ namespace margelo::nitro::test::external::bridge::swift {
     return std::make_shared<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(swiftPart);
   }
   void* NON_NULL get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType) {
-    std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(cppType);
+    
+    std::shared_ptr<margelo::nitro::test::external::SwiftClassWrapper> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::external::SwiftClassWrapper>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
       throw std::runtime_error("Class \"HybridSomeExternalObjectSpec\" is not implemented in Swift!");
     }
     #endif
-    NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
-    return swiftPart.toUnsafe();
+    return swiftWrapper->getSwiftImplementationUnretained();
   }
 
 } // namespace margelo::nitro::test::external::bridge::swift

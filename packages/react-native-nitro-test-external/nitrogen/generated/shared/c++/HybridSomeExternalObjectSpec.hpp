@@ -21,6 +21,11 @@ namespace margelo::nitro::test::external {
 
   using namespace margelo::nitro;
 
+class SwiftClassWrapper {
+public:
+  virtual void* NON_NULL getSwiftImplementationUnretained() = 0;
+};
+
   /**
    * An abstract base class for `SomeExternalObject`
    * Inherit this class to create instances of `HybridSomeExternalObjectSpec` in C++.

@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
    * the future, HybridExternalChildSpec_cxx can directly inherit from the C++ class HybridExternalChildSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridExternalChildSpecSwift: public virtual HybridExternalChildSpec {
+  class HybridExternalChildSpecSwift: public virtual HybridExternalChildSpec, public external::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridExternalChildSpecSwift(const NitroTest::HybridExternalChildSpec_cxx& swiftPart):
@@ -42,6 +42,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridExternalChildSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+    
+    
+    void* NON_NULL getSwiftImplementationUnretained() override {
+      return _swiftPart.toUnsafe();
     }
 
   public:
