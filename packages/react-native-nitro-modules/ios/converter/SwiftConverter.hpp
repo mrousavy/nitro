@@ -54,6 +54,12 @@ private:
   struct always_false : std::false_type {};
 };
 
+/**
+ * Gets the Swift type for the given C++ type.
+ */
+template <typename T>
+using SwiftTypeOf = typename SwiftConverter<T>::SwiftType;
+
 // double <> number
 template <>
 struct SwiftConverter<double> final {
@@ -83,3 +89,4 @@ struct SwiftConverter<bool> final {
 #include "SwiftConverter+String.hpp"
 #include "SwiftConverter+Optional.hpp"
 #include "SwiftConverter+Array.hpp"
+#include "SwiftConverter+Function.hpp"

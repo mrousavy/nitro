@@ -20,7 +20,7 @@ namespace margelo::nitro {
 // std::vector<ItemType> <> swift::Array<SwiftItemType>
 template <typename ItemType>
 struct SwiftConverter<std::vector<ItemType>> final {
-  using SwiftItemType = typename SwiftConverter<ItemType>::SwiftType;
+  using SwiftItemType = SwiftTypeOf<ItemType>;
   using SwiftType = swift::Array<SwiftItemType>;
   
   static inline std::vector<ItemType> fromSwift(const SwiftType& array) {
