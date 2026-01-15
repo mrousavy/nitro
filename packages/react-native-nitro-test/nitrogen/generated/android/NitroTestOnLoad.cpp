@@ -17,6 +17,7 @@
 
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridExternalChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridRecyclableTestViewSpec.hpp"
 #include "views/JHybridRecyclableTestViewStateUpdater.hpp"
@@ -50,6 +51,7 @@ int initialize(JavaVM* vm) {
     // Register native JNI methods
     margelo::nitro::test::JHybridBaseSpec::registerNatives();
     margelo::nitro::test::JHybridChildSpec::registerNatives();
+    margelo::nitro::test::JHybridExternalChildSpec::registerNatives();
     margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
     margelo::nitro::test::JHybridRecyclableTestViewSpec::registerNatives();
     margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
