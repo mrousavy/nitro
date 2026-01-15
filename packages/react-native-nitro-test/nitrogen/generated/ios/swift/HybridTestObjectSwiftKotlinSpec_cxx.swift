@@ -385,6 +385,31 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
     @inline(__always)
     set {
+      final class ClosureWrapper {
+        private let closure: (Double) -> Void
+        init(closure: consuming @escaping (Double) -> Void) {
+          self.closure = consume closure
+        }
+        func callAsFunction(_ x: Double) -> Void {
+          return self.closure(x)
+        }
+      }
+      let closure = { (x: Double) -> Void in
+        print("Lol \(x)")
+      }
+      let closureWrapper = ClosureWrapper(closure: closure)
+      let context = Unmanaged<ClosureWrapper>.passRetained(closureWrapper).toOpaque()
+      let x = bridge.SwiftFunction_void_double(context,
+                                               { (context: UnsafeMutableRawPointer, x: Double) -> Void in
+                                                 let unwrapped = Unmanaged<ClosureWrapper>.fromOpaque(context).takeUnretainedValue()
+                                                 return unwrapped(x)
+                                               },
+                                               { (context: UnsafeMutableRawPointer) -> Void in
+                                                 Unmanaged<ClosureWrapper>.fromOpaque(context).release()
+                                               })
+      x.callAsFunction(55.5)
+      x.callAsFunction(13.05)
+      
       self.__implementation.optionalCallback = { () -> ((_ value: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____value______(newValue) {
           let __unwrapped = bridge.get_std__optional_std__function_void_double____value______(newValue)

@@ -41,7 +41,7 @@ public:
     };
   }
   
-  inline R operator()(Args... args) {
+  inline R operator()(Args... args) const {
     return _function(args...);
   }
   

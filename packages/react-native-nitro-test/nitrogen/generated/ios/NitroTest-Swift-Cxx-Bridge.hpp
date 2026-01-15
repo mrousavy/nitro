@@ -99,6 +99,11 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <variant>
 #include <vector>
 
+namespace swift {
+class String;
+}
+#include <NitroModules/SwiftClosure.hpp>
+
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
  * as well as helper functions to interact with those C++ types from Swift.
@@ -460,6 +465,8 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::function<void(double)>`.
    */
   using Func_void_double = std::function<void(double /* value */)>;
+using SwiftFunction_void_double = SwiftFunction<void(double)>;
+using SwiftFunction_double_String_String = SwiftFunction<double(::swift::String, ::swift::String)>;
   /**
    * Wrapper class for a `std::function<void(double / * value * /)>`, this can be used from Swift.
    */
