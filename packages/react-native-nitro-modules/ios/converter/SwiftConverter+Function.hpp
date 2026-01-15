@@ -24,10 +24,10 @@ struct SwiftConverter<std::function<R(Args...)>> final {
   using SwiftType = SwiftFunction<SwiftTypeOf<R>(SwiftTypeOf<Args>...)>;
   
   static inline std::function<R(Args...)> fromSwift(const SwiftType& swiftClosure) {
-    throw std::runtime_error("not yet implemented!");
+    return swiftClosure; // <-- it's callable, so auto-convertable to std::function.
   }
   static inline SwiftType toSwift(const std::function<R(Args...)>& function) {
-    throw std::runtime_error("not yet implemented!");
+    return SwiftType(function);
   }
 };
 
