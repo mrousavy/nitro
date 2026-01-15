@@ -15,19 +15,41 @@ import NitroModules
 public final class Func_std__shared_ptr_Promise_std__string__ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  public let closure: () -> Promise<String>
+  private let closure: () -> Promise<String>
 
   public init(_ closure: @escaping () -> Promise<String>) {
     self.closure = closure
   }
-  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_Promise_std__string__) {
-    self.closure = { () -> Promise<String> in
-      fatalError("not yet implemented!")
-    }
+
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `Func_std__shared_ptr_Promise_std__string__`.
+   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_std__string__>`.
+   * This removes one strong reference from the object!
+   */
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_std__string__ {
+    return Unmanaged<Func_std__shared_ptr_Promise_std__string__>.fromOpaque(pointer).takeRetainedValue()
   }
 
   @inline(__always)
-  public func call() -> Promise<String> {
-    return self.closure()
+  public func call() -> bridge.std__shared_ptr_Promise_std__string__ {
+    let __result: Promise<String> = self.closure()
+    return { () -> bridge.std__shared_ptr_Promise_std__string__ in
+      let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
+      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
+      __result
+        .then({ __result in __promiseHolder.resolve(std.string(__result)) })
+        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+      return __promise
+    }()
   }
 }

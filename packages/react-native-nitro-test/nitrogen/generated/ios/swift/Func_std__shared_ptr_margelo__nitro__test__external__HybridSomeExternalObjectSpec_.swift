@@ -16,19 +16,37 @@ import NitroModules
 public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  public let closure: () -> (any HybridSomeExternalObjectSpec)
+  private let closure: () -> (any HybridSomeExternalObjectSpec)
 
   public init(_ closure: @escaping () -> (any HybridSomeExternalObjectSpec)) {
     self.closure = closure
   }
-  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) {
-    self.closure = { () -> (any HybridSomeExternalObjectSpec) in
-      fatalError("not yet implemented!")
-    }
+
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_`.
+   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_>`.
+   * This removes one strong reference from the object!
+   */
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
+    return Unmanaged<Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_>.fromOpaque(pointer).takeRetainedValue()
   }
 
   @inline(__always)
-  public func call() -> (any HybridSomeExternalObjectSpec) {
-    return self.closure()
+  public func call() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
+    let __result: (any HybridSomeExternalObjectSpec) = self.closure()
+    return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+      let __cxxWrapped = __result.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
   }
 }

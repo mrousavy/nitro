@@ -15,19 +15,33 @@ import NitroModules
 public final class Func_void_std__vector_Powertrain_ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  public let closure: (_ array: [Powertrain]) -> Void
+  private let closure: (_ array: [Powertrain]) -> Void
 
   public init(_ closure: @escaping (_ array: [Powertrain]) -> Void) {
     self.closure = closure
   }
-  public init(fromCxx function: consuming bridge.Func_void_std__vector_Powertrain_) {
-    self.closure = { (array: [Powertrain]) -> Void in
-      fatalError("not yet implemented!")
-    }
+
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `Func_void_std__vector_Powertrain_`.
+   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__vector_Powertrain_>`.
+   * This removes one strong reference from the object!
+   */
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__vector_Powertrain_ {
+    return Unmanaged<Func_void_std__vector_Powertrain_>.fromOpaque(pointer).takeRetainedValue()
   }
 
   @inline(__always)
-  public func call(array: [Powertrain]) -> Void {
-    return self.closure(array)
+  public func call(array: bridge.std__vector_Powertrain_) -> Void {
+    self.closure(array.map({ __item in __item }))
   }
 }
