@@ -173,10 +173,7 @@ namespace margelo::nitro::test {
     inline void setNullValue(nitro::NullType nullValue) noexcept override {
       _swiftPart.setNullValue(nullValue);
     }
-    inline std::optional<std::string> getOptionalString() noexcept override {
-      auto __result = _swiftPart.getOptionalString();
-      return __result;
-    }
+    std::optional<std::string> getOptionalString() noexcept override;
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }

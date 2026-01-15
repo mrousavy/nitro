@@ -22,6 +22,7 @@ namespace margelo::nitro {
 // std::string <> swift::String
 template <>
 struct SwiftConverter<std::string> final {
+  using SwiftType = swift::String;
   static std::string fromSwift(const swift::String& string);
   static swift::String toSwift(const std::string& string);
 };
