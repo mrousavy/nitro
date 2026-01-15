@@ -31,8 +31,12 @@ struct SwiftConverter<std::vector<T>> final {
     return vector;
   }
   static inline SwiftType toSwift(const std::vector<T>& vector) {
-    auto array = swift::Array<typename SwiftConverter<T>::SwiftType>::init(55);
-    
+    size_t size = vector.size();
+    auto array = swift::Array<typename SwiftConverter<T>::SwiftType>::init();
+    array.reserveCapacity(size);
+    for (size_t i = 0; i < size; i++) {
+      array.append(SwiftConverter<T>::toSwift(vector[i]));
+    }
     return array;
   }
 };
