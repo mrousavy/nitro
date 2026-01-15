@@ -26,10 +26,10 @@ public extension HybridExternalChildSpec_protocol {
 }
 
 /// See ``HybridExternalChildSpec``
-open class HybridExternalChildSpec_base: HybridSomeExternalObjectSpec_base {
+open class HybridExternalChildSpec_base {
   private weak var cxxWrapper: HybridExternalChildSpec_cxx? = nil
-  public override init() { super.init() }
-  public override func getCxxWrapper() -> HybridExternalChildSpec_cxx {
+  public init() { }
+  public func getCxxWrapper() -> HybridExternalChildSpec_cxx {
   #if DEBUG
     guard self is any HybridExternalChildSpec else {
       fatalError("`self` is not a `HybridExternalChildSpec`! Did you accidentally inherit from `HybridExternalChildSpec_base` instead of `HybridExternalChildSpec`?")
