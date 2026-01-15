@@ -247,6 +247,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     return self.__implementation.optionalString
   }
   
+  public final func bounceStringsPure(strings: [String]) -> [String] {
+    return try! self.__implementation.bounceStrings(array: strings)
+  }
+  
   public final var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {

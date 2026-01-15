@@ -10,9 +10,7 @@ template <typename T, typename Enable>
 struct SwiftConverter;
 } // namespace margelo::nitro
 
-namespace swift {
-  class String;
-}
+#ifdef SWIFT_SWIFT_H // <-- -Swift.h needs to be imported for this to work
 
 #include "SwiftConverter.hpp"
 #include <string>
@@ -23,8 +21,14 @@ namespace margelo::nitro {
 template <>
 struct SwiftConverter<std::string> final {
   using SwiftType = swift::String;
-  static std::string fromSwift(const swift::String& string);
-  static swift::String toSwift(const std::string& string);
+  static inline std::string fromSwift(const swift::String& string) {
+    return string;
+  }
+  static inline swift::String toSwift(const std::string& string) {
+    return swift::String(string);
+  }
 };
 
 } // namespace margelo::nitro
+
+#endif

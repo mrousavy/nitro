@@ -15,4 +15,10 @@ std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalStri
   return SwiftConverter<std::optional<std::string>>::fromSwift(swResult);
 }
 
+std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceStrings(const std::vector<std::string>& array) {
+  using CppType = std::vector<std::string>;
+  auto swResult = _swiftPart.bounceStringsPure(SwiftConverter<CppType>::toSwift(array));
+  return SwiftConverter<CppType>::fromSwift(swResult);
+}
+
 } // namespace margelo::nitro::test
