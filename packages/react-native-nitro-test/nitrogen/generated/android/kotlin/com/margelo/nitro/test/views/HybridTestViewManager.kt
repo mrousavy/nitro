@@ -9,9 +9,9 @@ package com.margelo.nitro.test.views
 
 import android.view.View
 import com.facebook.react.uimanager.ReactStylesDiffMap
-import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
+import com.facebook.react.uimanager.ViewGroupManager
 import com.margelo.nitro.R.id.associated_hybrid_view_tag
 import com.margelo.nitro.views.RecyclableView
 import com.margelo.nitro.test.*
@@ -19,7 +19,7 @@ import com.margelo.nitro.test.*
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
-open class HybridTestViewManager: SimpleViewManager<View>() {
+open class HybridTestViewManager: ViewGroupManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(HybridTestView::class.java)) {
       // Enable view recycling
