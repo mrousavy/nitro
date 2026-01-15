@@ -24,6 +24,10 @@
       "swift": "HybridChild",
       "kotlin": "HybridChild"
     },
+    "ExternalChild": {
+      "swift": "HybridExternalChild",
+      "kotlin": "HybridExternalChild"
+    },
     "PlatformObject": {
       "swift": "HybridPlatformObject",
       "kotlin": "HybridPlatformObject"

@@ -113,14 +113,13 @@ ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
 return std::make_shared<${swiftWrappingType}>(swiftPart);
     `.trim()
     getImplementation = `
-std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
+std::shared_ptr<nitro::SwiftClassWrapper> swiftWrapper = std::dynamic_pointer_cast<nitro::SwiftClassWrapper>(cppType);
 #ifdef NITRO_DEBUG
 if (swiftWrapper == nullptr) [[unlikely]] {
   throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
 }
 #endif
-${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
-return swiftPart.toUnsafe();
+return swiftWrapper->getSwiftPartUnretained();
 `.trim()
   } else {
     // It's an external type - we have to delegate the call to the external library's functions
@@ -166,6 +165,11 @@ void* NON_NULL get_${name}(${name} cppType) {
         {
           language: 'c++',
           name: 'NitroModules/NitroDefines.hpp',
+          space: 'system',
+        },
+        {
+          language: 'c++',
+          name: 'NitroModules/SwiftClassWrapper.hpp',
           space: 'system',
         },
         {

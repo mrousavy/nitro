@@ -26,20 +26,21 @@ public extension HybridRecyclableTestViewSpec_protocol {
 
 /// See ``HybridRecyclableTestViewSpec``
 open class HybridRecyclableTestViewSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridRecyclableTestViewSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridRecyclableTestViewSpec_cxx {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridRecyclableTestViewSpec_ {
   #if DEBUG
     guard self is any HybridRecyclableTestViewSpec else {
       fatalError("`self` is not a `HybridRecyclableTestViewSpec`! Did you accidentally inherit from `HybridRecyclableTestViewSpec_base` instead of `HybridRecyclableTestViewSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     } else {
       let cxxWrapper = HybridRecyclableTestViewSpec_cxx(self as! any HybridRecyclableTestViewSpec)
       self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     }
   }
 }

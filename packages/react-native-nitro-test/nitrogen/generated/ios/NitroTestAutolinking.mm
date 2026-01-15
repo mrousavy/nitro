@@ -14,6 +14,7 @@
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
+#include "HybridExternalChildSpecSwift.hpp"
 #include "HybridPlatformObjectSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "HybridRecyclableTestViewSpecSwift.hpp"
@@ -54,6 +55,13 @@
     "Child",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridChildSpec> hybridObject = NitroTest::NitroTestAutolinking::AutolinkedChild::create();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "ExternalChild",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridExternalChildSpec> hybridObject = NitroTest::NitroTestAutolinking::AutolinkedExternalChild::create();
       return hybridObject;
     }
   );

@@ -12,6 +12,7 @@ import {
   Base,
   HybridPlatformObject,
   HybridChild,
+  ExternalChild,
 } from 'react-native-nitro-test'
 import {
   type AssertionBackend,
@@ -1983,6 +1984,32 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(HybridSomeExternalObject)
+    ),
+    createTest('creating ExternalChild works', () =>
+      it(() => {
+        return NitroModules.createHybridObject<ExternalChild>('ExternalChild')
+      })
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('ExternalChild.bounceString(Hello!)', () =>
+      it(() => {
+        const externalChild =
+          NitroModules.createHybridObject<ExternalChild>('ExternalChild')
+        return externalChild.bounceString('Hello!')
+      })
+        .didNotThrow()
+        .equals('Hello!')
+    ),
+    createTest('ExternalChild.bounceString(Hello!)', () =>
+      it(() => {
+        const externalChild =
+          NitroModules.createHybridObject<ExternalChild>('ExternalChild')
+        const bounced = testObject.bounceExternalHybrid(externalChild)
+        return bounced.equals(externalChild)
+      })
+        .didNotThrow()
+        .equals(true)
     ),
     createTest('createInternalObject(...) returns a different subclass', () =>
       it(() => {

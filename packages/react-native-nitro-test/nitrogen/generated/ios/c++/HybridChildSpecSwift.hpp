@@ -21,6 +21,7 @@ namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include <string>
 #include "Car.hpp"
 #include <variant>
@@ -44,7 +45,7 @@ namespace margelo::nitro::test {
    * the future, HybridChildSpec_cxx can directly inherit from the C++ class HybridChildSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift {
+  class HybridChildSpecSwift: public virtual HybridChildSpec, public virtual HybridBaseSpecSwift, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridChildSpecSwift(const NitroTest::HybridChildSpec_cxx& swiftPart):
@@ -56,6 +57,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridChildSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

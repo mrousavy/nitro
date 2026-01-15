@@ -26,8 +26,7 @@ public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSo
   public func call() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
     let __result: (any HybridSomeExternalObjectSpec) = self.closure()
     return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = __result.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      return __result.getCxxPart()
     }()
   }
 

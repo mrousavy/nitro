@@ -14,6 +14,7 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include <string>
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
@@ -30,7 +31,7 @@ namespace margelo::nitro::test::external {
    * the future, HybridSomeExternalObjectSpec_cxx can directly inherit from the C++ class HybridSomeExternalObjectSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridSomeExternalObjectSpecSwift: public virtual HybridSomeExternalObjectSpec {
+  class HybridSomeExternalObjectSpecSwift: public virtual HybridSomeExternalObjectSpec, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridSomeExternalObjectSpecSwift(const NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart):
@@ -41,6 +42,11 @@ namespace margelo::nitro::test::external {
     // Get the Swift part
     inline NitroTestExternal::HybridSomeExternalObjectSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

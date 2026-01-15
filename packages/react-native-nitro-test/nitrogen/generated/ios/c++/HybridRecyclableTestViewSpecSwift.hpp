@@ -14,6 +14,7 @@ namespace NitroTest { class HybridRecyclableTestViewSpec_cxx; }
 
 
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
@@ -30,7 +31,7 @@ namespace margelo::nitro::test {
    * the future, HybridRecyclableTestViewSpec_cxx can directly inherit from the C++ class HybridRecyclableTestViewSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridRecyclableTestViewSpecSwift: public virtual HybridRecyclableTestViewSpec {
+  class HybridRecyclableTestViewSpecSwift: public virtual HybridRecyclableTestViewSpec, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridRecyclableTestViewSpecSwift(const NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart):
@@ -41,6 +42,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridRecyclableTestViewSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

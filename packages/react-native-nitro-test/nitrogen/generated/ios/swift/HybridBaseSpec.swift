@@ -26,20 +26,21 @@ public extension HybridBaseSpec_protocol {
 
 /// See ``HybridBaseSpec``
 open class HybridBaseSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridBaseSpec_cxx {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridBaseSpec_ {
   #if DEBUG
     guard self is any HybridBaseSpec else {
       fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     } else {
       let cxxWrapper = HybridBaseSpec_cxx(self as! any HybridBaseSpec)
       self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     }
   }
 }

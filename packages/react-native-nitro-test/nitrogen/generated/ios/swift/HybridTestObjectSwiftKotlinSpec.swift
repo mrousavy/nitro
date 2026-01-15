@@ -136,20 +136,21 @@ public extension HybridTestObjectSwiftKotlinSpec_protocol {
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 open class HybridTestObjectSwiftKotlinSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
   #if DEBUG
     guard self is any HybridTestObjectSwiftKotlinSpec else {
       fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     } else {
       let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! any HybridTestObjectSwiftKotlinSpec)
       self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     }
   }
 }

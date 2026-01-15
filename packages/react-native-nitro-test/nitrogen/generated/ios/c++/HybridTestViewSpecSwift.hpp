@@ -15,6 +15,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include "ColorScheme.hpp"
 #include <functional>
 
@@ -32,7 +33,7 @@ namespace margelo::nitro::test {
    * the future, HybridTestViewSpec_cxx can directly inherit from the C++ class HybridTestViewSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridTestViewSpecSwift: public virtual HybridTestViewSpec {
+  class HybridTestViewSpecSwift: public virtual HybridTestViewSpec, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridTestViewSpecSwift(const NitroTest::HybridTestViewSpec_cxx& swiftPart):
@@ -43,6 +44,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridTestViewSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

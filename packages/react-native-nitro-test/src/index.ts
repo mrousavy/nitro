@@ -13,6 +13,7 @@ export * from './specs/Child.nitro'
 export * from './specs/PlatformObject.nitro'
 export * from './specs/TestObject.nitro'
 export * from './specs/TestView.nitro'
+export * from './specs/ExternalChild.nitro'
 
 // Export all HybridObject singleton instances
 export const HybridTestObjectCpp =
