@@ -20,14 +20,14 @@ public final class Func_void_std__vector_Powertrain_ {
   public init(_ closure: @escaping (_ array: [Powertrain]) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__vector_Powertrain_) {
-    self.closure = { (array: bridge.std__vector_Powertrain_) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__vector_Powertrain_) {
+    self.closure = { (array: [Powertrain]) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    self.closure(array.map({ __item in __item }))
+  public func call(array: [Powertrain]) -> Void {
+    return self.closure(array)
   }
 }

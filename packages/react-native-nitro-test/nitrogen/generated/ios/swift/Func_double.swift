@@ -20,7 +20,7 @@ public final class Func_double {
   public init(_ closure: @escaping () -> Double) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_double) {
+  public init(fromCxx function: consuming bridge.Func_double) {
     self.closure = { () -> Double in
       fatalError("not yet implemented!")
     }
@@ -28,7 +28,6 @@ public final class Func_double {
 
   @inline(__always)
   public func call() -> Double {
-    let __result: Double = self.closure()
-    return __result
+    return self.closure()
   }
 }

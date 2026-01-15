@@ -20,29 +20,14 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__sha
   public init(_ closure: @escaping () -> Promise<Promise<ArrayBuffer>>) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) {
-    self.closure = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ in
+  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) {
+    self.closure = { () -> Promise<Promise<ArrayBuffer>> in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call() -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
-    let __result: Promise<Promise<ArrayBuffer>> = self.closure()
-    return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ in
-      let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____()
-      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(__promise)
-      __result
-        .then({ __result in __promiseHolder.resolve({ () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
-            let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(__promise)
-            __result
-              .then({ __result in __promiseHolder.resolve(__result.getArrayBuffer()) })
-              .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-            return __promise
-          }()) })
-        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-      return __promise
-    }()
+  public func call() -> Promise<Promise<ArrayBuffer>> {
+    return self.closure()
   }
 }

@@ -20,34 +20,14 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
   public init(_ closure: @escaping (_ value: Promise<ArrayBuffer>) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) {
-    self.closure = { (value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) {
+    self.closure = { (value: Promise<ArrayBuffer>) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void {
-    self.closure({ () -> Promise<ArrayBuffer> in
-      let __promise = Promise<ArrayBuffer>()
-      let __resolver = { (__result: ArrayBuffer) in
-        __promise.resolve(withResult: __result)
-      }
-      let __rejecter = { (__error: Error) in
-        __promise.reject(withError: __error)
-      }
-      let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_ArrayBuffer_ in
-        let __closureWrapper = Func_void_std__shared_ptr_ArrayBuffer_(__resolver)
-        return bridge.create_Func_void_std__shared_ptr_ArrayBuffer_(__closureWrapper.toUnsafe())
-      }()
-      let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-        let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-        return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-      }()
-      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(value)
-      __promiseHolder.addOnResolvedListener(__resolverCpp)
-      __promiseHolder.addOnRejectedListener(__rejecterCpp)
-      return __promise
-    }())
+  public func call(value: Promise<ArrayBuffer>) -> Void {
+    return self.closure(value)
   }
 }

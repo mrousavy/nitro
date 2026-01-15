@@ -20,29 +20,14 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____
   public init(_ closure: @escaping () -> Promise<Promise<Void>>) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____) {
-    self.closure = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_void____ in
+  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____) {
+    self.closure = { () -> Promise<Promise<Void>> in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call() -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_void____ {
-    let __result: Promise<Promise<Void>> = self.closure()
-    return { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_void____ in
-      let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_Promise_void____()
-      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(__promise)
-      __result
-        .then({ __result in __promiseHolder.resolve({ () -> bridge.std__shared_ptr_Promise_void__ in
-            let __promise = bridge.create_std__shared_ptr_Promise_void__()
-            let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(__promise)
-            __result
-              .then({ __result in __promiseHolder.resolve() })
-              .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-            return __promise
-          }()) })
-        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-      return __promise
-    }()
+  public func call() -> Promise<Promise<Void>> {
+    return self.closure()
   }
 }

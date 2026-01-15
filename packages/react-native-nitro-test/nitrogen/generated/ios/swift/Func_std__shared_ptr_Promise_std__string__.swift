@@ -20,22 +20,14 @@ public final class Func_std__shared_ptr_Promise_std__string__ {
   public init(_ closure: @escaping () -> Promise<String>) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_std__shared_ptr_Promise_std__string__) {
-    self.closure = { () -> bridge.std__shared_ptr_Promise_std__string__ in
+  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_Promise_std__string__) {
+    self.closure = { () -> Promise<String> in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call() -> bridge.std__shared_ptr_Promise_std__string__ {
-    let __result: Promise<String> = self.closure()
-    return { () -> bridge.std__shared_ptr_Promise_std__string__ in
-      let __promise = bridge.create_std__shared_ptr_Promise_std__string__()
-      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__string__(__promise)
-      __result
-        .then({ __result in __promiseHolder.resolve(std.string(__result)) })
-        .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
-      return __promise
-    }()
+  public func call() -> Promise<String> {
+    return self.closure()
   }
 }

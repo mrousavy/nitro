@@ -20,34 +20,14 @@ public final class Func_void_std__shared_ptr_Promise_double__ {
   public init(_ closure: @escaping (_ value: Promise<Double>) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__shared_ptr_Promise_double__) {
-    self.closure = { (value: bridge.std__shared_ptr_Promise_double__) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__shared_ptr_Promise_double__) {
+    self.closure = { (value: Promise<Double>) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(value: bridge.std__shared_ptr_Promise_double__) -> Void {
-    self.closure({ () -> Promise<Double> in
-      let __promise = Promise<Double>()
-      let __resolver = { (__result: Double) in
-        __promise.resolve(withResult: __result)
-      }
-      let __rejecter = { (__error: Error) in
-        __promise.reject(withError: __error)
-      }
-      let __resolverCpp = { () -> bridge.Func_void_double in
-        let __closureWrapper = Func_void_double(__resolver)
-        return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-      }()
-      let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-        let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-        return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-      }()
-      let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_double__(value)
-      __promiseHolder.addOnResolvedListenerCopy(__resolverCpp)
-      __promiseHolder.addOnRejectedListener(__rejecterCpp)
-      return __promise
-    }())
+  public func call(value: Promise<Double>) -> Void {
+    return self.closure(value)
   }
 }

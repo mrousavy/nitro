@@ -20,7 +20,7 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
   public init(_ closure: @escaping (_ value: ArrayBuffer) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__shared_ptr_ArrayBuffer_) {
+  public init(fromCxx function: consuming bridge.Func_void_std__shared_ptr_ArrayBuffer_) {
     self.closure = { (value: ArrayBuffer) -> Void in
       fatalError("not yet implemented!")
     }
@@ -28,6 +28,6 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
 
   @inline(__always)
   public func call(value: ArrayBuffer) -> Void {
-    self.closure(value)
+    return self.closure(value)
   }
 }

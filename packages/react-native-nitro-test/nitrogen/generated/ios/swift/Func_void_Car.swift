@@ -20,7 +20,7 @@ public final class Func_void_Car {
   public init(_ closure: @escaping (_ value: Car) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_Car) {
+  public init(fromCxx function: consuming bridge.Func_void_Car) {
     self.closure = { (value: Car) -> Void in
       fatalError("not yet implemented!")
     }
@@ -28,6 +28,6 @@ public final class Func_void_Car {
 
   @inline(__always)
   public func call(value: Car) -> Void {
-    self.closure(value)
+    return self.closure(value)
   }
 }

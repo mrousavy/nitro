@@ -1,5 +1,4 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { indent } from '../../utils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
@@ -16,27 +15,11 @@ export function createSwiftFunctionBridge(
   const bridge = bridgedFunction.getRequiredBridge()
   if (bridge == null) throw new Error(`FunctionType has to have a bridge!`)
 
-  const argsTypes = functionType.parameters.map((p) => {
-    const bridged = new SwiftCxxBridgedType(p)
-    return `${p.escapedName}: ${bridged.getTypeCode('swift')}`
-  })
-  const returnType = new SwiftCxxBridgedType(functionType.returnType)
-  const argsForward = functionType.parameters.map((p) => {
-    const bridged = new SwiftCxxBridgedType(p)
-    return bridged.parseFromCppToSwift(p.escapedName, 'swift')
-  })
-
-  let body: string
-  if (functionType.returnType.kind === 'void') {
-    body = `
-self.closure(${argsForward.join(', ')})
-    `.trim()
-  } else {
-    body = `
-let __result: ${functionType.returnType.getCode('swift')} = self.closure(${argsForward.join(', ')})
-return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
-    `.trim()
-  }
+  const returnType = functionType.returnType.getCode('swift')
+  const argsTypes = functionType.parameters.map(
+    (p) => `${p.escapedName}: ${p.getCode('swift')}`
+  )
+  const argsForward = functionType.parameters.map((p) => p.escapedName)
 
   const requiredImports = functionType
     .getRequiredImports('swift')
@@ -62,15 +45,15 @@ public final class ${swiftClassName} {
   public init(_ closure: @escaping ${functionType.getCode('swift')}) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.${bridge.specializationName}) {
-    self.closure = { (${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} in
+  public init(fromCxx function: consuming bridge.${bridge.specializationName}) {
+    self.closure = { (${argsTypes.join(', ')}) -> ${returnType} in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} {
-    ${indent(body, '    ')}
+  public func call(${argsTypes.join(', ')}) -> ${returnType} {
+    return self.closure(${argsForward.join(', ')})
   }
 }
   `.trim()

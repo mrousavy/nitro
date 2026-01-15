@@ -20,14 +20,14 @@ public final class Func_void_std__optional_double_ {
   public init(_ closure: @escaping (_ value: Double?) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__optional_double_) {
-    self.closure = { (value: bridge.std__optional_double_) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__optional_double_) {
+    self.closure = { (value: Double?) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(value: bridge.std__optional_double_) -> Void {
-    self.closure(value.value)
+  public func call(value: Double?) -> Void {
+    return self.closure(value)
   }
 }

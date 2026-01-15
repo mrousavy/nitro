@@ -21,18 +21,14 @@ public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSo
   public init(_ closure: @escaping () -> (any HybridSomeExternalObjectSpec)) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) {
-    self.closure = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+  public init(fromCxx function: consuming bridge.Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) {
+    self.closure = { () -> (any HybridSomeExternalObjectSpec) in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
-    let __result: (any HybridSomeExternalObjectSpec) = self.closure()
-    return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = __result.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
-    }()
+  public func call() -> (any HybridSomeExternalObjectSpec) {
+    return self.closure()
   }
 }

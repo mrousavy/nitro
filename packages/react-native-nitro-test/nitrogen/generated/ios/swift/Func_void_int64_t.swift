@@ -20,7 +20,7 @@ public final class Func_void_int64_t {
   public init(_ closure: @escaping (_ value: Int64) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_int64_t) {
+  public init(fromCxx function: consuming bridge.Func_void_int64_t) {
     self.closure = { (value: Int64) -> Void in
       fatalError("not yet implemented!")
     }
@@ -28,6 +28,6 @@ public final class Func_void_int64_t {
 
   @inline(__always)
   public func call(value: Int64) -> Void {
-    self.closure(value)
+    return self.closure(value)
   }
 }

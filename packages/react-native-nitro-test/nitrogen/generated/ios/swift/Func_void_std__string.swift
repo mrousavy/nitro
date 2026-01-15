@@ -20,14 +20,14 @@ public final class Func_void_std__string {
   public init(_ closure: @escaping (_ value: String) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__string) {
-    self.closure = { (value: std.string) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__string) {
+    self.closure = { (value: String) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(value: std.string) -> Void {
-    self.closure(String(value))
+  public func call(value: String) -> Void {
+    return self.closure(value)
   }
 }

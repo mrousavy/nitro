@@ -20,14 +20,14 @@ public final class Func_void_std__exception_ptr {
   public init(_ closure: @escaping (_ error: Error) -> Void) {
     self.closure = closure
   }
-  public init(_ function: consuming bridge.Func_void_std__exception_ptr) {
-    self.closure = { (error: std.exception_ptr) -> Void in
+  public init(fromCxx function: consuming bridge.Func_void_std__exception_ptr) {
+    self.closure = { (error: Error) -> Void in
       fatalError("not yet implemented!")
     }
   }
 
   @inline(__always)
-  public func call(error: std.exception_ptr) -> Void {
-    self.closure(RuntimeError.from(cppError: error))
+  public func call(error: Error) -> Void {
+    return self.closure(error)
   }
 }
