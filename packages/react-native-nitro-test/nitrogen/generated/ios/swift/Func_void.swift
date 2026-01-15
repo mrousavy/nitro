@@ -15,33 +15,20 @@ import NitroModules
 public final class Func_void {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: () -> Void
+  public let closure: () -> Void
 
   public init(_ closure: @escaping () -> Void) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.Func_void) {
+    self.closure = { () -> Void in
+      fatalError("not yet implemented!")
+      // return function()
+    }
   }
 
   @inline(__always)
   public func call() -> Void {
     self.closure()
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void {
-    return Unmanaged<Func_void>.fromOpaque(pointer).takeRetainedValue()
   }
 }

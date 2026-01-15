@@ -15,33 +15,20 @@ import NitroModules
 public final class Func_void_std__exception_ptr {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ error: Error) -> Void
+  public let closure: (_ error: Error) -> Void
 
   public init(_ closure: @escaping (_ error: Error) -> Void) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.Func_void_std__exception_ptr) {
+    self.closure = { (error: std.exception_ptr) -> Void in
+      fatalError("not yet implemented!")
+      // return function(RuntimeError.from(cppError: error))
+    }
   }
 
   @inline(__always)
   public func call(error: std.exception_ptr) -> Void {
     self.closure(RuntimeError.from(cppError: error))
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void_std__exception_ptr`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__exception_ptr>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__exception_ptr {
-    return Unmanaged<Func_void_std__exception_ptr>.fromOpaque(pointer).takeRetainedValue()
   }
 }

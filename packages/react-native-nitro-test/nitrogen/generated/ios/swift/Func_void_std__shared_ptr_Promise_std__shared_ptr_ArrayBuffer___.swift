@@ -15,10 +15,36 @@ import NitroModules
 public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ value: Promise<ArrayBuffer>) -> Void
+  public let closure: (_ value: Promise<ArrayBuffer>) -> Void
 
   public init(_ closure: @escaping (_ value: Promise<ArrayBuffer>) -> Void) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) {
+    self.closure = { (value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void in
+      fatalError("not yet implemented!")
+      // return function({ () -> Promise<ArrayBuffer> in
+  let __promise = Promise<ArrayBuffer>()
+  let __resolver = { (__result: ArrayBuffer) in
+    __promise.resolve(withResult: __result)
+  }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = { () -> bridge.Func_void_std__shared_ptr_ArrayBuffer_ in
+    let __closureWrapper = Func_void_std__shared_ptr_ArrayBuffer_(__resolver)
+    return bridge.create_Func_void_std__shared_ptr_ArrayBuffer_(__closureWrapper.toUnsafe())
+  }()
+  let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+    let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+    return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+  }()
+  let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(value)
+  __promiseHolder.addOnResolvedListener(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}())
+    }
   }
 
   @inline(__always)
@@ -44,24 +70,5 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
       __promiseHolder.addOnRejectedListener(__rejecterCpp)
       return __promise
     }())
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
-    return Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>.fromOpaque(pointer).takeRetainedValue()
   }
 }

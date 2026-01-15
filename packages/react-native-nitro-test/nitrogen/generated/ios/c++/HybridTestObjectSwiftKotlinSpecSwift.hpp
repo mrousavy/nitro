@@ -173,7 +173,10 @@ namespace margelo::nitro::test {
     inline void setNullValue(nitro::NullType nullValue) noexcept override {
       _swiftPart.setNullValue(nullValue);
     }
-    std::optional<std::string> getOptionalString() noexcept override;
+    inline std::optional<std::string> getOptionalString() noexcept override {
+      auto __result = _swiftPart.getOptionalString();
+      return __result;
+    }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
       _swiftPart.setOptionalString(optionalString);
     }
@@ -281,7 +284,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
+    inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
+      auto __result = _swiftPart.bounceStrings(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::vector<double> bounceNumbers(const std::vector<double>& array) override {
       auto __result = _swiftPart.bounceNumbers(array);
       if (__result.hasError()) [[unlikely]] {

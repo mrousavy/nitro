@@ -15,10 +15,16 @@ import NitroModules
 public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: () -> Promise<Promise<Void>>
+  public let closure: () -> Promise<Promise<Void>>
 
   public init(_ closure: @escaping () -> Promise<Promise<Void>>) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____) {
+    self.closure = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_void____ in
+      fatalError("not yet implemented!")
+      // return function()
+    }
   }
 
   @inline(__always)
@@ -39,24 +45,5 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____
         .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
       return __promise
     }()
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ {
-    return Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____>.fromOpaque(pointer).takeRetainedValue()
   }
 }

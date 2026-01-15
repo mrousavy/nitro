@@ -7,9 +7,15 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 export function createSwiftFunctionBridge(
   functionType: FunctionType
-): SourceFile {
+): SourceFile[] {
   const swiftClassName = functionType.specializationName
+  const iosNamespace = NitroConfig.current.getIosModuleName()
   const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
+
+  const bridgedFunction = new SwiftCxxBridgedType(functionType)
+  const bridge = bridgedFunction.getRequiredBridge()
+  if (bridge == null) throw new Error(`FunctionType has to have a bridge!`)
+
   const argsTypes = functionType.parameters.map((p) => {
     const bridged = new SwiftCxxBridgedType(p)
     return `${p.escapedName}: ${bridged.getTypeCode('swift')}`
@@ -38,7 +44,7 @@ return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
   requiredImports.push('import NitroModules')
   const imports = requiredImports.filter(isNotDuplicate)
 
-  const code = `
+  const swiftCode = `
 ${createFileMetadataString(`${swiftClassName}.swift`)}
 
 import Foundation
@@ -51,43 +57,85 @@ ${imports.join('\n')}
 public final class ${swiftClassName} {
   public typealias bridge = ${bridgeNamespace}
 
-  private let closure: ${functionType.getCode('swift')}
+  public let closure: ${functionType.getCode('swift')}
 
   public init(_ closure: @escaping ${functionType.getCode('swift')}) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.${bridge.specializationName}) {
+    self.closure = { (${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} in
+      fatalError("not yet implemented!")
+      // return function(${argsForward.join(', ')})
+    }
   }
 
   @inline(__always)
   public func call(${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} {
     ${indent(body, '    ')}
   }
+}
+  `.trim()
+  const cppHeaderCode = `
+${createFileMetadataString(`${swiftClassName}.hpp`)}
 
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
+#include <NitroModules/SwiftConverter.hpp>
+#include <functional>
 
-  /**
-   * Casts an unsafe pointer to a \`${swiftClassName}\`.
-   * The pointer has to be a retained opaque \`Unmanaged<${swiftClassName}>\`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${swiftClassName} {
-    return Unmanaged<${swiftClassName}>.fromOpaque(pointer).takeRetainedValue()
-  }
+namespace ${iosNamespace} {
+  class ${swiftClassName};
+}
+
+namespace margelo::nitro {
+  template <>
+  struct SwiftConverter<${functionType.getCode('c++')}> {
+    using SwiftType = ${iosNamespace}::${swiftClassName};
+    ${functionType.getCode('c++')} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
+    ${iosNamespace}::${swiftClassName} toSwift(const ${functionType.getCode('c++')}& cppFunc);
+  };
+}
+  `.trim()
+  const cppSourceCode = `
+${createFileMetadataString(`${swiftClassName}.cpp`)}
+
+#include "${swiftClassName}.hpp"
+#include <NitroModules/SwiftConverter.hpp>
+#include <functional>
+#include "${NitroConfig.current.getSwiftBridgeHeaderName()}.hpp"
+
+namespace margelo::nitro {
+
+${functionType.getCode('c++')} SwiftConverter<${functionType.getCode('c++')}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
+  throw std::runtime_error("not yet implemented!");
+}
+
+${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}>::toSwift(const ${functionType.getCode('c++')}& cppFunc) {
+  throw std::runtime_error("not yet implemented!");
+}
+
 }
   `.trim()
 
-  return {
-    content: code,
-    language: 'swift',
-    name: `${swiftClassName}.swift`,
-    platform: 'ios',
-    subdirectory: [],
-  }
+  return [
+    {
+      content: swiftCode,
+      language: 'swift',
+      name: `${swiftClassName}.swift`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+    {
+      content: cppHeaderCode,
+      language: 'c++',
+      name: `${swiftClassName}.hpp`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+    {
+      content: cppSourceCode,
+      language: 'c++',
+      name: `${swiftClassName}.cpp`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+  ]
 }

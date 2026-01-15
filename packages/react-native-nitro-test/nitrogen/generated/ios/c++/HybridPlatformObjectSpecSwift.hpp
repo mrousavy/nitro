@@ -17,7 +17,6 @@ namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 #include <string>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro::test {
 
@@ -72,7 +71,8 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
-      return SwiftConverter<std::string>::fromSwift(__result.value());
+      auto __value = std::move(__result.value());
+      return __value;
     }
 
   private:

@@ -182,15 +182,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'function': {
         const functionType = getTypeAs(this.type, FunctionType)
-        const extensionFile = createSwiftFunctionBridge(functionType)
-        files.push(extensionFile)
+        files.push(...createSwiftFunctionBridge(functionType))
         break
       }
       case 'promise': {
         // Promise needs resolver and rejecter funcs in Swift
         const promiseType = getTypeAs(this.type, PromiseType)
-        files.push(createSwiftFunctionBridge(promiseType.resolverFunction))
-        files.push(createSwiftFunctionBridge(promiseType.rejecterFunction))
+        files.push(...createSwiftFunctionBridge(promiseType.resolverFunction))
+        files.push(...createSwiftFunctionBridge(promiseType.rejecterFunction))
         break
       }
       case 'variant': {

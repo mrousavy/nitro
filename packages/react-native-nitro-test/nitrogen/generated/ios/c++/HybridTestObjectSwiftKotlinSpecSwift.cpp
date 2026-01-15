@@ -6,25 +6,6 @@
 ///
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
-#include <NitroModules/SwiftConverter.hpp>
-#include <NitroModules/SwiftClosure.hpp>
 
 namespace margelo::nitro::test {
-
-std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalString() noexcept {
-  auto swResult = _swiftPart.getOptionalStringPure();
-  return SwiftConverter<std::optional<std::string>>::fromSwift(swResult);
-}
-
-std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceStrings(const std::vector<std::string>& array) {
-  auto swiftClosure = SwiftConverter<std::function<double(std::string, std::string)>>::toSwift([](swift::String a, swift::String b) -> double {
-    return 55.5;
-  });
-  swiftClosure("Hello", "world!");
-  
-  using CppType = std::vector<std::string>;
-  auto swResult = _swiftPart.bounceStringsPure(SwiftConverter<CppType>::toSwift(array));
-  return SwiftConverter<CppType>::fromSwift(swResult);
-}
-
 } // namespace margelo::nitro::test

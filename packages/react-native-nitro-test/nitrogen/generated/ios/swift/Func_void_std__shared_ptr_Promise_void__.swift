@@ -15,10 +15,34 @@ import NitroModules
 public final class Func_void_std__shared_ptr_Promise_void__ {
   public typealias bridge = margelo.nitro.test.bridge.swift
 
-  private let closure: (_ value: Promise<Void>) -> Void
+  public let closure: (_ value: Promise<Void>) -> Void
 
   public init(_ closure: @escaping (_ value: Promise<Void>) -> Void) {
     self.closure = closure
+  }
+  public init(_ function: consuming bridge.Func_void_std__shared_ptr_Promise_void__) {
+    self.closure = { (value: bridge.std__shared_ptr_Promise_void__) -> Void in
+      fatalError("not yet implemented!")
+      // return function({ () -> Promise<Void> in
+  let __promise = Promise<Void>()
+  let __resolver = { __promise.resolve(withResult: ()) }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = { () -> bridge.Func_void in
+    let __closureWrapper = Func_void(__resolver)
+    return bridge.create_Func_void(__closureWrapper.toUnsafe())
+  }()
+  let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
+    let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
+    return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
+  }()
+  let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(value)
+  __promiseHolder.addOnResolvedListener(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}())
+    }
   }
 
   @inline(__always)
@@ -42,24 +66,5 @@ public final class Func_void_std__shared_ptr_Promise_void__ {
       __promiseHolder.addOnRejectedListener(__rejecterCpp)
       return __promise
     }())
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void_std__shared_ptr_Promise_void__`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__shared_ptr_Promise_void__>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_Promise_void__ {
-    return Unmanaged<Func_void_std__shared_ptr_Promise_void__>.fromOpaque(pointer).takeRetainedValue()
   }
 }
