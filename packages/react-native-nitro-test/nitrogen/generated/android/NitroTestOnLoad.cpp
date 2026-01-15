@@ -107,6 +107,14 @@ int initialize(JavaVM* vm) {
       }
     );
     HybridObjectRegistry::registerHybridObjectConstructor(
+      "ExternalChild",
+      []() -> std::shared_ptr<HybridObject> {
+        static DefaultConstructableObject<JHybridExternalChildSpec::javaobject> object("com/margelo/nitro/test/HybridExternalChild");
+        auto instance = object.create();
+        return instance->cthis()->shared();
+      }
+    );
+    HybridObjectRegistry::registerHybridObjectConstructor(
       "PlatformObject",
       []() -> std::shared_ptr<HybridObject> {
         static DefaultConstructableObject<JHybridPlatformObjectSpec::javaobject> object("com/margelo/nitro/test/HybridPlatformObject");

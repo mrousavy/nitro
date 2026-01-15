@@ -8,12 +8,11 @@
 import Foundation
 
 class HybridExternalChild: HybridExternalChildSpec {
-  var baseValue: Double {
-    return 40
-  }
-
   func bounceString(string: String) throws -> String {
     return string
+  }
+  func getValue() throws -> String {
+    return "external!"
   }
 
   func toString() -> String {

@@ -68,6 +68,19 @@ public final class NitroTestAutolinking {
     }
   }
   
+  public final class AutolinkedExternalChild: AutolinkedClass {
+    public static func create() -> bridge.std__shared_ptr_HybridExternalChildSpec_ {
+      let hybridObject = HybridExternalChild()
+      return { () -> bridge.std__shared_ptr_HybridExternalChildSpec_ in
+        let __cxxWrapped = hybridObject.getCxxWrapper()
+        return __cxxWrapped.getCxxPart()
+      }()
+    }
+    public static var isRecyclableHybridView: Bool {
+      return HybridExternalChild.self is any RecyclableView.Type
+    }
+  }
+  
   public final class AutolinkedPlatformObject: AutolinkedClass {
     public static func create() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
       let hybridObject = HybridPlatformObject()
