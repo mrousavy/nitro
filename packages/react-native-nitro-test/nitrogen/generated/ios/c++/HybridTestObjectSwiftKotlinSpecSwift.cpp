@@ -6,6 +6,13 @@
 ///
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
+#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro::test {
+
+std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalString() noexcept {
+  auto swResult = _swiftPart.getOptionalStringPure();
+  return SwiftConverter<std::optional<std::string>>::fromSwift(swResult);
+}
+
 } // namespace margelo::nitro::test

@@ -243,6 +243,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final func getOptionalStringPure() -> String? {
+    return self.__implementation.optionalString
+  }
+  
   public final var stringOrUndefined: bridge.std__optional_std__string_ {
     @inline(__always)
     get {

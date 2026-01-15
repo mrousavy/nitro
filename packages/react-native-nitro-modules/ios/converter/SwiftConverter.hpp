@@ -27,20 +27,25 @@ struct SwiftConverter final {
   SwiftConverter() = delete;
 
   /**
-   * Converts the given C++ STL value to type `T`.
+   * Represents the Swift type that this C++ STL Type `T` is convertable to.
+   */
+  using SwiftType = void*;
+
+  /**
+   * Converts the given Swift value to the C++ STL type `T`.
    * By default, this static-asserts.
    */
   static inline T fromSwift(void*) {
     static_assert(always_false<T>::value, "This type is not supported by the SwiftConverter!");
   }
   /**
-   * Converts `T` to a C++ STL value.
+   * Converts the C++ STL type `T` to a Swift value.
    * By default, this static-asserts.
    */
   static inline void* toSwift(T) {
     static_assert(always_false<T>::value, "This type is not supported by the SwiftConverter!");
   }
-
+  
 private:
   template <typename>
   struct always_false : std::false_type {};
@@ -49,6 +54,7 @@ private:
 // double <> number
 template <>
 struct SwiftConverter<double> final {
+  using SwiftType = double;
   static inline double fromSwift(double arg) {
     return arg;
   }
@@ -60,6 +66,7 @@ struct SwiftConverter<double> final {
 // bool <> boolean
 template <>
 struct SwiftConverter<bool> final {
+  using SwiftType = bool;
   static inline bool fromSwift(bool value) {
     return value;
   }
@@ -71,3 +78,4 @@ struct SwiftConverter<bool> final {
 } // namespace margelo::nitro
 
 #include "SwiftConverter+String.hpp"
+#include "SwiftConverter+Optional.hpp"
