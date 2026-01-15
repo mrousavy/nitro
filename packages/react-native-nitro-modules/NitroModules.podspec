@@ -51,6 +51,7 @@ Pod::Spec.new do |s|
     "cpp/utils/PropNameIDCache.hpp",
     "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
+    "ios/converter/*.hpp",
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/PromiseHolder.hpp",
     "ios/utils/AnyMapUtils.hpp",
