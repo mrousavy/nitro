@@ -27,7 +27,6 @@ public extension HybridExternalChildSpec_protocol {
 
 /// See ``HybridExternalChildSpec``
 open class HybridExternalChildSpec_base: HybridSomeExternalObjectSpec_base {
-  public let nonCppRepresentable = (0, 0)
   public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridExternalChildSpec_cxx? = nil
   public override init() { super.init() }
