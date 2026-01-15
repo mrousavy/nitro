@@ -10,7 +10,7 @@ template <typename T, typename Enable>
 struct SwiftConverter;
 } // namespace margelo::nitro
 
-#ifdef SWIFT_SWIFT_H
+#ifdef SWIFT_SWIFT_H // <-- -Swift.h needs to be imported for this to work
 
 #include "SwiftConverter.hpp"
 #include <optional>

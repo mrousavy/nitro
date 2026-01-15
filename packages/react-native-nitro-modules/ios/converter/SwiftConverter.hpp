@@ -21,6 +21,9 @@ namespace margelo::nitro {
  * if a given type is not convertable.
  * Value types, custom types (HybridObject), and even functions with any number of arguments/types are supported.
  * This type can be extended by just creating a new template for SwiftConverter in a header.
+ *
+ * Before including the `SwiftConverter.hpp`, you must include your module's `-Swift.h` header
+ * to be able to use all Swift types (like `swift::Optional<T>`, `swift::Array<T>`, ...)
  */
 template <typename T, typename Enable = void>
 struct SwiftConverter final {
@@ -45,7 +48,7 @@ struct SwiftConverter final {
   static inline void* toSwift(T) {
     static_assert(always_false<T>::value, "This type is not supported by the SwiftConverter!");
   }
-  
+
 private:
   template <typename>
   struct always_false : std::false_type {};
@@ -79,3 +82,4 @@ struct SwiftConverter<bool> final {
 
 #include "SwiftConverter+String.hpp"
 #include "SwiftConverter+Optional.hpp"
+#include "SwiftConverter+Array.hpp"
