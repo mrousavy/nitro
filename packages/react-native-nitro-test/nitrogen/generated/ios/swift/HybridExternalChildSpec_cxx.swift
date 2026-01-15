@@ -7,18 +7,19 @@
 
 import Foundation
 import NitroModules
-import NitroTestExternal
 
 /**
  * A class implementation that bridges HybridExternalChildSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * This class cannot be extended from, since inheritance is only reflected on the concrete Swift protocol/class,
+ * or via C++.
  *
  * Also, some Swift types need to be bridged with special handling:
  * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-open class HybridExternalChildSpec_cxx {
+public final class HybridExternalChildSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
@@ -49,7 +50,7 @@ open class HybridExternalChildSpec_cxx {
    * Get the actual `HybridExternalChildSpec` instance this class wraps.
    */
   @inline(__always)
-  open func getHybridExternalChildSpec() -> any HybridExternalChildSpec {
+  public func getHybridExternalChildSpec() -> any HybridExternalChildSpec {
     return __implementation
   }
 
@@ -57,7 +58,7 @@ open class HybridExternalChildSpec_cxx {
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  open func toUnsafe() -> UnsafeMutableRawPointer {
+  public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -66,7 +67,7 @@ open class HybridExternalChildSpec_cxx {
    * The pointer has to be a retained opaque `Unmanaged<HybridExternalChildSpec_cxx>`.
    * This removes one strong reference from the object!
    */
-  open class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridExternalChildSpec_cxx {
+  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> HybridExternalChildSpec_cxx {
     return Unmanaged<HybridExternalChildSpec_cxx>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -74,7 +75,7 @@ open class HybridExternalChildSpec_cxx {
    * Gets (or creates) the C++ part of this Hybrid Object.
    * The C++ part is a `std::shared_ptr<HybridExternalChildSpec>`.
    */
-  open func getCxxPart() -> bridge.std__shared_ptr_HybridExternalChildSpec_ {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridExternalChildSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
     if Bool(fromCxx: cachedCxxPart) {
       return cachedCxxPart
@@ -85,17 +86,12 @@ open class HybridExternalChildSpec_cxx {
     }
   }
 
-  open func getCxxPart() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
-    let ownCxxPart: bridge.std__shared_ptr_HybridExternalChildSpec_ = getCxxPart()
-    return bridge.upcast_ExternalChild_to_SomeExternalObject(ownCxxPart)
-  }
-
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  open var memorySize: Int {
+  public var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -103,7 +99,7 @@ open class HybridExternalChildSpec_cxx {
    * Compares this object with the given [other] object for reference equality.
    */
   @inline(__always)
-  open func equals(other: HybridExternalChildSpec_cxx) -> Bool {
+  public func equals(other: HybridExternalChildSpec_cxx) -> Bool {
     return self.__implementation === other.__implementation
   }
 
@@ -112,7 +108,7 @@ open class HybridExternalChildSpec_cxx {
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  open func dispose() {
+  public func dispose() {
     self.__implementation.dispose()
   }
 
@@ -120,7 +116,7 @@ open class HybridExternalChildSpec_cxx {
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  open func toString() -> String {
+  public func toString() -> String {
     return self.__implementation.toString()
   }
 
@@ -129,9 +125,9 @@ open class HybridExternalChildSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func getValue() -> bridge.Result_std__string_ {
+  public final func bounceString(string: std.string) -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.getValue()
+      let __result = try self.__implementation.bounceString(string: String(string))
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {
@@ -141,9 +137,9 @@ open class HybridExternalChildSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceString(string: std.string) -> bridge.Result_std__string_ {
+  public final func getValue() -> bridge.Result_std__string_ {
     do {
-      let __result = try self.__implementation.bounceString(string: String(string))
+      let __result = try self.__implementation.getValue()
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
     } catch (let __error) {

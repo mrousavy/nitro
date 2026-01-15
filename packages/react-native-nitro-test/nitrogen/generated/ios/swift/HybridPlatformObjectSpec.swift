@@ -26,20 +26,21 @@ public extension HybridPlatformObjectSpec_protocol {
 
 /// See ``HybridPlatformObjectSpec``
 open class HybridPlatformObjectSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridPlatformObjectSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridPlatformObjectSpec_cxx {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridPlatformObjectSpec_ {
   #if DEBUG
     guard self is any HybridPlatformObjectSpec else {
       fatalError("`self` is not a `HybridPlatformObjectSpec`! Did you accidentally inherit from `HybridPlatformObjectSpec_base` instead of `HybridPlatformObjectSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     } else {
       let cxxWrapper = HybridPlatformObjectSpec_cxx(self as! any HybridPlatformObjectSpec)
       self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     }
   }
 }

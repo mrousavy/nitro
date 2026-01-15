@@ -51,6 +51,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include <memory>
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
@@ -98,7 +99,7 @@ namespace margelo::nitro::test {
    * the future, HybridTestObjectSwiftKotlinSpec_cxx can directly inherit from the C++ class HybridTestObjectSwiftKotlinSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec {
+  class HybridTestObjectSwiftKotlinSpecSwift: public virtual HybridTestObjectSwiftKotlinSpec, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridTestObjectSwiftKotlinSpecSwift(const NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& swiftPart):
@@ -109,6 +110,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridTestObjectSwiftKotlinSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

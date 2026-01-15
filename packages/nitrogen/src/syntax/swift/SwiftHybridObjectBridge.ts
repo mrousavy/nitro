@@ -33,21 +33,21 @@ export function createSwiftHybridObjectCxxBridge(
   const moduleName = spec.config.getIosModuleName()
   const bridgeNamespace = spec.config.getSwiftBridgeNamespace('swift')
 
-  const propertiesBridge = spec.properties.map((p) =>
+  const allProperties = [
+    ...spec.properties,
+    ...spec.baseTypes.flatMap((b) => b.properties),
+  ]
+  const propertiesBridge = allProperties.map((p) =>
     getPropertyForwardImplementation(p)
   )
 
-  const methodsBridge = spec.methods.map((m) =>
-    getMethodForwardImplementation(m)
-  )
+  const allMethods = [
+    ...spec.methods,
+    ...spec.baseTypes.flatMap((b) => b.methods),
+  ]
+  const methodsBridge = allMethods.map((m) => getMethodForwardImplementation(m))
 
-  const baseClasses = spec.baseTypes.map((base) => {
-    const baseName = getHybridObjectName(base.name)
-    return baseName.HybridTSpecCxx
-  })
-  const hasBase = baseClasses.length > 0
-
-  if (spec.isHybridView && !hasBase) {
+  if (spec.isHybridView) {
     methodsBridge.push(
       `
 public final func getView() -> UnsafeMutableRawPointer {
@@ -90,30 +90,6 @@ public final func maybePrepareForRecycle() {
     hybridObject.getCode('c++', { mode: 'weak' })
   )
 
-  const baseGetCxxPartOverrides = spec.baseTypes.map((base) => {
-    const baseHybridObject = new HybridObjectType(base)
-    const bridgedBase = new SwiftCxxBridgedType(baseHybridObject)
-    const baseBridge = bridgedBase.getRequiredBridge()
-    if (baseBridge == null)
-      throw new Error(`HybridObject ${base.name}'s bridge cannot be null!`)
-
-    const upcastBridge = bridge.dependencies.find(
-      (b) =>
-        b.funcName.includes(escapeCppName(spec.name)) &&
-        b.funcName.includes(escapeCppName(base.name))
-    )
-    if (upcastBridge == null)
-      throw new Error(
-        `HybridObject ${spec.name}'s upcast-bridge cannot be found! ${JSON.stringify(baseBridge)}`
-      )
-
-    return `
-public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
-  let ownCxxPart: bridge.${bridge.specializationName} = getCxxPart()
-  return bridge.${upcastBridge.funcName}(ownCxxPart)
-}`.trim()
-  })
-
   const requiredImports = ['import NitroModules']
   requiredImports.push(
     ...spec.properties
@@ -136,13 +112,15 @@ ${imports.join('\n')}
 /**
  * A class implementation that bridges ${name.HybridTSpec} over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * This class cannot be extended from, since inheritance is only reflected on the concrete Swift protocol/class,
+ * or via C++.
  *
  * Also, some Swift types need to be bridged with special handling:
  * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `open class ${name.HybridTSpecCxx}`} {
+public final class ${name.HybridTSpecCxx} {
   /**
    * The Swift <> C++ bridge's namespace (\`${NitroConfig.current.getSwiftBridgeNamespace('c++')}\`)
    * from \`${moduleName}-Swift-Cxx-Bridge.hpp\`.
@@ -167,7 +145,6 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
   public init(_ implementation: any ${name.HybridTSpec}) {
     self.__implementation = implementation
     self.__cxxPart = .init()
-    ${hasBase ? 'super.init(implementation)' : '/* no base class */'}
   }
 
   /**
@@ -182,7 +159,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
    */
-  public ${hasBase ? 'override func' : 'func'} toUnsafe() -> UnsafeMutableRawPointer {
+  public func toUnsafe() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(self).toOpaque()
   }
 
@@ -191,7 +168,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * The pointer has to be a retained opaque \`Unmanaged<${name.HybridTSpecCxx}>\`.
    * This removes one strong reference from the object!
    */
-  public ${hasBase ? 'override class func' : 'class func'} fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
+  public class func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> ${name.HybridTSpecCxx} {
     return Unmanaged<${name.HybridTSpecCxx}>.fromOpaque(pointer).takeRetainedValue()
   }
 
@@ -210,14 +187,12 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
     }
   }
 
-  ${indent(baseGetCxxPartOverrides.join('\n'), '  ')}
-
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
-  public ${hasBase ? 'override var' : 'var'} memorySize: Int {
+  public var memorySize: Int {
     return MemoryHelper.getSizeOf(self.__implementation) + self.__implementation.memorySize
   }
 
@@ -234,7 +209,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * This _may_ be called manually from JS.
    */
   @inline(__always)
-  public ${hasBase ? 'override func' : 'func'} dispose() {
+  public func dispose() {
     self.__implementation.dispose()
   }
 
@@ -242,7 +217,7 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
    * Call toString() on the Swift class.
    */
   @inline(__always)
-  public ${hasBase ? 'override func' : 'func'} toString() -> String {
+  public func toString() -> String {
     return self.__implementation.toString()
   }
 
@@ -380,6 +355,7 @@ ${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 
 ${extraForwardDeclarations.join('\n')}
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 ${extraIncludes.join('\n')}
 
 #include "${getUmbrellaHeaderName()}"
@@ -396,7 +372,7 @@ namespace ${cxxNamespace} {
    * the future, ${name.HybridTSpecCxx} can directly inherit from the C++ class ${name.HybridTSpec}
    * to simplify the whole structure and memory management.
    */
-  class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
+  class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')}, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
@@ -407,6 +383,11 @@ namespace ${cxxNamespace} {
     // Get the Swift part
     inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

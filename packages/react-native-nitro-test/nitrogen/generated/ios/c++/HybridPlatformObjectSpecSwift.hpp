@@ -14,6 +14,7 @@ namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 
 
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include <string>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
@@ -30,7 +31,7 @@ namespace margelo::nitro::test {
    * the future, HybridPlatformObjectSpec_cxx can directly inherit from the C++ class HybridPlatformObjectSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridPlatformObjectSpecSwift: public virtual HybridPlatformObjectSpec {
+  class HybridPlatformObjectSpecSwift: public virtual HybridPlatformObjectSpec, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridPlatformObjectSpecSwift(const NitroTest::HybridPlatformObjectSpec_cxx& swiftPart):
@@ -41,6 +42,11 @@ namespace margelo::nitro::test {
     // Get the Swift part
     inline NitroTest::HybridPlatformObjectSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
+    }
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
+      return _swiftPart.toUnsafe();
     }
 
   public:

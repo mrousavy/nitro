@@ -22,8 +22,7 @@ public extension ExternalObjectStruct {
    */
   init(someExternal: (any HybridSomeExternalObjectSpec)) {
     self.init({ () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = someExternal.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
+      return someExternal.getCxxPart()
     }())
   }
 

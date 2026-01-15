@@ -5,6 +5,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
+import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import { createSwiftHybridObjectCxxBridge } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -37,8 +38,14 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
     protocolBaseClasses.push('HybridView')
   }
 
-  const hasBaseClass = classBaseClasses.length > 0
+  const hasBaseClass = spec.baseTypes.length > 0
   const baseMembers: string[] = []
+  const bridgeNamespace = spec.config.getSwiftBridgeNamespace('swift')
+  const hybridObject = new HybridObjectType(spec)
+  const bridgedType = new SwiftCxxBridgedType(hybridObject)
+  const bridge = bridgedType.getRequiredBridge()
+  if (bridge == null) throw new Error(`HybridObject Type should have a bridge!`)
+  baseMembers.push(`public typealias bridge = ${bridgeNamespace}`)
   baseMembers.push(`private weak var cxxWrapper: ${name.HybridTSpecCxx}? = nil`)
   if (hasBaseClass) {
     baseMembers.push(`public override init() { super.init() }`)
@@ -47,18 +54,18 @@ export function createSwiftHybridObject(spec: HybridObjectSpec): SourceFile[] {
   }
   baseMembers.push(
     `
-public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.HybridTSpecCxx} {
+public func getCxxPart() -> bridge.${bridge.specializationName} {
 #if DEBUG
   guard self is any ${name.HybridTSpec} else {
     fatalError("\`self\` is not a \`${name.HybridTSpec}\`! Did you accidentally inherit from \`${name.HybridTSpec}_base\` instead of \`${name.HybridTSpec}\`?")
   }
 #endif
   if let cxxWrapper = self.cxxWrapper {
-    return cxxWrapper
+    return cxxWrapper.getCxxPart()
   } else {
     let cxxWrapper = ${name.HybridTSpecCxx}(self as! any ${name.HybridTSpec})
     self.cxxWrapper = cxxWrapper
-    return cxxWrapper
+    return cxxWrapper.getCxxPart()
   }
 }`.trim()
   )

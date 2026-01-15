@@ -12,13 +12,15 @@ import NitroTestExternal
 /**
  * A class implementation that bridges HybridTestObjectSwiftKotlinSpec over to C++.
  * In C++, we cannot use Swift protocols - so we need to wrap it in a class to make it strongly defined.
+ * This class cannot be extended from, since inheritance is only reflected on the concrete Swift protocol/class,
+ * or via C++.
  *
  * Also, some Swift types need to be bridged with special handling:
  * - Enums need to be wrapped in Structs, otherwise they cannot be accessed bi-directionally (Swift bug: https://github.com/swiftlang/swift/issues/75330)
  * - Other HybridObjects need to be wrapped/unwrapped from the Swift TCxx wrapper
  * - Throwing methods need to be wrapped with a Result<T, Error> type, as exceptions cannot be propagated to C++
  */
-open class HybridTestObjectSwiftKotlinSpec_cxx {
+public final class HybridTestObjectSwiftKotlinSpec_cxx {
   /**
    * The Swift <> C++ bridge's namespace (`margelo::nitro::test::bridge::swift`)
    * from `NitroTest-Swift-Cxx-Bridge.hpp`.
@@ -43,7 +45,6 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public init(_ implementation: any HybridTestObjectSwiftKotlinSpec) {
     self.__implementation = implementation
     self.__cxxPart = .init()
-    /* no base class */
   }
 
   /**
@@ -77,7 +78,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   public func getCxxPart() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let cachedCxxPart = self.__cxxPart.lock()
-    if Bool(fromCxx: cachedCxxPart) {
+    if cachedCxxPart.__convertToBool() {
       return cachedCxxPart
     } else {
       let newCxxPart = bridge.create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(self.toUnsafe())
@@ -85,8 +86,6 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return newCxxPart
     }
   }
-
-  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -127,8 +126,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     get {
       return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = self.__implementation.thisObject.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return self.__implementation.thisObject.getCxxPart()
       }()
     }
   }
@@ -139,8 +137,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return { () -> bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
         if let __unwrappedValue = self.__implementation.optionalHybrid {
           return bridge.create_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-            let __cxxWrapped = __unwrappedValue.getCxxWrapper()
-            return __cxxWrapped.getCxxPart()
+            return __unwrappedValue.getCxxPart()
           }())
         } else {
           return .init()
@@ -429,8 +426,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.newTestObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(__resultCpp)
     } catch (let __error) {
@@ -463,8 +459,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __result {
           case .first(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_({ () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
-              let __cxxWrapped = __value.getCxxWrapper()
-              return __cxxWrapped.getCxxPart()
+              return __value.getCxxPart()
             }())
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(__value)
@@ -665,8 +660,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         var __vector = bridge.create_std__vector_std__shared_ptr_HybridChildSpec__(__result.count)
         for __item in __result {
           __vector.push_back({ () -> bridge.std__shared_ptr_HybridChildSpec_ in
-            let __cxxWrapped = __item.getCxxWrapper()
-            return __cxxWrapped.getCxxPart()
+            return __item.getCxxPart()
           }())
         }
         return __vector
@@ -2151,8 +2145,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __result {
           case .first(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_({ () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-              let __cxxWrapped = __value.getCxxWrapper()
-              return __cxxWrapped.getCxxPart()
+              return __value.getCxxPart()
             }())
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(__value)
@@ -2256,8 +2249,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -2271,8 +2263,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createBase()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2286,8 +2277,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createBaseActualChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2305,8 +2295,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridChildSpec()
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -2324,8 +2313,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridBaseSpec()
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2343,8 +2331,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridChildSpec()
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridBaseSpec__(__resultCpp)
     } catch (let __error) {
@@ -2362,8 +2349,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridBaseSpec()
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_HybridChildSpec__(__resultCpp)
     } catch (let __error) {
@@ -2415,8 +2401,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         return __instance.getHybridSomeExternalObjectSpec()
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
     } catch (let __error) {
@@ -2430,8 +2415,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     do {
       let __result = try self.__implementation.createInternalObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
     } catch (let __error) {
@@ -2476,8 +2460,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         switch __result {
           case .first(let __value):
             return bridge.create_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_({ () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-              let __cxxWrapped = __value.getCxxWrapper()
-              return __cxxWrapped.getCxxPart()
+              return __value.getCxxPart()
             }())
           case .second(let __value):
             return bridge.create_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_(std.string(__value))
@@ -2505,8 +2488,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         }
       }())
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-        let __cxxWrapped = __result.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
+        return __result.getCxxPart()
       }()
       return bridge.create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(__resultCpp)
     } catch (let __error) {

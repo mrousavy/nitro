@@ -53,6 +53,7 @@ Pod::Spec.new do |s|
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/PromiseHolder.hpp",
+    "ios/core/SwiftClassWrapper.hpp",
     "ios/utils/AnyMapUtils.hpp",
     "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
     "ios/utils/Result.hpp",

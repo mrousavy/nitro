@@ -29,20 +29,21 @@ public extension HybridTestViewSpec_protocol {
 
 /// See ``HybridTestViewSpec``
 open class HybridTestViewSpec_base {
+  public typealias bridge = margelo.nitro.test.bridge.swift
   private weak var cxxWrapper: HybridTestViewSpec_cxx? = nil
   public init() { }
-  public func getCxxWrapper() -> HybridTestViewSpec_cxx {
+  public func getCxxPart() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
   #if DEBUG
     guard self is any HybridTestViewSpec else {
       fatalError("`self` is not a `HybridTestViewSpec`! Did you accidentally inherit from `HybridTestViewSpec_base` instead of `HybridTestViewSpec`?")
     }
   #endif
     if let cxxWrapper = self.cxxWrapper {
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     } else {
       let cxxWrapper = HybridTestViewSpec_cxx(self as! any HybridTestViewSpec)
       self.cxxWrapper = cxxWrapper
-      return cxxWrapper
+      return cxxWrapper.getCxxPart()
     }
   }
 }

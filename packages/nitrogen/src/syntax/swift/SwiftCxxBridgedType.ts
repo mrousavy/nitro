@@ -666,8 +666,7 @@ case ${i}:
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${swiftParameterName}.getCxxWrapper()
-  return __cxxWrapped.getCxxPart()
+  return ${swiftParameterName}.getCxxPart()
 }()`.trim()
           default:
             return swiftParameterName

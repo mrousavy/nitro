@@ -15,7 +15,9 @@ namespace NitroTest { class HybridExternalChildSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpecSwift` to properly resolve imports.
 namespace margelo::nitro::test { class HybridSomeExternalObjectSpecSwift; }
 
+#include <NitroModules/SwiftClassWrapper.hpp>
 #include <string>
+#include "HybridSomeExternalObjectSpecSwift.hpp"
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -31,11 +33,12 @@ namespace margelo::nitro::test {
    * the future, HybridExternalChildSpec_cxx can directly inherit from the C++ class HybridExternalChildSpec
    * to simplify the whole structure and memory management.
    */
-  class HybridExternalChildSpecSwift: public virtual HybridExternalChildSpec, public external::SwiftClassWrapper {
+  class HybridExternalChildSpecSwift: public virtual HybridExternalChildSpec, public virtual HybridSomeExternalObjectSpecSwift, public nitro::SwiftClassWrapper {
   public:
     // Constructor from a Swift instance
     explicit HybridExternalChildSpecSwift(const NitroTest::HybridExternalChildSpec_cxx& swiftPart):
       HybridObject(HybridExternalChildSpec::TAG),
+      HybridSomeExternalObjectSpecSwift(swiftPart),
       _swiftPart(swiftPart) { }
 
   public:
@@ -43,9 +46,9 @@ namespace margelo::nitro::test {
     inline NitroTest::HybridExternalChildSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
-    
-    
-    void* NON_NULL getSwiftImplementationUnretained() override {
+
+    // Get the Swift part's actual implementation pointer
+    void* NON_NULL getSwiftPartUnretained() noexcept override {
       return _swiftPart.toUnsafe();
     }
 
@@ -72,14 +75,6 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    inline std::string getValue() override {
-      auto __result = _swiftPart.getValue();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
     inline std::string bounceString(const std::string& string) override {
       auto __result = _swiftPart.bounceString(string);
       if (__result.hasError()) [[unlikely]] {
