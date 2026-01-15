@@ -106,7 +106,12 @@ public final class ${swiftClassName} {
   }
 
   // New Code:
-  {
+  if (
+    // only generate (Double) -> Void for now.
+    functionType.parameters.length === 1 &&
+    functionType.parameters[0]?.kind === 'number' &&
+    functionType.returnType.kind === 'void'
+  ) {
     const iosNamespace = NitroConfig.current.getIosModuleName()
     const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
 
