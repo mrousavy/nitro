@@ -17,25 +17,28 @@ struct SwiftConverter;
 
 namespace margelo::nitro {
 
-// std::vector<T> <> swift::Array<SwiftT>
-template <typename T>
-struct SwiftConverter<std::vector<T>> final {
-  using SwiftType = swift::Array<typename SwiftConverter<T>::SwiftType>;
-  static inline std::vector<T> fromSwift(const SwiftType& array) {
+// std::vector<ItemType> <> swift::Array<SwiftItemType>
+template <typename ItemType>
+struct SwiftConverter<std::vector<ItemType>> final {
+  using SwiftItemType = typename SwiftConverter<ItemType>::SwiftType;
+  using SwiftType = swift::Array<SwiftItemType>;
+  
+  static inline std::vector<ItemType> fromSwift(const SwiftType& array) {
     auto size = array.getCount();
-    std::vector<T> vector;
+    std::vector<ItemType> vector;
     vector.reserve(size);
-    for (size_t i = 0; i < size; i++) {
-      vector.push_back(SwiftConverter<T>::fromSwift(array[i]));
+    for (const SwiftItemType& item : array) {
+      vector.push_back(SwiftConverter<ItemType>::fromSwift(item));
     }
     return vector;
   }
-  static inline SwiftType toSwift(const std::vector<T>& vector) {
+  
+  static inline SwiftType toSwift(const std::vector<ItemType>& vector) {
     size_t size = vector.size();
-    auto array = swift::Array<typename SwiftConverter<T>::SwiftType>::init();
+    auto array = swift::Array<SwiftItemType>::init();
     array.reserveCapacity(size);
-    for (size_t i = 0; i < size; i++) {
-      array.append(SwiftConverter<T>::toSwift(vector[i]));
+    for (const ItemType& item: vector) {
+      array.append(SwiftConverter<ItemType>::toSwift(item));
     }
     return array;
   }
