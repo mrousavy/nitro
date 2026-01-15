@@ -12,6 +12,22 @@
 
 namespace margelo::nitro {
 
+template <typename Signature>
+class SwiftFunction;
+
+template <typename R, typename... Args>
+struct SwiftFunction<R(Args...)> final {
+public:
+  explicit SwiftFunction(std::function<R(Args...)>&& func): _function(std::move(func)) { }
+  
+  inline R operator()(Args... args) {
+    return _function(args...);
+  }
+  
+private:
+  std::function<R(Args...)> _function;
+};
+
 /**
  * Holds a Swift closure, including any captured values via `Unmanaged` context.
  *
