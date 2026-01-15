@@ -24,9 +24,8 @@ struct SwiftConverter<std::vector<ItemType>> final {
   using SwiftType = swift::Array<SwiftItemType>;
   
   static inline std::vector<ItemType> fromSwift(const SwiftType& array) {
-    auto size = array.getCount();
     std::vector<ItemType> vector;
-    vector.reserve(size);
+    vector.reserve(array.getCount());
     for (const SwiftItemType& item : array) {
       vector.push_back(SwiftConverter<ItemType>::fromSwift(item));
     }
@@ -34,9 +33,8 @@ struct SwiftConverter<std::vector<ItemType>> final {
   }
   
   static inline SwiftType toSwift(const std::vector<ItemType>& vector) {
-    size_t size = vector.size();
     auto array = swift::Array<SwiftItemType>::init();
-    array.reserveCapacity(size);
+    array.reserveCapacity(vector.size());
     for (const ItemType& item: vector) {
       array.append(SwiftConverter<ItemType>::toSwift(item));
     }
