@@ -23,7 +23,6 @@ public final class Func_void_int64_t {
   public init(_ function: consuming bridge.Func_void_int64_t) {
     self.closure = { (value: Int64) -> Void in
       fatalError("not yet implemented!")
-      // return function(value)
     }
   }
 

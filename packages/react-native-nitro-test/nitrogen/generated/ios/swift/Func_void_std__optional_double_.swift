@@ -23,7 +23,6 @@ public final class Func_void_std__optional_double_ {
   public init(_ function: consuming bridge.Func_void_std__optional_double_) {
     self.closure = { (value: bridge.std__optional_double_) -> Void in
       fatalError("not yet implemented!")
-      // return function(value.value)
     }
   }
 

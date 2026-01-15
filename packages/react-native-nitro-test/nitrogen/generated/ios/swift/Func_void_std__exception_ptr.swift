@@ -23,7 +23,6 @@ public final class Func_void_std__exception_ptr {
   public init(_ function: consuming bridge.Func_void_std__exception_ptr) {
     self.closure = { (error: std.exception_ptr) -> Void in
       fatalError("not yet implemented!")
-      // return function(RuntimeError.from(cppError: error))
     }
   }
 

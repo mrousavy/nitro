@@ -23,7 +23,6 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double__
   public init(_ function: consuming bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) {
     self.closure = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_double____ in
       fatalError("not yet implemented!")
-      // return function()
     }
   }
 

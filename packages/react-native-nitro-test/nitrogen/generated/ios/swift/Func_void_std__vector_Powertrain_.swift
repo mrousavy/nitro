@@ -23,7 +23,6 @@ public final class Func_void_std__vector_Powertrain_ {
   public init(_ function: consuming bridge.Func_void_std__vector_Powertrain_) {
     self.closure = { (array: bridge.std__vector_Powertrain_) -> Void in
       fatalError("not yet implemented!")
-      // return function(array.map({ __item in __item }))
     }
   }
 

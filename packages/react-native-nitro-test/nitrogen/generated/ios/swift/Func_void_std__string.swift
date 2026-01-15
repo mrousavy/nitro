@@ -23,7 +23,6 @@ public final class Func_void_std__string {
   public init(_ function: consuming bridge.Func_void_std__string) {
     self.closure = { (value: std.string) -> Void in
       fatalError("not yet implemented!")
-      // return function(String(value))
     }
   }
 

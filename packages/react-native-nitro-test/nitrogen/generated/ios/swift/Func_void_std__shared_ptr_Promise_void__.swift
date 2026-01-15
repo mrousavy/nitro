@@ -23,25 +23,6 @@ public final class Func_void_std__shared_ptr_Promise_void__ {
   public init(_ function: consuming bridge.Func_void_std__shared_ptr_Promise_void__) {
     self.closure = { (value: bridge.std__shared_ptr_Promise_void__) -> Void in
       fatalError("not yet implemented!")
-      // return function({ () -> Promise<Void> in
-  let __promise = Promise<Void>()
-  let __resolver = { __promise.resolve(withResult: ()) }
-  let __rejecter = { (__error: Error) in
-    __promise.reject(withError: __error)
-  }
-  let __resolverCpp = { () -> bridge.Func_void in
-    let __closureWrapper = Func_void(__resolver)
-    return bridge.create_Func_void(__closureWrapper.toUnsafe())
-  }()
-  let __rejecterCpp = { () -> bridge.Func_void_std__exception_ptr in
-    let __closureWrapper = Func_void_std__exception_ptr(__rejecter)
-    return bridge.create_Func_void_std__exception_ptr(__closureWrapper.toUnsafe())
-  }()
-  let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_void__(value)
-  __promiseHolder.addOnResolvedListener(__resolverCpp)
-  __promiseHolder.addOnRejectedListener(__rejecterCpp)
-  return __promise
-}())
     }
   }
 

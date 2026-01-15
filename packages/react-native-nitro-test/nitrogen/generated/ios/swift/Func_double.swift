@@ -23,7 +23,6 @@ public final class Func_double {
   public init(_ function: consuming bridge.Func_double) {
     self.closure = { () -> Double in
       fatalError("not yet implemented!")
-      // return function()
     }
   }
 

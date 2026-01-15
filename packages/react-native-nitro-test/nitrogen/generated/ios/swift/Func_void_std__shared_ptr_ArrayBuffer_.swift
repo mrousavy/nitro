@@ -23,7 +23,6 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
   public init(_ function: consuming bridge.Func_void_std__shared_ptr_ArrayBuffer_) {
     self.closure = { (value: ArrayBuffer) -> Void in
       fatalError("not yet implemented!")
-      // return function(value)
     }
   }
 

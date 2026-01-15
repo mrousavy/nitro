@@ -23,7 +23,6 @@ public final class Func_void_double {
   public init(_ function: consuming bridge.Func_void_double) {
     self.closure = { (value: Double) -> Void in
       fatalError("not yet implemented!")
-      // return function(value)
     }
   }
 

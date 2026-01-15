@@ -65,7 +65,6 @@ public final class ${swiftClassName} {
   public init(_ function: consuming bridge.${bridge.specializationName}) {
     self.closure = { (${argsTypes.join(', ')}) -> ${returnType.getTypeCode('swift')} in
       fatalError("not yet implemented!")
-      // return function(${argsForward.join(', ')})
     }
   }
 

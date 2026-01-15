@@ -24,7 +24,6 @@ public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSo
   public init(_ function: consuming bridge.Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) {
     self.closure = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
       fatalError("not yet implemented!")
-      // return function()
     }
   }
 
