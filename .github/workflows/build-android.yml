@@ -66,7 +66,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            example/android/app/.cxx
+            example/android/app/build
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run Gradle Build for example/android/
