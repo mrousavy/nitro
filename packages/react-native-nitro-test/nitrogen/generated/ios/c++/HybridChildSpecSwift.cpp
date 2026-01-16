@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
   }
   bool HybridChildSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridChildSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -44,13 +44,13 @@ namespace margelo::nitro::test {
 
   // pragma MARK: Properties
 
-  double HybridChildSpecSwift::getChildValue() noexcept override {
+  double HybridChildSpecSwift::getChildValue() noexcept {
     return _swiftPart->getChildValue();
   }
 
   // pragma MARK: Methods
 
-  std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) override {
+  std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) {
     auto __result = _swiftPart->bounceVariant(std::forward<decltype(variant)>(variant));
     return __result;
   }

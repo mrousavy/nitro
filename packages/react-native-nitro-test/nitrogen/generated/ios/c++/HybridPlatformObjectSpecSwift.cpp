@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
   }
   bool HybridPlatformObjectSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridPlatformObjectSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -47,7 +47,7 @@ namespace margelo::nitro::test {
 
   // pragma MARK: Methods
 
-  std::string HybridPlatformObjectSpecSwift::getOSVersion() override {
+  std::string HybridPlatformObjectSpecSwift::getOSVersion() {
     auto __result = _swiftPart->getOSVersion();
     return __result;
   }

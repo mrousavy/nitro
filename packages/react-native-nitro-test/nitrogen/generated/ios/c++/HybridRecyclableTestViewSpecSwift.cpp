@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
   }
   bool HybridRecyclableTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -43,10 +43,10 @@ namespace margelo::nitro::test {
 
   // pragma MARK: Properties
 
-  bool HybridRecyclableTestViewSpecSwift::getIsBlue() noexcept override {
+  bool HybridRecyclableTestViewSpecSwift::getIsBlue() noexcept {
     return _swiftPart->isBlue();
   }
-  void HybridRecyclableTestViewSpecSwift::setIsBlue(bool isBlue) noexcept override {
+  void HybridRecyclableTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
     _swiftPart->setIsBlue(std::forward<decltype(isBlue)>(isBlue));
   }
 

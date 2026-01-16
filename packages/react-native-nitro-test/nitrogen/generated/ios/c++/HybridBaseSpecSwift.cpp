@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
   }
   bool HybridBaseSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridBaseSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -43,7 +43,7 @@ namespace margelo::nitro::test {
 
   // pragma MARK: Properties
 
-  double HybridBaseSpecSwift::getBaseValue() noexcept override {
+  double HybridBaseSpecSwift::getBaseValue() noexcept {
     return _swiftPart->getBaseValue();
   }
 

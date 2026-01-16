@@ -279,7 +279,6 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
         'c++',
         {
           classDefinitionName: name.HybridTSpecSwift,
-          override: true,
           noexcept: true,
         },
         {
@@ -325,7 +324,7 @@ _swiftPart->${m.name}(${params});
 
       return m.getCode(
         'c++',
-        { classDefinitionName: name.HybridTSpecSwift, override: true },
+        { classDefinitionName: name.HybridTSpecSwift },
         body
       )
     })
@@ -446,7 +445,7 @@ namespace ${cxxNamespace} {
   }
   bool ${name.HybridTSpecSwift}::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }

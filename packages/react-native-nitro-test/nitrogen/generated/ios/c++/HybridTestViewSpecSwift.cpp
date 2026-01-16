@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
   }
   bool HybridTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -43,36 +43,36 @@ namespace margelo::nitro::test {
 
   // pragma MARK: Properties
 
-  bool HybridTestViewSpecSwift::getIsBlue() noexcept override {
+  bool HybridTestViewSpecSwift::getIsBlue() noexcept {
     return _swiftPart->isBlue();
   }
-  void HybridTestViewSpecSwift::setIsBlue(bool isBlue) noexcept override {
+  void HybridTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
     _swiftPart->setIsBlue(std::forward<decltype(isBlue)>(isBlue));
   }
-  bool HybridTestViewSpecSwift::getHasBeenCalled() noexcept override {
+  bool HybridTestViewSpecSwift::getHasBeenCalled() noexcept {
     return _swiftPart->hasBeenCalled();
   }
-  void HybridTestViewSpecSwift::setHasBeenCalled(bool hasBeenCalled) noexcept override {
+  void HybridTestViewSpecSwift::setHasBeenCalled(bool hasBeenCalled) noexcept {
     _swiftPart->setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
   }
-  ColorScheme HybridTestViewSpecSwift::getColorScheme() noexcept override {
+  ColorScheme HybridTestViewSpecSwift::getColorScheme() noexcept {
     auto __result = _swiftPart->getColorScheme();
     return __result;
   }
-  void HybridTestViewSpecSwift::setColorScheme(ColorScheme colorScheme) noexcept override {
+  void HybridTestViewSpecSwift::setColorScheme(ColorScheme colorScheme) noexcept {
     _swiftPart->setColorScheme(colorScheme);
   }
-  std::function<void()> HybridTestViewSpecSwift::getSomeCallback() noexcept override {
+  std::function<void()> HybridTestViewSpecSwift::getSomeCallback() noexcept {
     auto __result = _swiftPart->getSomeCallback();
     return __result;
   }
-  void HybridTestViewSpecSwift::setSomeCallback(const std::function<void()>& someCallback) noexcept override {
+  void HybridTestViewSpecSwift::setSomeCallback(const std::function<void()>& someCallback) noexcept {
     _swiftPart->setSomeCallback(someCallback);
   }
 
   // pragma MARK: Methods
 
-  void HybridTestViewSpecSwift::someMethod() override {
+  void HybridTestViewSpecSwift::someMethod() {
     _swiftPart->someMethod();
   }
 

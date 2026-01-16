@@ -30,7 +30,7 @@ namespace margelo::nitro::test::external {
   }
   bool HybridSomeExternalObjectSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridSomeExternalObjectSpecSwift>(other)) {
-      return _swiftPart->equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->getSwiftPart());
     }
     return false;
   }
@@ -47,7 +47,7 @@ namespace margelo::nitro::test::external {
 
   // pragma MARK: Methods
 
-  std::string HybridSomeExternalObjectSpecSwift::getValue() override {
+  std::string HybridSomeExternalObjectSpecSwift::getValue() {
     auto __result = _swiftPart->getValue();
     return __result;
   }
