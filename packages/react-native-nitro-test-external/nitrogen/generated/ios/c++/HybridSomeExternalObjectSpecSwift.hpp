@@ -52,7 +52,7 @@ namespace margelo::nitro::test::external {
     std::string getValue() override;
 
   private:
-    NitroTestExternal::HybridSomeExternalObjectSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTestExternal::HybridSomeExternalObjectSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test::external

@@ -63,7 +63,7 @@ namespace margelo::nitro::test {
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    NitroTest::HybridChildSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridChildSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test

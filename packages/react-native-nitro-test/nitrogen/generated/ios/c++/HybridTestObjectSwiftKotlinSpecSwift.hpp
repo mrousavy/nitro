@@ -246,7 +246,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
 
   private:
-    NitroTest::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridTestObjectSwiftKotlinSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test

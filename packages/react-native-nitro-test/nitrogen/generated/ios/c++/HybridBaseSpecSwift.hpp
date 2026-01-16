@@ -52,7 +52,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    NitroTest::HybridBaseSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridBaseSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test

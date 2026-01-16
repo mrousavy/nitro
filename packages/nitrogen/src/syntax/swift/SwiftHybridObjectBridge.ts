@@ -266,14 +266,14 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
       if (bridged.needsSpecialHandling) {
         // we need custom C++ -> Swift conversion code
         getter = `
-auto __result = _swiftPart.${getterName}();
+auto __result = _swiftPart->${getterName}();
 return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
 `
-        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
+        setter = `_swiftPart->${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
       } else {
         // just forward value directly
-        getter = `return _swiftPart.${getterName}();`
-        setter = `_swiftPart.${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
+        getter = `return _swiftPart->${getterName}();`
+        setter = `_swiftPart->${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
       }
       return p.getCode(
         'c++',
@@ -313,13 +313,13 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
       if (hasResult) {
         // func returns something
         body = `
-auto __result = _swiftPart.${m.name}(${params});
+auto __result = _swiftPart->${m.name}(${params});
 return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
         `.trim()
       } else {
         // void func
         body = `
-_swiftPart.${m.name}(${params});
+_swiftPart->${m.name}(${params});
         `.trim()
       }
 
@@ -413,7 +413,7 @@ namespace ${cxxNamespace} {
     ${indent(cppMethodsDeclarations, '    ')}
 
   private:
-    ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;
+    std::shared_ptr<${iosModuleName}::${name.HybridTSpecCxx}> _swiftPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -430,30 +430,31 @@ namespace ${cxxNamespace} {
   // pragma MARK: Constructor
 
   ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
-    ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
-    _swiftPart(swiftPart) { }
+    ${indent(cppBaseCtorCalls.join(',\n'), '    ')} {
+    _swiftPart = std::make_shared<${iosModuleName}::${name.HybridTSpecCxx}>(swiftPart);
+  }
 
 
   ${iosModuleName}::${name.HybridTSpecCxx}& ${name.HybridTSpecSwift}::getSwiftPart() noexcept {
-    return _swiftPart;
+    return *_swiftPart;
   }
 
   // pragma MARK: HybridObject overrides
 
   size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
-    return _swiftPart.getMemorySize();
+    return _swiftPart->getMemorySize();
   }
   bool ${name.HybridTSpecSwift}::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
-      return _swiftPart.equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->_swiftPart);
     }
     return false;
   }
   void ${name.HybridTSpecSwift}::dispose() noexcept {
-    _swiftPart.dispose();
+    _swiftPart->dispose();
   }
   std::string ${name.HybridTSpecSwift}::toString() {
-    return _swiftPart.toString();
+    return _swiftPart->toString();
   }
 
   // pragma MARK: Properties

@@ -61,7 +61,7 @@ namespace margelo::nitro::test {
     void someMethod() override;
 
   private:
-    NitroTest::HybridTestViewSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridTestViewSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test

@@ -15,42 +15,43 @@ namespace margelo::nitro::test {
 
   HybridChildSpecSwift::HybridChildSpecSwift(const NitroTest::HybridChildSpec_cxx& swiftPart):
     HybridObject(HybridChildSpec::TAG),
-    HybridBaseSpecSwift(swiftPart),
-    _swiftPart(swiftPart) { }
+    HybridBaseSpecSwift(swiftPart) {
+    _swiftPart = std::make_shared<NitroTest::HybridChildSpec_cxx>(swiftPart);
+  }
 
 
   NitroTest::HybridChildSpec_cxx& HybridChildSpecSwift::getSwiftPart() noexcept {
-    return _swiftPart;
+    return *_swiftPart;
   }
 
   // pragma MARK: HybridObject overrides
 
   size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
-    return _swiftPart.getMemorySize();
+    return _swiftPart->getMemorySize();
   }
   bool HybridChildSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
     if (auto otherCast = std::dynamic_pointer_cast<HybridChildSpecSwift>(other)) {
-      return _swiftPart.equals(otherCast->_swiftPart);
+      return _swiftPart->equals(otherCast->_swiftPart);
     }
     return false;
   }
   void HybridChildSpecSwift::dispose() noexcept {
-    _swiftPart.dispose();
+    _swiftPart->dispose();
   }
   std::string HybridChildSpecSwift::toString() {
-    return _swiftPart.toString();
+    return _swiftPart->toString();
   }
 
   // pragma MARK: Properties
 
   double HybridChildSpecSwift::getChildValue() noexcept override {
-    return _swiftPart.getChildValue();
+    return _swiftPart->getChildValue();
   }
 
   // pragma MARK: Methods
 
   std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) override {
-    auto __result = _swiftPart.bounceVariant(std::forward<decltype(variant)>(variant));
+    auto __result = _swiftPart->bounceVariant(std::forward<decltype(variant)>(variant));
     return __result;
   }
 

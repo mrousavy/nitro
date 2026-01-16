@@ -53,7 +53,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    NitroTest::HybridRecyclableTestViewSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridRecyclableTestViewSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test

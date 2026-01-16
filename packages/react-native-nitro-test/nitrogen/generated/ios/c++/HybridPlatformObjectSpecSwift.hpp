@@ -52,7 +52,7 @@ namespace margelo::nitro::test {
     std::string getOSVersion() override;
 
   private:
-    NitroTest::HybridPlatformObjectSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridPlatformObjectSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test
