@@ -17,7 +17,7 @@ public struct JsStyleStruct {
 
   public init(
     value: Double,
-    onChanged: (_ num: Double) -> Void
+    onChanged: @escaping (_ num: Double) -> Void
   ) {
     self.value = value
     self.onChanged = onChanged

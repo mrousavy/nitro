@@ -6,6 +6,7 @@ import {
   escapeCppName,
   isNotDuplicate,
 } from '../helpers.js'
+import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
@@ -52,9 +53,10 @@ export function createSwiftStructBridge(
   const structMembers = struct.properties.map(
     (p) => `public let ${p.escapedName}: ${p.getCode('swift')}`
   )
-  const swiftInitParameters = struct.properties.map(
-    (p) => `${p.escapedName}: ${p.getCode('swift')}`
-  )
+  const swiftInitParameters = struct.properties.map((p) => {
+    const param = new Parameter(p.escapedName, p)
+    return param.getCode('swift')
+  })
   const swiftInitAssignments = struct.properties.map(
     (p) => `self.${p.escapedName} = ${p.escapedName}`
   )
