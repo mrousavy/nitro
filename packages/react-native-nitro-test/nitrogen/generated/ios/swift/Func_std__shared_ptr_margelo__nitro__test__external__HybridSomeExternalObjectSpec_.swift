@@ -22,15 +22,6 @@ public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSo
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
-    let __result: (any HybridSomeExternalObjectSpec) = self.closure()
-    return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = __result.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
-    }()
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -48,5 +39,14 @@ public final class Func_std__shared_ptr_margelo__nitro__test__external__HybridSo
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
     return Unmanaged<Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call() -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ {
+    let __result: (any HybridSomeExternalObjectSpec) = self.closure()
+    return { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
+      let __cxxWrapped = __result.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
   }
 }

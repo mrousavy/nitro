@@ -21,11 +21,6 @@ public final class Func_void_std__vector_Powertrain_ {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call(array: bridge.std__vector_Powertrain_) -> Void {
-    self.closure(array.map({ __item in __item }))
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -43,5 +38,10 @@ public final class Func_void_std__vector_Powertrain_ {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__vector_Powertrain_ {
     return Unmanaged<Func_void_std__vector_Powertrain_>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call(array: bridge.std__vector_Powertrain_) -> Void {
+    self.closure(array.map({ __item in __item }))
   }
 }

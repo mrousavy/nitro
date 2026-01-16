@@ -21,6 +21,25 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
     self.closure = closure
   }
 
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___`.
+   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>`.
+   * This removes one strong reference from the object!
+   */
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
+    return Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>.fromOpaque(pointer).takeRetainedValue()
+  }
+
   @inline(__always)
   public func call(value: bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___) -> Void {
     self.closure({ () -> Promise<ArrayBuffer> in
@@ -44,24 +63,5 @@ public final class Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer
       __promiseHolder.addOnRejectedListener(__rejecterCpp)
       return __promise
     }())
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ {
-    return Unmanaged<Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___>.fromOpaque(pointer).takeRetainedValue()
   }
 }

@@ -21,11 +21,6 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call(value: ArrayBuffer) -> Void {
-    self.closure(value)
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -43,5 +38,10 @@ public final class Func_void_std__shared_ptr_ArrayBuffer_ {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__shared_ptr_ArrayBuffer_ {
     return Unmanaged<Func_void_std__shared_ptr_ArrayBuffer_>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call(value: ArrayBuffer) -> Void {
+    self.closure(value)
   }
 }

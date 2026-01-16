@@ -21,11 +21,6 @@ public final class Func_void_int64_t {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call(value: Int64) -> Void {
-    self.closure(value)
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -43,5 +38,10 @@ public final class Func_void_int64_t {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_int64_t {
     return Unmanaged<Func_void_int64_t>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call(value: Int64) -> Void {
+    self.closure(value)
   }
 }

@@ -21,11 +21,6 @@ public final class Func_void_std__exception_ptr {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call(error: std.exception_ptr) -> Void {
-    self.closure(RuntimeError.from(cppError: error))
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -43,5 +38,10 @@ public final class Func_void_std__exception_ptr {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void_std__exception_ptr {
     return Unmanaged<Func_void_std__exception_ptr>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call(error: std.exception_ptr) -> Void {
+    self.closure(RuntimeError.from(cppError: error))
   }
 }
