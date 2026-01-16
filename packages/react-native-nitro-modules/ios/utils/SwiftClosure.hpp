@@ -7,10 +7,47 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <functional>
 #include <memory>
 
 namespace margelo::nitro {
+
+template <typename Signature>
+class SwiftFunction;
+
+template <typename R, typename... Args>
+struct SwiftFunction<R(Args...)> final {
+public:
+  explicit SwiftFunction(std::function<R(Args...)>&& func): _function(std::move(func)) { }
+  
+  using RawContextType = void* NON_NULL;
+  using RawFunctionType = R(RawContextType, Args...);
+  using RawDeleterFunctionType = void(RawContextType);
+  explicit SwiftFunction(RawContextType context,
+                         RawFunctionType* NON_NULL function,
+                         RawDeleterFunctionType* NON_NULL deleter) {
+    struct Control {
+      void* context;
+      RawFunctionType* function;
+      RawDeleterFunctionType* deleter;
+      ~Control() {
+        deleter(context);
+      }
+    };
+    auto control = std::make_shared<Control>(context, function, deleter);
+    _function = [control](Args... args) {
+      return control->function(control->context, args...);
+    };
+  }
+  
+  inline R operator()(Args... args) const {
+    return _function(args...);
+  }
+  
+private:
+  std::function<R(Args...)> _function;
+};
 
 /**
  * Holds a Swift closure, including any captured values via `Unmanaged` context.

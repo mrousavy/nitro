@@ -6,9 +6,12 @@
 ///
 
 /**
- * Represents the JS union `ColorScheme`, backed by a C++ enum.
+ * Represents the JS union `ColorScheme`.
  */
-public typealias ColorScheme = margelo.nitro.test.ColorScheme
+public enum ColorScheme: Int {
+  case light = 0
+  case dark = 1
+}
 
 public extension ColorScheme {
   /**

@@ -14,7 +14,6 @@
 
 namespace margelo::nitro::test::external::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
   std::shared_ptr<HybridSomeExternalObjectSpec> create_std__shared_ptr_HybridSomeExternalObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept {
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx swiftPart = NitroTestExternal::HybridSomeExternalObjectSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(swiftPart);

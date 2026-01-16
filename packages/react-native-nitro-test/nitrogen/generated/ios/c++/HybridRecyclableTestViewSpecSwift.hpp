@@ -16,8 +16,6 @@ namespace NitroTest { class HybridRecyclableTestViewSpec_cxx; }
 
 
 
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
-
 namespace margelo::nitro::test {
 
   /**
@@ -33,48 +31,29 @@ namespace margelo::nitro::test {
   class HybridRecyclableTestViewSpecSwift: public virtual HybridRecyclableTestViewSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridRecyclableTestViewSpecSwift(const NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart):
-      HybridObject(HybridRecyclableTestViewSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridRecyclableTestViewSpecSwift(const NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridRecyclableTestViewSpec_cxx& getSwiftPart() noexcept {
-      return _swiftPart;
-    }
+    NitroTest::HybridRecyclableTestViewSpec_cxx& getSwiftPart() noexcept;
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    bool equals(const std::shared_ptr<HybridObject>& other) override {
-      if (auto otherCast = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(other)) {
-        return _swiftPart.equals(otherCast->_swiftPart);
-      }
-      return false;
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    inline size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
+    void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     // Properties
-    inline bool getIsBlue() noexcept override {
-      return _swiftPart.isBlue();
-    }
-    inline void setIsBlue(bool isBlue) noexcept override {
-      _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
-    }
+    bool getIsBlue() noexcept override;
+    void setIsBlue(bool isBlue) noexcept override;
 
   public:
     // Methods
     
 
   private:
-    NitroTest::HybridRecyclableTestViewSpec_cxx _swiftPart;
+    std::shared_ptr<NitroTest::HybridRecyclableTestViewSpec_cxx> _swiftPart;
   };
 
 } // namespace margelo::nitro::test
