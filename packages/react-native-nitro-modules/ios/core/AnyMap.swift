@@ -42,18 +42,20 @@ public indirect enum AnyValue {
 /// Represents an `AnyMap`- an untyped map instance.
 /// See C++ `AnyMap.hpp` for more information.
 public final class AnyMap: @unchecked Sendable {
-  public let cppPart: margelo.nitro.SharedAnyMap
-
+  private var dictionary: Dictionary<String, Any>
+  
   public init() {
-    cppPart = margelo.nitro.AnyMap.make()
+    dictionary = Dictionary()
   }
-
   public init(withPreallocatedSize size: Int) {
-    cppPart = margelo.nitro.AnyMap.make(size)
+    dictionary = Dictionary(minimumCapacity: size)
   }
-
-  public init(withCppPart otherCppPart: margelo.nitro.SharedAnyMap) {
-    cppPart = otherCppPart
+  
+  /**
+   * Get the count of items stored in this `AnyMap`.
+   */
+  public var count: Int {
+    return dictionary.count
   }
 
   // pragma MARK: Common Operations
@@ -62,93 +64,90 @@ public final class AnyMap: @unchecked Sendable {
    * Returns whether the given key exists in the map.
    */
   public func contains(key: String) -> Bool {
-    return cppPart.pointee.contains(std.string(key))
+    return dictionary[key] != nil
   }
 
   /**
    * Removes the given key from the map.
    */
   public func remove(key: String) {
-    cppPart.pointee.remove(std.string(key))
+    dictionary.removeValue(forKey: key)
   }
 
   /**
    * Removes all keys in this map.
    */
   public func clear() {
-    cppPart.pointee.clear()
+    dictionary = [:]
   }
 
   /**
    * Get all keys in this map.
    */
   public func getAllKeys() -> [String] {
-    let cppKeys = cppPart.pointee.getAllKeys()
-    var keys = [String]()
-    keys.reserveCapacity(cppKeys.count)
-    for cppKey in cppKeys {
-      keys.append(String(cppKey))
-    }
-    return keys
+    return Array(dictionary.keys)
   }
 
   // pragma MARK: Getters
 
-  /**
-   * Gets the double value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getDouble(key: String) -> Double {
-    return cppPart.pointee.getDouble(std.string(key))
+  public func getDoubleOrNil(key: String) -> Double? {
+    return dictionary[key] as? Double
+  }
+  public func getDouble(key: String) throws -> Double {
+    guard let value = getDoubleOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain a Double with key \"\(key)\"!")
+    }
+    return value
   }
 
-  /**
-   * Gets the boolean value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getBoolean(key: String) -> Bool {
-    return cppPart.pointee.getBoolean(std.string(key))
+  public func getBooleanOrNil(key: String) -> Bool? {
+    return dictionary[key] as? Bool
+  }
+  public func getBoolean(key: String) throws -> Bool {
+    guard let value = getBooleanOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain a Boolean with key \"\(key)\"!")
+    }
+    return value
   }
 
-  /**
-   * Gets the bigint value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getBigInt(key: String) -> Int64 {
-    return cppPart.pointee.getBigInt(std.string(key))
+  public func getBigIntOrNil(key: String) -> Int64? {
+    return dictionary[key] as? Int64
+  }
+  public func getBigInt(key: String) throws -> Int64 {
+    guard let value = getBigIntOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain a BigInt with key \"\(key)\"!")
+    }
+    return value
   }
 
-  /**
-   * Gets the string value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getString(key: String) -> String {
-    let value = cppPart.pointee.getString(std.string(key))
-    return String(value)
+  public func getStringOrNil(key: String) -> String? {
+    return dictionary[key] as? String
+  }
+  public func getString(key: String) throws -> String {
+    guard let value = getStringOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain a String with key \"\(key)\"!")
+    }
+    return value
   }
 
-  /**
-   * Gets the array value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getArray(key: String) -> [AnyValue] {
-    let value = cppPart.pointee.getArray(std.string(key))
-    return value.toSwift()
+  public func getArrayOrNil(key: String) -> [AnyValue]? {
+    return dictionary[key] as? [AnyValue]
+  }
+  public func getArray(key: String) throws -> [AnyValue]? {
+    guard let value = getArrayOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain an Array with key \"\(key)\"!")
+    }
+    return value
   }
 
-  /**
-   * Gets the object value at the given key.
-   * If no value exists at the given key, or if it is not a double,
-   * this function throws.
-   */
-  public func getObject(key: String) -> [String: AnyValue] {
-    let value = cppPart.pointee.getObject(std.string(key))
-    return value.toSwift()
+  public func getObjectOrNil(key: String) -> [String: AnyValue]? {
+    return dictionary[key] as? [String: AnyValue]
+  }
+  public func getObject(key: String) throws -> [String: AnyValue] {
+    guard let value = getObjectOrNil(key: key) else {
+      throw RuntimeError.error(withMessage: "AnyMap does not contain an Object with key \"\(key)\"!")
+    }
+    return value
   }
 
   /**
@@ -157,9 +156,7 @@ public final class AnyMap: @unchecked Sendable {
    * this function throws.
    */
   public func getAny(key: String) -> Any? {
-    let value = cppPart.pointee.getAny(std.string(key))
-    let any = AnyValue.create(value)
-    return any.toAny()
+    return dictionary[key]
   }
 
   // pragma MARK: Setters
@@ -168,58 +165,56 @@ public final class AnyMap: @unchecked Sendable {
    * Set the given key to `null`.
    */
   public func setNull(key: String) {
-    cppPart.pointee.setNull(std.string(key))
+    dictionary[key] = nil
   }
 
   /**
    * Set the given key to the given double value.
    */
   public func setDouble(key: String, value: Double) {
-    cppPart.pointee.setDouble(std.string(key), value)
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given boolean value.
    */
   public func setBoolean(key: String, value: Bool) {
-    cppPart.pointee.setBoolean(std.string(key), value)
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given bigint value.
    */
   public func setBigInt(key: String, value: Int64) {
-    cppPart.pointee.setBigInt(std.string(key), value)
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given string value.
    */
   public func setString(key: String, value: String) {
-    cppPart.pointee.setString(std.string(key), std.string(value))
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given array value.
    */
   public func setArray(key: String, value: [AnyValue]) {
-    cppPart.pointee.setArray(std.string(key), margelo.nitro.AnyArray.create(value))
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given object value.
    */
   public func setObject(key: String, value: [String: AnyValue]) {
-    cppPart.pointee.setObject(std.string(key), margelo.nitro.AnyObject.create(value))
+    dictionary[key] = value
   }
 
   /**
    * Set the given key to the given any value.
    */
-  public func setAny(key: String, value: Any?) throws {
-    let swiftAny = try AnyValue.fromAny(value)
-    let cppAny = margelo.nitro.AnyValue.create(swiftAny)
-    cppPart.pointee.setAny(std.string(key), cppAny)
+  public func setAny(key: String, value: Any?) {
+    dictionary[key] = value
   }
 
   // pragma MARK: Is Getters
@@ -228,56 +223,56 @@ public final class AnyMap: @unchecked Sendable {
    * Gets whether the given `key` is holding a null value, or not.
    */
   public func isNull(key: String) -> Bool {
-    return cppPart.pointee.isNull(std.string(key))
+    return dictionary[key] == nil
   }
 
   /**
    * Gets whether the given `key` is holding a double value, or not.
    */
   public func isDouble(key: String) -> Bool {
-    return cppPart.pointee.isDouble(std.string(key))
+    return dictionary[key] is Double
   }
 
   /**
    * Gets whether the given `key` is holding a boolean value, or not.
    */
   public func isBool(key: String) -> Bool {
-    return cppPart.pointee.isBoolean(std.string(key))
+    return dictionary[key] is Bool
   }
 
   /**
    * Gets whether the given `key` is holding a bigint value, or not.
    */
   public func isBigInt(key: String) -> Bool {
-    return cppPart.pointee.isBigInt(std.string(key))
+    return dictionary[key] is Int64
   }
 
   /**
    * Gets whether the given `key` is holding a string value, or not.
    */
   public func isString(key: String) -> Bool {
-    return cppPart.pointee.isString(std.string(key))
+    return dictionary[key] is String
   }
 
   /**
    * Gets whether the given `key` is holding an array value, or not.
    */
   public func isArray(key: String) -> Bool {
-    return cppPart.pointee.isArray(std.string(key))
+    return dictionary[key] is Array<Any?>
   }
 
   /**
    * Gets whether the given `key` is holding an object value, or not.
    */
   public func isObject(key: String) -> Bool {
-    return cppPart.pointee.isObject(std.string(key))
+    return dictionary[key] is Dictionary<String, Any>
   }
 
   /**
    * Merges all keys and values from the `other` map into this map.
    */
   public func merge(other: AnyMap) {
-    cppPart.pointee.merge(other.cppPart)
+    fatalError("not yet implemented!")
   }
 }
 

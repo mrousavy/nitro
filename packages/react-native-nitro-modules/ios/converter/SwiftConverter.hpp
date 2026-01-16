@@ -91,3 +91,4 @@ struct SwiftConverter<bool> final {
 #include "SwiftConverter+Optional.hpp"
 #include "SwiftConverter+Array.hpp"
 #include "SwiftConverter+Function.hpp"
+#include "SwiftConverter+AnyMap.hpp"
