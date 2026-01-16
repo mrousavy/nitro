@@ -11,10 +11,10 @@
 namespace margelo::nitro {
 
 SwiftAnyMap::SwiftAnyMap(const NitroModules::AnyMap& swiftPart) {
-  _swiftPart = std::make_unique<NitroModules::AnyMap>(swiftPart);
+  _swiftPart = std::make_shared<NitroModules::AnyMap>(swiftPart);
 }
 
-const NitroModules::AnyMap& SwiftAnyMap::getSwiftPart() const {
+NitroModules::AnyMap SwiftAnyMap::getSwiftPart() const {
   return *_swiftPart;
 }
 

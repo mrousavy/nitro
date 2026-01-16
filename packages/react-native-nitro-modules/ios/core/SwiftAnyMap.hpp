@@ -25,12 +25,12 @@ namespace margelo::nitro {
   class SwiftAnyMap final {
   public:
     SwiftAnyMap(const NitroModules::AnyMap& swiftPart);
-    
+
   public:
-    const NitroModules::AnyMap& getSwiftPart() const;
+    NitroModules::AnyMap getSwiftPart() const;
 
   private:
-    std::unique_ptr<NitroModules::AnyMap> _swiftPart;
+    std::shared_ptr<NitroModules::AnyMap> _swiftPart;
   };
 
 }

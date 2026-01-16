@@ -24,6 +24,7 @@ import {
 import type { Language } from '../../getPlatformSpecs.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { ArrayType } from '../types/ArrayType.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -216,6 +217,18 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return `margelo::nitro::SwiftAnyMap`
           case 'swift':
             return `margelo.nitro.SwiftAnyMap`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
+      case 'array': {
+        const arrayType = getTypeAs(this.type, ArrayType)
+        const itemType = new SwiftCxxBridgedType(arrayType.itemType)
+        switch (language) {
+          case 'c++':
+            return `std::vector<${itemType.getTypeCode('c++')}>`
+          case 'swift':
+            return `[${itemType.getTypeCode('swift')}]`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

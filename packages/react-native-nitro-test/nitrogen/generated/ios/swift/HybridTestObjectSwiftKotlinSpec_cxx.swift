@@ -381,21 +381,21 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceHybridObjects(array: [(any HybridChildSpec)]) -> [(any HybridChildSpec)] {
+  public final func bounceHybridObjects(array: [HybridChildSpec_cxx]) -> [HybridChildSpec_cxx] {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceHybridObjects(array: array)
     return __result
   }
   
   @inline(__always)
-  public final func bounceFunctions(functions: [() -> Void]) -> [() -> Void] {
+  public final func bounceFunctions(functions: [Func_Void]) -> [Func_Void] {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceFunctions(functions: functions)
     return __result
   }
   
   @inline(__always)
-  public final func bounceMaps(maps: [AnyMap]) -> [AnyMap] {
+  public final func bounceMaps(maps: [margelo.nitro.SwiftAnyMap]) -> [margelo.nitro.SwiftAnyMap] {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceMaps(maps: maps)
     return __result
