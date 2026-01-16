@@ -6,9 +6,13 @@
 ///
 
 /**
- * Represents the JS enum `OldEnum`, backed by a C++ enum.
+ * Represents the JS enum `OldEnum`.
  */
-public typealias OldEnum = margelo.nitro.test.OldEnum
+public enum OldEnum: Int {
+  case first = 0
+  case second = 1
+  case third = 2
+}
 
 public extension OldEnum {
   /**

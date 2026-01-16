@@ -1,15 +1,12 @@
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent, toLowerCamelCase } from '../../utils.js'
 import { createFileMetadataString } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { EnumType } from '../types/EnumType.js'
 
-export function createSwiftEnumBridge(enumType: EnumType): SourceFile {
-  const fullName = NitroConfig.current.getCxxNamespace(
-    'swift',
-    enumType.enumName
-  )
-
+export function createSwiftEnumBridge(enumType: EnumType): SourceFile[] {
+  const iosNamespace = NitroConfig.current.getIosModuleName()
   const initializeCases = enumType.enumMembers.map((m) =>
     `
 case "${m.stringValue}":
@@ -23,13 +20,33 @@ case .${toLowerCamelCase(m.name)}:
 `.trim()
   )
 
-  const code = `
+  const cases = enumType.enumMembers.map(
+    (m) => `case ${toLowerCamelCase(m.name)} = ${m.value}`
+  )
+
+  const cppTypeName = enumType.getCode('c++', { fullyQualified: true })
+  const swiftToCppCases = enumType.enumMembers.map((m) =>
+    `
+case ${iosNamespace}::${enumType.enumName}::${toLowerCamelCase(m.name)}:
+  return ${cppTypeName}::${m.name};
+    `.trim()
+  )
+  const cppToSwiftCases = enumType.enumMembers.map((m) =>
+    `
+case ${cppTypeName}::${m.name}:
+  return ${iosNamespace}::${enumType.enumName}::${toLowerCamelCase(m.name)}();
+    `.trim()
+  )
+
+  const swiftCode = `
 ${createFileMetadataString(`${enumType.enumName}.swift`)}
 
 /**
- * Represents the JS ${enumType.jsType} \`${enumType.enumName}\`, backed by a C++ enum.
+ * Represents the JS ${enumType.jsType} \`${enumType.enumName}\`.
  */
-public typealias ${enumType.enumName} = ${fullName}
+public enum ${enumType.enumName}: Int {
+  ${indent(cases.join('\n'), '  ')}
+}
 
 public extension ${enumType.enumName} {
   /**
@@ -54,12 +71,71 @@ public extension ${enumType.enumName} {
   }
 }
   `.trim()
+  const cppHeaderCode = `
+${createFileMetadataString(`${enumType.enumName}.hpp`)}
 
-  return {
-    content: code,
-    language: 'swift',
-    name: `${enumType.enumName}.swift`,
-    platform: 'ios',
-    subdirectory: [],
+#include <NitroModules/SwiftConverter.hpp>
+#include "${enumType.enumName}.hpp"
+
+namespace ${iosNamespace} {
+  class ${enumType.enumName};
+}
+
+namespace margelo::nitro {
+  template <>
+  struct SwiftConverter<${cppTypeName}> {
+    using SwiftType = ${iosNamespace}::${enumType.enumName};
+    static ${cppTypeName} fromSwift(const ${iosNamespace}::${enumType.enumName}& swiftEnum);
+    static ${iosNamespace}::${enumType.enumName} toSwift(${cppTypeName} cppEnum);
+  };
+}
+  `.trim()
+  const cppSourceCode = `
+${createFileMetadataString(`${enumType.enumName}.cpp`)}
+
+#include "${enumType.enumName}+Swift.hpp"
+#include "${enumType.enumName}.hpp"
+#include <NitroModules/SwiftConverter.hpp>
+#include "${getUmbrellaHeaderName()}"
+
+namespace margelo::nitro {
+
+  ${cppTypeName} SwiftConverter<${cppTypeName}>::fromSwift(const ${iosNamespace}::${enumType.enumName}& swiftEnum) {
+    switch (swiftEnum) {
+      ${indent(swiftToCppCases.join('\n'), '      ')}
+    }
   }
+
+  ${iosNamespace}::${enumType.enumName} SwiftConverter<${cppTypeName}>::toSwift(${cppTypeName} cppEnum) {
+    switch (cppEnum) {
+      ${indent(cppToSwiftCases.join('\n'), '      ')}
+    }
+  }
+
+}
+  `.trim()
+
+  return [
+    {
+      content: swiftCode,
+      language: 'swift',
+      name: `${enumType.enumName}.swift`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+    {
+      content: cppHeaderCode,
+      language: 'c++',
+      name: `${enumType.enumName}+Swift.hpp`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+    {
+      content: cppSourceCode,
+      language: 'c++',
+      name: `${enumType.enumName}+Swift.cpp`,
+      platform: 'ios',
+      subdirectory: [],
+    },
+  ]
 }

@@ -201,15 +201,15 @@ ${createFileMetadataString(`${swiftClassName}.cpp`)}
 
 namespace margelo::nitro {
 
-${functionType.getCode('c++')} SwiftConverter<${functionType.getCode('c++')}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
-  return [swiftFunc = /* copy */ swiftFunc](${paramsCpp.join(', ')}) mutable -> ${functionType.returnType.getCode('c++')} {
-    return swiftFunc.call(${argsForward.join(', ')});
-  };
-}
+  ${functionType.getCode('c++')} SwiftConverter<${functionType.getCode('c++')}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
+    return [swiftFunc = /* copy */ swiftFunc](${paramsCpp.join(', ')}) mutable -> ${functionType.returnType.getCode('c++')} {
+      return swiftFunc.call(${argsForward.join(', ')});
+    };
+  }
 
-${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}>::toSwift(const ${functionType.getCode('c++')}& cppFunc) {
-  return ${iosNamespace}::${swiftClassName}::init(cppFunc);
-}
+  ${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}>::toSwift(const ${functionType.getCode('c++')}& cppFunc) {
+    return ${iosNamespace}::${swiftClassName}::init(cppFunc);
+  }
 
 }
   `.trim()
@@ -225,14 +225,14 @@ ${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}
       {
         content: cppHeaderCode,
         language: 'c++',
-        name: `${swiftClassName}.hpp`,
+        name: `${swiftClassName}+Swift.hpp`,
         platform: 'ios',
         subdirectory: [],
       },
       {
         content: cppSourceCode,
         language: 'c++',
-        name: `${swiftClassName}.cpp`,
+        name: `${swiftClassName}+Swift.cpp`,
         platform: 'ios',
         subdirectory: [],
       }
