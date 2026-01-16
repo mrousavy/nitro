@@ -263,7 +263,7 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline PartialPerson bouncePartialStruct(const PartialPerson& person) override {
-      auto __result = _swiftPart.bouncePartialStruct(std::forward<decltype(person)>(person));
+      auto __result = _swiftPart.bouncePartialStruct(person);
       return __result;
     }
     inline std::string sumUpAllPassengers(const std::vector<Car>& cars) override {
@@ -326,7 +326,7 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
-      auto __result = _swiftPart.extractMap(std::forward<decltype(mapWrapper)>(mapWrapper));
+      auto __result = _swiftPart.extractMap(mapWrapper);
       return __result;
     }
     inline double funcThatThrows() override {
@@ -460,30 +460,30 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline bool isCarElectric(const Car& car) override {
-      auto __result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
+      auto __result = _swiftPart.isCarElectric(car);
       return __result;
     }
     inline std::optional<Person> getDriver(const Car& car) override {
-      auto __result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
+      auto __result = _swiftPart.getDriver(car);
       return __result;
     }
     inline Car bounceCar(const Car& car) override {
-      auto __result = _swiftPart.bounceCar(std::forward<decltype(car)>(car));
+      auto __result = _swiftPart.bounceCar(car);
       return __result;
     }
     inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
-      _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
+      _swiftPart.jsStyleObjectAsParameters(params);
     }
     inline WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override {
-      auto __result = _swiftPart.bounceWrappedJsStyleStruct(std::forward<decltype(value)>(value));
+      auto __result = _swiftPart.bounceWrappedJsStyleStruct(value);
       return __result;
     }
     inline OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override {
-      auto __result = _swiftPart.bounceOptionalWrapper(std::forward<decltype(wrapper)>(wrapper));
+      auto __result = _swiftPart.bounceOptionalWrapper(wrapper);
       return __result;
     }
     inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
-      auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
+      auto __result = _swiftPart.bounceOptionalCallback(value);
       return __result;
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
@@ -586,7 +586,7 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override {
-      auto __result = _swiftPart.bounceExternalStruct(std::forward<decltype(externalStruct)>(externalStruct));
+      auto __result = _swiftPart.bounceExternalStruct(externalStruct);
       return __result;
     }
     inline std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) override {

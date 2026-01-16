@@ -52,6 +52,12 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'function':
         // Swift functions are wrapped in hard defined classes
         return true
+      case 'enum':
+        // Enums are separate Swift enums
+        return true
+      case 'struct':
+        // Structs are separate Swift structs
+        return true
       case 'map':
         // AnyMap has to be wrapped in `SwiftAnyMap`
         return true
@@ -224,6 +230,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'array': {
         const arrayType = getTypeAs(this.type, ArrayType)
         const itemType = new SwiftCxxBridgedType(arrayType.itemType)
+        if (!itemType.needsSpecialHandling) {
+          return this.type.getCode(language)
+        }
         switch (language) {
           case 'c++':
             return `std::vector<${itemType.getTypeCode('c++')}>`
@@ -289,6 +298,19 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'array': {
+        const arrayType = getTypeAs(this.type, ArrayType)
+        const itemType = new SwiftCxxBridgedType(arrayType.itemType)
+        if (!itemType.needsSpecialHandling) {
+          return cppParameterName
+        }
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.map({ item in ${itemType.parseFromCppToSwift('item', 'swift')} })`
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         return ''
       default:
@@ -324,6 +346,19 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `margelo.nitro.SwiftAnyMap(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'array': {
+        const arrayType = getTypeAs(this.type, ArrayType)
+        const itemType = new SwiftCxxBridgedType(arrayType.itemType)
+        if (!itemType.needsSpecialHandling) {
+          return swiftParameterName
+        }
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.map({ item in ${itemType.parseFromSwiftToCpp('item', 'swift')} })`
           default:
             return swiftParameterName
         }

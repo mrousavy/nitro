@@ -77,10 +77,11 @@ namespace margelo::nitro::test {
       _swiftPart.setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
     }
     inline ColorScheme getColorScheme() noexcept override {
-      return _swiftPart.getColorScheme();
+      auto __result = _swiftPart.getColorScheme();
+      return __result;
     }
     inline void setColorScheme(ColorScheme colorScheme) noexcept override {
-      _swiftPart.setColorScheme(std::forward<decltype(colorScheme)>(colorScheme));
+      _swiftPart.setColorScheme(colorScheme);
     }
     inline std::function<void()> getSomeCallback() noexcept override {
       auto __result = _swiftPart.getSomeCallback();

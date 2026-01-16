@@ -349,8 +349,8 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceStructs(array: [Person]) -> [Person] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceStructs(array: array)
-    return __result
+    let __result = try! self.__implementation.bounceStructs(array: array.map({ item in item }))
+    return __result.map({ item in item })
   }
   
   @inline(__always)
@@ -363,42 +363,42 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func sumUpAllPassengers(cars: [Car]) -> String {
     // TODO: Remove try!
-    let __result = try! self.__implementation.sumUpAllPassengers(cars: cars)
+    let __result = try! self.__implementation.sumUpAllPassengers(cars: cars.map({ item in item }))
     return __result
   }
   
   @inline(__always)
   public final func bounceEnums(array: [Powertrain]) -> [Powertrain] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceEnums(array: array)
-    return __result
+    let __result = try! self.__implementation.bounceEnums(array: array.map({ item in item }))
+    return __result.map({ item in item })
   }
   
   @inline(__always)
   public final func complexEnumCallback(array: [Powertrain], callback: Func__Powertrain__Void) -> Void {
     // TODO: Remove try!
-    try! self.__implementation.complexEnumCallback(array: array, callback: callback.closure)
+    try! self.__implementation.complexEnumCallback(array: array.map({ item in item }), callback: callback.closure)
   }
   
   @inline(__always)
   public final func bounceHybridObjects(array: [HybridChildSpec_cxx]) -> [HybridChildSpec_cxx] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceHybridObjects(array: array)
-    return __result
+    let __result = try! self.__implementation.bounceHybridObjects(array: array.map({ item in item.getHybridChildSpec() }))
+    return __result.map({ item in item.getCxxWrapper() })
   }
   
   @inline(__always)
   public final func bounceFunctions(functions: [Func_Void]) -> [Func_Void] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceFunctions(functions: functions)
-    return __result
+    let __result = try! self.__implementation.bounceFunctions(functions: functions.map({ item in item.closure }))
+    return __result.map({ item in Func_Void(item) })
   }
   
   @inline(__always)
   public final func bounceMaps(maps: [margelo.nitro.SwiftAnyMap]) -> [margelo.nitro.SwiftAnyMap] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceMaps(maps: maps)
-    return __result
+    let __result = try! self.__implementation.bounceMaps(maps: maps.map({ item in item.getSwiftPart() }))
+    return __result.map({ item in margelo.nitro.SwiftAnyMap(item) })
   }
   
   @inline(__always)
