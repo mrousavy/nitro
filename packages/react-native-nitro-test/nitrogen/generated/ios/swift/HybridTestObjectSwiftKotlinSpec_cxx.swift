@@ -416,38 +416,38 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createMap() -> AnyMap {
+  public final func createMap() -> margelo.nitro.SwiftAnyMap {
     // TODO: Remove try!
     let __result = try! self.__implementation.createMap()
+    return margelo.nitro.SwiftAnyMap(__result)
+  }
+  
+  @inline(__always)
+  public final func mapRoundtrip(map: margelo.nitro.SwiftAnyMap) -> margelo.nitro.SwiftAnyMap {
+    // TODO: Remove try!
+    let __result = try! self.__implementation.mapRoundtrip(map: map.getSwiftPart())
+    return margelo.nitro.SwiftAnyMap(__result)
+  }
+  
+  @inline(__always)
+  public final func getMapKeys(map: margelo.nitro.SwiftAnyMap) -> [String] {
+    // TODO: Remove try!
+    let __result = try! self.__implementation.getMapKeys(map: map.getSwiftPart())
     return __result
   }
   
   @inline(__always)
-  public final func mapRoundtrip(map: AnyMap) -> AnyMap {
+  public final func mergeMaps(a: margelo.nitro.SwiftAnyMap, b: margelo.nitro.SwiftAnyMap) -> margelo.nitro.SwiftAnyMap {
     // TODO: Remove try!
-    let __result = try! self.__implementation.mapRoundtrip(map: map)
-    return __result
+    let __result = try! self.__implementation.mergeMaps(a: a.getSwiftPart(), b: b.getSwiftPart())
+    return margelo.nitro.SwiftAnyMap(__result)
   }
   
   @inline(__always)
-  public final func getMapKeys(map: AnyMap) -> [String] {
+  public final func copyAnyMap(map: margelo.nitro.SwiftAnyMap) -> margelo.nitro.SwiftAnyMap {
     // TODO: Remove try!
-    let __result = try! self.__implementation.getMapKeys(map: map)
-    return __result
-  }
-  
-  @inline(__always)
-  public final func mergeMaps(a: AnyMap, b: AnyMap) -> AnyMap {
-    // TODO: Remove try!
-    let __result = try! self.__implementation.mergeMaps(a: a, b: b)
-    return __result
-  }
-  
-  @inline(__always)
-  public final func copyAnyMap(map: AnyMap) -> AnyMap {
-    // TODO: Remove try!
-    let __result = try! self.__implementation.copyAnyMap(map: map)
-    return __result
+    let __result = try! self.__implementation.copyAnyMap(map: map.getSwiftPart())
+    return margelo.nitro.SwiftAnyMap(__result)
   }
   
   @inline(__always)

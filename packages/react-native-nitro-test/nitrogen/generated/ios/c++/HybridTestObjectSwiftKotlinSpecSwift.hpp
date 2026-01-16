@@ -26,6 +26,8 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `SwiftAnyMap` to properly resolve imports.
+namespace margelo::nitro { class SwiftAnyMap; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -66,6 +68,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
+#include <NitroModules/SwiftAnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -299,19 +302,19 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.mapRoundtrip(std::forward<decltype(map)>(map));
+      auto __result = _swiftPart.mapRoundtrip(map);
       return __result;
     }
     inline std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.getMapKeys(std::forward<decltype(map)>(map));
+      auto __result = _swiftPart.getMapKeys(map);
       return __result;
     }
     inline std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override {
-      auto __result = _swiftPart.mergeMaps(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      auto __result = _swiftPart.mergeMaps(a, b);
       return __result;
     }
     inline std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.copyAnyMap(std::forward<decltype(map)>(map));
+      auto __result = _swiftPart.copyAnyMap(map);
       return __result;
     }
     inline std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override {

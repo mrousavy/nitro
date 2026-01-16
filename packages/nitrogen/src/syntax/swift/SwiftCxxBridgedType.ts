@@ -51,6 +51,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'function':
         // Swift functions are wrapped in hard defined classes
         return true
+      case 'map':
+        // AnyMap has to be wrapped in `SwiftAnyMap`
+        return true
       default:
         return false
     }
@@ -66,17 +69,31 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     const imports = this.type.getRequiredImports(language)
 
     if (language === 'c++') {
-      if (this.type.kind === 'array-buffer') {
-        imports.push({
-          name: 'NitroModules/ArrayBufferHolder.hpp',
-          forwardDeclaration: getForwardDeclaration(
-            'class',
-            'ArrayBufferHolder',
-            'NitroModules'
-          ),
-          language: 'c++',
-          space: 'system',
-        })
+      switch (this.type.kind) {
+        case 'array-buffer':
+          imports.push({
+            name: 'NitroModules/ArrayBufferHolder.hpp',
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              'ArrayBufferHolder',
+              'NitroModules'
+            ),
+            language: 'c++',
+            space: 'system',
+          })
+          break
+        case 'map':
+          imports.push({
+            name: 'NitroModules/SwiftAnyMap.hpp',
+            forwardDeclaration: getForwardDeclaration(
+              'class',
+              'SwiftAnyMap',
+              'margelo::nitro'
+            ),
+            language: 'c++',
+            space: 'system',
+          })
+          break
       }
     }
 
@@ -193,6 +210,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'c++':
+            return `margelo::nitro::SwiftAnyMap`
+          case 'swift':
+            return `margelo.nitro.SwiftAnyMap`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -241,6 +268,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.getSwiftPart()`
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         return ''
       default:
@@ -268,6 +303,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `${swiftParameterName}.getCxxWrapper()`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'map': {
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.SwiftAnyMap(${swiftParameterName})`
           default:
             return swiftParameterName
         }
