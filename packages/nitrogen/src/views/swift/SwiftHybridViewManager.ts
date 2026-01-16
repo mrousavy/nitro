@@ -11,9 +11,8 @@ import {
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import {
-  getAutolinkingClassName,
-  getAutolinkingNamespace,
   getHybridObjectConstructorCall,
+  getIsRecyclableCall,
 } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
@@ -143,7 +142,7 @@ using namespace ${namespace}::views;
 }
 
 + (BOOL)shouldBeRecycled {
-  return ${getAutolinkingNamespace()}::${getAutolinkingClassName(spec.name)}::isRecyclableHybridView();
+  return ${getIsRecyclableCall(spec.name)}
 }
 
 - (void)prepareForRecycle {

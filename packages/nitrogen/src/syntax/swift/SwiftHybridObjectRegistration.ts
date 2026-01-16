@@ -18,12 +18,8 @@ interface Props {
 
 interface SwiftHybridObjectRegistration {
   cppCode: string
-  swiftRegistrationClass: string
+  swiftRegistrationMethods: string
   requiredImports: SourceImport[]
-}
-
-export function getAutolinkingClassName(hybridObjectName: string): string {
-  return `Autolinked${hybridObjectName}`
 }
 
 export function getAutolinkingNamespace() {
@@ -36,8 +32,12 @@ export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
   const namespace = getAutolinkingNamespace()
-  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
-  return `${namespace}::${autolinkingClassName}::create();`
+  return `${namespace}::create${hybridObjectName}();`
+}
+
+export function getIsRecyclableCall(hybridObjectName: string): string {
+  const namespace = getAutolinkingNamespace()
+  return `${namespace}::is${hybridObjectName}Recyclable();`
 }
 
 export function createSwiftHybridObjectRegistration({
@@ -53,18 +53,16 @@ export function createSwiftHybridObjectRegistration({
     NitroConfig.current
   )
   const bridge = new SwiftCxxBridgedType(type)
-  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
 
   return {
-    swiftRegistrationClass: `
-public final class ${autolinkingClassName}: AutolinkedClass {
-  public static func create() -> ${bridge.getTypeCode('swift')} {
-    let hybridObject = ${swiftClassName}()
-    return ${indent(bridge.parseFromSwiftToCpp('hybridObject', 'swift'), '    ')}
-  }
-  public static var isRecyclableHybridView: Bool {
-    return ${swiftClassName}.self is any RecyclableView.Type
-  }
+    swiftRegistrationMethods: `
+public static func create${hybridObjectName}() -> ${bridge.getTypeCode('swift')} {
+  let hybridObject = ${swiftClassName}()
+  return ${indent(bridge.parseFromSwiftToCpp('hybridObject', 'swift'), '  ')}
+}
+
+public static func is${hybridObjectName}Recyclable() -> Bool {
+  return ${swiftClassName}.self is any RecyclableView.Type
 }
     `.trim(),
     requiredImports: [
