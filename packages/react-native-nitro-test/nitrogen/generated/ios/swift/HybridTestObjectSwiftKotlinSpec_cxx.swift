@@ -392,6 +392,22 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
+  public final var optionalCallbackDirect: Func_Double_Void? {
+    get {
+      if let __unwrappedValue = self.__implementation.optionalCallback {
+        return Func_Double_Void(__unwrappedValue)
+      } else {
+        return nil
+      }
+    }
+    set {
+      if let newValue {
+        self.__implementation.optionalCallback = newValue.closure
+      } else {
+        self.__implementation.optionalCallback = nil
+      }
+    }
+  }
   
   public final var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
