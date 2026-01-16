@@ -7,18 +7,5 @@
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 
-#include <NitroModules/SwiftConverter.hpp>
-#include "Func_Double_Void.hpp"
-
 namespace margelo::nitro::test {
-
-std::optional<std::function<void(double /* value */)>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalCallback() noexcept {
-  auto __result = _swiftPart.getOptionalCallbackDirect();
-  return SwiftConverter<std::optional<std::function<void(double /* value */)>>>::fromSwift(__result);;
-}
-void HybridTestObjectSwiftKotlinSpecSwift::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept {
-  auto value = SwiftConverter<std::optional<std::function<void(double /* value */)>>>::toSwift(optionalCallback);
-  _swiftPart.setOptionalCallbackDirect(value);
-}
-
 } // namespace margelo::nitro::test

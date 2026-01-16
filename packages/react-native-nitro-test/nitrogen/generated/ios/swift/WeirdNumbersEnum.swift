@@ -6,9 +6,13 @@
 ///
 
 /**
- * Represents the JS enum `WeirdNumbersEnum`, backed by a C++ enum.
+ * Represents the JS enum `WeirdNumbersEnum`.
  */
-public typealias WeirdNumbersEnum = margelo.nitro.test.WeirdNumbersEnum
+public enum WeirdNumbersEnum: Int {
+  case a = 0
+  case b = 32
+  case c = 64
+}
 
 public extension WeirdNumbersEnum {
   /**

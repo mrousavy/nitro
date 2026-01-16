@@ -176,8 +176,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'enum': {
         const enumType = getTypeAs(this.type, EnumType)
-        const extensionFile = createSwiftEnumBridge(enumType)
-        files.push(extensionFile)
+        files.push(...createSwiftEnumBridge(enumType))
         break
       }
       case 'function': {
