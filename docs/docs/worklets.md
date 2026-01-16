@@ -12,7 +12,17 @@ This allows the caller to call into native Nitro Modules from libraries like [re
 You can use a Nitro [Hybrid Object](hybrid-objects) on the default React JS context, on the UI context, or on any other background worklet context.
 
 <Tabs groupId="worklet-library">
-  <TabItem value="rnwc" label="Worklets Core" default>
+  <TabItem value="rnw" label="react-native-worklets (Reanimated)" default>
+  ```ts
+  const math = NitroModules.createHybridObject<Math>('Math')
+  runOnUI(() => {
+    'worklet'
+    const result = math.add(5, 3)
+    console.log(result) // --> 8
+  })()
+  ```
+  </TabItem>
+  <TabItem value="rnwc" label="react-native-worklets-core (Margelo)">
   ```ts
   const math = NitroModules.createHybridObject<Math>('Math')
   const boxed = NitroModules.box(math)
@@ -21,36 +31,12 @@ You can use a Nitro [Hybrid Object](hybrid-objects) on the default React JS cont
   context.runAsync(() => {
     'worklet'
     const unboxed = boxed.unbox()
-    console.log(unboxed.add(5, 3)) // --> 8
+    const result = unboxed.add(5, 3)
+    console.log(result) // --> 8
   })
   ```
   </TabItem>
-  <TabItem value="rea" label="Reanimated">
-  ```ts
-  const math = NitroModules.createHybridObject<Math>('Math')
-  const boxed = NitroModules.box(math)
-
-  runOnUI(() => {
-    'worklet'
-    const unboxed = boxed.unbox()
-    console.log(unboxed.add(5, 3)) // --> 8
-  })()
-  ```
-  </TabItem>
 </Tabs>
-
-## Boxing
-
-Since Nitro uses newer JSI APIs like `jsi::NativeState` - which current worklet libraries (like [react-native-worklets-core](https://github.com/margelo/react-native-worklets-core) or [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated)) do not yet fully support - Hybrid Objects cannot yet be _directly_ used in worklet contexts - they have to be _boxed_.
-
-A _boxed_ Hybrid Object is a native `jsi::HostObject`, which is supported by worklet libraries. The process is as following:
-
-1. In the runtime your `HybridObject` was created in (probably the default runtime), call `NitroModules.box(...)` to box it.
-2. The boxed result can be shared in any (worklet-)runtime if needed.
-3. To use the original `HybridObject`, simply call `.unbox()` on it in the desired (worklet-)runtime.
-4. The result of `.unbox()` is the original `HybridObject` - you can now call any methods on it as usual.
-
-In future versions of [react-native-worklets-core](https://github.com/margelo/react-native-worklets-core) or [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated) we expect fullly automatic `jsi::NativeState` support, which will make boxing obsolete.
 
 ## Dispatcher
 
@@ -77,6 +63,27 @@ auto myDispatcher = std::make_shared<MyRuntimeDispatcher>();
 Dispatcher::installRuntimeGlobalDispatcher(myRuntime, myDispatcher);
 ```
 
-This needs to be done once, ideally immediately as soon as possible after creating the `jsi::Runtime`.
+This needs to be done once, ideally immediately after creating the `jsi::Runtime`.
 
 Your `runSync` and `runAsync` implementations must run the given `function` on the same Thread that the `jsi::Runtime` was created on - see [`CallInvokerDispatcher.hpp`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/threading/CallInvokerDispatcher.hpp) for an example.
+
+## Boxing
+
+A [Hybrid Object](hybrid-objects) is a JS object with `jsi::NativeState` and a prototype chain.
+If you need to interop with legacy APIs or APIs that can't deal with `jsi::NativeState` yet, you can _box_ the Hybrid Object into a `jsi::HostObject`:
+
+```ts
+const math = NitroModules.createHybridObject<Math>('Math')
+const boxed = NitroModules.box(math) // <-- jsi::HostObject
+```
+
+The `boxed` object is a simple `jsi::HostObject` (see [`BoxedHybridObject.hpp`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/BoxedHybridObject.hpp)), which can later be _unboxed_ again:
+
+```ts
+const unboxed = boxed.unbox()    // <-- Math
+const result = unboxed.add(5, 3) // <-- 8
+```
+
+:::info
+This is how Hybrid Objects are captured inside Worklet Contexts under the hood as well!
+:::
