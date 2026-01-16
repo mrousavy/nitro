@@ -68,11 +68,7 @@ namespace margelo::nitro::test::external {
     // Methods
     inline std::string getValue() override {
       auto __result = _swiftPart.getValue();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
 
   private:

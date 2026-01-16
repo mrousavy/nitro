@@ -17,10 +17,7 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
-#include <NitroModules/Result.hpp>
-#include <exception>
 #include <memory>
-#include <string>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -39,14 +36,5 @@ namespace margelo::nitro::test::external::bridge::swift {
   // pragma MARK: std::weak_ptr<HybridSomeExternalObjectSpec>
   using std__weak_ptr_HybridSomeExternalObjectSpec_ = std::weak_ptr<HybridSomeExternalObjectSpec>;
   inline std__weak_ptr_HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(const std::shared_ptr<HybridSomeExternalObjectSpec>& strong) noexcept { return strong; }
-  
-  // pragma MARK: Result<std::string>
-  using Result_std__string_ = Result<std::string>;
-  inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
-    return Result<std::string>::withValue(value);
-  }
-  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
-    return Result<std::string>::withError(error);
-  }
 
 } // namespace margelo::nitro::test::external::bridge::swift

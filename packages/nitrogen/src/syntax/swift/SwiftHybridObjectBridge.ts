@@ -15,8 +15,6 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
-import { addKnownType } from '../createType.js'
-import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -306,19 +304,12 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
         // func returns something
         body = `
 auto __result = _swiftPart.${m.name}(${params});
-if (__result.hasError()) [[unlikely]] {
-  std::rethrow_exception(__result.error());
-}
-auto __value = std::move(__result.value());
-return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
+return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
         `.trim()
       } else {
         // void func
         body = `
-auto __result = _swiftPart.${m.name}(${params});
-if (__result.hasError()) [[unlikely]] {
-  std::rethrow_exception(__result.error());
-}
+_swiftPart.${m.name}(${params});
         `.trim()
       }
 
@@ -510,16 +501,6 @@ public final var ${property.name}: ${bridgedType.getTypeCode('swift')} {
 
 function getMethodForwardImplementation(method: Method): string {
   // wrapped return in a std::expected
-  const resultType = new ResultWrappingType(method.returnType)
-  addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
-  const bridgedResultType = new SwiftCxxBridgedType(resultType)
-  const resultBridge = bridgedResultType.getRequiredBridge()
-  if (resultBridge == null)
-    throw new Error(
-      `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
-    )
-  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error)
-
   const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
@@ -532,26 +513,21 @@ function getMethodForwardImplementation(method: Method): string {
   let body: string
   if (returnType.hasType) {
     body = `
-let __result = try self.__implementation.${method.name}(${passParams.join(', ')})
-let __resultCpp = ${returnType.parseFromSwiftToCpp('__result', 'swift')}
-return bridge.${resultBridge.funcName}(__resultCpp)
+// TODO: Remove try!
+let __result = try! self.__implementation.${method.name}(${passParams.join(', ')})
+return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
 `.trim()
   } else {
     body = `
-try self.__implementation.${method.name}(${passParams.join(', ')})
-return bridge.${resultBridge.funcName}()
+// TODO: Remove try!
+try! self.__implementation.${method.name}(${passParams.join(', ')})
 `.trim()
   }
 
   return `
 @inline(__always)
-public final func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
-  do {
-    ${indent(body, '    ')}
-  } catch (let __error) {
-    let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
-    return bridge.${resultBridge.funcName}(__exceptionPtr)
-  }
+public final func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
+  ${indent(body, '  ')}
 }
   `.trim()
 }

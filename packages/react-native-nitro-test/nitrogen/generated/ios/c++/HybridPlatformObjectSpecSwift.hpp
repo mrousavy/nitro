@@ -68,11 +68,7 @@ namespace margelo::nitro::test {
     // Methods
     inline std::string getOSVersion() override {
       auto __result = _swiftPart.getOSVersion();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
 
   private:

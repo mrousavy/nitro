@@ -13,8 +13,6 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
-#include <NitroModules/Result.hpp>
-#include <exception>
 #include <memory>
 #include <string>
 

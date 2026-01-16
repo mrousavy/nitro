@@ -127,13 +127,8 @@ open class HybridSomeExternalObjectSpec_cxx {
   // Methods
   @inline(__always)
   public final func getValue() -> String {
-    do {
-      let __result = try self.__implementation.getValue()
-      let __resultCpp = __result
-      return bridge.create_Result_std__string_(__resultCpp)
-    } catch (let __error) {
-      let __exceptionPtr = __error
-      return bridge.create_Result_std__string_(__exceptionPtr)
-    }
+    // TODO: Remove try!
+    let __result = try! self.__implementation.getValue()
+    return __result
   }
 }

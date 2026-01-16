@@ -12,8 +12,6 @@
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `ExternalObjectStruct` to properly resolve imports.
-namespace margelo::nitro::test { struct ExternalObjectStruct; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -32,12 +30,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
-// Forward declaration of `OptionalCallback` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
-// Forward declaration of `PartialPerson` to properly resolve imports.
-namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
@@ -65,7 +59,6 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
-#include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -74,9 +67,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
-#include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
-#include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
@@ -87,7 +78,6 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
-#include <NitroModules/Result.hpp>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <chrono>
 #include <exception>
@@ -272,15 +262,6 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridChildSpec_ = std::weak_ptr<HybridChildSpec>;
   inline std__weak_ptr_HybridChildSpec_ weakify_std__shared_ptr_HybridChildSpec_(const std::shared_ptr<HybridChildSpec>& strong) noexcept { return strong; }
   
-  // pragma MARK: Result<std::variant<std::string, Car>>
-  using Result_std__variant_std__string__Car__ = Result<std::variant<std::string, Car>>;
-  inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::variant<std::string, Car>& value) noexcept {
-    return Result<std::variant<std::string, Car>>::withValue(value);
-  }
-  inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::string, Car>>::withError(error);
-  }
-  
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlatformObjectSpec>`.
@@ -292,15 +273,6 @@ namespace margelo::nitro::test::bridge::swift {
   // pragma MARK: std::weak_ptr<HybridPlatformObjectSpec>
   using std__weak_ptr_HybridPlatformObjectSpec_ = std::weak_ptr<HybridPlatformObjectSpec>;
   inline std__weak_ptr_HybridPlatformObjectSpec_ weakify_std__shared_ptr_HybridPlatformObjectSpec_(const std::shared_ptr<HybridPlatformObjectSpec>& strong) noexcept { return strong; }
-  
-  // pragma MARK: Result<std::string>
-  using Result_std__string_ = Result<std::string>;
-  inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
-    return Result<std::string>::withValue(value);
-  }
-  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
-    return Result<std::string>::withError(error);
-  }
   
   // pragma MARK: std::shared_ptr<HybridRecyclableTestViewSpec>
   /**
@@ -1563,438 +1535,6 @@ namespace margelo::nitro::test::bridge::swift {
   Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ create_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper wrap_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ value) noexcept {
     return Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
-  using Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>;
-  inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& value) noexcept {
-    return Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>
-  using Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ = Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>;
-  inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& value) noexcept {
-    return Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>::withValue(value);
-  }
-  inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>::withError(error);
-  }
-  
-  // pragma MARK: Result<void>
-  using Result_void_ = Result<void>;
-  inline Result_void_ create_Result_void_() noexcept {
-    return Result<void>::withValue();
-  }
-  inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
-    return Result<void>::withError(error);
-  }
-  
-  // pragma MARK: Result<double>
-  using Result_double_ = Result<double>;
-  inline Result_double_ create_Result_double_(double value) noexcept {
-    return Result<double>::withValue(std::move(value));
-  }
-  inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
-    return Result<double>::withError(error);
-  }
-  
-  // pragma MARK: Result<nitro::NullType>
-  using Result_nitro__NullType_ = Result<nitro::NullType>;
-  inline Result_nitro__NullType_ create_Result_nitro__NullType_(nitro::NullType value) noexcept {
-    return Result<nitro::NullType>::withValue(std::move(value));
-  }
-  inline Result_nitro__NullType_ create_Result_nitro__NullType_(const std::exception_ptr& error) noexcept {
-    return Result<nitro::NullType>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::string>>
-  using Result_std__vector_std__string__ = Result<std::vector<std::string>>;
-  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value) noexcept {
-    return Result<std::vector<std::string>>::withValue(value);
-  }
-  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::string>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<double>>
-  using Result_std__vector_double__ = Result<std::vector<double>>;
-  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value) noexcept {
-    return Result<std::vector<double>>::withValue(value);
-  }
-  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<double>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<Person>>
-  using Result_std__vector_Person__ = Result<std::vector<Person>>;
-  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value) noexcept {
-    return Result<std::vector<Person>>::withValue(value);
-  }
-  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<Person>>::withError(error);
-  }
-  
-  // pragma MARK: Result<PartialPerson>
-  using Result_PartialPerson_ = Result<PartialPerson>;
-  inline Result_PartialPerson_ create_Result_PartialPerson_(const PartialPerson& value) noexcept {
-    return Result<PartialPerson>::withValue(value);
-  }
-  inline Result_PartialPerson_ create_Result_PartialPerson_(const std::exception_ptr& error) noexcept {
-    return Result<PartialPerson>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<Powertrain>>
-  using Result_std__vector_Powertrain__ = Result<std::vector<Powertrain>>;
-  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value) noexcept {
-    return Result<std::vector<Powertrain>>::withValue(value);
-  }
-  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<Powertrain>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::shared_ptr<HybridChildSpec>>>
-  using Result_std__vector_std__shared_ptr_HybridChildSpec___ = Result<std::vector<std::shared_ptr<HybridChildSpec>>>;
-  inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::vector<std::shared_ptr<HybridChildSpec>>& value) noexcept {
-    return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withValue(value);
-  }
-  inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::function<void()>>>
-  using Result_std__vector_std__function_void_____ = Result<std::vector<std::function<void()>>>;
-  inline Result_std__vector_std__function_void_____ create_Result_std__vector_std__function_void_____(const std::vector<std::function<void()>>& value) noexcept {
-    return Result<std::vector<std::function<void()>>>::withValue(value);
-  }
-  inline Result_std__vector_std__function_void_____ create_Result_std__vector_std__function_void_____(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::function<void()>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::shared_ptr<AnyMap>>>
-  using Result_std__vector_std__shared_ptr_AnyMap___ = Result<std::vector<std::shared_ptr<AnyMap>>>;
-  inline Result_std__vector_std__shared_ptr_AnyMap___ create_Result_std__vector_std__shared_ptr_AnyMap___(const std::vector<std::shared_ptr<AnyMap>>& value) noexcept {
-    return Result<std::vector<std::shared_ptr<AnyMap>>>::withValue(value);
-  }
-  inline Result_std__vector_std__shared_ptr_AnyMap___ create_Result_std__vector_std__shared_ptr_AnyMap___(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::shared_ptr<AnyMap>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::shared_ptr<Promise<double>>>>
-  using Result_std__vector_std__shared_ptr_Promise_double____ = Result<std::vector<std::shared_ptr<Promise<double>>>>;
-  inline Result_std__vector_std__shared_ptr_Promise_double____ create_Result_std__vector_std__shared_ptr_Promise_double____(const std::vector<std::shared_ptr<Promise<double>>>& value) noexcept {
-    return Result<std::vector<std::shared_ptr<Promise<double>>>>::withValue(value);
-  }
-  inline Result_std__vector_std__shared_ptr_Promise_double____ create_Result_std__vector_std__shared_ptr_Promise_double____(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::shared_ptr<Promise<double>>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::vector<std::shared_ptr<ArrayBuffer>>>
-  using Result_std__vector_std__shared_ptr_ArrayBuffer___ = Result<std::vector<std::shared_ptr<ArrayBuffer>>>;
-  inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::vector<std::shared_ptr<ArrayBuffer>>& value) noexcept {
-    return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withValue(value);
-  }
-  inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::exception_ptr& error) noexcept {
-    return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<AnyMap>>
-  using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
-  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
-    return Result<std::shared_ptr<AnyMap>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<AnyMap>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::unordered_map<std::string, std::variant<bool, double>>>
-  using Result_std__unordered_map_std__string__std__variant_bool__double___ = Result<std::unordered_map<std::string, std::variant<bool, double>>>;
-  inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::unordered_map<std::string, std::variant<bool, double>>& value) noexcept {
-    return Result<std::unordered_map<std::string, std::variant<bool, double>>>::withValue(value);
-  }
-  inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::exception_ptr& error) noexcept {
-    return Result<std::unordered_map<std::string, std::variant<bool, double>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::unordered_map<std::string, double>>
-  using Result_std__unordered_map_std__string__double__ = Result<std::unordered_map<std::string, double>>;
-  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::unordered_map<std::string, double>& value) noexcept {
-    return Result<std::unordered_map<std::string, double>>::withValue(value);
-  }
-  inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::exception_ptr& error) noexcept {
-    return Result<std::unordered_map<std::string, double>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::unordered_map<std::string, std::string>>
-  using Result_std__unordered_map_std__string__std__string__ = Result<std::unordered_map<std::string, std::string>>;
-  inline Result_std__unordered_map_std__string__std__string__ create_Result_std__unordered_map_std__string__std__string__(const std::unordered_map<std::string, std::string>& value) noexcept {
-    return Result<std::unordered_map<std::string, std::string>>::withValue(value);
-  }
-  inline Result_std__unordered_map_std__string__std__string__ create_Result_std__unordered_map_std__string__std__string__(const std::exception_ptr& error) noexcept {
-    return Result<std::unordered_map<std::string, std::string>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<void>>>
-  using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
-  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<void>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<void>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::optional<Powertrain>>
-  using Result_std__optional_Powertrain__ = Result<std::optional<Powertrain>>;
-  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(std::optional<Powertrain> value) noexcept {
-    return Result<std::optional<Powertrain>>::withValue(std::move(value));
-  }
-  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) noexcept {
-    return Result<std::optional<Powertrain>>::withError(error);
-  }
-  
-  // pragma MARK: Result<bool>
-  using Result_bool_ = Result<bool>;
-  inline Result_bool_ create_Result_bool_(bool value) noexcept {
-    return Result<bool>::withValue(std::move(value));
-  }
-  inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) noexcept {
-    return Result<bool>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::chrono::system_clock::time_point>
-  using Result_std__chrono__system_clock__time_point_ = Result<std::chrono::system_clock::time_point>;
-  inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(std::chrono::system_clock::time_point value) noexcept {
-    return Result<std::chrono::system_clock::time_point>::withValue(std::move(value));
-  }
-  inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(const std::exception_ptr& error) noexcept {
-    return Result<std::chrono::system_clock::time_point>::withError(error);
-  }
-  
-  // pragma MARK: Result<int64_t>
-  using Result_int64_t_ = Result<int64_t>;
-  inline Result_int64_t_ create_Result_int64_t_(int64_t value) noexcept {
-    return Result<int64_t>::withValue(std::move(value));
-  }
-  inline Result_int64_t_ create_Result_int64_t_(const std::exception_ptr& error) noexcept {
-    return Result<int64_t>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<int64_t>>>
-  using Result_std__shared_ptr_Promise_int64_t___ = Result<std::shared_ptr<Promise<int64_t>>>;
-  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<int64_t>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<int64_t>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<double>>>
-  using Result_std__shared_ptr_Promise_double___ = Result<std::shared_ptr<Promise<double>>>;
-  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<double>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<double>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<std::optional<double>>>>
-  using Result_std__shared_ptr_Promise_std__optional_double____ = Result<std::shared_ptr<Promise<std::optional<double>>>>;
-  inline Result_std__shared_ptr_Promise_std__optional_double____ create_Result_std__shared_ptr_Promise_std__optional_double____(const std::shared_ptr<Promise<std::optional<double>>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<std::optional<double>>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_std__optional_double____ create_Result_std__shared_ptr_Promise_std__optional_double____(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<std::optional<double>>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<Car>>>
-  using Result_std__shared_ptr_Promise_Car___ = Result<std::shared_ptr<Promise<Car>>>;
-  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<Car>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<Car>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>
-  using Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ = Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>;
-  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::function<void(double /* value */)>>
-  using Result_std__function_void_double____value______ = Result<std::function<void(double /* value */)>>;
-  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
-    return Result<std::function<void(double /* value */)>>::withValue(value);
-  }
-  inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::exception_ptr& error) noexcept {
-    return Result<std::function<void(double /* value */)>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::function<void(double /* num */)>>
-  using Result_std__function_void_double____num______ = Result<std::function<void(double /* num */)>>;
-  inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::function<void(double /* num */)>& value) noexcept {
-    return Result<std::function<void(double /* num */)>>::withValue(value);
-  }
-  inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::exception_ptr& error) noexcept {
-    return Result<std::function<void(double /* num */)>>::withError(error);
-  }
-  
-  // pragma MARK: Result<Car>
-  using Result_Car_ = Result<Car>;
-  inline Result_Car_ create_Result_Car_(const Car& value) noexcept {
-    return Result<Car>::withValue(value);
-  }
-  inline Result_Car_ create_Result_Car_(const std::exception_ptr& error) noexcept {
-    return Result<Car>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::optional<Person>>
-  using Result_std__optional_Person__ = Result<std::optional<Person>>;
-  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value) noexcept {
-    return Result<std::optional<Person>>::withValue(value);
-  }
-  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) noexcept {
-    return Result<std::optional<Person>>::withError(error);
-  }
-  
-  // pragma MARK: Result<WrappedJsStruct>
-  using Result_WrappedJsStruct_ = Result<WrappedJsStruct>;
-  inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const WrappedJsStruct& value) noexcept {
-    return Result<WrappedJsStruct>::withValue(value);
-  }
-  inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const std::exception_ptr& error) noexcept {
-    return Result<WrappedJsStruct>::withError(error);
-  }
-  
-  // pragma MARK: Result<OptionalWrapper>
-  using Result_OptionalWrapper_ = Result<OptionalWrapper>;
-  inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const OptionalWrapper& value) noexcept {
-    return Result<OptionalWrapper>::withValue(value);
-  }
-  inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const std::exception_ptr& error) noexcept {
-    return Result<OptionalWrapper>::withError(error);
-  }
-  
-  // pragma MARK: Result<OptionalCallback>
-  using Result_OptionalCallback_ = Result<OptionalCallback>;
-  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const OptionalCallback& value) noexcept {
-    return Result<OptionalCallback>::withValue(value);
-  }
-  inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
-    return Result<OptionalCallback>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
-  using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
-  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
-    return Result<std::shared_ptr<ArrayBuffer>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<ArrayBuffer>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<std::string, double>>
-  using Result_std__variant_std__string__double__ = Result<std::variant<std::string, double>>;
-  inline Result_std__variant_std__string__double__ create_Result_std__variant_std__string__double__(const std::variant<std::string, double>& value) noexcept {
-    return Result<std::variant<std::string, double>>::withValue(value);
-  }
-  inline Result_std__variant_std__string__double__ create_Result_std__variant_std__string__double__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::string, double>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<bool, OldEnum>>
-  using Result_std__variant_bool__OldEnum__ = Result<std::variant<bool, OldEnum>>;
-  inline Result_std__variant_bool__OldEnum__ create_Result_std__variant_bool__OldEnum__(const std::variant<bool, OldEnum>& value) noexcept {
-    return Result<std::variant<bool, OldEnum>>::withValue(value);
-  }
-  inline Result_std__variant_bool__OldEnum__ create_Result_std__variant_bool__OldEnum__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<bool, OldEnum>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<bool, WeirdNumbersEnum>>
-  using Result_std__variant_bool__WeirdNumbersEnum__ = Result<std::variant<bool, WeirdNumbersEnum>>;
-  inline Result_std__variant_bool__WeirdNumbersEnum__ create_Result_std__variant_bool__WeirdNumbersEnum__(const std::variant<bool, WeirdNumbersEnum>& value) noexcept {
-    return Result<std::variant<bool, WeirdNumbersEnum>>::withValue(value);
-  }
-  inline Result_std__variant_bool__WeirdNumbersEnum__ create_Result_std__variant_bool__WeirdNumbersEnum__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<bool, WeirdNumbersEnum>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<Car, Person>>
-  using Result_std__variant_Car__Person__ = Result<std::variant<Car, Person>>;
-  inline Result_std__variant_Car__Person__ create_Result_std__variant_Car__Person__(const std::variant<Car, Person>& value) noexcept {
-    return Result<std::variant<Car, Person>>::withValue(value);
-  }
-  inline Result_std__variant_Car__Person__ create_Result_std__variant_Car__Person__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<Car, Person>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>
-  using Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ = Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>;
-  inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& value) noexcept {
-    return Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>::withValue(value);
-  }
-  inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>
-  using Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ = Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>;
-  inline Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& value) noexcept {
-    return Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>::withValue(value);
-  }
-  inline Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>
-  using Result_std__shared_ptr_HybridChildSpec__ = Result<std::shared_ptr<HybridChildSpec>>;
-  inline Result_std__shared_ptr_HybridChildSpec__ create_Result_std__shared_ptr_HybridChildSpec__(const std::shared_ptr<HybridChildSpec>& value) noexcept {
-    return Result<std::shared_ptr<HybridChildSpec>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_HybridChildSpec__ create_Result_std__shared_ptr_HybridChildSpec__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<HybridChildSpec>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<HybridBaseSpec>>
-  using Result_std__shared_ptr_HybridBaseSpec__ = Result<std::shared_ptr<HybridBaseSpec>>;
-  inline Result_std__shared_ptr_HybridBaseSpec__ create_Result_std__shared_ptr_HybridBaseSpec__(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
-    return Result<std::shared_ptr<HybridBaseSpec>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_HybridBaseSpec__ create_Result_std__shared_ptr_HybridBaseSpec__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<HybridBaseSpec>>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>
-  using Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ = Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>;
-  inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& value) noexcept {
-    return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withValue(value);
-  }
-  inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
-  }
-  
-  // pragma MARK: Result<ExternalObjectStruct>
-  using Result_ExternalObjectStruct_ = Result<ExternalObjectStruct>;
-  inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const ExternalObjectStruct& value) noexcept {
-    return Result<ExternalObjectStruct>::withValue(value);
-  }
-  inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const std::exception_ptr& error) noexcept {
-    return Result<ExternalObjectStruct>::withError(error);
-  }
-  
-  // pragma MARK: Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>
-  using Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ = Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>;
-  inline Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& value) noexcept {
-    return Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>::withValue(value);
-  }
-  inline Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(const std::exception_ptr& error) noexcept {
-    return Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>::withError(error);
   }
 
 } // namespace margelo::nitro::test::bridge::swift

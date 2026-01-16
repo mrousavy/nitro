@@ -169,13 +169,8 @@ open class HybridTestViewSpec_cxx {
   // Methods
   @inline(__always)
   public final func someMethod() -> Void {
-    do {
-      try self.__implementation.someMethod()
-      return bridge.create_Result_void_()
-    } catch (let __error) {
-      let __exceptionPtr = __error
-      return bridge.create_Result_void_(__exceptionPtr)
-    }
+    // TODO: Remove try!
+    try! self.__implementation.someMethod()
   }
   
   public final func getView() -> UnsafeMutableRawPointer {

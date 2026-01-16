@@ -223,749 +223,376 @@ namespace margelo::nitro::test {
     // Methods
     inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override {
       auto __result = _swiftPart.newTestObject();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) override {
       auto __result = _swiftPart.getVariantHybrid(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void simpleFunc() override {
-      auto __result = _swiftPart.simpleFunc();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.simpleFunc();
     }
     inline double addNumbers(double a, double b) override {
       auto __result = _swiftPart.addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
       auto __result = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto __result = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
     }
     inline nitro::NullType bounceNull(nitro::NullType value) override {
       auto __result = _swiftPart.bounceNull(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
       auto __result = _swiftPart.bounceStrings(std::forward<decltype(array)>(array));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<double> bounceNumbers(const std::vector<double>& array) override {
       auto __result = _swiftPart.bounceNumbers(std::forward<decltype(array)>(array));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<Person> bounceStructs(const std::vector<Person>& array) override {
       auto __result = _swiftPart.bounceStructs(std::forward<decltype(array)>(array));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline PartialPerson bouncePartialStruct(const PartialPerson& person) override {
       auto __result = _swiftPart.bouncePartialStruct(std::forward<decltype(person)>(person));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::string sumUpAllPassengers(const std::vector<Car>& cars) override {
       auto __result = _swiftPart.sumUpAllPassengers(std::forward<decltype(cars)>(cars));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override {
       auto __result = _swiftPart.bounceEnums(std::forward<decltype(array)>(array));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override {
-      auto __result = _swiftPart.complexEnumCallback(std::forward<decltype(array)>(array), callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.complexEnumCallback(std::forward<decltype(array)>(array), callback);
     }
     inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
       auto __result = _swiftPart.bounceHybridObjects(std::forward<decltype(array)>(array));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override {
       auto __result = _swiftPart.bounceFunctions(std::forward<decltype(functions)>(functions));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override {
       auto __result = _swiftPart.bounceMaps(std::forward<decltype(maps)>(maps));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override {
       auto __result = _swiftPart.bouncePromises(std::forward<decltype(promises)>(promises));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override {
       auto __result = _swiftPart.bounceArrayBuffers(std::forward<decltype(arrayBuffers)>(arrayBuffers));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<AnyMap> createMap() override {
       auto __result = _swiftPart.createMap();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override {
       auto __result = _swiftPart.mapRoundtrip(std::forward<decltype(map)>(map));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override {
       auto __result = _swiftPart.getMapKeys(std::forward<decltype(map)>(map));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override {
       auto __result = _swiftPart.mergeMaps(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override {
       auto __result = _swiftPart.copyAnyMap(std::forward<decltype(map)>(map));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override {
       auto __result = _swiftPart.bounceMap(std::forward<decltype(map)>(map));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override {
       auto __result = _swiftPart.bounceSimpleMap(std::forward<decltype(map)>(map));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) override {
       auto __result = _swiftPart.extractMap(std::forward<decltype(mapWrapper)>(mapWrapper));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline double funcThatThrows() override {
       auto __result = _swiftPart.funcThatThrows();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() override {
       auto __result = _swiftPart.funcThatThrowsBeforePromise();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void throwError(const std::exception_ptr& error) override {
-      auto __result = _swiftPart.throwError(std::forward<decltype(error)>(error));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.throwError(std::forward<decltype(error)>(error));
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
       auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
       auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
       auto __result = _swiftPart.tryOptionalEnum(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override {
       auto __result = _swiftPart.tryTrailingOptional(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
       auto __result = _swiftPart.add1Hour(std::forward<decltype(date)>(date));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::chrono::system_clock::time_point currentDate() override {
       auto __result = _swiftPart.currentDate();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline int64_t calculateFibonacciSync(double value) override {
       auto __result = _swiftPart.calculateFibonacciSync(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) override {
       auto __result = _swiftPart.calculateFibonacciAsync(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> wait(double seconds) override {
       auto __result = _swiftPart.wait(std::forward<decltype(seconds)>(seconds));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> promiseThrows() override {
       auto __result = _swiftPart.promiseThrows();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<double>> promiseReturnsInstantly() override {
       auto __result = _swiftPart.promiseReturnsInstantly();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() override {
       auto __result = _swiftPart.promiseReturnsInstantlyAsync();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> promiseThatResolvesVoidInstantly() override {
       auto __result = _swiftPart.promiseThatResolvesVoidInstantly();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<std::optional<double>>> promiseThatResolvesToUndefined() override {
       auto __result = _swiftPart.promiseThatResolvesToUndefined();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override {
       auto __result = _swiftPart.awaitAndGetPromise(std::forward<decltype(promise)>(promise));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override {
       auto __result = _swiftPart.awaitAndGetComplexPromise(std::forward<decltype(promise)>(promise));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override {
       auto __result = _swiftPart.awaitPromise(std::forward<decltype(promise)>(promise));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void callCallback(const std::function<void()>& callback) override {
-      auto __result = _swiftPart.callCallback(callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.callCallback(callback);
     }
     inline std::shared_ptr<Promise<void>> callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) override {
       auto __result = _swiftPart.callCallbackThatReturnsPromiseVoid(callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) override {
-      auto __result = _swiftPart.callAll(first, second, third);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.callAll(first, second, third);
     }
     inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
-      auto __result = _swiftPart.callWithOptional(std::forward<decltype(value)>(value), callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.callWithOptional(std::forward<decltype(value)>(value), callback);
     }
     inline std::shared_ptr<Promise<double>> callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) override {
       auto __result = _swiftPart.callSumUpNTimes(callback, std::forward<decltype(n)>(n));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override {
       auto __result = _swiftPart.callbackAsyncPromise(callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override {
       auto __result = _swiftPart.callbackAsyncPromiseBuffer(callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::function<void(double /* value */)> getComplexCallback() override {
       auto __result = _swiftPart.getComplexCallback();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) override {
-      auto __result = _swiftPart.twoOptionalCallbacks(std::forward<decltype(value)>(value), std::forward<decltype(first)>(first), std::forward<decltype(second)>(second));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.twoOptionalCallbacks(std::forward<decltype(value)>(value), std::forward<decltype(first)>(first), std::forward<decltype(second)>(second));
     }
     inline void errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) override {
-      auto __result = _swiftPart.errorCallback(onError);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.errorCallback(onError);
     }
     inline std::function<void(double /* num */)> createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) override {
       auto __result = _swiftPart.createNativeCallback(wrappingJsCallback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override {
       auto __result = _swiftPart.getValueFromJSCallbackAndWait(getValue);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override {
       auto __result = _swiftPart.getValueFromJsCallback(callback, andThenCall);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline Car getCar() override {
       auto __result = _swiftPart.getCar();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline bool isCarElectric(const Car& car) override {
       auto __result = _swiftPart.isCarElectric(std::forward<decltype(car)>(car));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::optional<Person> getDriver(const Car& car) override {
       auto __result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline Car bounceCar(const Car& car) override {
       auto __result = _swiftPart.bounceCar(std::forward<decltype(car)>(car));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void jsStyleObjectAsParameters(const JsStyleStruct& params) override {
-      auto __result = _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.jsStyleObjectAsParameters(std::forward<decltype(params)>(params));
     }
     inline WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override {
       auto __result = _swiftPart.bounceWrappedJsStyleStruct(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override {
       auto __result = _swiftPart.bounceOptionalWrapper(std::forward<decltype(wrapper)>(wrapper));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
       auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBuffer() override {
       auto __result = _swiftPart.createArrayBuffer();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override {
       auto __result = _swiftPart.createArrayBufferFromNativeBuffer(std::forward<decltype(copy)>(copy));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
       auto __result = _swiftPart.copyBuffer(std::forward<decltype(buffer)>(buffer));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override {
       auto __result = _swiftPart.getBufferLastItem(std::forward<decltype(buffer)>(buffer));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
-      auto __result = _swiftPart.setAllValuesTo(std::forward<decltype(buffer)>(buffer), std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.setAllValuesTo(std::forward<decltype(buffer)>(buffer), std::forward<decltype(value)>(value));
     }
     inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override {
       auto __result = _swiftPart.createArrayBufferAsync();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
       auto __result = _swiftPart.bounceArrayBuffer(std::forward<decltype(buffer)>(buffer));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override {
       auto __result = _swiftPart.passVariant(std::forward<decltype(either)>(either));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override {
       auto __result = _swiftPart.getVariantEnum(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override {
       auto __result = _swiftPart.getVariantWeirdNumbersEnum(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override {
       auto __result = _swiftPart.getVariantObjects(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override {
       auto __result = _swiftPart.passNamedVariant(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override {
       auto __result = _swiftPart.passAllEmptyObjectVariant(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override {
       auto __result = _swiftPart.bounceComplexVariant(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridChildSpec> createChild() override {
       auto __result = _swiftPart.createChild();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridBaseSpec> createBase() override {
       auto __result = _swiftPart.createBase();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridBaseSpec> createBaseActualChild() override {
       auto __result = _swiftPart.createBaseActualChild();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChild(child);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override {
       auto __result = _swiftPart.bounceBase(base);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override {
       auto __result = _swiftPart.bounceChildBase(child);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override {
       auto __result = _swiftPart.castBase(base);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline double callbackSync(const std::function<double()>& callback) override {
       auto __result = _swiftPart.callbackSync(callback);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override {
       auto __result = _swiftPart.getIsViewBlue(view);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override {
       auto __result = _swiftPart.bounceExternalHybrid(externalObject);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override {
       auto __result = _swiftPart.createInternalObject();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override {
       auto __result = _swiftPart.bounceExternalStruct(std::forward<decltype(externalStruct)>(externalStruct));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) override {
       auto __result = _swiftPart.bounceExternalVariant(std::forward<decltype(variant)>(variant));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
     inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override {
       auto __result = _swiftPart.createExternalVariantFromFunc(factory);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
+      return __result;
     }
 
   private:

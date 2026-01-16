@@ -93,10 +93,7 @@ namespace margelo::nitro::test {
   public:
     // Methods
     inline void someMethod() override {
-      auto __result = _swiftPart.someMethod();
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
+      _swiftPart.someMethod();
     }
 
   private:
