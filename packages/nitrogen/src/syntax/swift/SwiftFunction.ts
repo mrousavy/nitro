@@ -186,8 +186,8 @@ namespace margelo::nitro {
   template <>
   struct SwiftConverter<${functionType.getCode('c++')}> {
     using SwiftType = ${iosNamespace}::${swiftClassName};
-    ${functionType.getCode('c++')} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
-    ${iosNamespace}::${swiftClassName} toSwift(const ${functionType.getCode('c++')}& cppFunc);
+    static ${functionType.getCode('c++')} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
+    static ${iosNamespace}::${swiftClassName} toSwift(const ${functionType.getCode('c++')}& cppFunc);
   };
 }
   `.trim()
