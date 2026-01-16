@@ -5,6 +5,8 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#pragma once
+
 #include <functional>
 #include "JsStyleStruct.hpp"
 #include <NitroModules/SwiftConverter.hpp>

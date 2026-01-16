@@ -5,6 +5,8 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#pragma once
+
 #include "ColorScheme.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 

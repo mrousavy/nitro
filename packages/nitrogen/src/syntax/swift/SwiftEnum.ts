@@ -74,6 +74,8 @@ public extension ${enumType.enumName} {
   const cppHeaderCode = `
 ${createFileMetadataString(`${enumType.enumName}+Swift.hpp`)}
 
+#pragma once
+
 #include "${enumType.enumName}.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 

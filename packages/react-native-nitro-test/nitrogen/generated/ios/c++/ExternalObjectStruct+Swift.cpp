@@ -11,6 +11,7 @@
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 
+
 namespace margelo::nitro {
 
   margelo::nitro::test::ExternalObjectStruct SwiftConverter<margelo::nitro::test::ExternalObjectStruct>::fromSwift(const NitroTest::ExternalObjectStruct& swiftStruct) {

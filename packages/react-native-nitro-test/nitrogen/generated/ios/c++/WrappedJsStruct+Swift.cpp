@@ -10,6 +10,7 @@
 #include <functional>
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
+#include "JsStyleStruct+Swift.hpp"
 
 namespace margelo::nitro {
 

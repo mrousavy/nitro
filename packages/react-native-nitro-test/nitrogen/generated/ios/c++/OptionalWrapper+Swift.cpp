@@ -11,6 +11,7 @@
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 
+
 namespace margelo::nitro {
 
   margelo::nitro::test::OptionalWrapper SwiftConverter<margelo::nitro::test::OptionalWrapper>::fromSwift(const NitroTest::OptionalWrapper& swiftStruct) {

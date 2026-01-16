@@ -5,6 +5,8 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#pragma once
+
 #include <functional>
 #include "MapWrapper.hpp"
 #include <NitroModules/SwiftConverter.hpp>

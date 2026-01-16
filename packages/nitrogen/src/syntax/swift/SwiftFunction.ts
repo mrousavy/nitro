@@ -175,6 +175,8 @@ public final class ${swiftClassName} {
     const cppHeaderCode = `
 ${createFileMetadataString(`${swiftClassName}+Swift.hpp`)}
 
+#pragma once
+
 #include <functional>
 #include <NitroModules/SwiftConverter.hpp>
 

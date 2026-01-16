@@ -11,6 +11,7 @@
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 
+
 namespace margelo::nitro {
 
   margelo::nitro::test::OptionalCallback SwiftConverter<margelo::nitro::test::OptionalCallback>::fromSwift(const NitroTest::OptionalCallback& swiftStruct) {

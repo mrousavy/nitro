@@ -1,9 +1,40 @@
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
+import { EnumType } from '../types/EnumType.js'
+import { FunctionType } from '../types/FunctionType.js'
+import { getTypeAs } from '../types/getTypeAs.js'
 import { StructType } from '../types/StructType.js'
+import type { Type } from '../types/Type.js'
+
+function getRequiredBridgeImport(type: Type): string | undefined {
+  // TODO: Avoid duplicating the name of those files - create one single source of truth so we dont fuck up renames
+  switch (type.kind) {
+    case 'struct': {
+      const struct = getTypeAs(type, StructType)
+      return `${struct.structName}+Swift.hpp`
+    }
+    case 'enum': {
+      const enumType = getTypeAs(type, EnumType)
+      return `${enumType.enumName}+Swift.hpp`
+    }
+    case 'function': {
+      const functionType = getTypeAs(type, FunctionType)
+      const swiftClassName = escapeCppName(
+        `Func_${functionType.parameters.map((p) => p.getCode('swift', { fullyQualified: false })).join('_')}_${functionType.returnType.getCode('swift')}`
+      )
+      return `${swiftClassName}+Swift.hpp`
+    }
+    default:
+      return undefined
+  }
+}
 
 export function createSwiftStructBridge(
   struct: StructType
@@ -36,6 +67,11 @@ export function createSwiftStructBridge(
       `SwiftConverter<${p.getCode('c++', { fullyQualified: true })}>::toSwift(cppStruct.${p.escapedName})`
   )
 
+  const extraImports = struct.properties
+    .map((p) => getRequiredBridgeImport(p))
+    .filter((i) => i != null)
+    .map((i) => `#include "${i}"`)
+
   const swiftCode = `
 ${createFileMetadataString(`${struct.structName}.swift`)}
 
@@ -56,7 +92,9 @@ public struct ${struct.structName} {
 }
   `.trim()
   const cppHeaderCode = `
-  ${createFileMetadataString(`${struct.structName}+Swift.hpp`)}
+${createFileMetadataString(`${struct.structName}+Swift.hpp`)}
+
+#pragma once
 
 #include <functional>
 #include "${struct.structName}.hpp"
@@ -83,6 +121,7 @@ namespace margelo::nitro {
 #include <functional>
 #include "${getUmbrellaHeaderName()}"
 #include <NitroModules/SwiftConverter.hpp>
+${extraImports.join('\n')}
 
 namespace margelo::nitro {
 

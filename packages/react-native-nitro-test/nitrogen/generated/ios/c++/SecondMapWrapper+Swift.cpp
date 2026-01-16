@@ -11,6 +11,7 @@
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 
+
 namespace margelo::nitro {
 
   margelo::nitro::test::SecondMapWrapper SwiftConverter<margelo::nitro::test::SecondMapWrapper>::fromSwift(const NitroTest::SecondMapWrapper& swiftStruct) {
