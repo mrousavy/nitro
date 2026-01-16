@@ -39,7 +39,7 @@ export function createSwiftHybridViewManager(
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
-    const bridge = new SwiftCxxBridgedType(p.type, false)
+    const bridge = new SwiftCxxBridgedType(p.type)
     const parse = bridge.parseFromCppToSwift(
       `newViewProps.${name}.value`,
       'c++'

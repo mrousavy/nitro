@@ -72,10 +72,12 @@ public extension ${enumType.enumName} {
 }
   `.trim()
   const cppHeaderCode = `
-${createFileMetadataString(`${enumType.enumName}.hpp`)}
+${createFileMetadataString(`${enumType.enumName}+Swift.hpp`)}
 
-#include <NitroModules/SwiftConverter.hpp>
+#pragma once
+
 #include "${enumType.enumName}.hpp"
+#include <NitroModules/SwiftConverter.hpp>
 
 namespace ${iosNamespace} {
   class ${enumType.enumName};
@@ -91,12 +93,12 @@ namespace margelo::nitro {
 }
   `.trim()
   const cppSourceCode = `
-${createFileMetadataString(`${enumType.enumName}.cpp`)}
+${createFileMetadataString(`${enumType.enumName}+Swift.cpp`)}
 
 #include "${enumType.enumName}+Swift.hpp"
 #include "${enumType.enumName}.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 #include "${getUmbrellaHeaderName()}"
+#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro {
 

@@ -7,5 +7,73 @@
 
 #include "HybridTestViewSpecSwift.hpp"
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor
+
+  HybridTestViewSpecSwift::HybridTestViewSpecSwift(const NitroTest::HybridTestViewSpec_cxx& swiftPart):
+    HybridObject(HybridTestViewSpec::TAG) {
+    _swiftPart = std::make_shared<NitroTest::HybridTestViewSpec_cxx>(swiftPart);
+  }
+
+
+  NitroTest::HybridTestViewSpec_cxx& HybridTestViewSpecSwift::getSwiftPart() noexcept {
+    return *_swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t HybridTestViewSpecSwift::getExternalMemorySize() noexcept {
+    return _swiftPart->getMemorySize();
+  }
+  bool HybridTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(other)) {
+      return _swiftPart->equals(otherCast->getSwiftPart());
+    }
+    return false;
+  }
+  void HybridTestViewSpecSwift::dispose() noexcept {
+    _swiftPart->dispose();
+  }
+  std::string HybridTestViewSpecSwift::toString() {
+    return _swiftPart->toString();
+  }
+
+  // pragma MARK: Properties
+
+  bool HybridTestViewSpecSwift::getIsBlue() noexcept {
+    return _swiftPart->isBlue();
+  }
+  void HybridTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
+    _swiftPart->setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+  }
+  bool HybridTestViewSpecSwift::getHasBeenCalled() noexcept {
+    return _swiftPart->hasBeenCalled();
+  }
+  void HybridTestViewSpecSwift::setHasBeenCalled(bool hasBeenCalled) noexcept {
+    _swiftPart->setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
+  }
+  ColorScheme HybridTestViewSpecSwift::getColorScheme() noexcept {
+    auto __result = _swiftPart->getColorScheme();
+    return __result;
+  }
+  void HybridTestViewSpecSwift::setColorScheme(ColorScheme colorScheme) noexcept {
+    _swiftPart->setColorScheme(colorScheme);
+  }
+  std::function<void()> HybridTestViewSpecSwift::getSomeCallback() noexcept {
+    auto __result = _swiftPart->getSomeCallback();
+    return __result;
+  }
+  void HybridTestViewSpecSwift::setSomeCallback(const std::function<void()>& someCallback) noexcept {
+    _swiftPart->setSomeCallback(someCallback);
+  }
+
+  // pragma MARK: Methods
+
+  void HybridTestViewSpecSwift::someMethod() {
+    _swiftPart->someMethod();
+  }
+
 } // namespace margelo::nitro::test

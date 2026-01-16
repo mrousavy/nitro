@@ -72,8 +72,8 @@ public static func is${hybridObjectName}Recyclable() -> Bool {
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    ${type.getCode('c++')} hybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
-    return hybridObject;
+    auto swiftHybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
+    return swiftHybridObject.getCxxPart();
   }
 );
       `.trim(),
