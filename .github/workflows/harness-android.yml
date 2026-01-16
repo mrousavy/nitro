@@ -78,6 +78,10 @@ jobs:
   harness_android_new:
     name: Harness Android (new architecture)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        min-sdk:
+          - '26'
     steps:
       - uses: actions/checkout@v6
         with:
@@ -109,10 +113,11 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            example/android/app/.cxx
+            example/android/app/build
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-
       - name: Build Android app
         working-directory: example/android
         run: ./gradlew assembleDebug --no-daemon --build-cache
