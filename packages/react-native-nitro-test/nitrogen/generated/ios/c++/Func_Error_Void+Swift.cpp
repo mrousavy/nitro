@@ -12,13 +12,13 @@
 
 namespace margelo::nitro {
 
-  std::function<void(const std::exception_ptr& /* error */)> SwiftConverter<std::function<void(const std::exception_ptr& /* error */)>>::fromSwift(const NitroTest::Func_Error_Void& swiftFunc) {
+  std::function<void(const std::exception_ptr&)> SwiftConverter<std::function<void(const std::exception_ptr&)>>::fromSwift(const NitroTest::Func_Error_Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](std::exception_ptr error) mutable -> void {
       return swiftFunc.call(error);
     };
   }
 
-  NitroTest::Func_Error_Void SwiftConverter<std::function<void(const std::exception_ptr& /* error */)>>::toSwift(const std::function<void(const std::exception_ptr& /* error */)>& cppFunc) {
+  NitroTest::Func_Error_Void SwiftConverter<std::function<void(const std::exception_ptr&)>>::toSwift(const std::function<void(const std::exception_ptr&)>& cppFunc) {
     return NitroTest::Func_Error_Void::init(cppFunc);
   }
 

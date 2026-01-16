@@ -16,9 +16,9 @@ namespace NitroTest {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<void(const std::string& /* value */)>> {
+  struct SwiftConverter<std::function<void(const std::string&)>> {
     using SwiftType = NitroTest::Func_String_Void;
-    static std::function<void(const std::string& /* value */)> fromSwift(const NitroTest::Func_String_Void& swiftFunc);
-    static NitroTest::Func_String_Void toSwift(const std::function<void(const std::string& /* value */)>& cppFunc);
+    static std::function<void(const std::string&)> fromSwift(const NitroTest::Func_String_Void& swiftFunc);
+    static NitroTest::Func_String_Void toSwift(const std::function<void(const std::string&)>& cppFunc);
   };
 }

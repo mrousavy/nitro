@@ -12,13 +12,13 @@
 
 namespace margelo::nitro {
 
-  std::function<void(const std::shared_ptr<Promise<void>>& /* value */)> SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>& /* value */)>>::fromSwift(const NitroTest::Func_Promise_Void__Void& swiftFunc) {
+  std::function<void(const std::shared_ptr<Promise<void>>&)> SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>&)>>::fromSwift(const NitroTest::Func_Promise_Void__Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](std::shared_ptr<Promise<void>> value) mutable -> void {
       return swiftFunc.call(value);
     };
   }
 
-  NitroTest::Func_Promise_Void__Void SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>& /* value */)>>::toSwift(const std::function<void(const std::shared_ptr<Promise<void>>& /* value */)>& cppFunc) {
+  NitroTest::Func_Promise_Void__Void SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>&)>>::toSwift(const std::function<void(const std::shared_ptr<Promise<void>>&)>& cppFunc) {
     return NitroTest::Func_Promise_Void__Void::init(cppFunc);
   }
 

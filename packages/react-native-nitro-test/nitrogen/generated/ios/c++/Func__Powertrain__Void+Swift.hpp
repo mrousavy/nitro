@@ -16,9 +16,9 @@ namespace NitroTest {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<void(const std::vector<Powertrain>& /* array */)>> {
+  struct SwiftConverter<std::function<void(const std::vector<Powertrain>&)>> {
     using SwiftType = NitroTest::Func__Powertrain__Void;
-    static std::function<void(const std::vector<Powertrain>& /* array */)> fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc);
-    static NitroTest::Func__Powertrain__Void toSwift(const std::function<void(const std::vector<Powertrain>& /* array */)>& cppFunc);
+    static std::function<void(const std::vector<Powertrain>&)> fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc);
+    static NitroTest::Func__Powertrain__Void toSwift(const std::function<void(const std::vector<Powertrain>&)>& cppFunc);
   };
 }

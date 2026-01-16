@@ -48,6 +48,7 @@ export function createSwiftFunctionBridge(
     .map((i) => `import ${i.name}`)
   requiredImports.push('import NitroModules')
   const imports = requiredImports.filter(isNotDuplicate)
+  const cppType = functionType.getCode('c++', { includeNameInfo: false })
 
   // TODO: Pass std::function via rvalue (&& / consuming) once Swift cxx-interop supports that
 
@@ -95,10 +96,10 @@ namespace ${iosNamespace} {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<${functionType.getCode('c++')}> {
+  struct SwiftConverter<${cppType}> {
     using SwiftType = ${iosNamespace}::${swiftClassName};
-    static ${functionType.getCode('c++')} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
-    static ${iosNamespace}::${swiftClassName} toSwift(const ${functionType.getCode('c++')}& cppFunc);
+    static ${cppType} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
+    static ${iosNamespace}::${swiftClassName} toSwift(const ${cppType}& cppFunc);
   };
 }
   `.trim()
@@ -112,13 +113,13 @@ ${createFileMetadataString(`${swiftClassName}+Swift.cpp`)}
 
 namespace margelo::nitro {
 
-  ${functionType.getCode('c++')} SwiftConverter<${functionType.getCode('c++')}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
+  ${cppType} SwiftConverter<${cppType}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](${paramsCpp.join(', ')}) mutable -> ${functionType.returnType.getCode('c++')} {
       return swiftFunc.call(${argsForward.join(', ')});
     };
   }
 
-  ${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}>::toSwift(const ${functionType.getCode('c++')}& cppFunc) {
+  ${iosNamespace}::${swiftClassName} SwiftConverter<${cppType}>::toSwift(const ${cppType}& cppFunc) {
     return ${iosNamespace}::${swiftClassName}::init(cppFunc);
   }
 

@@ -12,13 +12,13 @@
 
 namespace margelo::nitro {
 
-  std::function<void(double /* value */)> SwiftConverter<std::function<void(double /* value */)>>::fromSwift(const NitroTest::Func_Double_Void& swiftFunc) {
+  std::function<void(double)> SwiftConverter<std::function<void(double)>>::fromSwift(const NitroTest::Func_Double_Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](double value) mutable -> void {
       return swiftFunc.call(value);
     };
   }
 
-  NitroTest::Func_Double_Void SwiftConverter<std::function<void(double /* value */)>>::toSwift(const std::function<void(double /* value */)>& cppFunc) {
+  NitroTest::Func_Double_Void SwiftConverter<std::function<void(double)>>::toSwift(const std::function<void(double)>& cppFunc) {
     return NitroTest::Func_Double_Void::init(cppFunc);
   }
 

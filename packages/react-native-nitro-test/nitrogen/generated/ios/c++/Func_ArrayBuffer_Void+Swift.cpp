@@ -12,13 +12,13 @@
 
 namespace margelo::nitro {
 
-  std::function<void(const std::shared_ptr<ArrayBuffer>& /* value */)> SwiftConverter<std::function<void(const std::shared_ptr<ArrayBuffer>& /* value */)>>::fromSwift(const NitroTest::Func_ArrayBuffer_Void& swiftFunc) {
+  std::function<void(const std::shared_ptr<ArrayBuffer>&)> SwiftConverter<std::function<void(const std::shared_ptr<ArrayBuffer>&)>>::fromSwift(const NitroTest::Func_ArrayBuffer_Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](std::shared_ptr<ArrayBuffer> value) mutable -> void {
       return swiftFunc.call(value);
     };
   }
 
-  NitroTest::Func_ArrayBuffer_Void SwiftConverter<std::function<void(const std::shared_ptr<ArrayBuffer>& /* value */)>>::toSwift(const std::function<void(const std::shared_ptr<ArrayBuffer>& /* value */)>& cppFunc) {
+  NitroTest::Func_ArrayBuffer_Void SwiftConverter<std::function<void(const std::shared_ptr<ArrayBuffer>&)>>::toSwift(const std::function<void(const std::shared_ptr<ArrayBuffer>&)>& cppFunc) {
     return NitroTest::Func_ArrayBuffer_Void::init(cppFunc);
   }
 

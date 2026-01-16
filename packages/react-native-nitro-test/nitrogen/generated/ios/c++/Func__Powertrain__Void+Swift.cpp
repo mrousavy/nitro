@@ -12,13 +12,13 @@
 
 namespace margelo::nitro {
 
-  std::function<void(const std::vector<Powertrain>& /* array */)> SwiftConverter<std::function<void(const std::vector<Powertrain>& /* array */)>>::fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc) {
+  std::function<void(const std::vector<Powertrain>&)> SwiftConverter<std::function<void(const std::vector<Powertrain>&)>>::fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](std::vector<Powertrain> array) mutable -> void {
       return swiftFunc.call(array);
     };
   }
 
-  NitroTest::Func__Powertrain__Void SwiftConverter<std::function<void(const std::vector<Powertrain>& /* array */)>>::toSwift(const std::function<void(const std::vector<Powertrain>& /* array */)>& cppFunc) {
+  NitroTest::Func__Powertrain__Void SwiftConverter<std::function<void(const std::vector<Powertrain>&)>>::toSwift(const std::function<void(const std::vector<Powertrain>&)>& cppFunc) {
     return NitroTest::Func__Powertrain__Void::init(cppFunc);
   }
 
