@@ -1,3 +1,4 @@
+import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import {
@@ -124,15 +125,22 @@ public final class ${swiftClassName} {
       (p) => `${p.escapedName}: ${p.getCode('swift')}`
     )
     const argsForward = functionType.parameters.map((p) => p.escapedName)
+    const paramsCpp = functionType.parameters.map((p) => {
+      const bridged = new SwiftCxxBridgedType(p)
+      // TODO: .getTypeCode('c++') should use the swift::T types.
+      return `${bridged.getTypeCode('c++')} ${p.escapedName}`
+    })
 
     const swiftClassName = escapeCppName(
-      `Func_${argsTypes.join('_')}_${returnType}`
+      `Func_${functionType.parameters.map((p) => p.getCode('swift', { fullyQualified: false })).join('_')}_${returnType}`
     )
     const requiredImports = functionType
       .getRequiredImports('swift')
       .map((i) => `import ${i.name}`)
     requiredImports.push('import NitroModules')
     const imports = requiredImports.filter(isNotDuplicate)
+
+    // TODO: Pass std::function via rvalue (&& / consuming) once Swift cxx-interop supports that
 
     const swiftCode = `
 ${createFileMetadataString(`${swiftClassName}.swift`)}
@@ -189,16 +197,18 @@ ${createFileMetadataString(`${swiftClassName}.cpp`)}
 #include "${swiftClassName}.hpp"
 #include <NitroModules/SwiftConverter.hpp>
 #include <functional>
-#include "${NitroConfig.current.getSwiftBridgeHeaderName()}.hpp"
+#include "${getUmbrellaHeaderName()}"
 
 namespace margelo::nitro {
 
 ${functionType.getCode('c++')} SwiftConverter<${functionType.getCode('c++')}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
-  throw std::runtime_error("not yet implemented!");
+  return [swiftFunc = /* copy */ swiftFunc](${paramsCpp.join(', ')}) mutable -> ${functionType.returnType.getCode('c++')} {
+    return swiftFunc.call(${argsForward.join(', ')});
+  };
 }
 
 ${iosNamespace}::${swiftClassName} SwiftConverter<${functionType.getCode('c++')}>::toSwift(const ${functionType.getCode('c++')}& cppFunc) {
-  throw std::runtime_error("not yet implemented!");
+  return ${iosNamespace}::${swiftClassName}::init(cppFunc);
 }
 
 }
