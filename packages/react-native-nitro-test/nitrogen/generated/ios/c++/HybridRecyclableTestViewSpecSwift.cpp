@@ -7,5 +7,50 @@
 
 #include "HybridRecyclableTestViewSpecSwift.hpp"
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor
+
+  HybridRecyclableTestViewSpecSwift::HybridRecyclableTestViewSpecSwift(const NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart):
+    HybridObject(HybridRecyclableTestViewSpec::TAG),
+    _swiftPart(swiftPart) { }
+
+
+  NitroTest::HybridRecyclableTestViewSpec_cxx& HybridRecyclableTestViewSpecSwift::getSwiftPart() noexcept {
+    return _swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t HybridRecyclableTestViewSpecSwift::getExternalMemorySize() noexcept {
+    return _swiftPart.getMemorySize();
+  }
+  bool HybridRecyclableTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(other)) {
+      return _swiftPart.equals(otherCast->_swiftPart);
+    }
+    return false;
+  }
+  void HybridRecyclableTestViewSpecSwift::dispose() noexcept {
+    _swiftPart.dispose();
+  }
+  std::string HybridRecyclableTestViewSpecSwift::toString() {
+    return _swiftPart.toString();
+  }
+
+  // pragma MARK: Properties
+
+  bool HybridRecyclableTestViewSpecSwift::getIsBlue() noexcept override {
+    return _swiftPart.isBlue();
+  }
+  void HybridRecyclableTestViewSpecSwift::setIsBlue(bool isBlue) noexcept override {
+    _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+  }
+
+  // pragma MARK: Methods
+
+  
+
 } // namespace margelo::nitro::test

@@ -18,8 +18,6 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 #include "ColorScheme.hpp"
 #include <functional>
 
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
-
 namespace margelo::nitro::test {
 
   /**
@@ -35,67 +33,32 @@ namespace margelo::nitro::test {
   class HybridTestViewSpecSwift: public virtual HybridTestViewSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridTestViewSpecSwift(const NitroTest::HybridTestViewSpec_cxx& swiftPart):
-      HybridObject(HybridTestViewSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridTestViewSpecSwift(const NitroTest::HybridTestViewSpec_cxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridTestViewSpec_cxx& getSwiftPart() noexcept {
-      return _swiftPart;
-    }
+    NitroTest::HybridTestViewSpec_cxx& getSwiftPart() noexcept;
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    bool equals(const std::shared_ptr<HybridObject>& other) override {
-      if (auto otherCast = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(other)) {
-        return _swiftPart.equals(otherCast->_swiftPart);
-      }
-      return false;
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    inline size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
+    void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     // Properties
-    inline bool getIsBlue() noexcept override {
-      return _swiftPart.isBlue();
-    }
-    inline void setIsBlue(bool isBlue) noexcept override {
-      _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
-    }
-    inline bool getHasBeenCalled() noexcept override {
-      return _swiftPart.hasBeenCalled();
-    }
-    inline void setHasBeenCalled(bool hasBeenCalled) noexcept override {
-      _swiftPart.setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
-    }
-    inline ColorScheme getColorScheme() noexcept override {
-      auto __result = _swiftPart.getColorScheme();
-      return __result;
-    }
-    inline void setColorScheme(ColorScheme colorScheme) noexcept override {
-      _swiftPart.setColorScheme(colorScheme);
-    }
-    inline std::function<void()> getSomeCallback() noexcept override {
-      auto __result = _swiftPart.getSomeCallback();
-      return __result;
-    }
-    inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
-      _swiftPart.setSomeCallback(someCallback);
-    }
+    bool getIsBlue() noexcept override;
+    void setIsBlue(bool isBlue) noexcept override;
+    bool getHasBeenCalled() noexcept override;
+    void setHasBeenCalled(bool hasBeenCalled) noexcept override;
+    ColorScheme getColorScheme() noexcept override;
+    void setColorScheme(ColorScheme colorScheme) noexcept override;
+    std::function<void()> getSomeCallback() noexcept override;
+    void setSomeCallback(const std::function<void()>& someCallback) noexcept override;
 
   public:
     // Methods
-    inline void someMethod() override {
-      _swiftPart.someMethod();
-    }
+    void someMethod() override;
 
   private:
     NitroTest::HybridTestViewSpec_cxx _swiftPart;

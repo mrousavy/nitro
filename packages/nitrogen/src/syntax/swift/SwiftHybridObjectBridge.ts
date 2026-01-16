@@ -252,7 +252,10 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
 }
   `
 
-  const cppProperties = spec.properties
+  const cppPropertiesDeclarations = spec.properties
+    .map((p) => p.getCode('c++', { override: true, noexcept: true }))
+    .join('\n')
+  const cppPropertiesImplementations = spec.properties
     .map((p) => {
       const bridged = new SwiftCxxBridgedType(p.type)
       let getter: string
@@ -274,7 +277,11 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
       }
       return p.getCode(
         'c++',
-        { inline: true, override: true, noexcept: true },
+        {
+          classDefinitionName: name.HybridTSpecSwift,
+          override: true,
+          noexcept: true,
+        },
         {
           getter: getter.trim(),
           setter: setter.trim(),
@@ -283,7 +290,10 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
     })
     .join('\n')
 
-  const cppMethods = spec.methods
+  const cppMethodsDeclarations = spec.methods
+    .map((m) => m.getCode('c++', { override: true }))
+    .join('\n')
+  const cppMethodsImplementations = spec.methods
     .map((m) => {
       const params = m.parameters
         .map((p) => {
@@ -313,7 +323,11 @@ _swiftPart.${m.name}(${params});
         `.trim()
       }
 
-      return m.getCode('c++', { inline: true, override: true }, body)
+      return m.getCode(
+        'c++',
+        { classDefinitionName: name.HybridTSpecSwift, override: true },
+        body
+      )
     })
     .join('\n')
 
@@ -339,16 +353,6 @@ _swiftPart.${m.name}(${params});
     const baseName = getHybridObjectName(base.name)
     cppBaseClasses.push(`public virtual ${baseName.HybridTSpecSwift}`)
     cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
-    extraImports.push({
-      language: 'c++',
-      name: `${baseName.HybridTSpecSwift}.hpp`,
-      space: 'user',
-      forwardDeclaration: getForwardDeclaration(
-        'class',
-        baseName.HybridTSpecSwift,
-        cxxNamespace
-      ),
-    })
   }
 
   const extraForwardDeclarations = extraImports
@@ -373,8 +377,6 @@ ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 
-#include "${getUmbrellaHeaderName()}"
-
 namespace ${cxxNamespace} {
 
   /**
@@ -390,40 +392,25 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
-      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
-      _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart);
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
-      return _swiftPart;
-    }
+    ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept;
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    bool equals(const std::shared_ptr<HybridObject>& other) override {
-      if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
-        return _swiftPart.equals(otherCast->_swiftPart);
-      }
-      return false;
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    inline size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
+    void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     // Properties
-    ${indent(cppProperties, '    ')}
+    ${indent(cppPropertiesDeclarations, '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods, '    ')}
+    ${indent(cppMethodsDeclarations, '    ')}
 
   private:
     ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;
@@ -436,7 +423,47 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 #include "${name.HybridTSpecSwift}.hpp"
 
+#include "${getUmbrellaHeaderName()}"
+
 namespace ${cxxNamespace} {
+
+  // pragma MARK: Constructor
+
+  ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
+    ${indent(cppBaseCtorCalls.join(',\n'), '    ')},
+    _swiftPart(swiftPart) { }
+
+
+  ${iosModuleName}::${name.HybridTSpecCxx}& ${name.HybridTSpecSwift}::getSwiftPart() noexcept {
+    return _swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
+    return _swiftPart.getMemorySize();
+  }
+  bool ${name.HybridTSpecSwift}::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
+      return _swiftPart.equals(otherCast->_swiftPart);
+    }
+    return false;
+  }
+  void ${name.HybridTSpecSwift}::dispose() noexcept {
+    _swiftPart.dispose();
+  }
+  std::string ${name.HybridTSpecSwift}::toString() {
+    return _swiftPart.toString();
+  }
+
+  // pragma MARK: Properties
+
+  ${indent(cppPropertiesImplementations, '  ')}
+
+  // pragma MARK: Methods
+
+  ${indent(cppMethodsImplementations, '  ')}
+
 } // namespace ${cxxNamespace}
   `
 

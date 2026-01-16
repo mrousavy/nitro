@@ -7,5 +7,51 @@
 
 #include "HybridChildSpecSwift.hpp"
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor
+
+  HybridChildSpecSwift::HybridChildSpecSwift(const NitroTest::HybridChildSpec_cxx& swiftPart):
+    HybridObject(HybridChildSpec::TAG),
+    HybridBaseSpecSwift(swiftPart),
+    _swiftPart(swiftPart) { }
+
+
+  NitroTest::HybridChildSpec_cxx& HybridChildSpecSwift::getSwiftPart() noexcept {
+    return _swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t HybridChildSpecSwift::getExternalMemorySize() noexcept {
+    return _swiftPart.getMemorySize();
+  }
+  bool HybridChildSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<HybridChildSpecSwift>(other)) {
+      return _swiftPart.equals(otherCast->_swiftPart);
+    }
+    return false;
+  }
+  void HybridChildSpecSwift::dispose() noexcept {
+    _swiftPart.dispose();
+  }
+  std::string HybridChildSpecSwift::toString() {
+    return _swiftPart.toString();
+  }
+
+  // pragma MARK: Properties
+
+  double HybridChildSpecSwift::getChildValue() noexcept override {
+    return _swiftPart.getChildValue();
+  }
+
+  // pragma MARK: Methods
+
+  std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) override {
+    auto __result = _swiftPart.bounceVariant(std::forward<decltype(variant)>(variant));
+    return __result;
+  }
+
 } // namespace margelo::nitro::test

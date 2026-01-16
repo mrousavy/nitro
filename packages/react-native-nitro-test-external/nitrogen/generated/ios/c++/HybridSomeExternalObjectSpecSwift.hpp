@@ -16,8 +16,6 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 #include <string>
 
-#include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
-
 namespace margelo::nitro::test::external {
 
   /**
@@ -33,32 +31,17 @@ namespace margelo::nitro::test::external {
   class HybridSomeExternalObjectSpecSwift: public virtual HybridSomeExternalObjectSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridSomeExternalObjectSpecSwift(const NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart):
-      HybridObject(HybridSomeExternalObjectSpec::TAG),
-      _swiftPart(swiftPart) { }
+    explicit HybridSomeExternalObjectSpecSwift(const NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart);
 
   public:
     // Get the Swift part
-    inline NitroTestExternal::HybridSomeExternalObjectSpec_cxx& getSwiftPart() noexcept {
-      return _swiftPart;
-    }
+    NitroTestExternal::HybridSomeExternalObjectSpec_cxx& getSwiftPart() noexcept;
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    bool equals(const std::shared_ptr<HybridObject>& other) override {
-      if (auto otherCast = std::dynamic_pointer_cast<HybridSomeExternalObjectSpecSwift>(other)) {
-        return _swiftPart.equals(otherCast->_swiftPart);
-      }
-      return false;
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    inline size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
+    void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     // Properties
@@ -66,10 +49,7 @@ namespace margelo::nitro::test::external {
 
   public:
     // Methods
-    inline std::string getValue() override {
-      auto __result = _swiftPart.getValue();
-      return __result;
-    }
+    std::string getValue() override;
 
   private:
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx _swiftPart;
