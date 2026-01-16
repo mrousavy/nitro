@@ -9,36 +9,14 @@ import Foundation
 import NitroModules
 
 /**
- * Represents an instance of `SecondMapWrapper`, backed by a C++ struct.
+ * Represents an instance of `SecondMapWrapper`.
  */
-public typealias SecondMapWrapper = margelo.nitro.test.SecondMapWrapper
+public struct SecondMapWrapper {
+  public let second: Dictionary<String, String>
 
-public extension SecondMapWrapper {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `SecondMapWrapper`.
-   */
-  init(second: Dictionary<String, String>) {
-    self.init({ () -> bridge.std__unordered_map_std__string__std__string_ in
-      var __map = bridge.create_std__unordered_map_std__string__std__string_(second.count)
-      for (__k, __v) in second {
-        bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
-      }
-      return __map
-    }())
-  }
-
-  @inline(__always)
-  var second: Dictionary<String, String> {
-    return { () -> Dictionary<String, String> in
-      var __dictionary = Dictionary<String, String>(minimumCapacity: self.__second.size())
-      let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__second)
-      for __key in __keys {
-        let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__second, __key)
-        __dictionary[String(__key)] = String(__value)
-      }
-      return __dictionary
-    }()
+  public init(
+    second: Dictionary<String, String>
+  ) {
+    self.second = second
   }
 }

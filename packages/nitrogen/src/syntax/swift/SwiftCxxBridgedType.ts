@@ -166,12 +166,15 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     switch (this.type.kind) {
       case 'struct': {
         const struct = getTypeAs(this.type, StructType)
-        const extensionFile = createSwiftStructBridge(struct)
-        files.push(extensionFile)
-        extensionFile.referencedTypes.forEach((t) => {
-          const bridge = new SwiftCxxBridgedType(t)
-          files.push(...bridge.getExtraFiles())
-        })
+        const structFiles = createSwiftStructBridge(struct)
+        files.push(...structFiles)
+        const extraFiles = structFiles.flatMap((f) =>
+          f.referencedTypes.flatMap((t) => {
+            const bridge = new SwiftCxxBridgedType(t)
+            return bridge.getExtraFiles()
+          })
+        )
+        files.push(...extraFiles)
         break
       }
       case 'enum': {

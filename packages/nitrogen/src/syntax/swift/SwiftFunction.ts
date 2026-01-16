@@ -173,10 +173,10 @@ public final class ${swiftClassName} {
 }
   `.trim()
     const cppHeaderCode = `
-${createFileMetadataString(`${swiftClassName}.hpp`)}
+${createFileMetadataString(`${swiftClassName}+Swift.hpp`)}
 
-#include <NitroModules/SwiftConverter.hpp>
 #include <functional>
+#include <NitroModules/SwiftConverter.hpp>
 
 namespace ${iosNamespace} {
   class ${swiftClassName};
@@ -192,12 +192,12 @@ namespace margelo::nitro {
 }
   `.trim()
     const cppSourceCode = `
-${createFileMetadataString(`${swiftClassName}.cpp`)}
+${createFileMetadataString(`${swiftClassName}+Swift.cpp`)}
 
-#include "${swiftClassName}.hpp"
-#include <NitroModules/SwiftConverter.hpp>
+#include "${swiftClassName}+Swift.hpp"
 #include <functional>
 #include "${getUmbrellaHeaderName()}"
+#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro {
 

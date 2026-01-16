@@ -9,46 +9,17 @@ import Foundation
 import NitroModules
 
 /**
- * Represents an instance of `PartialPerson`, backed by a C++ struct.
+ * Represents an instance of `PartialPerson`.
  */
-public typealias PartialPerson = margelo.nitro.test.PartialPerson
+public struct PartialPerson {
+  public let name: String?
+  public let age: Double?
 
-public extension PartialPerson {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `PartialPerson`.
-   */
-  init(name: String?, age: Double?) {
-    self.init({ () -> bridge.std__optional_std__string_ in
-      if let __unwrappedValue = name {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
-      } else {
-        return .init()
-      }
-    }(), { () -> bridge.std__optional_double_ in
-      if let __unwrappedValue = age {
-        return bridge.create_std__optional_double_(__unwrappedValue)
-      } else {
-        return .init()
-      }
-    }())
-  }
-
-  @inline(__always)
-  var name: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__name) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__name)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
-  }
-  
-  @inline(__always)
-  var age: Double? {
-    return self.__age.value
+  public init(
+    name: String?,
+    age: Double?
+  ) {
+    self.name = name
+    self.age = age
   }
 }

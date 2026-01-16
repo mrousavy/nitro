@@ -9,35 +9,17 @@ import Foundation
 import NitroModules
 
 /**
- * Represents an instance of `JsStyleStruct`, backed by a C++ struct.
+ * Represents an instance of `JsStyleStruct`.
  */
-public typealias JsStyleStruct = margelo.nitro.test.JsStyleStruct
+public struct JsStyleStruct {
+  public let value: Double
+  public let onChanged: (_ num: Double) -> Void
 
-public extension JsStyleStruct {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `JsStyleStruct`.
-   */
-  init(value: Double, onChanged: @escaping (_ num: Double) -> Void) {
-    self.init(value, { () -> bridge.Func_void_double in
-      let __closureWrapper = Func_void_double(onChanged)
-      return bridge.create_Func_void_double(__closureWrapper.toUnsafe())
-    }())
-  }
-
-  @inline(__always)
-  var value: Double {
-    return self.__value
-  }
-  
-  @inline(__always)
-  var onChanged: (_ num: Double) -> Void {
-    return { () -> (Double) -> Void in
-      let __wrappedFunction = bridge.wrap_Func_void_double(self.__onChanged)
-      return { (__num: Double) -> Void in
-        __wrappedFunction.call(__num)
-      }
-    }()
+  public init(
+    value: Double,
+    onChanged: (_ num: Double) -> Void
+  ) {
+    self.value = value
+    self.onChanged = onChanged
   }
 }
