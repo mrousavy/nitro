@@ -229,6 +229,18 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'hybrid-object': {
+        const hybridObjectType = getTypeAs(this.type, HybridObjectType)
+        const { HybridTSpec } = getHybridObjectName(
+          hybridObjectType.hybridObjectName
+        )
+        switch (language) {
+          case 'swift':
+            return `${cppParameterName}.get${HybridTSpec}()`
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         return ''
       default:
@@ -246,22 +258,18 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const functionType = getTypeAs(this.type, FunctionType)
         const functionClassName = getSwiftFunctionClassName(functionType)
         switch (language) {
-          case 'c++':
-            return swiftParameterName
           case 'swift':
             return `${functionClassName}(${swiftParameterName})`
           default:
-            throw new Error(`Invalid language! ${language}`)
+            return swiftParameterName
         }
       }
       case 'hybrid-object': {
         switch (language) {
-          case 'c++':
-            return swiftParameterName
           case 'swift':
             return `${swiftParameterName}.getCxxWrapper()`
           default:
-            throw new Error(`Invalid language! ${language}`)
+            return swiftParameterName
         }
       }
       case 'void':

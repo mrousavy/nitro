@@ -7,12 +7,5 @@
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 
-#include <NitroModules/NitroModules-Swift.h>
-
 namespace margelo::nitro::test {
-
-void something() {
-  NitroModules::AnyMap::init();
-}
-
 } // namespace margelo::nitro::test

@@ -872,28 +872,28 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceChild(child: HybridChildSpec_cxx) -> HybridChildSpec_cxx {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceChild(child: child)
+    let __result = try! self.__implementation.bounceChild(child: child.getHybridChildSpec())
     return __result.getCxxWrapper()
   }
   
   @inline(__always)
   public final func bounceBase(base: HybridBaseSpec_cxx) -> HybridBaseSpec_cxx {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceBase(base: base)
+    let __result = try! self.__implementation.bounceBase(base: base.getHybridBaseSpec())
     return __result.getCxxWrapper()
   }
   
   @inline(__always)
   public final func bounceChildBase(child: HybridChildSpec_cxx) -> HybridBaseSpec_cxx {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceChildBase(child: child)
+    let __result = try! self.__implementation.bounceChildBase(child: child.getHybridChildSpec())
     return __result.getCxxWrapper()
   }
   
   @inline(__always)
   public final func castBase(base: HybridBaseSpec_cxx) -> HybridChildSpec_cxx {
     // TODO: Remove try!
-    let __result = try! self.__implementation.castBase(base: base)
+    let __result = try! self.__implementation.castBase(base: base.getHybridBaseSpec())
     return __result.getCxxWrapper()
   }
   
@@ -907,14 +907,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func getIsViewBlue(view: HybridTestViewSpec_cxx) -> Bool {
     // TODO: Remove try!
-    let __result = try! self.__implementation.getIsViewBlue(view: view)
+    let __result = try! self.__implementation.getIsViewBlue(view: view.getHybridTestViewSpec())
     return __result
   }
   
   @inline(__always)
   public final func bounceExternalHybrid(externalObject: HybridSomeExternalObjectSpec_cxx) -> HybridSomeExternalObjectSpec_cxx {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceExternalHybrid(externalObject: externalObject)
+    let __result = try! self.__implementation.bounceExternalHybrid(externalObject: externalObject.getHybridSomeExternalObjectSpec())
     return __result.getCxxWrapper()
   }
   
