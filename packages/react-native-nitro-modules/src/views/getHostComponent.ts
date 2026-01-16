@@ -1,5 +1,5 @@
 import { Platform, type HostComponent, type ViewProps } from 'react-native'
-// @ts-expect-error this unfortunately isn't typed or default-exported.
+// TODO: Migrate to the official export of `NativeComponentRegistry` from `react-native` once react-native 0.83.0 becomes more established
 // eslint-disable-next-line @react-native/no-deep-imports
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 import type {
@@ -23,6 +23,14 @@ export interface ViewConfig<Props> {
   validAttributes: {
     [K in keyof Props]: AttributeValue<Props[K]>
   }
+}
+type ReactNativeViewConfig = ReturnType<
+  Parameters<typeof NativeComponentRegistry.get>[1]
+>
+
+function typesafe<Props>(config: ViewConfig<Props>): ReactNativeViewConfig {
+  // TODO: Remove this unsafe cast and make it safe
+  return config as ReactNativeViewConfig
 }
 
 /**
@@ -132,7 +140,7 @@ export function getHostComponent<
   return NativeComponentRegistry.get(name, () => {
     const config = getViewConfig()
     config.validAttributes = wrapValidAttributes(config.validAttributes)
-    return config
+    return typesafe(config)
   })
 }
 
