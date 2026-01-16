@@ -123,10 +123,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
 
   // Properties
-  public final var thisObject: (any HybridTestObjectSwiftKotlinSpec) {
+  public final var thisObject: HybridTestObjectSwiftKotlinSpec_cxx {
     @inline(__always)
     get {
-      return self.__implementation.thisObject
+      return self.__implementation.thisObject.getCxxWrapper()
     }
   }
   
@@ -286,10 +286,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func newTestObject() -> (any HybridTestObjectSwiftKotlinSpec) {
+  public final func newTestObject() -> HybridTestObjectSwiftKotlinSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.newTestObject()
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
@@ -849,52 +849,52 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createChild() -> (any HybridChildSpec) {
+  public final func createChild() -> HybridChildSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.createChild()
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func createBase() -> (any HybridBaseSpec) {
+  public final func createBase() -> HybridBaseSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.createBase()
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func createBaseActualChild() -> (any HybridBaseSpec) {
+  public final func createBaseActualChild() -> HybridBaseSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.createBaseActualChild()
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func bounceChild(child: (any HybridChildSpec)) -> (any HybridChildSpec) {
+  public final func bounceChild(child: HybridChildSpec_cxx) -> HybridChildSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceChild(child: child)
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func bounceBase(base: (any HybridBaseSpec)) -> (any HybridBaseSpec) {
+  public final func bounceBase(base: HybridBaseSpec_cxx) -> HybridBaseSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceBase(base: base)
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func bounceChildBase(child: (any HybridChildSpec)) -> (any HybridBaseSpec) {
+  public final func bounceChildBase(child: HybridChildSpec_cxx) -> HybridBaseSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceChildBase(child: child)
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func castBase(base: (any HybridBaseSpec)) -> (any HybridChildSpec) {
+  public final func castBase(base: HybridBaseSpec_cxx) -> HybridChildSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.castBase(base: base)
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
@@ -905,24 +905,24 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getIsViewBlue(view: (any HybridTestViewSpec)) -> Bool {
+  public final func getIsViewBlue(view: HybridTestViewSpec_cxx) -> Bool {
     // TODO: Remove try!
     let __result = try! self.__implementation.getIsViewBlue(view: view)
     return __result
   }
   
   @inline(__always)
-  public final func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) -> (any HybridSomeExternalObjectSpec) {
+  public final func bounceExternalHybrid(externalObject: HybridSomeExternalObjectSpec_cxx) -> HybridSomeExternalObjectSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceExternalHybrid(externalObject: externalObject)
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
-  public final func createInternalObject() -> (any HybridSomeExternalObjectSpec) {
+  public final func createInternalObject() -> HybridSomeExternalObjectSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.createInternalObject()
-    return __result
+    return __result.getCxxWrapper()
   }
   
   @inline(__always)
@@ -940,9 +940,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createExternalVariantFromFunc(factory: Func__any_HybridSomeExternalObjectSpec_) -> (any HybridSomeExternalObjectSpec) {
+  public final func createExternalVariantFromFunc(factory: Func__any_HybridSomeExternalObjectSpec_) -> HybridSomeExternalObjectSpec_cxx {
     // TODO: Remove try!
     let __result = try! self.__implementation.createExternalVariantFromFunc(factory: factory.closure)
-    return __result
+    return __result.getCxxWrapper()
   }
 }

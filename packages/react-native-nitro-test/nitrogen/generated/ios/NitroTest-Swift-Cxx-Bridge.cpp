@@ -124,38 +124,6 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
-      swiftClosure.call(error);
-    };
-  }
-  
-  // pragma MARK: std::function<void(int64_t /* result */)>
-  Func_void_int64_t create_Func_void_int64_t(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_int64_t::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](int64_t result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
-  // pragma MARK: std::function<void(std::optional<double> /* result */)>
-  Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__optional_double_::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](std::optional<double> result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
-  // pragma MARK: std::function<void(const Car& /* result */)>
-  Func_void_Car create_Func_void_Car(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_Car::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const Car& result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____::fromUnsafe(swiftClosureWrapper);
@@ -165,11 +133,11 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>
-  Func_void_std__shared_ptr_Promise_void__ create_Func_void_std__shared_ptr_Promise_void__(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_void__::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<Promise<void>>& result) mutable -> void {
-      swiftClosure.call(result);
+  // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
+  Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__optional_double_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](std::optional<double> maybe) mutable -> void {
+      swiftClosure.call(maybe);
     };
   }
   
@@ -191,22 +159,6 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
-  Func_void_std__shared_ptr_Promise_double__ create_Func_void_std__shared_ptr_Promise_double__(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_double__::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<Promise<double>>& result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
-  // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
-  Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__shared_ptr_ArrayBuffer_::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<ArrayBuffer>& result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::fromUnsafe(swiftClosureWrapper);
@@ -216,19 +168,19 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>
-  Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ create_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& result) mutable -> void {
-      swiftClosure.call(result);
-    };
-  }
-  
   // pragma MARK: std::function<void(const std::string& /* value */)>
   Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__string::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::string& value) mutable -> void {
       swiftClosure.call(value);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
+      swiftClosure.call(error);
     };
   }
   

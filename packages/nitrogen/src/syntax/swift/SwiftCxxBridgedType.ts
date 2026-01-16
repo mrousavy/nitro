@@ -22,6 +22,8 @@ import {
   getSwiftFunctionClassName,
 } from './SwiftFunction.js'
 import type { Language } from '../../getPlatformSpecs.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
+import { getHybridObjectName } from '../getHybridObjectName.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -177,6 +179,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'hybrid-object': {
+        const hybridObjectType = getTypeAs(this.type, HybridObjectType)
+        const { HybridTSpecCxx } = getHybridObjectName(
+          hybridObjectType.hybridObjectName
+        )
+        switch (language) {
+          case 'c++':
+            return `${hybridObjectType.sourceConfig.getIosModuleName()}::${HybridTSpecCxx}`
+          case 'swift':
+            return HybridTSpecCxx
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -234,6 +250,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return swiftParameterName
           case 'swift':
             return `${functionClassName}(${swiftParameterName})`
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
+      case 'hybrid-object': {
+        switch (language) {
+          case 'c++':
+            return swiftParameterName
+          case 'swift':
+            return `${swiftParameterName}.getCxxWrapper()`
           default:
             throw new Error(`Invalid language! ${language}`)
         }

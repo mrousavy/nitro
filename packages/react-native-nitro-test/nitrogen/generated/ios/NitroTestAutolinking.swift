@@ -30,9 +30,9 @@ public final class NitroTestAutolinking {
   }
 
   public final class AutolinkedTestObjectSwiftKotlin: AutolinkedClass {
-    public static func create() -> (any HybridTestObjectSwiftKotlinSpec) {
+    public static func create() -> HybridTestObjectSwiftKotlinSpec_cxx {
       let hybridObject = HybridTestObjectSwift()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridTestObjectSwift.self is any RecyclableView.Type
@@ -40,9 +40,9 @@ public final class NitroTestAutolinking {
   }
   
   public final class AutolinkedBase: AutolinkedClass {
-    public static func create() -> (any HybridBaseSpec) {
+    public static func create() -> HybridBaseSpec_cxx {
       let hybridObject = HybridBase()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridBase.self is any RecyclableView.Type
@@ -50,9 +50,9 @@ public final class NitroTestAutolinking {
   }
   
   public final class AutolinkedChild: AutolinkedClass {
-    public static func create() -> (any HybridChildSpec) {
+    public static func create() -> HybridChildSpec_cxx {
       let hybridObject = HybridChild()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridChild.self is any RecyclableView.Type
@@ -60,9 +60,9 @@ public final class NitroTestAutolinking {
   }
   
   public final class AutolinkedPlatformObject: AutolinkedClass {
-    public static func create() -> (any HybridPlatformObjectSpec) {
+    public static func create() -> HybridPlatformObjectSpec_cxx {
       let hybridObject = HybridPlatformObject()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridPlatformObject.self is any RecyclableView.Type
@@ -70,9 +70,9 @@ public final class NitroTestAutolinking {
   }
   
   public final class AutolinkedTestView: AutolinkedClass {
-    public static func create() -> (any HybridTestViewSpec) {
+    public static func create() -> HybridTestViewSpec_cxx {
       let hybridObject = HybridTestView()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridTestView.self is any RecyclableView.Type
@@ -80,9 +80,9 @@ public final class NitroTestAutolinking {
   }
   
   public final class AutolinkedRecyclableTestView: AutolinkedClass {
-    public static func create() -> (any HybridRecyclableTestViewSpec) {
+    public static func create() -> HybridRecyclableTestViewSpec_cxx {
       let hybridObject = HybridRecyclableTestView()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridRecyclableTestView.self is any RecyclableView.Type

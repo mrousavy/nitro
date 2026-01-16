@@ -30,9 +30,9 @@ public final class NitroTestExternalAutolinking {
   }
 
   public final class AutolinkedSomeExternalObject: AutolinkedClass {
-    public static func create() -> (any HybridSomeExternalObjectSpec) {
+    public static func create() -> HybridSomeExternalObjectSpec_cxx {
       let hybridObject = HybridSomeExternalObject()
-      return hybridObject
+      return hybridObject.getCxxWrapper()
     }
     public static var isRecyclableHybridView: Bool {
       return HybridSomeExternalObject.self is any RecyclableView.Type
