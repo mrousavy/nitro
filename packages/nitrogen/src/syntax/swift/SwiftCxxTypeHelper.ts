@@ -1,13 +1,12 @@
-import { escapeCppName, toReferenceType } from '../helpers.js'
+import { escapeCppName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import type { Type } from '../types/Type.js'
-import { escapeComments, indent } from '../../utils.js'
+import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 
 export interface SwiftCxxHelper {
@@ -117,9 +116,6 @@ return ${cxxNamespace}::get_${internalName}(cppType);
     specializationName: name,
     cxxHeader: {
       code: `
-/**
- * Specialized version of \`${escapeComments(actualType)}\`.
- */
 using ${name} = ${actualType};
 ${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept;
 void* NON_NULL get_${name}(${name} cppType);
@@ -203,54 +199,7 @@ inline ${specializationName} ${funcName}(const ${parameterType}& strong) noexcep
 function createCxxFunctionSwiftHelper(type: FunctionType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const returnBridge = new SwiftCxxBridgedType(type.returnType)
-  const paramsSignature = type.parameters.map((p) => {
-    if (p.canBePassedByReference) {
-      return `${toReferenceType(p.getCode('c++'))} ${p.escapedName}`
-    } else {
-      return `${p.getCode('c++')} ${p.escapedName}`
-    }
-  })
-  const paramsForward = type.parameters.map((p) => {
-    const bridge = new SwiftCxxBridgedType(p)
-    return bridge.parseFromCppToSwift(p.escapedName, 'c++')
-  })
   const name = type.specializationName
-  const wrapperName = `${name}_Wrapper`
-  const swiftClassName = `${NitroConfig.current.getIosModuleName()}::${type.specializationName}`
-
-  const callParamsForward = type.parameters.map((p) => {
-    const bridge = new SwiftCxxBridgedType(p)
-    return bridge.parseFromSwiftToCpp(p.escapedName, 'c++')
-  })
-
-  const callFuncReturnType = returnBridge.getTypeCode('c++')
-  const callCppFuncParamsSignature = type.parameters.map((p) => {
-    const bridge = new SwiftCxxBridgedType(p)
-    const cppType = bridge.getTypeCode('c++')
-    return `${cppType} ${p.escapedName}`
-  })
-  let callCppFuncBody: string
-  if (returnBridge.hasType) {
-    callCppFuncBody = `
-auto __result = _function->operator()(${callParamsForward.join(', ')});
-return ${returnBridge.parseFromCppToSwift('__result', 'c++')};
-    `.trim()
-  } else {
-    callCppFuncBody = `_function->operator()(${callParamsForward.join(', ')});`
-  }
-
-  let body: string
-  if (type.returnType.kind === 'void') {
-    body = `
-swiftClosure.call(${paramsForward.join(', ')});
-`.trim()
-  } else {
-    body = `
-auto __result = swiftClosure.call(${paramsForward.join(', ')});
-return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
-    `.trim()
-  }
 
   // TODO: Remove our std::function wrapper once https://github.com/swiftlang/swift/issues/75844 is fixed.
   return {
@@ -259,24 +208,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     specializationName: name,
     cxxHeader: {
       code: `
-/**
- * Specialized version of \`${type.getCode('c++', { includeNameInfo: false })}\`.
- */
 using ${name} = ${actualType};
-/**
- * Wrapper class for a \`${escapeComments(actualType)}\`, this can be used from Swift.
- */
-class ${wrapperName} final {
-public:
-  explicit ${wrapperName}(${actualType}&& func): _function(std::make_unique<${actualType}>(std::move(func))) {}
-  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const noexcept;
-private:
-  std::unique_ptr<${actualType}> _function;
-} SWIFT_NONCOPYABLE;
-${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept;
-inline ${wrapperName} wrap_${name}(${name} value) noexcept {
-  return ${wrapperName}(std::move(value));
-}
     `.trim(),
       requiredIncludes: [
         {
@@ -292,28 +224,7 @@ inline ${wrapperName} wrap_${name}(${name} value) noexcept {
         ...bridgedType.getRequiredImports('c++'),
       ],
     },
-    cxxImplementation: {
-      code: `
-${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept {
-  auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
-  return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
-    ${indent(body, '    ')}
-  };
-}
-
-${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const noexcept {
-  ${indent(callCppFuncBody, '  ')}
-}
-`.trim(),
-      requiredIncludes: [
-        {
-          language: 'c++',
-          // Swift umbrella header
-          name: getUmbrellaHeaderName(),
-          space: 'user',
-        },
-      ],
-    },
+    cxxImplementation: undefined,
     dependencies: [],
   }
 }

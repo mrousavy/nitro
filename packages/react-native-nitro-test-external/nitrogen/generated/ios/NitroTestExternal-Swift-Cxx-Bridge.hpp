@@ -25,15 +25,10 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
  */
 namespace margelo::nitro::test::external::bridge::swift {
 
-  // pragma MARK: std::shared_ptr<HybridSomeExternalObjectSpec>
-  /**
-   * Specialized version of `std::shared_ptr<HybridSomeExternalObjectSpec>`.
-   */
   using std__shared_ptr_HybridSomeExternalObjectSpec_ = std::shared_ptr<HybridSomeExternalObjectSpec>;
   std::shared_ptr<HybridSomeExternalObjectSpec> create_std__shared_ptr_HybridSomeExternalObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType);
   
-  // pragma MARK: std::weak_ptr<HybridSomeExternalObjectSpec>
   using std__weak_ptr_HybridSomeExternalObjectSpec_ = std::weak_ptr<HybridSomeExternalObjectSpec>;
   inline std__weak_ptr_HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_HybridSomeExternalObjectSpec_(const std::shared_ptr<HybridSomeExternalObjectSpec>& strong) noexcept { return strong; }
 

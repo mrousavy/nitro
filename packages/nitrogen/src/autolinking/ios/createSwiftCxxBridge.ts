@@ -32,13 +32,13 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .flatMap((b) => [b, ...b?.dependencies])
     .filter(filterDuplicateHelperBridges)
   const headerHelperFunctions = bridges
-    .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeader.code}`)
+    .map((b) => b.cxxHeader.code)
     .filter(isNotDuplicate)
     .join('\n\n')
   const implementationHelperFunctions = bridges
     .map((b) => {
       if (b.cxxImplementation == null) return undefined
-      else return `// pragma MARK: ${b.cxxType}\n${b.cxxImplementation.code}`
+      else return b.cxxImplementation.code
     })
     .filter((c) => c != null)
     .filter(isNotDuplicate)
