@@ -13,9 +13,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `SomeExternalObjectNumber` to properly resolve imports.
+namespace margelo::nitro::test::external { struct SomeExternalObjectNumber; }
 
 #include <string>
+#include "SomeExternalObjectNumber.hpp"
+#include <optional>
 
 namespace margelo::nitro::test::external {
 
@@ -49,6 +52,7 @@ namespace margelo::nitro::test::external {
     public:
       // Methods
       virtual std::string getValue() = 0;
+      virtual SomeExternalObjectNumber getNumber(std::optional<double> number) = 0;
 
     protected:
       // Hybrid Setup
