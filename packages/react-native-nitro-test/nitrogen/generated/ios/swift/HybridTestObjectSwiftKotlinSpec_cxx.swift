@@ -440,7 +440,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func complexEnumCallback(array: [Powertrain], callback: Func__Powertrain_____array___Powertrain______Void) -> Void {
+  public final func complexEnumCallback(array: [Powertrain], callback: Func__Powertrain__Void) -> Void {
     do {
       try self.__implementation.complexEnumCallback(array: array, callback: callback.closure)
       return bridge.create_Result_void_()
@@ -846,7 +846,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callCallback(callback: Func_______Void) -> Void {
+  public final func callCallback(callback: Func_Void) -> Void {
     do {
       try self.__implementation.callCallback(callback: callback.closure)
       return bridge.create_Result_void_()
@@ -857,7 +857,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callCallbackThatReturnsPromiseVoid(callback: Func_______Promise_Promise_Void__) -> Promise<Void> {
+  public final func callCallbackThatReturnsPromiseVoid(callback: Func_Promise_Promise_Void__) -> Promise<Void> {
     do {
       let __result = try self.__implementation.callCallbackThatReturnsPromiseVoid(callback: callback.closure)
       let __resultCpp = __result
@@ -869,7 +869,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callAll(first: Func_______Void, second: Func_______Void, third: Func_______Void) -> Void {
+  public final func callAll(first: Func_Void, second: Func_Void, third: Func_Void) -> Void {
     do {
       try self.__implementation.callAll(first: first.closure, second: second.closure, third: third.closure)
       return bridge.create_Result_void_()
@@ -880,7 +880,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callWithOptional(value: Double?, callback: Func_Double_____maybe__Double______Void) -> Void {
+  public final func callWithOptional(value: Double?, callback: Func_Double__Void) -> Void {
     do {
       try self.__implementation.callWithOptional(value: value, callback: callback.closure)
       return bridge.create_Result_void_()
@@ -891,7 +891,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callSumUpNTimes(callback: Func_______Promise_Double_, n: Double) -> Promise<Double> {
+  public final func callSumUpNTimes(callback: Func_Promise_Double_, n: Double) -> Promise<Double> {
     do {
       let __result = try self.__implementation.callSumUpNTimes(callback: callback.closure, n: n)
       let __resultCpp = __result
@@ -903,7 +903,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackAsyncPromise(callback: Func_______Promise_Promise_Double__) -> Promise<Double> {
+  public final func callbackAsyncPromise(callback: Func_Promise_Promise_Double__) -> Promise<Double> {
     do {
       let __result = try self.__implementation.callbackAsyncPromise(callback: callback.closure)
       let __resultCpp = __result
@@ -915,7 +915,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackAsyncPromiseBuffer(callback: Func_______Promise_Promise_ArrayBuffer__) -> Promise<ArrayBuffer> {
+  public final func callbackAsyncPromiseBuffer(callback: Func_Promise_Promise_ArrayBuffer__) -> Promise<ArrayBuffer> {
     do {
       let __result = try self.__implementation.callbackAsyncPromiseBuffer(callback: callback.closure)
       let __resultCpp = __result
@@ -930,7 +930,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   public final func getComplexCallback() -> (_ value: Double) -> Void {
     do {
       let __result = try self.__implementation.getComplexCallback()
-      let __resultCpp = Func_Double____value__Double_____Void(__result)
+      let __resultCpp = Func_Double_Void(__result)
       return bridge.create_Result_std__function_void_double____value______(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error
@@ -950,7 +950,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func errorCallback(onError: Func_Error____error__Error_____Void) -> Void {
+  public final func errorCallback(onError: Func_Error_Void) -> Void {
     do {
       try self.__implementation.errorCallback(onError: onError.closure)
       return bridge.create_Result_void_()
@@ -961,10 +961,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createNativeCallback(wrappingJsCallback: Func_Double____num__Double_____Void) -> (_ num: Double) -> Void {
+  public final func createNativeCallback(wrappingJsCallback: Func_Double_Void) -> (_ num: Double) -> Void {
     do {
       let __result = try self.__implementation.createNativeCallback(wrappingJsCallback: wrappingJsCallback.closure)
-      let __resultCpp = Func_Double____num__Double_____Void(__result)
+      let __resultCpp = Func_Double_Void(__result)
       return bridge.create_Result_std__function_void_double____num______(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error
@@ -973,7 +973,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getValueFromJSCallbackAndWait(getValue: Func_______Promise_Double_) -> Promise<Double> {
+  public final func getValueFromJSCallbackAndWait(getValue: Func_Promise_Double_) -> Promise<Double> {
     do {
       let __result = try self.__implementation.getValueFromJSCallbackAndWait(getValue: getValue.closure)
       let __resultCpp = __result
@@ -985,7 +985,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func getValueFromJsCallback(callback: Func_______Promise_String_, andThenCall: Func_String____valueFromJs__String_____Void) -> Promise<Void> {
+  public final func getValueFromJsCallback(callback: Func_Promise_String_, andThenCall: Func_String_Void) -> Promise<Void> {
     do {
       let __result = try self.__implementation.getValueFromJsCallback(callback: callback.closure, andThenCall: andThenCall.closure)
       let __resultCpp = __result
@@ -1343,7 +1343,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func callbackSync(callback: Func_______Double) -> Double {
+  public final func callbackSync(callback: Func_Double) -> Double {
     do {
       let __result = try self.__implementation.callbackSync(callback: callback.closure)
       let __resultCpp = __result
@@ -1415,7 +1415,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createExternalVariantFromFunc(factory: Func________any_HybridSomeExternalObjectSpec_) -> (any HybridSomeExternalObjectSpec) {
+  public final func createExternalVariantFromFunc(factory: Func__any_HybridSomeExternalObjectSpec_) -> (any HybridSomeExternalObjectSpec) {
     do {
       let __result = try self.__implementation.createExternalVariantFromFunc(factory: factory.closure)
       let __resultCpp = __result

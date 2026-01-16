@@ -10,7 +10,7 @@ import type { FunctionType } from '../types/FunctionType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 
 export function getSwiftFunctionClassName(functionType: FunctionType): string {
-  const returnType = functionType.getCode('swift')
+  const returnType = functionType.returnType.getCode('swift')
   if (functionType.parameters.length > 0) {
     const parameters = functionType.parameters.map((p) =>
       p.getCode('swift', { fullyQualified: false })

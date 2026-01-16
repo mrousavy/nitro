@@ -482,13 +482,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<std::function<void(double / * value * /)>>`.
    */
   using std__optional_std__function_void_double____value______ = std::optional<std::function<void(double /* value */)>>;
-  inline std::optional<std::function<void(double /* value */)>> create_std__optional_std__function_void_double____value______(const NitroTest::Func_Double____value__Double_____Void& value) noexcept {
+  inline std::optional<std::function<void(double /* value */)>> create_std__optional_std__function_void_double____value______(const NitroTest::Func_Double_Void& value) noexcept {
     return std::optional<std::function<void(double /* value */)>>(value);
   }
   inline bool has_value_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline NitroTest::Func_Double____value__Double_____Void get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
+  inline NitroTest::Func_Double_Void get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return *optional;
   }
   
@@ -1135,13 +1135,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<std::function<void(const std::string& / * value * /)>>`.
    */
   using std__optional_std__function_void_const_std__string_____value______ = std::optional<std::function<void(const std::string& /* value */)>>;
-  inline std::optional<std::function<void(const std::string& /* value */)>> create_std__optional_std__function_void_const_std__string_____value______(const NitroTest::Func_String____value__String_____Void& value) noexcept {
+  inline std::optional<std::function<void(const std::string& /* value */)>> create_std__optional_std__function_void_const_std__string_____value______(const NitroTest::Func_String_Void& value) noexcept {
     return std::optional<std::function<void(const std::string& /* value */)>>(value);
   }
   inline bool has_value_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline NitroTest::Func_String____value__String_____Void get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
+  inline NitroTest::Func_String_Void get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
     return *optional;
   }
   

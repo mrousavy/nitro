@@ -155,10 +155,10 @@ open class HybridTestViewSpec_cxx {
     }
   }
   
-  public final var someCallback: Func_______Void {
+  public final var someCallback: Func_Void {
     @inline(__always)
     get {
-      return Func_______Void(self.__implementation.someCallback)
+      return Func_Void(self.__implementation.someCallback)
     }
     @inline(__always)
     set {
