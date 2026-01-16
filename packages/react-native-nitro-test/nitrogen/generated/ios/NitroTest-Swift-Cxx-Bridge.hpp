@@ -10,6 +10,8 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -24,6 +26,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `Person` to properly resolve imports.
+namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
 
@@ -44,22 +48,26 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
+#include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "Person.hpp"
 #include "Powertrain.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <NitroModules/Promise.hpp>
+#include <NitroModules/PromiseHolder.hpp>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <exception>
 #include <functional>
 #include <memory>
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 
 /**
@@ -111,21 +119,53 @@ namespace margelo::nitro::test::bridge::swift {
   
   using Func_void = std::function<void()>;
   
+  using std__shared_ptr_Promise_double__ = std::shared_ptr<Promise<double>>;
+  
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  
+  using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
+  
+  using std__shared_ptr_Promise_int64_t__ = std::shared_ptr<Promise<int64_t>>;
+  
+  using Func_void_int64_t = std::function<void(int64_t /* result */)>;
+  
+  using std__shared_ptr_Promise_std__optional_double___ = std::shared_ptr<Promise<std::optional<double>>>;
+  
+  using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* result */)>;
+  
+  using std__shared_ptr_Promise_Car__ = std::shared_ptr<Promise<Car>>;
+  
+  using Func_void_Car = std::function<void(const Car& /* result */)>;
+  
   using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>;
   
-  using Func_void_std__optional_double_ = std::function<void(std::optional<double> /* maybe */)>;
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_void____ = std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>;
+  
+  using Func_void_std__shared_ptr_Promise_void__ = std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>;
   
   using Func_std__shared_ptr_Promise_double__ = std::function<std::shared_ptr<Promise<double>>()>;
   
   using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>;
   
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_double____ = std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>;
+  
+  using Func_void_std__shared_ptr_Promise_double__ = std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>;
+  
+  using std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>;
+  
+  using Func_void_std__shared_ptr_ArrayBuffer_ = std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>;
+  
   using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>;
+  
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ = std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>;
+  
+  using Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>;
   
   using Func_void_std__string = std::function<void(const std::string& /* value */)>;
   
-  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
-  
   using Func_std__shared_ptr_Promise_std__string__ = std::function<std::shared_ptr<Promise<std::string>>()>;
+  
+  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
   
   using Func_double = std::function<double()>;
   

@@ -2,12 +2,16 @@ import { escapeCppName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
-import type { Type } from '../types/Type.js'
+import type { NamedType, Type } from '../types/Type.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
+import { ErrorType } from '../types/ErrorType.js'
+import { VoidType } from '../types/VoidType.js'
+import { PromiseType } from '../types/PromiseType.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -30,6 +34,8 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxHybridObjectSwiftHelper(getTypeAs(type, HybridObjectType))
     case 'function':
       return createCxxFunctionSwiftHelper(getTypeAs(type, FunctionType))
+    case 'promise':
+      return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
     default:
       return undefined
   }
@@ -226,5 +232,46 @@ using ${name} = ${actualType};
     },
     cxxImplementation: undefined,
     dependencies: [],
+  }
+}
+
+/**
+ * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `std::shared_ptr<Promise<T>>`.
+ */
+function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
+  const resultingType = type.resultingType.getCode('c++')
+  const bridgedType = new SwiftCxxBridgedType(type)
+  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
+
+  const resolverArgs: NamedType[] = []
+  if (type.resultingType.kind !== 'void') {
+    resolverArgs.push(new NamedWrappingType('result', type.resultingType))
+  }
+  const resolveFunction = new FunctionType(new VoidType(), resolverArgs)
+  const rejectFunction = new FunctionType(new VoidType(), [
+    new NamedWrappingType('error', new ErrorType()),
+  ])
+  const name = escapeCppName(actualType)
+  return {
+    cxxType: actualType,
+    funcName: `create_${name}`,
+    specializationName: name,
+    cxxHeader: {
+      code: `
+using ${name} = ${actualType};
+       `.trim(),
+      requiredIncludes: [
+        {
+          name: 'NitroModules/PromiseHolder.hpp',
+          space: 'system',
+          language: 'c++',
+        },
+        ...bridgedType.getRequiredImports('c++'),
+      ],
+    },
+    dependencies: [
+      createCxxFunctionSwiftHelper(resolveFunction),
+      createCxxFunctionSwiftHelper(rejectFunction),
+    ],
   }
 }
