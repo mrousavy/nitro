@@ -38,7 +38,8 @@ struct SwiftConverter final {
    * Converts the given Swift value to the C++ STL type `T`.
    * By default, this static-asserts.
    */
-  static inline T fromSwift(void*) {
+  template <typename Never>
+  static inline T fromSwift(Never&&) {
     static_assert(always_false<T>::value, "This type is not supported by the SwiftConverter!");
   }
   /**

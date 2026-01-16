@@ -76,7 +76,6 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
-#include <NitroModules/Result.hpp>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <chrono>
 #include <exception>
@@ -93,6 +92,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
+#include <NitroModules/SwiftAnyMap.hpp>
 #include <NitroModules/AnyMapUtils.hpp>
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>

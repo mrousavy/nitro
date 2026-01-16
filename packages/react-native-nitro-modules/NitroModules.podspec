@@ -54,6 +54,7 @@ Pod::Spec.new do |s|
     "ios/converter/*.hpp",
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/PromiseHolder.hpp",
+    "ios/core/SwiftAnyMap.hpp",
     "ios/utils/AnyMapUtils.hpp",
     "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
     "ios/utils/Result.hpp",

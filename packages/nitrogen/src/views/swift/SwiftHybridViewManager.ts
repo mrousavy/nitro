@@ -11,7 +11,6 @@ import {
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import {
-  getAutolinkingClassName,
   getAutolinkingNamespace,
   getHybridObjectConstructorCall,
 } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
@@ -40,7 +39,7 @@ export function createSwiftHybridViewManager(
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
-    const bridge = new SwiftCxxBridgedType(p.type, false)
+    const bridge = new SwiftCxxBridgedType(p.type)
     const parse = bridge.parseFromCppToSwift(
       `newViewProps.${name}.value`,
       'c++'
@@ -143,7 +142,7 @@ using namespace ${namespace}::views;
 }
 
 + (BOOL)shouldBeRecycled {
-  return ${getAutolinkingNamespace()}::${getAutolinkingClassName(spec.name)}::isRecyclableHybridView();
+  return ${getAutolinkingNamespace()}::is${spec.name}RecyclableHybridView();
 }
 
 - (void)prepareForRecycle {

@@ -9,27 +9,17 @@ import Foundation
 import NitroModules
 
 /**
- * Represents an instance of `Person`, backed by a C++ struct.
+ * Represents an instance of `Person`.
  */
-public typealias Person = margelo.nitro.test.Person
+public struct Person {
+  public let name: String
+  public let age: Double
 
-public extension Person {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `Person`.
-   */
-  init(name: String, age: Double) {
-    self.init(std.string(name), age)
-  }
-
-  @inline(__always)
-  var name: String {
-    return String(self.__name)
-  }
-  
-  @inline(__always)
-  var age: Double {
-    return self.__age
+  public init(
+    name: String,
+    age: Double
+  ) {
+    self.name = name
+    self.age = age
   }
 }

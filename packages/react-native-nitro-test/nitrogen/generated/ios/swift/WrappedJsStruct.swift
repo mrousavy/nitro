@@ -9,33 +9,17 @@ import Foundation
 import NitroModules
 
 /**
- * Represents an instance of `WrappedJsStruct`, backed by a C++ struct.
+ * Represents an instance of `WrappedJsStruct`.
  */
-public typealias WrappedJsStruct = margelo.nitro.test.WrappedJsStruct
+public struct WrappedJsStruct {
+  public let value: JsStyleStruct
+  public let items: [JsStyleStruct]
 
-public extension WrappedJsStruct {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `WrappedJsStruct`.
-   */
-  init(value: JsStyleStruct, items: [JsStyleStruct]) {
-    self.init(value, { () -> bridge.std__vector_JsStyleStruct_ in
-      var __vector = bridge.create_std__vector_JsStyleStruct_(items.count)
-      for __item in items {
-        __vector.push_back(__item)
-      }
-      return __vector
-    }())
-  }
-
-  @inline(__always)
-  var value: JsStyleStruct {
-    return self.__value
-  }
-  
-  @inline(__always)
-  var items: [JsStyleStruct] {
-    return self.__items.map({ __item in __item })
+  public init(
+    value: JsStyleStruct,
+    items: [JsStyleStruct]
+  ) {
+    self.value = value
+    self.items = items
   }
 }
