@@ -10,7 +10,7 @@
 #include <functional>
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/SwiftConverter.hpp>
-#include "Func_Double_Void+Swift.hpp"
+#include "Func_Double____num__Double_____Void+Swift.hpp"
 
 namespace margelo::nitro {
 

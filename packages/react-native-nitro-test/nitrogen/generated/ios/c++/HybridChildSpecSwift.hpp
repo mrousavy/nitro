@@ -84,7 +84,7 @@ namespace margelo::nitro::test {
   public:
     // Methods
     inline std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override {
-      auto __result = _swiftPart.bounceVariant(variant);
+      auto __result = _swiftPart.bounceVariant(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -1,11 +1,7 @@
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
-import {
-  createFileMetadataString,
-  escapeCppName,
-  isNotDuplicate,
-} from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
@@ -13,6 +9,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { getSwiftFunctionClassName } from './SwiftFunction.js'
 
 function getRequiredBridgeImport(type: Type): string | undefined {
   // TODO: Avoid duplicating the name of those files - create one single source of truth so we dont fuck up renames
@@ -27,9 +24,7 @@ function getRequiredBridgeImport(type: Type): string | undefined {
     }
     case 'function': {
       const functionType = getTypeAs(type, FunctionType)
-      const swiftClassName = escapeCppName(
-        `Func_${functionType.parameters.map((p) => p.getCode('swift', { fullyQualified: false })).join('_')}_${functionType.returnType.getCode('swift')}`
-      )
+      const swiftClassName = getSwiftFunctionClassName(functionType)
       return `${swiftClassName}+Swift.hpp`
     }
     default:

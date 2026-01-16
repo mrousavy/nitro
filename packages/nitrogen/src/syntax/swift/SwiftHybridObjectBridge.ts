@@ -299,7 +299,7 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
           }
         })
         .join(', ')
-      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType, true)
+      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
       const hasResult = m.returnType.kind !== 'void'
       let body: string
       if (hasResult) {
@@ -512,15 +512,15 @@ function getMethodForwardImplementation(method: Method): string {
   // wrapped return in a std::expected
   const resultType = new ResultWrappingType(method.returnType)
   addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
-  const bridgedResultType = new SwiftCxxBridgedType(resultType, true)
+  const bridgedResultType = new SwiftCxxBridgedType(resultType)
   const resultBridge = bridgedResultType.getRequiredBridge()
   if (resultBridge == null)
     throw new Error(
       `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
     )
-  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error, true)
+  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error)
 
-  const returnType = new SwiftCxxBridgedType(method.returnType, true)
+  const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.getTypeCode('swift')}`

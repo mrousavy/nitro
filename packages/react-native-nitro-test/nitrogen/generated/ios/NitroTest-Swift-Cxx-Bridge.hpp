@@ -430,13 +430,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<Powertrain>`.
    */
   using std__optional_Powertrain_ = std::optional<Powertrain>;
-  inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) noexcept {
+  inline std::optional<Powertrain> create_std__optional_Powertrain_(const NitroTest::Powertrain& value) noexcept {
     return std::optional<Powertrain>(value);
   }
   inline bool has_value_std__optional_Powertrain_(const std::optional<Powertrain>& optional) noexcept {
     return optional.has_value();
   }
-  inline Powertrain get_std__optional_Powertrain_(const std::optional<Powertrain>& optional) noexcept {
+  inline NitroTest::Powertrain get_std__optional_Powertrain_(const std::optional<Powertrain>& optional) noexcept {
     return *optional;
   }
   
@@ -445,13 +445,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<OldEnum>`.
    */
   using std__optional_OldEnum_ = std::optional<OldEnum>;
-  inline std::optional<OldEnum> create_std__optional_OldEnum_(const OldEnum& value) noexcept {
+  inline std::optional<OldEnum> create_std__optional_OldEnum_(const NitroTest::OldEnum& value) noexcept {
     return std::optional<OldEnum>(value);
   }
   inline bool has_value_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
     return optional.has_value();
   }
-  inline OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
+  inline NitroTest::OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
     return *optional;
   }
   
@@ -482,13 +482,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<std::function<void(double / * value * /)>>`.
    */
   using std__optional_std__function_void_double____value______ = std::optional<std::function<void(double /* value */)>>;
-  inline std::optional<std::function<void(double /* value */)>> create_std__optional_std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
+  inline std::optional<std::function<void(double /* value */)>> create_std__optional_std__function_void_double____value______(const NitroTest::Func_Double____value__Double_____Void& value) noexcept {
     return std::optional<std::function<void(double /* value */)>>(value);
   }
   inline bool has_value_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::function<void(double /* value */)> get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
+  inline NitroTest::Func_Double____value__Double_____Void get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return *optional;
   }
   
@@ -1040,8 +1040,8 @@ namespace margelo::nitro::test::bridge::swift {
   class Func_void_std__shared_ptr_ArrayBuffer__Wrapper final {
   public:
     explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>>(std::move(func))) {}
-    inline void call(ArrayBufferHolder result) const noexcept {
-      _function->operator()(result.getArrayBuffer());
+    inline void call(std::shared_ptr<ArrayBuffer> result) const noexcept {
+      _function->operator()(result);
     }
   private:
     std::unique_ptr<std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>> _function;
@@ -1135,13 +1135,13 @@ namespace margelo::nitro::test::bridge::swift {
    * Specialized version of `std::optional<std::function<void(const std::string& / * value * /)>>`.
    */
   using std__optional_std__function_void_const_std__string_____value______ = std::optional<std::function<void(const std::string& /* value */)>>;
-  inline std::optional<std::function<void(const std::string& /* value */)>> create_std__optional_std__function_void_const_std__string_____value______(const std::function<void(const std::string& /* value */)>& value) noexcept {
+  inline std::optional<std::function<void(const std::string& /* value */)>> create_std__optional_std__function_void_const_std__string_____value______(const NitroTest::Func_String____value__String_____Void& value) noexcept {
     return std::optional<std::function<void(const std::string& /* value */)>>(value);
   }
   inline bool has_value_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::function<void(const std::string& /* value */)> get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
+  inline NitroTest::Func_String____value__String_____Void get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
     return *optional;
   }
   

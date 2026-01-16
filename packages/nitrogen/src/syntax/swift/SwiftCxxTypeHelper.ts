@@ -228,7 +228,7 @@ inline ${specializationName} ${funcName}(const ${parameterType}& strong) noexcep
  */
 function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
-  const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType, true)
+  const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType)
   const name = escapeCppName(actualType)
   // TODO: Remove has_ and get_ wrappers once https://github.com/swiftlang/swift/issues/83801 is fixed.
   // TODO: Remove create_ wrapper once https://github.com/swiftlang/swift/issues/75834 is fixed.

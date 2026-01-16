@@ -30,12 +30,9 @@ public final class NitroTestExternalAutolinking {
   }
 
   public final class AutolinkedSomeExternalObject: AutolinkedClass {
-    public static func create() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+    public static func create() -> (any HybridSomeExternalObjectSpec) {
       let hybridObject = HybridSomeExternalObject()
-      return { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ in
-        let __cxxWrapped = hybridObject.getCxxWrapper()
-        return __cxxWrapped.getCxxPart()
-      }()
+      return hybridObject
     }
     public static var isRecyclableHybridView: Bool {
       return HybridSomeExternalObject.self is any RecyclableView.Type

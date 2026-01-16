@@ -135,11 +135,10 @@ namespace margelo::nitro::test {
       return __result;
     }
     inline std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() noexcept override {
-      auto __result = _swiftPart.getOptionalHybrid();
-      return __result;
+      return _swiftPart.getOptionalHybrid();
     }
     inline void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept override {
-      _swiftPart.setOptionalHybrid(optionalHybrid);
+      _swiftPart.setOptionalHybrid(std::forward<decltype(optionalHybrid)>(optionalHybrid));
     }
     inline double getNumberValue() noexcept override {
       return _swiftPart.getNumberValue();
@@ -154,11 +153,10 @@ namespace margelo::nitro::test {
       _swiftPart.setBoolValue(std::forward<decltype(boolValue)>(boolValue));
     }
     inline std::string getStringValue() noexcept override {
-      auto __result = _swiftPart.getStringValue();
-      return __result;
+      return _swiftPart.getStringValue();
     }
     inline void setStringValue(const std::string& stringValue) noexcept override {
-      _swiftPart.setStringValue(stringValue);
+      _swiftPart.setStringValue(std::forward<decltype(stringValue)>(stringValue));
     }
     inline int64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
@@ -167,67 +165,58 @@ namespace margelo::nitro::test {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
     inline nitro::NullType getNullValue() noexcept override {
-      auto __result = _swiftPart.getNullValue();
-      return __result;
+      return _swiftPart.getNullValue();
     }
     inline void setNullValue(nitro::NullType nullValue) noexcept override {
-      _swiftPart.setNullValue(nullValue);
+      _swiftPart.setNullValue(std::forward<decltype(nullValue)>(nullValue));
     }
     inline std::optional<std::string> getOptionalString() noexcept override {
-      auto __result = _swiftPart.getOptionalString();
-      return __result;
+      return _swiftPart.getOptionalString();
     }
     inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
-      _swiftPart.setOptionalString(optionalString);
+      _swiftPart.setOptionalString(std::forward<decltype(optionalString)>(optionalString));
     }
     inline std::optional<std::string> getStringOrUndefined() noexcept override {
-      auto __result = _swiftPart.getStringOrUndefined();
-      return __result;
+      return _swiftPart.getStringOrUndefined();
     }
     inline void setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept override {
-      _swiftPart.setStringOrUndefined(stringOrUndefined);
+      _swiftPart.setStringOrUndefined(std::forward<decltype(stringOrUndefined)>(stringOrUndefined));
     }
     inline std::variant<nitro::NullType, std::string> getStringOrNull() noexcept override {
-      auto __result = _swiftPart.getStringOrNull();
-      return __result;
+      return _swiftPart.getStringOrNull();
     }
     inline void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept override {
-      _swiftPart.setStringOrNull(stringOrNull);
+      _swiftPart.setStringOrNull(std::forward<decltype(stringOrNull)>(stringOrNull));
     }
     inline std::optional<std::vector<std::string>> getOptionalArray() noexcept override {
-      auto __result = _swiftPart.getOptionalArray();
-      return __result;
+      return _swiftPart.getOptionalArray();
     }
     inline void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) noexcept override {
-      _swiftPart.setOptionalArray(optionalArray);
+      _swiftPart.setOptionalArray(std::forward<decltype(optionalArray)>(optionalArray));
     }
     inline std::optional<Powertrain> getOptionalEnum() noexcept override {
-      auto __result = _swiftPart.getOptionalEnum();
-      return __result;
+      return _swiftPart.getOptionalEnum();
     }
     inline void setOptionalEnum(std::optional<Powertrain> optionalEnum) noexcept override {
-      _swiftPart.setOptionalEnum(optionalEnum);
+      _swiftPart.setOptionalEnum(std::forward<decltype(optionalEnum)>(optionalEnum));
     }
     inline std::optional<OldEnum> getOptionalOldEnum() noexcept override {
-      auto __result = _swiftPart.getOptionalOldEnum();
-      return __result;
+      return _swiftPart.getOptionalOldEnum();
     }
     inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
-      _swiftPart.setOptionalOldEnum(optionalOldEnum);
+      _swiftPart.setOptionalOldEnum(std::forward<decltype(optionalOldEnum)>(optionalOldEnum));
     }
     inline std::optional<std::function<void(double /* value */)>> getOptionalCallback() noexcept override {
-      auto __result = _swiftPart.getOptionalCallback();
-      return __result;
+      return _swiftPart.getOptionalCallback();
     }
     inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
-      _swiftPart.setOptionalCallback(optionalCallback);
+      _swiftPart.setOptionalCallback(std::forward<decltype(optionalCallback)>(optionalCallback));
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
-      auto __result = _swiftPart.getSomeVariant();
-      return __result;
+      return _swiftPart.getSomeVariant();
     }
     inline void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept override {
-      _swiftPart.setSomeVariant(someVariant);
+      _swiftPart.setSomeVariant(std::forward<decltype(someVariant)>(someVariant));
     }
 
   public:
@@ -241,7 +230,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) override {
-      auto __result = _swiftPart.getVariantHybrid(variant);
+      auto __result = _swiftPart.getVariantHybrid(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -263,7 +252,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::string addStrings(const std::string& a, const std::string& b) override {
-      auto __result = _swiftPart.addStrings(a, b);
+      auto __result = _swiftPart.addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -271,13 +260,13 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void multipleArguments(double num, const std::string& str, bool boo) override {
-      auto __result = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), str, std::forward<decltype(boo)>(boo));
+      auto __result = _swiftPart.multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
     inline nitro::NullType bounceNull(nitro::NullType value) override {
-      auto __result = _swiftPart.bounceNull(value);
+      auto __result = _swiftPart.bounceNull(std::forward<decltype(value)>(value));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -285,7 +274,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override {
-      auto __result = _swiftPart.bounceStrings(array);
+      auto __result = _swiftPart.bounceStrings(std::forward<decltype(array)>(array));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -293,7 +282,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<double> bounceNumbers(const std::vector<double>& array) override {
-      auto __result = _swiftPart.bounceNumbers(array);
+      auto __result = _swiftPart.bounceNumbers(std::forward<decltype(array)>(array));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -301,7 +290,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<Person> bounceStructs(const std::vector<Person>& array) override {
-      auto __result = _swiftPart.bounceStructs(array);
+      auto __result = _swiftPart.bounceStructs(std::forward<decltype(array)>(array));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -317,7 +306,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::string sumUpAllPassengers(const std::vector<Car>& cars) override {
-      auto __result = _swiftPart.sumUpAllPassengers(cars);
+      auto __result = _swiftPart.sumUpAllPassengers(std::forward<decltype(cars)>(cars));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -325,7 +314,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override {
-      auto __result = _swiftPart.bounceEnums(array);
+      auto __result = _swiftPart.bounceEnums(std::forward<decltype(array)>(array));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -333,13 +322,13 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override {
-      auto __result = _swiftPart.complexEnumCallback(array, callback);
+      auto __result = _swiftPart.complexEnumCallback(std::forward<decltype(array)>(array), callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
     inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
-      auto __result = _swiftPart.bounceHybridObjects(array);
+      auto __result = _swiftPart.bounceHybridObjects(std::forward<decltype(array)>(array));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -347,7 +336,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override {
-      auto __result = _swiftPart.bounceFunctions(functions);
+      auto __result = _swiftPart.bounceFunctions(std::forward<decltype(functions)>(functions));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -355,7 +344,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override {
-      auto __result = _swiftPart.bounceMaps(maps);
+      auto __result = _swiftPart.bounceMaps(std::forward<decltype(maps)>(maps));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -363,7 +352,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override {
-      auto __result = _swiftPart.bouncePromises(promises);
+      auto __result = _swiftPart.bouncePromises(std::forward<decltype(promises)>(promises));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -371,7 +360,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override {
-      auto __result = _swiftPart.bounceArrayBuffers(arrayBuffers);
+      auto __result = _swiftPart.bounceArrayBuffers(std::forward<decltype(arrayBuffers)>(arrayBuffers));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -387,7 +376,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.mapRoundtrip(map);
+      auto __result = _swiftPart.mapRoundtrip(std::forward<decltype(map)>(map));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -395,7 +384,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.getMapKeys(map);
+      auto __result = _swiftPart.getMapKeys(std::forward<decltype(map)>(map));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -403,7 +392,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<AnyMap> mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) override {
-      auto __result = _swiftPart.mergeMaps(a, b);
+      auto __result = _swiftPart.mergeMaps(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -411,7 +400,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) override {
-      auto __result = _swiftPart.copyAnyMap(map);
+      auto __result = _swiftPart.copyAnyMap(std::forward<decltype(map)>(map));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -419,7 +408,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) override {
-      auto __result = _swiftPart.bounceMap(map);
+      auto __result = _swiftPart.bounceMap(std::forward<decltype(map)>(map));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -427,7 +416,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override {
-      auto __result = _swiftPart.bounceSimpleMap(map);
+      auto __result = _swiftPart.bounceSimpleMap(std::forward<decltype(map)>(map));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -459,13 +448,13 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void throwError(const std::exception_ptr& error) override {
-      auto __result = _swiftPart.throwError(error);
+      auto __result = _swiftPart.throwError(std::forward<decltype(error)>(error));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
     }
     inline std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override {
-      auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), str);
+      auto __result = _swiftPart.tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -473,7 +462,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override {
-      auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), boo, str);
+      auto __result = _swiftPart.tryMiddleParam(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -481,7 +470,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override {
-      auto __result = _swiftPart.tryOptionalEnum(value);
+      auto __result = _swiftPart.tryOptionalEnum(std::forward<decltype(value)>(value));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -489,7 +478,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override {
-      auto __result = _swiftPart.tryTrailingOptional(std::forward<decltype(num)>(num), str, boo);
+      auto __result = _swiftPart.tryTrailingOptional(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -497,7 +486,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override {
-      auto __result = _swiftPart.add1Hour(date);
+      auto __result = _swiftPart.add1Hour(std::forward<decltype(date)>(date));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -577,7 +566,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override {
-      auto __result = _swiftPart.awaitAndGetPromise(promise);
+      auto __result = _swiftPart.awaitAndGetPromise(std::forward<decltype(promise)>(promise));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -585,7 +574,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) override {
-      auto __result = _swiftPart.awaitAndGetComplexPromise(promise);
+      auto __result = _swiftPart.awaitAndGetComplexPromise(std::forward<decltype(promise)>(promise));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -593,7 +582,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) override {
-      auto __result = _swiftPart.awaitPromise(promise);
+      auto __result = _swiftPart.awaitPromise(std::forward<decltype(promise)>(promise));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -621,7 +610,7 @@ namespace margelo::nitro::test {
       }
     }
     inline void callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) override {
-      auto __result = _swiftPart.callWithOptional(value, callback);
+      auto __result = _swiftPart.callWithOptional(std::forward<decltype(value)>(value), callback);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -659,7 +648,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) override {
-      auto __result = _swiftPart.twoOptionalCallbacks(std::forward<decltype(value)>(value), first, second);
+      auto __result = _swiftPart.twoOptionalCallbacks(std::forward<decltype(value)>(value), std::forward<decltype(first)>(first), std::forward<decltype(second)>(second));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -773,7 +762,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
-      auto __result = _swiftPart.copyBuffer(ArrayBufferHolder(buffer));
+      auto __result = _swiftPart.copyBuffer(std::forward<decltype(buffer)>(buffer));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -781,7 +770,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) override {
-      auto __result = _swiftPart.getBufferLastItem(ArrayBufferHolder(buffer));
+      auto __result = _swiftPart.getBufferLastItem(std::forward<decltype(buffer)>(buffer));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -789,7 +778,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override {
-      auto __result = _swiftPart.setAllValuesTo(ArrayBufferHolder(buffer), std::forward<decltype(value)>(value));
+      auto __result = _swiftPart.setAllValuesTo(std::forward<decltype(buffer)>(buffer), std::forward<decltype(value)>(value));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -803,7 +792,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override {
-      auto __result = _swiftPart.bounceArrayBuffer(ArrayBufferHolder(buffer));
+      auto __result = _swiftPart.bounceArrayBuffer(std::forward<decltype(buffer)>(buffer));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -811,7 +800,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override {
-      auto __result = _swiftPart.passVariant(either);
+      auto __result = _swiftPart.passVariant(std::forward<decltype(either)>(either));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -819,7 +808,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override {
-      auto __result = _swiftPart.getVariantEnum(variant);
+      auto __result = _swiftPart.getVariantEnum(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -827,7 +816,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override {
-      auto __result = _swiftPart.getVariantWeirdNumbersEnum(variant);
+      auto __result = _swiftPart.getVariantWeirdNumbersEnum(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -835,7 +824,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override {
-      auto __result = _swiftPart.getVariantObjects(variant);
+      auto __result = _swiftPart.getVariantObjects(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -843,7 +832,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override {
-      auto __result = _swiftPart.passNamedVariant(variant);
+      auto __result = _swiftPart.passNamedVariant(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -851,7 +840,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override {
-      auto __result = _swiftPart.passAllEmptyObjectVariant(variant);
+      auto __result = _swiftPart.passAllEmptyObjectVariant(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -859,7 +848,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override {
-      auto __result = _swiftPart.bounceComplexVariant(variant);
+      auto __result = _swiftPart.bounceComplexVariant(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -963,7 +952,7 @@ namespace margelo::nitro::test {
       return __value;
     }
     inline std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) override {
-      auto __result = _swiftPart.bounceExternalVariant(variant);
+      auto __result = _swiftPart.bounceExternalVariant(std::forward<decltype(variant)>(variant));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
