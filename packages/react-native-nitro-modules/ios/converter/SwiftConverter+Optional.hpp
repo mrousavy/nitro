@@ -17,7 +17,7 @@ struct SwiftConverter;
 
 namespace margelo::nitro {
 
-// std::string <> swift::String
+// std::optional<T> <> swift::Optional<SwiftT>
 template <typename T>
 struct SwiftConverter<std::optional<T>> final {
   using SwiftType = swift::Optional<SwiftTypeOf<T>>;
@@ -30,9 +30,9 @@ struct SwiftConverter<std::optional<T>> final {
   }
   static SwiftType toSwift(const std::optional<T>& optional) {
     if (optional.has_value()) {
-      return SwiftType(SwiftConverter<T>::toSwift(optional.value()));
+      return SwiftType::some(SwiftConverter<T>::toSwift(optional.value()));
     } else {
-      return SwiftType();
+      return SwiftType::none();
     }
   }
 };

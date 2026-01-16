@@ -21,12 +21,6 @@ public final class Func_double {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call() -> Double {
-    let __result: Double = self.closure()
-    return __result
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -44,5 +38,11 @@ public final class Func_double {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_double {
     return Unmanaged<Func_double>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call() -> Double {
+    let __result: Double = self.closure()
+    return __result
   }
 }

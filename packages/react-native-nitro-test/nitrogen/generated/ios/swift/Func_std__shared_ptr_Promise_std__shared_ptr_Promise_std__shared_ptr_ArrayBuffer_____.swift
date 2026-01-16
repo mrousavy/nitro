@@ -21,6 +21,25 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__sha
     self.closure = closure
   }
 
+  /**
+   * Casts this instance to a retained unsafe raw pointer.
+   * This acquires one additional strong reference on the object!
+   */
+  @inline(__always)
+  public func toUnsafe() -> UnsafeMutableRawPointer {
+    return Unmanaged.passRetained(self).toOpaque()
+  }
+
+  /**
+   * Casts an unsafe pointer to a `Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____`.
+   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____>`.
+   * This removes one strong reference from the object!
+   */
+  @inline(__always)
+  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
+    return Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____>.fromOpaque(pointer).takeRetainedValue()
+  }
+
   @inline(__always)
   public func call() -> bridge.std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
     let __result: Promise<Promise<ArrayBuffer>> = self.closure()
@@ -39,24 +58,5 @@ public final class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__sha
         .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
       return __promise
     }()
-  }
-
-  /**
-   * Casts this instance to a retained unsafe raw pointer.
-   * This acquires one additional strong reference on the object!
-   */
-  @inline(__always)
-  public func toUnsafe() -> UnsafeMutableRawPointer {
-    return Unmanaged.passRetained(self).toOpaque()
-  }
-
-  /**
-   * Casts an unsafe pointer to a `Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____`.
-   * The pointer has to be a retained opaque `Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____>`.
-   * This removes one strong reference from the object!
-   */
-  @inline(__always)
-  public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ {
-    return Unmanaged<Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____>.fromOpaque(pointer).takeRetainedValue()
   }
 }

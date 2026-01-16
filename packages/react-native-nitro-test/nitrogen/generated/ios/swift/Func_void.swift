@@ -21,11 +21,6 @@ public final class Func_void {
     self.closure = closure
   }
 
-  @inline(__always)
-  public func call() -> Void {
-    self.closure()
-  }
-
   /**
    * Casts this instance to a retained unsafe raw pointer.
    * This acquires one additional strong reference on the object!
@@ -43,5 +38,10 @@ public final class Func_void {
   @inline(__always)
   public static func fromUnsafe(_ pointer: UnsafeMutableRawPointer) -> Func_void {
     return Unmanaged<Func_void>.fromOpaque(pointer).takeRetainedValue()
+  }
+
+  @inline(__always)
+  public func call() -> Void {
+    self.closure()
   }
 }
