@@ -269,9 +269,7 @@ using ${name} = ${actualType};
 class ${wrapperName} final {
 public:
   explicit ${wrapperName}(${actualType}&& func): _function(std::make_unique<${actualType}>(std::move(func))) {}
-  inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const noexcept {
-    ${indent(callCppFuncBody, '    ')}
-  }
+  ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const noexcept;
 private:
   std::unique_ptr<${actualType}> _function;
 } SWIFT_NONCOPYABLE;
@@ -301,6 +299,10 @@ ${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept {
   return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
     ${indent(body, '    ')}
   };
+}
+
+${callFuncReturnType} ${wrapperName}::call(${callCppFuncParamsSignature.join(', ')}) const noexcept {
+  ${indent(callCppFuncBody, '  ')}
 }
 `.trim(),
       requiredIncludes: [

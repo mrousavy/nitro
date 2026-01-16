@@ -22,10 +22,6 @@ interface SwiftHybridObjectRegistration {
   requiredImports: SourceImport[]
 }
 
-export function getAutolinkingClassName(hybridObjectName: string): string {
-  return `Autolinked${hybridObjectName}`
-}
-
 export function getAutolinkingNamespace() {
   const swiftNamespace = NitroConfig.current.getIosModuleName()
   const autolinkingClassName = `${swiftNamespace}Autolinking`
@@ -36,8 +32,7 @@ export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
   const namespace = getAutolinkingNamespace()
-  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
-  return `${namespace}::${autolinkingClassName}::create();`
+  return `${namespace}::create${hybridObjectName}();`
 }
 
 export function createSwiftHybridObjectRegistration({
@@ -53,18 +48,15 @@ export function createSwiftHybridObjectRegistration({
     NitroConfig.current
   )
   const bridge = new SwiftCxxBridgedType(type)
-  const autolinkingClassName = getAutolinkingClassName(hybridObjectName)
 
   return {
     swiftRegistrationClass: `
-public final class ${autolinkingClassName}: AutolinkedClass {
-  public static func create() -> ${bridge.getTypeCode('swift')} {
-    let hybridObject = ${swiftClassName}()
-    return ${indent(bridge.parseFromSwiftToCpp('hybridObject', 'swift'), '    ')}
-  }
-  public static var isRecyclableHybridView: Bool {
-    return ${swiftClassName}.self is any RecyclableView.Type
-  }
+public static func create${hybridObjectName}() -> ${bridge.getTypeCode('swift')} {
+  let hybridObject = ${swiftClassName}()
+  return ${indent(bridge.parseFromSwiftToCpp('hybridObject', 'swift'), '    ')}
+}
+public static var is${hybridObjectName}RecyclableHybridView: Bool {
+  return ${swiftClassName}.self is any RecyclableView.Type
 }
     `.trim(),
     requiredImports: [
@@ -74,8 +66,8 @@ public final class ${autolinkingClassName}: AutolinkedClass {
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    ${type.getCode('c++')} hybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
-    return hybridObject;
+    auto swiftHybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
+    return swiftHybridObject.getCxxPart();
   }
 );
       `.trim(),

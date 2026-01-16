@@ -108,6 +108,10 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  void Func_void_double_Wrapper::call(double value) const noexcept {
+    _function->operator()(value);
+  }
+  
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__vector_Powertrain_::fromUnsafe(swiftClosureWrapper);
@@ -116,12 +120,20 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  void Func_void_std__vector_Powertrain__Wrapper::call(std::vector<Powertrain> array) const noexcept {
+    _function->operator()(array);
+  }
+  
   // pragma MARK: std::function<void()>
   Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)]() mutable -> void {
       swiftClosure.call();
     };
+  }
+  
+  void Func_void_Wrapper::call() const noexcept {
+    _function->operator()();
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>
@@ -133,12 +145,21 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
+  }
+  
   // pragma MARK: std::function<void(std::optional<double> /* maybe */)>
   Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__optional_double_::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](std::optional<double> maybe) mutable -> void {
       swiftClosure.call(maybe);
     };
+  }
+  
+  void Func_void_std__optional_double__Wrapper::call(std::optional<double> maybe) const noexcept {
+    _function->operator()(maybe);
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
@@ -150,6 +171,11 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  std::shared_ptr<Promise<double>> Func_std__shared_ptr_Promise_double___Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
+  }
+  
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
   Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::fromUnsafe(swiftClosureWrapper);
@@ -157,6 +183,11 @@ namespace margelo::nitro::test::bridge::swift {
       auto __result = swiftClosure.call();
       return __result;
     };
+  }
+  
+  std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>
@@ -168,6 +199,11 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>> Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
+  }
+  
   // pragma MARK: std::function<void(const std::string& /* value */)>
   Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__string::fromUnsafe(swiftClosureWrapper);
@@ -176,12 +212,20 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  void Func_void_std__string_Wrapper::call(std::string value) const noexcept {
+    _function->operator()(value);
+  }
+  
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
       swiftClosure.call(error);
     };
+  }
+  
+  void Func_void_std__exception_ptr_Wrapper::call(std::exception_ptr error) const noexcept {
+    _function->operator()(error);
   }
   
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
@@ -193,6 +237,11 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  std::shared_ptr<Promise<std::string>> Func_std__shared_ptr_Promise_std__string___Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
+  }
+  
   // pragma MARK: std::function<double()>
   Func_double create_Func_double(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_double::fromUnsafe(swiftClosureWrapper);
@@ -200,6 +249,11 @@ namespace margelo::nitro::test::bridge::swift {
       auto __result = swiftClosure.call();
       return __result;
     };
+  }
+  
+  double Func_double_Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
   }
   
   // pragma MARK: std::shared_ptr<HybridTestViewSpec>
@@ -235,6 +289,11 @@ namespace margelo::nitro::test::bridge::swift {
       auto __result = swiftClosure.call();
       return __result;
     };
+  }
+  
+  NitroTestExternal::HybridSomeExternalObjectSpec_cxx Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper::call() const noexcept {
+    auto __result = _function->operator()();
+    return __result;
   }
 
 } // namespace margelo::nitro::test::bridge::swift
