@@ -45,7 +45,19 @@ jobs:
           - '26'
     steps:
       - uses: actions/checkout@v6
+      
       - uses: oven-sh/setup-bun@v2
+
+      # Cache node_modules based on bun.lock
+      - name: Cache node_modules
+        uses: actions/cache@v5
+        with:
+          path: |
+            node_modules
+            example/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Install npm dependencies (bun)
         run: bun install
@@ -60,22 +72,34 @@ jobs:
           java-version: 17
           java-package: jdk
 
-      - name: Restore Gradle cache
+      # Layer 1: Gradle wrapper and dependencies cache
+      - name: Cache Gradle wrapper and dependencies
         uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            example/android/app/.cxx
-            example/android/app/build
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-
+            ${{ runner.os }}-gradle-wrapper-
+
+      # Layer 2: Gradle build cache (configuration cache + build cache)
+      - name: Cache Gradle build cache
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/configuration-cache
+            example/android/.gradle
+          key: ${{ runner.os }}-gradle-build-${{ matrix.min-sdk }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-${{ matrix.min-sdk }}-
+            ${{ runner.os }}-gradle-build-
+
       - name: Run Gradle Build for example/android/
         working-directory: example/android
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew assembleDebug --build-cache --configuration-cache --parallel --max-workers=4 -PreactNativeArchitectures=arm64-v8a
 
-      # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
+        if: always()
         working-directory: example/android
         run: ./gradlew --stop
