@@ -80,10 +80,14 @@ jobs:
           path: |
             ~/.gradle/configuration-cache
             example/android/.gradle
+            example/android/app/.cxx
+            example/android/app/build
+            example/android/build
           key: ${{ runner.os }}-gradle-build-${{ matrix.min-sdk }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-gradle-build-${{ matrix.min-sdk }}-
             ${{ runner.os }}-gradle-build-
+            
 
       - name: Run Gradle Build for example/android/
         working-directory: example/android
