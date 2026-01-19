@@ -5,7 +5,10 @@ import { indent } from '../../utils.js'
 import type { Method } from '../Method.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
-import { getHybridObjectName } from '../getHybridObjectName.js'
+import {
+  getHybridObjectName,
+  type HybridObjectName,
+} from '../getHybridObjectName.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
@@ -31,11 +34,11 @@ export function createSwiftHybridObjectCxxBridge(
   const iosModuleName = spec.config.getIosModuleName()
 
   const propertiesBridge = spec.properties.map((p) =>
-    getPropertyForwardImplementation(p)
+    getPropertyForwardImplementation(name, p)
   )
 
   const methodsBridge = spec.methods.map((m) =>
-    getMethodForwardImplementation(m)
+    getMethodForwardImplementation(name, m)
   )
 
   const baseClasses = spec.baseTypes.map((base) => {
@@ -48,19 +51,19 @@ export function createSwiftHybridObjectCxxBridge(
     methodsBridge.push(
       `
 public static func getView(this: UnsafeMutableRawPointer) -> UnsafeMutableRawPointer {
-  let __instance = cast(this)
+  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
   return Unmanaged.passRetained(__instance.view).toOpaque()
 }
 `.trim(),
       `
 public static func beforeUpdate(this: UnsafeMutableRawPointer) {
-  let __instance = cast(this)
+  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
   __instance.beforeUpdate()
 }
   `.trim(),
       `
 public static func afterUpdate(this: UnsafeMutableRawPointer) {
-  let __instance = cast(this)
+  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
   __instance.afterUpdate()
 }
 `.trim()
@@ -106,18 +109,13 @@ public final class ${name.HybridTSpecCxx} {
    */
   public typealias bridge = ${bridgeNamespace}
 
-  @inline(__always)
-  private static func cast(_ this: UnsafeRawPointer) -> ${name.HybridTSpec} {
-    return MemoryHelper.castUnsafe(this)
-  }
-
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
    * so the JS VM can properly track it and garbage-collect the JS object if needed.
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = cast(this)
+    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -127,7 +125,7 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = cast(this)
+    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
     __instance.dispose()
   }
 
@@ -136,7 +134,7 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = cast(this)
+    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
     return __instance.toString()
   }
 
@@ -145,8 +143,8 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = cast(this)
-    let __other = cast(other)
+    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<${name.HybridTSpec}>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
@@ -415,7 +413,10 @@ namespace ${cxxNamespace} {
   return files
 }
 
-function getPropertyForwardImplementation(property: Property): string {
+function getPropertyForwardImplementation(
+  name: HybridObjectName,
+  property: Property
+): string {
   const bridgedType = new SwiftCxxBridgedType(property.type)
   const methods: string[] = []
   // getter
@@ -423,7 +424,7 @@ function getPropertyForwardImplementation(property: Property): string {
     `
 @inline(__always)
 public static func ${property.getGetterName('swift')}(this: UnsafeRawPointer) -> ${bridgedType.getTypeCode('swift')} {
-  let __instance = cast(this)
+  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
   let __value = __instance.${property.name}
   return ${indent(bridgedType.parseFromSwiftToCpp('__value', 'swift'), '  ')}
 }
@@ -436,7 +437,7 @@ public static func ${property.getGetterName('swift')}(this: UnsafeRawPointer) ->
 
 @inline(__always)
 public static func ${property.getSetterName('swift')}(this: UnsafeRawPointer, newValue: ${bridgedType.getTypeCode('swift')}) {
-  let __instance = cast(this)
+  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
   __instance.${property.name} = ${indent(bridgedType.parseFromCppToSwift('newValue', 'swift'), '  ')}
 }
   `.trim()
@@ -446,7 +447,10 @@ public static func ${property.getSetterName('swift')}(this: UnsafeRawPointer, ne
   return methods.join('\n')
 }
 
-function getMethodForwardImplementation(method: Method): string {
+function getMethodForwardImplementation(
+  name: HybridObjectName,
+  method: Method
+): string {
   // wrapped return in a std::expected
   const resultType = new ResultWrappingType(method.returnType)
   addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
@@ -488,7 +492,7 @@ return bridge.${resultBridge.funcName}()
 @inline(__always)
 public static func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
-    let __instance = cast(this)
+    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
     ${indent(body, '    ')}
   } catch (let __error) {
     let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
