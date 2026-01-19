@@ -33,7 +33,7 @@ public final class HybridTestViewSpec_cxx {
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -43,7 +43,7 @@ public final class HybridTestViewSpec_cxx {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.dispose()
   }
 
@@ -52,7 +52,7 @@ public final class HybridTestViewSpec_cxx {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     return __instance.toString()
   }
 
@@ -61,51 +61,51 @@ public final class HybridTestViewSpec_cxx {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
-    let __other = Unmanaged<HybridTestViewSpec>.fromOpaque(other).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<HybridTestViewSpec_base>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
   // Properties
   @inline(__always)
   public static func isBlue(this: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     let __value = __instance.isBlue
     return __value
   }
   @inline(__always)
   public static func setIsBlue(this: UnsafeRawPointer, newValue: Bool) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.isBlue = newValue
   }
   
   @inline(__always)
   public static func hasBeenCalled(this: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     let __value = __instance.hasBeenCalled
     return __value
   }
   @inline(__always)
   public static func setHasBeenCalled(this: UnsafeRawPointer, newValue: Bool) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.hasBeenCalled = newValue
   }
   
   @inline(__always)
   public static func getColorScheme(this: UnsafeRawPointer) -> Int32 {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     let __value = __instance.colorScheme
     return __value.rawValue
   }
   @inline(__always)
   public static func setColorScheme(this: UnsafeRawPointer, newValue: Int32) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.colorScheme = margelo.nitro.test.ColorScheme(rawValue: newValue)!
   }
   
   @inline(__always)
   public static func getSomeCallback(this: UnsafeRawPointer) -> bridge.Func_void {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     let __value = __instance.someCallback
     return { () -> bridge.Func_void in
       let __closureWrapper = Func_void(__value)
@@ -114,7 +114,7 @@ public final class HybridTestViewSpec_cxx {
   }
   @inline(__always)
   public static func setSomeCallback(this: UnsafeRawPointer, newValue: bridge.Func_void) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.someCallback = { () -> () -> Void in
       let __wrappedFunction = bridge.wrap_Func_void(newValue)
       return { () -> Void in
@@ -127,7 +127,7 @@ public final class HybridTestViewSpec_cxx {
   @inline(__always)
   public static func someMethod(this: UnsafeRawPointer) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
       try __instance.someMethod()
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -137,17 +137,17 @@ public final class HybridTestViewSpec_cxx {
   }
   
   public static func getView(this: UnsafeMutableRawPointer) -> UnsafeMutableRawPointer {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     return Unmanaged.passRetained(__instance.view).toOpaque()
   }
   
   public static func beforeUpdate(this: UnsafeMutableRawPointer) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.beforeUpdate()
   }
   
   public static func afterUpdate(this: UnsafeMutableRawPointer) {
-    let __instance = Unmanaged<HybridTestViewSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestViewSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestViewSpec
     __instance.afterUpdate()
   }
 }

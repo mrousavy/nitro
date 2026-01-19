@@ -35,7 +35,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -45,7 +45,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.dispose()
   }
 
@@ -54,7 +54,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     return __instance.toString()
   }
 
@@ -63,15 +63,15 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
-    let __other = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(other).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
   // Properties
   @inline(__always)
   public static func getThisObject(this: UnsafeRawPointer) -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.thisObject
     return { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
       return __value.getCxxPart()
@@ -80,7 +80,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getOptionalHybrid(this: UnsafeRawPointer) -> bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalHybrid
     return { () -> bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ in
       if let __unwrappedValue = __value {
@@ -94,7 +94,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalHybrid(this: UnsafeRawPointer, newValue: bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalHybrid = { () -> (any HybridTestObjectSwiftKotlinSpec)? in
       if bridge.has_value_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(newValue) {
         let __unwrapped = bridge.get_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(newValue)
@@ -110,55 +110,55 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getNumberValue(this: UnsafeRawPointer) -> Double {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.numberValue
     return __value
   }
   @inline(__always)
   public static func setNumberValue(this: UnsafeRawPointer, newValue: Double) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.numberValue = newValue
   }
   
   @inline(__always)
   public static func getBoolValue(this: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.boolValue
     return __value
   }
   @inline(__always)
   public static func setBoolValue(this: UnsafeRawPointer, newValue: Bool) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.boolValue = newValue
   }
   
   @inline(__always)
   public static func getStringValue(this: UnsafeRawPointer) -> std.string {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.stringValue
     return std.string(__value)
   }
   @inline(__always)
   public static func setStringValue(this: UnsafeRawPointer, newValue: std.string) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.stringValue = String(newValue)
   }
   
   @inline(__always)
   public static func getBigintValue(this: UnsafeRawPointer) -> Int64 {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.bigintValue
     return __value
   }
   @inline(__always)
   public static func setBigintValue(this: UnsafeRawPointer, newValue: Int64) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.bigintValue = newValue
   }
   
   @inline(__always)
   public static func getStringOrUndefined(this: UnsafeRawPointer) -> bridge.std__optional_std__string_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.stringOrUndefined
     return { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = __value {
@@ -170,7 +170,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setStringOrUndefined(this: UnsafeRawPointer, newValue: bridge.std__optional_std__string_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.stringOrUndefined = { () -> String? in
       if bridge.has_value_std__optional_std__string_(newValue) {
         let __unwrapped = bridge.get_std__optional_std__string_(newValue)
@@ -183,7 +183,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getStringOrNull(this: UnsafeRawPointer) -> bridge.std__optional_std__string_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.stringOrNull
     return { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = __value {
@@ -195,7 +195,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setStringOrNull(this: UnsafeRawPointer, newValue: bridge.std__optional_std__string_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.stringOrNull = { () -> String? in
       if bridge.has_value_std__optional_std__string_(newValue) {
         let __unwrapped = bridge.get_std__optional_std__string_(newValue)
@@ -208,7 +208,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getOptionalString(this: UnsafeRawPointer) -> bridge.std__optional_std__string_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalString
     return { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = __value {
@@ -220,7 +220,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalString(this: UnsafeRawPointer, newValue: bridge.std__optional_std__string_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalString = { () -> String? in
       if bridge.has_value_std__optional_std__string_(newValue) {
         let __unwrapped = bridge.get_std__optional_std__string_(newValue)
@@ -233,7 +233,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getOptionalArray(this: UnsafeRawPointer) -> bridge.std__optional_std__vector_std__string__ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalArray
     return { () -> bridge.std__optional_std__vector_std__string__ in
       if let __unwrappedValue = __value {
@@ -251,7 +251,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalArray(this: UnsafeRawPointer, newValue: bridge.std__optional_std__vector_std__string__) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalArray = { () -> [String]? in
       if bridge.has_value_std__optional_std__vector_std__string__(newValue) {
         let __unwrapped = bridge.get_std__optional_std__vector_std__string__(newValue)
@@ -264,7 +264,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getOptionalEnum(this: UnsafeRawPointer) -> bridge.std__optional_Powertrain_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalEnum
     return { () -> bridge.std__optional_Powertrain_ in
       if let __unwrappedValue = __value {
@@ -276,13 +276,13 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalEnum(this: UnsafeRawPointer, newValue: bridge.std__optional_Powertrain_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalEnum = newValue.value
   }
   
   @inline(__always)
   public static func getOptionalOldEnum(this: UnsafeRawPointer) -> bridge.std__optional_OldEnum_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalOldEnum
     return { () -> bridge.std__optional_OldEnum_ in
       if let __unwrappedValue = __value {
@@ -294,13 +294,13 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalOldEnum(this: UnsafeRawPointer, newValue: bridge.std__optional_OldEnum_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalOldEnum = newValue.has_value() ? newValue.pointee : nil
   }
   
   @inline(__always)
   public static func getOptionalCallback(this: UnsafeRawPointer) -> bridge.std__optional_std__function_void_double____value______ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.optionalCallback
     return { () -> bridge.std__optional_std__function_void_double____value______ in
       if let __unwrappedValue = __value {
@@ -315,7 +315,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setOptionalCallback(this: UnsafeRawPointer, newValue: bridge.std__optional_std__function_void_double____value______) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.optionalCallback = { () -> ((_ value: Double) -> Void)? in
       if bridge.has_value_std__optional_std__function_void_double____value______(newValue) {
         let __unwrapped = bridge.get_std__optional_std__function_void_double____value______(newValue)
@@ -333,7 +333,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   
   @inline(__always)
   public static func getSomeVariant(this: UnsafeRawPointer) -> bridge.std__variant_std__string__double_ {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     let __value = __instance.someVariant
     return { () -> bridge.std__variant_std__string__double_ in
       switch __value {
@@ -346,7 +346,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   @inline(__always)
   public static func setSomeVariant(this: UnsafeRawPointer, newValue: bridge.std__variant_std__string__double_) {
-    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
     __instance.someVariant = { () -> Variant_String_Double in
       let __variant = newValue
       switch __variant.index() {
@@ -366,7 +366,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func newTestObject(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.newTestObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ in
         return __result.getCxxPart()
@@ -381,7 +381,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getVariantHybrid(this: UnsafeRawPointer, variant: bridge.std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_) -> bridge.Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getVariantHybrid(variant: { () -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person in
         let __variant = variant
         switch __variant.index() {
@@ -418,7 +418,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func simpleFunc(this: UnsafeRawPointer) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.simpleFunc()
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -430,7 +430,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func addNumbers(this: UnsafeRawPointer, a: Double, b: Double) -> bridge.Result_double_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.addNumbers(a: a, b: b)
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)
@@ -443,7 +443,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func addStrings(this: UnsafeRawPointer, a: std.string, b: std.string) -> bridge.Result_std__string_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.addStrings(a: String(a), b: String(b))
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
@@ -456,7 +456,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func multipleArguments(this: UnsafeRawPointer, num: Double, str: std.string, boo: Bool) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.multipleArguments(num: num, str: String(str), boo: boo)
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -468,7 +468,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceStrings(this: UnsafeRawPointer, array: bridge.std__vector_std__string_) -> bridge.Result_std__vector_std__string__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceStrings(array: array.map({ __item in String(__item) }))
       let __resultCpp = { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
@@ -487,7 +487,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceNumbers(this: UnsafeRawPointer, array: bridge.std__vector_double_) -> bridge.Result_std__vector_double__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceNumbers(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_double_ in
         var __vector = bridge.create_std__vector_double_(__result.count)
@@ -506,7 +506,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceStructs(this: UnsafeRawPointer, array: bridge.std__vector_Person_) -> bridge.Result_std__vector_Person__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceStructs(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_Person_ in
         var __vector = bridge.create_std__vector_Person_(__result.count)
@@ -525,7 +525,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func sumUpAllPassengers(this: UnsafeRawPointer, cars: bridge.std__vector_Car_) -> bridge.Result_std__string_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.sumUpAllPassengers(cars: cars.map({ __item in __item }))
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
@@ -538,7 +538,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceEnums(this: UnsafeRawPointer, array: bridge.std__vector_Powertrain_) -> bridge.Result_std__vector_Powertrain__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceEnums(array: array.map({ __item in __item }))
       let __resultCpp = { () -> bridge.std__vector_Powertrain_ in
         var __vector = bridge.create_std__vector_Powertrain_(__result.count)
@@ -557,7 +557,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func complexEnumCallback(this: UnsafeRawPointer, array: bridge.std__vector_Powertrain_, callback: bridge.Func_void_std__vector_Powertrain_) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.complexEnumCallback(array: array.map({ __item in __item }), callback: { () -> ([Powertrain]) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__vector_Powertrain_(callback)
         return { (__array: [Powertrain]) -> Void in
@@ -580,7 +580,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createMap(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createMap()
       let __resultCpp = __result.cppPart
       return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
@@ -593,7 +593,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func mapRoundtrip(this: UnsafeRawPointer, map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.mapRoundtrip(map: AnyMap(withCppPart: map))
       let __resultCpp = __result.cppPart
       return bridge.create_Result_std__shared_ptr_AnyMap__(__resultCpp)
@@ -606,7 +606,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getMapKeys(this: UnsafeRawPointer, map: margelo.nitro.SharedAnyMap) -> bridge.Result_std__vector_std__string__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getMapKeys(map: AnyMap(withCppPart: map))
       let __resultCpp = { () -> bridge.std__vector_std__string_ in
         var __vector = bridge.create_std__vector_std__string_(__result.count)
@@ -625,7 +625,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceMap(this: UnsafeRawPointer, map: bridge.std__unordered_map_std__string__std__variant_bool__double__) -> bridge.Result_std__unordered_map_std__string__std__variant_bool__double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceMap(map: { () -> Dictionary<String, Variant_Bool_Double> in
         var __dictionary = Dictionary<String, Variant_Bool_Double>(minimumCapacity: map.size())
         let __keys = bridge.get_std__unordered_map_std__string__std__variant_bool__double___keys(map)
@@ -671,7 +671,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func extractMap(this: UnsafeRawPointer, mapWrapper: MapWrapper) -> bridge.Result_std__unordered_map_std__string__std__string__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.extractMap(mapWrapper: mapWrapper)
       let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var __map = bridge.create_std__unordered_map_std__string__std__string_(__result.count)
@@ -690,7 +690,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func funcThatThrows(this: UnsafeRawPointer) -> bridge.Result_double_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.funcThatThrows()
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)
@@ -703,7 +703,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func funcThatThrowsBeforePromise(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.funcThatThrowsBeforePromise()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
@@ -723,7 +723,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func throwError(this: UnsafeRawPointer, error: std.exception_ptr) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.throwError(error: RuntimeError.from(cppError: error))
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -735,7 +735,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func tryOptionalParams(this: UnsafeRawPointer, num: Double, boo: Bool, str: bridge.std__optional_std__string_) -> bridge.Result_std__string_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.tryOptionalParams(num: num, boo: boo, str: { () -> String? in
         if bridge.has_value_std__optional_std__string_(str) {
           let __unwrapped = bridge.get_std__optional_std__string_(str)
@@ -755,7 +755,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func tryMiddleParam(this: UnsafeRawPointer, num: Double, boo: bridge.std__optional_bool_, str: std.string) -> bridge.Result_std__string_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.tryMiddleParam(num: num, boo: { () -> Bool? in
         if bridge.has_value_std__optional_bool_(boo) {
           let __unwrapped = bridge.get_std__optional_bool_(boo)
@@ -775,7 +775,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func tryOptionalEnum(this: UnsafeRawPointer, value: bridge.std__optional_Powertrain_) -> bridge.Result_std__optional_Powertrain__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.tryOptionalEnum(value: value.value)
       let __resultCpp = { () -> bridge.std__optional_Powertrain_ in
         if let __unwrappedValue = __result {
@@ -794,7 +794,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func tryTrailingOptional(this: UnsafeRawPointer, num: Double, str: std.string, boo: bridge.std__optional_bool_) -> bridge.Result_bool_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.tryTrailingOptional(num: num, str: String(str), boo: { () -> Bool? in
         if bridge.has_value_std__optional_bool_(boo) {
           let __unwrapped = bridge.get_std__optional_bool_(boo)
@@ -814,7 +814,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func add1Hour(this: UnsafeRawPointer, date: margelo.nitro.chrono_time) -> bridge.Result_std__chrono__system_clock__time_point_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.add1Hour(date: Date(fromChrono: date))
       let __resultCpp = __result.toCpp()
       return bridge.create_Result_std__chrono__system_clock__time_point_(__resultCpp)
@@ -827,7 +827,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func currentDate(this: UnsafeRawPointer) -> bridge.Result_std__chrono__system_clock__time_point_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.currentDate()
       let __resultCpp = __result.toCpp()
       return bridge.create_Result_std__chrono__system_clock__time_point_(__resultCpp)
@@ -840,7 +840,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func calculateFibonacciSync(this: UnsafeRawPointer, value: Double) -> bridge.Result_int64_t_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.calculateFibonacciSync(value: value)
       let __resultCpp = __result
       return bridge.create_Result_int64_t_(__resultCpp)
@@ -853,7 +853,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func calculateFibonacciAsync(this: UnsafeRawPointer, value: Double) -> bridge.Result_std__shared_ptr_Promise_int64_t___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.calculateFibonacciAsync(value: value)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_int64_t__ in
         let __promise = bridge.create_std__shared_ptr_Promise_int64_t__()
@@ -873,7 +873,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func wait(this: UnsafeRawPointer, seconds: Double) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.wait(seconds: seconds)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
@@ -893,7 +893,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func promiseThrows(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.promiseThrows()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_void__ in
         let __promise = bridge.create_std__shared_ptr_Promise_void__()
@@ -913,7 +913,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func promiseReturnsInstantly(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.promiseReturnsInstantly()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
@@ -933,7 +933,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func promiseReturnsInstantlyAsync(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.promiseReturnsInstantlyAsync()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_double__ in
         let __promise = bridge.create_std__shared_ptr_Promise_double__()
@@ -953,7 +953,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func awaitAndGetPromise(this: UnsafeRawPointer, promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.awaitAndGetPromise(promise: { () -> Promise<Double> in
         let __promise = Promise<Double>()
         let __resolver = { (__result: Double) in
@@ -993,7 +993,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func awaitAndGetComplexPromise(this: UnsafeRawPointer, promise: bridge.std__shared_ptr_Promise_Car__) -> bridge.Result_std__shared_ptr_Promise_Car___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.awaitAndGetComplexPromise(promise: { () -> Promise<Car> in
         let __promise = Promise<Car>()
         let __resolver = { (__result: Car) in
@@ -1033,7 +1033,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func awaitPromise(this: UnsafeRawPointer, promise: bridge.std__shared_ptr_Promise_void__) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.awaitPromise(promise: { () -> Promise<Void> in
         let __promise = Promise<Void>()
         let __resolver = { __promise.resolve(withResult: ()) }
@@ -1071,7 +1071,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callCallback(this: UnsafeRawPointer, callback: bridge.Func_void) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.callCallback(callback: { () -> () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(callback)
         return { () -> Void in
@@ -1088,7 +1088,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callAll(this: UnsafeRawPointer, first: bridge.Func_void, second: bridge.Func_void, third: bridge.Func_void) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.callAll(first: { () -> () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(first)
         return { () -> Void in
@@ -1115,7 +1115,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callWithOptional(this: UnsafeRawPointer, value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.callWithOptional(value: value.value, callback: { () -> (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
@@ -1138,7 +1138,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callSumUpNTimes(this: UnsafeRawPointer, callback: bridge.Func_std__shared_ptr_Promise_double__, n: Double) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.callSumUpNTimes(callback: { () -> () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(callback)
         return { () -> Promise<Double> in
@@ -1184,7 +1184,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callbackAsyncPromise(this: UnsafeRawPointer, callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.callbackAsyncPromise(callback: { () -> () -> Promise<Promise<Double>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(callback)
         return { () -> Promise<Promise<Double>> in
@@ -1230,7 +1230,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callbackAsyncPromiseBuffer(this: UnsafeRawPointer, callback: bridge.Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.callbackAsyncPromiseBuffer(callback: { () -> () -> Promise<Promise<ArrayBuffer>> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(callback)
         return { () -> Promise<Promise<ArrayBuffer>> in
@@ -1276,7 +1276,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getComplexCallback(this: UnsafeRawPointer) -> bridge.Result_std__function_void_double____value______ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getComplexCallback()
       let __resultCpp = { () -> bridge.Func_void_double in
         let __closureWrapper = Func_void_double(__result)
@@ -1292,7 +1292,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func twoOptionalCallbacks(this: UnsafeRawPointer, value: Double, first: bridge.std__optional_std__function_void_double____value______, second: bridge.std__optional_std__function_void_const_std__string_____value______) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.twoOptionalCallbacks(value: value, first: { () -> ((_ value: Double) -> Void)? in
         if bridge.has_value_std__optional_std__function_void_double____value______(first) {
           let __unwrapped = bridge.get_std__optional_std__function_void_double____value______(first)
@@ -1328,7 +1328,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getValueFromJSCallbackAndWait(this: UnsafeRawPointer, getValue: bridge.Func_std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getValueFromJSCallbackAndWait(getValue: { () -> () -> Promise<Double> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_double__(getValue)
         return { () -> Promise<Double> in
@@ -1374,7 +1374,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getValueFromJsCallback(this: UnsafeRawPointer, callback: bridge.Func_std__shared_ptr_Promise_std__string__, andThenCall: bridge.Func_void_std__string) -> bridge.Result_std__shared_ptr_Promise_void___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getValueFromJsCallback(callback: { () -> () -> Promise<String> in
         let __wrappedFunction = bridge.wrap_Func_std__shared_ptr_Promise_std__string__(callback)
         return { () -> Promise<String> in
@@ -1425,7 +1425,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getCar(this: UnsafeRawPointer) -> bridge.Result_Car_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getCar()
       let __resultCpp = __result
       return bridge.create_Result_Car_(__resultCpp)
@@ -1438,7 +1438,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func isCarElectric(this: UnsafeRawPointer, car: Car) -> bridge.Result_bool_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.isCarElectric(car: car)
       let __resultCpp = __result
       return bridge.create_Result_bool_(__resultCpp)
@@ -1451,7 +1451,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getDriver(this: UnsafeRawPointer, car: Car) -> bridge.Result_std__optional_Person__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getDriver(car: car)
       let __resultCpp = { () -> bridge.std__optional_Person_ in
         if let __unwrappedValue = __result {
@@ -1470,7 +1470,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceCar(this: UnsafeRawPointer, car: Car) -> bridge.Result_Car_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceCar(car: car)
       let __resultCpp = __result
       return bridge.create_Result_Car_(__resultCpp)
@@ -1483,7 +1483,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func jsStyleObjectAsParameters(this: UnsafeRawPointer, params: JsStyleStruct) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.jsStyleObjectAsParameters(params: params)
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -1495,7 +1495,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceWrappedJsStyleStruct(this: UnsafeRawPointer, value: WrappedJsStruct) -> bridge.Result_WrappedJsStruct_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceWrappedJsStyleStruct(value: value)
       let __resultCpp = __result
       return bridge.create_Result_WrappedJsStruct_(__resultCpp)
@@ -1508,7 +1508,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceOptionalWrapper(this: UnsafeRawPointer, wrapper: OptionalWrapper) -> bridge.Result_OptionalWrapper_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceOptionalWrapper(wrapper: wrapper)
       let __resultCpp = __result
       return bridge.create_Result_OptionalWrapper_(__resultCpp)
@@ -1521,7 +1521,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceOptionalCallback(this: UnsafeRawPointer, value: OptionalCallback) -> bridge.Result_OptionalCallback_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceOptionalCallback(value: value)
       let __resultCpp = __result
       return bridge.create_Result_OptionalCallback_(__resultCpp)
@@ -1534,7 +1534,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createArrayBuffer(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createArrayBuffer()
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
@@ -1547,7 +1547,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createArrayBufferFromNativeBuffer(this: UnsafeRawPointer, copy: Bool) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createArrayBufferFromNativeBuffer(copy: copy)
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
@@ -1560,7 +1560,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func copyBuffer(this: UnsafeRawPointer, buffer: ArrayBuffer) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.copyBuffer(buffer: buffer)
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
@@ -1573,7 +1573,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getBufferLastItem(this: UnsafeRawPointer, buffer: ArrayBuffer) -> bridge.Result_double_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getBufferLastItem(buffer: buffer)
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)
@@ -1586,7 +1586,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func setAllValuesTo(this: UnsafeRawPointer, buffer: ArrayBuffer, value: Double) -> bridge.Result_void_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       try __instance.setAllValuesTo(buffer: buffer, value: value)
       return bridge.create_Result_void_()
     } catch (let __error) {
@@ -1598,7 +1598,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createArrayBufferAsync(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createArrayBufferAsync()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ in
         let __promise = bridge.create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___()
@@ -1618,7 +1618,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceArrayBuffer(this: UnsafeRawPointer, buffer: ArrayBuffer) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceArrayBuffer(buffer: buffer)
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
@@ -1631,7 +1631,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func passVariant(this: UnsafeRawPointer, either: bridge.std__variant_bool__std__vector_double___std__vector_std__string___std__string__double_) -> bridge.Result_std__variant_std__string__double__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.passVariant(either: { () -> Variant_Bool__Double___String__String_Double in
         let __variant = either
         switch __variant.index() {
@@ -1672,7 +1672,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getVariantEnum(this: UnsafeRawPointer, variant: bridge.std__variant_bool__OldEnum_) -> bridge.Result_std__variant_bool__OldEnum__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getVariantEnum(variant: { () -> Variant_Bool_OldEnum in
         let __variant = variant
         switch __variant.index() {
@@ -1704,7 +1704,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getVariantWeirdNumbersEnum(this: UnsafeRawPointer, variant: bridge.std__variant_bool__WeirdNumbersEnum_) -> bridge.Result_std__variant_bool__WeirdNumbersEnum__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getVariantWeirdNumbersEnum(variant: { () -> Variant_Bool_WeirdNumbersEnum in
         let __variant = variant
         switch __variant.index() {
@@ -1736,7 +1736,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getVariantObjects(this: UnsafeRawPointer, variant: bridge.std__variant_Car__Person_) -> bridge.Result_std__variant_Car__Person__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getVariantObjects(variant: { () -> Variant_Car_Person in
         let __variant = variant
         switch __variant.index() {
@@ -1768,7 +1768,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func passNamedVariant(this: UnsafeRawPointer, variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.passNamedVariant(variant: { () -> NamedVariant in
         let __variant = variant
         switch __variant.index() {
@@ -1800,7 +1800,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func passAllEmptyObjectVariant(this: UnsafeRawPointer, variant: bridge.std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_) -> bridge.Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.passAllEmptyObjectVariant(variant: { () -> Variant__any_HybridBaseSpec__OptionalWrapper in
         let __variant = variant
         switch __variant.index() {
@@ -1837,7 +1837,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceComplexVariant(this: UnsafeRawPointer, variant: bridge.std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap__) -> bridge.Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__chrono__system_clock__time_point__std__shared_ptr_Promise_double____std__shared_ptr_AnyMap___ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceComplexVariant(variant: { () -> CoreTypesVariant in
         let __variant = variant
         switch __variant.index() {
@@ -1924,7 +1924,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createChild(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridChildSpec_ in
         return __result.getCxxPart()
@@ -1939,7 +1939,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createBase(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createBase()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         return __result.getCxxPart()
@@ -1954,7 +1954,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createBaseActualChild(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createBaseActualChild()
       let __resultCpp = { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
         return __result.getCxxPart()
@@ -1969,7 +1969,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceChild(this: UnsafeRawPointer, child: bridge.std__shared_ptr_HybridChildSpec_) -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceChild(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_HybridChildSpec_(child)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -1987,7 +1987,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceBase(this: UnsafeRawPointer, base: bridge.std__shared_ptr_HybridBaseSpec_) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(base)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -2005,7 +2005,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceChildBase(this: UnsafeRawPointer, child: bridge.std__shared_ptr_HybridChildSpec_) -> bridge.Result_std__shared_ptr_HybridBaseSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceChildBase(child: { () -> HybridChildSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_HybridChildSpec_(child)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -2023,7 +2023,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func castBase(this: UnsafeRawPointer, base: bridge.std__shared_ptr_HybridBaseSpec_) -> bridge.Result_std__shared_ptr_HybridChildSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.castBase(base: { () -> HybridBaseSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_HybridBaseSpec_(base)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -2041,7 +2041,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func callbackSync(this: UnsafeRawPointer, callback: bridge.Func_double) -> bridge.Result_double_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.callbackSync(callback: { () -> () -> Double in
         let __wrappedFunction = bridge.wrap_Func_double(callback)
         return { () -> Double in
@@ -2060,7 +2060,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getIsViewBlue(this: UnsafeRawPointer, view: bridge.std__shared_ptr_HybridTestViewSpec_) -> bridge.Result_bool_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getIsViewBlue(view: { () -> HybridTestViewSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_HybridTestViewSpec_(view)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -2076,7 +2076,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func bounceExternalHybrid(this: UnsafeRawPointer, externalObject: bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_) -> bridge.Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.bounceExternalHybrid(externalObject: { () -> HybridSomeExternalObjectSpec in
         let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(externalObject)
         return MemoryHelper.castUnsafe(__unsafePointer)
@@ -2094,7 +2094,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func createInternalObject(this: UnsafeRawPointer) -> bridge.Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.createInternalObject()
       let __resultCpp = { () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
         return __result.getCxxPart()
@@ -2109,7 +2109,7 @@ public final class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public static func getTotalNumberOfTestObjectsAlive(this: UnsafeRawPointer) -> bridge.Result_double_ {
     do {
-      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridTestObjectSwiftKotlinSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridTestObjectSwiftKotlinSpec
       let __result = try __instance.getTotalNumberOfTestObjectsAlive()
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)

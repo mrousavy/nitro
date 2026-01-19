@@ -51,19 +51,19 @@ export function createSwiftHybridObjectCxxBridge(
     methodsBridge.push(
       `
 public static func getView(this: UnsafeMutableRawPointer) -> UnsafeMutableRawPointer {
-  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+  let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
   return Unmanaged.passRetained(__instance.view).toOpaque()
 }
 `.trim(),
       `
 public static func beforeUpdate(this: UnsafeMutableRawPointer) {
-  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+  let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
   __instance.beforeUpdate()
 }
   `.trim(),
       `
 public static func afterUpdate(this: UnsafeMutableRawPointer) {
-  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+  let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
   __instance.afterUpdate()
 }
 `.trim()
@@ -115,7 +115,7 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -125,7 +125,7 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
     __instance.dispose()
   }
 
@@ -134,7 +134,7 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
     return __instance.toString()
   }
 
@@ -143,8 +143,8 @@ public final class ${name.HybridTSpecCxx} {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
-    let __other = Unmanaged<${name.HybridTSpec}>.fromOpaque(other).takeUnretainedValue()
+    let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
@@ -424,7 +424,7 @@ function getPropertyForwardImplementation(
     `
 @inline(__always)
 public static func ${property.getGetterName('swift')}(this: UnsafeRawPointer) -> ${bridgedType.getTypeCode('swift')} {
-  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+  let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
   let __value = __instance.${property.name}
   return ${indent(bridgedType.parseFromSwiftToCpp('__value', 'swift'), '  ')}
 }
@@ -437,7 +437,7 @@ public static func ${property.getGetterName('swift')}(this: UnsafeRawPointer) ->
 
 @inline(__always)
 public static func ${property.getSetterName('swift')}(this: UnsafeRawPointer, newValue: ${bridgedType.getTypeCode('swift')}) {
-  let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+  let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
   __instance.${property.name} = ${indent(bridgedType.parseFromCppToSwift('newValue', 'swift'), '  ')}
 }
   `.trim()
@@ -492,7 +492,7 @@ return bridge.${resultBridge.funcName}()
 @inline(__always)
 public static func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
   do {
-    let __instance = Unmanaged<${name.HybridTSpec}>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<${name.HybridTSpec}_base>.fromOpaque(this).takeUnretainedValue() as! ${name.HybridTSpec}
     ${indent(body, '    ')}
   } catch (let __error) {
     let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}

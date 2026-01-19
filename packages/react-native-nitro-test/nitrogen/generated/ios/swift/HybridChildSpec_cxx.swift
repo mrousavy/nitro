@@ -33,7 +33,7 @@ public final class HybridChildSpec_cxx {
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridChildSpec
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -43,7 +43,7 @@ public final class HybridChildSpec_cxx {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridChildSpec
     __instance.dispose()
   }
 
@@ -52,7 +52,7 @@ public final class HybridChildSpec_cxx {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridChildSpec
     return __instance.toString()
   }
 
@@ -61,15 +61,15 @@ public final class HybridChildSpec_cxx {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
-    let __other = Unmanaged<HybridChildSpec>.fromOpaque(other).takeUnretainedValue()
+    let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<HybridChildSpec_base>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
   // Properties
   @inline(__always)
   public static func getChildValue(this: UnsafeRawPointer) -> Double {
-    let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridChildSpec
     let __value = __instance.childValue
     return __value
   }
@@ -78,7 +78,7 @@ public final class HybridChildSpec_cxx {
   @inline(__always)
   public static func bounceVariant(this: UnsafeRawPointer, variant: bridge.std__variant_std__string__Car_) -> bridge.Result_std__variant_std__string__Car__ {
     do {
-      let __instance = Unmanaged<HybridChildSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridChildSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridChildSpec
       let __result = try __instance.bounceVariant(variant: { () -> NamedVariant in
         let __variant = variant
         switch __variant.index() {

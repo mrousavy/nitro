@@ -33,7 +33,7 @@ public final class HybridPlatformObjectSpec_cxx {
    */
   @inline(__always)
   public static func getMemorySize(this: UnsafeRawPointer) -> Int {
-    let __instance = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridPlatformObjectSpec
     return MemoryHelper.getSizeOf(__instance) + __instance.memorySize
   }
 
@@ -43,7 +43,7 @@ public final class HybridPlatformObjectSpec_cxx {
    */
   @inline(__always)
   public static func dispose(this: UnsafeRawPointer) {
-    let __instance = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridPlatformObjectSpec
     __instance.dispose()
   }
 
@@ -52,7 +52,7 @@ public final class HybridPlatformObjectSpec_cxx {
    */
   @inline(__always)
   public static func toString(this: UnsafeRawPointer) -> String {
-    let __instance = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(this).takeUnretainedValue()
+    let __instance = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridPlatformObjectSpec
     return __instance.toString()
   }
 
@@ -61,8 +61,8 @@ public final class HybridPlatformObjectSpec_cxx {
    */
   @inline(__always)
   public static func equals(this: UnsafeRawPointer, other: UnsafeRawPointer) -> Bool {
-    let __instance = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(this).takeUnretainedValue()
-    let __other = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(other).takeUnretainedValue()
+    let __instance = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(this).takeUnretainedValue()
+    let __other = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(other).takeUnretainedValue()
     return __instance === __other
   }
 
@@ -73,7 +73,7 @@ public final class HybridPlatformObjectSpec_cxx {
   @inline(__always)
   public static func getOSVersion(this: UnsafeRawPointer) -> bridge.Result_std__string_ {
     do {
-      let __instance = Unmanaged<HybridPlatformObjectSpec>.fromOpaque(this).takeUnretainedValue()
+      let __instance = Unmanaged<HybridPlatformObjectSpec_base>.fromOpaque(this).takeUnretainedValue() as! HybridPlatformObjectSpec
       let __result = try __instance.getOSVersion()
       let __resultCpp = std.string(__result)
       return bridge.create_Result_std__string_(__resultCpp)
