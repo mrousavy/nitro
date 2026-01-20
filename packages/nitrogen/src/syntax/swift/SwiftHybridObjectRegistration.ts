@@ -32,12 +32,12 @@ export function getHybridObjectConstructorCall(
   hybridObjectName: string
 ): string {
   const namespace = getAutolinkingNamespace()
-  return `${namespace}::create${hybridObjectName}();`
+  return `${namespace}::create${hybridObjectName}()`
 }
 
 export function getIsRecyclableCall(hybridObjectName: string): string {
   const namespace = getAutolinkingNamespace()
-  return `${namespace}::is${hybridObjectName}Recyclable();`
+  return `${namespace}::is${hybridObjectName}Recyclable()`
 }
 
 export function createSwiftHybridObjectRegistration({
@@ -72,8 +72,8 @@ public static func is${hybridObjectName}Recyclable() -> Bool {
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    ${type.getCode('c++')} hybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
-    return hybridObject;
+    auto swiftHybridObject = ${getHybridObjectConstructorCall(hybridObjectName)};
+    return swiftHybridObject.getCxxPart();
   }
 );
       `.trim(),

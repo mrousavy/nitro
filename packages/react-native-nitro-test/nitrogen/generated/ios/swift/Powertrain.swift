@@ -6,9 +6,13 @@
 ///
 
 /**
- * Represents the JS union `Powertrain`, backed by a C++ enum.
+ * Represents the JS union `Powertrain`.
  */
-public typealias Powertrain = margelo.nitro.test.Powertrain
+public enum Powertrain: Int {
+  case electric = 0
+  case gas = 1
+  case hybrid = 2
+}
 
 public extension Powertrain {
   /**

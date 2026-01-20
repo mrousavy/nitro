@@ -12,7 +12,7 @@
  * JS type: `function | number`
  */
 @frozen
-public indirect enum Variant_______Void_Double {
-  case first(() -> Void)
+public enum Variant_______Void_Double {
+  case first(Func_Void)
   case second(Double)
 }

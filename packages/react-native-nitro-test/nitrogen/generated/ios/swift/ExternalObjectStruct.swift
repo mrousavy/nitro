@@ -10,29 +10,22 @@ import NitroTestExternal
 import NitroModules
 
 /**
- * Represents an instance of `ExternalObjectStruct`, backed by a C++ struct.
+ * Represents an instance of `ExternalObjectStruct`.
  */
-public typealias ExternalObjectStruct = margelo.nitro.test.ExternalObjectStruct
+public struct ExternalObjectStruct {
+  public let someExternal: (any HybridSomeExternalObjectSpec)
 
-public extension ExternalObjectStruct {
-  private typealias bridge = margelo.nitro.test.bridge.swift
-
-  /**
-   * Create a new instance of `ExternalObjectStruct`.
-   */
-  init(someExternal: (any HybridSomeExternalObjectSpec)) {
-    self.init({ () -> bridge.std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = someExternal.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
-    }())
+  public init(
+    someExternal: (any HybridSomeExternalObjectSpec)
+  ) {
+    self.someExternal = someExternal
   }
-
-  @inline(__always)
-  var someExternal: (any HybridSomeExternalObjectSpec) {
-    return { () -> any HybridSomeExternalObjectSpec in
-      let __unsafePointer = bridge.get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(self.__someExternal)
-      let __instance = HybridSomeExternalObjectSpec_cxx.fromUnsafe(__unsafePointer)
-      return __instance.getHybridSomeExternalObjectSpec()
-    }()
+  
+  public var someExternal_cxx: HybridSomeExternalObjectSpec_cxx {
+    return someExternal.getCxxWrapper()
+  }
+  
+  public init(someExternal: HybridSomeExternalObjectSpec_cxx) {
+    self.init(someExternal: someExternal.getHybridSomeExternalObjectSpec())
   }
 }

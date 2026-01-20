@@ -30,7 +30,8 @@ export class RecordType implements Type {
       case 'c++':
         return `std::unordered_map<${keyCode}, ${valueCode}>`
       case 'swift':
-        return `Dictionary<${keyCode}, ${valueCode}>`
+        // TODO: Swift does not expose Dictionary<K, V> to C++...
+        return `Double`
       case 'kotlin':
         return `Map<${keyCode}, ${valueCode}>`
       default:

@@ -7,5 +7,51 @@
 
 #include "HybridRecyclableTestViewSpecSwift.hpp"
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+
 namespace margelo::nitro::test {
+
+  // pragma MARK: Constructor
+
+  HybridRecyclableTestViewSpecSwift::HybridRecyclableTestViewSpecSwift(const NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart):
+    HybridObject(HybridRecyclableTestViewSpec::TAG) {
+    _swiftPart = std::make_shared<NitroTest::HybridRecyclableTestViewSpec_cxx>(swiftPart);
+  }
+
+
+  NitroTest::HybridRecyclableTestViewSpec_cxx& HybridRecyclableTestViewSpecSwift::getSwiftPart() noexcept {
+    return *_swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t HybridRecyclableTestViewSpecSwift::getExternalMemorySize() noexcept {
+    return _swiftPart->getMemorySize();
+  }
+  bool HybridRecyclableTestViewSpecSwift::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(other)) {
+      return _swiftPart->equals(otherCast->getSwiftPart());
+    }
+    return false;
+  }
+  void HybridRecyclableTestViewSpecSwift::dispose() noexcept {
+    _swiftPart->dispose();
+  }
+  std::string HybridRecyclableTestViewSpecSwift::toString() {
+    return _swiftPart->toString();
+  }
+
+  // pragma MARK: Properties
+
+  bool HybridRecyclableTestViewSpecSwift::getIsBlue() noexcept {
+    throw std::runtime_error("not yet implemented!");
+  }
+  void HybridRecyclableTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
+    throw std::runtime_error("not yet implemented!");
+  }
+
+  // pragma MARK: Methods
+
+  
+
 } // namespace margelo::nitro::test

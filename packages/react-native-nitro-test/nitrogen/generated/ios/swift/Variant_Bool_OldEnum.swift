@@ -12,7 +12,7 @@
  * JS type: `boolean | enum`
  */
 @frozen
-public indirect enum Variant_Bool_OldEnum {
+public enum Variant_Bool_OldEnum {
   case first(Bool)
   case second(OldEnum)
 }

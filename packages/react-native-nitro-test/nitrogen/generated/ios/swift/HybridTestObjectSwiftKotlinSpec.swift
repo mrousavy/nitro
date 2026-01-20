@@ -53,9 +53,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getMapKeys(map: AnyMap) throws -> [String]
   func mergeMaps(a: AnyMap, b: AnyMap) throws -> AnyMap
   func copyAnyMap(map: AnyMap) throws -> AnyMap
-  func bounceMap(map: Dictionary<String, Variant_Bool_Double>) throws -> Dictionary<String, Variant_Bool_Double>
-  func bounceSimpleMap(map: Dictionary<String, Double>) throws -> Dictionary<String, Double>
-  func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
+  func bounceMap(map: Double) throws -> Double
+  func bounceSimpleMap(map: Double) throws -> Double
+  func extractMap(mapWrapper: MapWrapper) throws -> Double
   func funcThatThrows() throws -> Double
   func funcThatThrowsBeforePromise() throws -> Promise<Void>
   func throwError(error: Error) throws -> Void

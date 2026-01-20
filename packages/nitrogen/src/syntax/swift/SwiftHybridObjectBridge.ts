@@ -15,8 +15,6 @@ import { NitroConfig } from '../../config/NitroConfig.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
-import { addKnownType } from '../createType.js'
-import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 /**
  * Creates a Swift class that bridges Swift over to C++.
@@ -254,75 +252,35 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
 }
   `
 
-  const cppProperties = spec.properties
+  const cppPropertiesDeclarations = spec.properties
+    .map((p) => p.getCode('c++', { override: true, noexcept: true }))
+    .join('\n')
+  const cppPropertiesImplementations = spec.properties
     .map((p) => {
-      const bridged = new SwiftCxxBridgedType(p.type)
-      let getter: string
-      let setter: string
-
-      const getterName = p.getGetterName('swift')
-      const setterName = p.getSetterName('swift')
-      if (bridged.needsSpecialHandling) {
-        // we need custom C++ -> Swift conversion code
-        getter = `
-auto __result = _swiftPart.${getterName}();
-return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
-`
-        setter = `_swiftPart.${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
-      } else {
-        // just forward value directly
-        getter = `return _swiftPart.${getterName}();`
-        setter = `_swiftPart.${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
-      }
       return p.getCode(
         'c++',
-        { inline: true, override: true, noexcept: true },
         {
-          getter: getter.trim(),
-          setter: setter.trim(),
+          classDefinitionName: name.HybridTSpecSwift,
+          noexcept: true,
+        },
+        {
+          getter: 'throw std::runtime_error("not yet implemented!");',
+          setter: 'throw std::runtime_error("not yet implemented!");',
         }
       )
     })
     .join('\n')
 
-  const cppMethods = spec.methods
+  const cppMethodsDeclarations = spec.methods
+    .map((m) => m.getCode('c++', { override: true }))
+    .join('\n')
+  const cppMethodsImplementations = spec.methods
     .map((m) => {
-      const params = m.parameters
-        .map((p) => {
-          const bridged = new SwiftCxxBridgedType(p.type)
-          if (bridged.needsSpecialHandling) {
-            // we need custom C++ -> Swift conversion code
-            return bridged.parseFromCppToSwift(p.name, 'c++')
-          } else {
-            // just forward value directly
-            return `std::forward<decltype(${p.name})>(${p.name})`
-          }
-        })
-        .join(', ')
-      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType, true)
-      const hasResult = m.returnType.kind !== 'void'
-      let body: string
-      if (hasResult) {
-        // func returns something
-        body = `
-auto __result = _swiftPart.${m.name}(${params});
-if (__result.hasError()) [[unlikely]] {
-  std::rethrow_exception(__result.error());
-}
-auto __value = std::move(__result.value());
-return ${bridgedReturnType.parseFromSwiftToCpp('__value', 'c++')};
-        `.trim()
-      } else {
-        // void func
-        body = `
-auto __result = _swiftPart.${m.name}(${params});
-if (__result.hasError()) [[unlikely]] {
-  std::rethrow_exception(__result.error());
-}
-        `.trim()
-      }
-
-      return m.getCode('c++', { inline: true, override: true }, body)
+      return m.getCode(
+        'c++',
+        { classDefinitionName: name.HybridTSpecSwift },
+        'throw std::runtime_error("not yet implemented!");'
+      )
     })
     .join('\n')
 
@@ -348,16 +306,6 @@ if (__result.hasError()) [[unlikely]] {
     const baseName = getHybridObjectName(base.name)
     cppBaseClasses.push(`public virtual ${baseName.HybridTSpecSwift}`)
     cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
-    extraImports.push({
-      language: 'c++',
-      name: `${baseName.HybridTSpecSwift}.hpp`,
-      space: 'user',
-      forwardDeclaration: getForwardDeclaration(
-        'class',
-        baseName.HybridTSpecSwift,
-        cxxNamespace
-      ),
-    })
   }
 
   const extraForwardDeclarations = extraImports
@@ -382,8 +330,6 @@ ${extraForwardDeclarations.join('\n')}
 
 ${extraIncludes.join('\n')}
 
-#include "${getUmbrellaHeaderName()}"
-
 namespace ${cxxNamespace} {
 
   /**
@@ -399,43 +345,28 @@ namespace ${cxxNamespace} {
   class ${name.HybridTSpecSwift}: ${cppBaseClasses.join(', ')} {
   public:
     // Constructor from a Swift instance
-    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
-      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
-      _swiftPart(swiftPart) { }
+    explicit ${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart);
 
   public:
     // Get the Swift part
-    inline ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept {
-      return _swiftPart;
-    }
+    ${iosModuleName}::${name.HybridTSpecCxx}& getSwiftPart() noexcept;
 
   public:
-    inline size_t getExternalMemorySize() noexcept override {
-      return _swiftPart.getMemorySize();
-    }
-    bool equals(const std::shared_ptr<HybridObject>& other) override {
-      if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
-        return _swiftPart.equals(otherCast->_swiftPart);
-      }
-      return false;
-    }
-    void dispose() noexcept override {
-      _swiftPart.dispose();
-    }
-    std::string toString() override {
-      return _swiftPart.toString();
-    }
+    inline size_t getExternalMemorySize() noexcept override;
+    bool equals(const std::shared_ptr<HybridObject>& other) override;
+    void dispose() noexcept override;
+    std::string toString() override;
 
   public:
     // Properties
-    ${indent(cppProperties, '    ')}
+    ${indent(cppPropertiesDeclarations, '    ')}
 
   public:
     // Methods
-    ${indent(cppMethods, '    ')}
+    ${indent(cppMethodsDeclarations, '    ')}
 
   private:
-    ${iosModuleName}::${name.HybridTSpecCxx} _swiftPart;
+    std::shared_ptr<${iosModuleName}::${name.HybridTSpecCxx}> _swiftPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -445,7 +376,48 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
 
 #include "${name.HybridTSpecSwift}.hpp"
 
+#include "${getUmbrellaHeaderName()}"
+
 namespace ${cxxNamespace} {
+
+  // pragma MARK: Constructor
+
+  ${name.HybridTSpecSwift}::${name.HybridTSpecSwift}(const ${iosModuleName}::${name.HybridTSpecCxx}& swiftPart):
+    ${indent(cppBaseCtorCalls.join(',\n'), '    ')} {
+    _swiftPart = std::make_shared<${iosModuleName}::${name.HybridTSpecCxx}>(swiftPart);
+  }
+
+
+  ${iosModuleName}::${name.HybridTSpecCxx}& ${name.HybridTSpecSwift}::getSwiftPart() noexcept {
+    return *_swiftPart;
+  }
+
+  // pragma MARK: HybridObject overrides
+
+  size_t ${name.HybridTSpecSwift}::getExternalMemorySize() noexcept {
+    return _swiftPart->getMemorySize();
+  }
+  bool ${name.HybridTSpecSwift}::equals(const std::shared_ptr<HybridObject>& other) {
+    if (auto otherCast = std::dynamic_pointer_cast<${name.HybridTSpecSwift}>(other)) {
+      return _swiftPart->equals(otherCast->getSwiftPart());
+    }
+    return false;
+  }
+  void ${name.HybridTSpecSwift}::dispose() noexcept {
+    _swiftPart->dispose();
+  }
+  std::string ${name.HybridTSpecSwift}::toString() {
+    return _swiftPart->toString();
+  }
+
+  // pragma MARK: Properties
+
+  ${indent(cppPropertiesImplementations, '  ')}
+
+  // pragma MARK: Methods
+
+  ${indent(cppMethodsImplementations, '  ')}
+
 } // namespace ${cxxNamespace}
   `
 
@@ -510,17 +482,7 @@ public final var ${property.name}: ${bridgedType.getTypeCode('swift')} {
 
 function getMethodForwardImplementation(method: Method): string {
   // wrapped return in a std::expected
-  const resultType = new ResultWrappingType(method.returnType)
-  addKnownType(`expected_${resultType.getCode('c++')}`, resultType, 'swift')
-  const bridgedResultType = new SwiftCxxBridgedType(resultType, true)
-  const resultBridge = bridgedResultType.getRequiredBridge()
-  if (resultBridge == null)
-    throw new Error(
-      `Result type (${bridgedResultType.getTypeCode('c++')}) does not have a bridge!`
-    )
-  const bridgedErrorType = new SwiftCxxBridgedType(resultType.error, true)
-
-  const returnType = new SwiftCxxBridgedType(method.returnType, true)
+  const returnType = new SwiftCxxBridgedType(method.returnType)
   const params = method.parameters.map((p) => {
     const bridgedType = new SwiftCxxBridgedType(p.type)
     return `${p.name}: ${bridgedType.getTypeCode('swift')}`
@@ -532,26 +494,21 @@ function getMethodForwardImplementation(method: Method): string {
   let body: string
   if (returnType.hasType) {
     body = `
-let __result = try self.__implementation.${method.name}(${passParams.join(', ')})
-let __resultCpp = ${returnType.parseFromSwiftToCpp('__result', 'swift')}
-return bridge.${resultBridge.funcName}(__resultCpp)
+// TODO: Remove try!
+let __result = try! self.__implementation.${method.name}(${passParams.join(', ')})
+return ${returnType.parseFromSwiftToCpp('__result', 'swift')}
 `.trim()
   } else {
     body = `
-try self.__implementation.${method.name}(${passParams.join(', ')})
-return bridge.${resultBridge.funcName}()
+// TODO: Remove try!
+try! self.__implementation.${method.name}(${passParams.join(', ')})
 `.trim()
   }
 
   return `
 @inline(__always)
-public final func ${method.name}(${params.join(', ')}) -> ${bridgedResultType.getTypeCode('swift')} {
-  do {
-    ${indent(body, '    ')}
-  } catch (let __error) {
-    let __exceptionPtr = ${indent(bridgedErrorType.parseFromSwiftToCpp('__error', 'swift'), '    ')}
-    return bridge.${resultBridge.funcName}(__exceptionPtr)
-  }
+public final func ${method.name}(${params.join(', ')}) -> ${returnType.getTypeCode('swift')} {
+  ${indent(body, '  ')}
 }
   `.trim()
 }

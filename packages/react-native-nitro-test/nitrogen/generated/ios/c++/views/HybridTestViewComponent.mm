@@ -29,7 +29,7 @@ using namespace margelo::nitro::test::views;
 @end
 
 @implementation HybridTestViewComponent {
-  std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+  std::unique_ptr<NitroTest::HybridTestViewSpec_cxx> _hybridView;
 }
 
 + (void) load {
@@ -43,22 +43,18 @@ using namespace margelo::nitro::test::views;
 
 - (instancetype) init {
   if (self = [super init]) {
-    std::shared_ptr<HybridTestViewSpec> hybridView = NitroTest::NitroTestAutolinking::createTestView();
-    _hybridView = std::dynamic_pointer_cast<HybridTestViewSpecSwift>(hybridView);
+    _hybridView = std::make_unique<NitroTest::HybridTestViewSpec_cxx>(NitroTest::NitroTestAutolinking::createTestView());
     [self updateView];
   }
   return self;
 }
 
 - (void) updateView {
-  // 1. Get Swift part
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
-
-  // 2. Get UIView*
-  void* viewUnsafe = swiftPart.getView();
+  // 1. Get UIView*
+  void* viewUnsafe = _hybridView->getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
-  // 3. Update RCTViewComponentView's [contentView]
+  // 2. Update RCTViewComponentView's [contentView]
   [self setContentView:view];
 }
 
@@ -67,40 +63,43 @@ using namespace margelo::nitro::test::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  _hybridView->beforeUpdate();
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setIsBlue(SwiftConverter<bool>::toSwift(newViewProps.isBlue.value));
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setHasBeenCalled(SwiftConverter<bool>::toSwift(newViewProps.hasBeenCalled.value));
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setColorScheme(SwiftConverter<ColorScheme>::toSwift(newViewProps.colorScheme.value));
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
   if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setSomeCallback(SwiftConverter<std::function<void()>>::toSwift(newViewProps.someCallback.value));
     newViewProps.someCallback.isDirty = false;
   }
 
-  swiftPart.afterUpdate();
+  _hybridView->afterUpdate();
 
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
-      maybeFunc.value()(_hybridView);
+      maybeFunc.value()(_hybridView->getCxxPart());
     }
     newViewProps.hybridRef.isDirty = false;
   }
@@ -115,8 +114,7 @@ using namespace margelo::nitro::test::views;
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
-  swiftPart.maybePrepareForRecycle();
+  _hybridView->maybePrepareForRecycle();
 }
 
 @end

@@ -39,43 +39,43 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridTestObjectSwiftKotlinSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestObjectSwiftKotlin();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createTestObjectSwiftKotlin();
+      return swiftHybridObject.getCxxPart();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridBaseSpec> hybridObject = NitroTest::NitroTestAutolinking::createBase();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createBase();
+      return swiftHybridObject.getCxxPart();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridChildSpec> hybridObject = NitroTest::NitroTestAutolinking::createChild();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createChild();
+      return swiftHybridObject.getCxxPart();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "PlatformObject",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridPlatformObjectSpec> hybridObject = NitroTest::NitroTestAutolinking::createPlatformObject();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createPlatformObject();
+      return swiftHybridObject.getCxxPart();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestView();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createTestView();
+      return swiftHybridObject.getCxxPart();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<HybridRecyclableTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createRecyclableTestView();
-      return hybridObject;
+      auto swiftHybridObject = NitroTest::NitroTestAutolinking::createRecyclableTestView();
+      return swiftHybridObject.getCxxPart();
     }
   );
 }

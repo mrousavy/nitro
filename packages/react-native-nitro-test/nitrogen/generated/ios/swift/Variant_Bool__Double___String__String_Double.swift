@@ -12,7 +12,7 @@
  * JS type: `boolean | array | array | string | number`
  */
 @frozen
-public indirect enum Variant_Bool__Double___String__String_Double {
+public enum Variant_Bool__Double___String__String_Double {
   case first(Bool)
   case second([Double])
   case third([String])
