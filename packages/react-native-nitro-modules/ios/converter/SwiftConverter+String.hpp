@@ -9,8 +9,8 @@ struct SwiftConverter;
 } // namespace margelo::nitro
 
 #ifdef SWIFT_SWIFT_H // <-- -Swift.h needs to be imported for this to work
-#ifndef SWIFT_CONVERTER_ARRAY
-#define SWIFT_CONVERTER_ARRAY
+#ifndef SWIFT_CONVERTER_STRING
+#define SWIFT_CONVERTER_STRING
 
 #include "SwiftConverter.hpp"
 #include <string>
