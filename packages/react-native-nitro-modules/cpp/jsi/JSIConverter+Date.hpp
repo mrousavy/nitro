@@ -28,7 +28,7 @@ using namespace std;
 
 // Date <> chrono::system_clock::time_point
 template <>
-struct JSIConverter<std::chrono::system_clock::time_point> final {
+struct JSIConverter<chrono::system_clock::time_point> final {
   static inline chrono::system_clock::time_point fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
 #ifdef NITRO_DEBUG
     if (!arg.isObject()) [[unlikely]] {
@@ -51,7 +51,7 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
         object.getProperty(runtime, PropNameIDCache::get(runtime, "getTime")).getObject(runtime).getFunction(runtime);
     double msSinceEpoch = getTimeFunc.callWithThis(runtime, object).getNumber();
 
-    // ms -> std::chrono::system_clock::time_point
+    // ms -> chrono::system_clock::time_point
     auto durationMs = chrono::duration<double, std::milli>(msSinceEpoch);
     auto duration = chrono::duration_cast<chrono::system_clock::duration>(durationMs);
     auto timePoint = chrono::system_clock::time_point(duration);
