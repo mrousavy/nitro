@@ -12,10 +12,6 @@
 #include "Func__any_HybridSomeExternalObjectSpec_+Swift.hpp"
 #include <functional>
 
-#include <memory>
-#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()> SwiftConverter<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>>::fromSwift(const NitroTest::Func__any_HybridSomeExternalObjectSpec_& swiftFunc) {

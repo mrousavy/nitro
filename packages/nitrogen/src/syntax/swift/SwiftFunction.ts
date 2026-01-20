@@ -40,7 +40,7 @@ export function createSwiftFunctionBridge(
   const argsForward = functionType.parameters.map((p) => p.escapedName)
   const paramsCpp = functionType.parameters.map((p) => {
     const parameter = new Parameter(p.escapedName, p)
-    return parameter.getCode('c++')
+    return parameter.getCode('c++', { fullyQualified: true })
   })
 
   const swiftClassName = getSwiftFunctionClassName(functionType)
