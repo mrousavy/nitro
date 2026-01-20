@@ -95,10 +95,13 @@ ${createFileMetadataString(`${struct.structName}+Swift.hpp`)}
 
 #include <functional>
 #include "${struct.structName}.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace ${iosNamespace} {
   class ${struct.structName};
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

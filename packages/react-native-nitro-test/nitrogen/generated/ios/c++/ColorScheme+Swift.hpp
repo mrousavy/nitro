@@ -8,10 +8,13 @@
 #pragma once
 
 #include "ColorScheme.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class ColorScheme;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

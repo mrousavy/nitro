@@ -77,10 +77,13 @@ ${createFileMetadataString(`${enumType.enumName}+Swift.hpp`)}
 #pragma once
 
 #include "${enumType.enumName}.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace ${iosNamespace} {
   class ${enumType.enumName};
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

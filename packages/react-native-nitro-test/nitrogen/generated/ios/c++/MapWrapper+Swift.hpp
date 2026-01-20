@@ -9,10 +9,13 @@
 
 #include <functional>
 #include "MapWrapper.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class MapWrapper;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

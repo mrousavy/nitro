@@ -8,10 +8,13 @@
 #pragma once
 
 #include "WeirdNumbersEnum.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class WeirdNumbersEnum;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

@@ -9,10 +9,13 @@
 
 #include <functional>
 #include "Car.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class Car;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

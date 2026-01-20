@@ -8,10 +8,13 @@
 #pragma once
 
 #include "OldEnum.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class OldEnum;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

@@ -8,10 +8,13 @@
 #pragma once
 
 #include <functional>
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class Func_Promise_Promise_Void__;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

@@ -9,10 +9,13 @@
 
 #include <functional>
 #include "Person.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class Person;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

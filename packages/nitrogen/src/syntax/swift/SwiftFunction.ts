@@ -88,10 +88,13 @@ ${createFileMetadataString(`${swiftClassName}+Swift.hpp`)}
 #pragma once
 
 #include <functional>
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace ${iosNamespace} {
   class ${swiftClassName};
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

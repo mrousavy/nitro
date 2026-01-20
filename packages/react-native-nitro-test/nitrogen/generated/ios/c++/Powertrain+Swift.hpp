@@ -8,10 +8,13 @@
 #pragma once
 
 #include "Powertrain.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class Powertrain;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

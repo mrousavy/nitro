@@ -9,10 +9,13 @@
 
 #include <functional>
 #include "OptionalCallback.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class OptionalCallback;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {

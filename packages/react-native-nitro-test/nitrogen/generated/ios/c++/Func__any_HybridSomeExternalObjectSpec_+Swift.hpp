@@ -8,10 +8,13 @@
 #pragma once
 
 #include <functional>
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace NitroTest {
   class Func__any_HybridSomeExternalObjectSpec_;
+}
+namespace margelo::nitro {
+  template <typename T, typename Enable>
+  struct SwiftConverter;
 }
 
 namespace margelo::nitro {
