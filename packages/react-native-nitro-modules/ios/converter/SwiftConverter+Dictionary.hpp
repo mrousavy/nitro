@@ -11,7 +11,7 @@ namespace margelo::nitro {
 
 // std::unordered_map<K, V> <> swift::Dictionary<K, V>
 template <typename K, typename V>
-struct SwiftConverter<std::unordered_map<K, V>> final {
+struct SwiftConverter<std::unordered_map<K, V>, void> final {
   // TODO: Swift does not expose Dictionary<K, V> to C++ yet...
   using SwiftType = double;
 

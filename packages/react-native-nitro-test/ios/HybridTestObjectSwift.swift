@@ -305,16 +305,19 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   func currentDate() throws -> Date {
     return .now
   }
-
-  func bounceMap(map: [String: Variant_Bool_Double]) throws -> [String: Variant_Bool_Double] {
+  
+  // TODO: Implement via Dictionary<K, V> once Swift exposes that via C++
+  func bounceMap(map: Double) throws -> Double {
     return map
   }
-
-  func bounceSimpleMap(map: [String: Double]) throws -> [String: Double] {
+  
+  // TODO: Implement via Dictionary<K, V> once Swift exposes that via C++
+  func bounceSimpleMap(map: Double) throws -> Double {
     return map
   }
-
-  func extractMap(mapWrapper: MapWrapper) throws -> [String: String] {
+  
+  // TODO: Implement via Dictionary<K, V> once Swift exposes that via C++
+  func extractMap(mapWrapper: MapWrapper) throws -> Double {
     return mapWrapper.map
   }
 
