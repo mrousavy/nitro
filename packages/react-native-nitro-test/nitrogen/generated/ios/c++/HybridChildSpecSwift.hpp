@@ -26,6 +26,7 @@ namespace margelo::nitro::test { struct Person; }
 #include "Person.hpp"
 #include <optional>
 #include <vector>
+#include "HybridBaseSpecSwift.hpp"
 
 namespace margelo::nitro::test {
 
