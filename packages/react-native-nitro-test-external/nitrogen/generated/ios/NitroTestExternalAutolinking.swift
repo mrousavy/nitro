@@ -12,12 +12,9 @@ import NitroModules
 public final class NitroTestExternalAutolinking {
   public typealias bridge = margelo.nitro.test.external.bridge.swift
 
-  public static func createSomeExternalObject() -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ {
+  public static func createSomeExternalObject() -> HybridSomeExternalObjectSpec_cxx {
     let hybridObject = HybridSomeExternalObject()
-    return { () -> bridge.std__shared_ptr_HybridSomeExternalObjectSpec_ in
-      let __cxxWrapped = hybridObject.getCxxWrapper()
-      return __cxxWrapped.getCxxPart()
-    }()
+    return hybridObject.getCxxWrapper()
   }
   
   public static func isSomeExternalObjectRecyclable() -> Bool {

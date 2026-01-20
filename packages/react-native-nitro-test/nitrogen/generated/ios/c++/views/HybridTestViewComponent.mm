@@ -84,7 +84,7 @@ using namespace margelo::nitro::test::views;
   }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    swiftPart.setColorScheme(newViewProps.colorScheme.value);
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
