@@ -21,6 +21,7 @@
 #include "Powertrain+Swift.hpp"
 #include "Person+Swift.hpp"
 #include "Person+Swift.hpp"
+#include "Variant_String_Double+Swift.hpp"
 
 namespace margelo::nitro {
 

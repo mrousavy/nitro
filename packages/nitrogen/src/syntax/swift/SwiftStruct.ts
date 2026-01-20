@@ -12,6 +12,7 @@ import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
+import { VariantType } from '../types/VariantType.js'
 import { getSwiftFunctionClassName } from './SwiftFunction.js'
 
 function getRequiredBridgeImport(type: Type): string | undefined {
@@ -28,6 +29,11 @@ function getRequiredBridgeImport(type: Type): string | undefined {
     case 'function': {
       const functionType = getTypeAs(type, FunctionType)
       const swiftClassName = getSwiftFunctionClassName(functionType)
+      return `${swiftClassName}+Swift.hpp`
+    }
+    case 'variant': {
+      const variantType = getTypeAs(type, VariantType)
+      const swiftClassName = variantType.getAliasName('swift')
       return `${swiftClassName}+Swift.hpp`
     }
     case 'optional': {
