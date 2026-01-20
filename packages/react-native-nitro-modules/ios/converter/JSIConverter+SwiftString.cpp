@@ -7,33 +7,41 @@
 #include <jsi/jsi.h>
 #include "NitroModules-Swift.h"
 #include <string>
+#include <array>
+#include <vector>
+#include <cstdint>
 
 namespace margelo::nitro {
 
 template <size_t InlineCapacity>
 struct SmallUtf8Buffer {
-  std::array<uint8_t, InlineCapacity> inlineBuf{};
-  std::vector<uint8_t> heapBuf;
-  size_t size = 0;
-  bool usingHeap = false;
+private:
+  std::array<uint8_t, InlineCapacity> _inlineBuf{};
+  std::vector<uint8_t> _heapBuf;
+  size_t _size = 0;
+  bool _usingHeap = false;
 
+public:
   void push(uint8_t b) {
-    if (!usingHeap) {
-      if (size < InlineCapacity) {
-        inlineBuf[size++] = b;
+    if (!_usingHeap) {
+      if (_size < InlineCapacity) {
+        _inlineBuf[_size++] = b;
         return;
       }
       // Spill to heap: move inline bytes into vector
-      usingHeap = true;
-      heapBuf.reserve(InlineCapacity * 2);
-      heapBuf.insert(heapBuf.end(), inlineBuf.begin(), inlineBuf.begin() + size);
+      _usingHeap = true;
+      _heapBuf.reserve(InlineCapacity * 2);
+      _heapBuf.insert(_heapBuf.end(), _inlineBuf.begin(), _inlineBuf.begin() + _size);
     }
-    heapBuf.push_back(b);
-    ++size;
+    _heapBuf.push_back(b);
+    ++_size;
   }
 
   const uint8_t* data() const {
-    return usingHeap ? heapBuf.data() : inlineBuf.data();
+    return _usingHeap ? _heapBuf.data() : _inlineBuf.data();
+  }
+  const size_t size() const {
+    return _size;
   }
 };
 
@@ -77,10 +85,10 @@ jsi::Value JSIConverter<swift::String>::toJSI(jsi::Runtime& runtime, const swift
   if (isAscii) {
     // Ascii is the fast path and requires less storage or conversions.
     auto data = reinterpret_cast<const char*>(buffer.data());
-    return jsi::String::createFromAscii(runtime, data, buffer.size);
+    return jsi::String::createFromAscii(runtime, data, buffer.size());
   } else {
     // UTF8 (or implicitly UTF16) is required for special characters.
-    return jsi::String::createFromUtf8(runtime, buffer.data(), buffer.size);
+    return jsi::String::createFromUtf8(runtime, buffer.data(), buffer.size());
   }
 }
 
