@@ -451,21 +451,21 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceMap(map: Dictionary<String, Variant_Bool_Double>) -> Dictionary<String, Variant_Bool_Double> {
+  public final func bounceMap(map: Double) -> Double {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceMap(map: map)
     return __result
   }
   
   @inline(__always)
-  public final func bounceSimpleMap(map: Dictionary<String, Double>) -> Dictionary<String, Double> {
+  public final func bounceSimpleMap(map: Double) -> Double {
     // TODO: Remove try!
     let __result = try! self.__implementation.bounceSimpleMap(map: map)
     return __result
   }
   
   @inline(__always)
-  public final func extractMap(mapWrapper: MapWrapper) -> Dictionary<String, String> {
+  public final func extractMap(mapWrapper: MapWrapper) -> Double {
     // TODO: Remove try!
     let __result = try! self.__implementation.extractMap(mapWrapper: mapWrapper)
     return __result

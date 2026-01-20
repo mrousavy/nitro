@@ -12,10 +12,10 @@ import NitroModules
  * Represents an instance of `SecondMapWrapper`.
  */
 public struct SecondMapWrapper {
-  public let second: Dictionary<String, String>
+  public let second: Double
 
   public init(
-    second: Dictionary<String, String>
+    second: Double
   ) {
     self.second = second
   }

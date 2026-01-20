@@ -12,11 +12,11 @@ import NitroModules
  * Represents an instance of `MapWrapper`.
  */
 public struct MapWrapper {
-  public let map: Dictionary<String, String>
+  public let map: Double
   public let secondMap: SecondMapWrapper
 
   public init(
-    map: Dictionary<String, String>,
+    map: Double,
     secondMap: SecondMapWrapper
   ) {
     self.map = map
