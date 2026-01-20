@@ -20,4 +20,12 @@ public struct ExternalObjectStruct {
   ) {
     self.someExternal = someExternal
   }
+  
+  public var someExternal_cxx: HybridSomeExternalObjectSpec_cxx {
+    return someExternal.getCxxWrapper()
+  }
+  
+  public init(someExternal: HybridSomeExternalObjectSpec_cxx) {
+    self.init(someExternal: someExternal.getHybridSomeExternalObjectSpec())
+  }
 }
