@@ -96,6 +96,7 @@ struct SwiftConverter<bool> final {
 #include "SwiftConverter+Dictionary.hpp"
 #include "SwiftConverter+Function.hpp"
 #include "SwiftConverter+AnyMap.hpp"
+#include "SwiftConverter+ArrayBuffer.hpp"
 
 #endif
 #else
