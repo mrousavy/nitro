@@ -15,6 +15,7 @@
 #include <functional>
 #include <variant>
 #include <optional>
+#include "Variant_______Void_Double+Swift.hpp"
 
 namespace margelo::nitro {
 
