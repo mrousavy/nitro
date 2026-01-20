@@ -22,7 +22,7 @@ namespace margelo::nitro {
 template <>
 struct SwiftConverter<std::shared_ptr<ArrayBuffer>, void> final {
   using SwiftType = ArrayBufferHolder;
-  static std::shared_ptr<ArrayBuffer> fromSwift(ArrayBufferHolder& swiftArrayBuffer);
+  static std::shared_ptr<ArrayBuffer> fromSwift(const ArrayBufferHolder& swiftArrayBuffer);
   static ArrayBufferHolder toSwift(const std::shared_ptr<ArrayBuffer>& cppArrayBuffer);
 };
 

@@ -11,7 +11,7 @@
 
 namespace margelo::nitro {
 
-std::shared_ptr<ArrayBuffer> fromSwift(ArrayBufferHolder& swiftArrayBuffer) {
+std::shared_ptr<ArrayBuffer> fromSwift(const ArrayBufferHolder& swiftArrayBuffer) {
   return swiftArrayBuffer.getArrayBuffer();
 }
 
