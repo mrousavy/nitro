@@ -15,7 +15,6 @@ import {
   getIsRecyclableCall,
 } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
-import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -23,9 +22,7 @@ export function createSwiftHybridViewManager(
   const cppFiles = createViewComponentShadowNodeFiles(spec)
   const namespace = spec.config.getCxxNamespace('c++')
   const swiftNamespace = spec.config.getIosModuleName()
-  const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
-    spec.name
-  )
+  const { HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(spec.name)
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
   const autolinking = spec.config.getAutolinkedHybridObjects()
@@ -39,15 +36,10 @@ export function createSwiftHybridViewManager(
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
-    const bridge = new SwiftCxxBridgedType(p.type)
-    const parse = bridge.parseFromCppToSwift(
-      `newViewProps.${name}.value`,
-      'c++'
-    )
     return `
 // ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
-  swiftPart.${setter}(${indent(parse, '  ')});
+  _hybridView->${setter}(SwiftConverter<${p.type.getCode('c++')}>::toSwift(newViewProps.${name}.value));
   newViewProps.${name}.isDirty = false;
 }
 `.trim()
@@ -80,7 +72,7 @@ using namespace ${namespace}::views;
 @end
 
 @implementation ${component} {
-  std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+  std::unique_ptr<${swiftNamespace}::${HybridTSpecCxx}> _hybridView;
 }
 
 + (void) load {
@@ -94,22 +86,18 @@ using namespace ${namespace}::views;
 
 - (instancetype) init {
   if (self = [super init]) {
-    std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
-    _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
+    _hybridView = std::make_unique<${swiftNamespace}::${HybridTSpecCxx}>(${getHybridObjectConstructorCall(spec.name)});
     [self updateView];
   }
   return self;
 }
 
 - (void) updateView {
-  // 1. Get Swift part
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
-
-  // 2. Get UIView*
-  void* viewUnsafe = swiftPart.getView();
+  // 1. Get UIView*
+  void* viewUnsafe = _hybridView->getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
-  // 3. Update RCTViewComponentView's [contentView]
+  // 2. Update RCTViewComponentView's [contentView]
   [self setContentView:view];
 }
 
@@ -118,21 +106,20 @@ using namespace ${namespace}::views;
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  _hybridView->beforeUpdate();
 
   ${indent(propAssignments.join('\n'), '  ')}
 
-  swiftPart.afterUpdate();
+  _hybridView->afterUpdate();
 
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
-      maybeFunc.value()(_hybridView);
+      maybeFunc.value()(_hybridView->getCxxPart());
     }
     newViewProps.hybridRef.isDirty = false;
   }
@@ -142,13 +129,12 @@ using namespace ${namespace}::views;
 }
 
 + (BOOL)shouldBeRecycled {
-  return ${getIsRecyclableCall(spec.name)}
+  return ${getIsRecyclableCall(spec.name)};
 }
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
-  swiftPart.maybePrepareForRecycle();
+  _hybridView->maybePrepareForRecycle();
 }
 
 @end
