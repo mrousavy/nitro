@@ -61,6 +61,8 @@ Pod::Spec.new do |s|
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
+    # The umbrella header to import Swift symbols in C++
+    "ios/NitroModules-Swift-Cxx-Umbrella.hpp",
   ]
 
   xcconfig = {

@@ -5,7 +5,7 @@
 #include "JSIConverter+SwiftString.hpp"
 #include "JSIConverter.hpp"
 #include <jsi/jsi.h>
-#include "NitroModules-Swift.h"
+#include <NitroModules/NitroModules-Swift-Cxx-Umbrella.hpp>
 #include <string>
 #include <array>
 #include <vector>

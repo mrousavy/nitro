@@ -6,7 +6,7 @@
 //
 
 #include "SwiftAnyMap.hpp"
-#include "NitroModules-Swift.h"
+#include <NitroModules/NitroModules-Swift-Cxx-Umbrella.hpp>
 
 namespace margelo::nitro {
 
