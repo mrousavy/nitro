@@ -22,4 +22,15 @@ public struct JsStyleStruct {
     self.value = value
     self.onChanged = onChanged
   }
+  
+  public init(
+    value: Double,
+    onChanged: Func_Double_Void
+  ) {
+    self.init(value: value, onChanged: onChanged.closure)
+  }
+  
+  public var onChanged_cxx: Func_Double_Void {
+    return Func_Double_Void(onChanged)
+  }
 }

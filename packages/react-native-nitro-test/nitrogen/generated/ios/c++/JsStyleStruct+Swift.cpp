@@ -19,7 +19,7 @@ namespace margelo::nitro {
   margelo::nitro::test::JsStyleStruct SwiftConverter<margelo::nitro::test::JsStyleStruct>::fromSwift(const NitroTest::JsStyleStruct& swiftStruct) {
     return margelo::nitro::test::JsStyleStruct(
       SwiftConverter<double>::fromSwift(swiftStruct.getValue()),
-      SwiftConverter<std::function<void(double /* num */)>>::fromSwift(swiftStruct.getOnChanged())
+      SwiftConverter<std::function<void(double /* num */)>>::fromSwift(swiftStruct.getOnChanged_cxx())
     );
   }
 
