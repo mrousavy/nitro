@@ -13,6 +13,6 @@ import NitroModules
  */
 @frozen
 public enum Variant_NullType_String {
-  case first(NullType)
+  case first(Double)
   case second(String)
 }

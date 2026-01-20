@@ -28,7 +28,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var stringOrUndefined: String? = nil
 
-  var stringOrNull: Variant_NullType_String = .first(.null)
+  var stringOrNull: Variant_NullType_String = .first(0)
 
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
