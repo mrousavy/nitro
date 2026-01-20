@@ -5,9 +5,11 @@ import { includeHeader } from '../c++/includeNitroHeader.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
+import { ArrayType } from '../types/ArrayType.js'
 import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
+import { OptionalType } from '../types/OptionalType.js'
 import { StructType } from '../types/StructType.js'
 import type { Type } from '../types/Type.js'
 import { getSwiftFunctionClassName } from './SwiftFunction.js'
@@ -27,6 +29,14 @@ function getRequiredBridgeImport(type: Type): string | undefined {
       const functionType = getTypeAs(type, FunctionType)
       const swiftClassName = getSwiftFunctionClassName(functionType)
       return `${swiftClassName}+Swift.hpp`
+    }
+    case 'optional': {
+      const optionalType = getTypeAs(type, OptionalType)
+      return getRequiredBridgeImport(optionalType.wrappingType)
+    }
+    case 'array': {
+      const arrayType = getTypeAs(type, ArrayType)
+      return getRequiredBridgeImport(arrayType.itemType)
     }
     default:
       return undefined

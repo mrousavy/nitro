@@ -19,6 +19,8 @@
 #include <vector>
 #include <variant>
 #include "Powertrain+Swift.hpp"
+#include "Person+Swift.hpp"
+#include "Person+Swift.hpp"
 
 namespace margelo::nitro {
 
