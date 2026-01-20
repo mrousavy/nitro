@@ -5,11 +5,13 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "Car+Swift.hpp"
 #include "Car.hpp"
 #include <functional>
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 #include "Powertrain+Swift.hpp"
 
 namespace margelo::nitro {

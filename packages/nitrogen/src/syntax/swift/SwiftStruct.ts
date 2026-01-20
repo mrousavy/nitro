@@ -116,11 +116,13 @@ namespace margelo::nitro {
   const cppSourceCode = `
   ${createFileMetadataString(`${struct.structName}+Swift.cpp`)}
 
+#include "${getUmbrellaHeaderName()}"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "${struct.structName}+Swift.hpp"
 #include "${struct.structName}.hpp"
 #include <functional>
-#include "${getUmbrellaHeaderName()}"
-#include <NitroModules/SwiftConverter.hpp>
 ${extraImports.join('\n')}
 
 namespace margelo::nitro {

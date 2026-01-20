@@ -109,10 +109,12 @@ namespace margelo::nitro {
   const cppSourceCode = `
 ${createFileMetadataString(`${swiftClassName}+Swift.cpp`)}
 
+#include "${getUmbrellaHeaderName()}"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "${swiftClassName}+Swift.hpp"
 #include <functional>
-#include "${getUmbrellaHeaderName()}"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro {
 

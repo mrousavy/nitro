@@ -98,10 +98,12 @@ namespace margelo::nitro {
   const cppSourceCode = `
 ${createFileMetadataString(`${enumType.enumName}+Swift.cpp`)}
 
+#include "${getUmbrellaHeaderName()}"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "${enumType.enumName}+Swift.hpp"
 #include "${enumType.enumName}.hpp"
-#include "${getUmbrellaHeaderName()}"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro {
 

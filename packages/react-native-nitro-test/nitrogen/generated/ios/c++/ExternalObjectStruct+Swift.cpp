@@ -5,11 +5,13 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "ExternalObjectStruct+Swift.hpp"
 #include "ExternalObjectStruct.hpp"
 #include <functional>
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 
 namespace margelo::nitro {

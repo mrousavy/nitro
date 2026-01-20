@@ -5,10 +5,12 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#define SWIFT_IS_IMPORTED
+#include <NitroModules/SwiftConverter.hpp>
+
 #include "ColorScheme+Swift.hpp"
 #include "ColorScheme.hpp"
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
-#include <NitroModules/SwiftConverter.hpp>
 
 namespace margelo::nitro {
 
