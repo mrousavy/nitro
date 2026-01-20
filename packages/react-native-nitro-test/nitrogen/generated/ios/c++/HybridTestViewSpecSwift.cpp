@@ -44,36 +44,34 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   bool HybridTestViewSpecSwift::getIsBlue() noexcept {
-    return _swiftPart->isBlue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
-    _swiftPart->setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+    throw std::runtime_error("not yet implemented!");
   }
   bool HybridTestViewSpecSwift::getHasBeenCalled() noexcept {
-    return _swiftPart->hasBeenCalled();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestViewSpecSwift::setHasBeenCalled(bool hasBeenCalled) noexcept {
-    _swiftPart->setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
+    throw std::runtime_error("not yet implemented!");
   }
   ColorScheme HybridTestViewSpecSwift::getColorScheme() noexcept {
-    auto __result = _swiftPart->getColorScheme();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestViewSpecSwift::setColorScheme(ColorScheme colorScheme) noexcept {
-    _swiftPart->setColorScheme(colorScheme);
+    throw std::runtime_error("not yet implemented!");
   }
   std::function<void()> HybridTestViewSpecSwift::getSomeCallback() noexcept {
-    auto __result = _swiftPart->getSomeCallback();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestViewSpecSwift::setSomeCallback(const std::function<void()>& someCallback) noexcept {
-    _swiftPart->setSomeCallback(someCallback);
+    throw std::runtime_error("not yet implemented!");
   }
 
   // pragma MARK: Methods
 
   void HybridTestViewSpecSwift::someMethod() {
-    _swiftPart->someMethod();
+    throw std::runtime_error("not yet implemented!");
   }
 
 } // namespace margelo::nitro::test

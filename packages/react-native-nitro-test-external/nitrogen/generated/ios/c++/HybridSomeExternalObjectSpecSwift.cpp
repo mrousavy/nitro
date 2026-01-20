@@ -48,8 +48,7 @@ namespace margelo::nitro::test::external {
   // pragma MARK: Methods
 
   std::string HybridSomeExternalObjectSpecSwift::getValue() {
-    auto __result = _swiftPart->getValue();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
 
 } // namespace margelo::nitro::test::external

@@ -44,468 +44,382 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::getThisObject() noexcept {
-    auto __result = _swiftPart->getThisObject();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalHybrid() noexcept {
-    return _swiftPart->getOptionalHybrid();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) noexcept {
-    _swiftPart->setOptionalHybrid(std::forward<decltype(optionalHybrid)>(optionalHybrid));
+    throw std::runtime_error("not yet implemented!");
   }
   double HybridTestObjectSwiftKotlinSpecSwift::getNumberValue() noexcept {
-    return _swiftPart->getNumberValue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setNumberValue(double numberValue) noexcept {
-    _swiftPart->setNumberValue(std::forward<decltype(numberValue)>(numberValue));
+    throw std::runtime_error("not yet implemented!");
   }
   bool HybridTestObjectSwiftKotlinSpecSwift::getBoolValue() noexcept {
-    return _swiftPart->getBoolValue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setBoolValue(bool boolValue) noexcept {
-    _swiftPart->setBoolValue(std::forward<decltype(boolValue)>(boolValue));
+    throw std::runtime_error("not yet implemented!");
   }
   std::string HybridTestObjectSwiftKotlinSpecSwift::getStringValue() noexcept {
-    return _swiftPart->getStringValue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setStringValue(const std::string& stringValue) noexcept {
-    _swiftPart->setStringValue(std::forward<decltype(stringValue)>(stringValue));
+    throw std::runtime_error("not yet implemented!");
   }
   int64_t HybridTestObjectSwiftKotlinSpecSwift::getBigintValue() noexcept {
-    return _swiftPart->getBigintValue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setBigintValue(int64_t bigintValue) noexcept {
-    _swiftPart->setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
+    throw std::runtime_error("not yet implemented!");
   }
   nitro::NullType HybridTestObjectSwiftKotlinSpecSwift::getNullValue() noexcept {
-    return _swiftPart->getNullValue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setNullValue(nitro::NullType nullValue) noexcept {
-    _swiftPart->setNullValue(std::forward<decltype(nullValue)>(nullValue));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getOptionalString() noexcept {
-    return _swiftPart->getOptionalString();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalString(const std::optional<std::string>& optionalString) noexcept {
-    _swiftPart->setOptionalString(std::forward<decltype(optionalString)>(optionalString));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrUndefined() noexcept {
-    return _swiftPart->getStringOrUndefined();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setStringOrUndefined(const std::optional<std::string>& stringOrUndefined) noexcept {
-    _swiftPart->setStringOrUndefined(std::forward<decltype(stringOrUndefined)>(stringOrUndefined));
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<nitro::NullType, std::string> HybridTestObjectSwiftKotlinSpecSwift::getStringOrNull() noexcept {
-    return _swiftPart->getStringOrNull();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) noexcept {
-    _swiftPart->setStringOrNull(std::forward<decltype(stringOrNull)>(stringOrNull));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<std::vector<std::string>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalArray() noexcept {
-    return _swiftPart->getOptionalArray();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) noexcept {
-    _swiftPart->setOptionalArray(std::forward<decltype(optionalArray)>(optionalArray));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::getOptionalEnum() noexcept {
-    return _swiftPart->getOptionalEnum();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalEnum(std::optional<Powertrain> optionalEnum) noexcept {
-    _swiftPart->setOptionalEnum(std::forward<decltype(optionalEnum)>(optionalEnum));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<OldEnum> HybridTestObjectSwiftKotlinSpecSwift::getOptionalOldEnum() noexcept {
-    return _swiftPart->getOptionalOldEnum();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept {
-    _swiftPart->setOptionalOldEnum(std::forward<decltype(optionalOldEnum)>(optionalOldEnum));
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<std::function<void(double /* value */)>> HybridTestObjectSwiftKotlinSpecSwift::getOptionalCallback() noexcept {
-    return _swiftPart->getOptionalCallback();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept {
-    _swiftPart->setOptionalCallback(std::forward<decltype(optionalCallback)>(optionalCallback));
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::getSomeVariant() noexcept {
-    return _swiftPart->getSomeVariant();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept {
-    _swiftPart->setSomeVariant(std::forward<decltype(someVariant)>(someVariant));
+    throw std::runtime_error("not yet implemented!");
   }
 
   // pragma MARK: Methods
 
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> HybridTestObjectSwiftKotlinSpecSwift::newTestObject() {
-    auto __result = _swiftPart->newTestObject();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> HybridTestObjectSwiftKotlinSpecSwift::getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) {
-    auto __result = _swiftPart->getVariantHybrid(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::simpleFunc() {
-    _swiftPart->simpleFunc();
+    throw std::runtime_error("not yet implemented!");
   }
   double HybridTestObjectSwiftKotlinSpecSwift::addNumbers(double a, double b) {
-    auto __result = _swiftPart->addNumbers(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::string HybridTestObjectSwiftKotlinSpecSwift::addStrings(const std::string& a, const std::string& b) {
-    auto __result = _swiftPart->addStrings(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::multipleArguments(double num, const std::string& str, bool boo) {
-    _swiftPart->multipleArguments(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
+    throw std::runtime_error("not yet implemented!");
   }
   nitro::NullType HybridTestObjectSwiftKotlinSpecSwift::bounceNull(nitro::NullType value) {
-    auto __result = _swiftPart->bounceNull(std::forward<decltype(value)>(value));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceStrings(const std::vector<std::string>& array) {
-    auto __result = _swiftPart->bounceStrings(std::forward<decltype(array)>(array));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<double> HybridTestObjectSwiftKotlinSpecSwift::bounceNumbers(const std::vector<double>& array) {
-    auto __result = _swiftPart->bounceNumbers(std::forward<decltype(array)>(array));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<Person> HybridTestObjectSwiftKotlinSpecSwift::bounceStructs(const std::vector<Person>& array) {
-    auto __result = _swiftPart->bounceStructs(std::forward<decltype(array)>(array));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   PartialPerson HybridTestObjectSwiftKotlinSpecSwift::bouncePartialStruct(const PartialPerson& person) {
-    auto __result = _swiftPart->bouncePartialStruct(person);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::string HybridTestObjectSwiftKotlinSpecSwift::sumUpAllPassengers(const std::vector<Car>& cars) {
-    auto __result = _swiftPart->sumUpAllPassengers(std::forward<decltype(cars)>(cars));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::bounceEnums(const std::vector<Powertrain>& array) {
-    auto __result = _swiftPart->bounceEnums(std::forward<decltype(array)>(array));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) {
-    _swiftPart->complexEnumCallback(std::forward<decltype(array)>(array), callback);
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::shared_ptr<HybridChildSpec>> HybridTestObjectSwiftKotlinSpecSwift::bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) {
-    auto __result = _swiftPart->bounceHybridObjects(std::forward<decltype(array)>(array));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::function<void()>> HybridTestObjectSwiftKotlinSpecSwift::bounceFunctions(const std::vector<std::function<void()>>& functions) {
-    auto __result = _swiftPart->bounceFunctions(std::forward<decltype(functions)>(functions));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::shared_ptr<AnyMap>> HybridTestObjectSwiftKotlinSpecSwift::bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) {
-    auto __result = _swiftPart->bounceMaps(std::forward<decltype(maps)>(maps));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::shared_ptr<Promise<double>>> HybridTestObjectSwiftKotlinSpecSwift::bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) {
-    auto __result = _swiftPart->bouncePromises(std::forward<decltype(promises)>(promises));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::shared_ptr<ArrayBuffer>> HybridTestObjectSwiftKotlinSpecSwift::bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) {
-    auto __result = _swiftPart->bounceArrayBuffers(std::forward<decltype(arrayBuffers)>(arrayBuffers));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::createMap() {
-    auto __result = _swiftPart->createMap();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::mapRoundtrip(const std::shared_ptr<AnyMap>& map) {
-    auto __result = _swiftPart->mapRoundtrip(map);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::vector<std::string> HybridTestObjectSwiftKotlinSpecSwift::getMapKeys(const std::shared_ptr<AnyMap>& map) {
-    auto __result = _swiftPart->getMapKeys(map);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::mergeMaps(const std::shared_ptr<AnyMap>& a, const std::shared_ptr<AnyMap>& b) {
-    auto __result = _swiftPart->mergeMaps(a, b);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<AnyMap> HybridTestObjectSwiftKotlinSpecSwift::copyAnyMap(const std::shared_ptr<AnyMap>& map) {
-    auto __result = _swiftPart->copyAnyMap(map);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::unordered_map<std::string, std::variant<bool, double>> HybridTestObjectSwiftKotlinSpecSwift::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
-    auto __result = _swiftPart->bounceMap(std::forward<decltype(map)>(map));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::unordered_map<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::bounceSimpleMap(const std::unordered_map<std::string, double>& map) {
-    auto __result = _swiftPart->bounceSimpleMap(std::forward<decltype(map)>(map));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::unordered_map<std::string, std::string> HybridTestObjectSwiftKotlinSpecSwift::extractMap(const MapWrapper& mapWrapper) {
-    auto __result = _swiftPart->extractMap(mapWrapper);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   double HybridTestObjectSwiftKotlinSpecSwift::funcThatThrows() {
-    auto __result = _swiftPart->funcThatThrows();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::funcThatThrowsBeforePromise() {
-    auto __result = _swiftPart->funcThatThrowsBeforePromise();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::throwError(const std::exception_ptr& error) {
-    _swiftPart->throwError(std::forward<decltype(error)>(error));
+    throw std::runtime_error("not yet implemented!");
   }
   std::string HybridTestObjectSwiftKotlinSpecSwift::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
-    auto __result = _swiftPart->tryOptionalParams(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::string HybridTestObjectSwiftKotlinSpecSwift::tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) {
-    auto __result = _swiftPart->tryMiddleParam(std::forward<decltype(num)>(num), std::forward<decltype(boo)>(boo), std::forward<decltype(str)>(str));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<Powertrain> HybridTestObjectSwiftKotlinSpecSwift::tryOptionalEnum(std::optional<Powertrain> value) {
-    auto __result = _swiftPart->tryOptionalEnum(std::forward<decltype(value)>(value));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   bool HybridTestObjectSwiftKotlinSpecSwift::tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) {
-    auto __result = _swiftPart->tryTrailingOptional(std::forward<decltype(num)>(num), std::forward<decltype(str)>(str), std::forward<decltype(boo)>(boo));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::chrono::system_clock::time_point HybridTestObjectSwiftKotlinSpecSwift::add1Hour(std::chrono::system_clock::time_point date) {
-    auto __result = _swiftPart->add1Hour(std::forward<decltype(date)>(date));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::chrono::system_clock::time_point HybridTestObjectSwiftKotlinSpecSwift::currentDate() {
-    auto __result = _swiftPart->currentDate();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   int64_t HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciSync(double value) {
-    auto __result = _swiftPart->calculateFibonacciSync(std::forward<decltype(value)>(value));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<int64_t>> HybridTestObjectSwiftKotlinSpecSwift::calculateFibonacciAsync(double value) {
-    auto __result = _swiftPart->calculateFibonacciAsync(std::forward<decltype(value)>(value));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::wait(double seconds) {
-    auto __result = _swiftPart->wait(std::forward<decltype(seconds)>(seconds));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::promiseThrows() {
-    auto __result = _swiftPart->promiseThrows();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::promiseReturnsInstantly() {
-    auto __result = _swiftPart->promiseReturnsInstantly();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::promiseReturnsInstantlyAsync() {
-    auto __result = _swiftPart->promiseReturnsInstantlyAsync();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::promiseThatResolvesVoidInstantly() {
-    auto __result = _swiftPart->promiseThatResolvesVoidInstantly();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<std::optional<double>>> HybridTestObjectSwiftKotlinSpecSwift::promiseThatResolvesToUndefined() {
-    auto __result = _swiftPart->promiseThatResolvesToUndefined();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
-    auto __result = _swiftPart->awaitAndGetPromise(std::forward<decltype(promise)>(promise));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<Car>> HybridTestObjectSwiftKotlinSpecSwift::awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) {
-    auto __result = _swiftPart->awaitAndGetComplexPromise(std::forward<decltype(promise)>(promise));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::awaitPromise(const std::shared_ptr<Promise<void>>& promise) {
-    auto __result = _swiftPart->awaitPromise(std::forward<decltype(promise)>(promise));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::callCallback(const std::function<void()>& callback) {
-    _swiftPart->callCallback(callback);
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::callCallbackThatReturnsPromiseVoid(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>& callback) {
-    auto __result = _swiftPart->callCallbackThatReturnsPromiseVoid(callback);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::callAll(const std::function<void()>& first, const std::function<void()>& second, const std::function<void()>& third) {
-    _swiftPart->callAll(first, second, third);
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
-    _swiftPart->callWithOptional(std::forward<decltype(value)>(value), callback);
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) {
-    auto __result = _swiftPart->callSumUpNTimes(callback, std::forward<decltype(n)>(n));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) {
-    auto __result = _swiftPart->callbackAsyncPromise(callback);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectSwiftKotlinSpecSwift::callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) {
-    auto __result = _swiftPart->callbackAsyncPromiseBuffer(callback);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::function<void(double /* value */)> HybridTestObjectSwiftKotlinSpecSwift::getComplexCallback() {
-    auto __result = _swiftPart->getComplexCallback();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) {
-    _swiftPart->twoOptionalCallbacks(std::forward<decltype(value)>(value), std::forward<decltype(first)>(first), std::forward<decltype(second)>(second));
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::errorCallback(const std::function<void(const std::exception_ptr& /* error */)>& onError) {
-    _swiftPart->errorCallback(onError);
+    throw std::runtime_error("not yet implemented!");
   }
   std::function<void(double /* num */)> HybridTestObjectSwiftKotlinSpecSwift::createNativeCallback(const std::function<void(double /* num */)>& wrappingJsCallback) {
-    auto __result = _swiftPart->createNativeCallback(wrappingJsCallback);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<double>> HybridTestObjectSwiftKotlinSpecSwift::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
-    auto __result = _swiftPart->getValueFromJSCallbackAndWait(getValue);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<void>> HybridTestObjectSwiftKotlinSpecSwift::getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
-    auto __result = _swiftPart->getValueFromJsCallback(callback, andThenCall);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   Car HybridTestObjectSwiftKotlinSpecSwift::getCar() {
-    auto __result = _swiftPart->getCar();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   bool HybridTestObjectSwiftKotlinSpecSwift::isCarElectric(const Car& car) {
-    auto __result = _swiftPart->isCarElectric(car);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::optional<Person> HybridTestObjectSwiftKotlinSpecSwift::getDriver(const Car& car) {
-    auto __result = _swiftPart->getDriver(car);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   Car HybridTestObjectSwiftKotlinSpecSwift::bounceCar(const Car& car) {
-    auto __result = _swiftPart->bounceCar(car);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::jsStyleObjectAsParameters(const JsStyleStruct& params) {
-    _swiftPart->jsStyleObjectAsParameters(params);
+    throw std::runtime_error("not yet implemented!");
   }
   WrappedJsStruct HybridTestObjectSwiftKotlinSpecSwift::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
-    auto __result = _swiftPart->bounceWrappedJsStyleStruct(value);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   OptionalWrapper HybridTestObjectSwiftKotlinSpecSwift::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
-    auto __result = _swiftPart->bounceOptionalWrapper(wrapper);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   OptionalCallback HybridTestObjectSwiftKotlinSpecSwift::bounceOptionalCallback(const OptionalCallback& value) {
-    auto __result = _swiftPart->bounceOptionalCallback(value);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::createArrayBuffer() {
-    auto __result = _swiftPart->createArrayBuffer();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::createArrayBufferFromNativeBuffer(bool copy) {
-    auto __result = _swiftPart->createArrayBufferFromNativeBuffer(std::forward<decltype(copy)>(copy));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
-    auto __result = _swiftPart->copyBuffer(std::forward<decltype(buffer)>(buffer));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   double HybridTestObjectSwiftKotlinSpecSwift::getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) {
-    auto __result = _swiftPart->getBufferLastItem(std::forward<decltype(buffer)>(buffer));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridTestObjectSwiftKotlinSpecSwift::setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) {
-    _swiftPart->setAllValuesTo(std::forward<decltype(buffer)>(buffer), std::forward<decltype(value)>(value));
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> HybridTestObjectSwiftKotlinSpecSwift::createArrayBufferAsync() {
-    auto __result = _swiftPart->createArrayBufferAsync();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<ArrayBuffer> HybridTestObjectSwiftKotlinSpecSwift::bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
-    auto __result = _swiftPart->bounceArrayBuffer(std::forward<decltype(buffer)>(buffer));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::string, double> HybridTestObjectSwiftKotlinSpecSwift::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
-    auto __result = _swiftPart->passVariant(std::forward<decltype(either)>(either));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<bool, OldEnum> HybridTestObjectSwiftKotlinSpecSwift::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
-    auto __result = _swiftPart->getVariantEnum(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<bool, WeirdNumbersEnum> HybridTestObjectSwiftKotlinSpecSwift::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
-    auto __result = _swiftPart->getVariantWeirdNumbersEnum(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<Car, Person> HybridTestObjectSwiftKotlinSpecSwift::getVariantObjects(const std::variant<Car, Person>& variant) {
-    auto __result = _swiftPart->getVariantObjects(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::string, Car> HybridTestObjectSwiftKotlinSpecSwift::passNamedVariant(const std::variant<std::string, Car>& variant) {
-    auto __result = _swiftPart->passNamedVariant(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> HybridTestObjectSwiftKotlinSpecSwift::passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) {
-    auto __result = _swiftPart->passAllEmptyObjectVariant(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> HybridTestObjectSwiftKotlinSpecSwift::bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) {
-    auto __result = _swiftPart->bounceComplexVariant(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::createChild() {
-    auto __result = _swiftPart->createChild();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBase() {
-    auto __result = _swiftPart->createBase();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::createBaseActualChild() {
-    auto __result = _swiftPart->createBaseActualChild();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChild(const std::shared_ptr<HybridChildSpec>& child) {
-    auto __result = _swiftPart->bounceChild(child);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceBase(const std::shared_ptr<HybridBaseSpec>& base) {
-    auto __result = _swiftPart->bounceBase(base);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridBaseSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) {
-    auto __result = _swiftPart->bounceChildBase(child);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<HybridChildSpec> HybridTestObjectSwiftKotlinSpecSwift::castBase(const std::shared_ptr<HybridBaseSpec>& base) {
-    auto __result = _swiftPart->castBase(base);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   double HybridTestObjectSwiftKotlinSpecSwift::callbackSync(const std::function<double()>& callback) {
-    auto __result = _swiftPart->callbackSync(callback);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   bool HybridTestObjectSwiftKotlinSpecSwift::getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) {
-    auto __result = _swiftPart->getIsViewBlue(view);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectSwiftKotlinSpecSwift::bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
-    auto __result = _swiftPart->bounceExternalHybrid(externalObject);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectSwiftKotlinSpecSwift::createInternalObject() {
-    auto __result = _swiftPart->createInternalObject();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   ExternalObjectStruct HybridTestObjectSwiftKotlinSpecSwift::bounceExternalStruct(const ExternalObjectStruct& externalStruct) {
-    auto __result = _swiftPart->bounceExternalStruct(externalStruct);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> HybridTestObjectSwiftKotlinSpecSwift::bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) {
-    auto __result = _swiftPart->bounceExternalVariant(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectSwiftKotlinSpecSwift::createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) {
-    auto __result = _swiftPart->createExternalVariantFromFunc(factory);
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
 
 } // namespace margelo::nitro::test

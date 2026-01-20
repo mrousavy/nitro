@@ -44,7 +44,7 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   double HybridBaseSpecSwift::getBaseValue() noexcept {
-    return _swiftPart->getBaseValue();
+    throw std::runtime_error("not yet implemented!");
   }
 
   // pragma MARK: Methods

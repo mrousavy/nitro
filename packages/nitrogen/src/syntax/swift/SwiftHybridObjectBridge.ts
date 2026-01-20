@@ -257,24 +257,6 @@ ${hasBase ? `open class ${name.HybridTSpecCxx} : ${baseClasses.join(', ')}` : `o
     .join('\n')
   const cppPropertiesImplementations = spec.properties
     .map((p) => {
-      const bridged = new SwiftCxxBridgedType(p.type)
-      let getter: string
-      let setter: string
-
-      const getterName = p.getGetterName('swift')
-      const setterName = p.getSetterName('swift')
-      if (bridged.needsSpecialHandling) {
-        // we need custom C++ -> Swift conversion code
-        getter = `
-auto __result = _swiftPart->${getterName}();
-return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
-`
-        setter = `_swiftPart->${setterName}(${bridged.parseFromCppToSwift(p.name, 'c++')});`
-      } else {
-        // just forward value directly
-        getter = `return _swiftPart->${getterName}();`
-        setter = `_swiftPart->${setterName}(std::forward<decltype(${p.name})>(${p.name}));`
-      }
       return p.getCode(
         'c++',
         {
@@ -282,8 +264,8 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
           noexcept: true,
         },
         {
-          getter: getter.trim(),
-          setter: setter.trim(),
+          getter: 'throw std::runtime_error("not yet implemented!");',
+          setter: 'throw std::runtime_error("not yet implemented!");',
         }
       )
     })
@@ -294,38 +276,10 @@ return ${bridged.parseFromSwiftToCpp('__result', 'c++')};
     .join('\n')
   const cppMethodsImplementations = spec.methods
     .map((m) => {
-      const params = m.parameters
-        .map((p) => {
-          const bridged = new SwiftCxxBridgedType(p.type)
-          if (bridged.needsSpecialHandling) {
-            // we need custom C++ -> Swift conversion code
-            return bridged.parseFromCppToSwift(p.name, 'c++')
-          } else {
-            // just forward value directly
-            return `std::forward<decltype(${p.name})>(${p.name})`
-          }
-        })
-        .join(', ')
-      const bridgedReturnType = new SwiftCxxBridgedType(m.returnType)
-      const hasResult = m.returnType.kind !== 'void'
-      let body: string
-      if (hasResult) {
-        // func returns something
-        body = `
-auto __result = _swiftPart->${m.name}(${params});
-return ${bridgedReturnType.parseFromSwiftToCpp('__result', 'c++')};
-        `.trim()
-      } else {
-        // void func
-        body = `
-_swiftPart->${m.name}(${params});
-        `.trim()
-      }
-
       return m.getCode(
         'c++',
         { classDefinitionName: name.HybridTSpecSwift },
-        body
+        'throw std::runtime_error("not yet implemented!");'
       )
     })
     .join('\n')

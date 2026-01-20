@@ -44,10 +44,10 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   bool HybridRecyclableTestViewSpecSwift::getIsBlue() noexcept {
-    return _swiftPart->isBlue();
+    throw std::runtime_error("not yet implemented!");
   }
   void HybridRecyclableTestViewSpecSwift::setIsBlue(bool isBlue) noexcept {
-    _swiftPart->setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+    throw std::runtime_error("not yet implemented!");
   }
 
   // pragma MARK: Methods

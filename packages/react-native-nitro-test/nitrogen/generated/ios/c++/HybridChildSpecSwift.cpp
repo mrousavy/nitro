@@ -45,14 +45,13 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   double HybridChildSpecSwift::getChildValue() noexcept {
-    return _swiftPart->getChildValue();
+    throw std::runtime_error("not yet implemented!");
   }
 
   // pragma MARK: Methods
 
   std::variant<std::string, Car> HybridChildSpecSwift::bounceVariant(const std::variant<std::string, Car>& variant) {
-    auto __result = _swiftPart->bounceVariant(std::forward<decltype(variant)>(variant));
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
 
 } // namespace margelo::nitro::test

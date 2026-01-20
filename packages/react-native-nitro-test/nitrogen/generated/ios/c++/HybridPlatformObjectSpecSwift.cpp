@@ -48,8 +48,7 @@ namespace margelo::nitro::test {
   // pragma MARK: Methods
 
   std::string HybridPlatformObjectSpecSwift::getOSVersion() {
-    auto __result = _swiftPart->getOSVersion();
-    return __result;
+    throw std::runtime_error("not yet implemented!");
   }
 
 } // namespace margelo::nitro::test
