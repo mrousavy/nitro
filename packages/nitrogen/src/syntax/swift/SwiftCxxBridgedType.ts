@@ -59,7 +59,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         // Structs are separate Swift structs
         return true
       case 'map':
-        // AnyMap has to be wrapped in `SwiftAnyMap`
+        // AnyMap is NitroModules::AnyMap
         return true
       default:
         return false
@@ -84,18 +84,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
               'class',
               'ArrayBufferHolder',
               'NitroModules'
-            ),
-            language: 'c++',
-            space: 'system',
-          })
-          break
-        case 'map':
-          imports.push({
-            name: 'NitroModules/SwiftAnyMap.hpp',
-            forwardDeclaration: getForwardDeclaration(
-              'class',
-              'SwiftAnyMap',
-              'margelo::nitro'
             ),
             language: 'c++',
             space: 'system',
@@ -220,11 +208,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map': {
         switch (language) {
           case 'c++':
-            return `margelo::nitro::SwiftAnyMap`
-          case 'swift':
-            return `margelo.nitro.SwiftAnyMap`
+            return `NitroModules::AnyMap`
           default:
-            throw new Error(`Invalid language! ${language}`)
+            return this.type.getCode(language)
         }
       }
       case 'array': {
@@ -338,14 +324,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `${swiftParameterName}.getCxxWrapper()`
-          default:
-            return swiftParameterName
-        }
-      }
-      case 'map': {
-        switch (language) {
-          case 'swift':
-            return `margelo.nitro.SwiftAnyMap(${swiftParameterName})`
           default:
             return swiftParameterName
         }

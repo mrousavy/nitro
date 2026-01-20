@@ -60,7 +60,6 @@ ${includes.sort().join('\n')}
 
 // Common C++ types used in Swift
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/SwiftAnyMap.hpp>
 #include <NitroModules/AnyMapUtils.hpp>
 #include <NitroModules/RuntimeError.hpp>
 #include <NitroModules/DateToChronoDate.hpp>
