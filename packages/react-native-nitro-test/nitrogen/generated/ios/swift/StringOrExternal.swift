@@ -12,7 +12,7 @@ import NitroTestExternal
  * JS type: `hybrid-object | string`
  */
 @frozen
-public indirect enum StringOrExternal {
-  case first((any HybridSomeExternalObjectSpec))
+public enum StringOrExternal {
+  case first(HybridSomeExternalObjectSpec_cxx)
   case second(String)
 }

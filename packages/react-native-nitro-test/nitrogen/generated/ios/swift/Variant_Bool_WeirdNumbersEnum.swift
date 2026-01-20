@@ -12,7 +12,7 @@
  * JS type: `boolean | enum`
  */
 @frozen
-public indirect enum Variant_Bool_WeirdNumbersEnum {
+public enum Variant_Bool_WeirdNumbersEnum {
   case first(Bool)
   case second(WeirdNumbersEnum)
 }

@@ -12,7 +12,7 @@
  * JS type: `hybrid-object | struct`
  */
 @frozen
-public indirect enum Variant__any_HybridBaseSpec__OptionalWrapper {
-  case first((any HybridBaseSpec))
+public enum Variant__any_HybridBaseSpec__OptionalWrapper {
+  case first(HybridBaseSpec_cxx)
   case second(OptionalWrapper)
 }

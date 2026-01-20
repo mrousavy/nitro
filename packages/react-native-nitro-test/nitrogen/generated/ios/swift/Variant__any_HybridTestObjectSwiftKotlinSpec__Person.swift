@@ -12,7 +12,7 @@
  * JS type: `hybrid-object | struct`
  */
 @frozen
-public indirect enum Variant__any_HybridTestObjectSwiftKotlinSpec__Person {
-  case first((any HybridTestObjectSwiftKotlinSpec))
+public enum Variant__any_HybridTestObjectSwiftKotlinSpec__Person {
+  case first(HybridTestObjectSwiftKotlinSpec_cxx)
   case second(Person)
 }

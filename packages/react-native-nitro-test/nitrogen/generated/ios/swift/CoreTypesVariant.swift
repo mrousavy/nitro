@@ -12,9 +12,9 @@ import NitroModules
  * JS type: `array-buffer | function | struct | promise | date | map`
  */
 @frozen
-public indirect enum CoreTypesVariant {
+public enum CoreTypesVariant {
   case first(ArrayBuffer)
-  case second((_ value: Double) -> Void)
+  case second(Func_Double_Void)
   case third(WrappedJsStruct)
   case fourth(Promise<Double>)
   case fifth(Date)
