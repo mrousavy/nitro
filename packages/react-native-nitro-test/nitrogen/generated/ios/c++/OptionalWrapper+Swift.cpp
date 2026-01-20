@@ -12,7 +12,9 @@
 #include "OptionalWrapper+Swift.hpp"
 #include "OptionalWrapper.hpp"
 #include <functional>
-
+#include <NitroModules/ArrayBuffer.hpp>
+#include <optional>
+#include <string>
 
 namespace margelo::nitro {
 

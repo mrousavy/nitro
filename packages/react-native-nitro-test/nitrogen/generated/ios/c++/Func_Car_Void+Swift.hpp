@@ -8,6 +8,8 @@
 #pragma once
 
 #include <functional>
+#include "Car.hpp"
+#include <functional>
 
 namespace NitroTest {
   class Func_Car_Void;

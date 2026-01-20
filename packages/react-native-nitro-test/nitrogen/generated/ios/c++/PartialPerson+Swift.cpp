@@ -12,7 +12,8 @@
 #include "PartialPerson+Swift.hpp"
 #include "PartialPerson.hpp"
 #include <functional>
-
+#include <string>
+#include <optional>
 
 namespace margelo::nitro {
 

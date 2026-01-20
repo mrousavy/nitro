@@ -12,7 +12,9 @@
 #include "WrappedJsStruct+Swift.hpp"
 #include "WrappedJsStruct.hpp"
 #include <functional>
-#include "JsStyleStruct+Swift.hpp"
+#include "JsStyleStruct.hpp"
+#include <vector>
+#include JsStyleStruct+Swift.hpp
 
 namespace margelo::nitro {
 

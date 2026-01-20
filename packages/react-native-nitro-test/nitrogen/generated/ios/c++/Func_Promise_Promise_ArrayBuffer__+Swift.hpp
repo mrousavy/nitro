@@ -8,6 +8,9 @@
 #pragma once
 
 #include <functional>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/Promise.hpp>
+#include <functional>
 
 namespace NitroTest {
   class Func_Promise_Promise_ArrayBuffer__;

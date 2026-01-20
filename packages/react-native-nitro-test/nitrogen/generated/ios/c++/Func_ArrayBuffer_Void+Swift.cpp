@@ -12,13 +12,10 @@
 #include "Func_ArrayBuffer_Void+Swift.hpp"
 #include <functional>
 
-#include <NitroModules/ArrayBuffer.hpp>
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void(const std::shared_ptr<ArrayBuffer>&)> SwiftConverter<std::function<void(const std::shared_ptr<ArrayBuffer>&)>>::fromSwift(const NitroTest::Func_ArrayBuffer_Void& swiftFunc) {
-    return [swiftFunc = /* copy */ swiftFunc](std::shared_ptr<ArrayBuffer> value) mutable -> void {
+    return [swiftFunc = /* copy */ swiftFunc](const std::shared_ptr<ArrayBuffer>& value) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
       // return swiftFunc.call(value);

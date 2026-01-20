@@ -8,6 +8,8 @@
 #pragma once
 
 #include <functional>
+#include <exception>
+#include <functional>
 
 namespace NitroTest {
   class Func_Error_Void;

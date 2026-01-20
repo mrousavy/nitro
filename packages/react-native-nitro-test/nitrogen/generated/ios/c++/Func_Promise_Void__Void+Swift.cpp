@@ -12,13 +12,10 @@
 #include "Func_Promise_Void__Void+Swift.hpp"
 #include <functional>
 
-#include <NitroModules/Promise.hpp>
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void(const std::shared_ptr<Promise<void>>&)> SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>&)>>::fromSwift(const NitroTest::Func_Promise_Void__Void& swiftFunc) {
-    return [swiftFunc = /* copy */ swiftFunc](std::shared_ptr<Promise<void>> value) mutable -> void {
+    return [swiftFunc = /* copy */ swiftFunc](const std::shared_ptr<Promise<void>>& value) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
       // return swiftFunc.call(value);

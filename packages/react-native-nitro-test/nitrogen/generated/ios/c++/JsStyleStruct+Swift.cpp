@@ -12,14 +12,15 @@
 #include "JsStyleStruct+Swift.hpp"
 #include "JsStyleStruct.hpp"
 #include <functional>
-#include "Func_Double_Void+Swift.hpp"
+#include <functional>
+#include Func_Double_Void+Swift.hpp
 
 namespace margelo::nitro {
 
   margelo::nitro::test::JsStyleStruct SwiftConverter<margelo::nitro::test::JsStyleStruct>::fromSwift(const NitroTest::JsStyleStruct& swiftStruct) {
     return margelo::nitro::test::JsStyleStruct(
       SwiftConverter<double>::fromSwift(swiftStruct.getValue()),
-      SwiftConverter<std::function<void(double /* num */)>>::fromSwift(swiftStruct.getOnChanged_cxx())
+      SwiftConverter<std::function<void(double /* num */)>>::fromSwift(swiftStruct.getOnChanged())
     );
   }
 

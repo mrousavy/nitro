@@ -12,7 +12,8 @@
 #include "ExternalObjectStruct+Swift.hpp"
 #include "ExternalObjectStruct.hpp"
 #include <functional>
-
+#include <memory>
+#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 
 namespace margelo::nitro {
 

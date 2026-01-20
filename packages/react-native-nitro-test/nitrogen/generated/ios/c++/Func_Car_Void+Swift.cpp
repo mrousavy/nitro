@@ -12,13 +12,10 @@
 #include "Func_Car_Void+Swift.hpp"
 #include <functional>
 
-#include "Car.hpp"
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void(const margelo::nitro::test::Car&)> SwiftConverter<std::function<void(const margelo::nitro::test::Car&)>>::fromSwift(const NitroTest::Func_Car_Void& swiftFunc) {
-    return [swiftFunc = /* copy */ swiftFunc](Car value) mutable -> void {
+    return [swiftFunc = /* copy */ swiftFunc](const Car& value) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
       // return swiftFunc.call(value);

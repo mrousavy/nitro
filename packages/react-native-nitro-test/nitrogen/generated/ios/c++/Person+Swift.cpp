@@ -12,7 +12,7 @@
 #include "Person+Swift.hpp"
 #include "Person.hpp"
 #include <functional>
-
+#include <string>
 
 namespace margelo::nitro {
 

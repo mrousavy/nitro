@@ -8,6 +8,9 @@
 #pragma once
 
 #include <functional>
+#include "Powertrain.hpp"
+#include <vector>
+#include <functional>
 
 namespace NitroTest {
   class Func__Powertrain__Void;

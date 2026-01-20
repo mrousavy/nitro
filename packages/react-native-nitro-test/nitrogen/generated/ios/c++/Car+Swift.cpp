@@ -12,7 +12,13 @@
 #include "Car+Swift.hpp"
 #include "Car.hpp"
 #include <functional>
-#include "Powertrain+Swift.hpp"
+#include <string>
+#include "Powertrain.hpp"
+#include "Person.hpp"
+#include <optional>
+#include <vector>
+#include <variant>
+#include Powertrain+Swift.hpp
 
 namespace margelo::nitro {
 

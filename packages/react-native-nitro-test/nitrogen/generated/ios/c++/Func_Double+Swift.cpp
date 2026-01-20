@@ -12,8 +12,6 @@
 #include "Func_Double+Swift.hpp"
 #include <functional>
 
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<double()> SwiftConverter<std::function<double()>>::fromSwift(const NitroTest::Func_Double& swiftFunc) {

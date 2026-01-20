@@ -1,6 +1,7 @@
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { capitalizeName, indent } from '../../utils.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
@@ -64,10 +65,14 @@ export function createSwiftStructBridge(
       `SwiftConverter<${p.getCode('c++', { fullyQualified: true })}>::toSwift(cppStruct.${p.escapedName})`
   )
 
-  const extraImports = struct.properties
-    .map((p) => getRequiredBridgeImport(p))
-    .filter((i) => i != null)
-    .map((i) => `#include "${i}"`)
+  const extraIncludes = struct.properties
+    .flatMap((p) => p.getRequiredImports('c++'))
+    .map((i) => includeHeader(i, true))
+    .filter(isNotDuplicate)
+  for (const prop of struct.properties) {
+    const include = getRequiredBridgeImport(prop)
+    if (include != null) extraIncludes.push(`#include ${include}`)
+  }
 
   const swiftCode = `
 ${createFileMetadataString(`${struct.structName}.swift`)}
@@ -123,7 +128,7 @@ namespace margelo::nitro {
 #include "${struct.structName}+Swift.hpp"
 #include "${struct.structName}.hpp"
 #include <functional>
-${extraImports.join('\n')}
+${extraIncludes.join('\n')}
 
 namespace margelo::nitro {
 

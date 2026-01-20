@@ -12,7 +12,10 @@
 #include "MapWrapper+Swift.hpp"
 #include "MapWrapper.hpp"
 #include <functional>
-#include "SecondMapWrapper+Swift.hpp"
+#include <string>
+#include <unordered_map>
+#include "SecondMapWrapper.hpp"
+#include SecondMapWrapper+Swift.hpp
 
 namespace margelo::nitro {
 

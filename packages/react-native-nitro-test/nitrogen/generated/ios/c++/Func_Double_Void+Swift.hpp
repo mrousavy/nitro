@@ -8,6 +8,7 @@
 #pragma once
 
 #include <functional>
+#include <functional>
 
 namespace NitroTest {
   class Func_Double_Void;

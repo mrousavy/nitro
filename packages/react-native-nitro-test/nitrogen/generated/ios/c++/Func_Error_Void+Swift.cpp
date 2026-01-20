@@ -12,13 +12,10 @@
 #include "Func_Error_Void+Swift.hpp"
 #include <functional>
 
-#include <exception>
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void(const std::exception_ptr&)> SwiftConverter<std::function<void(const std::exception_ptr&)>>::fromSwift(const NitroTest::Func_Error_Void& swiftFunc) {
-    return [swiftFunc = /* copy */ swiftFunc](std::exception_ptr error) mutable -> void {
+    return [swiftFunc = /* copy */ swiftFunc](const std::exception_ptr& error) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
       // return swiftFunc.call(error);

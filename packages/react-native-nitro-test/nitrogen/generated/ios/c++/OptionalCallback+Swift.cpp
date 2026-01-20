@@ -9,11 +9,12 @@
 #define SWIFT_IS_IMPORTED
 #include <NitroModules/SwiftConverter.hpp>
 
-#include "Variant_______Void_Double+Swift.hpp"
 #include "OptionalCallback+Swift.hpp"
 #include "OptionalCallback.hpp"
 #include <functional>
-
+#include <functional>
+#include <variant>
+#include <optional>
 
 namespace margelo::nitro {
 

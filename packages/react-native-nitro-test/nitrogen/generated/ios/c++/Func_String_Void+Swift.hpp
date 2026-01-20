@@ -8,6 +8,8 @@
 #pragma once
 
 #include <functional>
+#include <string>
+#include <functional>
 
 namespace NitroTest {
   class Func_String_Void;

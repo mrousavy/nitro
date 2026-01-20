@@ -6,6 +6,7 @@ import {
   escapeCppName,
   isNotDuplicate,
 } from '../helpers.js'
+import { Parameter } from '../Parameter.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { FunctionType } from '../types/FunctionType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
@@ -38,9 +39,8 @@ export function createSwiftFunctionBridge(
   )
   const argsForward = functionType.parameters.map((p) => p.escapedName)
   const paramsCpp = functionType.parameters.map((p) => {
-    const bridged = new SwiftCxxBridgedType(p)
-    // TODO: .getTypeCode('c++') should use the swift::T types.
-    return `${bridged.getTypeCode('c++')} ${p.escapedName}`
+    const parameter = new Parameter(p.escapedName, p)
+    return parameter.getCode('c++')
   })
 
   const swiftClassName = getSwiftFunctionClassName(functionType)
@@ -96,6 +96,7 @@ ${createFileMetadataString(`${swiftClassName}+Swift.hpp`)}
 #pragma once
 
 #include <functional>
+${extraIncludes.join('\n')}
 
 namespace ${iosNamespace} {
   class ${swiftClassName};
@@ -123,8 +124,6 @@ ${createFileMetadataString(`${swiftClassName}+Swift.cpp`)}
 
 #include "${swiftClassName}+Swift.hpp"
 #include <functional>
-
-${extraIncludes.join('\n')}
 
 namespace margelo::nitro {
 

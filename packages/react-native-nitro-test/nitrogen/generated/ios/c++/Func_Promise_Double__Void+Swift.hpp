@@ -8,6 +8,8 @@
 #pragma once
 
 #include <functional>
+#include <NitroModules/Promise.hpp>
+#include <functional>
 
 namespace NitroTest {
   class Func_Promise_Double__Void;

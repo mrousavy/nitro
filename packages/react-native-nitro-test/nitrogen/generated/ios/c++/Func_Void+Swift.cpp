@@ -12,8 +12,6 @@
 #include "Func_Void+Swift.hpp"
 #include <functional>
 
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void()> SwiftConverter<std::function<void()>>::fromSwift(const NitroTest::Func_Void& swiftFunc) {

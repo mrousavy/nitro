@@ -8,6 +8,9 @@
 #pragma once
 
 #include <functional>
+#include <string>
+#include <NitroModules/Promise.hpp>
+#include <functional>
 
 namespace NitroTest {
   class Func_Promise_String_;

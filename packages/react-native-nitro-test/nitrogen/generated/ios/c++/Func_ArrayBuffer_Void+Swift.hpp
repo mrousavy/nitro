@@ -8,6 +8,8 @@
 #pragma once
 
 #include <functional>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <functional>
 
 namespace NitroTest {
   class Func_ArrayBuffer_Void;

@@ -12,14 +12,10 @@
 #include "Func__Powertrain__Void+Swift.hpp"
 #include <functional>
 
-#include "Powertrain.hpp"
-#include <vector>
-#include <functional>
-
 namespace margelo::nitro {
 
   std::function<void(const std::vector<margelo::nitro::test::Powertrain>&)> SwiftConverter<std::function<void(const std::vector<margelo::nitro::test::Powertrain>&)>>::fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc) {
-    return [swiftFunc = /* copy */ swiftFunc](std::vector<NitroTest::Powertrain> array) mutable -> void {
+    return [swiftFunc = /* copy */ swiftFunc](const std::vector<Powertrain>& array) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
       // return swiftFunc.call(array);

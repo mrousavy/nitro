@@ -8,6 +8,9 @@
 #pragma once
 
 #include <functional>
+#include <memory>
+#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <functional>
 
 namespace NitroTest {
   class Func__any_HybridSomeExternalObjectSpec_;
