@@ -276,14 +276,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
-      case 'map': {
-        switch (language) {
-          case 'swift':
-            return `${cppParameterName}.getSwiftPart()`
-          default:
-            return cppParameterName
-        }
-      }
       case 'array': {
         const arrayType = getTypeAs(this.type, ArrayType)
         const itemType = new SwiftCxxBridgedType(arrayType.itemType)

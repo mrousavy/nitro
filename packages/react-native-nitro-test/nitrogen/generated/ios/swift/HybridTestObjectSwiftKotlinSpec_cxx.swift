@@ -397,7 +397,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func bounceMaps(maps: [AnyMap]) -> [AnyMap] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceMaps(maps: maps.map({ item in item.getSwiftPart() }))
+    let __result = try! self.__implementation.bounceMaps(maps: maps.map({ item in item }))
     return __result.map({ item in item })
   }
   
@@ -425,28 +425,28 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func mapRoundtrip(map: AnyMap) -> AnyMap {
     // TODO: Remove try!
-    let __result = try! self.__implementation.mapRoundtrip(map: map.getSwiftPart())
+    let __result = try! self.__implementation.mapRoundtrip(map: map)
     return __result
   }
   
   @inline(__always)
   public final func getMapKeys(map: AnyMap) -> [String] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.getMapKeys(map: map.getSwiftPart())
+    let __result = try! self.__implementation.getMapKeys(map: map)
     return __result
   }
   
   @inline(__always)
   public final func mergeMaps(a: AnyMap, b: AnyMap) -> AnyMap {
     // TODO: Remove try!
-    let __result = try! self.__implementation.mergeMaps(a: a.getSwiftPart(), b: b.getSwiftPart())
+    let __result = try! self.__implementation.mergeMaps(a: a, b: b)
     return __result
   }
   
   @inline(__always)
   public final func copyAnyMap(map: AnyMap) -> AnyMap {
     // TODO: Remove try!
-    let __result = try! self.__implementation.copyAnyMap(map: map.getSwiftPart())
+    let __result = try! self.__implementation.copyAnyMap(map: map)
     return __result
   }
   
