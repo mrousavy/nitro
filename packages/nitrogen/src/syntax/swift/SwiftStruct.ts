@@ -71,7 +71,7 @@ export function createSwiftStructBridge(
     .filter(isNotDuplicate)
   for (const prop of struct.properties) {
     const include = getRequiredBridgeImport(prop)
-    if (include != null) extraIncludes.push(`#include ${include}`)
+    if (include != null) extraIncludes.push(`#include "${include}"`)
   }
 
   const swiftCode = `

@@ -15,7 +15,7 @@
 #include <string>
 #include <unordered_map>
 #include "SecondMapWrapper.hpp"
-#include SecondMapWrapper+Swift.hpp
+#include "SecondMapWrapper+Swift.hpp"
 
 namespace margelo::nitro {
 

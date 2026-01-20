@@ -13,7 +13,7 @@
 #include "JsStyleStruct.hpp"
 #include <functional>
 #include <functional>
-#include Func_Double_Void+Swift.hpp
+#include "Func_Double_Void+Swift.hpp"
 
 namespace margelo::nitro {
 

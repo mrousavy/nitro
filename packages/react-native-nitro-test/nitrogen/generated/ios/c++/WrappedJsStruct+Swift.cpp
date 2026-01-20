@@ -14,7 +14,7 @@
 #include <functional>
 #include "JsStyleStruct.hpp"
 #include <vector>
-#include JsStyleStruct+Swift.hpp
+#include "JsStyleStruct+Swift.hpp"
 
 namespace margelo::nitro {
 
