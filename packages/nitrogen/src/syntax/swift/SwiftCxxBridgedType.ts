@@ -16,7 +16,7 @@ import {
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
-import { createSwiftVariant } from './SwiftVariant.js'
+import { createSwiftVariantBridge } from './SwiftVariant.js'
 import {
   createSwiftFunctionBridge,
   getSwiftFunctionClassName,
@@ -142,8 +142,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
-        const file = createSwiftVariant(variant)
-        files.push(file)
+        files.push(...createSwiftVariantBridge(variant))
         break
       }
     }
