@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::MapWrapper> {
+  struct SwiftConverter<margelo::nitro::test::MapWrapper, void> {
     using SwiftType = NitroTest::MapWrapper;
     static margelo::nitro::test::MapWrapper fromSwift(const NitroTest::MapWrapper& swiftStruct);
     static NitroTest::MapWrapper toSwift(const margelo::nitro::test::MapWrapper& cppStruct);

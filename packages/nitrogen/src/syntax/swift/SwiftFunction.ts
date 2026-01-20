@@ -99,7 +99,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<${cppType}> {
+  struct SwiftConverter<${cppType}, void> {
     using SwiftType = ${iosNamespace}::${swiftClassName};
     static ${cppType} fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc);
     static ${iosNamespace}::${swiftClassName} toSwift(const ${cppType}& cppFunc);

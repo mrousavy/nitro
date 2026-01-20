@@ -88,7 +88,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<${cppTypeName}> {
+  struct SwiftConverter<${cppTypeName}, void> {
     using SwiftType = ${iosNamespace}::${enumType.enumName};
     static ${cppTypeName} fromSwift(const ${iosNamespace}::${enumType.enumName}& swiftEnum);
     static ${iosNamespace}::${enumType.enumName} toSwift(${cppTypeName} cppEnum);

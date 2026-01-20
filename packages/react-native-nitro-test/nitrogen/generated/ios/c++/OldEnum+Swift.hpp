@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::OldEnum> {
+  struct SwiftConverter<margelo::nitro::test::OldEnum, void> {
     using SwiftType = NitroTest::OldEnum;
     static margelo::nitro::test::OldEnum fromSwift(const NitroTest::OldEnum& swiftEnum);
     static NitroTest::OldEnum toSwift(margelo::nitro::test::OldEnum cppEnum);

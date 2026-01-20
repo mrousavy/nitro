@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::OptionalWrapper> {
+  struct SwiftConverter<margelo::nitro::test::OptionalWrapper, void> {
     using SwiftType = NitroTest::OptionalWrapper;
     static margelo::nitro::test::OptionalWrapper fromSwift(const NitroTest::OptionalWrapper& swiftStruct);
     static NitroTest::OptionalWrapper toSwift(const margelo::nitro::test::OptionalWrapper& cppStruct);

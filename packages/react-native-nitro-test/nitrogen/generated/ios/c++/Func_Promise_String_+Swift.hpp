@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<std::shared_ptr<Promise<std::string>>()>> {
+  struct SwiftConverter<std::function<std::shared_ptr<Promise<std::string>>()>, void> {
     using SwiftType = NitroTest::Func_Promise_String_;
     static std::function<std::shared_ptr<Promise<std::string>>()> fromSwift(const NitroTest::Func_Promise_String_& swiftFunc);
     static NitroTest::Func_Promise_String_ toSwift(const std::function<std::shared_ptr<Promise<std::string>>()>& cppFunc);

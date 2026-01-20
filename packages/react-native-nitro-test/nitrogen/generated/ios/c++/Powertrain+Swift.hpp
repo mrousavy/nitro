@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::Powertrain> {
+  struct SwiftConverter<margelo::nitro::test::Powertrain, void> {
     using SwiftType = NitroTest::Powertrain;
     static margelo::nitro::test::Powertrain fromSwift(const NitroTest::Powertrain& swiftEnum);
     static NitroTest::Powertrain toSwift(margelo::nitro::test::Powertrain cppEnum);

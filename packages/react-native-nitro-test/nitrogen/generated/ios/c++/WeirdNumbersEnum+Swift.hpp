@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::WeirdNumbersEnum> {
+  struct SwiftConverter<margelo::nitro::test::WeirdNumbersEnum, void> {
     using SwiftType = NitroTest::WeirdNumbersEnum;
     static margelo::nitro::test::WeirdNumbersEnum fromSwift(const NitroTest::WeirdNumbersEnum& swiftEnum);
     static NitroTest::WeirdNumbersEnum toSwift(margelo::nitro::test::WeirdNumbersEnum cppEnum);

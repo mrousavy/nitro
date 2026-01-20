@@ -106,7 +106,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<${cppStructName}> {
+  struct SwiftConverter<${cppStructName}, void> {
     using SwiftType = ${iosNamespace}::${struct.structName};
     static ${cppStructName} fromSwift(const ${iosNamespace}::${struct.structName}& swiftStruct);
     static ${iosNamespace}::${struct.structName} toSwift(const ${cppStructName}& cppStruct);

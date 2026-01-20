@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::OptionalCallback> {
+  struct SwiftConverter<margelo::nitro::test::OptionalCallback, void> {
     using SwiftType = NitroTest::OptionalCallback;
     static margelo::nitro::test::OptionalCallback fromSwift(const NitroTest::OptionalCallback& swiftStruct);
     static NitroTest::OptionalCallback toSwift(const margelo::nitro::test::OptionalCallback& cppStruct);

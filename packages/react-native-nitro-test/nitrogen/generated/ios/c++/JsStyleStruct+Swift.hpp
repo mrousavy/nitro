@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::JsStyleStruct> {
+  struct SwiftConverter<margelo::nitro::test::JsStyleStruct, void> {
     using SwiftType = NitroTest::JsStyleStruct;
     static margelo::nitro::test::JsStyleStruct fromSwift(const NitroTest::JsStyleStruct& swiftStruct);
     static NitroTest::JsStyleStruct toSwift(const margelo::nitro::test::JsStyleStruct& cppStruct);

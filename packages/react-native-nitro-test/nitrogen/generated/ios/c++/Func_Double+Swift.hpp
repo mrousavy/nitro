@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<double()>> {
+  struct SwiftConverter<std::function<double()>, void> {
     using SwiftType = NitroTest::Func_Double;
     static std::function<double()> fromSwift(const NitroTest::Func_Double& swiftFunc);
     static NitroTest::Func_Double toSwift(const std::function<double()>& cppFunc);

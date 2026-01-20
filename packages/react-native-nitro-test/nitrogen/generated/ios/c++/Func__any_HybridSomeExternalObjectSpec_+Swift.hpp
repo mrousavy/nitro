@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>> {
+  struct SwiftConverter<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>, void> {
     using SwiftType = NitroTest::Func__any_HybridSomeExternalObjectSpec_;
     static std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()> fromSwift(const NitroTest::Func__any_HybridSomeExternalObjectSpec_& swiftFunc);
     static NitroTest::Func__any_HybridSomeExternalObjectSpec_ toSwift(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& cppFunc);

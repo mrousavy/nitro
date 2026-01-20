@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::ExternalObjectStruct> {
+  struct SwiftConverter<margelo::nitro::test::ExternalObjectStruct, void> {
     using SwiftType = NitroTest::ExternalObjectStruct;
     static margelo::nitro::test::ExternalObjectStruct fromSwift(const NitroTest::ExternalObjectStruct& swiftStruct);
     static NitroTest::ExternalObjectStruct toSwift(const margelo::nitro::test::ExternalObjectStruct& cppStruct);

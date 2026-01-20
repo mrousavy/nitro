@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::ColorScheme> {
+  struct SwiftConverter<margelo::nitro::test::ColorScheme, void> {
     using SwiftType = NitroTest::ColorScheme;
     static margelo::nitro::test::ColorScheme fromSwift(const NitroTest::ColorScheme& swiftEnum);
     static NitroTest::ColorScheme toSwift(margelo::nitro::test::ColorScheme cppEnum);

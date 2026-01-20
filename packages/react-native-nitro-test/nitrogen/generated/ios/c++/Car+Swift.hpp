@@ -20,7 +20,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<margelo::nitro::test::Car> {
+  struct SwiftConverter<margelo::nitro::test::Car, void> {
     using SwiftType = NitroTest::Car;
     static margelo::nitro::test::Car fromSwift(const NitroTest::Car& swiftStruct);
     static NitroTest::Car toSwift(const margelo::nitro::test::Car& cppStruct);

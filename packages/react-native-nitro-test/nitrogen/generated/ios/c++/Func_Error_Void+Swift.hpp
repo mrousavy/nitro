@@ -19,7 +19,7 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<void(const std::exception_ptr&)>> {
+  struct SwiftConverter<std::function<void(const std::exception_ptr&)>, void> {
     using SwiftType = NitroTest::Func_Error_Void;
     static std::function<void(const std::exception_ptr&)> fromSwift(const NitroTest::Func_Error_Void& swiftFunc);
     static NitroTest::Func_Error_Void toSwift(const std::function<void(const std::exception_ptr&)>& cppFunc);
