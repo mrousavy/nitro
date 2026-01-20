@@ -18,9 +18,7 @@
 namespace margelo::nitro {
 
   margelo::nitro::test::ExternalObjectStruct SwiftConverter<margelo::nitro::test::ExternalObjectStruct>::fromSwift(const NitroTest::ExternalObjectStruct& swiftStruct) {
-    return margelo::nitro::test::ExternalObjectStruct(
-      SwiftConverter<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::fromSwift(swiftStruct.getSomeExternal_cxx())
-    );
+    throw std::runtime_error("Downcasting can't work yet outside of the defining module...");
   }
 
   NitroTest::ExternalObjectStruct SwiftConverter<margelo::nitro::test::ExternalObjectStruct>::toSwift(const margelo::nitro::test::ExternalObjectStruct& cppStruct) {
