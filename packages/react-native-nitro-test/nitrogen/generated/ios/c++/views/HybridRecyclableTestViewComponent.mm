@@ -69,7 +69,8 @@ using namespace margelo::nitro::test::views;
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    _hybridView->setIsBlue(SwiftConverter<bool>::toSwift(newViewProps.isBlue.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setIsBlue(SwiftConverter<bool>::toSwift(newViewProps.isBlue.value));
     newViewProps.isBlue.isDirty = false;
   }
 

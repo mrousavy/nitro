@@ -39,7 +39,8 @@ export function createSwiftHybridViewManager(
     return `
 // ${p.jsSignature}
 if (newViewProps.${name}.isDirty) {
-  _hybridView->${setter}(SwiftConverter<${p.type.getCode('c++')}>::toSwift(newViewProps.${name}.value));
+  // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+  // _hybridView->${setter}(SwiftConverter<${p.type.getCode('c++')}>::toSwift(newViewProps.${name}.value));
   newViewProps.${name}.isDirty = false;
 }
 `.trim()

@@ -69,22 +69,26 @@ using namespace margelo::nitro::test::views;
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    _hybridView->setIsBlue(SwiftConverter<bool>::toSwift(newViewProps.isBlue.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setIsBlue(SwiftConverter<bool>::toSwift(newViewProps.isBlue.value));
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    _hybridView->setHasBeenCalled(SwiftConverter<bool>::toSwift(newViewProps.hasBeenCalled.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setHasBeenCalled(SwiftConverter<bool>::toSwift(newViewProps.hasBeenCalled.value));
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
-    _hybridView->setColorScheme(SwiftConverter<ColorScheme>::toSwift(newViewProps.colorScheme.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setColorScheme(SwiftConverter<ColorScheme>::toSwift(newViewProps.colorScheme.value));
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
   if (newViewProps.someCallback.isDirty) {
-    _hybridView->setSomeCallback(SwiftConverter<std::function<void()>>::toSwift(newViewProps.someCallback.value));
+    // TODO: Actually set props via SwiftConverter (or make Props use JSIConverter+Swift)
+    // _hybridView->setSomeCallback(SwiftConverter<std::function<void()>>::toSwift(newViewProps.someCallback.value));
     newViewProps.someCallback.isDirty = false;
   }
 
