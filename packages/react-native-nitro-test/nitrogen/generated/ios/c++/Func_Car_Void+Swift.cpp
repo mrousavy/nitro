@@ -16,7 +16,9 @@ namespace margelo::nitro {
 
   std::function<void(const Car&)> SwiftConverter<std::function<void(const Car&)>>::fromSwift(const NitroTest::Func_Car_Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](Car value) mutable -> void {
-      return swiftFunc.call(value);
+      // TODO: Actually call function (convert Swift <-> C++)
+      throw std::runtime_error("Not yet implemented!");
+      // return swiftFunc.call(value);
     };
   }
 

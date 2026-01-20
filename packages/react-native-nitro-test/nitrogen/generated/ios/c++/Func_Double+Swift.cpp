@@ -16,7 +16,9 @@ namespace margelo::nitro {
 
   std::function<double()> SwiftConverter<std::function<double()>>::fromSwift(const NitroTest::Func_Double& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc]() mutable -> double {
-      return swiftFunc.call();
+      // TODO: Actually call function (convert Swift <-> C++)
+      throw std::runtime_error("Not yet implemented!");
+      // return swiftFunc.call();
     };
   }
 

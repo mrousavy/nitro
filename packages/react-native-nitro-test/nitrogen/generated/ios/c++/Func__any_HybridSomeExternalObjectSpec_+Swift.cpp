@@ -16,7 +16,9 @@ namespace margelo::nitro {
 
   std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()> SwiftConverter<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>>::fromSwift(const NitroTest::Func__any_HybridSomeExternalObjectSpec_& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc]() mutable -> std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> {
-      return swiftFunc.call();
+      // TODO: Actually call function (convert Swift <-> C++)
+      throw std::runtime_error("Not yet implemented!");
+      // return swiftFunc.call();
     };
   }
 

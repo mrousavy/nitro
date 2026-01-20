@@ -16,7 +16,9 @@ namespace margelo::nitro {
 
   std::function<void(const std::shared_ptr<Promise<double>>&)> SwiftConverter<std::function<void(const std::shared_ptr<Promise<double>>&)>>::fromSwift(const NitroTest::Func_Promise_Double__Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](std::shared_ptr<Promise<double>> value) mutable -> void {
-      return swiftFunc.call(value);
+      // TODO: Actually call function (convert Swift <-> C++)
+      throw std::runtime_error("Not yet implemented!");
+      // return swiftFunc.call(value);
     };
   }
 

@@ -120,7 +120,9 @@ namespace margelo::nitro {
 
   ${cppType} SwiftConverter<${cppType}>::fromSwift(const ${iosNamespace}::${swiftClassName}& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](${paramsCpp.join(', ')}) mutable -> ${functionType.returnType.getCode('c++')} {
-      return swiftFunc.call(${argsForward.join(', ')});
+      // TODO: Actually call function (convert Swift <-> C++)
+      throw std::runtime_error("Not yet implemented!");
+      // return swiftFunc.call(${argsForward.join(', ')});
     };
   }
 
