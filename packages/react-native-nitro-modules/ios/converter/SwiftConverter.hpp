@@ -2,13 +2,16 @@
 // Created by Marc Rousavy on 15.01.26.
 //
 
-#pragma once
 
 // Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
 template <typename T, typename Enable>
 struct SwiftConverter;
 } // namespace margelo::nitro
+
+#ifdef SWIFT_IS_IMPORTED
+#ifndef SWIFT_CONVERTER
+#define SWIFT_CONVERTER
 
 #include <type_traits>
 #include <variant>
@@ -91,3 +94,8 @@ struct SwiftConverter<bool> final {
 #include "SwiftConverter+Optional.hpp"
 #include "SwiftConverter+Array.hpp"
 #include "SwiftConverter+Function.hpp"
+
+#endif
+#else
+#warning Tried including `SwiftConverter.hpp`, but `SWIFT_IS_IMPORTED` is not defined. Import the `-Swift.h` header, define `SWIFT_IS_IMPORTED`, and try again.
+#endif
