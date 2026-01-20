@@ -44,7 +44,9 @@ def add_nitrogen_files(spec)
     # Generated specs
     "nitrogen/generated/shared/**/*.{h,hpp}",
     # Swift to C++ bridging helpers
-    "nitrogen/generated/ios/${name}-Swift-Cxx-Bridge.hpp"
+    "nitrogen/generated/ios/${name}-Swift-Cxx-Bridge.hpp",
+    # Swift symbols exported to C++
+    "nitrogen/generated/ios/${name}-Swift-Cxx-Umbrella.hpp",
   ]
 
   current_private_header_files = Array(spec.attributes_hash['private_header_files'])
