@@ -12,9 +12,12 @@
 #include "Func_Car_Void+Swift.hpp"
 #include <functional>
 
+#include "Car.hpp"
+#include <functional>
+
 namespace margelo::nitro {
 
-  std::function<void(const Car&)> SwiftConverter<std::function<void(const Car&)>>::fromSwift(const NitroTest::Func_Car_Void& swiftFunc) {
+  std::function<void(const margelo::nitro::test::Car&)> SwiftConverter<std::function<void(const margelo::nitro::test::Car&)>>::fromSwift(const NitroTest::Func_Car_Void& swiftFunc) {
     return [swiftFunc = /* copy */ swiftFunc](Car value) mutable -> void {
       // TODO: Actually call function (convert Swift <-> C++)
       throw std::runtime_error("Not yet implemented!");
@@ -22,7 +25,7 @@ namespace margelo::nitro {
     };
   }
 
-  NitroTest::Func_Car_Void SwiftConverter<std::function<void(const Car&)>>::toSwift(const std::function<void(const Car&)>& cppFunc) {
+  NitroTest::Func_Car_Void SwiftConverter<std::function<void(const margelo::nitro::test::Car&)>>::toSwift(const std::function<void(const margelo::nitro::test::Car&)>& cppFunc) {
     return NitroTest::Func_Car_Void::init(cppFunc);
   }
 

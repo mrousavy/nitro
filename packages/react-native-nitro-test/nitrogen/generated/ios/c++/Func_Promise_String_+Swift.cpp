@@ -12,6 +12,10 @@
 #include "Func_Promise_String_+Swift.hpp"
 #include <functional>
 
+#include <string>
+#include <NitroModules/Promise.hpp>
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<std::shared_ptr<Promise<std::string>>()> SwiftConverter<std::function<std::shared_ptr<Promise<std::string>>()>>::fromSwift(const NitroTest::Func_Promise_String_& swiftFunc) {

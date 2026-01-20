@@ -12,6 +12,9 @@
 #include "Func_Error_Void+Swift.hpp"
 #include <functional>
 
+#include <exception>
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<void(const std::exception_ptr&)> SwiftConverter<std::function<void(const std::exception_ptr&)>>::fromSwift(const NitroTest::Func_Error_Void& swiftFunc) {

@@ -1,5 +1,6 @@
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
+import { includeHeader } from '../c++/includeNitroHeader.js'
 import {
   createFileMetadataString,
   escapeCppName,
@@ -48,7 +49,14 @@ export function createSwiftFunctionBridge(
     .map((i) => `import ${i.name}`)
   requiredImports.push('import NitroModules')
   const imports = requiredImports.filter(isNotDuplicate)
-  const cppType = functionType.getCode('c++', { includeNameInfo: false })
+  const extraIncludes = functionType
+    .getRequiredImports('c++')
+    .map((i) => includeHeader(i, true))
+    .filter(isNotDuplicate)
+  const cppType = functionType.getCode('c++', {
+    includeNameInfo: false,
+    fullyQualified: true,
+  })
 
   // TODO: Pass std::function via rvalue (&& / consuming) once Swift cxx-interop supports that
 
@@ -115,6 +123,8 @@ ${createFileMetadataString(`${swiftClassName}+Swift.cpp`)}
 
 #include "${swiftClassName}+Swift.hpp"
 #include <functional>
+
+${extraIncludes.join('\n')}
 
 namespace margelo::nitro {
 

@@ -12,6 +12,9 @@
 #include "Func_String_Void+Swift.hpp"
 #include <functional>
 
+#include <string>
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<void(const std::string&)> SwiftConverter<std::function<void(const std::string&)>>::fromSwift(const NitroTest::Func_String_Void& swiftFunc) {

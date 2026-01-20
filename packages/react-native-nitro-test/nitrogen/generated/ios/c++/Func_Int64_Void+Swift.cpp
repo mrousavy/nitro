@@ -12,6 +12,8 @@
 #include "Func_Int64_Void+Swift.hpp"
 #include <functional>
 
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<void(int64_t)> SwiftConverter<std::function<void(int64_t)>>::fromSwift(const NitroTest::Func_Int64_Void& swiftFunc) {

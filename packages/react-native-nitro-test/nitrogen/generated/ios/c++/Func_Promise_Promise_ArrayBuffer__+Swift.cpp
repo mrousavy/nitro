@@ -12,6 +12,10 @@
 #include "Func_Promise_Promise_ArrayBuffer__+Swift.hpp"
 #include <functional>
 
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/Promise.hpp>
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()> SwiftConverter<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>>::fromSwift(const NitroTest::Func_Promise_Promise_ArrayBuffer__& swiftFunc) {

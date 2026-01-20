@@ -12,6 +12,9 @@
 #include "Func_Promise_Void__Void+Swift.hpp"
 #include <functional>
 
+#include <NitroModules/Promise.hpp>
+#include <functional>
+
 namespace margelo::nitro {
 
   std::function<void(const std::shared_ptr<Promise<void>>&)> SwiftConverter<std::function<void(const std::shared_ptr<Promise<void>>&)>>::fromSwift(const NitroTest::Func_Promise_Void__Void& swiftFunc) {

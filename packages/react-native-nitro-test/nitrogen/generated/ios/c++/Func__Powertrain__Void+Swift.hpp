@@ -19,9 +19,9 @@ namespace margelo::nitro {
 
 namespace margelo::nitro {
   template <>
-  struct SwiftConverter<std::function<void(const std::vector<Powertrain>&)>, void> {
+  struct SwiftConverter<std::function<void(const std::vector<margelo::nitro::test::Powertrain>&)>, void> {
     using SwiftType = NitroTest::Func__Powertrain__Void;
-    static std::function<void(const std::vector<Powertrain>&)> fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc);
-    static NitroTest::Func__Powertrain__Void toSwift(const std::function<void(const std::vector<Powertrain>&)>& cppFunc);
+    static std::function<void(const std::vector<margelo::nitro::test::Powertrain>&)> fromSwift(const NitroTest::Func__Powertrain__Void& swiftFunc);
+    static NitroTest::Func__Powertrain__Void toSwift(const std::function<void(const std::vector<margelo::nitro::test::Powertrain>&)>& cppFunc);
   };
 }
