@@ -16,7 +16,7 @@ public enum CoreTypesVariant {
   case first(ArrayBuffer)
   case second(Func_Double_Void)
   case third(WrappedJsStruct)
-  case fourth(Promise<Double>)
-  case fifth(Date)
+  case fourth(Double)
+  case fifth(Double)
   case sixth(AnyMap)
 }
