@@ -272,7 +272,7 @@ namespace ${namespace} {
   void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = dynamic_cast<${shadowNodeClassName}&>(shadowNode);
+    auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
     const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
     ${stateClassName} state;
     state.setProps(props);
