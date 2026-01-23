@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 13.01.25.
 //
 
-import Foundation
-
 /// A `HybridView` that can also be recycled.
 public protocol RecyclableView {
   /**

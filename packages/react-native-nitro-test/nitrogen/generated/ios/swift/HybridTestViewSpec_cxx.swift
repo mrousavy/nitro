@@ -5,7 +5,6 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-import Foundation
 import NitroModules
 
 /**
@@ -199,7 +198,7 @@ open class HybridTestViewSpec_cxx {
   }
   
   public final func maybePrepareForRecycle() {
-    guard let recyclable = __implementation as? RecyclableView else { return }
+    guard let recyclable = __implementation as? any RecyclableView else { return }
     recyclable.prepareForRecycle()
   }
 }

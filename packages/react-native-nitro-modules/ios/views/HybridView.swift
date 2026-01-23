@@ -7,7 +7,6 @@
 
 #if canImport(UIKit)
 
-  import Foundation
   import UIKit
 
   /// A base protocol for all Swift-based Hybrid Views.

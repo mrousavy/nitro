@@ -5,7 +5,6 @@
 //  Created by Marc Rousavy on 14.08.25.
 //
 
-import Foundation
 import NitroModules
 
 class HybridSomeExternalObject: HybridSomeExternalObjectSpec {

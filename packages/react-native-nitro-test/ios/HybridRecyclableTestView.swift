@@ -5,7 +5,6 @@
 //  Created by Marc Rousavy on 03.10.24.
 //
 
-import Foundation
 import NitroModules
 import UIKit
 

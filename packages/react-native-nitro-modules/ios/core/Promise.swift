@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 15.08.24.
 //
 
-import Foundation
-
 /// Represents a Promise that can be passed to JS.
 ///
 /// Create a new Promise with the following APIs:

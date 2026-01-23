@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 20.08.24.
 //
 
-import Foundation
-
 /// Represents any value representable by the `AnyMap`.
 /// Note: Arrays are currently not implemented due to a Swift compiler bug https://github.com/swiftlang/swift/issues/75994
 public indirect enum AnyValue {

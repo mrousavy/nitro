@@ -66,7 +66,7 @@ public final func afterUpdate() {
 `.trim(),
       `
 public final func maybePrepareForRecycle() {
-  guard let recyclable = __implementation as? RecyclableView else { return }
+  guard let recyclable = __implementation as? any RecyclableView else { return }
   recyclable.prepareForRecycle()
 }
 `.trim()
@@ -130,7 +130,6 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
-import Foundation
 ${imports.join('\n')}
 
 /**

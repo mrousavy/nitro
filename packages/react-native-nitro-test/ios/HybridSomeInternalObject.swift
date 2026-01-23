@@ -5,7 +5,6 @@
 //  Created by Marc Rousavy on 11.08.24.
 //
 
-import Foundation
 import NitroModules
 import NitroTestExternal
 

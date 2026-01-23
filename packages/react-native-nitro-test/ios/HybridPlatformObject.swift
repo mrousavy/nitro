@@ -5,7 +5,6 @@
 //  Created by Marc Rousavy on 27.10.25.
 //
 
-import Foundation
 import UIKit
 
 class HybridPlatformObject: HybridPlatformObjectSpec {
