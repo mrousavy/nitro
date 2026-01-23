@@ -53,7 +53,7 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-open class ${manager}: SimpleViewManager<View>() {
+public class ${manager}: SimpleViewManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(${viewImplementation}::class.java)) {
       // Enable view recycling
@@ -152,7 +152,7 @@ namespace ${cxxNamespace} {
 
 using namespace facebook;
 
-class J${stateUpdaterName}: public jni::JavaClass<J${stateUpdaterName}> {
+class J${stateUpdaterName} final: public jni::JavaClass<J${stateUpdaterName}> {
 public:
   static constexpr auto kJavaDescriptor = "L${updaterJniDescriptor};";
 
