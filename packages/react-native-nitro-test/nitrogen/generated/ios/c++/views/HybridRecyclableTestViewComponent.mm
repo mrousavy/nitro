@@ -44,7 +44,7 @@ using namespace margelo::nitro::test::views;
 - (instancetype) init {
   if (self = [super init]) {
     std::shared_ptr<HybridRecyclableTestViewSpec> hybridView = NitroTest::NitroTestAutolinking::createRecyclableTestView();
-    _hybridView = std::static_pointer_cast<HybridRecyclableTestViewSpecSwift>(hybridView);
+    _hybridView = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(hybridView);
     [self updateView];
   }
   return self;

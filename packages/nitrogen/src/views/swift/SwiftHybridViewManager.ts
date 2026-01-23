@@ -95,7 +95,7 @@ using namespace ${namespace}::views;
 - (instancetype) init {
   if (self = [super init]) {
     std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
-    _hybridView = std::static_pointer_cast<${HybridTSpecSwift}>(hybridView);
+    _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
     [self updateView];
   }
   return self;
