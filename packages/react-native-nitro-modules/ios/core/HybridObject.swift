@@ -5,8 +5,6 @@
 //  Created by Marc Rousavy on 23.07.24.
 //
 
-import Foundation
-
 /// A base protocol for all Swift-based Hybrid Objects.
 public protocol HybridObject: AnyObject {
   /**

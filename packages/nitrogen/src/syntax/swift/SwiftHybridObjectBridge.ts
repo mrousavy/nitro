@@ -130,7 +130,6 @@ public override func getCxxPart() -> bridge.${baseBridge.specializationName} {
   const swiftCxxWrapperCode = `
 ${createFileMetadataString(`${name.HybridTSpecCxx}.swift`)}
 
-import Foundation
 ${imports.join('\n')}
 
 /**
