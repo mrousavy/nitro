@@ -154,6 +154,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun updateTravelEstimates(templateId: String, steps: Array<TripPoint>): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun updateManeuvers(templateId: String, maneuvers: Array<NitroRoutingManeuver>): Unit
+  
+  @DoNotStrip
+  @Keep
   abstract fun simpleFunc(): Unit
   
   @DoNotStrip

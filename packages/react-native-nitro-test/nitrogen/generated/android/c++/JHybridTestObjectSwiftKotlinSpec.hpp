@@ -85,6 +85,8 @@ namespace margelo::nitro::test {
     // Methods
     std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override;
     std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) override;
+    void updateTravelEstimates(const std::string& templateId, const std::vector<TripPoint>& steps) override;
+    void updateManeuvers(const std::string& templateId, const std::vector<NitroRoutingManeuver>& maneuvers) override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;

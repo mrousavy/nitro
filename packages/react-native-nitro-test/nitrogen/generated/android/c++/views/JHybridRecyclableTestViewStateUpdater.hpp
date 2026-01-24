@@ -24,7 +24,7 @@ namespace margelo::nitro::test::views {
 
 using namespace facebook;
 
-class JHybridRecyclableTestViewStateUpdater final: public jni::JavaClass<JHybridRecyclableTestViewStateUpdater> {
+class JHybridRecyclableTestViewStateUpdater: public jni::JavaClass<JHybridRecyclableTestViewStateUpdater> {
 public:
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/views/HybridRecyclableTestViewStateUpdater;";
 
