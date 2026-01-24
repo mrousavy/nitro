@@ -18,10 +18,19 @@ public extension TravelEstimates {
   /**
    * Create a new instance of `TravelEstimates`.
    */
-  init(distanceRemaining: Distance, timeRemaining: DurationWithTimeZone, tripText: AutoText?) {
+  init(distanceRemaining: Distance, timeRemaining: DurationWithTimeZone, tripText: AutoText?, _doNotUse: (() -> Void)?) {
     self.init(distanceRemaining, timeRemaining, { () -> bridge.std__optional_AutoText_ in
       if let __unwrappedValue = tripText {
         return bridge.create_std__optional_AutoText_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__function_void____ in
+      if let __unwrappedValue = _doNotUse {
+        return bridge.create_std__optional_std__function_void____({ () -> bridge.Func_void in
+          let __closureWrapper = Func_void(__unwrappedValue)
+          return bridge.create_Func_void(__closureWrapper.toUnsafe())
+        }())
       } else {
         return .init()
       }
@@ -41,5 +50,22 @@ public extension TravelEstimates {
   @inline(__always)
   var tripText: AutoText? {
     return self.__tripText.value
+  }
+  
+  @inline(__always)
+  var _doNotUse: (() -> Void)? {
+    return { () -> (() -> Void)? in
+      if bridge.has_value_std__optional_std__function_void____(self.___doNotUse) {
+        let __unwrapped = bridge.get_std__optional_std__function_void____(self.___doNotUse)
+        return { () -> () -> Void in
+          let __wrappedFunction = bridge.wrap_Func_void(__unwrapped)
+          return { () -> Void in
+            __wrappedFunction.call()
+          }
+        }()
+      } else {
+        return nil
+      }
+    }()
   }
 }

@@ -18,6 +18,9 @@
 #include "JDistance.hpp"
 #include "JDistanceUnits.hpp"
 #include "JDurationWithTimeZone.hpp"
+#include "JFunc_void.hpp"
+#include <NitroModules/JNICallable.hpp>
+#include <functional>
 #include <optional>
 #include <string>
 
@@ -46,10 +49,21 @@ namespace margelo::nitro::test {
       jni::local_ref<JDurationWithTimeZone> timeRemaining = this->getFieldValue(fieldTimeRemaining);
       static const auto fieldTripText = clazz->getField<JAutoText>("tripText");
       jni::local_ref<JAutoText> tripText = this->getFieldValue(fieldTripText);
+      static const auto field_doNotUse = clazz->getField<JFunc_void::javaobject>("_doNotUse");
+      jni::local_ref<JFunc_void::javaobject> _doNotUse = this->getFieldValue(field_doNotUse);
       return TravelEstimates(
         distanceRemaining->toCpp(),
         timeRemaining->toCpp(),
-        tripText != nullptr ? std::make_optional(tripText->toCpp()) : std::nullopt
+        tripText != nullptr ? std::make_optional(tripText->toCpp()) : std::nullopt,
+        _doNotUse != nullptr ? std::make_optional([&]() -> std::function<void()> {
+          if (_doNotUse->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+            auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(_doNotUse);
+            return downcast->cthis()->getFunction();
+          } else {
+            auto _doNotUseRef = jni::make_global(_doNotUse);
+            return JNICallable<JFunc_void, void()>(std::move(_doNotUseRef));
+          }
+        }()) : std::nullopt
       );
     }
 
@@ -59,14 +73,15 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JTravelEstimates::javaobject> fromCpp(const TravelEstimates& value) {
-      using JSignature = JTravelEstimates(jni::alias_ref<JDistance>, jni::alias_ref<JDurationWithTimeZone>, jni::alias_ref<JAutoText>);
+      using JSignature = JTravelEstimates(jni::alias_ref<JDistance>, jni::alias_ref<JDurationWithTimeZone>, jni::alias_ref<JAutoText>, jni::alias_ref<JFunc_void::javaobject>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
         JDistance::fromCpp(value.distanceRemaining),
         JDurationWithTimeZone::fromCpp(value.timeRemaining),
-        value.tripText.has_value() ? JAutoText::fromCpp(value.tripText.value()) : nullptr
+        value.tripText.has_value() ? JAutoText::fromCpp(value.tripText.value()) : nullptr,
+        value._doNotUse.has_value() ? JFunc_void_cxx::fromCpp(value._doNotUse.value()) : nullptr
       );
     }
   };

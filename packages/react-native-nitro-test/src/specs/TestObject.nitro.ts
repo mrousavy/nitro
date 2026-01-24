@@ -131,6 +131,10 @@ type TravelEstimates = {
   distanceRemaining: Distance;
   timeRemaining: DurationWithTimeZone;
   tripText?: AutoText;
+  /**
+   * This makes TravelEstimates.hpp not equatable and solves an "map" not available on vector build issue.
+   */
+  _doNotUse?: () => void;
 };
 
 type TripPoint = {

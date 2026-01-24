@@ -18,8 +18,11 @@
 #include "JDistance.hpp"
 #include "JDistanceUnits.hpp"
 #include "JDurationWithTimeZone.hpp"
+#include "JFunc_void.hpp"
 #include "JTravelEstimates.hpp"
 #include "TravelEstimates.hpp"
+#include <NitroModules/JNICallable.hpp>
+#include <functional>
 #include <optional>
 #include <string>
 

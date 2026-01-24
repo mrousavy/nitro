@@ -39,6 +39,7 @@ namespace margelo::nitro::test { struct AutoText; }
 #include "DurationWithTimeZone.hpp"
 #include "AutoText.hpp"
 #include <optional>
+#include <functional>
 
 namespace margelo::nitro::test {
 
@@ -50,13 +51,14 @@ namespace margelo::nitro::test {
     Distance distanceRemaining     SWIFT_PRIVATE;
     DurationWithTimeZone timeRemaining     SWIFT_PRIVATE;
     std::optional<AutoText> tripText     SWIFT_PRIVATE;
+    std::optional<std::function<void()>> _doNotUse     SWIFT_PRIVATE;
 
   public:
     TravelEstimates() = default;
-    explicit TravelEstimates(Distance distanceRemaining, DurationWithTimeZone timeRemaining, std::optional<AutoText> tripText): distanceRemaining(distanceRemaining), timeRemaining(timeRemaining), tripText(tripText) {}
+    explicit TravelEstimates(Distance distanceRemaining, DurationWithTimeZone timeRemaining, std::optional<AutoText> tripText, std::optional<std::function<void()>> _doNotUse): distanceRemaining(distanceRemaining), timeRemaining(timeRemaining), tripText(tripText), _doNotUse(_doNotUse) {}
 
   public:
-    friend bool operator==(const TravelEstimates& lhs, const TravelEstimates& rhs) = default;
+    // TravelEstimates is not equatable because these properties are not equatable: _doNotUse
   };
 
 } // namespace margelo::nitro::test
@@ -71,7 +73,8 @@ namespace margelo::nitro {
       return margelo::nitro::test::TravelEstimates(
         JSIConverter<margelo::nitro::test::Distance>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceRemaining"))),
         JSIConverter<margelo::nitro::test::DurationWithTimeZone>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "timeRemaining"))),
-        JSIConverter<std::optional<margelo::nitro::test::AutoText>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tripText")))
+        JSIConverter<std::optional<margelo::nitro::test::AutoText>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tripText"))),
+        JSIConverter<std::optional<std::function<void()>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "_doNotUse")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::TravelEstimates& arg) {
@@ -79,6 +82,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "distanceRemaining"), JSIConverter<margelo::nitro::test::Distance>::toJSI(runtime, arg.distanceRemaining));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "timeRemaining"), JSIConverter<margelo::nitro::test::DurationWithTimeZone>::toJSI(runtime, arg.timeRemaining));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "tripText"), JSIConverter<std::optional<margelo::nitro::test::AutoText>>::toJSI(runtime, arg.tripText));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "_doNotUse"), JSIConverter<std::optional<std::function<void()>>>::toJSI(runtime, arg._doNotUse));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -92,6 +96,7 @@ namespace margelo::nitro {
       if (!JSIConverter<margelo::nitro::test::Distance>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "distanceRemaining")))) return false;
       if (!JSIConverter<margelo::nitro::test::DurationWithTimeZone>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "timeRemaining")))) return false;
       if (!JSIConverter<std::optional<margelo::nitro::test::AutoText>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tripText")))) return false;
+      if (!JSIConverter<std::optional<std::function<void()>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "_doNotUse")))) return false;
       return true;
     }
   };

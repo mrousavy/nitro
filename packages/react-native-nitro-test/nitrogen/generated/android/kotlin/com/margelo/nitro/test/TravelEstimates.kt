@@ -25,9 +25,16 @@ data class TravelEstimates(
   val timeRemaining: DurationWithTimeZone,
   @DoNotStrip
   @Keep
-  val tripText: AutoText?
+  val tripText: AutoText?,
+  @DoNotStrip
+  @Keep
+  val _doNotUse: Func_void?
 ) {
-  /* primary constructor */
+  /**
+   * Create a new instance of TravelEstimates from Kotlin
+   */
+  constructor(distanceRemaining: Distance, timeRemaining: DurationWithTimeZone, tripText: AutoText?, _doNotUse: (() -> Unit)?):
+         this(distanceRemaining, timeRemaining, tripText, _doNotUse?.let { Func_void_java(it) })
 
   companion object {
     /**
@@ -37,8 +44,8 @@ data class TravelEstimates(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(distanceRemaining: Distance, timeRemaining: DurationWithTimeZone, tripText: AutoText?): TravelEstimates {
-      return TravelEstimates(distanceRemaining, timeRemaining, tripText)
+    private fun fromCpp(distanceRemaining: Distance, timeRemaining: DurationWithTimeZone, tripText: AutoText?, _doNotUse: Func_void?): TravelEstimates {
+      return TravelEstimates(distanceRemaining, timeRemaining, tripText, _doNotUse)
     }
   }
 }

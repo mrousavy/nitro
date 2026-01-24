@@ -105,7 +105,7 @@ namespace margelo::nitro::test {
     explicit NitroRoutingManeuver(std::vector<NitroAttributedString> attributedInstructionVariants, std::variant<AssetImage, GlyphImage> symbolImage, std::optional<std::variant<AssetImage, GlyphImage>> junctionImage, std::optional<TurnType> turnType, std::optional<double> angle, std::optional<std::vector<double>> elementAngles, std::optional<double> exitNumber, std::optional<OffRampType> offRampType, std::optional<OnRampType> onRampType, std::optional<ForkType> forkType, std::optional<KeepType> keepType, std::optional<LaneGuidance> linkedLaneGuidance, NitroColor cardBackgroundColor, std::string id, TravelEstimates travelEstimates, TrafficSide trafficSide, ManeuverType maneuverType, std::optional<std::vector<std::string>> roadName, std::optional<std::string> highwayExitLabel): attributedInstructionVariants(attributedInstructionVariants), symbolImage(symbolImage), junctionImage(junctionImage), turnType(turnType), angle(angle), elementAngles(elementAngles), exitNumber(exitNumber), offRampType(offRampType), onRampType(onRampType), forkType(forkType), keepType(keepType), linkedLaneGuidance(linkedLaneGuidance), cardBackgroundColor(cardBackgroundColor), id(id), travelEstimates(travelEstimates), trafficSide(trafficSide), maneuverType(maneuverType), roadName(roadName), highwayExitLabel(highwayExitLabel) {}
 
   public:
-    friend bool operator==(const NitroRoutingManeuver& lhs, const NitroRoutingManeuver& rhs) = default;
+    // NitroRoutingManeuver is not equatable because these properties are not equatable: travelEstimates
   };
 
 } // namespace margelo::nitro::test
