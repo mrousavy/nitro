@@ -46,9 +46,10 @@ function benchmarkSTL(obj: { stringValue: string }): number {
 
   // run addNumbers(...) ITERATIONS amount of times
   const start = performance.now()
+  const str = 'Hello!'
   for (let i = 0; i < ITERATIONS; i++) {
     // get + concat + set
-    obj.stringValue = obj.stringValue + '_'
+    obj.stringValue = str
   }
   const end = performance.now()
   console.log('C++:', obj.stringValue.length)
@@ -63,9 +64,10 @@ function benchmarkSwift(obj: { stringValueSwift: string }): number {
 
   // run addNumbers(...) ITERATIONS amount of times
   const start = performance.now()
+  const str = 'Hello!'
   for (let i = 0; i < ITERATIONS; i++) {
     // get + concat + set
-    obj.stringValueSwift = obj.stringValueSwift + '_'
+    obj.stringValueSwift = str
   }
   const end = performance.now()
   console.log('Swift:', obj.stringValueSwift.length)
