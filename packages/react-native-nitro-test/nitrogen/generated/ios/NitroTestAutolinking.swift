@@ -12,17 +12,15 @@ import NitroModules
 public final class NitroTestAutolinking {
   public typealias bridge = margelo.nitro.test.bridge.swift
   
-  public static func createString(bytes: UnsafeRawPointer, length: Int, isAscii: Bool) -> String {
-      if isAscii {
-        let castBytes = bytes.assumingMemoryBound(to: UInt8.self)
-        let pointer = UnsafeBufferPointer(start: castBytes, count: length)
-        return String(decoding: pointer, as: UTF8.self)
-      } else {
-        let castBytes = bytes.assumingMemoryBound(to: UInt16.self)
-        let pointer = UnsafeBufferPointer(start: castBytes, count: length)
-        return String(decoding: pointer, as: UTF16.self)
-      }
+  public static func createUTF8String(bytes: UnsafeRawPointer, length: Int) -> String {
+    return String(unsafeUninitializedCapacity: length) { buffer in
+      memcpy(buffer.baseAddress, bytes, length)
+      return length
     }
+  }
+  public static func createUTF16String(bytes: UnsafePointer<UInt16>, length: Int) -> String {
+    return String(utf16CodeUnits: bytes, count: length)
+  }
 
   public static func createTestObjectSwiftKotlin() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let hybridObject = HybridTestObjectSwift()

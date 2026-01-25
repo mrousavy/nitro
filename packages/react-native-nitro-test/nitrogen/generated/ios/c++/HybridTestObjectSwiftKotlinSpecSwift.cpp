@@ -57,8 +57,14 @@ struct JSIConverter<swift::String> final {
     // Concat pieces of jsi::String into swift::String - some segments may be ascii, others UTF
     swift::String string = swift::String::init();
     auto callback = [&](bool ascii, const void* data, size_t length) {
-      swift::String sequence = NitroTest::NitroTestAutolinking::createString(data, length, ascii);
-      string.appendContentsOf(sequence);
+      if (ascii) {
+        swift::String sequence = NitroTest::NitroTestAutolinking::createUTF8String(data, length);
+        string.appendContentsOf(sequence);
+      } else {
+        const uint16_t* utf16Bytes = static_cast<const uint16_t*>(data);
+        swift::String sequence = NitroTest::NitroTestAutolinking::createUTF16String(utf16Bytes, length);
+        string.appendContentsOf(sequence);
+      }
     };
     jsString.getStringData(runtime, callback);
     // Return result
