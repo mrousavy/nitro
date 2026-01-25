@@ -15,7 +15,6 @@ import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectSwiftKotlin } from 'react-native-nitro-test'
-import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 
 declare global {
   var gc: () => void
@@ -26,8 +25,8 @@ declare global {
 
 interface BenchmarksResult {
   numberOfIterations: number
-  nitroExecutionTimeMs: number
-  turboExecutionTimeMs: number
+  cppStlExecutionTimeMs: number
+  swiftExecutionTimeMs: number
 }
 
 function delay(ms: number): Promise<void> {
@@ -40,17 +39,20 @@ async function waitForGc(): Promise<void> {
 }
 
 interface BenchmarkableObject {
-  addNumbers(a: number, b: number): number
+  stringValue: string
+  stringValueSwift: string
 }
 function benchmark(obj: BenchmarkableObject): number {
   // warmup
-  obj.addNumbers(0, 3)
+  obj.stringValue
+  obj.stringValue = ''
+  obj.stringValue
 
   // run addNumbers(...) ITERATIONS amount of times
   const start = performance.now()
-  let num = 0
   for (let i = 0; i < ITERATIONS; i++) {
-    num = obj.addNumbers(num, 3)
+    // get + concat + set
+    obj.stringValue = obj.stringValue + '_'
   }
   const end = performance.now()
   return end - start
@@ -61,15 +63,15 @@ async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
   await waitForGc()
 
-  const turboTime = benchmark(ExampleTurboModule)
-  const nitroTime = benchmark(HybridTestObjectSwiftKotlin)
+  const cppTime = benchmark(HybridTestObjectSwiftKotlin)
+  const swiftTime = benchmark(HybridTestObjectSwiftKotlin)
 
   console.log(
-    `Benchmarks finished! Nitro: ${nitroTime.toFixed(2)}ms | Turbo: ${turboTime.toFixed(2)}ms`
+    `Benchmarks finished! std::string: ${cppTime.toFixed(2)}ms | swift::String: ${swiftTime.toFixed(2)}ms`
   )
   return {
-    nitroExecutionTimeMs: nitroTime,
-    turboExecutionTimeMs: turboTime,
+    cppStlExecutionTimeMs: cppTime,
+    swiftExecutionTimeMs: swiftTime,
     numberOfIterations: ITERATIONS,
   }
 }
@@ -85,7 +87,7 @@ export function BenchmarksScreen() {
 
   const factor = React.useMemo(() => {
     if (results == null) return 0
-    const f = results.turboExecutionTimeMs / results.nitroExecutionTimeMs
+    const f = results.cppStlExecutionTimeMs / results.swiftExecutionTimeMs
     return Math.round(f * 10) / 10
   }, [results])
 
@@ -96,16 +98,16 @@ export function BenchmarksScreen() {
     const r = await runBenchmarks()
     setResults(r)
 
-    const slowest = Math.max(r.nitroExecutionTimeMs, r.turboExecutionTimeMs)
+    const slowest = Math.max(r.swiftExecutionTimeMs, r.cppStlExecutionTimeMs)
     const maxWidth = dimensions.width * 0.65
     Animated.spring(turboWidth, {
-      toValue: (r.turboExecutionTimeMs / slowest) * maxWidth,
+      toValue: (r.cppStlExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
     }).start()
     Animated.spring(nitroWidth, {
-      toValue: (r.nitroExecutionTimeMs / slowest) * maxWidth,
+      toValue: (r.swiftExecutionTimeMs / slowest) * maxWidth,
       friction: 10,
       tension: 40,
       useNativeDriver: false,
@@ -131,7 +133,7 @@ export function BenchmarksScreen() {
             <View style={styles.largeVSpacer} />
 
             <View style={styles.turboResults}>
-              <Text style={styles.title}>Turbo Modules</Text>
+              <Text style={styles.title}>C++ std::string</Text>
               <View style={styles.smallVSpacer} />
               <Animated.View
                 style={[
@@ -147,7 +149,7 @@ export function BenchmarksScreen() {
               <Text style={styles.text}>
                 Time:{' '}
                 <Text style={styles.bold}>
-                  {results.turboExecutionTimeMs.toFixed(2)}ms
+                  {results.cppStlExecutionTimeMs.toFixed(2)}ms
                 </Text>
               </Text>
             </View>
@@ -155,7 +157,7 @@ export function BenchmarksScreen() {
             <View style={styles.largeVSpacer} />
 
             <View style={styles.nitroResults}>
-              <Text style={styles.title}>Nitro Modules</Text>
+              <Text style={styles.title}>swift::String</Text>
               <View style={styles.smallVSpacer} />
               <Animated.View
                 style={[
@@ -170,7 +172,7 @@ export function BenchmarksScreen() {
               <Text style={styles.text}>
                 Time:{' '}
                 <Text style={styles.bold}>
-                  {results.nitroExecutionTimeMs.toFixed(2)}ms
+                  {results.swiftExecutionTimeMs.toFixed(2)}ms
                 </Text>
                 {'      '}(<Text style={styles.bold}>{factor}x</Text>{' '}
                 {factor > 1 ? 'faster' : 'slower'}!)
@@ -273,6 +275,11 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 25,
+    fontFamily: Platform.select({
+      ios: 'Menlo',
+      macos: 'Menlo',
+      android: 'monospace',
+    }),
   },
   chart: {
     height: 20,
