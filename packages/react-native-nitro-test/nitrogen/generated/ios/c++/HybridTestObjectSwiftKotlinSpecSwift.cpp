@@ -103,11 +103,11 @@ struct JSIConverter<swift::String> final {
 namespace margelo::nitro::test {
 
 swift::String HybridTestObjectSwiftKotlinSpecSwift::getStringValueSwift() noexcept {
-  return swift::String::init();
+  return _swiftPart.getStringValueSwift();
 }
 
 void HybridTestObjectSwiftKotlinSpecSwift::setStringValueSwift(const swift::String& string) noexcept {
-  
+  _swiftPart.setStringValueSwift(string);
 }
 
 void HybridTestObjectSwiftKotlinSpecSwift::loadHybridMethods() {
