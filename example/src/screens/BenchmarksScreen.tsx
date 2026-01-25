@@ -75,7 +75,7 @@ function benchmarkSwift(obj: { stringValueSwift: string }): number {
   return end - start
 }
 
-const ITERATIONS = 5_000
+const ITERATIONS = 1_000_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
   await waitForGc()
@@ -144,7 +144,7 @@ export function BenchmarksScreen() {
         {results != null ? (
           <View style={styles.chartsContainer}>
             <Text style={styles.text}>
-              Calling <Text style={styles.bold}>addNumbers(...)</Text>{' '}
+              Calling <Text style={styles.bold}>setString(...)</Text>{' '}
               <Text style={styles.bold}>{ITERATIONS}</Text>x:
             </Text>
             <View style={styles.largeVSpacer} />
