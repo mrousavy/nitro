@@ -38,11 +38,7 @@ async function waitForGc(): Promise<void> {
   await delay(500)
 }
 
-interface BenchmarkableObject {
-  stringValue: string
-  stringValueSwift: string
-}
-function benchmark(obj: BenchmarkableObject): number {
+function benchmarkSTL(obj: { stringValue: string }): number {
   // warmup
   obj.stringValue
   obj.stringValue = ''
@@ -57,14 +53,29 @@ function benchmark(obj: BenchmarkableObject): number {
   const end = performance.now()
   return end - start
 }
+function benchmarkSwift(obj: { stringValueSwift: string }): number {
+  // warmup
+  obj.stringValueSwift
+  obj.stringValueSwift = ''
+  obj.stringValueSwift
 
-const ITERATIONS = 100_000
+  // run addNumbers(...) ITERATIONS amount of times
+  const start = performance.now()
+  for (let i = 0; i < ITERATIONS; i++) {
+    // get + concat + set
+    obj.stringValueSwift = obj.stringValueSwift + '_'
+  }
+  const end = performance.now()
+  return end - start
+}
+
+const ITERATIONS = 5_000
 async function runBenchmarks(): Promise<BenchmarksResult> {
   console.log(`Running benchmarks ${ITERATIONS}x...`)
   await waitForGc()
 
-  const cppTime = benchmark(HybridTestObjectSwiftKotlin)
-  const swiftTime = benchmark(HybridTestObjectSwiftKotlin)
+  const cppTime = benchmarkSTL(HybridTestObjectSwiftKotlin)
+  const swiftTime = benchmarkSwift(HybridTestObjectSwiftKotlin)
 
   console.log(
     `Benchmarks finished! std::string: ${cppTime.toFixed(2)}ms | swift::String: ${swiftTime.toFixed(2)}ms`
