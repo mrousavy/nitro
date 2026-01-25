@@ -12,7 +12,7 @@ import NitroModules
 public final class NitroTestAutolinking {
   public typealias bridge = margelo.nitro.test.bridge.swift
   
-  public static func createUTF8String(bytes: UnsafeRawPointer, length: Int) -> String {
+  public static func createASCIIString(bytes: UnsafeRawPointer, length: Int) -> String {
     return String(unsafeUninitializedCapacity: length) { buffer in
       memcpy(buffer.baseAddress, bytes, length)
       return length
@@ -20,6 +20,31 @@ public final class NitroTestAutolinking {
   }
   public static func createUTF16String(bytes: UnsafePointer<UInt16>, length: Int) -> String {
     return String(utf16CodeUnits: bytes, count: length)
+  }
+  
+  public static func getStringBytes(rt: inout facebook.jsi.Runtime, string: String) -> bridge.UnsafeJsiStringWrapper {
+    if string.isEmpty {
+      // 0 characters
+      return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, "", 0))
+    }
+    
+    if #available(iOS 26.0, *),
+       string.utf8Span.isKnownASCII {
+      // It's all ASCII characters!
+      let span = string.utf8Span.span
+      return span.withUnsafeBytes { buffer in
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, buffer.baseAddress!, span.count))
+      }
+    } else {
+      // It's not ASCII, so let's use UTF16 as that's JSI's native path
+      let utf16JsiString = string.utf16.withContiguousStorageIfAvailable { buffer in
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&rt, buffer.baseAddress!, string.count))
+      }
+      if let utf16JsiString {
+        return utf16JsiString
+      }
+      fatalError("String does not have contiguous storage!")
+    }
   }
 
   public static func createTestObjectSwiftKotlin() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
