@@ -51,6 +51,8 @@ function benchmarkSTL(obj: { stringValue: string }): number {
     obj.stringValue = obj.stringValue + '_'
   }
   const end = performance.now()
+  console.log('C++:', obj.stringValue.length)
+  console.log('C++:', obj.stringValue.substring(0, 100))
   return end - start
 }
 function benchmarkSwift(obj: { stringValueSwift: string }): number {
@@ -66,6 +68,8 @@ function benchmarkSwift(obj: { stringValueSwift: string }): number {
     obj.stringValueSwift = obj.stringValueSwift + '_'
   }
   const end = performance.now()
+  console.log('Swift:', obj.stringValueSwift.length)
+  console.log('Swift:', obj.stringValueSwift.substring(0, 100))
   return end - start
 }
 
