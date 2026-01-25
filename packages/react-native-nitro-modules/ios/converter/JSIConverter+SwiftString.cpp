@@ -54,7 +54,7 @@ swift::String JSIConverter<swift::String>::fromJSI(jsi::Runtime& runtime, const 
   swift::String string = swift::String::init();
   auto callback = [&](bool ascii, const void* data, size_t length) {
     if (ascii) {
-      swift::String sequence = NitroModules::StringUtils::createUTF8String(data, length);
+      swift::String sequence = NitroModules::StringUtils::createASCIIString(data, length);
       string.appendContentsOf(sequence);
     } else {
       const uint16_t* utf16Bytes = static_cast<const uint16_t*>(data);
