@@ -105,6 +105,18 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
  */
 namespace margelo::nitro::test::bridge::swift {
 
+struct UnsafeJsiStringWrapper {
+  UnsafeJsiStringWrapper(jsi::String&& string): string(std::move(string)) { }
+  UnsafeJsiStringWrapper(const UnsafeJsiStringWrapper& other): string(std::move(other.moveOutString())) {}
+  UnsafeJsiStringWrapper(UnsafeJsiStringWrapper&& other): string(std::move(other.string)) { }
+  
+  jsi::String&& moveOutString() const {
+    return std::move(const_cast<UnsafeJsiStringWrapper*>(this)->string);
+  }
+  
+  jsi::String string;
+};
+
   // pragma MARK: std::shared_ptr<HybridBaseSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridBaseSpec>`.

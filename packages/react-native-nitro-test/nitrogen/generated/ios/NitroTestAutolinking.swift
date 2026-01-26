@@ -22,48 +22,47 @@ public final class NitroTestAutolinking {
     return String(utf16CodeUnits: bytes, count: length)
   }
   
-  public static func getStringBytes(rt: inout facebook.jsi.Runtime, string: String) -> bridge.UnsafeJsiStringWrapper {
+  public static func convertStringToJS(runtime: inout facebook.jsi.Runtime, string: String) -> bridge.UnsafeJsiStringWrapper {
     if string.isEmpty {
-      // 0 characters
-      return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, "", 0))
+      // A) Empty string, no need for accessing data
+      return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, "", 0))
     }
     
-
     if #available(iOS 26.0, *),
        string.utf8Span.isKnownASCII {
-      // It's all ASCII characters! That's a fast path in jsi::String.
+      // B) It's all ASCII - we can access the bytes and use jsi::String's ASCII fast-path
       let span = string.utf8Span.span
       return span.withUnsafeBytes { buffer in
-        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, buffer.baseAddress!, span.count))
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, buffer.baseAddress!, span.count))
       }
     } else {
-      // It's not ASCII, so let's try to no-copy access the UTF16 bytes
-      let utf16JsString = string.utf16.withContiguousStorageIfAvailable { buffer in
-        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&rt, buffer.baseAddress!, string.count))
-      }
-      if let utf16JsString {
+      // C) It's not ASCII, so let's try to no-copy access the UTF16 bytes - also a fast-path in jsi::String
+      if let utf16JsString = string.utf16.withContiguousStorageIfAvailable({ buffer in
+              return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, string.count))
+      }) {
         return utf16JsString
       }
       
-      // The bytes couldn't be accessed as UTF16 no-copy, so we have to do UTF8 + decode.
       if #available(iOS 26.0, *) {
+        // D) The UTF16 bytes couldn't be zero-copy accessed, so we have to access the Span's UTF8 data (no-copy) + decode.
         let span = string.utf8Span.span
-        return span.withUnsafeBytes { raw in
-          let u8 = raw.bindMemory(to: UInt8.self)
-          return transcodeUTF8ToTempUTF16AndCallJSI(rt: &rt, utf8: u8)
+        return span.withUnsafeBytes { buffer in
+          let utf8 = buffer.bindMemory(to: UInt8.self)
+          return transcodeUTF8ToUTF16JSString(runtime: &runtime, utf8: utf8)
         }
       } else {
-        var copy = string
-        return copy.withUTF8 { u8 in
-          transcodeUTF8ToTempUTF16AndCallJSI(rt: &rt, utf8: u8)
+        // E) We can't access neither UTF16 nor UTF8 as zero-copy, we have to do a potential UTF8 copy + decode.
+        var maybeCopy = string
+        return maybeCopy.withUTF8 { u8 in
+          transcodeUTF8ToUTF16JSString(runtime: &runtime, utf8: u8)
         }
       }
     }
   }
   
   @inline(__always)
-  private static func transcodeUTF8ToTempUTF16AndCallJSI(
-    rt: inout facebook.jsi.Runtime,
+  private static func transcodeUTF8ToUTF16JSString(
+    runtime: inout facebook.jsi.Runtime,
     utf8: UnsafeBufferPointer<UInt8>
   ) -> bridge.UnsafeJsiStringWrapper {
     withUnsafeTemporaryAllocation(of: UInt16.self, capacity: utf8.count) { buffer in
@@ -77,7 +76,7 @@ public final class NitroTestAutolinking {
       }
 
       return bridge.UnsafeJsiStringWrapper(
-        consuming: facebook.jsi.String.createFromUtf16(&rt, buffer.baseAddress!, charactersCount)
+        consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, charactersCount)
       )
     }
   }
