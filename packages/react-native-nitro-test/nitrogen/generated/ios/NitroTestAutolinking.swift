@@ -31,29 +31,27 @@ public final class NitroTestAutolinking {
     if #available(iOS 26.0, *),
        string.utf8Span.isKnownASCII {
       // B) It's all ASCII - we can access the bytes and use jsi::String's ASCII fast-path
-      let span = string.utf8Span.span
-      return span.withUnsafeBytes { buffer in
-        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, buffer.baseAddress!, span.count))
+      return string.utf8Span.span.withUnsafeBytes { buffer in
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, buffer.baseAddress!, buffer.count))
       }
     } else {
       // C) It's not ASCII, so let's try to no-copy access the UTF16 bytes - also a fast-path in jsi::String
       if let utf16JsString = string.utf16.withContiguousStorageIfAvailable({ buffer in
-        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, string.count))
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, buffer.count))
       }) {
         return utf16JsString
       }
       
       if #available(iOS 26.0, *) {
         // D) The UTF16 bytes couldn't be zero-copy accessed, so we have to access the Span's UTF8 data (no-copy) and have JSI decode the UTF8.
-        let span = string.utf8Span.span
-        return span.withUnsafeBytes { buffer in
-          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, span.count))
+        return string.utf8Span.span.withUnsafeBytes { buffer in
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, buffer.count))
         }
       } else {
         // E) We can't access neither UTF16 nor UTF8 as zero-copy, we have to do a potential UTF8 copy and have JSI decode the UTF8.
         var maybeCopy = string
         return maybeCopy.withUTF8 { buffer in
-          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, string.count))
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, buffer.count))
         }
       }
     }
