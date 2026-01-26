@@ -28,22 +28,57 @@ public final class NitroTestAutolinking {
       return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, "", 0))
     }
     
+
     if #available(iOS 26.0, *),
        string.utf8Span.isKnownASCII {
-      // It's all ASCII characters!
+      // It's all ASCII characters! That's a fast path in jsi::String.
       let span = string.utf8Span.span
       return span.withUnsafeBytes { buffer in
         return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&rt, buffer.baseAddress!, span.count))
       }
     } else {
-      // It's not ASCII, so let's use UTF16 as that's JSI's native path
-      let utf16JsiString = string.utf16.withContiguousStorageIfAvailable { buffer in
+      // It's not ASCII, so let's try to no-copy access the UTF16 bytes
+      let utf16JsString = string.utf16.withContiguousStorageIfAvailable { buffer in
         return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&rt, buffer.baseAddress!, string.count))
       }
-      if let utf16JsiString {
-        return utf16JsiString
+      if let utf16JsString {
+        return utf16JsString
       }
-      fatalError("String does not have contiguous storage!")
+      
+      // The bytes couldn't be accessed as UTF16 no-copy, so we have to do UTF8 + decode.
+      if #available(iOS 26.0, *) {
+        let span = string.utf8Span.span
+        return span.withUnsafeBytes { raw in
+          let u8 = raw.bindMemory(to: UInt8.self)
+          return transcodeUTF8ToTempUTF16AndCallJSI(rt: &rt, utf8: u8)
+        }
+      } else {
+        var copy = string
+        return copy.withUTF8 { u8 in
+          transcodeUTF8ToTempUTF16AndCallJSI(rt: &rt, utf8: u8)
+        }
+      }
+    }
+  }
+  
+  @inline(__always)
+  private static func transcodeUTF8ToTempUTF16AndCallJSI(
+    rt: inout facebook.jsi.Runtime,
+    utf8: UnsafeBufferPointer<UInt8>
+  ) -> bridge.UnsafeJsiStringWrapper {
+    withUnsafeTemporaryAllocation(of: UInt16.self, capacity: utf8.count) { buffer in
+      var charactersCount = 0
+      let iterator = utf8.makeIterator()
+
+      // Transcode each UTF8 character to UTF16
+      _ = transcode(iterator, from: Unicode.UTF8.self, to: Unicode.UTF16.self, stoppingOnError: false) { u16 in
+        buffer[charactersCount] = u16
+        charactersCount += 1
+      }
+
+      return bridge.UnsafeJsiStringWrapper(
+        consuming: facebook.jsi.String.createFromUtf16(&rt, buffer.baseAddress!, charactersCount)
+      )
     }
   }
 
