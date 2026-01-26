@@ -37,7 +37,7 @@ public final class NitroTestAutolinking {
     } else {
       // C) It's not ASCII, so let's try to no-copy access the UTF16 bytes - also a fast-path in jsi::String
       if let utf16JsString = string.utf16.withContiguousStorageIfAvailable({ buffer in
-        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, buffer.count))
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, string.utf16.count))
       }) {
         return utf16JsString
       }
