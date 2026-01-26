@@ -65,6 +65,8 @@ def add_nitrogen_files(spec)
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
+    # Put -Swift.h header in build dir
+    "SWIFT_INSTALL_OBJC_HEADER" => "YES",
   })
 end
   `.trim()

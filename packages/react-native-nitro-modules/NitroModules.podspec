@@ -71,6 +71,8 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
+    # Put -Swift.h header in build dir
+    "SWIFT_INSTALL_OBJC_HEADER" => "YES",
   }
 
   if has_react_native()
