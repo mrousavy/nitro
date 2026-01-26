@@ -1,7 +1,6 @@
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 ENV['RCT_USE_RN_DEP'] = '1'
 ENV['RCT_USE_PREBUILT_RNCORE'] = '1'
-ENV['USE_FRAMEWORKS'] = 'static'
 
 Pod::UI.puts "Building with RCT_NEW_ARCH_ENABLED = #{ENV['RCT_NEW_ARCH_ENABLED']}..."
 
