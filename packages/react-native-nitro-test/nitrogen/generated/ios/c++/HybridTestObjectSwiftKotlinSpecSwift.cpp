@@ -35,8 +35,7 @@ struct JSIConverter<swift::String> final {
     return string;
   }
   static jsi::Value toJSI(jsi::Runtime& runtime, const swift::String& string) {
-    auto unsafeJsiString = NitroTest::NitroTestAutolinking::convertStringToJS(runtime, string);
-    return unsafeJsiString.moveOutString();
+    return NitroTest::NitroTestAutolinking::convertStringToJS(runtime, string).moveOutString();
   }
   static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     return value.isString();
