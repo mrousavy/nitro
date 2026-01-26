@@ -45,7 +45,7 @@ namespace margelo::nitro::test {
   // pragma MARK: Properties
 
   double HybridChildSpecSwift::getChildValue() noexcept {
-    throw std::runtime_error("not yet implemented!");
+    return 0.0;
   }
 
   // pragma MARK: Methods
