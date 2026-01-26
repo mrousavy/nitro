@@ -36,8 +36,8 @@ public final class NitroTestAutolinking {
           return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, buffer.baseAddress!, buffer.count))
         } else {
           // C) It's not ASCII, so let's use the UTF8 decoder from JSI, which internally likely transcodes to UTF16.
-          //    We cannot use a Swift fast-path here, since Swift doesn't natively stores Strings in contiguous UTF16 memory,
-          //    so this is the best we can do.
+          //    We cannot use a UTF16 fast-path here, since Swift doesn't natively stores Strings in contiguous UTF16 memory,
+          //    so UTF8 is the best we can do.
           return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, buffer.count))
         }
       }
