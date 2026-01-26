@@ -1,6 +1,5 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import type { BridgedType } from '../BridgedType.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 import { FunctionType } from '../types/FunctionType.js'
@@ -61,6 +60,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map':
         // AnyMap is NitroModules::AnyMap
         return true
+      case 'array-buffer':
+        // TODO: ArrayBuffer is currently just `bool` to fix compile errors
+        return true
       default:
         return false
     }
@@ -74,23 +76,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
 
   getRequiredImports(language: Language): SourceImport[] {
     const imports = this.type.getRequiredImports(language)
-
-    if (language === 'c++') {
-      switch (this.type.kind) {
-        case 'array-buffer':
-          imports.push({
-            name: 'NitroModules/ArrayBufferHolder.hpp',
-            forwardDeclaration: getForwardDeclaration(
-              'class',
-              'ArrayBufferHolder',
-              'NitroModules'
-            ),
-            language: 'c++',
-            space: 'system',
-          })
-          break
-      }
-    }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
     const referencedTypes = getReferencedTypes(this.type)
@@ -186,6 +171,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return `${this.iosNamespace}::${enumType.enumName}`
           case 'swift':
             return enumType.enumName
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
+      }
+      case 'array-buffer': {
+        switch (language) {
+          case 'c++':
+            return 'bool'
+          case 'swift':
+            return 'Bool'
           default:
             throw new Error(`Invalid language! ${language}`)
         }
@@ -288,6 +283,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'array-buffer': {
+        switch (language) {
+          case 'swift':
+            return `ArrayBuffer.allocate(size: 0)`
+          default:
+            return cppParameterName
+        }
+      }
       case 'void':
         return ''
       default:
@@ -328,6 +331,14 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `${swiftParameterName}.map({ item in ${itemType.parseFromSwiftToCpp('item', 'swift')} })`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'array-buffer': {
+        switch (language) {
+          case 'swift':
+            return `true`
           default:
             return swiftParameterName
         }

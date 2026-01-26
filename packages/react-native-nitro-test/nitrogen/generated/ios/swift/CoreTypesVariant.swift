@@ -13,7 +13,7 @@ import NitroModules
  */
 @frozen
 public enum CoreTypesVariant {
-  case first(ArrayBuffer)
+  case first(Bool)
   case second(Func_Double_Void)
   case third(WrappedJsStruct)
   case fourth(Double)

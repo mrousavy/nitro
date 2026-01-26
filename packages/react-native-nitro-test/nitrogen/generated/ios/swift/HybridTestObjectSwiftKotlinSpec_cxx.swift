@@ -409,10 +409,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceArrayBuffers(arrayBuffers: [ArrayBuffer]) -> [ArrayBuffer] {
+  public final func bounceArrayBuffers(arrayBuffers: [Bool]) -> [Bool] {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceArrayBuffers(arrayBuffers: arrayBuffers)
-    return __result
+    let __result = try! self.__implementation.bounceArrayBuffers(arrayBuffers: arrayBuffers.map({ item in ArrayBuffer.allocate(size: 0) }))
+    return __result.map({ item in true })
   }
   
   @inline(__always)
@@ -752,37 +752,37 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createArrayBuffer() -> ArrayBuffer {
+  public final func createArrayBuffer() -> Bool {
     // TODO: Remove try!
     let __result = try! self.__implementation.createArrayBuffer()
-    return __result
+    return true
   }
   
   @inline(__always)
-  public final func createArrayBufferFromNativeBuffer(copy: Bool) -> ArrayBuffer {
+  public final func createArrayBufferFromNativeBuffer(copy: Bool) -> Bool {
     // TODO: Remove try!
     let __result = try! self.__implementation.createArrayBufferFromNativeBuffer(copy: copy)
+    return true
+  }
+  
+  @inline(__always)
+  public final func copyBuffer(buffer: Bool) -> Bool {
+    // TODO: Remove try!
+    let __result = try! self.__implementation.copyBuffer(buffer: ArrayBuffer.allocate(size: 0))
+    return true
+  }
+  
+  @inline(__always)
+  public final func getBufferLastItem(buffer: Bool) -> Double {
+    // TODO: Remove try!
+    let __result = try! self.__implementation.getBufferLastItem(buffer: ArrayBuffer.allocate(size: 0))
     return __result
   }
   
   @inline(__always)
-  public final func copyBuffer(buffer: ArrayBuffer) -> ArrayBuffer {
+  public final func setAllValuesTo(buffer: Bool, value: Double) -> Void {
     // TODO: Remove try!
-    let __result = try! self.__implementation.copyBuffer(buffer: buffer)
-    return __result
-  }
-  
-  @inline(__always)
-  public final func getBufferLastItem(buffer: ArrayBuffer) -> Double {
-    // TODO: Remove try!
-    let __result = try! self.__implementation.getBufferLastItem(buffer: buffer)
-    return __result
-  }
-  
-  @inline(__always)
-  public final func setAllValuesTo(buffer: ArrayBuffer, value: Double) -> Void {
-    // TODO: Remove try!
-    try! self.__implementation.setAllValuesTo(buffer: buffer, value: value)
+    try! self.__implementation.setAllValuesTo(buffer: ArrayBuffer.allocate(size: 0), value: value)
   }
   
   @inline(__always)
@@ -793,10 +793,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceArrayBuffer(buffer: ArrayBuffer) -> ArrayBuffer {
+  public final func bounceArrayBuffer(buffer: Bool) -> Bool {
     // TODO: Remove try!
-    let __result = try! self.__implementation.bounceArrayBuffer(buffer: buffer)
-    return __result
+    let __result = try! self.__implementation.bounceArrayBuffer(buffer: ArrayBuffer.allocate(size: 0))
+    return true
   }
   
   @inline(__always)

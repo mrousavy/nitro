@@ -26,8 +26,6 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
-// Forward declaration of `ArrayBufferHolder` to properly resolve imports.
-namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -68,7 +66,6 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/ArrayBufferHolder.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
 #include "SecondMapWrapper.hpp"
