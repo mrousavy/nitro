@@ -44,40 +44,18 @@ public final class NitroTestAutolinking {
       }
       
       if #available(iOS 26.0, *) {
-        // D) The UTF16 bytes couldn't be zero-copy accessed, so we have to access the Span's UTF8 data (no-copy) + decode.
+        // D) The UTF16 bytes couldn't be zero-copy accessed, so we have to access the Span's UTF8 data (no-copy) and have JSI decode the UTF8.
         let span = string.utf8Span.span
         return span.withUnsafeBytes { buffer in
-          let utf8 = buffer.bindMemory(to: UInt8.self)
-          return transcodeUTF8ToUTF16JSString(runtime: &runtime, utf8: utf8)
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, span.count))
         }
       } else {
-        // E) We can't access neither UTF16 nor UTF8 as zero-copy, we have to do a potential UTF8 copy + decode.
+        // E) We can't access neither UTF16 nor UTF8 as zero-copy, we have to do a potential UTF8 copy and have JSI decode the UTF8.
         var maybeCopy = string
-        return maybeCopy.withUTF8 { u8 in
-          transcodeUTF8ToUTF16JSString(runtime: &runtime, utf8: u8)
+        return maybeCopy.withUTF8 { buffer in
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, string.count))
         }
       }
-    }
-  }
-  
-  @inline(__always)
-  private static func transcodeUTF8ToUTF16JSString(
-    runtime: inout facebook.jsi.Runtime,
-    utf8: UnsafeBufferPointer<UInt8>
-  ) -> bridge.UnsafeJsiStringWrapper {
-    withUnsafeTemporaryAllocation(of: UInt16.self, capacity: utf8.count) { buffer in
-      var charactersCount = 0
-      let iterator = utf8.makeIterator()
-
-      // Transcode each UTF8 character to UTF16
-      _ = transcode(iterator, from: Unicode.UTF8.self, to: Unicode.UTF16.self, stoppingOnError: false) { u16 in
-        buffer[charactersCount] = u16
-        charactersCount += 1
-      }
-
-      return bridge.UnsafeJsiStringWrapper(
-        consuming: facebook.jsi.String.createFromUtf16(&runtime, buffer.baseAddress!, charactersCount)
-      )
     }
   }
 
