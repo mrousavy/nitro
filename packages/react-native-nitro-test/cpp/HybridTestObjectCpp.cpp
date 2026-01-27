@@ -272,7 +272,7 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::mergeMaps(const std::shared_ptr<Any
 
 std::shared_ptr<AnyMap> HybridTestObjectCpp::copyAnyMap(const std::shared_ptr<AnyMap>& map) {
   auto keys = map->getAllKeys();
-  auto newMap = AnyMap::make();
+  auto newMap = AnyMap::make(keys.size());
   for (const auto& key : keys) {
     auto any = map->getAny(key);
     newMap->setAny(key, any);
