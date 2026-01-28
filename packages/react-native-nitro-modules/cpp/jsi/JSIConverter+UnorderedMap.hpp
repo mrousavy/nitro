@@ -33,9 +33,10 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
     std::unordered_map<std::string, ValueType> map;
     map.reserve(length);
     for (size_t i = 0; i < length; ++i) {
-      std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
-      jsi::Value value = object.getProperty(runtime, PropNameIDCache::get(runtime, key));
-      map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
+      jsi::String keyString = propertyNames.getValueAtIndex(runtime, i).asString(runtime);
+      jsi::Value value = object.getProperty(runtime, keyString);
+      std::string key = keyString.utf8(runtime);
+      map.emplace(std::move(key), JSIConverter<ValueType>::fromJSI(runtime, value));
     }
     return map;
   }
@@ -56,11 +57,12 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
     if (!isPlainObject(runtime, object)) {
       return false;
     }
-    jsi::Array properties = object.getPropertyNames(runtime);
-    size_t size = properties.size(runtime);
+    jsi::Array propNames = object.getPropertyNames(runtime);
+    size_t size = propNames.size(runtime);
     for (size_t i = 0; i < size; i++) {
-      bool canConvertProp = JSIConverter<ValueType>::canConvert(runtime, properties.getValueAtIndex(runtime, i));
-      if (!canConvertProp) {
+      jsi::String keyString = propNames.getValueAtIndex(runtime, i).asString(runtime);
+      jsi::Value propValue = object.getProperty(runtime, keyString);
+      if (!JSIConverter<ValueType>::canConvert(runtime, propValue)) {
         return false;
       }
     }
