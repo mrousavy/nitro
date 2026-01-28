@@ -22,7 +22,7 @@
     "@docusaurus/preset-classic": "3.8.1",
     "@docusaurus/theme-mermaid": "3.8.1",
     "@mdx-js/react": "^3.1.1",
-    "cheerio": "^1.1.2",
+    "cheerio": "^1.2.0",
     "clsx": "^2.0.0",
     "esbuild-register": "^3.6.0",
     "prism-react-renderer": "^2.3.0",
