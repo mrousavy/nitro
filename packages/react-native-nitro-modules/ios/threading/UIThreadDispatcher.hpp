@@ -14,6 +14,6 @@ public:
 
 private:
   dispatch_queue_t _queue;
-}
+};
 
 } // namespace margelo::nitro
