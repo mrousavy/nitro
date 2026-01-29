@@ -35,7 +35,7 @@ public:
       return oldProp;
     }
     T converted = JSIConverter<T>::fromJSI(runtime, value);
-    BorrowingReference<jsi::Value cached;
+    BorrowingReference<jsi::Value> cached;
     {
       JSICacheReference cache = JSICache::getOrCreateCache(runtime);
       cached = cache.makeShared(jsi::Value(runtime, value));
