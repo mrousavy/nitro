@@ -5,16 +5,14 @@ namespace margelo::nitro {
 UIThreadDispatcher::UIThreadDispatcher() : _queue(dispatch_get_main_queue()) {}
 
 void UIThreadDispatcher::runSync(std::function<void()>&& function) {
-  std::function<void()> funcCopy = function;
-  dispatch_sync(_queue, ^{
-    funcCopy();
-  });
+  throw std::runtime_error("UIThreadDispatcher::runSync() is not implemented!");
 }
 
 void UIThreadDispatcher::runAsync(std::function<void()>&& function) {
-  std::function<void()> funcCopy = function;
-  dispatch_async(_queue, ^{
-    funcCopy();
+  std::function<void()>* funcHeap = new std::function<void()>(std::move(function));
+  dispatch_sync(_queue, ^{
+    (*funcHeap)();
+    delete funcHeap;
   });
 }
 
