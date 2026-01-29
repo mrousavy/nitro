@@ -241,6 +241,31 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const SelfReferentialStruct& config) mutable -> std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> {
+      auto __result = swiftClosure.call(config);
+      return __result;
+    };
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>
+  Func_void_std__shared_ptr_Promise_SelfReferentialStruct__ create_Func_void_std__shared_ptr_Promise_SelfReferentialStruct__(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__shared_ptr_Promise_SelfReferentialStruct__::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::shared_ptr<Promise<SelfReferentialStruct>>& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const SelfReferentialStruct& /* result */)>
+  Func_void_SelfReferentialStruct create_Func_void_SelfReferentialStruct(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_SelfReferentialStruct::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const SelfReferentialStruct& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
   // pragma MARK: std::function<double()>
   Func_double create_Func_double(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = NitroTest::Func_double::fromUnsafe(swiftClosureWrapper);
