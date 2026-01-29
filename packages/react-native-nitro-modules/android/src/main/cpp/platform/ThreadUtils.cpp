@@ -6,6 +6,8 @@
 //
 
 #include "ThreadUtils.hpp"
+#include "JThreadUtils.hpp"
+#include "UIThreadDispatcher.hpp"
 #include <pthread.h>
 #include <sstream>
 #include <string>
@@ -14,27 +16,25 @@
 
 namespace margelo::nitro {
 
+using namespace facebook;
+
+// Implementation for the C++ shared `ThreadUtils` class
 std::string ThreadUtils::getThreadName() {
-#ifdef HAVE_ANDROID_PTHREAD_SETNAME_NP
-  // Try using pthread APIs
-  pthread_t thisThread = pthread_self();
-  char threadName[16]; // Thread name length limit in Android is 16 characters
-
-  int result = pthread_getname_np(thisThread, threadName, sizeof(threadName));
-  if (result == 0) {
-    return std::string(threadName);
-  }
-#endif
-
-  // Fall back to this_thread ID
-  std::stringstream stream;
-  stream << std::this_thread::get_id();
-  std::string threadId = stream.str();
-  return "Thread #" + threadId;
+  auto name = JThreadUtils::getCurrentThreadName();
+  return name->toStdString();
 }
 
 void ThreadUtils::setThreadName(const std::string& name) {
-  prctl(PR_SET_NAME, name.c_str(), 0, 0, 0);
+  auto jName = jni::make_jstring(name);
+  JThreadUtils::setCurrentThreadName(jName);
+}
+
+bool ThreadUtils::isUIThread() {
+  return JThreadUtils::isOnUIThread();
+}
+
+std::shared_ptr<Dispatcher> ThreadUtils::createUIThreadDispatcher() {
+  return std::make_shared<UIThreadDispatcher>();
 }
 
 } // namespace margelo::nitro

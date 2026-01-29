@@ -6,6 +6,7 @@
 //
 
 #include "ThreadUtils.hpp"
+#include "UIThreadDispatcher.hpp"
 #include <dispatch/dispatch.h>
 #include <pthread.h>
 #include <sstream>
@@ -38,6 +39,14 @@ std::string ThreadUtils::getThreadName() {
 
 void ThreadUtils::setThreadName(const std::string& name) {
   pthread_setname_np(name.c_str());
+}
+
+bool ThreadUtils::isUIThread() {
+  return pthread_main_np() != 0;
+}
+
+std::shared_ptr<Dispatcher> ThreadUtils::createUIThreadDispatcher() {
+  return std::make_shared<UIThreadDispatcher>();
 }
 
 } // namespace margelo::nitro

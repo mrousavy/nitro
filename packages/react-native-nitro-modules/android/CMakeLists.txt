@@ -38,6 +38,7 @@ include_directories(
   src/main/cpp/registry
   src/main/cpp/turbomodule
   src/main/cpp/platform
+  src/main/cpp/threading
   src/main/cpp/utils
   src/main/cpp/views
 )
