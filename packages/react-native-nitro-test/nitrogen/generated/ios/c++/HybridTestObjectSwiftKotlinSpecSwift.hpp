@@ -20,6 +20,50 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `TripPoint` to properly resolve imports.
+namespace margelo::nitro::test { struct TripPoint; }
+// Forward declaration of `TravelEstimates` to properly resolve imports.
+namespace margelo::nitro::test { struct TravelEstimates; }
+// Forward declaration of `Distance` to properly resolve imports.
+namespace margelo::nitro::test { struct Distance; }
+// Forward declaration of `DistanceUnits` to properly resolve imports.
+namespace margelo::nitro::test { enum class DistanceUnits; }
+// Forward declaration of `DurationWithTimeZone` to properly resolve imports.
+namespace margelo::nitro::test { struct DurationWithTimeZone; }
+// Forward declaration of `AutoText` to properly resolve imports.
+namespace margelo::nitro::test { struct AutoText; }
+// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRoutingManeuver; }
+// Forward declaration of `NitroAttributedString` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedString; }
+// Forward declaration of `NitroAttributedStringImage` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedStringImage; }
+// Forward declaration of `AssetImage` to properly resolve imports.
+namespace margelo::nitro::test { struct AssetImage; }
+// Forward declaration of `GlyphImage` to properly resolve imports.
+namespace margelo::nitro::test { struct GlyphImage; }
+// Forward declaration of `NitroColor` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroColor; }
+// Forward declaration of `TurnType` to properly resolve imports.
+namespace margelo::nitro::test { enum class TurnType; }
+// Forward declaration of `OffRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OffRampType; }
+// Forward declaration of `OnRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OnRampType; }
+// Forward declaration of `ForkType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ForkType; }
+// Forward declaration of `KeepType` to properly resolve imports.
+namespace margelo::nitro::test { enum class KeepType; }
+// Forward declaration of `LaneGuidance` to properly resolve imports.
+namespace margelo::nitro::test { struct LaneGuidance; }
+// Forward declaration of `PreferredImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct PreferredImageLane; }
+// Forward declaration of `ImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct ImageLane; }
+// Forward declaration of `TrafficSide` to properly resolve imports.
+namespace margelo::nitro::test { enum class TrafficSide; }
+// Forward declaration of `ManeuverType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ManeuverType; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -62,6 +106,28 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OldEnum.hpp"
 #include <functional>
 #include "Person.hpp"
+#include "TripPoint.hpp"
+#include "TravelEstimates.hpp"
+#include "Distance.hpp"
+#include "DistanceUnits.hpp"
+#include "DurationWithTimeZone.hpp"
+#include "AutoText.hpp"
+#include "NitroRoutingManeuver.hpp"
+#include "NitroAttributedString.hpp"
+#include "NitroAttributedStringImage.hpp"
+#include "AssetImage.hpp"
+#include "GlyphImage.hpp"
+#include "NitroColor.hpp"
+#include "TurnType.hpp"
+#include "OffRampType.hpp"
+#include "OnRampType.hpp"
+#include "ForkType.hpp"
+#include "KeepType.hpp"
+#include "LaneGuidance.hpp"
+#include "PreferredImageLane.hpp"
+#include "ImageLane.hpp"
+#include "TrafficSide.hpp"
+#include "ManeuverType.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -247,6 +313,18 @@ namespace margelo::nitro::test {
       }
       auto __value = std::move(__result.value());
       return __value;
+    }
+    inline void updateTravelEstimates(const std::string& templateId, const std::vector<TripPoint>& steps) override {
+      auto __result = _swiftPart.updateTravelEstimates(templateId, steps);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void updateManeuvers(const std::string& templateId, const std::vector<NitroRoutingManeuver>& maneuvers) override {
+      auto __result = _swiftPart.updateManeuvers(templateId, maneuvers);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
     }
     inline void simpleFunc() override {
       auto __result = _swiftPart.simpleFunc();

@@ -45,6 +45,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectSwiftKotlinSpec::getVariantHybrid);
+      prototype.registerHybridMethod("updateTravelEstimates", &HybridTestObjectSwiftKotlinSpec::updateTravelEstimates);
+      prototype.registerHybridMethod("updateManeuvers", &HybridTestObjectSwiftKotlinSpec::updateManeuvers);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSwiftKotlinSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectSwiftKotlinSpec::addStrings);

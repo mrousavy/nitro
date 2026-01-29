@@ -8,12 +8,26 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AssetImage` to properly resolve imports.
+namespace margelo::nitro::test { struct AssetImage; }
+// Forward declaration of `AutoText` to properly resolve imports.
+namespace margelo::nitro::test { struct AutoText; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
+// Forward declaration of `DistanceUnits` to properly resolve imports.
+namespace margelo::nitro::test { enum class DistanceUnits; }
+// Forward declaration of `Distance` to properly resolve imports.
+namespace margelo::nitro::test { struct Distance; }
+// Forward declaration of `DurationWithTimeZone` to properly resolve imports.
+namespace margelo::nitro::test { struct DurationWithTimeZone; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `ForkType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ForkType; }
+// Forward declaration of `GlyphImage` to properly resolve imports.
+namespace margelo::nitro::test { struct GlyphImage; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -28,12 +42,32 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `ImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct ImageLane; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `KeepType` to properly resolve imports.
+namespace margelo::nitro::test { enum class KeepType; }
+// Forward declaration of `LaneGuidance` to properly resolve imports.
+namespace margelo::nitro::test { struct LaneGuidance; }
+// Forward declaration of `ManeuverType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ManeuverType; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `NitroAttributedStringImage` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedStringImage; }
+// Forward declaration of `NitroAttributedString` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedString; }
+// Forward declaration of `NitroColor` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroColor; }
+// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRoutingManeuver; }
+// Forward declaration of `OffRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OffRampType; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OnRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OnRampType; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
@@ -44,32 +78,64 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `PreferredImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct PreferredImageLane; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `TrafficSide` to properly resolve imports.
+namespace margelo::nitro::test { enum class TrafficSide; }
+// Forward declaration of `TravelEstimates` to properly resolve imports.
+namespace margelo::nitro::test { struct TravelEstimates; }
+// Forward declaration of `TripPoint` to properly resolve imports.
+namespace margelo::nitro::test { struct TripPoint; }
+// Forward declaration of `TurnType` to properly resolve imports.
+namespace margelo::nitro::test { enum class TurnType; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
+#include "AssetImage.hpp"
+#include "AutoText.hpp"
 #include "Car.hpp"
 #include "ColorScheme.hpp"
+#include "Distance.hpp"
+#include "DistanceUnits.hpp"
+#include "DurationWithTimeZone.hpp"
 #include "ExternalObjectStruct.hpp"
+#include "ForkType.hpp"
+#include "GlyphImage.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "ImageLane.hpp"
 #include "JsStyleStruct.hpp"
+#include "KeepType.hpp"
+#include "LaneGuidance.hpp"
+#include "ManeuverType.hpp"
 #include "MapWrapper.hpp"
+#include "NitroAttributedString.hpp"
+#include "NitroAttributedStringImage.hpp"
+#include "NitroColor.hpp"
+#include "NitroRoutingManeuver.hpp"
+#include "OffRampType.hpp"
 #include "OldEnum.hpp"
+#include "OnRampType.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "PreferredImageLane.hpp"
 #include "SecondMapWrapper.hpp"
+#include "TrafficSide.hpp"
+#include "TravelEstimates.hpp"
+#include "TripPoint.hpp"
+#include "TurnType.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>

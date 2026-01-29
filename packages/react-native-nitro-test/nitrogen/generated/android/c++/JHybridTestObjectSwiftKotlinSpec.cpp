@@ -37,6 +37,50 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `TripPoint` to properly resolve imports.
+namespace margelo::nitro::test { struct TripPoint; }
+// Forward declaration of `TravelEstimates` to properly resolve imports.
+namespace margelo::nitro::test { struct TravelEstimates; }
+// Forward declaration of `Distance` to properly resolve imports.
+namespace margelo::nitro::test { struct Distance; }
+// Forward declaration of `DistanceUnits` to properly resolve imports.
+namespace margelo::nitro::test { enum class DistanceUnits; }
+// Forward declaration of `DurationWithTimeZone` to properly resolve imports.
+namespace margelo::nitro::test { struct DurationWithTimeZone; }
+// Forward declaration of `AutoText` to properly resolve imports.
+namespace margelo::nitro::test { struct AutoText; }
+// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRoutingManeuver; }
+// Forward declaration of `NitroAttributedString` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedString; }
+// Forward declaration of `NitroAttributedStringImage` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroAttributedStringImage; }
+// Forward declaration of `AssetImage` to properly resolve imports.
+namespace margelo::nitro::test { struct AssetImage; }
+// Forward declaration of `GlyphImage` to properly resolve imports.
+namespace margelo::nitro::test { struct GlyphImage; }
+// Forward declaration of `NitroColor` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroColor; }
+// Forward declaration of `TurnType` to properly resolve imports.
+namespace margelo::nitro::test { enum class TurnType; }
+// Forward declaration of `OffRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OffRampType; }
+// Forward declaration of `OnRampType` to properly resolve imports.
+namespace margelo::nitro::test { enum class OnRampType; }
+// Forward declaration of `ForkType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ForkType; }
+// Forward declaration of `KeepType` to properly resolve imports.
+namespace margelo::nitro::test { enum class KeepType; }
+// Forward declaration of `LaneGuidance` to properly resolve imports.
+namespace margelo::nitro::test { struct LaneGuidance; }
+// Forward declaration of `PreferredImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct PreferredImageLane; }
+// Forward declaration of `ImageLane` to properly resolve imports.
+namespace margelo::nitro::test { struct ImageLane; }
+// Forward declaration of `TrafficSide` to properly resolve imports.
+namespace margelo::nitro::test { enum class TrafficSide; }
+// Forward declaration of `ManeuverType` to properly resolve imports.
+namespace margelo::nitro::test { enum class ManeuverType; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -107,6 +151,53 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "ExternalObjectStruct.hpp"
 #include "JExternalObjectStruct.hpp"
 #include "JStringOrExternal.hpp"
+#include "TripPoint.hpp"
+#include "JTripPoint.hpp"
+#include "TravelEstimates.hpp"
+#include "JTravelEstimates.hpp"
+#include "Distance.hpp"
+#include "JDistance.hpp"
+#include "DistanceUnits.hpp"
+#include "JDistanceUnits.hpp"
+#include "DurationWithTimeZone.hpp"
+#include "JDurationWithTimeZone.hpp"
+#include "AutoText.hpp"
+#include "JAutoText.hpp"
+#include "NitroRoutingManeuver.hpp"
+#include "JNitroRoutingManeuver.hpp"
+#include "NitroAttributedString.hpp"
+#include "JNitroAttributedString.hpp"
+#include "NitroAttributedStringImage.hpp"
+#include "JNitroAttributedStringImage.hpp"
+#include "AssetImage.hpp"
+#include "GlyphImage.hpp"
+#include "JNitroImage.hpp"
+#include "JAssetImage.hpp"
+#include "NitroColor.hpp"
+#include "JNitroColor.hpp"
+#include "JGlyphImage.hpp"
+#include "JVariant_AssetImage_GlyphImage.hpp"
+#include "TurnType.hpp"
+#include "JTurnType.hpp"
+#include "OffRampType.hpp"
+#include "JOffRampType.hpp"
+#include "OnRampType.hpp"
+#include "JOnRampType.hpp"
+#include "ForkType.hpp"
+#include "JForkType.hpp"
+#include "KeepType.hpp"
+#include "JKeepType.hpp"
+#include "LaneGuidance.hpp"
+#include "JLaneGuidance.hpp"
+#include "PreferredImageLane.hpp"
+#include "ImageLane.hpp"
+#include "JVariant_PreferredImageLane_ImageLane.hpp"
+#include "JPreferredImageLane.hpp"
+#include "JImageLane.hpp"
+#include "TrafficSide.hpp"
+#include "JTrafficSide.hpp"
+#include "ManeuverType.hpp"
+#include "JManeuverType.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -331,6 +422,32 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person>(jni::alias_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> /* variant */)>("getVariantHybrid");
     auto __result = method(_javaPart, JVariant_HybridTestObjectSwiftKotlinSpec_Person::fromCpp(variant));
     return __result->toCpp();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::updateTravelEstimates(const std::string& templateId, const std::vector<TripPoint>& steps) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JTripPoint>> /* steps */)>("updateTravelEstimates");
+    method(_javaPart, jni::make_jstring(templateId), [&]() {
+      size_t __size = steps.size();
+      jni::local_ref<jni::JArrayClass<JTripPoint>> __array = jni::JArrayClass<JTripPoint>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = steps[__i];
+        auto __elementJni = JTripPoint::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }());
+  }
+  void JHybridTestObjectSwiftKotlinSpec::updateManeuvers(const std::string& templateId, const std::vector<NitroRoutingManeuver>& maneuvers) {
+    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JNitroRoutingManeuver>> /* maneuvers */)>("updateManeuvers");
+    method(_javaPart, jni::make_jstring(templateId), [&]() {
+      size_t __size = maneuvers.size();
+      jni::local_ref<jni::JArrayClass<JNitroRoutingManeuver>> __array = jni::JArrayClass<JNitroRoutingManeuver>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = maneuvers[__i];
+        auto __elementJni = JNitroRoutingManeuver::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }());
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = javaClassStatic()->getMethod<void()>("simpleFunc");

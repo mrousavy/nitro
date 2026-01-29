@@ -9,6 +9,7 @@ import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
 import type { Child } from './Child.nitro'
 import type { Base } from './Base.nitro'
+import type { ImageResolvedAssetSource } from 'react-native'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -104,6 +105,181 @@ type CoreTypesVariant =
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
+
+
+
+
+type DistanceUnits = 'meters' | 'miles' | 'kilometers' | 'yards' | 'feet';
+
+type Distance = {
+  value: number;
+  unit: DistanceUnits;
+};
+
+type DurationWithTimeZone = {
+  timezone: string;
+  seconds: number;
+};
+
+type AutoText = {
+  text: string;
+  distance?: Distance;
+  duration?: number;
+};
+
+type TravelEstimates = {
+  distanceRemaining: Distance;
+  timeRemaining: DurationWithTimeZone;
+  tripText?: AutoText;
+  /**
+   * This makes TravelEstimates.hpp not equatable and solves an "map" not available on vector build issue.
+   */
+  _doNotUse?: () => void;
+};
+
+type TripPoint = {
+  latitude: number;
+  longitude: number;
+  name: string;
+  travelEstimates: TravelEstimates;
+};
+
+type NitroAttributedStringImage = {
+  image: NitroImage;
+  position: number;
+};
+
+type NitroAttributedString = {
+  text: string;
+  images?: Array<NitroAttributedStringImage>;
+};
+
+enum TrafficSide {
+  Right = 0, // counterclockwise for roundabouts
+  Left = 1, // clockwise for roundabouts
+}
+
+enum ManeuverType {
+  Depart = 0,
+  Arrive = 10,
+  ArriveLeft = 11,
+  ArriveRight = 12,
+  Straight = 20,
+  Turn = 30,
+  Roundabout = 40,
+  OffRamp = 50,
+  OnRamp = 60,
+  Fork = 70,
+  EnterFerry = 80,
+  Keep = 90,
+}
+
+interface BaseManeuver {
+  id: string;
+  travelEstimates: TravelEstimates;
+  trafficSide: TrafficSide;
+  maneuverType: ManeuverType;
+  roadName?: Array<string>;
+  highwayExitLabel?: string;
+}
+
+type NitroColor = { lightColor: number; darkColor: number };
+
+interface AssetImage extends ImageResolvedAssetSource {
+  color?: NitroColor;
+  packager_asset: boolean;
+}
+
+interface GlyphImage {
+  glyph: number;
+  color: NitroColor;
+  backgroundColor: NitroColor;
+  fontScale?: number;
+}
+
+type NitroImage = GlyphImage | AssetImage;
+
+enum TurnType {
+  NoTurn = 0, // Android TYPE_UNKNOWN, iOS noTurn
+  SlightLeft = 1, // Android TYPE_TURN_SLIGHT_LEFT, iOS slightLeftTurn
+  SlightRight = 2, // Android TYPE_TURN_SLIGHT_RIGHT, iOS slightRightTurn
+  NormalLeft = 3, // Android TYPE_TURN_NORMAL_LEFT, iOS leftTurn
+  NormalRight = 4, // Android TYPE_TURN_NORMAL_RIGHT, iOS rightTurn
+  SharpLeft = 5, // Android TYPE_TURN_SHARP_LEFT, iOS sharpLeftTurn
+  SharpRight = 6, // Android TYPE_TURN_SHARP_RIGHT, iOS sharpRightTurn
+  UTurnLeft = 7, // Android TYPE_U_TURN_LEFT, iOS uTurn
+  UTurnRight = 8, // Android TYPE_U_TURN_RIGHT, iOS uTurn
+}
+
+enum OffRampType {
+  SlightLeft = 0, // Android TYPE_OFF_RAMP_SLIGHT_LEFT
+  SlightRight = 1, // Android TYPE_OFF_RAMP_SLIGHT_RIGHT
+  NormalLeft = 2, // Android TYPE_OFF_RAMP_NORMAL_LEFT
+  NormalRight = 3, // Android TYPE_OFF_RAMP_NORMAL_RIGHT
+}
+
+enum OnRampType {
+  SlightLeft = 0, // Android TYPE_ON_RAMP_SLIGHT_LEFT
+  SlightRight = 1, // Android TYPE_ON_RAMP_SLIGHT_RIGHT
+  NormalLeft = 2, // Android TYPE_ON_RAMP_NORMAL_LEFT
+  NormalRight = 3, // Android TYPE_ON_RAMP_NORMAL_RIGHT
+  SharpLeft = 4, // Android TYPE_ON_RAMP_SHARP_LEFT
+  SharpRight = 5, // Android TYPE_ON_RAMP_SHARP_RIGHT
+  UTurnLeft = 6, // Android TYPE_ON_RAMP_U_TURN_LEFT
+  UTurnRight = 7, // Android TYPE_ON_RAMP_U_TURN_RIGHT
+}
+
+enum ForkType {
+  Left = 0, // Android TYPE_FORK_LEFT
+  Right = 1, // Android TYPE_FORK_RIGHT
+}
+
+enum KeepType {
+  Left = 0, // Android TYPE_KEEP_LEFT, iOS keepLeft
+  Right = 1, // Android TYPE_KEEP_RIGHT, iOS keepRight
+  FollowRoad = 2,
+}
+
+interface Lane {
+  angles: Array<number>;
+}
+
+interface PreferredLane extends Lane {
+  /**
+   * highlightedAngle must not be included in angles, if you have no more angles you can specify an empty angles array
+   */
+  highlightedAngle: number;
+  isPreferred: boolean;
+}
+
+interface PreferredImageLane extends PreferredLane {
+  image: NitroImage;
+}
+
+interface ImageLane extends Lane {
+  image: NitroImage;
+}
+
+interface LaneGuidance {
+  instructionVariants: Array<string>;
+  lanes: Array<PreferredImageLane | ImageLane>;
+}
+
+interface NitroRoutingManeuver extends BaseManeuver {
+  attributedInstructionVariants: Array<NitroAttributedString>;
+  symbolImage: NitroImage;
+  junctionImage?: NitroImage;
+  turnType?: TurnType;
+  angle?: number;
+  elementAngles?: Array<number>;
+  exitNumber?: number;
+  offRampType?: OffRampType;
+  onRampType?: OnRampType;
+  forkType?: ForkType;
+  keepType?: KeepType;
+  linkedLaneGuidance?: LaneGuidance;
+  cardBackgroundColor: NitroColor;
+}
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -330,4 +506,6 @@ export interface TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
+  updateTravelEstimates(templateId: string, steps: Array<TripPoint>): void;
+  updateManeuvers(templateId: string, maneuvers: Array<NitroRoutingManeuver>): void;
 }

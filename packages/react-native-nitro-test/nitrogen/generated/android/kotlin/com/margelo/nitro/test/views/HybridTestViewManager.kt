@@ -19,7 +19,7 @@ import com.margelo.nitro.test.*
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
-public class HybridTestViewManager: SimpleViewManager<View>() {
+open class HybridTestViewManager: SimpleViewManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(HybridTestView::class.java)) {
       // Enable view recycling

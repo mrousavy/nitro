@@ -77,7 +77,7 @@ namespace margelo::nitro::test::views {
   void HybridRecyclableTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<HybridRecyclableTestViewShadowNode&>(shadowNode);
+    auto& concreteShadowNode = dynamic_cast<HybridRecyclableTestViewShadowNode&>(shadowNode);
     const HybridRecyclableTestViewProps& props = concreteShadowNode.getConcreteProps();
     HybridRecyclableTestViewState state;
     state.setProps(props);
