@@ -35,8 +35,11 @@ public:
       return oldProp;
     }
     T converted = JSIConverter<T>::fromJSI(runtime, value);
-    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-    BorrowingReference<jsi::Value> cached = cache.makeShared(jsi::Value(runtime, value));
+    BorrowingReference<jsi::Value cached;
+    {
+      JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+      cached = cache.makeShared(jsi::Value(runtime, value));
+    }
     return CachedProp<T>(std::move(converted), std::move(cached), /* isDirty */ true);
   }
 };

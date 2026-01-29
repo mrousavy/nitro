@@ -62,8 +62,11 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
       }
     }
 
-    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-    auto borrowingArrayBuffer = cache.makeShared(object.getArrayBuffer(runtime));
+    BorrowingReference<jsi::ArrayBuffer> borrowingArrayBuffer;
+    {
+      JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+      borrowingArrayBuffer = cache.makeShared(object.getArrayBuffer(runtime));
+    }
 
     return std::make_shared<JSArrayBuffer>(runtime, borrowingArrayBuffer);
   }

@@ -204,8 +204,11 @@ const jsi::Function& CommonGlobals::getGlobalFunction(jsi::Runtime& runtime, con
   jsi::Function function = getFunction(runtime);
 
   // Let's throw it in cache!
-  JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
-  BorrowingReference<jsi::Function> sharedFunction = jsiCache.makeShared(std::move(function));
+  BorrowingReference<jsi::Function> sharedFunction;
+  {
+    JSICacheReference jsiCache = JSICache::getOrCreateCache(runtime);
+    sharedFunction = jsiCache.makeShared(std::move(function));
+  }
   functionCache[stringKey] = sharedFunction;
 
   // And now return:
