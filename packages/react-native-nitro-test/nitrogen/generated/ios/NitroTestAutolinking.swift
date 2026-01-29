@@ -11,6 +11,44 @@ import NitroModules
 //       See: https://github.com/swiftlang/swift/pull/83616
 public final class NitroTestAutolinking {
   public typealias bridge = margelo.nitro.test.bridge.swift
+  
+  public static func createASCIIString(bytes: UnsafeRawPointer, length: Int) -> String {
+    return String(unsafeUninitializedCapacity: length) { buffer in
+      memcpy(buffer.baseAddress, bytes, length)
+      return length
+    }
+  }
+  public static func createUTF16String(bytes: UnsafePointer<UInt16>, length: Int) -> String {
+    return String(utf16CodeUnits: bytes, count: length)
+  }
+  
+  public static func convertStringToJS(runtime: inout facebook.jsi.Runtime, string: String) -> bridge.UnsafeJsiStringWrapper {
+    if string.isEmpty {
+      // A) Empty string, no need for accessing data
+      return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, "", 0))
+    }
+    
+    if #available(iOS 26.0, *) {
+      let utf8 = string.utf8Span
+      return utf8.span.withUnsafeBytes { buffer in
+        if utf8.isKnownASCII {
+          // B) It's all ASCII - we can access the bytes and use jsi::String's ASCII fast-path
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromAscii(&runtime, buffer.baseAddress!, buffer.count))
+        } else {
+          // C) It's not ASCII, so let's use the UTF8 decoder from JSI, which internally likely transcodes to UTF16.
+          //    We cannot use a UTF16 fast-path here, since Swift doesn't natively stores Strings in contiguous UTF16 memory,
+          //    so UTF8 is the best we can do.
+          return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, buffer.count))
+        }
+      }
+    } else {
+      // D) We can't access neither UTF16 nor UTF8 as zero-copy, we have to do a potential UTF8 copy and have JSI decode the UTF8.
+      var maybeCopy = string
+      return maybeCopy.withUTF8 { buffer in
+        return bridge.UnsafeJsiStringWrapper(consuming: facebook.jsi.String.createFromUtf8(&runtime, buffer.baseAddress!, buffer.count))
+      }
+    }
+  }
 
   public static func createTestObjectSwiftKotlin() -> bridge.std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ {
     let hybridObject = HybridTestObjectSwift()

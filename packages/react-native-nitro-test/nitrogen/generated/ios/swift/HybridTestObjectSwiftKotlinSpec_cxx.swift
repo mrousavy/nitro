@@ -196,6 +196,17 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var stringValueSwift: String {
+    @inline(__always)
+    get {
+      return self.__implementation.stringValue
+    }
+    @inline(__always)
+    set {
+      self.__implementation.stringValue = newValue
+    }
+  }
+  
   public final var bigintValue: Int64 {
     @inline(__always)
     get {

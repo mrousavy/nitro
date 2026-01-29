@@ -6,6 +6,65 @@
 ///
 
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
+#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+
+// JSIConverter+SwiftString
+#include <NitroModules/JSIConverter.hpp>
+namespace margelo::nitro {
+using namespace facebook;
+
+// string <> swift::String
+template <>
+struct JSIConverter<swift::String> final {
+  static swift::String fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+    jsi::String jsString = arg.getString(runtime);
+    // Concat pieces of jsi::String into swift::String - some segments may be ascii, others UTF
+    swift::String string = swift::String::init();
+    auto callback = [&](bool ascii, const void* data, size_t length) {
+      if (ascii) {
+        swift::String sequence = NitroTest::NitroTestAutolinking::createASCIIString(data, length);
+        string.appendContentsOf(sequence);
+      } else {
+        const uint16_t* utf16Bytes = static_cast<const uint16_t*>(data);
+        swift::String sequence = NitroTest::NitroTestAutolinking::createUTF16String(utf16Bytes, length);
+        string.appendContentsOf(sequence);
+      }
+    };
+    jsString.getStringData(runtime, callback);
+    // Return result
+    return string;
+  }
+  static jsi::Value toJSI(jsi::Runtime& runtime, const swift::String& string) {
+    return NitroTest::NitroTestAutolinking::convertStringToJS(runtime, string).moveOutString();
+  }
+  static bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
+    return value.isString();
+  }
+};
+} // namespace margelo::nitro
 
 namespace margelo::nitro::test {
+
+swift::String HybridTestObjectSwiftKotlinSpecSwift::getStringValueSwift() noexcept {
+  return _swiftPart.getStringValueSwift();
+}
+
+void HybridTestObjectSwiftKotlinSpecSwift::setStringValueSwift(const swift::String& string) noexcept {
+  _swiftPart.setStringValueSwift(string);
+}
+
+void HybridTestObjectSwiftKotlinSpecSwift::loadHybridMethods() {
+  // call base protoype
+  HybridTestObjectSwiftKotlinSpec::loadHybridMethods();
+  // register all methods we override here
+  registerHybrids(this, [](Prototype& prototype) {
+    // Register stringValue again here so we have one less virtual method call
+    prototype.registerHybridGetter("stringValue", &HybridTestObjectSwiftKotlinSpecSwift::getStringValue);
+    prototype.registerHybridSetter("stringValue", &HybridTestObjectSwiftKotlinSpecSwift::setStringValue);
+    // Register Swift overrides directly, also with no virtual method calls
+    prototype.registerHybridGetter("stringValueSwift", &HybridTestObjectSwiftKotlinSpecSwift::getStringValueSwift);
+    prototype.registerHybridSetter("stringValueSwift", &HybridTestObjectSwiftKotlinSpecSwift::setStringValueSwift);
+  });
+}
+
 } // namespace margelo::nitro::test
