@@ -97,8 +97,10 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 #endif
 
   // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
-  JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-  _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
+  {
+    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+    _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
+  }
 
   // 8. Return it!
   return object;
