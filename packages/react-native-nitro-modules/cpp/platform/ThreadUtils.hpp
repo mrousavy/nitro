@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "Dispatcher.hpp"
+#include <memory>
 #include <string>
 
 namespace margelo::nitro {
@@ -26,6 +28,17 @@ public:
    * This is implemented differently on iOS and Android.
    */
   static void setThreadName(const std::string& name);
+
+  /**
+   * Gets whether the caller is currently running
+   * on the Main/UI Thread.
+   */
+  static bool isUIThread();
+
+  /**
+   * Create a `Dispatcher` for the Main/UI Thread.
+   */
+  static std::shared_ptr<Dispatcher> createUIThreadDispatcher();
 };
 
 } // namespace margelo::nitro
