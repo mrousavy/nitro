@@ -10,7 +10,7 @@ void UIThreadDispatcher::runSync(std::function<void()>&& function) {
 
 void UIThreadDispatcher::runAsync(std::function<void()>&& function) {
   std::function<void()>* funcHeap = new std::function<void()>(std::move(function));
-  dispatch_sync(_queue, ^{
+  dispatch_async(_queue, ^{
     (*funcHeap)();
     delete funcHeap;
   });
