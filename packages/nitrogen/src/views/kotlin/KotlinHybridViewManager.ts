@@ -140,7 +140,6 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 #endif
 
 #include <fbjni/fbjni.h>
-#include <react/fabric/StateWrapperImpl.h>
 #include <react/fabric/CoreComponentsRegistry.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
@@ -193,6 +192,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <react/fabric/StateWrapperImpl.h>
 
 namespace ${cxxNamespace} {
 

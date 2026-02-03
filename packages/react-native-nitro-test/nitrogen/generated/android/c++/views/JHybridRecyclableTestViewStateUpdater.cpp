@@ -8,6 +8,7 @@
 #include "JHybridRecyclableTestViewStateUpdater.hpp"
 #include "views/HybridRecyclableTestViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <react/fabric/StateWrapperImpl.h>
 
 namespace margelo::nitro::test::views {
 
