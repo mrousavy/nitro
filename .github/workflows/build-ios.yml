@@ -65,7 +65,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 1.5G
-          key: ${{ runner.os }}-ccache-example-ios
+          key: ${{ runner.os }}-${{ matrix.use_frameworks }}-ccache-example-ios
           create-symlink: true
       - name: Setup ccache behavior
         run: |
@@ -88,9 +88,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ matrix.use_frameworks }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-${{ matrix.use_frameworks }}-pods-
       - name: Install Pods
         working-directory: example
         run: bun pods
@@ -99,9 +99,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
+          key: ${{ runner.os }}-${{ matrix.use_frameworks }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
           restore-keys: |
-            ${{ runner.os }}-dd-
+            ${{ runner.os }}-${{ matrix.use_frameworks }}-dd-
 
       - name: Build App
         working-directory: example/ios
