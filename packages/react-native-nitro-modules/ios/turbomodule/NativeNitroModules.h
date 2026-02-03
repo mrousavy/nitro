@@ -8,7 +8,7 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 
 // New Architecture uses the Codegen'd Spec (TurboModule)
-#import "NitroModulesSpec.h"
+#import <NitroModulesSpec/NitroModulesSpec.h>
 @interface NativeNitroModules : NSObject <NativeNitroModulesSpec>
 @end
 
