@@ -25,8 +25,10 @@ std::string ThreadUtils::getThreadName() {
 }
 
 void ThreadUtils::setThreadName(const std::string& name) {
-  auto jName = jni::make_jstring(name);
-  JThreadUtils::setCurrentThreadName(jName);
+  jni::ThreadScope::WithClassLoader([&]() {
+    auto jName = jni::make_jstring(name);
+    JThreadUtils::setCurrentThreadName(jName);
+  });
 }
 
 bool ThreadUtils::isUIThread() {
