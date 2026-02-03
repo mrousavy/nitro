@@ -37,7 +37,6 @@ namespace margelo::nitro::test::views {
   class HybridTestViewProps final: public react::ViewProps {
   public:
     HybridTestViewProps() = default;
-    HybridTestViewProps(const HybridTestViewProps&);
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
                         const react::RawProps& rawProps);

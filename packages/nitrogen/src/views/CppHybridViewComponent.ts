@@ -115,7 +115,6 @@ namespace ${namespace} {
   class ${propsClassName} final: public react::ViewProps {
   public:
     ${propsClassName}() = default;
-    ${propsClassName}(const ${propsClassName}&);
     ${propsClassName}(const react::PropsParserContext& context,
   ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
   ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
@@ -248,9 +247,6 @@ namespace ${namespace} {
   ${ctorIndent}   const ${propsClassName}& sourceProps,
   ${ctorIndent}   const react::RawProps& rawProps):
     ${indent(propInitializers.join(',\n'), '    ')} { }
-
-  ${propsClassName}::${propsClassName}(const ${propsClassName}& other):
-    ${indent(propCopyInitializers.join(',\n'), '    ')} { }
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

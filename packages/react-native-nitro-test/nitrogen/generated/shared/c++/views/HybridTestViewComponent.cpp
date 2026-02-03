@@ -77,14 +77,6 @@ namespace margelo::nitro::test::views {
       }
     }()) { }
 
-  HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
-    react::ViewProps(),
-    isBlue(other.isBlue),
-    hasBeenCalled(other.hasBeenCalled),
-    colorScheme(other.colorScheme),
-    someCallback(other.someCallback),
-    hybridRef(other.hybridRef) { }
-
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("isBlue"): return true;
