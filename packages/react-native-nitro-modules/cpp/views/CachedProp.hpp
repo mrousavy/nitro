@@ -17,8 +17,10 @@ template <typename T>
 struct CachedProp {
 public:
   T value;
-  BorrowingReference<jsi::Value> jsiValue;
   bool isDirty = false;
+
+private:
+  BorrowingReference<jsi::Value> jsiValue;
 
 public:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
