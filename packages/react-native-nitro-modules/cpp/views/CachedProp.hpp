@@ -22,8 +22,8 @@ public:
   // Default constructor
   CachedProp() = default;
   // Constructor with value
-  CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue):
-    value(std::move(value)), isDirty(true), jsiValue(std::move(jsiValue)) {}
+  CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
+      : value(std::move(value)), isDirty(true), jsiValue(std::move(jsiValue)) {}
   // Copy/Move/Destruct
   CachedProp(const CachedProp&) = default;
   CachedProp(CachedProp&&) = default;
