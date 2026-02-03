@@ -434,6 +434,18 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
+  override fun bounceSelfReferentialStruct(value: SelfReferentialStruct): SelfReferentialStruct {
+    return value
+  }
+
+  override fun bounceTreeNode(node: TreeNode): TreeNode {
+    return node
+  }
+
+  override fun bounceTreeNodeMap(node: TreeNodeMap): TreeNodeMap {
+    return node
+  }
+
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(

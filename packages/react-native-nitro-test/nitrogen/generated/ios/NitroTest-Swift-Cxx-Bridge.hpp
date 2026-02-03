@@ -42,6 +42,12 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `SelfReferentialStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct SelfReferentialStruct; }
+// Forward declaration of `TreeNodeMap` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNodeMap; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -79,6 +85,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "SelfReferentialStruct.hpp"
+#include "TreeNode.hpp"
+#include "TreeNodeMap.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -184,6 +193,21 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::optional<std::variant<std::string, double>>
+  /**
+   * Specialized version of `std::optional<std::variant<std::string, double>>`.
+   */
+  using std__optional_std__variant_std__string__double__ = std::optional<std::variant<std::string, double>>;
+  inline std::optional<std::variant<std::string, double>> create_std__optional_std__variant_std__string__double__(const std::variant<std::string, double>& value) noexcept {
+    return std::optional<std::variant<std::string, double>>(value);
+  }
+  inline bool has_value_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::variant<std::string, double> get_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::variant<std::string, double>
   /**
    * Wrapper struct for `std::variant<std::string, double>`.
@@ -211,21 +235,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) noexcept {
     return std__variant_std__string__double_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<std::string, double>>
-  /**
-   * Specialized version of `std::optional<std::variant<std::string, double>>`.
-   */
-  using std__optional_std__variant_std__string__double__ = std::optional<std::variant<std::string, double>>;
-  inline std::optional<std::variant<std::string, double>> create_std__optional_std__variant_std__string__double__(const std::variant<std::string, double>& value) noexcept {
-    return std::optional<std::variant<std::string, double>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline std::variant<std::string, double> get_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
-    return *optional;
   }
   
   // pragma MARK: std::variant<std::string, Car>
@@ -1206,6 +1215,21 @@ namespace margelo::nitro::test::bridge::swift {
     return *optional;
   }
   
+  // pragma MARK: std::optional<std::variant<std::function<void()>, double>>
+  /**
+   * Specialized version of `std::optional<std::variant<std::function<void()>, double>>`.
+   */
+  using std__optional_std__variant_std__function_void_____double__ = std::optional<std::variant<std::function<void()>, double>>;
+  inline std::optional<std::variant<std::function<void()>, double>> create_std__optional_std__variant_std__function_void_____double__(const std::variant<std::function<void()>, double>& value) noexcept {
+    return std::optional<std::variant<std::function<void()>, double>>(value);
+  }
+  inline bool has_value_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::variant<std::function<void()>, double> get_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+    return *optional;
+  }
+  
   // pragma MARK: std::variant<std::function<void()>, double>
   /**
    * Wrapper struct for `std::variant<std::function<void()>, double>`.
@@ -1235,19 +1259,146 @@ namespace margelo::nitro::test::bridge::swift {
     return std__variant_std__function_void_____double_(value);
   }
   
-  // pragma MARK: std::optional<std::variant<std::function<void()>, double>>
+  // pragma MARK: std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>
   /**
-   * Specialized version of `std::optional<std::variant<std::function<void()>, double>>`.
+   * Specialized version of `std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& / * config * /)>>`.
    */
-  using std__optional_std__variant_std__function_void_____double__ = std::optional<std::variant<std::function<void()>, double>>;
-  inline std::optional<std::variant<std::function<void()>, double>> create_std__optional_std__variant_std__function_void_____double__(const std::variant<std::function<void()>, double>& value) noexcept {
-    return std::optional<std::variant<std::function<void()>, double>>(value);
+  using std__optional_std__function_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____const_SelfReferentialStruct_____config______ = std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>;
+  inline std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>> create_std__optional_std__function_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____const_SelfReferentialStruct_____config______(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>& value) noexcept {
+    return std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>(value);
   }
-  inline bool has_value_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+  inline bool has_value_std__optional_std__function_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____const_SelfReferentialStruct_____config______(const std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<std::function<void()>, double> get_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+  inline std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)> get_std__optional_std__function_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____const_SelfReferentialStruct_____config______(const std::optional<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>& optional) noexcept {
     return *optional;
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct&)>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& / * config * /)>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> call(SelfReferentialStruct config) const noexcept {
+      auto __result = _function->operator()(config);
+      return __result;
+    }
+  private:
+    std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>(const SelfReferentialStruct& /* config */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct_____SelfReferentialStruct_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct____ = std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct____() noexcept {
+    return Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<SelfReferentialStruct>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_SelfReferentialStruct____(std::shared_ptr<Promise<std::shared_ptr<Promise<SelfReferentialStruct>>>> promise) noexcept {
+    return PromiseHolder<std::shared_ptr<Promise<SelfReferentialStruct>>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>&)>`.
+   */
+  using Func_void_std__shared_ptr_Promise_SelfReferentialStruct__ = std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_Promise_SelfReferentialStruct___Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_Promise_SelfReferentialStruct___Wrapper(std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<Promise<SelfReferentialStruct>> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::shared_ptr<Promise<SelfReferentialStruct>>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__shared_ptr_Promise_SelfReferentialStruct__ create_Func_void_std__shared_ptr_Promise_SelfReferentialStruct__(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__shared_ptr_Promise_SelfReferentialStruct___Wrapper wrap_Func_void_std__shared_ptr_Promise_SelfReferentialStruct__(Func_void_std__shared_ptr_Promise_SelfReferentialStruct__ value) noexcept {
+    return Func_void_std__shared_ptr_Promise_SelfReferentialStruct___Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<SelfReferentialStruct>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<SelfReferentialStruct>>`.
+   */
+  using std__shared_ptr_Promise_SelfReferentialStruct__ = std::shared_ptr<Promise<SelfReferentialStruct>>;
+  inline std::shared_ptr<Promise<SelfReferentialStruct>> create_std__shared_ptr_Promise_SelfReferentialStruct__() noexcept {
+    return Promise<SelfReferentialStruct>::create();
+  }
+  inline PromiseHolder<SelfReferentialStruct> wrap_std__shared_ptr_Promise_SelfReferentialStruct__(std::shared_ptr<Promise<SelfReferentialStruct>> promise) noexcept {
+    return PromiseHolder<SelfReferentialStruct>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const SelfReferentialStruct& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const SelfReferentialStruct&)>`.
+   */
+  using Func_void_SelfReferentialStruct = std::function<void(const SelfReferentialStruct& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const SelfReferentialStruct& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_SelfReferentialStruct_Wrapper final {
+  public:
+    explicit Func_void_SelfReferentialStruct_Wrapper(std::function<void(const SelfReferentialStruct& /* result */)>&& func): _function(std::make_unique<std::function<void(const SelfReferentialStruct& /* result */)>>(std::move(func))) {}
+    inline void call(SelfReferentialStruct result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const SelfReferentialStruct& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_SelfReferentialStruct create_Func_void_SelfReferentialStruct(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_SelfReferentialStruct_Wrapper wrap_Func_void_SelfReferentialStruct(Func_void_SelfReferentialStruct value) noexcept {
+    return Func_void_SelfReferentialStruct_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::vector<TreeNode>
+  /**
+   * Specialized version of `std::vector<TreeNode>`.
+   */
+  using std__vector_TreeNode_ = std::vector<TreeNode>;
+  inline std::vector<TreeNode> create_std__vector_TreeNode_(size_t size) noexcept {
+    std::vector<TreeNode> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, TreeNodeMap>
+  /**
+   * Specialized version of `std::unordered_map<std::string, TreeNodeMap>`.
+   */
+  using std__unordered_map_std__string__TreeNodeMap_ = std::unordered_map<std::string, TreeNodeMap>;
+  inline std::unordered_map<std::string, TreeNodeMap> create_std__unordered_map_std__string__TreeNodeMap_(size_t size) noexcept {
+    std::unordered_map<std::string, TreeNodeMap> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__TreeNodeMap__keys(const std__unordered_map_std__string__TreeNodeMap_& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline TreeNodeMap get_std__unordered_map_std__string__TreeNodeMap__value(const std__unordered_map_std__string__TreeNodeMap_& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__TreeNodeMap_(std__unordered_map_std__string__TreeNodeMap_& map, const std::string& key, const TreeNodeMap& value) noexcept {
+    map.emplace(key, value);
   }
   
   // pragma MARK: std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>
@@ -1887,6 +2038,33 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
+  }
+  
+  // pragma MARK: Result<SelfReferentialStruct>
+  using Result_SelfReferentialStruct_ = Result<SelfReferentialStruct>;
+  inline Result_SelfReferentialStruct_ create_Result_SelfReferentialStruct_(const SelfReferentialStruct& value) noexcept {
+    return Result<SelfReferentialStruct>::withValue(value);
+  }
+  inline Result_SelfReferentialStruct_ create_Result_SelfReferentialStruct_(const std::exception_ptr& error) noexcept {
+    return Result<SelfReferentialStruct>::withError(error);
+  }
+  
+  // pragma MARK: Result<TreeNode>
+  using Result_TreeNode_ = Result<TreeNode>;
+  inline Result_TreeNode_ create_Result_TreeNode_(const TreeNode& value) noexcept {
+    return Result<TreeNode>::withValue(value);
+  }
+  inline Result_TreeNode_ create_Result_TreeNode_(const std::exception_ptr& error) noexcept {
+    return Result<TreeNode>::withError(error);
+  }
+  
+  // pragma MARK: Result<TreeNodeMap>
+  using Result_TreeNodeMap_ = Result<TreeNodeMap>;
+  inline Result_TreeNodeMap_ create_Result_TreeNodeMap_(const TreeNodeMap& value) noexcept {
+    return Result<TreeNodeMap>::withValue(value);
+  }
+  inline Result_TreeNodeMap_ create_Result_TreeNodeMap_(const std::exception_ptr& error) noexcept {
+    return Result<TreeNodeMap>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

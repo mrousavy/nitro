@@ -1873,6 +1873,42 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceSelfReferentialStruct(value: SelfReferentialStruct) -> bridge.Result_SelfReferentialStruct_ {
+    do {
+      let __result = try self.__implementation.bounceSelfReferentialStruct(value: value)
+      let __resultCpp = __result
+      return bridge.create_Result_SelfReferentialStruct_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_SelfReferentialStruct_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceTreeNode(node: TreeNode) -> bridge.Result_TreeNode_ {
+    do {
+      let __result = try self.__implementation.bounceTreeNode(node: node)
+      let __resultCpp = __result
+      return bridge.create_Result_TreeNode_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_TreeNode_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceTreeNodeMap(node: TreeNodeMap) -> bridge.Result_TreeNodeMap_ {
+    do {
+      let __result = try self.__implementation.bounceTreeNodeMap(node: node)
+      let __resultCpp = __result
+      return bridge.create_Result_TreeNodeMap_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_TreeNodeMap_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()

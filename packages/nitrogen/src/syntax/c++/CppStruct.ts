@@ -64,7 +64,10 @@ export function createCppStruct(
   }
 
   // Get C++ includes for each extra-file we need to include
-  const includedTypes = properties.flatMap((r) => r.getRequiredImports('c++'))
+  // Filter out self-references to avoid including ourselves (e.g., cyclic types like `Node { node?: Node }`)
+  const includedTypes = properties
+    .flatMap((r) => r.getRequiredImports('c++'))
+    .filter((i) => i.name !== `${typename}.hpp`)
   const cppForwardDeclarations = includedTypes
     .map((i) => i.forwardDeclaration)
     .filter((v) => v != null)

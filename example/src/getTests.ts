@@ -7,6 +7,9 @@ import {
   type Powertrain,
   type WrappedJsStruct,
   type OptionalWrapper,
+  type SelfReferentialStruct,
+  type TreeNode,
+  type TreeNodeMap,
   WeirdNumbersEnum,
   CustomString,
   Base,
@@ -1959,6 +1962,72 @@ export function getTests(
         .didNotThrow()
         .equals({ someExternal: HybridSomeExternalObject })
     ),
+
+    // Self-referential / cyclic struct tests
+    createTest('bounceSelfReferentialStruct(...) with empty struct', () =>
+      it(() => {
+        const struct: SelfReferentialStruct = {}
+        return testObject.bounceSelfReferentialStruct(struct)
+      })
+        .didNotThrow()
+        .equals({ transform: undefined })
+    ),
+    createTest('bounceSelfReferentialStruct(...) with transform callback', async () =>
+      (
+        await it(async () => {
+          const struct: SelfReferentialStruct = {
+            transform: async (config) => config,
+          }
+          const result = testObject.bounceSelfReferentialStruct(struct)
+          // Call the transform to verify it works
+          const transformed = await result.transform!({ transform: undefined })
+          return transformed
+        })
+      )
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('bounceTreeNode(...) works', () =>
+      it(() => {
+        const node: TreeNode = {
+          value: 42,
+          children: [
+            { value: 1, children: [] },
+            { value: 2, children: [{ value: 3, children: [] }] },
+          ],
+        }
+        return testObject.bounceTreeNode(node)
+      })
+        .didNotThrow()
+        .equals({
+          value: 42,
+          children: [
+            { value: 1, children: [] },
+            { value: 2, children: [{ value: 3, children: [] }] },
+          ],
+        })
+    ),
+    createTest('bounceTreeNodeMap(...) works', () =>
+      it(() => {
+        const node: TreeNodeMap = {
+          value: 100,
+          children: {
+            left: { value: 50, children: {} },
+            right: { value: 150, children: {} },
+          },
+        }
+        return testObject.bounceTreeNodeMap(node)
+      })
+        .didNotThrow()
+        .equals({
+          value: 100,
+          children: {
+            left: { value: 50, children: {} },
+            right: { value: 150, children: {} },
+          },
+        })
+    ),
+
     createTest('bounceExternalVariant(...) works with string', () =>
       it(() => {
         return testObject.bounceExternalVariant('Hello!')

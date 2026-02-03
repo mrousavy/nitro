@@ -36,13 +36,13 @@ export class ResultWrappingType implements Type {
         )
     }
   }
-  getExtraFiles(): SourceFile[] {
-    return [...this.result.getExtraFiles(), ...this.error.getExtraFiles()]
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return [...this.result.getExtraFiles(visited), ...this.error.getExtraFiles(visited)]
   }
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
     const imports: SourceImport[] = [
-      ...this.result.getRequiredImports(language),
-      ...this.error.getRequiredImports(language),
+      ...this.result.getRequiredImports(language, visited),
+      ...this.error.getRequiredImports(language, visited),
     ]
     if (language === 'c++') {
       imports.push({

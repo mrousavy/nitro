@@ -88,6 +88,24 @@ interface MapWrapper {
   map: Record<string, string>
   secondMap: SecondMapWrapper
 }
+
+// Self-referential callback in struct (not cyclic - callback is a reference type)
+export interface SelfReferentialStruct {
+  transform?: (config: SelfReferentialStruct) => Promise<SelfReferentialStruct>
+}
+
+// Self-referential struct via array
+export interface TreeNode {
+  value: number
+  children: TreeNode[]
+}
+
+// Self-referential struct via map
+export interface TreeNodeMap {
+  value: number
+  children: Record<string, TreeNodeMap>
+}
+
 export type CustomString = CustomType<
   string,
   'CustomString',
@@ -238,6 +256,11 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  bounceSelfReferentialStruct(
+    value: SelfReferentialStruct
+  ): SelfReferentialStruct
+  bounceTreeNode(node: TreeNode): TreeNode
+  bounceTreeNodeMap(node: TreeNodeMap): TreeNodeMap
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

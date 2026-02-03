@@ -5,6 +5,10 @@ import { getReferencedTypes } from '../getReferencedTypes.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
+import {
+  detectCyclicFunctionDependencies,
+  partitionAndTransformImports,
+} from './detectCyclicDependencies.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 interface BridgedProperty {
@@ -93,12 +97,38 @@ data class ${structType.structName}(
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
     .flatMap((t) => t.getRequiredImports('c++'))
-  const includes = imports
-    .map((i) => includeHeader(i))
-    .filter(isNotDuplicate)
-    .sort()
+    // Filter out self-includes
+    .filter((i) => i.name !== `J${structType.structName}.hpp`)
 
-  const fbjniCode = `
+  // Detect cyclic function references: function types that reference this struct
+  // These function JNI headers (J<FuncName>.hpp) would create circular includes
+  const { cyclicNames: cyclicFunctionNames, hasCyclicDeps } =
+    detectCyclicFunctionDependencies(structType)
+
+  // Partition imports into regular and cyclic includes in a single pass
+  const { regularIncludes, cyclicIncludes } = partitionAndTransformImports(
+    imports,
+    cyclicFunctionNames,
+    includeHeader
+  )
+
+  // Generate forward declarations for cyclic function types
+  const forwardDeclarations = Array.from(cyclicFunctionNames)
+    .map((funcName) => `struct J${funcName};`)
+    .join('\n  ')
+
+  const files: SourceFile[] = []
+  files.push({
+    content: code,
+    language: 'kotlin',
+    name: `${structType.structName}.kt`,
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
+    platform: 'android',
+  })
+
+  if (hasCyclicDeps) {
+    // For cyclic dependencies: header with declarations only, cpp with implementations
+    const fbjniHeader = `
 ${createFileMetadataString(`J${structType.structName}.hpp`)}
 
 #pragma once
@@ -106,7 +136,92 @@ ${createFileMetadataString(`J${structType.structName}.hpp`)}
 #include <fbjni/fbjni.h>
 #include "${structType.declarationFile.name}"
 
-${includes.join('\n')}
+${regularIncludes.join('\n')}
+
+namespace ${cxxNamespace} {
+
+  using namespace facebook;
+
+  // Forward declarations for cyclic dependencies
+  ${forwardDeclarations}
+
+  /**
+   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
+   */
+  struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
+  public:
+    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+
+  public:
+    /**
+     * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
+     */
+    [[maybe_unused]]
+    [[nodiscard]]
+    ${structType.structName} toCpp() const;
+
+  public:
+    /**
+     * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
+     */
+    [[maybe_unused]]
+    static jni::local_ref<J${structType.structName}::javaobject> fromCpp(const ${structType.structName}& value);
+  };
+
+} // namespace ${cxxNamespace}
+    `.trim()
+
+    const fbjniCpp = `
+${createFileMetadataString(`J${structType.structName}.cpp`)}
+
+#include "J${structType.structName}.hpp"
+
+// Include cyclic dependencies in the .cpp file where all types are complete
+${cyclicIncludes.join('\n')}
+
+namespace ${cxxNamespace} {
+
+  ${structType.structName} J${structType.structName}::toCpp() const {
+    ${indent(jniStructInitializerBody, '    ')}
+  }
+
+  jni::local_ref<J${structType.structName}::javaobject> J${structType.structName}::fromCpp(const ${structType.structName}& value) {
+    ${indent(cppStructInitializerBody, '    ')}
+  }
+
+} // namespace ${cxxNamespace}
+    `.trim()
+
+    files.push({
+      content: fbjniHeader,
+      language: 'c++',
+      name: `J${structType.structName}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
+    files.push({
+      content: fbjniCpp,
+      language: 'c++',
+      name: `J${structType.structName}.cpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
+  } else {
+    // No cyclic dependencies - use the original inline header-only code
+    const allIncludes = imports
+      .map((i) => includeHeader(i))
+      .filter(isNotDuplicate)
+      .sort()
+
+    const fbjniCode = `
+${createFileMetadataString(`J${structType.structName}.hpp`)}
+
+#pragma once
+
+#include <fbjni/fbjni.h>
+#include "${structType.declarationFile.name}"
+
+${allIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
@@ -140,23 +255,17 @@ namespace ${cxxNamespace} {
   };
 
 } // namespace ${cxxNamespace}
-  `.trim()
+    `.trim()
 
-  const files: SourceFile[] = []
-  files.push({
-    content: code,
-    language: 'kotlin',
-    name: `${structType.structName}.kt`,
-    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
-    platform: 'android',
-  })
-  files.push({
-    content: fbjniCode,
-    language: 'c++',
-    name: `J${structType.structName}.hpp`,
-    subdirectory: [],
-    platform: 'android',
-  })
+    files.push({
+      content: fbjniCode,
+      language: 'c++',
+      name: `J${structType.structName}.hpp`,
+      subdirectory: [],
+      platform: 'android',
+    })
+  }
+
   return files
 }
 

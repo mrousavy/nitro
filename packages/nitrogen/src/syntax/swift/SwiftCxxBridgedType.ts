@@ -128,8 +128,11 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     return bridge
   }
 
-  getRequiredImports(language: Language): SourceImport[] {
-    const imports = this.type.getRequiredImports(language)
+  getRequiredImports(language: Language, visited: Set<Type> = new Set()): SourceImport[] {
+    const alreadyVisited = visited.has(this.type)
+    visited.add(this.type)
+
+    const imports = alreadyVisited ? [] : this.type.getRequiredImports(language, visited)
 
     if (language === 'c++') {
       if (this.type.kind === 'array-buffer') {
@@ -147,20 +150,28 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
-    const referencedTypes = getReferencedTypes(this.type)
-    referencedTypes.forEach((t) => {
-      if (t === this.type) {
-        // break a recursion - we already know this type
-        return
-      }
-      const bridged = new SwiftCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports(language))
-    })
+    // Skip if we've already visited this type to avoid infinite recursion
+    if (!alreadyVisited) {
+      const referencedTypes = getReferencedTypes(this.type)
+      referencedTypes.forEach((t) => {
+        if (t === this.type) {
+          // break a recursion - we already know this type
+          return
+        }
+        const bridged = new SwiftCxxBridgedType(t)
+        imports.push(...bridged.getRequiredImports(language, visited))
+      })
+    }
 
     return imports
   }
 
-  getExtraFiles(): SourceFile[] {
+  getExtraFiles(visited: Set<Type> = new Set()): SourceFile[] {
+    if (visited.has(this.type)) {
+      return []
+    }
+    visited.add(this.type)
+
     const files: SourceFile[] = []
 
     switch (this.type.kind) {
@@ -170,7 +181,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         files.push(extensionFile)
         extensionFile.referencedTypes.forEach((t) => {
           const bridge = new SwiftCxxBridgedType(t)
-          files.push(...bridge.getExtraFiles())
+          files.push(...bridge.getExtraFiles(visited))
         })
         break
       }
@@ -209,7 +220,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         return
       }
       const bridged = new SwiftCxxBridgedType(t)
-      files.push(...bridged.getExtraFiles())
+      files.push(...bridged.getExtraFiles(visited))
     })
 
     return files

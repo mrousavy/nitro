@@ -96,6 +96,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper
   func bounceOptionalCallback(value: OptionalCallback) throws -> OptionalCallback
+  func bounceSelfReferentialStruct(value: SelfReferentialStruct) throws -> SelfReferentialStruct
+  func bounceTreeNode(node: TreeNode) throws -> TreeNode
+  func bounceTreeNodeMap(node: TreeNodeMap) throws -> TreeNodeMap
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer

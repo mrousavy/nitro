@@ -37,12 +37,12 @@ export class TupleType implements Type {
         )
     }
   }
-  getExtraFiles(): SourceFile[] {
-    return this.itemTypes.flatMap((t) => t.getExtraFiles())
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return this.itemTypes.flatMap((t) => t.getExtraFiles(visited))
   }
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
     const imports = this.itemTypes.flatMap((t) =>
-      t.getRequiredImports(language)
+      t.getRequiredImports(language, visited)
     )
     if (language === 'c++') {
       imports.push({

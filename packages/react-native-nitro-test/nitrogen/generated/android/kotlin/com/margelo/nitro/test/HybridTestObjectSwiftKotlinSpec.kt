@@ -493,6 +493,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceSelfReferentialStruct(value: SelfReferentialStruct): SelfReferentialStruct
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceTreeNode(node: TreeNode): TreeNode
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceTreeNodeMap(node: TreeNodeMap): TreeNodeMap
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip

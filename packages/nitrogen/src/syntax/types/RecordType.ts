@@ -39,13 +39,13 @@ export class RecordType implements Type {
         )
     }
   }
-  getExtraFiles(): SourceFile[] {
-    return [...this.keyType.getExtraFiles(), ...this.valueType.getExtraFiles()]
+  getExtraFiles(visited?: Set<Type>): SourceFile[] {
+    return [...this.keyType.getExtraFiles(visited), ...this.valueType.getExtraFiles(visited)]
   }
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(language: Language, visited?: Set<Type>): SourceImport[] {
     const imports: SourceImport[] = [
-      ...this.keyType.getRequiredImports(language),
-      ...this.valueType.getRequiredImports(language),
+      ...this.keyType.getRequiredImports(language, visited),
+      ...this.valueType.getRequiredImports(language, visited),
     ]
     if (language === 'c++') {
       imports.push({
