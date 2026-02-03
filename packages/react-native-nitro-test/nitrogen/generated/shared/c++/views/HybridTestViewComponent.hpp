@@ -58,11 +58,11 @@ namespace margelo::nitro::test::views {
    */
   class HybridTestViewState final {
   public:
-    HybridTestViewState() = default;
+    HybridTestViewState(): _props(nullptr) {}
+    HybridTestViewState(std::shared_ptr<HybridTestViewProps>&& props): _props(std::move(props)) {}
 
   public:
-    void setProps(const HybridTestViewProps& props) { _props.emplace(props); }
-    const std::optional<HybridTestViewProps>& getProps() const { return _props; }
+    const std::shared_ptr<HybridTestViewProps>& getProps() const { return _props; }
 
   public:
 #ifdef ANDROID
@@ -76,7 +76,7 @@ namespace margelo::nitro::test::views {
 #endif
 
   private:
-    std::optional<HybridTestViewProps> _props;
+    std::shared_ptr<HybridTestViewProps> _props;
   };
 
   /**

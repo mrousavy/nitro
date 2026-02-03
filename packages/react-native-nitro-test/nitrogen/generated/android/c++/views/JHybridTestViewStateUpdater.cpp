@@ -31,38 +31,37 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridTestViewState& data = concreteState->getData();
-  const std::optional<HybridTestViewProps>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<HybridTestViewProps>& props = data.getProps();
+  if (props == nullptr) {
     // Props aren't set yet!
     throw std::runtime_error("HybridTestViewState's data doesn't contain any props!");
   }
-  const HybridTestViewProps& props = maybeProps.value();
-  if (props.isBlue.isDirty) {
-    view->setIsBlue(props.isBlue.value);
-    // TODO: Set isDirty = false
+  if (props->isBlue.isDirty) {
+    view->setIsBlue(props->isBlue.value);
+    props->isBlue.isDirty = false;
   }
-  if (props.hasBeenCalled.isDirty) {
-    view->setHasBeenCalled(props.hasBeenCalled.value);
-    // TODO: Set isDirty = false
+  if (props->hasBeenCalled.isDirty) {
+    view->setHasBeenCalled(props->hasBeenCalled.value);
+    props->hasBeenCalled.isDirty = false;
   }
-  if (props.colorScheme.isDirty) {
-    view->setColorScheme(props.colorScheme.value);
-    // TODO: Set isDirty = false
+  if (props->colorScheme.isDirty) {
+    view->setColorScheme(props->colorScheme.value);
+    props->colorScheme.isDirty = false;
   }
-  if (props.someCallback.isDirty) {
-    view->setSomeCallback(props.someCallback.value);
-    // TODO: Set isDirty = false
+  if (props->someCallback.isDirty) {
+    view->setSomeCallback(props->someCallback.value);
+    props->someCallback.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       std::shared_ptr<JHybridTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridTestViewSpec>();
       maybeFunc.value()(shared);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 
