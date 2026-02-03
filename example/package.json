@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.33.3",
+  "version": "0.33.4",
   "private": true,
   "scripts": {
     "start": "react-native start --client-logs",

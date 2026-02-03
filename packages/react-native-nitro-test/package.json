@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-test",
-  "version": "0.33.3",
+  "version": "0.33.4",
   "description": "A testing playground library for Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
