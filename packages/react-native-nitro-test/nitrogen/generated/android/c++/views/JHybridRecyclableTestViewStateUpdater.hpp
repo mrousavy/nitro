@@ -12,8 +12,8 @@
 #endif
 
 #include <fbjni/fbjni.h>
-#include <react/fabric/StateWrapperImpl.h>
 #include <react/fabric/CoreComponentsRegistry.h>
+#include <react/fabric/StateWrapperImpl.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>

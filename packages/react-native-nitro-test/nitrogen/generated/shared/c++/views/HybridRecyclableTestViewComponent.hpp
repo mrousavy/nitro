@@ -36,7 +36,6 @@ namespace margelo::nitro::test::views {
   class HybridRecyclableTestViewProps final: public react::ViewProps {
   public:
     HybridRecyclableTestViewProps() = default;
-    HybridRecyclableTestViewProps(const HybridRecyclableTestViewProps&);
     HybridRecyclableTestViewProps(const react::PropsParserContext& context,
                                   const HybridRecyclableTestViewProps& sourceProps,
                                   const react::RawProps& rawProps);
@@ -55,10 +54,14 @@ namespace margelo::nitro::test::views {
   class HybridRecyclableTestViewState final {
   public:
     HybridRecyclableTestViewState() = default;
+    explicit HybridRecyclableTestViewState(const std::shared_ptr<HybridRecyclableTestViewProps>& props):
+      _props(props) {}
 
   public:
-    void setProps(const HybridRecyclableTestViewProps& props) { _props.emplace(props); }
-    const std::optional<HybridRecyclableTestViewProps>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<HybridRecyclableTestViewProps>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -72,7 +75,7 @@ namespace margelo::nitro::test::views {
 #endif
 
   private:
-    std::optional<HybridRecyclableTestViewProps> _props;
+    std::shared_ptr<HybridRecyclableTestViewProps> _props;
   };
 
   /**
@@ -88,7 +91,7 @@ namespace margelo::nitro::test::views {
    */
   class HybridRecyclableTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridRecyclableTestViewShadowNode> {
   public:
-    HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+    explicit HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**

@@ -77,14 +77,6 @@ namespace margelo::nitro::test::views {
       }
     }()) { }
 
-  HybridTestViewProps::HybridTestViewProps(const HybridTestViewProps& other):
-    react::ViewProps(),
-    isBlue(other.isBlue),
-    hasBeenCalled(other.hasBeenCalled),
-    colorScheme(other.colorScheme),
-    someCallback(other.someCallback),
-    hybridRef(other.hybridRef) { }
-
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("isBlue"): return true;
@@ -114,9 +106,9 @@ namespace margelo::nitro::test::views {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
-    const HybridTestViewProps& props = concreteShadowNode.getConcreteProps();
-    HybridTestViewState state;
-    state.setProps(props);
+    const std::shared_ptr<const HybridTestViewProps>& constProps = concreteShadowNode.getConcreteSharedProps();
+    const std::shared_ptr<HybridTestViewProps>& props = std::const_pointer_cast<HybridTestViewProps>(constProps);
+    HybridTestViewState state{props};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif

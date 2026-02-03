@@ -17,8 +17,20 @@ template <typename T>
 struct CachedProp {
 public:
   T value;
-  BorrowingReference<jsi::Value> jsiValue;
   bool isDirty = false;
+
+  // Default constructor
+  CachedProp() = default;
+  // Constructor with value
+  CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
+      : value(std::move(value)), isDirty(true), jsiValue(std::move(jsiValue)) {}
+  // Copy/Move/Destruct
+  CachedProp(const CachedProp&) = default;
+  CachedProp(CachedProp&&) = default;
+  ~CachedProp() = default;
+
+private:
+  BorrowingReference<jsi::Value> jsiValue;
 
 public:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
@@ -40,7 +52,7 @@ public:
       JSICacheReference cache = JSICache::getOrCreateCache(runtime);
       cached = cache.makeShared(jsi::Value(runtime, value));
     }
-    return CachedProp<T>(std::move(converted), std::move(cached), /* isDirty */ true);
+    return CachedProp<T>(std::move(converted), std::move(cached));
   }
 };
 
