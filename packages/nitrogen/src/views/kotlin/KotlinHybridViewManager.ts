@@ -141,6 +141,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 
 #include <fbjni/fbjni.h>
 #include <react/fabric/CoreComponentsRegistry.h>
+#include <react/fabric/StateWrapperImpl.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
@@ -180,9 +181,9 @@ public:
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (props.${name}.isDirty) {
-  view->${setter}(props.${name}.value);
-  // TODO: Set isDirty = false
+if (props->${name}.isDirty) {
+  view->${setter}(props->${name}.value);
+  props->${name}.isDirty = false;
 }
     `.trim()
   })
@@ -215,23 +216,22 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const ${stateClassName}& data = concreteState->getData();
-  const std::optional<${propsClassName}>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<${propsClassName}>& props = data.getProps();
+  if (props == nullptr) {
     // Props aren't set yet!
     throw std::runtime_error("${stateClassName}'s data doesn't contain any props!");
   }
-  const ${propsClassName}& props = maybeProps.value();
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
       maybeFunc.value()(shared);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 

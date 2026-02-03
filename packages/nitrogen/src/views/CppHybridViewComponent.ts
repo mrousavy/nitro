@@ -133,10 +133,14 @@ namespace ${namespace} {
   class ${stateClassName} final {
   public:
     ${stateClassName}() = default;
+    explicit ${stateClassName}(const std::shared_ptr<${propsClassName}>& props):
+      _props(props) {}
 
   public:
-    void setProps(const ${propsClassName}& props) { _props.emplace(props); }
-    const std::optional<${propsClassName}>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<${propsClassName}>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -150,7 +154,7 @@ namespace ${namespace} {
 #endif
 
   private:
-    std::optional<${propsClassName}> _props;
+    std::shared_ptr<${propsClassName}> _props;
   };
 
   /**
@@ -166,7 +170,7 @@ namespace ${namespace} {
    */
   class ${descriptorClassName} final: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
   public:
-    ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
+    explicit ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**
@@ -273,9 +277,9 @@ namespace ${namespace} {
     // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
-    const ${propsClassName}& props = concreteShadowNode.getConcreteProps();
-    ${stateClassName} state;
-    state.setProps(props);
+    const std::shared_ptr<const ${propsClassName}>& constProps = concreteShadowNode.getConcreteSharedProps();
+    const std::shared_ptr<${propsClassName}>& props = std::const_pointer_cast<${propsClassName}>(constProps);
+    ${stateClassName} state{props};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif

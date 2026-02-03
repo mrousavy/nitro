@@ -58,11 +58,15 @@ namespace margelo::nitro::test::views {
    */
   class HybridTestViewState final {
   public:
-    HybridTestViewState(): _props(nullptr) {}
-    HybridTestViewState(std::shared_ptr<HybridTestViewProps>&& props): _props(std::move(props)) {}
+    HybridTestViewState() = default;
+    explicit HybridTestViewState(const std::shared_ptr<HybridTestViewProps>& props):
+      _props(props) {}
 
   public:
-    const std::shared_ptr<HybridTestViewProps>& getProps() const { return _props; }
+    [[nodiscard]]
+    const std::shared_ptr<HybridTestViewProps>& getProps() const {
+      return _props;
+    }
 
   public:
 #ifdef ANDROID
@@ -92,7 +96,7 @@ namespace margelo::nitro::test::views {
    */
   class HybridTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
-    HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
+    explicit HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
     /**

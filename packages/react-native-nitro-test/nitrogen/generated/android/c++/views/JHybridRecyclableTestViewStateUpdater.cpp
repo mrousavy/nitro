@@ -31,26 +31,25 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRecyclableTestViewState& data = concreteState->getData();
-  const std::optional<HybridRecyclableTestViewProps>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<HybridRecyclableTestViewProps>& props = data.getProps();
+  if (props == nullptr) {
     // Props aren't set yet!
     throw std::runtime_error("HybridRecyclableTestViewState's data doesn't contain any props!");
   }
-  const HybridRecyclableTestViewProps& props = maybeProps.value();
-  if (props.isBlue.isDirty) {
-    view->setIsBlue(props.isBlue.value);
-    // TODO: Set isDirty = false
+  if (props->isBlue.isDirty) {
+    view->setIsBlue(props->isBlue.value);
+    props->isBlue.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       std::shared_ptr<JHybridRecyclableTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridRecyclableTestViewSpec>();
       maybeFunc.value()(shared);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 
