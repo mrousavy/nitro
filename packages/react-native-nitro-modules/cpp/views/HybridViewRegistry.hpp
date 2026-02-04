@@ -6,9 +6,9 @@
 //
 
 #include "NitroDefines.hpp"
-#include <vector>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -20,9 +20,9 @@ class HybridViewRegistry final {
 public:
   static void registerHybridView(const std::string& viewName, HybridViewInfo&& viewInfo);
   static const HybridViewInfo& getHybridViewInfo(const std::string& viewName);
-  
+
 private:
   static std::unordered_map<std::string, HybridViewInfo> _views;
 };
 
-}
+} // namespace margelo::nitro

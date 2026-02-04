@@ -34,7 +34,7 @@ public:
   std::shared_ptr<HybridObject> createHybridObject(const std::string& name);
   bool hasHybridObject(const std::string& name);
   std::vector<std::string> getAllHybridObjectNames();
-  
+
   // Hybrid Views
   std::vector<std::string> getViewProps(const std::string& viewName);
 

@@ -9,7 +9,6 @@
 
 namespace margelo::nitro {
 
-
 std::unordered_map<std::string, HybridViewInfo> HybridViewRegistry::_views;
 
 void HybridViewRegistry::registerHybridView(const std::string& viewName, HybridViewInfo&& viewInfo) {
@@ -27,4 +26,4 @@ const HybridViewInfo& HybridViewRegistry::getHybridViewInfo(const std::string& v
   return found->second;
 }
 
-}
+} // namespace margelo::nitro

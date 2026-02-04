@@ -21,7 +21,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridMethod("hasHybridObject", &HybridNitroModulesProxy::hasHybridObject);
     prototype.registerRawHybridMethod("isHybridObject", 1, &HybridNitroModulesProxy::isHybridObject);
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
-    
+
     prototype.registerHybridMethod("getViewProps", &HybridNitroModulesProxy::getViewProps);
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
