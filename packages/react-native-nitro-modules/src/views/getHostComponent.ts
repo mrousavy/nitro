@@ -12,9 +12,9 @@ import { NitroModules } from '../NitroModules'
 type AttributeValue<T, V = T> =
   | boolean
   | {
-    diff?: (arg1: T, arg2: T) => boolean
-    process?: (arg1: V) => T
-  }
+      diff?: (arg1: T, arg2: T) => boolean
+      process?: (arg1: V) => T
+    }
 
 export interface ViewConfig<Props> {
   uiViewClassName: string
@@ -79,10 +79,10 @@ export type NitroViewWrappedCallback<T extends Function | undefined> = { f: T }
 // wraps functions as objects - the original function is stored in `f`.
 type WrapFunctionsInObjects<Props> = {
   [K in keyof Props]: Props[K] extends Function
-  ? NitroViewWrappedCallback<Props[K]>
-  : Props[K] extends Function | undefined
-  ? NitroViewWrappedCallback<Props[K]>
-  : Props[K]
+    ? NitroViewWrappedCallback<Props[K]>
+    : Props[K] extends Function | undefined
+      ? NitroViewWrappedCallback<Props[K]>
+      : Props[K]
 }
 
 /**
@@ -100,7 +100,7 @@ export type ReactNativeView<
   WrapFunctionsInObjects<
     DefaultHybridViewProps<HybridView<Props, Methods>> & Props
   > &
-  ViewProps
+    ViewProps
 >
 
 type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
