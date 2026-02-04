@@ -82,4 +82,10 @@ export interface NitroModulesProxy
    * This is achieved by just doing a round-trip from JS -> native -> JS.
    */
   updateMemorySize<T extends HybridObject<{}>>(obj: T): T
+
+  /**
+   * Gets a list of all props the given Nitro View supports.
+   * @throws If no Nitro View is registered under the {@linkcode viewName}.
+   */
+  getViewProps(viewName: string): string[]
 }
