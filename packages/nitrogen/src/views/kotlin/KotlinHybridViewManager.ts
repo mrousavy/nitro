@@ -35,6 +35,7 @@ export function createKotlinHybridViewManager(
       `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
     )
   }
+  const propNames = spec.properties.map((p) => `"${p.name}"`)
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -162,16 +163,7 @@ public:
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
-  static void registerNatives() {
-    // Register JNI calls
-    javaClassStatic()->registerNatives({
-      makeNativeMethod("updateViewProps", J${stateUpdaterName}::updateViewProps),
-    });
-    // Register React Native view component descriptor
-    auto provider = react::concreteComponentDescriptorProvider<${descriptorClassName}>();
-    auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
-    providerRegistry->add(provider);
-  }
+  static void registerNatives();
 };
 
 } // namespace ${cxxNamespace}
@@ -198,6 +190,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 namespace ${cxxNamespace} {
 
 using namespace facebook;
+using namespace margelo;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
@@ -234,6 +227,24 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     }
     props->hybridRef.isDirty = false;
   }
+}
+
+static void J${stateUpdaterName}::registerNatives() {
+  // Register JNI calls
+  javaClassStatic()->registerNatives({
+    makeNativeMethod("updateViewProps", J${stateUpdaterName}::updateViewProps),
+  });
+  // Register React Native view component descriptor
+  auto provider = react::concreteComponentDescriptorProvider<${descriptorClassName}>();
+  auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
+  providerRegistry->add(provider);
+  // Register HybridViewInfo in Nitro
+  nitro::HybridViewRegistry::registerHybridView("${spec.name}",
+                                                nitro::HybridViewInfo{
+                                                  {
+                                                    ${indent(propNames.join(',\n'), '                                                    ')}
+                                                  }
+                                                });
 }
 
 } // namespace ${cxxNamespace}

@@ -12,12 +12,14 @@
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <NitroModules/NitroDefines.hpp>
+#import <NitroModules/HybridViewRegistry.hpp>
 #import <UIKit/UIKit.h>
 
 #import "HybridTestViewSpecSwift.hpp"
 #import "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 using namespace facebook;
+using namespace margelo;
 using namespace margelo::nitro::test;
 using namespace margelo::nitro::test::views;
 
@@ -34,7 +36,18 @@ using namespace margelo::nitro::test::views;
 
 + (void) load {
   [super load];
+  // Register React Native view component descriptor
   [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[HybridTestViewComponent class]];
+  // Register HybridViewInfo in Nitro
+  nitro::HybridViewRegistry::registerHybridView("TestView",
+                                                nitro::HybridViewInfo{
+                                                  {
+                                                    "isBlue",
+                                                    "hasBeenCalled",
+                                                    "colorScheme",
+                                                    "someCallback"
+                                                  }
+                                                });
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
