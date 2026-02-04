@@ -33,7 +33,7 @@ const jsi::PropNameID& PropNameIDCache::get(jsi::Runtime& runtime, const std::st
   auto sharedPropName = jsiCache.makeShared(std::move(propName));
 
   // store it in cache...
-  cache.emplace(value, sharedPropName);
+  cache.insert_or_assign(value, sharedPropName);
 
   // return it!
   return *sharedPropName;
