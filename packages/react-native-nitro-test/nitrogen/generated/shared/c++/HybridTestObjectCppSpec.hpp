@@ -153,6 +153,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) = 0;
       virtual CustomString bounceCustomType(CustomString value) = 0;
       virtual void writeRows(const std::optional<std::vector<std::variant<nitro::NullType, bool, std::shared_ptr<ArrayBuffer>, std::string, double>>>& rows) = 0;
+      virtual void writeColumn(const std::optional<std::variant<nitro::NullType, bool, std::shared_ptr<ArrayBuffer>, std::string, double>>& column) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;

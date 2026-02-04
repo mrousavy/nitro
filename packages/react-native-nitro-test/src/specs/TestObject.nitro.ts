@@ -321,6 +321,8 @@ export interface TestObjectCpp
   bounceCustomType(value: CustomString): CustomString
 
   writeRows(rows?: Rows): void
+
+  writeColumn(column: Column): void
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
