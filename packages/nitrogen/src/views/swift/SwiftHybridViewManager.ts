@@ -52,6 +52,7 @@ if (newViewProps.${name}.isDirty) {
 }
 `.trim()
   })
+  const propNames = spec.properties.map((p) => `"${p.name}"`)
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -63,12 +64,14 @@ ${createFileMetadataString(`${component}.mm`)}
 #import <React/RCTComponentViewFactory.h>
 #import <React/UIView+ComponentViewProtocol.h>
 #import <NitroModules/NitroDefines.hpp>
+#import <NitroModules/HybridViewRegistry.hpp>
 #import <UIKit/UIKit.h>
 
 #import "${HybridTSpecSwift}.hpp"
 #import "${getUmbrellaHeaderName()}"
 
 using namespace facebook;
+using namespace margelo;
 using namespace ${namespace};
 using namespace ${namespace}::views;
 
@@ -85,7 +88,15 @@ using namespace ${namespace}::views;
 
 + (void) load {
   [super load];
+  // Register React Native view component descriptor
   [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[${component} class]];
+  // Register HybridViewInfo in Nitro
+  nitro::HybridViewRegistry::registerHybridView("${spec.name}",
+                                                nitro::HybridViewInfo{
+                                                  {
+                                                    ${indent(propNames.join(',\n'), '                                                    ')}
+                                                  }
+                                                });
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {

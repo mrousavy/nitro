@@ -35,6 +35,9 @@ public:
   bool hasHybridObject(const std::string& name);
   std::vector<std::string> getAllHybridObjectNames();
 
+  // Hybrid Views
+  std::vector<std::string> getViewProps(const std::string& viewName);
+
   // Helpers
   std::shared_ptr<BoxedHybridObject> box(const std::shared_ptr<HybridObject>& hybridObject);
   std::shared_ptr<HybridObject> updateMemorySize(const std::shared_ptr<HybridObject>& hybridObject);

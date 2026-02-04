@@ -7,6 +7,7 @@
 
 #include "HybridNitroModulesProxy.hpp"
 #include "HybridObjectRegistry.hpp"
+#include "HybridViewRegistry.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 
@@ -20,6 +21,8 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridMethod("hasHybridObject", &HybridNitroModulesProxy::hasHybridObject);
     prototype.registerRawHybridMethod("isHybridObject", 1, &HybridNitroModulesProxy::isHybridObject);
     prototype.registerHybridMethod("getAllHybridObjectNames", &HybridNitroModulesProxy::getAllHybridObjectNames);
+
+    prototype.registerHybridMethod("getViewProps", &HybridNitroModulesProxy::getViewProps);
 
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
     prototype.registerHybridMethod("updateMemorySize", &HybridNitroModulesProxy::updateMemorySize);
@@ -42,6 +45,12 @@ bool HybridNitroModulesProxy::hasHybridObject(const std::string& name) {
 
 std::vector<std::string> HybridNitroModulesProxy::getAllHybridObjectNames() {
   return HybridObjectRegistry::getAllHybridObjectNames();
+}
+
+// Hybrid Views
+std::vector<std::string> HybridNitroModulesProxy::getViewProps(const std::string& viewName) {
+  const HybridViewInfo& viewInfo = HybridViewRegistry::getHybridViewInfo(viewName);
+  return viewInfo.propNames;
 }
 
 // Helpers
