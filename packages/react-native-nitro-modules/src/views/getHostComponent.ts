@@ -7,13 +7,14 @@ import type {
   HybridViewMethods,
   HybridViewProps,
 } from './HybridView'
+import { NitroModules } from '../NitroModules'
 
 type AttributeValue<T, V = T> =
   | boolean
   | {
-      diff?: (arg1: T, arg2: T) => boolean
-      process?: (arg1: V) => T
-    }
+    diff?: (arg1: T, arg2: T) => boolean
+    process?: (arg1: V) => T
+  }
 
 export interface ViewConfig<Props> {
   uiViewClassName: string
@@ -78,10 +79,10 @@ export type NitroViewWrappedCallback<T extends Function | undefined> = { f: T }
 // wraps functions as objects - the original function is stored in `f`.
 type WrapFunctionsInObjects<Props> = {
   [K in keyof Props]: Props[K] extends Function
-    ? NitroViewWrappedCallback<Props[K]>
-    : Props[K] extends Function | undefined
-      ? NitroViewWrappedCallback<Props[K]>
-      : Props[K]
+  ? NitroViewWrappedCallback<Props[K]>
+  : Props[K] extends Function | undefined
+  ? NitroViewWrappedCallback<Props[K]>
+  : Props[K]
 }
 
 /**
@@ -99,7 +100,7 @@ export type ReactNativeView<
   WrapFunctionsInObjects<
     DefaultHybridViewProps<HybridView<Props, Methods>> & Props
   > &
-    ViewProps
+  ViewProps
 >
 
 type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
@@ -130,7 +131,7 @@ export function getHostComponent<
   Methods extends HybridViewMethods,
 >(
   name: string,
-  getViewConfig: () => ViewConfig<Props>
+  getViewConfig?: () => ViewConfig<Props>
 ): ReactNativeView<Props, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
@@ -138,9 +139,28 @@ export function getHostComponent<
     )
   }
   return NativeComponentRegistry.get(name, () => {
-    const config = getViewConfig()
-    config.validAttributes = wrapValidAttributes(config.validAttributes)
-    return typesafe(config)
+    if (getViewConfig != null) {
+      // Use a user-provided .json ViewConfig
+      const config = getViewConfig()
+      config.validAttributes = wrapValidAttributes(config.validAttributes)
+      return typesafe(config)
+    } else {
+      // Look up View config from native keys
+      const props = NitroModules.getViewProps(name)
+      const validAttributes = Object.fromEntries(
+        props.map((p) => [
+          p,
+          {
+            diff: (a: unknown, b: unknown) => a !== b,
+            process: (a: unknown) => a,
+          },
+        ])
+      )
+      return {
+        uiViewClassName: name,
+        validAttributes: validAttributes,
+      }
+    }
   })
 }
 
