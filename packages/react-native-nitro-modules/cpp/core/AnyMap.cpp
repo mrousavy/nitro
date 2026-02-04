@@ -164,28 +164,28 @@ AnyValue AnyMap::getAny(const std::string& key) const {
 
 // Set
 void AnyMap::setNull(const std::string& key) {
-  _map.emplace(key, nitro::null);
+  _map.insert_or_assign(key, nitro::null);
 }
 void AnyMap::setDouble(const std::string& key, double value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setBoolean(const std::string& key, bool value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setBigInt(const std::string& key, int64_t value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setString(const std::string& key, const std::string& value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setArray(const std::string& key, const AnyArray& value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setObject(const std::string& key, const AnyObject& value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 void AnyMap::setAny(const std::string& key, const AnyValue& value) {
-  _map.emplace(key, value);
+  _map.insert_or_assign(key, value);
 }
 
 // C++ getter
