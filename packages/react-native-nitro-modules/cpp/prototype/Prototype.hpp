@@ -60,7 +60,7 @@ public:
   static std::shared_ptr<Prototype> get(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base = nullptr) {
     static std::unordered_map<NativeInstanceId, std::shared_ptr<Prototype>> _prototypesCache;
 
-    auto [it, inserted] = cache.try_emplace(typeId);
+    auto [it, inserted] = _prototypesCache.try_emplace(typeId);
     if (inserted) {
       // This is the first time we see this C++ type ID - create a new base Prototype for this.
       it->second = std::shared_ptr<Prototype>(new Prototype(typeId, base));
