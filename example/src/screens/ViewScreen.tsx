@@ -33,7 +33,6 @@ export function ViewScreenImpl() {
                 const isBlue = HybridTestObjectSwiftKotlin.getIsViewBlue(ref)
                 console.log(`Is View blue: ${isBlue}`)
               })}
-              style={styles.view}
               isBlue={i % 2 === 0}
               someCallback={callback(() => console.log(`Callback called!`))}
               colorScheme="dark"
@@ -47,7 +46,6 @@ export function ViewScreenImpl() {
           return (
             <RecyclableTestView
               key={i}
-              style={styles.view}
               isBlue={i % 2 === 0}
               onTouchEnd={() => {
                 console.log(`Touched View #${i}!`)
