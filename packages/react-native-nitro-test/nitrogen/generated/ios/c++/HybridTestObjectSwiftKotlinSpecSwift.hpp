@@ -86,6 +86,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
+namespace swift { class String; }
+
 namespace margelo::nitro::test {
 
   /**
@@ -160,6 +162,8 @@ namespace margelo::nitro::test {
     inline void setStringValue(const std::string& stringValue) noexcept override {
       _swiftPart.setStringValue(stringValue);
     }
+    swift::String getStringValueSwift() noexcept;
+    void setStringValueSwift(const swift::String& stringValueSwift) noexcept;
     inline int64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
     }
@@ -978,6 +982,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    
+    void loadHybridMethods() override;
 
   private:
     NitroTest::HybridTestObjectSwiftKotlinSpec_cxx _swiftPart;

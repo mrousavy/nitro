@@ -18,6 +18,8 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   var boolValue: Bool = false
 
   var stringValue: String = ""
+  
+  var stringValueSwift: String = ""
 
   var bigintValue: Int64 = 0
 
