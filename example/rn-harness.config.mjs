@@ -24,6 +24,7 @@ const config = {
     }),
   ],
   defaultRunner: "android",
+  bridgeTimeout: 120000,
 };
 
 export default config;
