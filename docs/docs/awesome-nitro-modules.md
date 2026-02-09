@@ -48,6 +48,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-file-system** | Node.js-compatible `fs` with zero-copy binary data | [GitHub](https://github.com/iwater/react-native-nitro-file-system) |
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
 | **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
+| **react-native-superconfig** | Superfast typesafe config library | [GitHub](https://github.com/riteshshukla04/react-native-superconfig) |
 
 ### Networking
 
