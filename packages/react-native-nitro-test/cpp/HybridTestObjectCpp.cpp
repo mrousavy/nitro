@@ -51,11 +51,11 @@ void HybridTestObjectCpp::setInt64Value(int64_t int64Value) {
   _int64Value = int64Value;
 }
 
-uint64_t HybridTestObjectCpp::getUInt64Value() {
+uint64_t HybridTestObjectCpp::getUint64Value() {
   return _uint64Value;
 }
 
-void HybridTestObjectCpp::setUInt64Value(uint64_t uint64Value) {
+void HybridTestObjectCpp::setUint64Value(uint64_t uint64Value) {
   _uint64Value = uint64Value;
 }
 
@@ -252,16 +252,16 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   map->setBoolean("bool", getBoolValue());
   map->setString("string", getStringValue());
   map->setInt64("int64", getInt64Value());
-  map->setUInt64("uint64", getUInt64Value());
+  map->setUInt64("uint64", getUint64Value());
   map->setNull("null");
-  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUInt64Value()};
+  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUint64Value()};
   map->setArray("array", array);
-  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUInt64Value(), array};
+  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUint64Value(), array};
   map->setObject("object", {{"number", getNumberValue()},
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
                             {"int64", getInt64Value()},
-                            {"uint64", getUInt64Value()},
+                            {"uint64", getUint64Value()},
                             {"null", nitro::null},
                             {"array", nestedArray}});
   return map;
