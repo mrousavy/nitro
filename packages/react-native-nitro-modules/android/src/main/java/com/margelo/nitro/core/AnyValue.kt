@@ -55,7 +55,14 @@ class AnyValue {
    * Create a new [AnyValue] that holds the given [Long]
    */
   constructor(value: Long) {
-    mHybridData = initHybrid(value)
+    mHybridData = initHybrid(value, true)
+  }
+
+  /**
+   * Create a new [AnyValue] that holds the given [ULong]
+   */
+  constructor(value: ULong) {
+    mHybridData = initHybrid(value.toLong(), false)
   }
 
   /**
@@ -183,7 +190,7 @@ class AnyValue {
 
   private external fun initHybrid(value: Boolean): HybridData
 
-  private external fun initHybrid(value: Long): HybridData
+  private external fun initHybrid(value: Long, isSigned: Boolean): HybridData
 
   private external fun initHybrid(value: String): HybridData
 

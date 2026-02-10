@@ -22,7 +22,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var boolValue: Boolean = false
   override var stringValue: String = ""
   override var int64Value: Long = 0L
-  override var uint64Value: ULong = 0L
+  override var uint64Value: ULong = 0u
   override var optionalString: String? = null
   override var stringOrUndefined: String? = null
   override var nullValue: NullType = NullType.NULL

@@ -51,8 +51,12 @@ protected:
   static jni::local_ref<JAnyValue::jhybriddata> initHybridBoolean(jni::alias_ref<jhybridobject>, bool value) {
     return makeCxxInstance(value);
   }
-  static jni::local_ref<JAnyValue::jhybriddata> initHybridLong(jni::alias_ref<jhybridobject>, int64_t value) {
-    return makeCxxInstance(value);
+  static jni::local_ref<JAnyValue::jhybriddata> initHybridLong(jni::alias_ref<jhybridobject>, jlong value, bool isSigned) {
+    if (isSigned) {
+      return makeCxxInstance(static_cast<int64_t>(value));
+    } else {
+      return makeCxxInstance(static_cast<uint64_t>(value));
+    }
   }
   static jni::local_ref<JAnyValue::jhybriddata> initHybridString(jni::alias_ref<jhybridobject>, const std::string& value) {
     return makeCxxInstance(value);
@@ -82,6 +86,7 @@ private:
   explicit JAnyValue(double value) : _value(value) {}
   explicit JAnyValue(bool value) : _value(value) {}
   explicit JAnyValue(int64_t value) : _value(value) {}
+  explicit JAnyValue(uint64_t value) : _value(value) {}
   explicit JAnyValue(const std::string& value) : _value(value) {}
   explicit JAnyValue(AnyArray&& value) : _value(std::move(value)) {}
   explicit JAnyValue(AnyObject&& value) : _value(std::move(value)) {}
