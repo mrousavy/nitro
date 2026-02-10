@@ -298,7 +298,7 @@ export function createType(
           // If there is no alias, it is an inline union instead of a separate type declaration!
           throw new Error(
             `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
-            `Extract the union to a separate type, and re-run nitrogen!`
+              `Extract the union to a separate type, and re-run nitrogen!`
           )
         }
         const typename = symbol.getEscapedName()
@@ -364,9 +364,9 @@ export function createType(
     } else if (type.isUndefined()) {
       throw new Error(
         `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
-        `- If you want to make a type optional, add \`?\` to its name, or make it an union with \`undefined\`.\n` +
-        `- If you want a method that returns nothing, use \`void\` instead.\n` +
-        `- If you want to represent an explicit absence of a value, use \`null\` instead.`
+          `- If you want to make a type optional, add \`?\` to its name, or make it an union with \`undefined\`.\n` +
+          `- If you want a method that returns nothing, use \`void\` instead.\n` +
+          `- If you want to represent an explicit absence of a value, use \`null\` instead.`
       )
     } else if (type.isAny()) {
       throw new Error(
@@ -386,7 +386,7 @@ export function createType(
         // Could be an invalid import, e.g. an alias
         throw new Error(
           `The TypeScript type "${type.getText()}" cannot be resolved - is it imported properly? ` +
-          `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
+            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
         )
       } else {
         // A different error

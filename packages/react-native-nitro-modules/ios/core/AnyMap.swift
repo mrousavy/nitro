@@ -112,7 +112,7 @@ public final class AnyMap: @unchecked Sendable {
   public func getBoolean(key: String) -> Bool {
     return cppPart.pointee.getBoolean(std.string(key))
   }
-  
+
   /**
    * Gets the Int64 value at the given key.
    * If no value exists at the given key, or if it is not an Int64,
@@ -121,7 +121,7 @@ public final class AnyMap: @unchecked Sendable {
   public func getInt64(key: String) -> Int64 {
     return cppPart.pointee.getInt64(std.string(key))
   }
-  
+
   /**
    * Gets the UInt64 value at the given key.
    * If no value exists at the given key, or if it is not a UInt64,
@@ -194,14 +194,14 @@ public final class AnyMap: @unchecked Sendable {
   public func setBoolean(key: String, value: Bool) {
     cppPart.pointee.setBoolean(std.string(key), value)
   }
-  
+
   /**
    * Set the given key to the given Int64 value.
    */
   public func setInt64(key: String, value: Int64) {
     cppPart.pointee.setInt64(std.string(key), value)
   }
-  
+
   /**
    * Set the given key to the given UInt64 value.
    */
@@ -261,14 +261,14 @@ public final class AnyMap: @unchecked Sendable {
   public func isBool(key: String) -> Bool {
     return cppPart.pointee.isBoolean(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a Int64 value, or not.
    */
   public func isInt64(key: String) -> Bool {
     return cppPart.pointee.isInt64(std.string(key))
   }
-  
+
   /**
    * Gets whether the given `key` is holding a UInt64 value, or not.
    */

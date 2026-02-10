@@ -153,7 +153,16 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
         "uint64" to AnyValue(uint64Value),
         "null" to AnyValue(),
         "array" to
-          AnyValue(arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(int64Value), AnyValue(uint64Value), AnyValue(array))),
+          AnyValue(
+            arrayOf(
+              AnyValue(numberValue),
+              AnyValue(boolValue),
+              AnyValue(stringValue),
+              AnyValue(int64Value),
+              AnyValue(uint64Value),
+              AnyValue(array),
+            ),
+          ),
       ),
     )
     return map
