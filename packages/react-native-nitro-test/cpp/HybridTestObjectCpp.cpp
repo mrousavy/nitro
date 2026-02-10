@@ -252,16 +252,14 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   map->setBoolean("bool", getBoolValue());
   map->setString("string", getStringValue());
   map->setInt64("int64", getInt64Value());
-  map->setUInt64("uint64", getUint64Value());
   map->setNull("null");
-  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUint64Value()};
+  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value()};
   map->setArray("array", array);
-  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), getUint64Value(), array};
+  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), array};
   map->setObject("object", {{"number", getNumberValue()},
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
                             {"int64", getInt64Value()},
-                            {"uint64", getUint64Value()},
                             {"null", nitro::null},
                             {"array", nestedArray}});
   return map;

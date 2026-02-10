@@ -1,4 +1,4 @@
-import type { Int64, UInt64 } from './Int64'
+import type { Int64 } from './Int64'
 
 /**
  * Represents a single value inside an untyped map.
@@ -8,7 +8,6 @@ export type ValueType =
   | number
   | boolean
   | Int64
-  | UInt64
   | null
   | ValueType[]
   | { [k: string]: ValueType }
@@ -16,7 +15,7 @@ export type ValueType =
 /**
  * Represents an untyped map, similar to a JSON structure.
  * Supported types:
- * - Primitives (`string`, `number`, `boolean`, `bigint`, `null`)
+ * - Primitives (`string`, `number`, `boolean`, `Int64`, `null`)
  * - Arrays of primitives (`ValueType[]`)
  * - Objects of primitives (`Record<string, ValueType>`)
  * - Arrays of arrays or objects

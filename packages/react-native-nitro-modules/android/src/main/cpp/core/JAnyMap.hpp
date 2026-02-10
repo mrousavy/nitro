@@ -88,9 +88,6 @@ protected:
   bool isInt64(const std::string& key) {
     return _map->isInt64(key);
   }
-  bool isUInt64(const std::string& key) {
-    return _map->isUInt64(key);
-  }
   bool isString(const std::string& key) {
     return _map->isString(key);
   }
@@ -111,10 +108,6 @@ protected:
   int64_t getInt64(const std::string& key) {
     return _map->getInt64(key);
   }
-  jlong getUInt64BoxedAsLong(const std::string& key) {
-    uint64_t value = _map->getUInt64(key);
-    return static_cast<jlong>(value);
-  }
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
@@ -134,10 +127,6 @@ protected:
   }
   void setInt64(const std::string& key, int64_t value) {
     _map->setInt64(key, value);
-  }
-  void setUInt64BoxedAsLong(const std::string& key, jlong value) {
-    uint64_t cast = static_cast<uint64_t>(value);
-    _map->setUInt64(key, cast);
   }
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
@@ -201,7 +190,6 @@ public:
         makeNativeMethod("isDouble", JAnyMap::isDouble),
         makeNativeMethod("isBoolean", JAnyMap::isBoolean),
         makeNativeMethod("isInt64", JAnyMap::isInt64),
-        makeNativeMethod("isUInt64", JAnyMap::isUInt64),
         makeNativeMethod("isString", JAnyMap::isString),
         makeNativeMethod("isArray", JAnyMap::isArray),
         makeNativeMethod("isObject", JAnyMap::isObject),
@@ -209,7 +197,6 @@ public:
         makeNativeMethod("getDouble", JAnyMap::getDouble),
         makeNativeMethod("getBoolean", JAnyMap::getBoolean),
         makeNativeMethod("getInt64", JAnyMap::getInt64),
-        makeNativeMethod("getUInt64BoxedAsLong", JAnyMap::getUInt64BoxedAsLong),
         makeNativeMethod("getString", JAnyMap::getString),
         makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
         makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
@@ -219,7 +206,6 @@ public:
         makeNativeMethod("setDouble", JAnyMap::setDouble),
         makeNativeMethod("setBoolean", JAnyMap::setBoolean),
         makeNativeMethod("setInt64", JAnyMap::setInt64),
-        makeNativeMethod("setUInt64BoxedAsLong", JAnyMap::setUInt64BoxedAsLong),
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),

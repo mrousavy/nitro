@@ -222,11 +222,9 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     map.setBoolean(key: "bool", value: boolValue)
     map.setString(key: "string", value: stringValue)
     map.setInt64(key: "int64", value: int64Value)
-    map.setUInt64(key: "uint64", value: uint64Value)
     map.setNull(key: "null")
     let array: [AnyValue] = [
       .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value),
-      .uint64(uint64Value),
     ]
     map.setArray(key: "array", value: array)
     map.setObject(
@@ -236,11 +234,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
         "bool": .bool(boolValue),
         "string": .string(stringValue),
         "int64": .int64(int64Value),
-        "uint64": .uint64(uint64Value),
         "null": .null,
         "array": .array([
           .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value),
-          .uint64(uint64Value), .array(array),
+          .array(array),
         ]),
       ])
     return map

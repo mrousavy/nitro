@@ -139,9 +139,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     map.setBoolean("bool", boolValue)
     map.setString("string", stringValue)
     map.setInt64("int64", int64Value)
-    map.setUInt64("uint64", uint64Value)
     map.setNull("null")
-    val array = arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(int64Value), AnyValue(uint64Value))
+    val array = arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(int64Value))
     map.setAnyArray("array", array)
     map.setAnyObject(
       "object",
@@ -150,7 +149,6 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
         "bool" to AnyValue(boolValue),
         "string" to AnyValue(stringValue),
         "int64" to AnyValue(int64Value),
-        "uint64" to AnyValue(uint64Value),
         "null" to AnyValue(),
         "array" to
           AnyValue(
@@ -159,7 +157,6 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
               AnyValue(boolValue),
               AnyValue(stringValue),
               AnyValue(int64Value),
-              AnyValue(uint64Value),
               AnyValue(array),
             ),
           ),

@@ -51,12 +51,8 @@ protected:
   static jni::local_ref<JAnyValue::jhybriddata> initHybridBoolean(jni::alias_ref<jhybridobject>, bool value) {
     return makeCxxInstance(value);
   }
-  static jni::local_ref<JAnyValue::jhybriddata> initHybridLong(jni::alias_ref<jhybridobject>, jlong value, bool isSigned) {
-    if (isSigned) {
-      return makeCxxInstance(static_cast<int64_t>(value));
-    } else {
-      return makeCxxInstance(static_cast<uint64_t>(value));
-    }
+  static jni::local_ref<JAnyValue::jhybriddata> initHybridLong(jni::alias_ref<jhybridobject>, int64_t value) {
+    return makeCxxInstance(value);
   }
   static jni::local_ref<JAnyValue::jhybriddata> initHybridString(jni::alias_ref<jhybridobject>, const std::string& value) {
     return makeCxxInstance(value);
@@ -86,7 +82,6 @@ private:
   explicit JAnyValue(double value) : _value(value) {}
   explicit JAnyValue(bool value) : _value(value) {}
   explicit JAnyValue(int64_t value) : _value(value) {}
-  explicit JAnyValue(uint64_t value) : _value(value) {}
   explicit JAnyValue(const std::string& value) : _value(value) {}
   explicit JAnyValue(AnyArray&& value) : _value(std::move(value)) {}
   explicit JAnyValue(AnyObject&& value) : _value(std::move(value)) {}
@@ -107,9 +102,6 @@ protected:
   bool isInt64() {
     return std::holds_alternative<int64_t>(_value);
   }
-  bool isUInt64() {
-    return std::holds_alternative<uint64_t>(_value);
-  }
   bool isString() {
     return std::holds_alternative<std::string>(_value);
   }
@@ -129,10 +121,6 @@ protected:
   }
   int64_t asInt64() {
     return std::get<int64_t>(_value);
-  }
-  jlong asUInt64BoxedAsLong() {
-    uint64_t value = std::get<uint64_t>(_value);
-    return static_cast<jlong>(value);
   }
   std::string asString() {
     return std::get<std::string>(_value);
@@ -183,7 +171,6 @@ public:
         makeNativeMethod("isDouble", JAnyValue::isDouble),
         makeNativeMethod("isBoolean", JAnyValue::isBoolean),
         makeNativeMethod("isInt64", JAnyValue::isInt64),
-        makeNativeMethod("isUInt64", JAnyValue::isUInt64),
         makeNativeMethod("isString", JAnyValue::isString),
         makeNativeMethod("isAnyArray", JAnyValue::isAnyArray),
         makeNativeMethod("isAnyObject", JAnyValue::isAnyObject),
@@ -191,7 +178,6 @@ public:
         makeNativeMethod("asDouble", JAnyValue::asDouble),
         makeNativeMethod("asBoolean", JAnyValue::asBoolean),
         makeNativeMethod("asInt64", JAnyValue::asInt64),
-        makeNativeMethod("asUInt64BoxedAsLong", JAnyValue::asUInt64BoxedAsLong),
         makeNativeMethod("asString", JAnyValue::asString),
         makeNativeMethod("asAnyArray", JAnyValue::asAnyArray),
         makeNativeMethod("asAnyObject", JAnyValue::asAnyObject),

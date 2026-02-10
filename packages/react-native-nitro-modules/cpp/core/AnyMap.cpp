@@ -54,13 +54,6 @@ bool AnyMap::isInt64(const std::string& key) const {
   }
   return std::holds_alternative<int64_t>(found->second);
 }
-bool AnyMap::isUInt64(const std::string& key) const {
-  auto found = _map.find(key);
-  if (found == _map.end()) {
-    return false;
-  }
-  return std::holds_alternative<uint64_t>(found->second);
-}
 bool AnyMap::isString(const std::string& key) const {
   auto found = _map.find(key);
   if (found == _map.end()) {
@@ -128,17 +121,6 @@ int64_t AnyMap::getInt64(const std::string& key) const {
     throw std::runtime_error("The value at key \"" + key + "\" is not a int64!");
   }
 }
-uint64_t AnyMap::getUInt64(const std::string& key) const {
-  auto found = _map.find(key);
-  if (found == _map.end()) {
-    throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
-  }
-  if (auto result = std::get_if<int64_t>(&found->second)) {
-    return *result;
-  } else {
-    throw std::runtime_error("The value at key \"" + key + "\" is not a uint64!");
-  }
-}
 std::string AnyMap::getString(const std::string& key) const {
   auto found = _map.find(key);
   if (found == _map.end()) {
@@ -191,9 +173,6 @@ void AnyMap::setBoolean(const std::string& key, bool value) {
   _map.insert_or_assign(key, value);
 }
 void AnyMap::setInt64(const std::string& key, int64_t value) {
-  _map.insert_or_assign(key, value);
-}
-void AnyMap::setUInt64(const std::string& key, uint64_t value) {
   _map.insert_or_assign(key, value);
 }
 void AnyMap::setString(const std::string& key, const std::string& value) {

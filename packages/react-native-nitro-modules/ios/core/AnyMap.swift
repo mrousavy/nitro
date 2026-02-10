@@ -12,7 +12,6 @@ public indirect enum AnyValue {
   case number(Double)
   case bool(Bool)
   case int64(Int64)
-  case uint64(UInt64)
   case string(String)
   case array([AnyValue])
   case object([String: AnyValue])
@@ -26,8 +25,6 @@ public indirect enum AnyValue {
       return .number(margelo.nitro.AnyMapUtils.get_AnyValue_number(value))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_int64(value) {
       return .int64(margelo.nitro.AnyMapUtils.get_AnyValue_int64(value))
-    } else if margelo.nitro.AnyMapUtils.is_AnyValue_uint64(value) {
-      return .uint64(margelo.nitro.AnyMapUtils.get_AnyValue_uint64(value))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_string(value) {
       return .string(String(margelo.nitro.AnyMapUtils.get_AnyValue_string(value)))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyArray(value) {
@@ -123,15 +120,6 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Gets the UInt64 value at the given key.
-   * If no value exists at the given key, or if it is not a UInt64,
-   * this function throws.
-   */
-  public func getUInt64(key: String) -> UInt64 {
-    return cppPart.pointee.getUInt64(std.string(key))
-  }
-
-  /**
    * Gets the string value at the given key.
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
@@ -203,13 +191,6 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Set the given key to the given UInt64 value.
-   */
-  public func setUInt64(key: String, value: UInt64) {
-    cppPart.pointee.setUInt64(std.string(key), value)
-  }
-
-  /**
    * Set the given key to the given string value.
    */
   public func setString(key: String, value: String) {
@@ -270,13 +251,6 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Gets whether the given `key` is holding a UInt64 value, or not.
-   */
-  public func isUInt64(key: String) -> Bool {
-    return cppPart.pointee.isUInt64(std.string(key))
-  }
-
-  /**
    * Gets whether the given `key` is holding a string value, or not.
    */
   public func isString(key: String) -> Bool {
@@ -318,8 +292,6 @@ extension margelo.nitro.AnyValue {
       return create(number)
     case .int64(let int64):
       return create(int64)
-    case .uint64(let uint64):
-      return create(uint64)
     case .string(let string):
       return create(string)
     case .array(let array):
@@ -338,9 +310,6 @@ extension margelo.nitro.AnyValue {
     return margelo.nitro.AnyMapUtils.create_AnyValue(value)
   }
   static func create(_ value: Int64) -> margelo.nitro.AnyValue {
-    return margelo.nitro.AnyMapUtils.create_AnyValue(value)
-  }
-  static func create(_ value: UInt64) -> margelo.nitro.AnyValue {
     return margelo.nitro.AnyMapUtils.create_AnyValue(value)
   }
   static func create(_ value: String) -> margelo.nitro.AnyValue {
@@ -416,8 +385,6 @@ extension AnyValue {
       return AnyValue.number(Double(value))
     case let value as Int64:
       return AnyValue.int64(value)
-    case let value as UInt64:
-      return AnyValue.uint64(value)
     case let value as Bool:
       return AnyValue.bool(value)
     case let value as [Any]:
@@ -442,8 +409,6 @@ extension AnyValue {
       return nil
     case .int64(let int):
       return int
-    case .uint64(let uint):
-      return uint
     case .bool(let bool):
       return bool
     case .number(let double):

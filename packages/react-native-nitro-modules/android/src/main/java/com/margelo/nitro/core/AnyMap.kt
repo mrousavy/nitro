@@ -100,9 +100,6 @@ class AnyMap {
   external fun isInt64(key: String): Boolean
 
   @FastNative
-  external fun isUInt64(key: String): Boolean
-
-  @FastNative
   external fun isString(key: String): Boolean
 
   @FastNative
@@ -119,12 +116,6 @@ class AnyMap {
 
   @FastNative
   external fun getInt64(key: String): Long
-
-  fun getUInt64(key: String): ULong {
-    return getUInt64BoxedAsLong(key).toULong()
-  }
-  @FastNative
-  private external fun getUInt64BoxedAsLong(key: String): Long
 
   external fun getString(key: String): String
 
@@ -151,16 +142,6 @@ class AnyMap {
 
   @FastNative
   external fun setInt64(
-    key: String,
-    value: Long,
-  )
-
-  fun setUInt64(key: String, value: ULong) {
-    setUInt64BoxedAsLong(key, value.toLong())
-  }
-
-  @FastNative
-  private external fun setUInt64BoxedAsLong(
     key: String,
     value: Long,
   )
