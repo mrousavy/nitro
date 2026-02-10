@@ -81,7 +81,7 @@ namespace AnyMapUtils {
   inline int64_t get_AnyValue_int64(const AnyValue& value) {
     return std::get<int64_t>(value);
   }
-  inline int64_t get_AnyValue_uint64(const AnyValue& value) {
+  inline uint64_t get_AnyValue_uint64(const AnyValue& value) {
     return std::get<uint64_t>(value);
   }
   inline std::string get_AnyValue_string(const AnyValue& value) {

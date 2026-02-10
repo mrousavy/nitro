@@ -44,6 +44,8 @@ Primitives are very efficient and can be passed with little to no overhead, espe
 
 ## `bigint`'s actual type
 
-A `bigint` is actually a variable-size type. While it is bridged to a 64-bit Integer (-2<sup>63</sup> … 2<sup>63</sup>−1), it can theoretically be larger than that.
+A `bigint` is actually a variable-size type.
 
-Since there is no built-in equivalent of `bigint` in C++/Swift/Kotlin, you'd need to stringify the `bigint` value on the JS side and parse it from a string to your big number library of choice on the native side again in cases where you really need big numbers.
+In Nitro, you have to explicitly choose `Int64` or `UInt64` as types, which map to `bigint` in JS.
+
+If you need larger numbers than `UInt64`, you need to either implement a Big Integer library yourself, or bridge `bigint` values using `string`s.

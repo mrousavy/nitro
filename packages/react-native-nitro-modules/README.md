@@ -134,10 +134,16 @@ The following C++ / JS types are supported out of the box:
     <td><code>String</code></td>
   </tr>
   <tr>
-    <td><code>bigint</code></td>
-    <td><code>int64_t</code> / <code>uint64_t</code></td>
+    <td><code>Int64</code> (<code>bigint</code>)</td>
+    <td><code>int64_t</code></td>
     <td><code>Int64</code></td>
     <td><code>Long</code></td>
+  </tr>
+  <tr>
+    <td><code>UInt64</code> (<code>bigint</code>)</td>
+    <td><code>uint64_t</code></td>
+    <td><code>UInt64</code></td>
+    <td><code>ULong</code></td>
   </tr>
   <tr>
     <td><code>T[]</code></td>

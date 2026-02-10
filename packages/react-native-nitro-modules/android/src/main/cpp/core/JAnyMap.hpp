@@ -85,7 +85,7 @@ protected:
   bool isBoolean(const std::string& key) {
     return _map->isBoolean(key);
   }
-  bool isBigInt(const std::string& key) {
+  bool isInt64(const std::string& key) {
     return _map->isBigInt(key);
   }
   bool isString(const std::string& key) {
