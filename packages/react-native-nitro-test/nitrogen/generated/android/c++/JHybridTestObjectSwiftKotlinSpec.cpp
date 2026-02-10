@@ -204,14 +204,23 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* stringValue */)>("setStringValue");
     method(_javaPart, jni::make_jstring(stringValue));
   }
-  uint64_t JHybridTestObjectSwiftKotlinSpec::getBigintValue() {
-    static const auto method = javaClassStatic()->getMethod<uint64_t()>("getBigintValue");
+  int64_t JHybridTestObjectSwiftKotlinSpec::getInt64Value() {
+    static const auto method = javaClassStatic()->getMethod<int64_t()>("getInt64Value");
     auto __result = method(_javaPart);
     return __result;
   }
-  void JHybridTestObjectSwiftKotlinSpec::setBigintValue(uint64_t bigintValue) {
-    static const auto method = javaClassStatic()->getMethod<void(uint64_t /* bigintValue */)>("setBigintValue");
-    method(_javaPart, bigintValue);
+  void JHybridTestObjectSwiftKotlinSpec::setInt64Value(int64_t int64Value) {
+    static const auto method = javaClassStatic()->getMethod<void(int64_t /* int64Value */)>("setInt64Value");
+    method(_javaPart, int64Value);
+  }
+  uint64_t JHybridTestObjectSwiftKotlinSpec::getUint64Value() {
+    static const auto method = javaClassStatic()->getMethod<uint64_t()>("getUint64Value");
+    auto __result = method(_javaPart);
+    return reinterpret_cast<uint64_t>(__result);
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setUint64Value(uint64_t uint64Value) {
+    static const auto method = javaClassStatic()->getMethod<void(uint64_t /* uint64Value */)>("setUint64Value");
+    method(_javaPart, uint64Value);
   }
   nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNull>()>("getNullValue");

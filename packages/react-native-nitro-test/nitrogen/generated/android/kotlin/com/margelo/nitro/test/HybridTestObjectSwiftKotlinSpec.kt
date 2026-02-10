@@ -79,7 +79,13 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var bigintValue: ULong
+  abstract var int64Value: Long
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var uint64Value: ULong
   
   @get:DoNotStrip
   @get:Keep

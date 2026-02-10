@@ -23,8 +23,10 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("boolValue", &HybridTestObjectSwiftKotlinSpec::setBoolValue);
       prototype.registerHybridGetter("stringValue", &HybridTestObjectSwiftKotlinSpec::getStringValue);
       prototype.registerHybridSetter("stringValue", &HybridTestObjectSwiftKotlinSpec::setStringValue);
-      prototype.registerHybridGetter("bigintValue", &HybridTestObjectSwiftKotlinSpec::getBigintValue);
-      prototype.registerHybridSetter("bigintValue", &HybridTestObjectSwiftKotlinSpec::setBigintValue);
+      prototype.registerHybridGetter("int64Value", &HybridTestObjectSwiftKotlinSpec::getInt64Value);
+      prototype.registerHybridSetter("int64Value", &HybridTestObjectSwiftKotlinSpec::setInt64Value);
+      prototype.registerHybridGetter("uint64Value", &HybridTestObjectSwiftKotlinSpec::getUint64Value);
+      prototype.registerHybridSetter("uint64Value", &HybridTestObjectSwiftKotlinSpec::setUint64Value);
       prototype.registerHybridGetter("nullValue", &HybridTestObjectSwiftKotlinSpec::getNullValue);
       prototype.registerHybridSetter("nullValue", &HybridTestObjectSwiftKotlinSpec::setNullValue);
       prototype.registerHybridGetter("optionalString", &HybridTestObjectSwiftKotlinSpec::getOptionalString);

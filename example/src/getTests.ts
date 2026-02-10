@@ -28,13 +28,13 @@ import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
 
 type TestResult =
   | {
-      status: 'successful'
-      result: string
-    }
+    status: 'successful'
+    result: string
+  }
   | {
-      status: 'failed'
-      message: string
-    }
+    status: 'failed'
+    message: string
+  }
 
 export interface TestRunner {
   name: string
@@ -122,7 +122,7 @@ const TEST_MAP_4: Record<
 const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
-    onChanged: (_num: number) => {},
+    onChanged: (_num: number) => { },
   },
   items: [],
 }
@@ -444,13 +444,13 @@ export function getTests(
     ),
     createTest('set optionalCallback, then undefined', () =>
       it(() => {
-        testObject.optionalCallback = () => {}
+        testObject.optionalCallback = () => { }
         testObject.optionalCallback = undefined
       }).didNotThrow()
     ),
     createTest('get optionalCallback (== self)', () =>
       it(() => {
-        testObject.optionalCallback = () => {}
+        testObject.optionalCallback = () => { }
         return testObject.optionalCallback
       })
         .didNotThrow()
@@ -570,7 +570,7 @@ export function getTests(
     ),
     createTest('bounceOptionalCallback(...) works for function', () =>
       it(
-        () => testObject.bounceOptionalCallback({ callback: () => {} }).callback
+        () => testObject.bounceOptionalCallback({ callback: () => { } }).callback
       )
         .didNotThrow()
         .didReturn('function')
@@ -605,7 +605,7 @@ export function getTests(
         .equals([HybridChild, HybridChild])
     ),
     createTest('bounceFunctions(...)', () =>
-      it(() => testObject.bounceFunctions([() => {}, () => {}]))
+      it(() => testObject.bounceFunctions([() => { }, () => { }]))
         .didNotThrow()
         .toBeArray()
         .toContain(0)
@@ -678,7 +678,8 @@ export function getTests(
         .toContain('object')
         .toContain('array')
         .toContain('null')
-        .toContain('bigint')
+        .toContain('int64')
+        .toContain('uint64')
         .toContain('string')
         .toContain('bool')
         .toContain('number')
@@ -691,7 +692,8 @@ export function getTests(
           testObject.numberValue,
           testObject.boolValue,
           testObject.stringValue,
-          testObject.bigintValue,
+          testObject.int64Value,
+          testObject.uint64Value,
         ])
     ),
     createTest('createMap().object', () =>
@@ -703,15 +705,18 @@ export function getTests(
             testObject.numberValue,
             testObject.boolValue,
             testObject.stringValue,
-            testObject.bigintValue,
+            testObject.int64Value,
+            testObject.uint64Value,
             [
               testObject.numberValue,
               testObject.boolValue,
               testObject.stringValue,
-              testObject.bigintValue,
+              testObject.int64Value,
+              testObject.uint64Value,
             ],
           ],
-          bigint: testObject.bigintValue,
+          int64: testObject.int64Value,
+          uint64: testObject.uint64Value,
           bool: testObject.boolValue,
           string: testObject.stringValue,
           number: testObject.numberValue,
@@ -938,7 +943,7 @@ export function getTests(
         .equals(55)
     ),
     createTest('bounceComplexVariant(...) with Callback', () =>
-      it(() => testObject.bounceComplexVariant(() => {}))
+      it(() => testObject.bounceComplexVariant(() => { }))
         .didNotThrow()
         .didReturn('function')
     ),
@@ -946,7 +951,7 @@ export function getTests(
       it(() =>
         testObject.bounceComplexVariant({
           items: [],
-          value: { onChanged: () => {}, value: 55 },
+          value: { onChanged: () => { }, value: 55 },
         })
       )
         .didNotThrow()
@@ -1090,117 +1095,117 @@ export function getTests(
     // More complex variants...
     ...('getVariantTuple' in testObject
       ? [
-          createTest('getVariantTuple(...) converts Float2', () =>
-            it(() => testObject.getVariantTuple([10, 20]))
-              .didNotThrow()
-              .equals([10, 20])
-          ),
-          createTest('getVariantTuple(...) converts Float3', () =>
-            it(() => testObject.getVariantTuple([10, 20, 30]))
-              .didNotThrow()
-              .equals([10, 20, 30])
-          ),
-          createTest(
-            'getVariantTuple(...) throws at wrong size (4 items)',
-            () =>
-              it(() =>
-                // @ts-expect-error
-                testObject.getVariantTuple([10, 20, 30, 40, 50])
-              ).didThrow()
-          ),
-          createTest('getVariantTuple(...) throws at wrong type (string)', () =>
-            // @ts-expect-error
-            it(() => testObject.getVariantTuple('hello')).didThrow()
-          ),
-          createTest(
-            'getVariantTuple(...) throws at wrong type (string[])',
-            () =>
-              it(() =>
-                // @ts-expect-error
-                testObject.getVariantTuple(['hello', 'world'])
-              ).didThrow()
-          ),
-        ]
+        createTest('getVariantTuple(...) converts Float2', () =>
+          it(() => testObject.getVariantTuple([10, 20]))
+            .didNotThrow()
+            .equals([10, 20])
+        ),
+        createTest('getVariantTuple(...) converts Float3', () =>
+          it(() => testObject.getVariantTuple([10, 20, 30]))
+            .didNotThrow()
+            .equals([10, 20, 30])
+        ),
+        createTest(
+          'getVariantTuple(...) throws at wrong size (4 items)',
+          () =>
+            it(() =>
+              // @ts-expect-error
+              testObject.getVariantTuple([10, 20, 30, 40, 50])
+            ).didThrow()
+        ),
+        createTest('getVariantTuple(...) throws at wrong type (string)', () =>
+          // @ts-expect-error
+          it(() => testObject.getVariantTuple('hello')).didThrow()
+        ),
+        createTest(
+          'getVariantTuple(...) throws at wrong type (string[])',
+          () =>
+            it(() =>
+              // @ts-expect-error
+              testObject.getVariantTuple(['hello', 'world'])
+            ).didThrow()
+        ),
+      ]
       : [
-          // Swift/Kotlin test object does not have variants yet.
-        ]),
+        // Swift/Kotlin test object does not have variants yet.
+      ]),
 
     // Tuples Tests
     ...('someTuple' in testObject
       ? [
-          createTest("set someTuple to [55, 'hello']", () =>
-            it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
-          ),
-          createTest("get someTuple (== [55, 'hello'])", () =>
-            it(() => {
-              testObject.someTuple = [55, 'hello']
-              return testObject.someTuple
-            }).equals([55, 'hello'])
-          ),
-          createTest('flip([10, 20, 30])', () =>
-            it(() => testObject.flip([10, 20, 30]))
-              .didNotThrow()
-              .equals([30, 20, 10])
-          ),
-          createTest('flip([10, 20]) throws', () =>
-            it(() =>
-              testObject.flip(
-                // @ts-expect-error
-                [10, 20]
-              )
+        createTest("set someTuple to [55, 'hello']", () =>
+          it(() => (testObject.someTuple = [55, 'hello'])).didNotThrow()
+        ),
+        createTest("get someTuple (== [55, 'hello'])", () =>
+          it(() => {
+            testObject.someTuple = [55, 'hello']
+            return testObject.someTuple
+          }).equals([55, 'hello'])
+        ),
+        createTest('flip([10, 20, 30])', () =>
+          it(() => testObject.flip([10, 20, 30]))
+            .didNotThrow()
+            .equals([30, 20, 10])
+        ),
+        createTest('flip([10, 20]) throws', () =>
+          it(() =>
+            testObject.flip(
+              // @ts-expect-error
+              [10, 20]
             )
-              .didThrow(
-                `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
-              )
-              .didThrow('expects 3 items')
-          ),
-          createTest('passTuple(...)', () =>
-            it(() => testObject.passTuple([13, 'hello', true]))
-              .didNotThrow()
-              .equals([13, 'hello', true])
-          ),
-        ]
+          )
+            .didThrow(
+              `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
+            )
+            .didThrow('expects 3 items')
+        ),
+        createTest('passTuple(...)', () =>
+          it(() => testObject.passTuple([13, 'hello', true]))
+            .didNotThrow()
+            .equals([13, 'hello', true])
+        ),
+      ]
       : [
-          // Swift/Kotlin Test Object does not have tuples yet!
-        ]),
+        // Swift/Kotlin Test Object does not have tuples yet!
+      ]),
 
     // Custom Types tests
     ...('bounceCustomType' in testObject
       ? [
-          createTest('bounceCustomType(...) works', () =>
-            it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
-              .didNotThrow()
-              .equals(TEST_CUSTOM_TYPE)
-          ),
-        ]
+        createTest('bounceCustomType(...) works', () =>
+          it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
+            .didNotThrow()
+            .equals(TEST_CUSTOM_TYPE)
+        ),
+      ]
       : [
-          // Swift/Kotlin Test Object does not have CustomTypes!
-        ]),
+        // Swift/Kotlin Test Object does not have CustomTypes!
+      ]),
 
     // AnyHybridObject test
     ...('bounceAnyHybrid' in testObject
       ? [
-          createTest('bounceAnyHybrid(...) works', () =>
-            it(() => testObject.bounceAnyHybrid(HybridSomeExternalObject))
+        createTest('bounceAnyHybrid(...) works', () =>
+          it(() => testObject.bounceAnyHybrid(HybridSomeExternalObject))
+            .didNotThrow()
+            .equals(HybridSomeExternalObject)
+        ),
+        createTest(
+          'bounceAnyHybrid(...) different object does not equal',
+          () =>
+            it(() => {
+              const external = testObject.bounceAnyHybrid(
+                HybridSomeExternalObject
+              )
+              return external.equals(testObject)
+            })
               .didNotThrow()
-              .equals(HybridSomeExternalObject)
-          ),
-          createTest(
-            'bounceAnyHybrid(...) different object does not equal',
-            () =>
-              it(() => {
-                const external = testObject.bounceAnyHybrid(
-                  HybridSomeExternalObject
-                )
-                return external.equals(testObject)
-              })
-                .didNotThrow()
-                .equals(false)
-          ),
-        ]
+              .equals(false)
+        ),
+      ]
       : [
-          // Swift/Kotlin Test Object does not have CustomTypes!
-        ]),
+        // Swift/Kotlin Test Object does not have CustomTypes!
+      ]),
 
     createTest('bounceMap(map) === map', () =>
       it(() => testObject.bounceMap(TEST_MAP))
@@ -1282,7 +1287,7 @@ export function getTests(
     createTest('JS Promise<number> can be awaited on native side', async () =>
       (
         await it(async () => {
-          let resolve = (_: number) => {}
+          let resolve = (_: number) => { }
           const promise = new Promise<number>((r) => {
             resolve = r
           })
@@ -1297,7 +1302,7 @@ export function getTests(
     createTest('JS Promise<Car> can be awaited on native side', async () =>
       (
         await it(async () => {
-          let resolve = (_: Car) => {}
+          let resolve = (_: Car) => { }
           const promise = new Promise<Car>((r) => {
             resolve = r
           })
@@ -1312,7 +1317,7 @@ export function getTests(
     createTest('JS Promise<void> can be awaited on native side', async () =>
       (
         await it(async () => {
-          let resolve = () => {}
+          let resolve = () => { }
           const promise = new Promise<void>((r) => {
             resolve = r
           })
@@ -1329,7 +1334,7 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            let reject = (_: Error) => {}
+            let reject = (_: Error) => { }
             const promise = new Promise<void>((_, r) => {
               reject = r
             })
@@ -1814,16 +1819,16 @@ export function getTests(
     ),
     ...('rawJsiFunc' in testObject
       ? [
-          createTest('Call Raw JSI Func', () =>
-            // @ts-expect-error
-            it(() => testObject.rawJsiFunc(55, false, 'hello', { obj: true }))
-              .didNotThrow()
-              .equals([55, false, 'hello', { obj: true }])
-          ),
-        ]
+        createTest('Call Raw JSI Func', () =>
+          // @ts-expect-error
+          it(() => testObject.rawJsiFunc(55, false, 'hello', { obj: true }))
+            .didNotThrow()
+            .equals([55, false, 'hello', { obj: true }])
+        ),
+      ]
       : [
-          // Swift/Kotlin Test Objects don't have raw JSI functions!
-        ]),
+        // Swift/Kotlin Test Objects don't have raw JSI functions!
+      ]),
 
     createTest('createBase() works', () =>
       it(() => testObject.createBase())

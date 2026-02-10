@@ -69,7 +69,8 @@ function getTypeLooselyness(type: Type): number {
     case 'array-buffer':
       // We have `.isArrayBuffer()`
       return 0
-    case 'bigint':
+    case 'int64':
+    case 'uint64':
       // We have `.isBigInt()`
       return 0
     case 'boolean':
