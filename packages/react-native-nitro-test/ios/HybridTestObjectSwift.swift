@@ -238,8 +238,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
         "uint64": .uint64(uint64Value),
         "null": .null,
         "array": .array([
-          .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value), .uint64(uint64Value)
-          .array(array),
+          .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value), .uint64(uint64Value), .array(array),
         ]),
       ])
     return map
