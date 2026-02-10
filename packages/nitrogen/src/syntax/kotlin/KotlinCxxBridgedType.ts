@@ -234,9 +234,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'number':
       case 'boolean':
       case 'int64':
-      case 'uint64':
         // primitives are not references
         return this.getTypeCode('c++')
+      case 'uint64':
+        // ULong is unfortunately not representable in JNI. It's long + cast
+        return 'jlong'
       default:
         return `jni::${referenceType}_ref<${this.getTypeCode('c++')}>`
     }
@@ -245,9 +247,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   getTypeCode(language: 'kotlin' | 'c++', isBoxed = false): string {
     switch (this.type.kind) {
       case 'number':
-      case 'int64':
-      case 'uint64':
       case 'boolean':
+      case 'int64':
         if (isBoxed) {
           return getKotlinBoxedPrimitiveType(this.type)
         } else {
@@ -256,6 +257,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return 'jboolean'
           }
           return this.type.getCode(language)
+        }
+      case 'uint64':
+        // ULong is unfortunately not representable in JNI. It's long + cast
+        switch (language) {
+          case 'c++':
+            if (isBoxed) {
+              return 'jni::JLong'
+            } else {
+              return 'jlong'
+            }
+          case 'kotlin':
+            return 'Long'
+          default:
+            return this.type.getCode(language)
         }
       case 'array':
         const array = getTypeAs(this.type, ArrayType)
