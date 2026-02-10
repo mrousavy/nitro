@@ -4,6 +4,7 @@ import {
   type Sync,
   type CustomType,
   type AnyHybridObject,
+  type UInt64,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -103,7 +104,7 @@ type CoreTypesVariant =
   | AnyMap
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
-interface PartialPerson extends Partial<Person> {}
+interface PartialPerson extends Partial<Person> { }
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -113,7 +114,7 @@ interface SharedTestObjectProps {
   numberValue: number
   boolValue: boolean
   stringValue: string
-  bigintValue: bigint
+  bigintValue: UInt64
   nullValue: null
   optionalString?: string
   stringOrUndefined: string | undefined
@@ -295,7 +296,7 @@ interface SharedTestObjectProps {
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++'; android: 'c++' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
@@ -322,7 +323,7 @@ export interface TestObjectCpp
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin

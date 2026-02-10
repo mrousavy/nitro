@@ -8,6 +8,7 @@ export * from './getHybridObjectConstructor'
 export * from './HybridObject'
 export * from './NitroModules'
 export * from './Sync'
+export * from './Int64'
 
 export * from './views/HybridView'
 export * from './views/getHostComponent'

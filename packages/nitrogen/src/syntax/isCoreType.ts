@@ -60,7 +60,9 @@ export function isSyncFunction(type: TSMorphType): boolean {
 }
 
 export function isInt64(type: TSMorphType): boolean {
-  if (!type.isBigInt()) {
+  // Int64 is an intersection: `bigint & {...}`
+  const isBigInt = type.getIntersectionTypes().some((i) => i.isBigInt())
+  if (!isBigInt) {
     // not a bigint
     return false
   }
@@ -68,7 +70,9 @@ export function isInt64(type: TSMorphType): boolean {
   return signedTag != null
 }
 export function isUInt64(type: TSMorphType): boolean {
-  if (!type.isBigInt()) {
+  // UInt64 is an intersection: `bigint & {...}`
+  const isBigInt = type.getIntersectionTypes().some((i) => i.isBigInt())
+  if (!isBigInt) {
     // not a bigint
     return false
   }

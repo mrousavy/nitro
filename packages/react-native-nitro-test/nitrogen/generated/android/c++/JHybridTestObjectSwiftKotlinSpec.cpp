@@ -204,13 +204,13 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* stringValue */)>("setStringValue");
     method(_javaPart, jni::make_jstring(stringValue));
   }
-  int64_t JHybridTestObjectSwiftKotlinSpec::getBigintValue() {
-    static const auto method = javaClassStatic()->getMethod<int64_t()>("getBigintValue");
+  uint64_t JHybridTestObjectSwiftKotlinSpec::getBigintValue() {
+    static const auto method = javaClassStatic()->getMethod<uint64_t()>("getBigintValue");
     auto __result = method(_javaPart);
     return __result;
   }
-  void JHybridTestObjectSwiftKotlinSpec::setBigintValue(int64_t bigintValue) {
-    static const auto method = javaClassStatic()->getMethod<void(int64_t /* bigintValue */)>("setBigintValue");
+  void JHybridTestObjectSwiftKotlinSpec::setBigintValue(uint64_t bigintValue) {
+    static const auto method = javaClassStatic()->getMethod<void(uint64_t /* bigintValue */)>("setBigintValue");
     method(_javaPart, bigintValue);
   }
   nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {

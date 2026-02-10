@@ -60,8 +60,8 @@ namespace margelo::nitro::test {
     void setBoolValue(bool boolValue) override;
     std::string getStringValue() override;
     void setStringValue(const std::string& stringValue) override;
-    int64_t getBigintValue() override;
-    void setBigintValue(int64_t bigintValue) override;
+    uint64_t getBigintValue() override;
+    void setBigintValue(uint64_t bigintValue) override;
     nitro::NullType getNullValue() override;
     void setNullValue(nitro::NullType nullValue) override;
     std::optional<std::string> getOptionalString() override;

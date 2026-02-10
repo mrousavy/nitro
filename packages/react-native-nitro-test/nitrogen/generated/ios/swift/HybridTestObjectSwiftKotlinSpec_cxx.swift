@@ -196,7 +196,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var bigintValue: Int64 {
+  public final var bigintValue: UInt64 {
     @inline(__always)
     get {
       return self.__implementation.bigintValue

@@ -160,10 +160,10 @@ namespace margelo::nitro::test {
     inline void setStringValue(const std::string& stringValue) noexcept override {
       _swiftPart.setStringValue(stringValue);
     }
-    inline int64_t getBigintValue() noexcept override {
+    inline uint64_t getBigintValue() noexcept override {
       return _swiftPart.getBigintValue();
     }
-    inline void setBigintValue(int64_t bigintValue) noexcept override {
+    inline void setBigintValue(uint64_t bigintValue) noexcept override {
       _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
     }
     inline nitro::NullType getNullValue() noexcept override {
