@@ -28,7 +28,7 @@
     "prism-react-renderer": "^2.3.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "satori": "^0.19.1",
+    "satori": "^0.19.2",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
