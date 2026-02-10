@@ -214,12 +214,12 @@ namespace margelo::nitro::test {
     method(_javaPart, int64Value);
   }
   uint64_t JHybridTestObjectSwiftKotlinSpec::getUint64Value() {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getUint64Value");
+    static const auto method = javaClassStatic()->getMethod<jlong()>("getUint64Value_cxx");
     auto __result = method(_javaPart);
     return static_cast<uint64_t>(__result);
   }
   void JHybridTestObjectSwiftKotlinSpec::setUint64Value(uint64_t uint64Value) {
-    static const auto method = javaClassStatic()->getMethod<void(jlong /* uint64Value */)>("setUint64Value");
+    static const auto method = javaClassStatic()->getMethod<void(jlong /* uint64Value */)>("setUint64Value_cxx");
     method(_javaPart, uint64Value);
   }
   nitro::NullType JHybridTestObjectSwiftKotlinSpec::getNullValue() {

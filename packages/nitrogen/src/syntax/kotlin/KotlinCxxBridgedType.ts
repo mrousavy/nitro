@@ -56,6 +56,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const keyType = new KotlinCxxBridgedType(record.keyType)
         const valueType = new KotlinCxxBridgedType(record.valueType)
         return keyType.needsSpecialHandling || valueType.needsSpecialHandling
+      case 'uint64':
+        // ULong == Long, we need to cast
+        return true
       default:
         break
     }
@@ -499,6 +502,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             } else {
               return parameterName
             }
+          case 'kotlin':
+            switch (this.type.kind) {
+              case 'uint64':
+                // Long -> ULong
+                return `${parameterName}.toULong()`
+              default:
+                return parameterName
+            }
           default:
             return parameterName
         }
@@ -757,8 +768,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     isBoxed = false
   ): string {
     switch (this.type.kind) {
-      case 'number':
       case 'boolean':
+      case 'number':
       case 'int64':
       case 'uint64':
         switch (language) {
@@ -784,6 +795,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 break
             }
             return code
+          case 'kotlin':
+            switch (this.type.kind) {
+              case 'uint64':
+                // ULong -> Long
+                return `${parameterName}.toLong()`
+              default:
+                return parameterName
+            }
           default:
             return parameterName
         }
