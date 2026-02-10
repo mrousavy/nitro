@@ -57,8 +57,10 @@ public:
   void setBoolValue(bool boolValue) override;
   std::string getStringValue() override;
   void setStringValue(const std::string& stringValue) override;
-  int64_t getBigintValue() override;
-  void setBigintValue(int64_t bigintValue) override;
+  int64_t getInt64Value() override;
+  void setInt64Value(int64_t int64Value) override;
+  uint64_t getUInt64Value() override;
+  void setUInt64Value(uint64_t uint64Value) override;
   NullType getNullValue() override;
   void setNullValue(NullType value) override;
   std::optional<std::string> getOptionalString() override;

@@ -28,8 +28,11 @@ namespace AnyMapUtils {
   inline AnyValue create_AnyValue(double doubleValue) {
     return AnyValue{doubleValue};
   }
-  inline AnyValue create_AnyValue(int64_t bigintValue) {
-    return AnyValue{bigintValue};
+  inline AnyValue create_AnyValue(int64_t int64Value) {
+    return AnyValue{int64Value};
+  }
+  inline AnyValue create_AnyValue(uint64_t uint64Value) {
+    return AnyValue{uint64Value};
   }
   inline AnyValue create_AnyValue(const std::string& stringValue) {
     return AnyValue{stringValue};
@@ -50,8 +53,11 @@ namespace AnyMapUtils {
   inline bool is_AnyValue_number(const AnyValue& value) {
     return std::holds_alternative<double>(value);
   }
-  inline bool is_AnyValue_bigint(const AnyValue& value) {
+  inline bool is_AnyValue_int64(const AnyValue& value) {
     return std::holds_alternative<int64_t>(value);
+  }
+  inline bool is_AnyValue_uint64(const AnyValue& value) {
+    return std::holds_alternative<uint64_t>(value);
   }
   inline bool is_AnyValue_string(const AnyValue& value) {
     return std::holds_alternative<std::string>(value);
@@ -72,8 +78,11 @@ namespace AnyMapUtils {
   inline double get_AnyValue_number(const AnyValue& value) {
     return std::get<double>(value);
   }
-  inline int64_t get_AnyValue_bigint(const AnyValue& value) {
+  inline int64_t get_AnyValue_int64(const AnyValue& value) {
     return std::get<int64_t>(value);
+  }
+  inline int64_t get_AnyValue_uint64(const AnyValue& value) {
+    return std::get<uint64_t>(value);
   }
   inline std::string get_AnyValue_string(const AnyValue& value) {
     return std::get<std::string>(value);
