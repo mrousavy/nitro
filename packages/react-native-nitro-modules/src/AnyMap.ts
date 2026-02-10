@@ -1,3 +1,5 @@
+import type { Int64, UInt64 } from './Int64'
+
 /**
  * Represents a single value inside an untyped map.
  */
@@ -5,7 +7,8 @@ export type ValueType =
   | string
   | number
   | boolean
-  | bigint
+  | Int64
+  | UInt64
   | null
   | ValueType[]
   | { [k: string]: ValueType }

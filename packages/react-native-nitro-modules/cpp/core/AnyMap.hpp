@@ -134,12 +134,12 @@ public:
    */
   bool getBoolean(const std::string& key) const;
   /**
-   * Returns the bigint value at the given `key`.
+   * Returns the Int64 value at the given `key`.
    * If no `int64_t` value exists at the given `key`, this method will throw.
    */
   int64_t getInt64(const std::string& key) const;
   /**
-   * Returns the bigint value at the given `key`.
+   * Returns the UInt64 value at the given `key`.
    * If no `uint64_t` value exists at the given `key`, this method will throw.
    */
   uint64_t getUInt64(const std::string& key) const;

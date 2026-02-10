@@ -101,7 +101,13 @@ class AnyValue {
    * Gets whether this [AnyValue] instance is holding a [Long] value.
    */
   @FastNative
-  external fun isBigInt(): Boolean
+  external fun isInt64(): Boolean
+
+  /**
+   * Gets whether this [AnyValue] instance is holding a [ULong] value.
+   */
+  @FastNative
+  external fun isUInt64(): Boolean
 
   /**
    * Gets whether this [AnyValue] instance is holding a [String] value.
@@ -137,10 +143,21 @@ class AnyValue {
 
   /**
    * Get the [Long] value this [AnyValue] is holding.
-   * @throws Error if this [AnyValue] is not holding a [Long] (see [isLong]`()`)
+   * @throws Error if this [AnyValue] is not holding a [Long] (see [isInt64]`()`)
    */
   @FastNative
-  external fun asBigInt(): Long
+  external fun asInt64(): Long
+
+  /**
+   * Get the [ULong] value this [AnyValue] is holding.
+   * @throws Error if this [AnyValue] is not holding a [ULong] (see [isUInt64]`()`)
+   */
+  fun asUInt64(): ULong {
+    return asUInt64BoxedAsLong().toULong()
+  }
+
+  @FastNative
+  private external fun asUInt64BoxedAsLong(): Long
 
   /**
    * Get the [String] value this [AnyValue] is holding.
@@ -179,8 +196,10 @@ class AnyValue {
       return null
     } else if (isDouble()) {
       return asDouble()
-    } else if (isBigInt()) {
-      return asBigInt()
+    } else if (isInt64()) {
+      return asInt64()
+    } else if (isUInt64()) {
+      return asUInt64()
     } else if (isBoolean()) {
       return asBoolean()
     } else if (isString()) {

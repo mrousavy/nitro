@@ -97,7 +97,10 @@ class AnyMap {
   external fun isBoolean(key: String): Boolean
 
   @FastNative
-  external fun isBigInt(key: String): Boolean
+  external fun isInt64(key: String): Boolean
+
+  @FastNative
+  external fun isUInt64(key: String): Boolean
 
   @FastNative
   external fun isString(key: String): Boolean
@@ -115,7 +118,13 @@ class AnyMap {
   external fun getBoolean(key: String): Boolean
 
   @FastNative
-  external fun getBigInt(key: String): Long
+  external fun getInt64(key: String): Long
+
+  fun getUInt64(key: String): ULong {
+    return getUInt64BoxedAsLong(key).toULong()
+  }
+  @FastNative
+  private external fun getUInt64BoxedAsLong(key: String): Long
 
   external fun getString(key: String): String
 
@@ -141,7 +150,17 @@ class AnyMap {
   )
 
   @FastNative
-  external fun setBigInt(
+  external fun setInt64(
+    key: String,
+    value: Long,
+  )
+
+  fun setUInt64(key: String, value: ULong) {
+    setUInt64BoxedAsLong(key, value.toLong())
+  }
+
+  @FastNative
+  private external fun setUInt64BoxedAsLong(
     key: String,
     value: Long,
   )
