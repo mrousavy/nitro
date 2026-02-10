@@ -310,6 +310,20 @@ export function getTests(
         .didNotThrow()
         .equals(7362572367826385n)
     ),
+    createTest('set int64Value to -7362572367826385n', () =>
+      it(() => (testObject.int64Value = -7362572367826385n)).didNotThrow()
+    ),
+    createTest('get int64Value (== -7362572367826385n)', () =>
+      it(() => {
+        testObject.int64Value = -7362572367826385n
+        return testObject.int64Value
+      })
+        .didNotThrow()
+        .equals(-7362572367826385n)
+    ),
+    createTest('set uint64Value to -7362572367826385n throws', () =>
+      it(() => (testObject.uint64Value = -7362572367826385n)).didThrow()
+    ),
     createTest('set stringOrUndefined to string, then undefined', () =>
       it(() => {
         testObject.stringOrUndefined = 'hello'
