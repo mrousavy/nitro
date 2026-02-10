@@ -61,6 +61,12 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-net** | Node.js-compatible `net`, `tls`, `http(s)` | [GitHub](https://github.com/iwater/react-native-nitro-net) |
 | **react-native-nitro-dgram** | High-performance Node.js `dgram` (UDP) | [GitHub](https://github.com/iwater/react-native-nitro-dgram) |
 
+### Maps
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **react-native-google-maps-plus** | Google Maps SDK wrapper for Android & iOS | [GitHub](https://github.com/pinpong/react-native-google-maps-plus) |
+
 ### UI & Styling
 
 | Module | Description | Links |
