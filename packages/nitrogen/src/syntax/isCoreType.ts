@@ -58,3 +58,20 @@ export function isSyncFunction(type: TSMorphType): boolean {
   const syncTag = type.getProperty('__syncTag')
   return syncTag != null
 }
+
+export function isInt64(type: TSMorphType): boolean {
+  if (!type.isBigInt()) {
+    // not a bigint
+    return false
+  }
+  const signedTag = type.getProperty('__signedTag')
+  return signedTag != null
+}
+export function isUInt64(type: TSMorphType): boolean {
+  if (!type.isBigInt()) {
+    // not a bigint
+    return false
+  }
+  const unsignedTag = type.getProperty('__unsignedTag')
+  return unsignedTag != null
+}
