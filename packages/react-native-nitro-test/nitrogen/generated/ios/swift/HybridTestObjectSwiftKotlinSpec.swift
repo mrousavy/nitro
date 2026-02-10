@@ -16,7 +16,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var numberValue: Double { get set }
   var boolValue: Bool { get set }
   var stringValue: String { get set }
-  var bigintValue: Int64 { get set }
+  var int64Value: Int64 { get set }
+  var uint64Value: UInt64 { get set }
   var nullValue: NullType { get set }
   var optionalString: String? { get set }
   var stringOrUndefined: String? { get set }

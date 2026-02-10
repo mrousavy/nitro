@@ -115,8 +115,10 @@ namespace margelo::nitro::test {
       virtual void setBoolValue(bool boolValue) = 0;
       virtual std::string getStringValue() = 0;
       virtual void setStringValue(const std::string& stringValue) = 0;
-      virtual int64_t getBigintValue() = 0;
-      virtual void setBigintValue(int64_t bigintValue) = 0;
+      virtual int64_t getInt64Value() = 0;
+      virtual void setInt64Value(int64_t int64Value) = 0;
+      virtual uint64_t getUint64Value() = 0;
+      virtual void setUint64Value(uint64_t uint64Value) = 0;
       virtual nitro::NullType getNullValue() = 0;
       virtual void setNullValue(nitro::NullType nullValue) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;

@@ -25,8 +25,10 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("boolValue", &HybridTestObjectCppSpec::setBoolValue);
       prototype.registerHybridGetter("stringValue", &HybridTestObjectCppSpec::getStringValue);
       prototype.registerHybridSetter("stringValue", &HybridTestObjectCppSpec::setStringValue);
-      prototype.registerHybridGetter("bigintValue", &HybridTestObjectCppSpec::getBigintValue);
-      prototype.registerHybridSetter("bigintValue", &HybridTestObjectCppSpec::setBigintValue);
+      prototype.registerHybridGetter("int64Value", &HybridTestObjectCppSpec::getInt64Value);
+      prototype.registerHybridSetter("int64Value", &HybridTestObjectCppSpec::setInt64Value);
+      prototype.registerHybridGetter("uint64Value", &HybridTestObjectCppSpec::getUint64Value);
+      prototype.registerHybridSetter("uint64Value", &HybridTestObjectCppSpec::setUint64Value);
       prototype.registerHybridGetter("nullValue", &HybridTestObjectCppSpec::getNullValue);
       prototype.registerHybridSetter("nullValue", &HybridTestObjectCppSpec::setNullValue);
       prototype.registerHybridGetter("optionalString", &HybridTestObjectCppSpec::getOptionalString);

@@ -141,7 +141,7 @@ AnyValue JAnyMap::jObjectToAnyValue(jni::alias_ref<jni::JObject> jObject) {
   // Check for Boolean
   if (jObject->isInstanceOf(jni::JBoolean::javaClassStatic())) {
     auto jBool = jni::static_ref_cast<jni::JBoolean>(jObject);
-    return jBool->booleanValue();
+    return static_cast<bool>(jBool->booleanValue());
   }
 
   // Check for Long (bigint)

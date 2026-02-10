@@ -56,6 +56,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         const keyType = new KotlinCxxBridgedType(record.keyType)
         const valueType = new KotlinCxxBridgedType(record.valueType)
         return keyType.needsSpecialHandling || valueType.needsSpecialHandling
+      case 'uint64':
+        // ULong == Long, we need to cast
+        return true
       default:
         break
     }
@@ -233,9 +236,12 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'void':
       case 'number':
       case 'boolean':
-      case 'bigint':
+      case 'int64':
         // primitives are not references
         return this.getTypeCode('c++')
+      case 'uint64':
+        // ULong is unfortunately not representable in JNI. It's long + cast
+        return 'jlong'
       default:
         return `jni::${referenceType}_ref<${this.getTypeCode('c++')}>`
     }
@@ -244,8 +250,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   getTypeCode(language: 'kotlin' | 'c++', isBoxed = false): string {
     switch (this.type.kind) {
       case 'number':
-      case 'bigint':
       case 'boolean':
+      case 'int64':
         if (isBoxed) {
           return getKotlinBoxedPrimitiveType(this.type)
         } else {
@@ -254,6 +260,20 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return 'jboolean'
           }
           return this.type.getCode(language)
+        }
+      case 'uint64':
+        // ULong is unfortunately not representable in JNI. It's long + cast
+        switch (language) {
+          case 'c++':
+            if (isBoxed) {
+              return 'jni::JLong'
+            } else {
+              return 'jlong'
+            }
+          case 'kotlin':
+            return 'Long'
+          default:
+            return this.type.getCode(language)
         }
       case 'array':
         const array = getTypeAs(this.type, ArrayType)
@@ -265,7 +285,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return 'jni::JArrayDouble'
               case 'boolean':
                 return 'jni::JArrayBoolean'
-              case 'bigint':
+              case 'int64':
+                return 'jni::JArrayLong'
+              case 'uint64':
+                // ULong is Long, we have to reinterpret cast it
                 return 'jni::JArrayLong'
               default:
                 return `jni::JArrayClass<${bridgedItem.getTypeCode(language)}>`
@@ -276,7 +299,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return 'DoubleArray'
               case 'boolean':
                 return 'BooleanArray'
-              case 'bigint':
+              case 'int64':
+                return 'LongArray'
+              case 'uint64':
+                // ULong is Long, we have to reinterpret cast it
                 return 'LongArray'
               default:
                 return `Array<${bridgedItem.getTypeCode(language)}>`
@@ -400,7 +426,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // primitives need to be boxed to make them nullable
               case 'number':
               case 'boolean':
-              case 'bigint':
+              case 'int64':
+              case 'uint64':
                 const boxed = getKotlinBoxedPrimitiveType(optional.wrappingType)
                 return boxed
               default:
@@ -464,7 +491,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     switch (this.type.kind) {
       case 'number':
       case 'boolean':
-      case 'bigint':
+      case 'int64':
+      case 'uint64':
         switch (language) {
           case 'c++':
             if (isBoxed) {
@@ -473,6 +501,14 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               return `${boxed}::valueOf(${parameterName})`
             } else {
               return parameterName
+            }
+          case 'kotlin':
+            switch (this.type.kind) {
+              case 'uint64':
+                // Long -> ULong
+                return `${parameterName}.toULong()`
+              default:
+                return parameterName
             }
           default:
             return parameterName
@@ -623,7 +659,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             switch (array.itemType.kind) {
               case 'number':
               case 'boolean':
-              case 'bigint': {
+              case 'int64':
+              case 'uint64': {
                 // primitive arrays can be constructed more efficiently with region/batch access.
                 // no need to iterate through the entire array.
                 return `
@@ -731,9 +768,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     isBoxed = false
   ): string {
     switch (this.type.kind) {
-      case 'number':
       case 'boolean':
-      case 'bigint':
+      case 'number':
+      case 'int64':
+      case 'uint64':
         switch (language) {
           case 'c++':
             let code: string
@@ -744,11 +782,27 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // it's just the primitive type directly
               code = parameterName
             }
-            if (this.type.kind === 'boolean') {
-              // jboolean =/= bool (it's a char in Java)
-              code = `static_cast<bool>(${code})`
+            switch (this.type.kind) {
+              case 'boolean':
+                // jboolean =/= bool (it's a char in Java)
+                code = `static_cast<bool>(${code})`
+                break
+              case 'uint64':
+                // jlong =/= uint64 (it's signed in Java)
+                code = `static_cast<uint64_t>(${code})`
+                break
+              default:
+                break
             }
             return code
+          case 'kotlin':
+            switch (this.type.kind) {
+              case 'uint64':
+                // ULong -> Long
+                return `${parameterName}.toLong()`
+              default:
+                return parameterName
+            }
           default:
             return parameterName
         }
@@ -907,7 +961,8 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             switch (array.itemType.kind) {
               case 'number':
               case 'boolean':
-              case 'bigint': {
+              case 'int64':
+              case 'uint64': {
                 // primitive arrays can use region/batch access,
                 // which we can use to construct the vector directly instead of looping through it.
                 return `

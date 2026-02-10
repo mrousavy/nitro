@@ -99,7 +99,7 @@ protected:
   bool isBoolean() {
     return std::holds_alternative<bool>(_value);
   }
-  bool isBigInt() {
+  bool isInt64() {
     return std::holds_alternative<int64_t>(_value);
   }
   bool isString() {
@@ -119,7 +119,7 @@ protected:
   bool asBoolean() {
     return std::get<bool>(_value);
   }
-  int64_t asBigInt() {
+  int64_t asInt64() {
     return std::get<int64_t>(_value);
   }
   std::string asString() {
@@ -170,14 +170,14 @@ public:
         makeNativeMethod("isNull", JAnyValue::isNull),
         makeNativeMethod("isDouble", JAnyValue::isDouble),
         makeNativeMethod("isBoolean", JAnyValue::isBoolean),
-        makeNativeMethod("isBigInt", JAnyValue::isBigInt),
+        makeNativeMethod("isInt64", JAnyValue::isInt64),
         makeNativeMethod("isString", JAnyValue::isString),
         makeNativeMethod("isAnyArray", JAnyValue::isAnyArray),
         makeNativeMethod("isAnyObject", JAnyValue::isAnyObject),
         // get
         makeNativeMethod("asDouble", JAnyValue::asDouble),
         makeNativeMethod("asBoolean", JAnyValue::asBoolean),
-        makeNativeMethod("asBigInt", JAnyValue::asBigInt),
+        makeNativeMethod("asInt64", JAnyValue::asInt64),
         makeNativeMethod("asString", JAnyValue::asString),
         makeNativeMethod("asAnyArray", JAnyValue::asAnyArray),
         makeNativeMethod("asAnyObject", JAnyValue::asAnyObject),

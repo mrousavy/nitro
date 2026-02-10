@@ -4,6 +4,8 @@ import {
   type Sync,
   type CustomType,
   type AnyHybridObject,
+  type UInt64,
+  type Int64,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
 import type { SomeExternalObject } from 'react-native-nitro-test-external'
@@ -113,7 +115,8 @@ interface SharedTestObjectProps {
   numberValue: number
   boolValue: boolean
   stringValue: string
-  bigintValue: bigint
+  int64Value: Int64
+  uint64Value: UInt64
   nullValue: null
   optionalString?: string
   stringOrUndefined: string | undefined
@@ -182,8 +185,8 @@ interface SharedTestObjectProps {
   currentDate(): Date
 
   // Promises
-  calculateFibonacciSync(value: number): bigint
-  calculateFibonacciAsync(value: number): Promise<bigint>
+  calculateFibonacciSync(value: number): Int64
+  calculateFibonacciAsync(value: number): Promise<Int64>
   wait(seconds: number): Promise<void>
   promiseThrows(): Promise<void>
   promiseReturnsInstantly(): Promise<number>

@@ -85,8 +85,8 @@ protected:
   bool isBoolean(const std::string& key) {
     return _map->isBoolean(key);
   }
-  bool isBigInt(const std::string& key) {
-    return _map->isBigInt(key);
+  bool isInt64(const std::string& key) {
+    return _map->isInt64(key);
   }
   bool isString(const std::string& key) {
     return _map->isString(key);
@@ -105,8 +105,8 @@ protected:
   bool getBoolean(const std::string& key) {
     return _map->getBoolean(key);
   }
-  int64_t getBigInt(const std::string& key) {
-    return _map->getBigInt(key);
+  int64_t getInt64(const std::string& key) {
+    return _map->getInt64(key);
   }
   std::string getString(const std::string& key) {
     return _map->getString(key);
@@ -125,8 +125,8 @@ protected:
   void setBoolean(const std::string& key, bool value) {
     _map->setBoolean(key, value);
   }
-  void setBigInt(const std::string& key, int64_t value) {
-    _map->setBigInt(key, value);
+  void setInt64(const std::string& key, int64_t value) {
+    _map->setInt64(key, value);
   }
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
@@ -189,14 +189,14 @@ public:
         makeNativeMethod("isNull", JAnyMap::isNull),
         makeNativeMethod("isDouble", JAnyMap::isDouble),
         makeNativeMethod("isBoolean", JAnyMap::isBoolean),
-        makeNativeMethod("isBigInt", JAnyMap::isBigInt),
+        makeNativeMethod("isInt64", JAnyMap::isInt64),
         makeNativeMethod("isString", JAnyMap::isString),
         makeNativeMethod("isArray", JAnyMap::isArray),
         makeNativeMethod("isObject", JAnyMap::isObject),
         // get
         makeNativeMethod("getDouble", JAnyMap::getDouble),
         makeNativeMethod("getBoolean", JAnyMap::getBoolean),
-        makeNativeMethod("getBigInt", JAnyMap::getBigInt),
+        makeNativeMethod("getInt64", JAnyMap::getInt64),
         makeNativeMethod("getString", JAnyMap::getString),
         makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
         makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
@@ -205,7 +205,7 @@ public:
         makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
         makeNativeMethod("setBoolean", JAnyMap::setBoolean),
-        makeNativeMethod("setBigInt", JAnyMap::setBigInt),
+        makeNativeMethod("setInt64", JAnyMap::setInt64),
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),

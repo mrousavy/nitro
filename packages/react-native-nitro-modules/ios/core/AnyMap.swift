@@ -11,7 +11,7 @@ public indirect enum AnyValue {
   case null
   case number(Double)
   case bool(Bool)
-  case bigint(Int64)
+  case int64(Int64)
   case string(String)
   case array([AnyValue])
   case object([String: AnyValue])
@@ -23,8 +23,8 @@ public indirect enum AnyValue {
       return .bool(margelo.nitro.AnyMapUtils.get_AnyValue_bool(value))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_number(value) {
       return .number(margelo.nitro.AnyMapUtils.get_AnyValue_number(value))
-    } else if margelo.nitro.AnyMapUtils.is_AnyValue_bigint(value) {
-      return .bigint(margelo.nitro.AnyMapUtils.get_AnyValue_bigint(value))
+    } else if margelo.nitro.AnyMapUtils.is_AnyValue_int64(value) {
+      return .int64(margelo.nitro.AnyMapUtils.get_AnyValue_int64(value))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_string(value) {
       return .string(String(margelo.nitro.AnyMapUtils.get_AnyValue_string(value)))
     } else if margelo.nitro.AnyMapUtils.is_AnyValue_AnyArray(value) {
@@ -111,12 +111,12 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Gets the bigint value at the given key.
-   * If no value exists at the given key, or if it is not a double,
+   * Gets the Int64 value at the given key.
+   * If no value exists at the given key, or if it is not an Int64,
    * this function throws.
    */
-  public func getBigInt(key: String) -> Int64 {
-    return cppPart.pointee.getBigInt(std.string(key))
+  public func getInt64(key: String) -> Int64 {
+    return cppPart.pointee.getInt64(std.string(key))
   }
 
   /**
@@ -184,10 +184,10 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Set the given key to the given bigint value.
+   * Set the given key to the given Int64 value.
    */
-  public func setBigInt(key: String, value: Int64) {
-    cppPart.pointee.setBigInt(std.string(key), value)
+  public func setInt64(key: String, value: Int64) {
+    cppPart.pointee.setInt64(std.string(key), value)
   }
 
   /**
@@ -244,10 +244,10 @@ public final class AnyMap: @unchecked Sendable {
   }
 
   /**
-   * Gets whether the given `key` is holding a bigint value, or not.
+   * Gets whether the given `key` is holding a Int64 value, or not.
    */
-  public func isBigInt(key: String) -> Bool {
-    return cppPart.pointee.isBigInt(std.string(key))
+  public func isInt64(key: String) -> Bool {
+    return cppPart.pointee.isInt64(std.string(key))
   }
 
   /**
@@ -290,8 +290,8 @@ extension margelo.nitro.AnyValue {
       return create(bool)
     case .number(let number):
       return create(number)
-    case .bigint(let bigint):
-      return create(bigint)
+    case .int64(let int64):
+      return create(int64)
     case .string(let string):
       return create(string)
     case .array(let array):
@@ -384,7 +384,7 @@ extension AnyValue {
     case let value as Float:
       return AnyValue.number(Double(value))
     case let value as Int64:
-      return AnyValue.bigint(value)
+      return AnyValue.int64(value)
     case let value as Bool:
       return AnyValue.bool(value)
     case let value as [Any]:
@@ -407,7 +407,7 @@ extension AnyValue {
     switch self {
     case .null:
       return nil
-    case .bigint(let int):
+    case .int64(let int):
       return int
     case .bool(let bool):
       return bool
