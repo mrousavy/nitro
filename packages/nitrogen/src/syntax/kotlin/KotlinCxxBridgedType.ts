@@ -778,7 +778,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 break
               case 'uint64':
                 // jlong =/= uint64 (it's signed in Java)
-                code = `reinterpret_cast<uint64_t>(${code})`
+                code = `static_cast<uint64_t>(${code})`
                 break
               default:
                 break
