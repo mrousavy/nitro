@@ -19,7 +19,7 @@ struct AnyValue;
 using AnyArray = std::vector<AnyValue>;
 using AnyObject = std::unordered_map<std::string, AnyValue>;
 
-using VariantType = std::variant<NullType, bool, double, int64_t, std::string, AnyArray, AnyObject>;
+using VariantType = std::variant<NullType, bool, double, int64_t, uint64_t, std::string, AnyArray, AnyObject>;
 struct AnyValue : VariantType {
   using VariantType::variant;
 
@@ -92,10 +92,15 @@ public:
    */
   bool isBoolean(const std::string& key) const;
   /**
-   * Returns whether the value under the given key is a `bigint`.
-   * If the value is not a `bigint` (or there is no value at the given `key`), this returns `false`.
+   * Returns whether the value under the given key is a `int64_t`.
+   * If the value is not a `int64_t` (or there is no value at the given `key`), this returns `false`.
    */
-  bool isBigInt(const std::string& key) const;
+  bool isInt64(const std::string& key) const;
+  /**
+   * Returns whether the value under the given key is a `uint64_t`.
+   * If the value is not a `uint64_t` (or there is no value at the given `key`), this returns `false`.
+   */
+  bool isUInt64(const std::string& key) const;
   /**
    * Returns whether the value under the given key is a `string`.
    * If the value is not a `string` (or there is no value at the given `key`), this returns `false`.
@@ -130,9 +135,14 @@ public:
   bool getBoolean(const std::string& key) const;
   /**
    * Returns the bigint value at the given `key`.
-   * If no `bigint` value exists at the given `key`, this method will throw.
+   * If no `int64_t` value exists at the given `key`, this method will throw.
    */
-  int64_t getBigInt(const std::string& key) const;
+  int64_t getInt64(const std::string& key) const;
+  /**
+   * Returns the bigint value at the given `key`.
+   * If no `uint64_t` value exists at the given `key`, this method will throw.
+   */
+  uint64_t getUInt64(const std::string& key) const;
   /**
    * Returns the string value at the given `key`.
    * If no `string` value exists at the given `key`, this method will throw.
@@ -172,10 +182,15 @@ public:
    */
   void setBoolean(const std::string& key, bool value);
   /**
-   * Set the value at the given key to the given `bigint`.
+   * Set the value at the given key to the given `int64_t`.
    * If the key already exists, this will overwrite the value at that `key`.
    */
-  void setBigInt(const std::string& key, int64_t value);
+  void setInt64(const std::string& key, int64_t value);
+  /**
+   * Set the value at the given key to the given `uint64_t`.
+   * If the key already exists, this will overwrite the value at that `key`.
+   */
+  void setUInt64(const std::string& key, uint64_t value);
   /**
    * Set the value at the given key to the given `string`.
    * If the key already exists, this will overwrite the value at that `key`.
