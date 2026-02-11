@@ -613,17 +613,32 @@ export function getTests(
     createTest('createOptionalPrimitivesHolder(5, ...)', async () =>
       it(() => testObject.createOptionalPrimitivesHolder(5))
         .didNotThrow()
-        .equals({ optionalNumber: 5 })
+        .equals({
+          optionalNumber: 5,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
     ),
     createTest('createOptionalPrimitivesHolder(..., true, ...)', async () =>
       it(() => testObject.createOptionalPrimitivesHolder(undefined, true))
         .didNotThrow()
-        .equals({ optionalBoolean: true })
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: true,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
     ),
     createTest('createOptionalPrimitivesHolder(...)', async () =>
       it(() => testObject.createOptionalPrimitivesHolder())
         .didNotThrow()
-        .equals({})
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
     ),
     createTest('createOptionalPrimitivesHolder(ALL)', async () =>
       it(() => testObject.createOptionalPrimitivesHolder(5, true, 7n, 13n))
