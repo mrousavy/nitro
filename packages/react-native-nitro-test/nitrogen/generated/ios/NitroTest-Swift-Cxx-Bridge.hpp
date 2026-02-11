@@ -34,6 +34,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalPrimitivesHolder; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -75,6 +77,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalPrimitivesHolder.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
@@ -549,6 +552,36 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__vector_Powertrain__Wrapper wrap_Func_void_std__vector_Powertrain_(Func_void_std__vector_Powertrain_ value) noexcept {
     return Func_void_std__vector_Powertrain__Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<uint64_t>
+  /**
+   * Specialized version of `std::optional<uint64_t>`.
+   */
+  using std__optional_uint64_t_ = std::optional<uint64_t>;
+  inline std::optional<uint64_t> create_std__optional_uint64_t_(const uint64_t& value) noexcept {
+    return std::optional<uint64_t>(value);
+  }
+  inline bool has_value_std__optional_uint64_t_(const std::optional<uint64_t>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline uint64_t get_std__optional_uint64_t_(const std::optional<uint64_t>& optional) noexcept {
+    return *optional;
+  }
+  
+  // pragma MARK: std::optional<int64_t>
+  /**
+   * Specialized version of `std::optional<int64_t>`.
+   */
+  using std__optional_int64_t_ = std::optional<int64_t>;
+  inline std::optional<int64_t> create_std__optional_int64_t_(const int64_t& value) noexcept {
+    return std::optional<int64_t>(value);
+  }
+  inline bool has_value_std__optional_int64_t_(const std::optional<int64_t>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline int64_t get_std__optional_int64_t_(const std::optional<int64_t>& optional) noexcept {
+    return *optional;
   }
   
   // pragma MARK: std::vector<std::shared_ptr<HybridChildSpec>>
@@ -1653,6 +1686,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<OptionalPrimitivesHolder>
+  using Result_OptionalPrimitivesHolder_ = Result<OptionalPrimitivesHolder>;
+  inline Result_OptionalPrimitivesHolder_ create_Result_OptionalPrimitivesHolder_(const OptionalPrimitivesHolder& value) noexcept {
+    return Result<OptionalPrimitivesHolder>::withValue(value);
+  }
+  inline Result_OptionalPrimitivesHolder_ create_Result_OptionalPrimitivesHolder_(const std::exception_ptr& error) noexcept {
+    return Result<OptionalPrimitivesHolder>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::shared_ptr<HybridChildSpec>>>

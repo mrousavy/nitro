@@ -36,6 +36,8 @@ namespace margelo::nitro::test { struct MapWrapper; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalPrimitivesHolder; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -65,6 +67,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalPrimitivesHolder.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"

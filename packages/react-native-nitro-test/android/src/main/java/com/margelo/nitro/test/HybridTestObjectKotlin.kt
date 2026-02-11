@@ -108,6 +108,15 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
+  override fun createOptionalPrimitivesHolder(
+    optionalNumber: Double?,
+    optionalBoolean: Boolean?,
+    optionalUInt64: ULong?,
+    optionalInt64: Long?,
+  ): OptionalPrimitivesHolder {
+    return OptionalPrimitivesHolder(optionalNumber, optionalBoolean, optionalUInt64, optionalInt64)
+  }
+
   override fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit> {
     return functions
   }

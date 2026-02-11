@@ -56,6 +56,14 @@ export interface Car {
   someVariant?: number | string
 }
 
+// A Type specifically testing optional primitives
+export interface OptionalPrimitivesHolder {
+  optionalNumber?: number
+  optionalBoolean?: boolean
+  optionalUInt64?: UInt64
+  optionalInt64?: Int64
+}
+
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
 export type Person = {
   name: string
@@ -105,7 +113,7 @@ type CoreTypesVariant =
   | AnyMap
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
-interface PartialPerson extends Partial<Person> {}
+interface PartialPerson extends Partial<Person> { }
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -144,6 +152,14 @@ interface SharedTestObjectProps {
     array: Powertrain[],
     callback: (array: Powertrain[]) => void
   ): void
+
+  // Optional Primitives test
+  createOptionalPrimitivesHolder(
+    optionalNumber?: number,
+    optionalBoolean?: boolean,
+    optionalUInt64?: UInt64,
+    optionalInt64?: Int64
+  ): OptionalPrimitivesHolder
 
   // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]
@@ -298,7 +314,7 @@ interface SharedTestObjectProps {
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++'; android: 'c++' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
@@ -325,7 +341,7 @@ export interface TestObjectCpp
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin

@@ -124,6 +124,9 @@ public:
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
+  OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean,
+                                                          std::optional<uint64_t> optionalUInt64,
+                                                          std::optional<int64_t> optionalInt64) override;
   std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
   std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
   std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;

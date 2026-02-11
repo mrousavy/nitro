@@ -24,6 +24,8 @@ namespace margelo::nitro::test { struct Person; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalPrimitivesHolder; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
@@ -64,6 +66,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
+#include "OptionalPrimitivesHolder.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
@@ -343,6 +346,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override {
+      auto __result = _swiftPart.createOptionalPrimitivesHolder(optionalNumber, optionalBoolean, optionalUInt64, optionalInt64);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
     inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
       auto __result = _swiftPart.bounceHybridObjects(array);

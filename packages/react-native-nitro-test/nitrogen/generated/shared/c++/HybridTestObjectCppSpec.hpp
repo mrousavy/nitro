@@ -27,6 +27,8 @@ namespace margelo::nitro { class HybridObject; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalPrimitivesHolder; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -66,6 +68,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "CustomString.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
+#include "OptionalPrimitivesHolder.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
@@ -166,6 +169,7 @@ namespace margelo::nitro::test {
       virtual std::string sumUpAllPassengers(const std::vector<Car>& cars) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
+      virtual OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) = 0;
       virtual std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) = 0;
       virtual std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) = 0;
       virtual std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) = 0;

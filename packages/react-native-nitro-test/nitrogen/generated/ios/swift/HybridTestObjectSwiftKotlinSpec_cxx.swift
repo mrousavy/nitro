@@ -664,6 +664,25 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func createOptionalPrimitivesHolder(optionalNumber: bridge.std__optional_double_, optionalBoolean: bridge.std__optional_bool_, optionalUInt64: bridge.std__optional_uint64_t_, optionalInt64: bridge.std__optional_int64_t_) -> bridge.Result_OptionalPrimitivesHolder_ {
+    do {
+      let __result = try self.__implementation.createOptionalPrimitivesHolder(optionalNumber: optionalNumber.value, optionalBoolean: { () -> Bool? in
+        if bridge.has_value_std__optional_bool_(optionalBoolean) {
+          let __unwrapped = bridge.get_std__optional_bool_(optionalBoolean)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), optionalUInt64: optionalUInt64.value, optionalInt64: optionalInt64.value)
+      let __resultCpp = __result
+      return bridge.create_Result_OptionalPrimitivesHolder_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_OptionalPrimitivesHolder_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceHybridObjects(array: bridge.std__vector_std__shared_ptr_HybridChildSpec__) -> bridge.Result_std__vector_std__shared_ptr_HybridChildSpec___ {
     do {
       let __result = try self.__implementation.bounceHybridObjects(array: array.map({ __item in { () -> any HybridChildSpec in
