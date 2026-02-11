@@ -22,10 +22,11 @@ public:
     return "This is overridden!";
   }
 
-  OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean,
-                                                          std::optional<uint64_t> optionalUInt64,
-                                                          std::optional<int64_t> optionalInt64) override {
-    return OptionalPrimitivesHolder{optionalNumber, optionalBoolean, optionalUInt64, optionalInt64};
+  external::OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber,
+                                                                    std::optional<bool> optionalBoolean,
+                                                                    std::optional<uint64_t> optionalUInt64,
+                                                                    std::optional<int64_t> optionalInt64) override {
+    return external::OptionalPrimitivesHolder{optionalNumber, optionalBoolean, optionalUInt64, optionalInt64};
   }
 };
 
