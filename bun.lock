@@ -50,7 +50,7 @@
         "@docusaurus/module-type-aliases": "3.8.1",
         "@docusaurus/tsconfig": "3.8.1",
         "@docusaurus/types": "3.8.1",
-        "docusaurus-plugin-llms": "^0.2.2",
+        "docusaurus-plugin-llms": "^0.3.0",
         "typescript": "~5.8.3",
       },
     },
@@ -2003,7 +2003,7 @@
 
     "doctrine": ["doctrine@3.0.0", "", { "dependencies": { "esutils": "^2.0.2" } }, "sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w=="],
 
-    "docusaurus-plugin-llms": ["docusaurus-plugin-llms@0.2.2", "", { "dependencies": { "gray-matter": "^4.0.3", "minimatch": "^9.0.3", "yaml": "^2.8.1" }, "peerDependencies": { "@docusaurus/core": "^3.0.0" } }, "sha512-DZlZ6cv9p5poFE00Qg78aurBNWhLa4o0VhH4kI33DUT0y4ydlFEJJbf8Bks9BuuGPFbY/Guebn+hRc2QymMImg=="],
+    "docusaurus-plugin-llms": ["docusaurus-plugin-llms@0.3.0", "", { "dependencies": { "gray-matter": "^4.0.3", "minimatch": "^9.0.3", "yaml": "^2.8.1" }, "peerDependencies": { "@docusaurus/core": "^3.0.0" } }, "sha512-JuADAJA2fjTv1U4XQUoIu1LyjISDzxFhRK5HbCZiHum4HlmdPwyx8NBXsi+LfdUyjK9acbZgazGsHPhdwEZs0g=="],
 
     "dom-converter": ["dom-converter@0.2.0", "", { "dependencies": { "utila": "~0.4" } }, "sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA=="],
 
