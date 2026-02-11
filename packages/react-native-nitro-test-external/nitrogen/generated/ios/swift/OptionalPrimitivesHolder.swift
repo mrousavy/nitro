@@ -48,7 +48,14 @@ public extension OptionalPrimitivesHolder {
 
   @inline(__always)
   var optionalNumber: Double? {
-    return self.__optionalNumber.value
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__optionalNumber) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__optionalNumber)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
   }
   
   @inline(__always)

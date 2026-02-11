@@ -139,7 +139,14 @@ open class HybridSomeExternalObjectSpec_cxx {
   @inline(__always)
   public final func createOptionalPrimitivesHolder(optionalNumber: bridge.std__optional_double_, optionalBoolean: bridge.std__optional_bool_, optionalUInt64: bridge.std__optional_uint64_t_, optionalInt64: bridge.std__optional_int64_t_) -> bridge.Result_OptionalPrimitivesHolder_ {
     do {
-      let __result = try self.__implementation.createOptionalPrimitivesHolder(optionalNumber: optionalNumber.value, optionalBoolean: { () -> Bool? in
+      let __result = try self.__implementation.createOptionalPrimitivesHolder(optionalNumber: { () -> Double? in
+        if bridge.has_value_std__optional_double_(optionalNumber) {
+          let __unwrapped = bridge.get_std__optional_double_(optionalNumber)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), optionalBoolean: { () -> Bool? in
         if bridge.has_value_std__optional_bool_(optionalBoolean) {
           let __unwrapped = bridge.get_std__optional_bool_(optionalBoolean)
           return __unwrapped
