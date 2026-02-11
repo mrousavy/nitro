@@ -56,6 +56,7 @@ namespace margelo::nitro::test::external {
   public:
     // Methods
     std::string getValue() override;
+    SomeExternalObjectNumber getNumber(std::optional<double> number) override;
 
   private:
     friend HybridBase;

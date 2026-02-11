@@ -468,7 +468,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             // TODO: Remove this check for booleans once https://github.com/swiftlang/swift/issues/84848 is fixed.
             const swiftBug84848Workaround =
               optional.wrappingType.kind === 'boolean'
-            if (!wrapping.needsSpecialHandling && !swiftBug84848Workaround) {
+
+            // TODO: Remove this check for numbers once https://github.com/swiftlang/swift/issues/85735 is fixed.
+            const swiftBug85735Workaround =
+              optional.wrappingType.kind === 'number'
+
+            if (
+              !wrapping.needsSpecialHandling &&
+              !swiftBug84848Workaround &&
+              !swiftBug85735Workaround
+            ) {
               return `${cppParameterName}.value`
             }
             return `

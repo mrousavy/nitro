@@ -2019,6 +2019,22 @@ export function getTests(
         .didNotThrow()
         .equals('This is overridden!')
     ),
+    createTest('getNumber(...) works for number', () =>
+      it(() => {
+        const object = testObject.createInternalObject()
+        return object.getNumber(57)
+      })
+        .didNotThrow()
+        .equals({ number: 57 })
+    ),
+    createTest('getNumber(...) works for undefined', () =>
+      it(() => {
+        const object = testObject.createInternalObject()
+        return object.getNumber()
+      })
+        .didNotThrow()
+        .equals({ number: undefined })
+    ),
     createTest('new T() works', () =>
       it(() => {
         const HybridTestObjectCpp =

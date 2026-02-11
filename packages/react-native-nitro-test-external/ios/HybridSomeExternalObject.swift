@@ -8,7 +8,15 @@
 import NitroModules
 
 class HybridSomeExternalObject: HybridSomeExternalObjectSpec {
+
+    
   func getValue() throws -> String {
     return "Hello world!"
+  }
+    
+  func getNumber(number: Double?) throws -> SomeExternalObjectNumber {
+    return SomeExternalObjectNumber(
+        number: number
+    )
   }
 }
