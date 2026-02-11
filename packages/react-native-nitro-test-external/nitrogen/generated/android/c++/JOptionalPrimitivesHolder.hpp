@@ -12,7 +12,7 @@
 
 #include <optional>
 
-namespace margelo::nitro::test {
+namespace margelo::nitro::test::external {
 
   using namespace facebook;
 
@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
    */
   struct JOptionalPrimitivesHolder final: public jni::JavaClass<JOptionalPrimitivesHolder> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OptionalPrimitivesHolder;";
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/OptionalPrimitivesHolder;";
 
   public:
     /**
@@ -66,4 +66,4 @@ namespace margelo::nitro::test {
     }
   };
 
-} // namespace margelo::nitro::test
+} // namespace margelo::nitro::test::external

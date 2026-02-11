@@ -32,7 +32,7 @@
 
 #include <optional>
 
-namespace margelo::nitro::test {
+namespace margelo::nitro::test::external {
 
   /**
    * A struct which can be represented as a JavaScript object (OptionalPrimitivesHolder).
@@ -52,23 +52,23 @@ namespace margelo::nitro::test {
     friend bool operator==(const OptionalPrimitivesHolder& lhs, const OptionalPrimitivesHolder& rhs) = default;
   };
 
-} // namespace margelo::nitro::test
+} // namespace margelo::nitro::test::external
 
 namespace margelo::nitro {
 
   // C++ OptionalPrimitivesHolder <> JS OptionalPrimitivesHolder (object)
   template <>
-  struct JSIConverter<margelo::nitro::test::OptionalPrimitivesHolder> final {
-    static inline margelo::nitro::test::OptionalPrimitivesHolder fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::external::OptionalPrimitivesHolder> final {
+    static inline margelo::nitro::test::external::OptionalPrimitivesHolder fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return margelo::nitro::test::OptionalPrimitivesHolder(
+      return margelo::nitro::test::external::OptionalPrimitivesHolder(
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "optionalNumber"))),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "optionalBoolean"))),
         JSIConverter<std::optional<uint64_t>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "optionalUInt64"))),
         JSIConverter<std::optional<int64_t>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "optionalInt64")))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::OptionalPrimitivesHolder& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::external::OptionalPrimitivesHolder& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "optionalNumber"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.optionalNumber));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "optionalBoolean"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.optionalBoolean));

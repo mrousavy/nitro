@@ -219,15 +219,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
-  abstract fun createOptionalPrimitivesHolder(optionalNumber: Double?, optionalBoolean: Boolean?, optionalUInt64: ULong?, optionalInt64: Long?): OptionalPrimitivesHolder
-  
-  @DoNotStrip
-  @Keep
-  private fun createOptionalPrimitivesHolder_cxx(optionalNumber: Double?, optionalBoolean: Boolean?, optionalUInt64: Long?, optionalInt64: Long?): OptionalPrimitivesHolder {
-    val __result = createOptionalPrimitivesHolder(optionalNumber, optionalBoolean, optionalUInt64?.let { it.toULong() }, optionalInt64)
-    return __result
-  }
-  
   @DoNotStrip
   @Keep
   abstract fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec>

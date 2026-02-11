@@ -56,14 +56,6 @@ export interface Car {
   someVariant?: number | string
 }
 
-// A Type specifically testing optional primitives
-export interface OptionalPrimitivesHolder {
-  optionalNumber?: number
-  optionalBoolean?: boolean
-  optionalUInt64?: UInt64
-  optionalInt64?: Int64
-}
-
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
 export type Person = {
   name: string
@@ -152,14 +144,6 @@ interface SharedTestObjectProps {
     array: Powertrain[],
     callback: (array: Powertrain[]) => void
   ): void
-
-  // Optional Primitives test
-  createOptionalPrimitivesHolder(
-    optionalNumber?: number,
-    optionalBoolean?: boolean,
-    optionalUInt64?: UInt64,
-    optionalInt64?: Int64
-  ): OptionalPrimitivesHolder
 
   // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]

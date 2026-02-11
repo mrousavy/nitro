@@ -10,10 +10,10 @@ import NitroModules
 /**
  * Represents an instance of `OptionalPrimitivesHolder`, backed by a C++ struct.
  */
-public typealias OptionalPrimitivesHolder = margelo.nitro.test.OptionalPrimitivesHolder
+public typealias OptionalPrimitivesHolder = margelo.nitro.test.external.OptionalPrimitivesHolder
 
 public extension OptionalPrimitivesHolder {
-  private typealias bridge = margelo.nitro.test.bridge.swift
+  private typealias bridge = margelo.nitro.test.external.bridge.swift
 
   /**
    * Create a new instance of `OptionalPrimitivesHolder`.
@@ -48,14 +48,7 @@ public extension OptionalPrimitivesHolder {
 
   @inline(__always)
   var optionalNumber: Double? {
-    return { () -> Double? in
-      if bridge.has_value_std__optional_double_(self.__optionalNumber) {
-        let __unwrapped = bridge.get_std__optional_double_(self.__optionalNumber)
-        return __unwrapped
-      } else {
-        return nil
-      }
-    }()
+    return self.__optionalNumber.value
   }
   
   @inline(__always)

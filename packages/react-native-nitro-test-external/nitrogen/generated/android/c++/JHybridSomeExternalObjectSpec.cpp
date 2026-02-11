@@ -7,9 +7,13 @@
 
 #include "JHybridSomeExternalObjectSpec.hpp"
 
-
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 #include <string>
+#include "OptionalPrimitivesHolder.hpp"
+#include "JOptionalPrimitivesHolder.hpp"
+#include <optional>
 
 namespace margelo::nitro::test::external {
 
@@ -54,6 +58,11 @@ namespace margelo::nitro::test::external {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getValue");
     auto __result = method(_javaPart);
     return __result->toStdString();
+  }
+  OptionalPrimitivesHolder JHybridSomeExternalObjectSpec::createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalPrimitivesHolder>(jni::alias_ref<jni::JDouble> /* optionalNumber */, jni::alias_ref<jni::JBoolean> /* optionalBoolean */, jni::alias_ref<jni::JLong> /* optionalUInt64 */, jni::alias_ref<jni::JLong> /* optionalInt64 */)>("createOptionalPrimitivesHolder_cxx");
+    auto __result = method(_javaPart, optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr, optionalBoolean.has_value() ? jni::JBoolean::valueOf(optionalBoolean.value()) : nullptr, optionalUInt64.has_value() ? jni::JLong::valueOf(optionalUInt64.value()) : nullptr, optionalInt64.has_value() ? jni::JLong::valueOf(optionalInt64.value()) : nullptr);
+    return __result->toCpp();
   }
 
 } // namespace margelo::nitro::test::external
