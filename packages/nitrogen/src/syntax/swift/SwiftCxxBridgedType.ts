@@ -468,8 +468,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             // TODO: Remove this check for booleans/doubles once https://github.com/swiftlang/swift/issues/84848 is fixed.
             //       Right now, optionals of doubles or booleans (and who knows what else?) fail to compile when `.value` is used.
             const swiftBug84848Workaround =
-              optional.wrappingType.kind === 'boolean' /*||
-              optional.wrappingType.kind === 'number'*/
+              optional.wrappingType.kind === 'boolean' ||
+              optional.wrappingType.kind === 'number'
             if (!swiftBug84848Workaround) {
               if (!wrapping.needsSpecialHandling) {
                 return `${cppParameterName}.value`
