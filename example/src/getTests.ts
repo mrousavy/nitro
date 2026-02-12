@@ -610,6 +610,55 @@ export function getTests(
         .didNotThrow()
         .didReturn('undefined')
     ),
+    createTest('createOptionalPrimitivesHolder(5, ...)', async () =>
+      it(() => HybridSomeExternalObject.createOptionalPrimitivesHolder(5))
+        .didNotThrow()
+        .equals({
+          optionalNumber: 5,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(..., true, ...)', async () =>
+      it(() =>
+        HybridSomeExternalObject.createOptionalPrimitivesHolder(undefined, true)
+      )
+        .didNotThrow()
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: true,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(...)', async () =>
+      it(() => HybridSomeExternalObject.createOptionalPrimitivesHolder())
+        .didNotThrow()
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(ALL)', async () =>
+      it(() =>
+        HybridSomeExternalObject.createOptionalPrimitivesHolder(
+          5,
+          true,
+          7n,
+          13n
+        )
+      )
+        .didNotThrow()
+        .equals({
+          optionalNumber: 5,
+          optionalBoolean: true,
+          optionalUInt64: 7n,
+          optionalInt64: 13n,
+        })
+    ),
 
     createTest('complexEnumCallback(...)', async () =>
       (
