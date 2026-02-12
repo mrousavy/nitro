@@ -7,10 +7,12 @@ on:
     paths:
       - '.github/workflows/lint-swift.yml'
       - '**/*.swift'
+      - 'scripts/swift-format.sh'
   pull_request:
     paths:
       - '.github/workflows/lint-swift.yml'
       - '**/*.swift'
+      - 'scripts/swift-format.sh'
 
 jobs:
   lint:

@@ -11,6 +11,7 @@ on:
       - '**/*.cpp'
       - '**/*.c'
       - '**/*.mm'
+      - 'scripts/clang-format.sh'
   pull_request:
     paths:
       - '.github/workflows/lint-cpp.yml'
@@ -19,6 +20,7 @@ on:
       - '**/*.cpp'
       - '**/*.c'
       - '**/*.mm'
+      - 'scripts/clang-format.sh'
 
 jobs:
   lint:

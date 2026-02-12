@@ -7,10 +7,12 @@ on:
     paths:
       - '.github/workflows/lint-kotlin.yml'
       - '**/*.kt'
+      - 'scripts/kotlin-format.sh'
   pull_request:
     paths:
       - '.github/workflows/lint-kotlin.yml'
       - '**/*.kt'
+      - 'scripts/kotlin-format.sh'
 
 jobs:
   lint:
