@@ -14,6 +14,7 @@ public protocol HybridSomeExternalObjectSpec_protocol: HybridObject {
 
   // Methods
   func getValue() throws -> String
+  func createOptionalPrimitivesHolder(optionalNumber: Double?, optionalBoolean: Bool?, optionalUInt64: UInt64?, optionalInt64: Int64?) throws -> OptionalPrimitivesHolder
 }
 
 public extension HybridSomeExternalObjectSpec_protocol {

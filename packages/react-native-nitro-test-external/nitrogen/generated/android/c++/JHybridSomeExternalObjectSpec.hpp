@@ -56,6 +56,7 @@ namespace margelo::nitro::test::external {
   public:
     // Methods
     std::string getValue() override;
+    OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override;
 
   private:
     friend HybridBase;

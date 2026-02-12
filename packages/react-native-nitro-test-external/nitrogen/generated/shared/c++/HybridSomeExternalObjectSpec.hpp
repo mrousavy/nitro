@@ -13,9 +13,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 #include <string>
+#include "OptionalPrimitivesHolder.hpp"
+#include <optional>
 
 namespace margelo::nitro::test::external {
 
@@ -49,6 +52,7 @@ namespace margelo::nitro::test::external {
     public:
       // Methods
       virtual std::string getValue() = 0;
+      virtual OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) = 0;
 
     protected:
       // Hybrid Setup
