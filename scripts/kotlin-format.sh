@@ -1,21 +1,20 @@
 #!/bin/bash
 
-set -euo pipefail
+set -e
 
-FILES=()
-while IFS= read -r -d '' f; do FILES+=("$f"); done < <(
-  find packages -type f \( -name '*.kt' -o -name '*.kts' \) -path '*/android/src/main/java/*' -print0
+KOTLIN_DIRS=(
+  # react-native-nitro-modules
+  "packages/react-native-nitro-modules/android/src/main/java"
+  # react-native-nitro-test
+  "packages/react-native-nitro-test/android/src/main/java"
+  # react-native-nitro-test-external
+  "packages/react-native-nitro-test-external/android/src/main/java"
 )
 
-if ! command -v ktlint >/dev/null; then
+if which ktlint >/dev/null; then
+  ktlint --editorconfig=./config/.editorconfig --format "${KOTLIN_DIRS[@]}"
+  echo "Kotlin Format done!"
+else
   echo "error: ktlint not installed, install with 'brew install ktlint' (see https://github.com/pinterest/ktlint )"
   exit 1
 fi
-
-if ((${#FILES[@]} == 0)); then
-  echo "No Kotlin files found to format."
-  exit 0
-fi
-
-ktlint --editorconfig=./config/.editorconfig --format "${FILES[@]}"
-echo "Kotlin Format done!"
