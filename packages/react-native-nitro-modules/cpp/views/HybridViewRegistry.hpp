@@ -1,0 +1,28 @@
+//
+//  HybridViewRegistry.hpp
+//  Nitro
+//
+//  Created by Marc Rousavy on 04.02.26.
+//
+
+#include "NitroDefines.hpp"
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+namespace margelo::nitro {
+
+struct HybridViewInfo {
+  std::vector<std::string> propNames;
+};
+
+class HybridViewRegistry final {
+public:
+  static void registerHybridView(const std::string& viewName, HybridViewInfo&& viewInfo);
+  static const HybridViewInfo& getHybridViewInfo(const std::string& viewName);
+  
+private:
+  static std::unordered_map<std::string, HybridViewInfo>& getHybridViewsRegistry();
+};
+
+} // namespace margelo::nitro

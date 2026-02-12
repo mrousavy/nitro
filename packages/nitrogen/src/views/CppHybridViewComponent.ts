@@ -9,7 +9,6 @@ import {
 } from '../syntax/helpers.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
-import { createHostComponentJs } from './createHostComponentJs.js'
 import { Property } from '../syntax/Property.js'
 import { FunctionType } from '../syntax/types/FunctionType.js'
 import { VoidType } from '../syntax/types/VoidType.js'
@@ -283,7 +282,7 @@ namespace ${namespace} {
 } // namespace ${namespace}
 `.trim()
 
-  const files: SourceFile[] = [
+  return [
     {
       name: `${component}.hpp`,
       content: componentHeaderCode,
@@ -299,7 +298,4 @@ namespace ${namespace} {
       subdirectory: ['views'],
     },
   ]
-  const jsFiles = createHostComponentJs(spec)
-  files.push(...(jsFiles as unknown as SourceFile[]))
-  return files
 }

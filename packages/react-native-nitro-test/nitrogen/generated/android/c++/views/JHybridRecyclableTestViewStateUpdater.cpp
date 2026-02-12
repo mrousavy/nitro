@@ -13,6 +13,7 @@
 namespace margelo::nitro::test::views {
 
 using namespace facebook;
+using namespace margelo;
 using ConcreteStateData = react::ConcreteState<HybridRecyclableTestViewState>;
 
 void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
@@ -52,6 +53,24 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
     }
     props->hybridRef.isDirty = false;
   }
+}
+
+static void JHybridRecyclableTestViewStateUpdater::registerNatives() {
+  // Register JNI calls
+  javaClassStatic()->registerNatives({
+    makeNativeMethod("updateViewProps", JHybridRecyclableTestViewStateUpdater::updateViewProps),
+  });
+  // Register React Native view component descriptor
+  auto provider = react::concreteComponentDescriptorProvider<HybridRecyclableTestViewComponentDescriptor>();
+  auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
+  providerRegistry->add(provider);
+  // Register HybridViewInfo in Nitro
+  nitro::HybridViewRegistry::registerHybridView("RecyclableTestView",
+                                                nitro::HybridViewInfo{
+                                                  {
+                                                    "isBlue"
+                                                  }
+                                                });
 }
 
 } // namespace margelo::nitro::test::views

@@ -34,16 +34,7 @@ public:
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
-  static void registerNatives() {
-    // Register JNI calls
-    javaClassStatic()->registerNatives({
-      makeNativeMethod("updateViewProps", JHybridRecyclableTestViewStateUpdater::updateViewProps),
-    });
-    // Register React Native view component descriptor
-    auto provider = react::concreteComponentDescriptorProvider<HybridRecyclableTestViewComponentDescriptor>();
-    auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
-    providerRegistry->add(provider);
-  }
+  static void registerNatives();
 };
 
 } // namespace margelo::nitro::test::views
