@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "SafeHardwareBuffer.hpp"
 #include <android/hardware_buffer.h>
 #include <fbjni/fbjni.h>
 
@@ -19,20 +20,20 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/utils/HardwareBufferUtils;";
 
 public:
-  static size_t getHardwareBufferSize(AHardwareBuffer* hardwareBuffer);
+  static void copyBoxedHardwareBufferIntoExistingBoxedHardwareBuffer(jni::alias_ref<jni::JClass>,
+                                                                     jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
+                                                                     jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer);
 
-  static void copyHardwareBufferBoxed(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer,
-                                      jni::alias_ref<jni::JObject> boxedDestinationHardwareBuffer);
+  static jni::local_ref<jni::JObject>
+  copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer(jni::alias_ref<jni::JClass>, jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer);
 
-  static jni::local_ref<jni::JObject> copyHardwareBufferBoxedNew(jni::alias_ref<jni::JClass>,
-                                                                 jni::alias_ref<jni::JObject> boxedSourceHardwareBuffer);
-
-  static void copyHardwareBuffer(AHardwareBuffer* sourceHardwareBuffer, AHardwareBuffer* destinationHardwareBuffer);
+  static void copyHardwareBuffer(SafeHardwareBuffer& source, SafeHardwareBuffer& destination);
 
 public:
   static void registerNatives() {
-    javaClassStatic()->registerNatives({makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyHardwareBufferBoxed),
-                                        makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyHardwareBufferBoxedNew)});
+    javaClassStatic()->registerNatives(
+        {makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyBoxedHardwareBufferIntoExistingBoxedHardwareBuffer),
+         makeNativeMethod("copyHardwareBuffer", JHardwareBufferUtils::copyBoxedHardwareBufferIntoNewBoxedHardwareBuffer)});
   }
 };
 

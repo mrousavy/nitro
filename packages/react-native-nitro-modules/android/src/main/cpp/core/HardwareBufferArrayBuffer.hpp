@@ -9,6 +9,7 @@
 
 #include "ArrayBuffer.hpp"
 #include "JHardwareBufferUtils.hpp"
+#include "SafeHardwareBuffer.hpp"
 #include <android/hardware_buffer.h>
 #include <android/hardware_buffer_jni.h>
 #include <fbjni/ByteBuffer.h>
@@ -18,76 +19,37 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-#if __ANDROID_API__ >= 26
 /**
  * Represents an `ArrayBuffer` that holds a `HardwareBuffer`.
  */
 class HardwareBufferArrayBuffer final : public ArrayBuffer {
 public:
   /**
-   * Create a new `HardwareBufferArrayBuffer` instance that wraps the given `HardwareBuffer`.
-   * This constructor will add a +1 retain count on the given `hardwareBuffer` using
-   * `AHardwareBuffer_acquire(...)`, and release it again once it is destructured.
+   * Create a new `HardwareBufferArrayBuffer` instance that wraps the given `SafeHardwareBuffer`.
+   * `SafeHardwareBuffer` is managing the retain count of `AHardwareBuffer*`.
    */
-  explicit HardwareBufferArrayBuffer(AHardwareBuffer* hardwareBuffer)
-      : _hardwareBuffer(hardwareBuffer), _dataCached(nullptr), _isLocked(false) {
-    AHardwareBuffer_acquire(hardwareBuffer);
-  }
-
-  ~HardwareBufferArrayBuffer() override {
-    // Hermes GC can destroy JS objects on a non-JNI Thread.
-    unlock();
-    jni::ThreadScope::WithClassLoader([&] { AHardwareBuffer_release(_hardwareBuffer); });
-  }
-
-public:
-  /**
-   * Unlocks the HardwareBuffer if it was locked.
-   * Subsequent calls to `data()` will have to lock the buffer again.
-   *
-   * It is a good practice to call this when the buffer is likely not being
-   * read from using this `HardwareBufferArrayBuffer` instance again anytime soon.
-   */
-  void unlock() {
-    if (_isLocked) {
-      AHardwareBuffer_unlock(_hardwareBuffer, nullptr);
-      _isLocked = false;
-    }
-    _dataCached = nullptr;
-  }
+  explicit HardwareBufferArrayBuffer(SafeHardwareBuffer&& hardwareBuffer) : _hardwareBuffer(std::move(hardwareBuffer)) {}
 
 public:
   [[nodiscard]] uint8_t* data() override {
-    if (_isLocked && _dataCached != nullptr) {
-      // We are still locked on the AHardwareBuffer* and have a valid buffer.
-      return _dataCached;
-    }
-    void* buffer;
-    int result = AHardwareBuffer_lock(_hardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &buffer);
-    if (result != 0) {
-      throw std::runtime_error("Failed to read HardwareBuffer bytes!");
-    }
-    _dataCached = static_cast<uint8_t*>(buffer);
-    _isLocked = true;
-    return _dataCached;
+    void* data = _hardwareBuffer.data(LockFlag::READ);
+    return static_cast<uint8_t*>(data);
   }
   [[nodiscard]] size_t size() const override {
-    return JHardwareBufferUtils::getHardwareBufferSize(_hardwareBuffer);
+    return _hardwareBuffer.size();
   }
   [[nodiscard]] bool isOwner() const noexcept override {
     return true;
   }
 
 public:
-  [[nodiscard]] AHardwareBuffer* getBuffer() const {
+    [[nodiscard]]
+  const SafeHardwareBuffer& getHardwareBuffer() const noexcept {
     return _hardwareBuffer;
   }
 
 private:
-  AHardwareBuffer* _hardwareBuffer;
-  uint8_t* _dataCached;
-  bool _isLocked;
+  SafeHardwareBuffer _hardwareBuffer;
 };
-#endif
 
 } // namespace margelo::nitro
