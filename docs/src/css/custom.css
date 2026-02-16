@@ -244,6 +244,19 @@ pre code:has(.code-block-diff-remove-line) {
   }
 }
 
+/* YouTube Video embed */
+.video {
+  width: 70%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+@media (max-width: 768px) or (((min-width: 997px) and (max-width: 1320px))) {
+  .video {
+    width: 100%;
+  }
+}
+
 .side-by-side-block {
   flex: 1 1 0;
   min-width: 0;
