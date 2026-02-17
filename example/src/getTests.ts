@@ -1476,15 +1476,18 @@ export function getTests(
     ),
     createTest('getValueFromJsCallback(...)', async () =>
       (
-        await it(async () => {
-          let value: string | undefined
-          await testObject.getValueFromJsCallback(
-            () => 'hello',
-            (val) => {
-              value = val
-            }
+        await it(() => {
+          // This chains the .then to the JS callback - which is a macrotask. Promises are microtasks.
+          return new Promise((resolve, reject) =>
+            testObject
+              .getValueFromJsCallback(
+                () => 'hello',
+                (val) => {
+                  resolve(val)
+                }
+              )
+              .catch(reject)
           )
-          return value
         })
       )
         .didNotThrow()
