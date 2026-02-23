@@ -15,6 +15,7 @@
     "android/gradle.properties",
     "android/CMakeLists.txt",
     "android/src",
+    "cpp",
     "ios/**/*.h",
     "ios/**/*.m",
     "ios/**/*.mm",
