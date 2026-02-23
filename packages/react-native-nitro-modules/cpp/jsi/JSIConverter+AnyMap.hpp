@@ -72,7 +72,7 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
     if (!isPlainObject(runtime, object)) {
       return false;
     }
-  
+
     jsi::Array propNames = object.getPropertyNames(runtime);
     size_t size = propNames.size(runtime);
     for (size_t i = 0; i < size; i++) {
