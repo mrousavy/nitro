@@ -1,5 +1,4 @@
 import { getHostComponent, type HybridRef } from 'react-native-nitro-modules'
-import RecyclableTestViewConfig from '../../nitrogen/generated/shared/json/RecyclableTestViewConfig.json'
 import {
   type RecyclableTestViewMethods,
   type RecyclableTestViewProps,
@@ -11,7 +10,7 @@ import {
 export const RecyclableTestView = getHostComponent<
   RecyclableTestViewProps,
   RecyclableTestViewMethods
->('RecyclableTestView', () => RecyclableTestViewConfig)
+>('RecyclableTestView')
 
 export type RecyclableTestViewRef = HybridRef<
   RecyclableTestViewProps,

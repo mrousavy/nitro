@@ -7,6 +7,7 @@ import type {
   HybridViewMethods,
   HybridViewProps,
 } from './HybridView'
+import { NitroModules } from '../NitroModules'
 
 type AttributeValue<T, V = T> =
   | boolean
@@ -130,7 +131,7 @@ export function getHostComponent<
   Methods extends HybridViewMethods,
 >(
   name: string,
-  getViewConfig: () => ViewConfig<Props>
+  getViewConfig?: () => ViewConfig<Props>
 ): ReactNativeView<Props, Methods> {
   if (NativeComponentRegistry == null) {
     throw new Error(
@@ -138,9 +139,28 @@ export function getHostComponent<
     )
   }
   return NativeComponentRegistry.get(name, () => {
-    const config = getViewConfig()
-    config.validAttributes = wrapValidAttributes(config.validAttributes)
-    return typesafe(config)
+    if (getViewConfig != null) {
+      // Use a user-provided .json ViewConfig
+      const config = getViewConfig()
+      config.validAttributes = wrapValidAttributes(config.validAttributes)
+      return typesafe(config)
+    } else {
+      // Look up View config from native keys
+      const props = NitroModules.getViewProps(name)
+      const validAttributes = Object.fromEntries(
+        props.map((p) => [
+          p,
+          {
+            diff: (a: unknown, b: unknown) => a !== b,
+            process: (a: unknown) => a,
+          },
+        ])
+      )
+      return {
+        uiViewClassName: name,
+        validAttributes: validAttributes,
+      }
+    }
   })
 }
 
