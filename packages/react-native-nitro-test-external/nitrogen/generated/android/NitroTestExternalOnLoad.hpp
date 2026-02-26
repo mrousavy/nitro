@@ -6,6 +6,7 @@
 ///
 
 #include <jni.h>
+#include <functional>
 #include <NitroModules/NitroDefines.hpp>
 
 namespace margelo::nitro::test::external {
@@ -16,10 +17,14 @@ namespace margelo::nitro::test::external {
    * Example:
    * ```cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return margelo::nitro::test::external::initialize(vm);
+   *   return margelo::nitro::test::external::initialize(vm, []() {
+   *     // any custom registrations go here.
+   *   });
    * }
    * ```
    */
+  int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations);
+
   int initialize(JavaVM* vm);
 
 } // namespace margelo::nitro::test::external
