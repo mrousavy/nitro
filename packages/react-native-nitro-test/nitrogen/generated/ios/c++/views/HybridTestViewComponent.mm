@@ -74,12 +74,12 @@ using namespace margelo::nitro::test::views;
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    swiftPart.setBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
+    swiftPart.setBeenCalled(newViewProps.hasBeenCalled.value);
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum

@@ -150,10 +150,6 @@ export function compareLooselyness(a: Type, b: Type): number {
   return getTypeLooselyness(a) - getTypeLooselyness(b)
 }
 
-export function isBooleanPropertyPrefix(name: string): boolean {
-  return name.startsWith('is') || name.startsWith('has')
-}
-
 export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {
   return array.indexOf(item) === index
 }

@@ -74,7 +74,7 @@ using namespace margelo::nitro::test::views;
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    swiftPart.setBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
 

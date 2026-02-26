@@ -321,7 +321,7 @@ namespace margelo::nitro::test {
     method(_javaPart, optionalCallback.has_value() ? JFunc_void_double_cxx::fromCpp(optionalCallback.value()) : nullptr);
   }
   bool JHybridTestObjectSwiftKotlinSpec::getHasBoolean() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("hasBoolean");
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBoolean");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
@@ -331,7 +331,7 @@ namespace margelo::nitro::test {
     return static_cast<bool>(__result);
   }
   bool JHybridTestObjectSwiftKotlinSpec::getHasBooleanWritable() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("hasBooleanWritable");
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBooleanWritable");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
