@@ -82,4 +82,15 @@ export interface NitroModulesProxy
    * This is achieved by just doing a round-trip from JS -> native -> JS.
    */
   updateMemorySize<T extends HybridObject<{}>>(obj: T): T
+
+  /**
+   * Allocate a new native {@linkcode ArrayBuffer} with the
+   * given {@linkcode size}.
+   *
+   * As opposed to creating an {@linkcode ArrayBuffer} from JS,
+   * this method returns a buffer that can be directly read from
+   * and written to in Nitro Modules without copying, as native
+   * owns it - not JS.
+   */
+  createNativeArrayBuffer(size: number): ArrayBuffer
 }
