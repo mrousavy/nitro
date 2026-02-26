@@ -117,7 +117,7 @@ void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace ${cxxNamespace};
 
-    // Register native JNI methods
+  // Register native JNI methods
   ${indent(jniRegistrations.join('\n'), '  ')}
 
   // Register Nitro Hybrid Objects

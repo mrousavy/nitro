@@ -51,7 +51,7 @@ void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test;
 
-    // Register native JNI methods
+  // Register native JNI methods
   margelo::nitro::test::JHybridBaseSpec::registerNatives();
   margelo::nitro::test::JHybridChildSpec::registerNatives();
   margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
