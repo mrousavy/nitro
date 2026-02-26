@@ -21,6 +21,12 @@
 namespace margelo::nitro::test::external {
 
 int initialize(JavaVM* vm) {
+  initialize(vm, []() {
+    // no extra initializations.
+  });
+}
+
+int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations) {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test::external;
   using namespace facebook;
@@ -38,6 +44,9 @@ int initialize(JavaVM* vm) {
         return instance->cthis()->shared();
       }
     );
+
+    // Register anything custom from the user
+    extraRegistrations();
   });
 }
 

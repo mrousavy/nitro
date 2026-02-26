@@ -62,6 +62,7 @@ export function createHybridObjectIntializer(): SourceFile[] {
 ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
 #include <jni.h>
+#include <functional>
 #include <NitroModules/NitroDefines.hpp>
 
 namespace ${cxxNamespace} {
@@ -72,10 +73,14 @@ namespace ${cxxNamespace} {
    * Example:
    * \`\`\`cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return ${cxxNamespace}::initialize(vm);
+   *   return ${cxxNamespace}::initialize(vm, []() {
+   *     // any custom registrations go here.
+   *   });
    * }
    * \`\`\`
    */
+  int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations);
+
   int initialize(JavaVM* vm);
 
 } // namespace ${cxxNamespace}
@@ -99,6 +104,12 @@ ${includes}
 namespace ${cxxNamespace} {
 
 int initialize(JavaVM* vm) {
+  initialize(vm, []() {
+    // no extra initializations.
+  });
+}
+
+int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations) {
   using namespace margelo::nitro;
   using namespace ${cxxNamespace};
   using namespace facebook;
@@ -109,6 +120,9 @@ int initialize(JavaVM* vm) {
 
     // Register Nitro Hybrid Objects
     ${indent(cppRegistrations.join('\n'), '    ')}
+
+    // Register anything custom from the user
+    extraRegistrations();
   });
 }
 
