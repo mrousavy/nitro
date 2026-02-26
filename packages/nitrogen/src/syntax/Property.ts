@@ -113,11 +113,7 @@ export class Property implements CodeNode {
             break
           }
         case 'swift':
-          if (this.name.startsWith('is')) {
-            // isSomething -> setSomething()
-            const cleanName = this.name.replace('is', '')
-            return `set${capitalizeName(cleanName)}`
-          } else if (this.name.startsWith('has')) {
+          if (this.name.startsWith('has')) {
             // hasSomething -> setSomething()
             const cleanName = this.name.replace('has', '')
             return `set${capitalizeName(cleanName)}`
