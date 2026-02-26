@@ -279,6 +279,93 @@ describe("FFI Error Propagation", () => {
     });
   });
 
+  describe("Method Result<T, String> support", () => {
+    test("method shim unwraps Result with three-way match", () => {
+      const spec = makeSpec(
+        "Image",
+        [],
+        [new Method("compute", new NumberType(), [])],
+      );
+      const files = createRustHybridObject(spec);
+      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+
+      // Should have three-way match: Ok(Ok(..)), Ok(Err(..)), Err(..)
+      expect(rsFile.content).toContain("Ok(Ok(__value))");
+      expect(rsFile.content).toContain("Ok(Err(__err))");
+      expect(rsFile.content).toContain("Err(__panic)");
+    });
+
+    test("void method shim unwraps Result<(), String>", () => {
+      const spec = makeSpec(
+        "Image",
+        [],
+        [new Method("doWork", new VoidType(), [])],
+      );
+      const files = createRustHybridObject(spec);
+      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+
+      expect(rsFile.content).toContain("Ok(Ok(_))");
+      expect(rsFile.content).toContain("Ok(Err(__err))");
+    });
+
+    test("property getter does NOT use Result unwrapping", () => {
+      const spec = makeSpec(
+        "Image",
+        [new Property("width", new NumberType(), true)],
+        [],
+      );
+      const files = createRustHybridObject(spec);
+      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+
+      // Property getters should use two-way match (Ok/Err), not three-way
+      expect(rsFile.content).toContain("Ok(__result)");
+      // Should NOT have Ok(Ok(..)) pattern for property getters
+      const getterIdx = rsFile.content.indexOf("HybridImageSpec_get_width");
+      const nextShimIdx = rsFile.content.indexOf("#[unsafe(no_mangle)]", getterIdx + 1);
+      const getterSection = rsFile.content.slice(getterIdx, nextShimIdx > 0 ? nextShimIdx : undefined);
+      expect(getterSection).not.toContain("Ok(Ok(");
+    });
+
+    test("trait methods return Result<T, String>", () => {
+      const spec = makeSpec(
+        "Image",
+        [],
+        [new Method("compute", new NumberType(), [])],
+      );
+      const files = createRustHybridObject(spec);
+      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+
+      expect(rsFile.content).toContain(
+        "fn compute(&mut self) -> Result<f64, String>;",
+      );
+    });
+  });
+
+  describe("Callback exception guard", () => {
+    test("C++ trampoline wraps body in try/catch", () => {
+      const fs = require("fs");
+      const path = require("path");
+      const bridgedTypeSource = fs.readFileSync(
+        path.resolve(__dirname, "../syntax/rust/RustCxxBridgedType.ts"),
+        "utf-8",
+      );
+      // The trampoline body should be wrapped in try/catch
+      expect(bridgedTypeSource).toContain("try {");
+      expect(bridgedTypeSource).toContain("catch (const std::exception& __e)");
+      expect(bridgedTypeSource).toContain("catch (...)");
+      expect(bridgedTypeSource).toContain("std::abort()");
+    });
+
+    test("C++ bridge includes <cstdio> and <cstdlib> for abort/fprintf", () => {
+      const spec = makeSpec("Image", [], []);
+      const files = createRustHybridObject(spec);
+      const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
+
+      expect(hpp.content).toContain("#include <cstdio>");
+      expect(hpp.content).toContain("#include <cstdlib>");
+    });
+  });
+
   describe("Enum conversion uses panic instead of abort", () => {
     test("RustCxxBridgedType source code uses panic! instead of abort()", () => {
       // Verify at the source level that the enum conversion template uses panic!

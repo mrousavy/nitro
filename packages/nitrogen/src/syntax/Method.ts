@@ -142,7 +142,13 @@ ${signature} {
         const rustName = toSnakeCase(this.name);
         const params = this.parameters.map((p) => p.getCode("rust"));
         const returnType = this.returnType.getCode("rust");
-        const returnSuffix = returnType === "()" ? "" : ` -> ${returnType}`;
+        // Wrap return type in Result<T, String> so implementors can propagate
+        // errors without panicking. The FFI shim unwraps both Ok and Err paths.
+        const resultType =
+          returnType === "()"
+            ? `Result<(), String>`
+            : `Result<${returnType}, String>`;
+        const returnSuffix = ` -> ${resultType}`;
         const allParams =
           params.length > 0 ? `&mut self, ${params.join(", ")}` : "&mut self";
         let signature = `fn ${rustName}(${allParams})${returnSuffix}`;

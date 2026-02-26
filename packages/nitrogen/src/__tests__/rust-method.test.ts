@@ -38,13 +38,13 @@ describe('Rust Method Code Generation', () => {
   test('void method with no params', () => {
     const method = new Method('doSomething', new VoidType(), [])
     const code = method.getCode('rust')
-    expect(code).toBe('fn do_something(&mut self);')
+    expect(code).toBe('fn do_something(&mut self) -> Result<(), String>;')
   })
 
   test('method with return type', () => {
     const method = new Method('getValue', new NumberType(), [])
     const code = method.getCode('rust')
-    expect(code).toBe('fn get_value(&mut self) -> f64;')
+    expect(code).toBe('fn get_value(&mut self) -> Result<f64, String>;')
   })
 
   test('method with parameters', () => {
@@ -53,7 +53,7 @@ describe('Rust Method Code Generation', () => {
       new Parameter('b', new NumberType()),
     ])
     const code = method.getCode('rust')
-    expect(code).toBe('fn add_numbers(&mut self, a: f64, b: f64) -> f64;')
+    expect(code).toBe('fn add_numbers(&mut self, a: f64, b: f64) -> Result<f64, String>;')
   })
 
   test('method with string params and return', () => {
@@ -61,7 +61,7 @@ describe('Rust Method Code Generation', () => {
       new Parameter('name', new StringType()),
     ])
     const code = method.getCode('rust')
-    expect(code).toBe('fn greet(&mut self, name: String) -> String;')
+    expect(code).toBe('fn greet(&mut self, name: String) -> Result<String, String>;')
   })
 
   test('method with complex types', () => {
@@ -71,14 +71,14 @@ describe('Rust Method Code Generation', () => {
     ])
     const code = method.getCode('rust')
     expect(code).toBe(
-      'fn process_data(&mut self, items: Vec<f64>, label: Option<String>);'
+      'fn process_data(&mut self, items: Vec<f64>, label: Option<String>) -> Result<(), String>;'
     )
   })
 
   test('method with body', () => {
     const method = new Method('getValue', new NumberType(), [])
     const code = method.getCode('rust', {}, 'return 42.0;')
-    expect(code).toContain('fn get_value(&mut self) -> f64 {')
+    expect(code).toContain('fn get_value(&mut self) -> Result<f64, String> {')
     expect(code).toContain('return 42.0;')
     expect(code).toContain('}')
   })

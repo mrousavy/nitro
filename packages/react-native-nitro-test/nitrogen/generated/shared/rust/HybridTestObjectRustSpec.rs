@@ -44,6 +44,7 @@ use super::Variant_bool_WeirdNumbersEnum::Variant_bool_WeirdNumbersEnum;
 use super::Variant_bool_f64::Variant_bool_f64;
 use super::WeirdNumbersEnum::WeirdNumbersEnum;
 use super::WrappedJsStruct::WrappedJsStruct;
+use crate::*;
 use std::collections::HashMap;
 
 /// Implement this trait to create a Rust-backed HybridObject for `TestObjectRust`.
@@ -94,152 +95,239 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     fn set_some_variant(&mut self, value: Variant_String_f64);
 
     // Methods
-    fn new_test_object(&mut self) -> Box<dyn HybridTestObjectRustSpec>;
+    fn new_test_object(&mut self) -> Result<Box<dyn HybridTestObjectRustSpec>, String>;
     fn get_variant_hybrid(
         &mut self,
         variant: Variant_Box_dyn_HybridTestObjectRustSpec__Person,
-    ) -> Variant_Box_dyn_HybridTestObjectRustSpec__Person;
-    fn simple_func(&mut self);
-    fn add_numbers(&mut self, a: f64, b: f64) -> f64;
-    fn add_strings(&mut self, a: String, b: String) -> String;
-    fn multiple_arguments(&mut self, num: f64, str: String, boo: bool);
-    fn bounce_null(&mut self, value: ());
-    fn bounce_strings(&mut self, array: Vec<String>) -> Vec<String>;
-    fn bounce_numbers(&mut self, array: Vec<f64>) -> Vec<f64>;
-    fn bounce_structs(&mut self, array: Vec<Person>) -> Vec<Person>;
-    fn bounce_partial_struct(&mut self, person: PartialPerson) -> PartialPerson;
-    fn sum_up_all_passengers(&mut self, cars: Vec<Car>) -> String;
-    fn bounce_enums(&mut self, array: Vec<Powertrain>) -> Vec<Powertrain>;
+    ) -> Result<Variant_Box_dyn_HybridTestObjectRustSpec__Person, String>;
+    fn simple_func(&mut self) -> Result<(), String>;
+    fn add_numbers(&mut self, a: f64, b: f64) -> Result<f64, String>;
+    fn add_strings(&mut self, a: String, b: String) -> Result<String, String>;
+    fn multiple_arguments(&mut self, num: f64, str: String, boo: bool) -> Result<(), String>;
+    fn bounce_null(&mut self, value: ()) -> Result<(), String>;
+    fn bounce_strings(&mut self, array: Vec<String>) -> Result<Vec<String>, String>;
+    fn bounce_numbers(&mut self, array: Vec<f64>) -> Result<Vec<f64>, String>;
+    fn bounce_structs(&mut self, array: Vec<Person>) -> Result<Vec<Person>, String>;
+    fn bounce_partial_struct(&mut self, person: PartialPerson) -> Result<PartialPerson, String>;
+    fn sum_up_all_passengers(&mut self, cars: Vec<Car>) -> Result<String, String>;
+    fn bounce_enums(&mut self, array: Vec<Powertrain>) -> Result<Vec<Powertrain>, String>;
     fn complex_enum_callback(
         &mut self,
         array: Vec<Powertrain>,
         callback: Box<dyn Fn(Vec<Powertrain>)>,
-    );
+    ) -> Result<(), String>;
     fn bounce_hybrid_objects(
         &mut self,
         array: Vec<Box<dyn HybridChildSpec>>,
-    ) -> Vec<Box<dyn HybridChildSpec>>;
-    fn bounce_functions(&mut self, functions: Vec<Box<dyn Fn()>>) -> Vec<Box<dyn Fn()>>;
-    fn bounce_maps(&mut self, maps: Vec<*mut std::ffi::c_void>) -> Vec<*mut std::ffi::c_void>;
-    fn bounce_promises(&mut self, promises: Vec<f64>) -> Vec<f64>;
-    fn bounce_array_buffers(&mut self, array_buffers: Vec<NitroBuffer>) -> Vec<NitroBuffer>;
-    fn create_map(&mut self) -> *mut std::ffi::c_void;
-    fn map_roundtrip(&mut self, map: *mut std::ffi::c_void) -> *mut std::ffi::c_void;
-    fn get_map_keys(&mut self, map: *mut std::ffi::c_void) -> Vec<String>;
+    ) -> Result<Vec<Box<dyn HybridChildSpec>>, String>;
+    fn bounce_functions(
+        &mut self,
+        functions: Vec<Box<dyn Fn()>>,
+    ) -> Result<Vec<Box<dyn Fn()>>, String>;
+    fn bounce_maps(
+        &mut self,
+        maps: Vec<*mut std::ffi::c_void>,
+    ) -> Result<Vec<*mut std::ffi::c_void>, String>;
+    fn bounce_promises(&mut self, promises: Vec<f64>) -> Result<Vec<f64>, String>;
+    fn bounce_array_buffers(
+        &mut self,
+        array_buffers: Vec<NitroBuffer>,
+    ) -> Result<Vec<NitroBuffer>, String>;
+    fn create_map(&mut self) -> Result<*mut std::ffi::c_void, String>;
+    fn map_roundtrip(
+        &mut self,
+        map: *mut std::ffi::c_void,
+    ) -> Result<*mut std::ffi::c_void, String>;
+    fn get_map_keys(&mut self, map: *mut std::ffi::c_void) -> Result<Vec<String>, String>;
     fn merge_maps(
         &mut self,
         a: *mut std::ffi::c_void,
         b: *mut std::ffi::c_void,
-    ) -> *mut std::ffi::c_void;
-    fn copy_any_map(&mut self, map: *mut std::ffi::c_void) -> *mut std::ffi::c_void;
+    ) -> Result<*mut std::ffi::c_void, String>;
+    fn copy_any_map(&mut self, map: *mut std::ffi::c_void)
+        -> Result<*mut std::ffi::c_void, String>;
     fn bounce_map(
         &mut self,
         map: HashMap<String, Variant_bool_f64>,
-    ) -> HashMap<String, Variant_bool_f64>;
-    fn bounce_simple_map(&mut self, map: HashMap<String, f64>) -> HashMap<String, f64>;
-    fn extract_map(&mut self, map_wrapper: MapWrapper) -> HashMap<String, String>;
-    fn func_that_throws(&mut self) -> f64;
-    fn func_that_throws_before_promise(&mut self);
-    fn throw_error(&mut self, error: String);
-    fn try_optional_params(&mut self, num: f64, boo: bool, str: Option<String>) -> String;
-    fn try_middle_param(&mut self, num: f64, boo: Option<bool>, str: String) -> String;
-    fn try_optional_enum(&mut self, value: Option<Powertrain>) -> Option<Powertrain>;
-    fn try_trailing_optional(&mut self, num: f64, str: String, boo: Option<bool>) -> bool;
-    fn add1_hour(&mut self, date: f64) -> f64;
-    fn current_date(&mut self) -> f64;
-    fn calculate_fibonacci_sync(&mut self, value: f64) -> i64;
-    fn calculate_fibonacci_async(&mut self, value: f64) -> i64;
-    fn wait(&mut self, seconds: f64);
-    fn promise_throws(&mut self);
-    fn promise_returns_instantly(&mut self) -> f64;
-    fn promise_returns_instantly_async(&mut self) -> f64;
-    fn promise_that_resolves_void_instantly(&mut self);
-    fn promise_that_resolves_to_undefined(&mut self) -> Option<f64>;
-    fn await_and_get_promise(&mut self, promise: f64) -> f64;
-    fn await_and_get_complex_promise(&mut self, promise: Car) -> Car;
-    fn await_promise(&mut self, promise: ());
-    fn call_callback(&mut self, callback: Box<dyn Fn()>);
-    fn call_callback_that_returns_promise_void(&mut self, callback: Box<dyn Fn()>);
-    fn call_all(&mut self, first: Box<dyn Fn()>, second: Box<dyn Fn()>, third: Box<dyn Fn()>);
-    fn call_with_optional(&mut self, value: Option<f64>, callback: Box<dyn Fn(Option<f64>)>);
-    fn call_sum_up_n_times(&mut self, callback: Box<dyn Fn() -> f64>, n: f64) -> f64;
-    fn callback_async_promise(&mut self, callback: Box<dyn Fn() -> f64>) -> f64;
+    ) -> Result<HashMap<String, Variant_bool_f64>, String>;
+    fn bounce_simple_map(
+        &mut self,
+        map: HashMap<String, f64>,
+    ) -> Result<HashMap<String, f64>, String>;
+    fn extract_map(&mut self, map_wrapper: MapWrapper) -> Result<HashMap<String, String>, String>;
+    fn func_that_throws(&mut self) -> Result<f64, String>;
+    fn func_that_throws_before_promise(&mut self) -> Result<(), String>;
+    fn throw_error(&mut self, error: String) -> Result<(), String>;
+    fn try_optional_params(
+        &mut self,
+        num: f64,
+        boo: bool,
+        str: Option<String>,
+    ) -> Result<String, String>;
+    fn try_middle_param(
+        &mut self,
+        num: f64,
+        boo: Option<bool>,
+        str: String,
+    ) -> Result<String, String>;
+    fn try_optional_enum(
+        &mut self,
+        value: Option<Powertrain>,
+    ) -> Result<Option<Powertrain>, String>;
+    fn try_trailing_optional(
+        &mut self,
+        num: f64,
+        str: String,
+        boo: Option<bool>,
+    ) -> Result<bool, String>;
+    fn add1_hour(&mut self, date: f64) -> Result<f64, String>;
+    fn current_date(&mut self) -> Result<f64, String>;
+    fn calculate_fibonacci_sync(&mut self, value: f64) -> Result<i64, String>;
+    fn calculate_fibonacci_async(&mut self, value: f64) -> Result<i64, String>;
+    fn wait(&mut self, seconds: f64) -> Result<(), String>;
+    fn promise_throws(&mut self) -> Result<(), String>;
+    fn promise_returns_instantly(&mut self) -> Result<f64, String>;
+    fn promise_returns_instantly_async(&mut self) -> Result<f64, String>;
+    fn promise_that_resolves_void_instantly(&mut self) -> Result<(), String>;
+    fn promise_that_resolves_to_undefined(&mut self) -> Result<Option<f64>, String>;
+    fn await_and_get_promise(&mut self, promise: f64) -> Result<f64, String>;
+    fn await_and_get_complex_promise(&mut self, promise: Car) -> Result<Car, String>;
+    fn await_promise(&mut self, promise: ()) -> Result<(), String>;
+    fn call_callback(&mut self, callback: Box<dyn Fn()>) -> Result<(), String>;
+    fn call_callback_that_returns_promise_void(
+        &mut self,
+        callback: Box<dyn Fn()>,
+    ) -> Result<(), String>;
+    fn call_all(
+        &mut self,
+        first: Box<dyn Fn()>,
+        second: Box<dyn Fn()>,
+        third: Box<dyn Fn()>,
+    ) -> Result<(), String>;
+    fn call_with_optional(
+        &mut self,
+        value: Option<f64>,
+        callback: Box<dyn Fn(Option<f64>)>,
+    ) -> Result<(), String>;
+    fn call_sum_up_n_times(
+        &mut self,
+        callback: Box<dyn Fn() -> f64>,
+        n: f64,
+    ) -> Result<f64, String>;
+    fn callback_async_promise(&mut self, callback: Box<dyn Fn() -> f64>) -> Result<f64, String>;
     fn callback_async_promise_buffer(
         &mut self,
         callback: Box<dyn Fn() -> NitroBuffer>,
-    ) -> NitroBuffer;
-    fn get_complex_callback(&mut self) -> Box<dyn Fn(f64)>;
+    ) -> Result<NitroBuffer, String>;
+    fn get_complex_callback(&mut self) -> Result<Box<dyn Fn(f64)>, String>;
     fn two_optional_callbacks(
         &mut self,
         value: f64,
         first: Option<Box<dyn Fn(f64)>>,
         second: Option<Box<dyn Fn(String)>>,
-    );
-    fn error_callback(&mut self, on_error: Box<dyn Fn(String)>);
+    ) -> Result<(), String>;
+    fn error_callback(&mut self, on_error: Box<dyn Fn(String)>) -> Result<(), String>;
     fn create_native_callback(
         &mut self,
         wrapping_js_callback: Box<dyn Fn(f64)>,
-    ) -> Box<dyn Fn(f64)>;
-    fn get_value_from_js_callback_and_wait(&mut self, get_value: Box<dyn Fn() -> f64>) -> f64;
+    ) -> Result<Box<dyn Fn(f64)>, String>;
+    fn get_value_from_js_callback_and_wait(
+        &mut self,
+        get_value: Box<dyn Fn() -> f64>,
+    ) -> Result<f64, String>;
     fn get_value_from_js_callback(
         &mut self,
         callback: Box<dyn Fn() -> String>,
         and_then_call: Box<dyn Fn(String)>,
-    );
-    fn get_car(&mut self) -> Car;
-    fn is_car_electric(&mut self, car: Car) -> bool;
-    fn get_driver(&mut self, car: Car) -> Option<Person>;
-    fn bounce_car(&mut self, car: Car) -> Car;
-    fn js_style_object_as_parameters(&mut self, params: JsStyleStruct);
-    fn bounce_wrapped_js_style_struct(&mut self, value: WrappedJsStruct) -> WrappedJsStruct;
-    fn bounce_optional_wrapper(&mut self, wrapper: OptionalWrapper) -> OptionalWrapper;
-    fn bounce_optional_callback(&mut self, value: OptionalCallback) -> OptionalCallback;
-    fn create_array_buffer(&mut self) -> NitroBuffer;
-    fn create_array_buffer_from_native_buffer(&mut self, copy: bool) -> NitroBuffer;
-    fn copy_buffer(&mut self, buffer: NitroBuffer) -> NitroBuffer;
-    fn get_buffer_last_item(&mut self, buffer: NitroBuffer) -> f64;
-    fn set_all_values_to(&mut self, buffer: NitroBuffer, value: f64);
-    fn create_array_buffer_async(&mut self) -> NitroBuffer;
-    fn bounce_array_buffer(&mut self, buffer: NitroBuffer) -> NitroBuffer;
+    ) -> Result<(), String>;
+    fn get_car(&mut self) -> Result<Car, String>;
+    fn is_car_electric(&mut self, car: Car) -> Result<bool, String>;
+    fn get_driver(&mut self, car: Car) -> Result<Option<Person>, String>;
+    fn bounce_car(&mut self, car: Car) -> Result<Car, String>;
+    fn js_style_object_as_parameters(&mut self, params: JsStyleStruct) -> Result<(), String>;
+    fn bounce_wrapped_js_style_struct(
+        &mut self,
+        value: WrappedJsStruct,
+    ) -> Result<WrappedJsStruct, String>;
+    fn bounce_optional_wrapper(
+        &mut self,
+        wrapper: OptionalWrapper,
+    ) -> Result<OptionalWrapper, String>;
+    fn bounce_optional_callback(
+        &mut self,
+        value: OptionalCallback,
+    ) -> Result<OptionalCallback, String>;
+    fn create_array_buffer(&mut self) -> Result<NitroBuffer, String>;
+    fn create_array_buffer_from_native_buffer(&mut self, copy: bool)
+        -> Result<NitroBuffer, String>;
+    fn copy_buffer(&mut self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
+    fn get_buffer_last_item(&mut self, buffer: NitroBuffer) -> Result<f64, String>;
+    fn set_all_values_to(&mut self, buffer: NitroBuffer, value: f64) -> Result<(), String>;
+    fn create_array_buffer_async(&mut self) -> Result<NitroBuffer, String>;
+    fn bounce_array_buffer(&mut self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
     fn pass_variant(
         &mut self,
         either: Variant_bool_Vec_f64__Vec_String__String_f64,
-    ) -> Variant_String_f64;
-    fn get_variant_enum(&mut self, variant: Variant_bool_OldEnum) -> Variant_bool_OldEnum;
+    ) -> Result<Variant_String_f64, String>;
+    fn get_variant_enum(
+        &mut self,
+        variant: Variant_bool_OldEnum,
+    ) -> Result<Variant_bool_OldEnum, String>;
     fn get_variant_weird_numbers_enum(
         &mut self,
         variant: Variant_bool_WeirdNumbersEnum,
-    ) -> Variant_bool_WeirdNumbersEnum;
-    fn get_variant_objects(&mut self, variant: Variant_Car_Person) -> Variant_Car_Person;
-    fn pass_named_variant(&mut self, variant: NamedVariant) -> NamedVariant;
+    ) -> Result<Variant_bool_WeirdNumbersEnum, String>;
+    fn get_variant_objects(
+        &mut self,
+        variant: Variant_Car_Person,
+    ) -> Result<Variant_Car_Person, String>;
+    fn pass_named_variant(&mut self, variant: NamedVariant) -> Result<NamedVariant, String>;
     fn pass_all_empty_object_variant(
         &mut self,
         variant: Variant_Box_dyn_HybridBaseSpec__OptionalWrapper,
-    ) -> Variant_Box_dyn_HybridBaseSpec__OptionalWrapper;
-    fn bounce_complex_variant(&mut self, variant: CoreTypesVariant) -> CoreTypesVariant;
-    fn create_child(&mut self) -> Box<dyn HybridChildSpec>;
-    fn create_base(&mut self) -> Box<dyn HybridBaseSpec>;
-    fn create_base_actual_child(&mut self) -> Box<dyn HybridBaseSpec>;
-    fn bounce_child(&mut self, child: Box<dyn HybridChildSpec>) -> Box<dyn HybridChildSpec>;
-    fn bounce_base(&mut self, base: Box<dyn HybridBaseSpec>) -> Box<dyn HybridBaseSpec>;
-    fn bounce_child_base(&mut self, child: Box<dyn HybridChildSpec>) -> Box<dyn HybridBaseSpec>;
-    fn cast_base(&mut self, base: Box<dyn HybridBaseSpec>) -> Box<dyn HybridChildSpec>;
-    fn callback_sync(&mut self, callback: Box<dyn Fn() -> f64>) -> f64;
-    fn get_is_view_blue(&mut self, view: Box<dyn HybridTestViewSpec>) -> bool;
+    ) -> Result<Variant_Box_dyn_HybridBaseSpec__OptionalWrapper, String>;
+    fn bounce_complex_variant(
+        &mut self,
+        variant: CoreTypesVariant,
+    ) -> Result<CoreTypesVariant, String>;
+    fn create_child(&mut self) -> Result<Box<dyn HybridChildSpec>, String>;
+    fn create_base(&mut self) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn create_base_actual_child(&mut self) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn bounce_child(
+        &mut self,
+        child: Box<dyn HybridChildSpec>,
+    ) -> Result<Box<dyn HybridChildSpec>, String>;
+    fn bounce_base(
+        &mut self,
+        base: Box<dyn HybridBaseSpec>,
+    ) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn bounce_child_base(
+        &mut self,
+        child: Box<dyn HybridChildSpec>,
+    ) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn cast_base(
+        &mut self,
+        base: Box<dyn HybridBaseSpec>,
+    ) -> Result<Box<dyn HybridChildSpec>, String>;
+    fn callback_sync(&mut self, callback: Box<dyn Fn() -> f64>) -> Result<f64, String>;
+    fn get_is_view_blue(&mut self, view: Box<dyn HybridTestViewSpec>) -> Result<bool, String>;
     fn bounce_external_hybrid(
         &mut self,
         external_object: Box<dyn HybridSomeExternalObjectSpec>,
-    ) -> Box<dyn HybridSomeExternalObjectSpec>;
-    fn create_internal_object(&mut self) -> Box<dyn HybridSomeExternalObjectSpec>;
+    ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
+    fn create_internal_object(&mut self) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
     fn bounce_external_struct(
         &mut self,
         external_struct: ExternalObjectStruct,
-    ) -> ExternalObjectStruct;
-    fn bounce_external_variant(&mut self, variant: StringOrExternal) -> StringOrExternal;
+    ) -> Result<ExternalObjectStruct, String>;
+    fn bounce_external_variant(
+        &mut self,
+        variant: StringOrExternal,
+    ) -> Result<StringOrExternal, String>;
     fn create_external_variant_from_func(
         &mut self,
         factory: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>>,
-    ) -> Box<dyn HybridSomeExternalObjectSpec>;
+    ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
 
     /// Return the size of any external heap allocations, in bytes.
     /// This is used to inform the JavaScript GC about native memory pressure.
@@ -254,6 +342,9 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_this_object(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -264,9 +355,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_this_object(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -277,6 +369,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_this_object(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -304,9 +399,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -318,6 +414,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -343,7 +442,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -353,6 +452,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_number_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -363,9 +465,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_number_value(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -377,6 +480,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
     ptr: *mut std::ffi::c_void,
     value: f64,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -388,7 +494,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -398,6 +504,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_bool_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -408,9 +517,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_bool_value(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_bool {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -422,6 +532,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
     ptr: *mut std::ffi::c_void,
     value: bool,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -433,7 +546,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -443,6 +556,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_cstr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -456,9 +572,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_cstr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -470,6 +587,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
     ptr: *mut std::ffi::c_void,
     value: *const std::ffi::c_char,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -485,7 +605,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -495,6 +615,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_int64_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_i64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -505,9 +628,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_int64_value(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_i64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -519,6 +643,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
     ptr: *mut std::ffi::c_void,
     value: i64,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -530,7 +657,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -540,6 +667,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_uint64_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_u64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -550,9 +680,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_uint64_value(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_u64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -564,6 +695,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
     ptr: *mut std::ffi::c_void,
     value: u64,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -575,7 +709,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -585,6 +719,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -596,7 +733,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -607,6 +744,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
     ptr: *mut std::ffi::c_void,
     value: (),
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -618,7 +758,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -628,6 +768,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -658,9 +801,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -672,6 +816,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -699,7 +846,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -709,6 +856,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -739,9 +889,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -753,6 +904,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -780,7 +934,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -790,6 +944,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_null(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -800,9 +957,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_null(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -814,6 +972,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -825,7 +986,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -835,6 +996,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -862,9 +1026,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -876,6 +1041,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -899,7 +1067,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -909,6 +1077,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -936,9 +1107,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -950,6 +1122,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -975,7 +1150,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -985,6 +1160,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1012,9 +1190,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1026,6 +1205,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1051,7 +1233,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1061,6 +1243,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1088,9 +1273,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1102,6 +1288,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1118,7 +1307,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
                             __s.value as *mut super::Func_void_double::Func_void_double,
                         );
                         let __cb: Box<dyn Fn(f64)> =
-                            Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                            Box::new(move |__p0: f64| __wrapper.call(__p0));
                         __cb
                     })
                 } else {
@@ -1132,7 +1321,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1142,6 +1331,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_some_variant(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1152,9 +1344,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_some_variant(
                 error: std::ptr::null_mut(),
                 value: __result,
             },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1166,6 +1359,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1177,7 +1373,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
             },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1187,20 +1383,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_new_test_object(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.new_test_object();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.new_test_object()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1212,22 +1420,34 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_hybrid(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant =
                 *Box::from_raw(variant as *mut Variant_Box_dyn_HybridTestObjectRustSpec__Person);
-            let __result = obj.get_variant_hybrid(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_variant_hybrid(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1238,18 +1458,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_hybrid(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_simple_func(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.simple_func();
+            obj.simple_func()
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1261,19 +1491,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_numbers(
     a: f64,
     b: f64,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.add_numbers(a, b)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1286,25 +1528,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_strings(
     a: *const std::ffi::c_char,
     b: *const std::ffi::c_char,
 ) -> __FfiResult_cstr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
             let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
-            let __result = obj.add_strings(__a, __b);
-            {
-                let __s = __result.replace('\0', "");
+            obj.add_strings(__a, __b).map(|__value| {
+                let __s = __value.replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
-            }
+            })
         })) {
-            Ok(__result) => __FfiResult_cstr {
+            Ok(Ok(__value)) => __FfiResult_cstr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_cstr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_cstr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1318,19 +1571,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
     str: *const std::ffi::c_char,
     boo: bool,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-            obj.multiple_arguments(num, __str, boo);
+            obj.multiple_arguments(num, __str, boo)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1340,18 +1603,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.bounce_null();
+            obj.bounce_null()
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1362,21 +1635,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_strings(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<String>);
-            let __result = obj.bounce_strings(__array);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_strings(__array)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1388,21 +1673,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_numbers(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<f64>);
-            let __result = obj.bounce_numbers(__array);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_numbers(__array)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1414,21 +1711,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_structs(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Person>);
-            let __result = obj.bounce_structs(__array);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_structs(__array)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1440,21 +1749,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_partial_struct(
     ptr: *mut std::ffi::c_void,
     person: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __person = *Box::from_raw(person as *mut PartialPerson);
-            let __result = obj.bounce_partial_struct(__person);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_partial_struct(__person)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1466,24 +1787,35 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
     ptr: *mut std::ffi::c_void,
     cars: *mut std::ffi::c_void,
 ) -> __FfiResult_cstr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __cars = *Box::from_raw(cars as *mut Vec<Car>);
-            let __result = obj.sum_up_all_passengers(__cars);
-            {
-                let __s = __result.replace('\0', "");
+            obj.sum_up_all_passengers(__cars).map(|__value| {
+                let __s = __value.replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
-            }
+            })
         })) {
-            Ok(__result) => __FfiResult_cstr {
+            Ok(Ok(__value)) => __FfiResult_cstr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_cstr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_cstr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1495,21 +1827,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_enums(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
-            let __result = obj.bounce_enums(__array);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_enums(__array)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1522,6 +1866,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
     array: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1529,18 +1876,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_void_std__vector_Powertrain_::Func_void_std__vector_Powertrain_);
                 let __cb: Box<dyn Fn(Vec<Powertrain>)> =
-                    Box::new(move |__p0: Vec<Powertrain>| unsafe { __wrapper.call(__p0) });
+                    Box::new(move |__p0: Vec<Powertrain>| __wrapper.call(__p0));
                 __cb
             };
-            obj.complex_enum_callback(__array, __callback);
+            obj.complex_enum_callback(__array, __callback)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1551,21 +1905,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_hybrid_objects(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Box<dyn HybridChildSpec>>);
-            let __result = obj.bounce_hybrid_objects(__array);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_hybrid_objects(__array)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1577,21 +1943,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_functions(
     ptr: *mut std::ffi::c_void,
     functions: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn()>>);
-            let __result = obj.bounce_functions(__functions);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_functions(__functions)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1603,21 +1981,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
     ptr: *mut std::ffi::c_void,
     maps: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __maps = *Box::from_raw(maps as *mut Vec<*mut std::ffi::c_void>);
-            let __result = obj.bounce_maps(__maps);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_maps(__maps)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1629,21 +2019,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_promises(
     ptr: *mut std::ffi::c_void,
     promises: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promises = *Box::from_raw(promises as *mut Vec<f64>);
-            let __result = obj.bounce_promises(__promises);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_promises(__promises)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1655,21 +2057,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffers(
     ptr: *mut std::ffi::c_void,
     array_buffers: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array_buffers = *Box::from_raw(array_buffers as *mut Vec<NitroBuffer>);
-            let __result = obj.bounce_array_buffers(__array_buffers);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_array_buffers(__array_buffers)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1680,20 +2094,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffers(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_map(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_map();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_map()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1705,21 +2131,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-            let __result = obj.map_roundtrip(__map);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.map_roundtrip(__map)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1731,21 +2169,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_map_keys(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-            let __result = obj.get_map_keys(__map);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_map_keys(__map)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1758,22 +2208,34 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
     a: *mut std::ffi::c_void,
     b: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __a = *Box::from_raw(a as *mut *mut std::ffi::c_void);
             let __b = *Box::from_raw(b as *mut *mut std::ffi::c_void);
-            let __result = obj.merge_maps(__a, __b);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.merge_maps(__a, __b)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1785,21 +2247,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-            let __result = obj.copy_any_map(__map);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.copy_any_map(__map)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1811,21 +2285,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut HashMap<String, Variant_bool_f64>);
-            let __result = obj.bounce_map(__map);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_map(__map)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1837,21 +2323,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_simple_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut HashMap<String, f64>);
-            let __result = obj.bounce_simple_map(__map);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_simple_map(__map)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1863,21 +2361,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_extract_map(
     ptr: *mut std::ffi::c_void,
     map_wrapper: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map_wrapper = *Box::from_raw(map_wrapper as *mut MapWrapper);
-            let __result = obj.extract_map(__map_wrapper);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.extract_map(__map_wrapper)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1888,19 +2398,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_extract_map(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.func_that_throws()
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -1911,18 +2433,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws_before_promise(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.func_that_throws_before_promise();
+            obj.func_that_throws_before_promise()
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1933,21 +2465,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_throw_error(
     ptr: *mut std::ffi::c_void,
     error: *const std::ffi::c_char,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __error = std::ffi::CStr::from_ptr(error)
                 .to_string_lossy()
                 .into_owned();
-            obj.throw_error(__error);
+            obj.throw_error(__error)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -1960,6 +2502,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
     boo: bool,
     str: *mut std::ffi::c_void,
 ) -> __FfiResult_cstr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -1980,20 +2525,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
                     None
                 }
             };
-            let __result = obj.try_optional_params(num, boo, __str);
-            {
-                let __s = __result.replace('\0', "");
+            obj.try_optional_params(num, boo, __str).map(|__value| {
+                let __s = __value.replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
-            }
+            })
         })) {
-            Ok(__result) => __FfiResult_cstr {
+            Ok(Ok(__value)) => __FfiResult_cstr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_cstr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_cstr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2007,6 +2560,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
     boo: *mut std::ffi::c_void,
     str: *const std::ffi::c_char,
 ) -> __FfiResult_cstr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2024,20 +2580,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
                 }
             };
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-            let __result = obj.try_middle_param(num, __boo, __str);
-            {
-                let __s = __result.replace('\0', "");
+            obj.try_middle_param(num, __boo, __str).map(|__value| {
+                let __s = __value.replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
-            }
+            })
         })) {
-            Ok(__result) => __FfiResult_cstr {
+            Ok(Ok(__value)) => __FfiResult_cstr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_cstr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_cstr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2049,6 +2613,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2067,34 +2634,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
                     None
                 }
             };
-            let __result = obj.try_optional_enum(__value);
-            {
-                #[repr(C)]
-                struct __Opt {
-                    has_value: u8,
-                    value: i32,
-                }
-                let __opt: __Opt = match __result {
-                    Some(__v) => __Opt {
-                        has_value: 1,
-                        value: __v as i32,
-                    },
-                    None => __Opt {
-                        has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                    },
-                };
-                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
-            }
+            obj.try_optional_enum(__value).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: i32 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v as i32 }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2108,6 +2666,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
     str: *const std::ffi::c_char,
     boo: *mut std::ffi::c_void,
 ) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2127,14 +2688,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
             };
             obj.try_trailing_optional(num, __str, __boo)
         })) {
-            Ok(__result) => __FfiResult_bool {
+            Ok(Ok(__value)) => __FfiResult_bool {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_bool {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_bool {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2146,21 +2716,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add1_hour(
     ptr: *mut std::ffi::c_void,
     date: f64,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __date = date;
-            let __result = obj.add1_hour(__date);
-            __result
+            obj.add1_hour(__date).map(|__value| __value)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2171,20 +2752,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add1_hour(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.current_date();
-            __result
+            obj.current_date().map(|__value| __value)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2196,19 +2788,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_sync(
     ptr: *mut std::ffi::c_void,
     value: f64,
 ) -> __FfiResult_i64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_sync(value)
         })) {
-            Ok(__result) => __FfiResult_i64 {
+            Ok(Ok(__value)) => __FfiResult_i64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_i64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_i64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2220,19 +2824,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_async(
     ptr: *mut std::ffi::c_void,
     value: f64,
 ) -> __FfiResult_i64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_async(value)
         })) {
-            Ok(__result) => __FfiResult_i64 {
+            Ok(Ok(__value)) => __FfiResult_i64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_i64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_i64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2244,18 +2860,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(
     ptr: *mut std::ffi::c_void,
     seconds: f64,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.wait(seconds);
+            obj.wait(seconds)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2265,18 +2891,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.promise_throws();
+            obj.promise_throws()
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2286,19 +2922,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly()
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2309,19 +2957,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly_async(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly_async()
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2332,18 +2992,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly_asyn
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_void_instantly(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.promise_that_resolves_void_instantly();
+            obj.promise_that_resolves_void_instantly()
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2353,37 +3023,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_void_ins
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undefined(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.promise_that_resolves_to_undefined();
-            {
-                #[repr(C)]
-                struct __Opt {
-                    has_value: u8,
-                    value: f64,
-                }
-                let __opt: __Opt = match __result {
-                    Some(__v) => __Opt {
-                        has_value: 1,
-                        value: __v,
-                    },
-                    None => __Opt {
-                        has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                    },
-                };
-                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
-            }
+            obj.promise_that_resolves_to_undefined().map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: f64 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2395,20 +3059,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut f64);
             obj.await_and_get_promise(__promise)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2420,21 +3096,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_complex_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut Car);
-            let __result = obj.await_and_get_complex_promise(__promise);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.await_and_get_complex_promise(__promise)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2446,19 +3134,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut ());
-            obj.await_promise(__promise);
+            obj.await_promise(__promise)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2469,23 +3167,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
                 __cb
             };
-            obj.call_callback(__callback);
+            obj.call_callback(__callback)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2496,23 +3204,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback_that_returns_pro
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____);
-                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
                 __cb
             };
-            obj.call_callback_that_returns_promise_void(__callback);
+            obj.call_callback_that_returns_promise_void(__callback)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2525,33 +3243,43 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_all(
     second: *mut std::ffi::c_void,
     third: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __first = {
                 let __wrapper = Box::from_raw(first as *mut super::Func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
                 __cb
             };
             let __second = {
                 let __wrapper = Box::from_raw(second as *mut super::Func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
                 __cb
             };
             let __third = {
                 let __wrapper = Box::from_raw(third as *mut super::Func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
                 __cb
             };
-            obj.call_all(__first, __second, __third);
+            obj.call_all(__first, __second, __third)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2563,6 +3291,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
     value: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2582,18 +3313,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_void_std__optional_double_::Func_void_std__optional_double_);
                 let __cb: Box<dyn Fn(Option<f64>)> =
-                    Box::new(move |__p0: Option<f64>| unsafe { __wrapper.call(__p0) });
+                    Box::new(move |__p0: Option<f64>| __wrapper.call(__p0));
                 __cb
             };
-            obj.call_with_optional(__value, __callback);
+            obj.call_with_optional(__value, __callback)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2605,25 +3343,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_sum_up_n_times(
     callback: *mut std::ffi::c_void,
     n: f64,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64> =
-                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.call_sum_up_n_times(__callback, n)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2635,25 +3384,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____);
-                let __cb: Box<dyn Fn() -> f64> =
-                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.callback_async_promise(__callback)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2665,26 +3425,38 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise_buffer(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____);
                 let __cb: Box<dyn Fn() -> NitroBuffer> =
-                    Box::new(move || -> NitroBuffer { unsafe { __wrapper.call() } });
+                    Box::new(move || -> NitroBuffer { __wrapper.call() });
                 __cb
             };
-            let __result = obj.callback_async_promise_buffer(__callback);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.callback_async_promise_buffer(__callback)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2695,20 +3467,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise_buffer(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_complex_callback(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.get_complex_callback();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_complex_callback()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2722,6 +3506,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
     first: *mut std::ffi::c_void,
     second: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2738,7 +3525,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
                             __s.value as *mut super::Func_void_double::Func_void_double,
                         );
                         let __cb: Box<dyn Fn(f64)> =
-                            Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                            Box::new(move |__p0: f64| __wrapper.call(__p0));
                         __cb
                     })
                 } else {
@@ -2758,22 +3545,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
                             __s.value as *mut super::Func_void_std__string::Func_void_std__string,
                         );
                         let __cb: Box<dyn Fn(String)> =
-                            Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                            Box::new(move |__p0: String| __wrapper.call(__p0));
                         __cb
                     })
                 } else {
                     None
                 }
             };
-            obj.two_optional_callbacks(value, __first, __second);
+            obj.two_optional_callbacks(value, __first, __second)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2784,6 +3578,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
     ptr: *mut std::ffi::c_void,
     on_error: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2792,19 +3589,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
                     on_error
                         as *mut super::Func_void_std__exception_ptr::Func_void_std__exception_ptr,
                 );
-                let __cb: Box<dyn Fn(String)> =
-                    Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                let __cb: Box<dyn Fn(String)> = Box::new(move |__p0: String| __wrapper.call(__p0));
                 __cb
             };
-            obj.error_callback(__on_error);
+            obj.error_callback(__on_error)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2815,6 +3618,9 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
     ptr: *mut std::ffi::c_void,
     wrapping_js_callback: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
@@ -2822,21 +3628,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
                 let __wrapper = Box::from_raw(
                     wrapping_js_callback as *mut super::Func_void_double::Func_void_double,
                 );
-                let __cb: Box<dyn Fn(f64)> =
-                    Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                let __cb: Box<dyn Fn(f64)> = Box::new(move |__p0: f64| __wrapper.call(__p0));
                 __cb
             };
-            let __result = obj.create_native_callback(__wrapping_js_callback);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_native_callback(__wrapping_js_callback)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2848,25 +3662,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback_and
     ptr: *mut std::ffi::c_void,
     get_value: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __get_value = {
                 let __wrapper = Box::from_raw(get_value as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64> =
-                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.get_value_from_js_callback_and_wait(__get_value)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2879,32 +3704,41 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
     callback: *mut std::ffi::c_void,
     and_then_call: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__string__::Func_std__shared_ptr_Promise_std__string__);
                 let __cb: Box<dyn Fn() -> String> =
-                    Box::new(move || -> String { unsafe { __wrapper.call() } });
+                    Box::new(move || -> String { __wrapper.call() });
                 __cb
             };
             let __and_then_call = {
                 let __wrapper = Box::from_raw(
                     and_then_call as *mut super::Func_void_std__string::Func_void_std__string,
                 );
-                let __cb: Box<dyn Fn(String)> =
-                    Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                let __cb: Box<dyn Fn(String)> = Box::new(move |__p0: String| __wrapper.call(__p0));
                 __cb
             };
-            obj.get_value_from_js_callback(__callback, __and_then_call);
+            obj.get_value_from_js_callback(__callback, __and_then_call)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -2914,20 +3748,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_car(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.get_car();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_car()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2939,20 +3785,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_is_car_electric(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
 ) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
             obj.is_car_electric(__car)
         })) {
-            Ok(__result) => __FfiResult_bool {
+            Ok(Ok(__value)) => __FfiResult_bool {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_bool {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_bool {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -2964,38 +3822,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
-            let __result = obj.get_driver(__car);
-            {
-                #[repr(C)]
-                struct __Opt {
-                    has_value: u8,
-                    value: *mut std::ffi::c_void,
-                }
-                let __opt: __Opt = match __result {
-                    Some(__v) => __Opt {
-                        has_value: 1,
-                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
-                    },
-                    None => __Opt {
-                        has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                    },
-                };
-                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
-            }
+            obj.get_driver(__car).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3007,21 +3859,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_car(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
-            let __result = obj.bounce_car(__car);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_car(__car)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3033,19 +3897,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_js_style_object_as_parameters(
     ptr: *mut std::ffi::c_void,
     params: *mut std::ffi::c_void,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __params = *Box::from_raw(params as *mut JsStyleStruct);
-            obj.js_style_object_as_parameters(__params);
+            obj.js_style_object_as_parameters(__params)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -3056,21 +3930,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_wrapped_js_style_struct
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = *Box::from_raw(value as *mut WrappedJsStruct);
-            let __result = obj.bounce_wrapped_js_style_struct(__value);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_wrapped_js_style_struct(__value)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3082,21 +3968,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_wrapper(
     ptr: *mut std::ffi::c_void,
     wrapper: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __wrapper = *Box::from_raw(wrapper as *mut OptionalWrapper);
-            let __result = obj.bounce_optional_wrapper(__wrapper);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_optional_wrapper(__wrapper)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3108,21 +4006,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_callback(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = *Box::from_raw(value as *mut OptionalCallback);
-            let __result = obj.bounce_optional_callback(__value);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_optional_callback(__value)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3133,20 +4043,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_array_buffer();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_array_buffer()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3158,20 +4080,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_from_nativ
     ptr: *mut std::ffi::c_void,
     copy: bool,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_array_buffer_from_native_buffer(copy);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_array_buffer_from_native_buffer(copy)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3183,21 +4117,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_buffer(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-            let __result = obj.copy_buffer(__buffer);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.copy_buffer(__buffer)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3209,20 +4155,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_buffer_last_item(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
             obj.get_buffer_last_item(__buffer)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3235,19 +4193,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_all_values_to(
     buffer: *mut std::ffi::c_void,
     value: f64,
 ) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-            obj.set_all_values_to(__buffer, value);
+            obj.set_all_values_to(__buffer, value)
         })) {
-            Ok(_) => __FfiResult_void {
+            Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
             },
+            Ok(Err(__err)) => __FfiResult_void {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+            },
             Err(__panic) => __FfiResult_void {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
             },
         }
     }
@@ -3257,20 +4225,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_all_values_to(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_async(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_array_buffer_async();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_array_buffer_async()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3282,21 +4262,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffer(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-            let __result = obj.bounce_array_buffer(__buffer);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_array_buffer(__buffer)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3308,22 +4300,34 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_variant(
     ptr: *mut std::ffi::c_void,
     either: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __either =
                 *Box::from_raw(either as *mut Variant_bool_Vec_f64__Vec_String__String_f64);
-            let __result = obj.pass_variant(__either);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.pass_variant(__either)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3335,21 +4339,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_enum(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_bool_OldEnum);
-            let __result = obj.get_variant_enum(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_variant_enum(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3361,21 +4377,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_weird_numbers_enum
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_bool_WeirdNumbersEnum);
-            let __result = obj.get_variant_weird_numbers_enum(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_variant_weird_numbers_enum(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3387,21 +4415,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_objects(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_Car_Person);
-            let __result = obj.get_variant_objects(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.get_variant_objects(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3413,21 +4453,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_named_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut NamedVariant);
-            let __result = obj.pass_named_variant(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.pass_named_variant(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3439,22 +4491,34 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_all_empty_object_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant =
                 *Box::from_raw(variant as *mut Variant_Box_dyn_HybridBaseSpec__OptionalWrapper);
-            let __result = obj.pass_all_empty_object_variant(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.pass_all_empty_object_variant(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3466,21 +4530,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_complex_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut CoreTypesVariant);
-            let __result = obj.bounce_complex_variant(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_complex_variant(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3491,20 +4567,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_complex_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_child(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_child();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_child()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3515,20 +4603,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_child(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_base();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_base()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3539,20 +4639,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base_actual_child(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_base_actual_child();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_base_actual_child()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3564,21 +4676,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child(
     ptr: *mut std::ffi::c_void,
     child: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
-            let __result = obj.bounce_child(__child);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_child(__child)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3590,21 +4714,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_base(
     ptr: *mut std::ffi::c_void,
     base: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
-            let __result = obj.bounce_base(__base);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_base(__base)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3616,21 +4752,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child_base(
     ptr: *mut std::ffi::c_void,
     child: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
-            let __result = obj.bounce_child_base(__child);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_child_base(__child)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3642,21 +4790,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_cast_base(
     ptr: *mut std::ffi::c_void,
     base: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
-            let __result = obj.cast_base(__base);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.cast_base(__base)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3668,25 +4828,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_sync(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
 ) -> __FfiResult_f64 {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::Func_double::Func_double);
-                let __cb: Box<dyn Fn() -> f64> =
-                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.callback_sync(__callback)
         })) {
-            Ok(__result) => __FfiResult_f64 {
+            Ok(Ok(__value)) => __FfiResult_f64 {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_f64 {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_f64 {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3698,20 +4869,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_view_blue(
     ptr: *mut std::ffi::c_void,
     view: *mut std::ffi::c_void,
 ) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __view = *Box::from_raw(view as *mut Box<dyn HybridTestViewSpec>);
             obj.get_is_view_blue(__view)
         })) {
-            Ok(__result) => __FfiResult_bool {
+            Ok(Ok(__value)) => __FfiResult_bool {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_bool {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_bool {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3723,22 +4906,34 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_hybrid(
     ptr: *mut std::ffi::c_void,
     external_object: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __external_object =
                 *Box::from_raw(external_object as *mut Box<dyn HybridSomeExternalObjectSpec>);
-            let __result = obj.bounce_external_hybrid(__external_object);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_external_hybrid(__external_object)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3749,20 +4944,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_hybrid(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_internal_object(
     ptr: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __result = obj.create_internal_object();
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_internal_object()
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3774,21 +4981,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_struct(
     ptr: *mut std::ffi::c_void,
     external_struct: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __external_struct = *Box::from_raw(external_struct as *mut ExternalObjectStruct);
-            let __result = obj.bounce_external_struct(__external_struct);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_external_struct(__external_struct)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3800,21 +5019,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut StringOrExternal);
-            let __result = obj.bounce_external_variant(__variant);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.bounce_external_variant(__variant)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }
@@ -3826,28 +5057,38 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_external_variant_from_f
     ptr: *mut std::ffi::c_void,
     factory: *mut std::ffi::c_void,
 ) -> __FfiResult_ptr {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __factory = {
                 let __wrapper = Box::from_raw(factory as *mut super::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_);
                 let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>> =
-                    Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> {
-                        unsafe { __wrapper.call() }
-                    });
+                    Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> { __wrapper.call() });
                 __cb
             };
-            let __result = obj.create_external_variant_from_func(__factory);
-            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+            obj.create_external_variant_from_func(__factory)
+                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
-            Ok(__result) => __FfiResult_ptr {
+            Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
                 error: std::ptr::null_mut(),
-                value: __result,
+                value: __value,
             },
+            Ok(Err(__err)) => __FfiResult_ptr {
+                is_ok: 0,
+                error: {
+                    let __s = __err.replace('\0', "");
+                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                },
+                value: std::mem::zeroed(),
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => __FfiResult_ptr {
                 is_ok: 0,
-                error: super::lib::__nitro_panic_to_cstring(__panic),
+                error: crate::__nitro_panic_to_cstring(__panic),
                 value: std::mem::zeroed(),
             },
         }

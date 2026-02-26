@@ -49,17 +49,44 @@ function createRustTraitAndFfi(spec: HybridObjectSpec): SourceFile {
   const shims: string[] = [];
 
   // Helper: generate a catch_unwind-wrapped FFI shim that returns __FfiResult_*.
+  // Helper to convert a Rust error string to a C string for FFI.
+  const errToCString = `{ let __s = __err.replace('\\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }`;
+
   function wrapCatchUnwind(
     funcName: string,
     params: string,
     resultType: string,
     isVoid: boolean,
     closureBody: string,
+    returnsResult: boolean = false,
   ): string {
-    if (isVoid) {
+    const note = `// NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.`;
+
+    if (isVoid && returnsResult) {
+      // Method returning Result<(), String>
       return `
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
+    ${note}
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+${closureBody}
+        })) {
+            Ok(Ok(_)) => ${resultType} { is_ok: 1, error: std::ptr::null_mut() },
+            Ok(Err(__err)) => ${resultType} { is_ok: 0, error: ${errToCString} },
+            Err(__panic) => ${resultType} { is_ok: 0, error: crate::__nitro_panic_to_cstring(__panic) },
+        }
+    }
+}
+      `.trim();
+    } else if (isVoid) {
+      // Property setter or void return without Result
+      return `
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
+    ${note}
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
 ${closureBody}
@@ -70,15 +97,36 @@ ${closureBody}
     }
 }
       `.trim();
-    } else {
+    } else if (returnsResult) {
+      // Method returning Result<T, String>
       return `
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
+    ${note}
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+${closureBody}
+        })) {
+            Ok(Ok(__value)) => ${resultType} { is_ok: 1, error: std::ptr::null_mut(), value: __value },
+            Ok(Err(__err)) => ${resultType} { is_ok: 0, error: ${errToCString}, value: std::mem::zeroed() },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
+            Err(__panic) => ${resultType} { is_ok: 0, error: crate::__nitro_panic_to_cstring(__panic), value: std::mem::zeroed() },
+        }
+    }
+}
+      `.trim();
+    } else {
+      // Property getter returning bare value
+      return `
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
+    ${note}
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
 ${closureBody}
         })) {
             Ok(__result) => ${resultType} { is_ok: 1, error: std::ptr::null_mut(), value: __result },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
             Err(__panic) => ${resultType} { is_ok: 0, error: crate::__nitro_panic_to_cstring(__panic), value: std::mem::zeroed() },
         }
     }
@@ -191,6 +239,8 @@ ${closureBody}
 
     const traitCall = `obj.${rustMethodName}(${traitCallArgs.join(", ")})`;
 
+    // Method returns Result<T, String>. The closure must return Result<FfiT, String>
+    // so wrapCatchUnwind can three-way match on Ok(Ok(v)) / Ok(Err(e)) / Err(panic).
     const closureLines: string[] = [];
     closureLines.push(
       `            let obj = &mut *(ptr as *mut Box<dyn ${name.HybridTSpec}>);`,
@@ -199,13 +249,13 @@ ${closureBody}
       closureLines.push(`            ${conv}`);
     }
     if (returnBridged.needsSpecialHandling) {
-      closureLines.push(`            let __result = ${traitCall};`);
+      // Convert the inner value from Rust type to FFI type, preserving the Result wrapper
+      const converted = returnBridged.parseFromRustToCpp("__value", "rust");
       closureLines.push(
-        `            ${returnBridged.parseFromRustToCpp("__result", "rust")}`,
+        `            ${traitCall}.map(|__value| ${converted})`,
       );
-    } else if (isVoidReturn) {
-      closureLines.push(`            ${traitCall};`);
     } else {
+      // Bare type or void — Result passes through directly
       closureLines.push(`            ${traitCall}`);
     }
 
@@ -216,6 +266,7 @@ ${closureBody}
         resultType,
         isVoidReturn,
         closureLines.join("\n"),
+        true, // methods return Result<T, String>
       ),
     );
   }
@@ -545,6 +596,8 @@ ${createFileMetadataString(`${name.HybridTSpecRust}.hpp`)}
 
 #pragma once
 
+#include <cstdio>
+#include <cstdlib>
 #include <stdexcept>
 #include "${name.HybridTSpec}.hpp"
 

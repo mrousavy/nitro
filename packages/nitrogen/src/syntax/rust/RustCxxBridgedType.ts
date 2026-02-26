@@ -375,15 +375,22 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
               return `__a${i}`;
             });
 
-            let trampolineBody: string;
+            // Wrap the trampoline body in try/catch to prevent C++ exceptions from
+            // unwinding through Rust stack frames (which is UB). Since the callback
+            // returns via a bare function pointer with no error channel, we must abort.
+            let trampolineInner: string;
             if (funcType.returnType.kind === "void") {
-              trampolineBody = `(*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
+              trampolineInner = `(*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
             } else if (returnBridged.needsSpecialHandling) {
               const converted = returnBridged.parseFromCppToRust("__r", "c++");
-              trampolineBody = `auto __r = (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")}); return ${converted};`;
+              trampolineInner = `auto __r = (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")}); return ${converted};`;
             } else {
-              trampolineBody = `return (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
+              trampolineInner = `return (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
             }
+            const trampolineBody =
+              `try { ${trampolineInner} } ` +
+              `catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\\n", __e.what()); std::abort(); } ` +
+              `catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\\n"); std::abort(); }`;
 
             const returnArrow =
               ffiReturnType === "void" ? "" : `-> ${ffiReturnType} `;
