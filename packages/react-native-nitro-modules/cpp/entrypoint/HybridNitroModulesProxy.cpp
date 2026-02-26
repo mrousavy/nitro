@@ -24,6 +24,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridMethod("box", &HybridNitroModulesProxy::box);
     prototype.registerHybridMethod("updateMemorySize", &HybridNitroModulesProxy::updateMemorySize);
 
+    prototype.registerHybridMethod("createNativeArrayBuffer", &HybridNitroModulesProxy::createNativeArrayBuffer);
     prototype.registerRawHybridMethod("hasNativeState", 1, &HybridNitroModulesProxy::hasNativeState);
 
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
@@ -74,6 +75,10 @@ std::shared_ptr<HybridObject> HybridNitroModulesProxy::updateMemorySize(const st
   // If a hybridObject goes from Native -> JS, it will update its memory size internally (in `HybridObject::toObject(..)`).
   // This is all that function does.
   return hybridObject;
+}
+
+std::shared_ptr<ArrayBuffer> HybridNitroModulesProxy::createNativeArrayBuffer(double size) {
+  return ArrayBuffer::allocate(static_cast<size_t>(size));
 }
 
 // Build Info

@@ -2175,6 +2175,17 @@ export function getTests(
         NitroModules.updateMemorySize(testObject)
       }).didNotThrow()
     ),
+    createTest('NitroModules.createNativeArrayBuffer(...) works', () =>
+      it(() => {
+        const buffer = NitroModules.createNativeArrayBuffer(1024)
+        const array = new Uint8Array(buffer)
+        array[0] = 13
+        return array[0]
+      })
+        .didNotThrow()
+        .didReturn('number')
+        .equals(13)
+    ),
     createTest('NitroModules.buildType holds a string', () =>
       it(() => {
         return NitroModules.buildType
