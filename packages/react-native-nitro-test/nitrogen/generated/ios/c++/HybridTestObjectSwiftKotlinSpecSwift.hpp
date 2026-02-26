@@ -228,6 +228,24 @@ namespace margelo::nitro::test {
     inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
       _swiftPart.setOptionalCallback(optionalCallback);
     }
+    inline bool getHasBoolean() noexcept override {
+      return _swiftPart.hasBoolean();
+    }
+    inline bool getIsBoolean() noexcept override {
+      return _swiftPart.isBoolean();
+    }
+    inline bool getHasBooleanWritable() noexcept override {
+      return _swiftPart.hasBooleanWritable();
+    }
+    inline void setHasBooleanWritable(bool hasBooleanWritable) noexcept override {
+      _swiftPart.setHasBooleanWritable(std::forward<decltype(hasBooleanWritable)>(hasBooleanWritable));
+    }
+    inline bool getIsBooleanWritable() noexcept override {
+      return _swiftPart.isBooleanWritable();
+    }
+    inline void setIsBooleanWritable(bool isBooleanWritable) noexcept override {
+      _swiftPart.setIsBooleanWritable(std::forward<decltype(isBooleanWritable)>(isBooleanWritable));
+    }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();
       return __result;

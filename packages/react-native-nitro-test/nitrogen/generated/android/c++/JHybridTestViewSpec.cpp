@@ -62,7 +62,7 @@ namespace margelo::nitro::test {
     method(_javaPart, isBlue);
   }
   bool JHybridTestViewSpec::getHasBeenCalled() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("hasBeenCalled");
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBeenCalled");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }

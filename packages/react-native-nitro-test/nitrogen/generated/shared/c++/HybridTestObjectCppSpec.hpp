@@ -142,6 +142,12 @@ namespace margelo::nitro::test {
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
       virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
       virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
+      virtual bool getHasBoolean() = 0;
+      virtual bool getIsBoolean() = 0;
+      virtual bool getHasBooleanWritable() = 0;
+      virtual void setHasBooleanWritable(bool hasBooleanWritable) = 0;
+      virtual bool getIsBooleanWritable() = 0;
+      virtual void setIsBooleanWritable(bool isBooleanWritable) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

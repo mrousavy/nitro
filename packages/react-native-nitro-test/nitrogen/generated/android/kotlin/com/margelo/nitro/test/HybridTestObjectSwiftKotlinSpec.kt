@@ -153,6 +153,26 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @get:DoNotStrip
   @get:Keep
+  abstract val hasBoolean: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val isBoolean: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var hasBooleanWritable: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var isBooleanWritable: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var someVariant: Variant_String_Double

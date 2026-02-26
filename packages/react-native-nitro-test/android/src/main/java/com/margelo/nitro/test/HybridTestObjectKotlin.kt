@@ -36,6 +36,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var optionalOldEnum: OldEnum? = null
   override var optionalCallback: ((value: Double) -> Unit)? = null
 
+  override val hasBoolean = false
+  override val isBoolean = false
+  override var hasBooleanWritable = false
+  override var isBooleanWritable = false
+
   override fun simpleFunc() {
     // do nothing
   }

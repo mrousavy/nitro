@@ -126,6 +126,12 @@ interface SharedTestObjectProps {
   optionalOldEnum?: OldEnum
   optionalCallback?: (value: number) => void
 
+  // Kotlin/Swift simplify boolean names (has*/is*)
+  readonly hasBoolean: boolean
+  readonly isBoolean: boolean
+  hasBooleanWritable: boolean
+  isBooleanWritable: boolean
+
   // Basic function tests
   simpleFunc(): void
   addNumbers(a: number, b: number): number

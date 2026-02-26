@@ -467,6 +467,36 @@ export function getTests(
         .didReturn(typeof OldEnum.SECOND)
         .equals(OldEnum.SECOND)
     ),
+    createTest('get hasBoolean', () =>
+      it(() => {
+        return testObject.hasBoolean
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('set + get hasBooleanWritable', () =>
+      it(() => {
+        testObject.hasBooleanWritable = true
+        return testObject.hasBooleanWritable
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('get isBoolean', () =>
+      it(() => {
+        return testObject.isBoolean
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('set + get isBooleanWritable', () =>
+      it(() => {
+        testObject.isBooleanWritable = true
+        return testObject.isBooleanWritable
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('set optionalCallback, then undefined', () =>
       it(() => {
         testObject.optionalCallback = () => {}

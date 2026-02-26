@@ -21,7 +21,7 @@
 namespace margelo::nitro::test::external {
 
 int initialize(JavaVM* vm) {
-  initialize(vm, []() {
+  return initialize(vm, []() {
     // no extra initializations.
   });
 }

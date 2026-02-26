@@ -147,6 +147,30 @@ std::optional<std::function<void(double)>> HybridTestObjectCpp::getOptionalCallb
   return _optionalCallback;
 }
 
+bool HybridTestObjectCpp::getHasBoolean() {
+  return false;
+}
+
+bool HybridTestObjectCpp::getIsBoolean() {
+  return false;
+}
+
+bool HybridTestObjectCpp::getIsBooleanWritable() {
+  return _isBooleanWritable;
+}
+
+void HybridTestObjectCpp::setIsBooleanWritable(bool isBooleanWritable) {
+  _isBooleanWritable = isBooleanWritable;
+}
+
+bool HybridTestObjectCpp::getHasBooleanWritable() {
+  return _hasBooleanWritable;
+}
+
+void HybridTestObjectCpp::setHasBooleanWritable(bool hasBooleanWritable) {
+  _hasBooleanWritable = hasBooleanWritable;
+}
+
 void HybridTestObjectCpp::setOptionalCallback(const std::optional<std::function<void(double)>>& callback) {
   _optionalCallback = callback;
 }

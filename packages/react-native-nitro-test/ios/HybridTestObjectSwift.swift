@@ -39,6 +39,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var optionalCallback: ((Double) -> Void)? = nil
 
+  let hasBoolean = false
+  let isBoolean = false
+  var hasBooleanWritable = false
+  var isBooleanWritable = false
+
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self
   }

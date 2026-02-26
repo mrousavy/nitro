@@ -320,6 +320,34 @@ namespace margelo::nitro::test {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void_double::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
     method(_javaPart, optionalCallback.has_value() ? JFunc_void_double_cxx::fromCpp(optionalCallback.value()) : nullptr);
   }
+  bool JHybridTestObjectSwiftKotlinSpec::getHasBoolean() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBoolean");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::getIsBoolean() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBoolean");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::getHasBooleanWritable() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBooleanWritable");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setHasBooleanWritable(bool hasBooleanWritable) {
+    static const auto method = javaClassStatic()->getMethod<void(jboolean /* hasBooleanWritable */)>("setHasBooleanWritable");
+    method(_javaPart, hasBooleanWritable);
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::getIsBooleanWritable() {
+    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBooleanWritable");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setIsBooleanWritable(bool isBooleanWritable) {
+    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBooleanWritable */)>("setBooleanWritable");
+    method(_javaPart, isBooleanWritable);
+  }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");
     auto __result = method(_javaPart);
