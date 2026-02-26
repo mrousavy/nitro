@@ -100,6 +100,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
         And lastly, call the C++/JNI `registerNatives()` function inside your library's `JNI_OnLoad(...)` entry point (often in `cpp-adapter.cpp`) within your `facebook::jni::initialize(...)` call:
 
         ```cpp
+        #include <fbjni/fbjni.h>
         #include "$$androidCxxLibName$$OnLoad.hpp"
 
         JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
