@@ -114,7 +114,7 @@ int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations) {
   using namespace ${cxxNamespace};
   using namespace facebook;
 
-  return facebook::jni::initialize(vm, [] {
+  return facebook::jni::initialize(vm, [extraRegistrations = std::move(extraRegistrations)] {
     // Register native JNI methods
     ${indent(jniRegistrations.join('\n'), '    ')}
 

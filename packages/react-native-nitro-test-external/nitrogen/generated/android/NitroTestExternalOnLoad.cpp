@@ -31,7 +31,7 @@ int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations) {
   using namespace margelo::nitro::test::external;
   using namespace facebook;
 
-  return facebook::jni::initialize(vm, [] {
+  return facebook::jni::initialize(vm, [extraRegistrations = std::move(extraRegistrations)] {
     // Register native JNI methods
     margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
 
