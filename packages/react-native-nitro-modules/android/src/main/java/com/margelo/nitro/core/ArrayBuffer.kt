@@ -2,6 +2,7 @@ package com.margelo.nitro.core
 
 import android.hardware.HardwareBuffer
 import android.os.Build
+import android.util.Log
 import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import com.facebook.jni.HybridData
@@ -197,12 +198,18 @@ class ArrayBuffer {
      */
     fun copy(other: ArrayBuffer): ArrayBuffer {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && other.isHardwareBuffer) {
-        val hardwareBuffer = other.getHardwareBuffer()
-        return copy(hardwareBuffer)
-      } else {
-        val byteBuffer = other.getBuffer(false)
-        return copy(byteBuffer)
+        // Fast Path: Try copying the C++ HardwareBuffer
+        try {
+          val hardwareBuffer = other.getHardwareBuffer()
+          return copy(hardwareBuffer)
+        } catch (error: Throwable) {
+          Log.w("ArrayBuffer", "Failed to copy HardwareBuffer, falling back to ByteBuffer copy...", error)
+          // fallthrough
+        }
       }
+
+      val byteBuffer = other.getBuffer(false)
+      return copy(byteBuffer)
     }
 
     /**
