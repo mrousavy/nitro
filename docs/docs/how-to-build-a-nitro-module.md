@@ -97,14 +97,18 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
         include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/$$androidCxxLibName$$+autolinking.cmake)
         ```
 
-        And lastly, call the C++/JNI `initialize` function inside your library's `JNI_OnLoad(...)` entry point (often in `cpp-adapter.cpp`):
+        And lastly, call the C++/JNI `registerNatives()` function inside your library's `JNI_OnLoad(...)` entry point (often in `cpp-adapter.cpp`) within your `facebook::jni::initialize(...)` call:
 
         ```cpp
         #include "$$androidCxxLibName$$OnLoad.hpp"
 
         JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
           // diff-add
-          return margelo::nitro::$$cxxNamespace$$::initialize(vm);
+          return facebook::jni::initialize(vm, []() {
+            // diff-add
+            margelo::nitro::$$cxxNamespace$$::registerNatives();
+          // diff-add
+          });
         }
         ```
       </TabItem>

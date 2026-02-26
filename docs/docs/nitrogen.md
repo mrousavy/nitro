@@ -297,7 +297,9 @@ Make sure `HybridMath` is default-constructible and scoped inside the correct na
   #include "NitroMathOnLoad.hpp"
 
   JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-    return margelo::nitro::math::initialize(vm);
+    return facebook::jni::initialize(vm, []() {
+      margelo::nitro::math::initialize();
+    });
   }
   ```
 

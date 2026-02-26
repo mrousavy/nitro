@@ -70,19 +70,19 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
   auto fn = map.find(hybridObjectName);
   if (fn == map.end()) [[unlikely]] {
     auto allObjectNames = getAllRegisteredHybridObjectNamesToString();
-    auto message =
-        "Cannot create an instance of HybridObject \"" + hybridObjectName +
-        "\" - It has not yet been registered in the Nitro Modules HybridObjectRegistry! Suggestions:\n"
-        "- If you use Nitrogen, make sure your `nitro.json` contains `" +
-        hybridObjectName +
-        "` on this platform.\n"
-        "- If you use Nitrogen, make sure your library (*Package.kt)/app (MainApplication.kt) calls "
-        "`$$androidCxxLibName$$OnLoad.initializeNative()` somewhere on app-startup.\n"
-        "- If you use Nitrogen, make sure your `cpp-adapter.cpp`/`OnLoad.cpp` calls `margelo::nitro::$$cxxNamespace$$::initialize(vm)`.\n"
-        "- If you use Nitrogen, inspect the generated `$$androidCxxLibName$$OnLoad.cpp` file.\n"
-        "- If you don't use Nitrogen, make sure you called `HybridObjectRegistry.registerHybridObject(...)`."
-        "- All registered HybridObjects: [" +
-        allObjectNames + "]";
+    auto message = "Cannot create an instance of HybridObject \"" + hybridObjectName +
+                   "\" - It has not yet been registered in the Nitro Modules HybridObjectRegistry! Suggestions:\n"
+                   "- If you use Nitrogen, make sure your `nitro.json` contains `" +
+                   hybridObjectName +
+                   "` on this platform.\n"
+                   "- If you use Nitrogen, make sure your library (*Package.kt)/app (MainApplication.kt) calls "
+                   "`$$androidCxxLibName$$OnLoad.initializeNative()` somewhere on app-startup.\n"
+                   "- If you use Nitrogen, make sure your `cpp-adapter.cpp`/`OnLoad.cpp` calls "
+                   "`margelo::nitro::$$cxxNamespace$$::registerNatives()` inside `facebook::jni::initialize(...)`.\n"
+                   "- If you use Nitrogen, inspect the generated `$$androidCxxLibName$$OnLoad.cpp` file.\n"
+                   "- If you don't use Nitrogen, make sure you called `HybridObjectRegistry.registerHybridObject(...)`."
+                   "- All registered HybridObjects: [" +
+                   allObjectNames + "]";
     throw std::runtime_error(message);
   }
   std::shared_ptr<HybridObject> instance = fn->second();
