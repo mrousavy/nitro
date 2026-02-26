@@ -102,20 +102,12 @@ export class Property implements CodeNode {
 
   getSetterName(environment: LanguageEnvironment): string {
     if (this.type.kind === 'boolean') {
-      // Boolean accessors where the property starts with "is" or "has" are renamed in JVM and Swift
+      // Boolean accessors where the property starts with "is" are renamed in JVM
       switch (environment) {
         case 'jvm':
           if (this.name.startsWith('is')) {
             // isSomething -> setSomething()
             const cleanName = this.name.replace('is', '')
-            return `set${capitalizeName(cleanName)}`
-          } else {
-            break
-          }
-        case 'swift':
-          if (this.name.startsWith('has')) {
-            // hasSomething -> setSomething()
-            const cleanName = this.name.replace('has', '')
             return `set${capitalizeName(cleanName)}`
           } else {
             break
