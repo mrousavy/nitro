@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 pub mod Car;
@@ -68,4 +71,13 @@ pub mod HybridSomeExternalObjectSpec {
 }
 pub mod HybridTestViewSpec {
     pub trait HybridTestViewSpec: Send + Sync {}
+}
+
+/// Free a Rust-allocated CString from C++.
+/// This is called by the C++ bridge to deallocate strings returned from Rust.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
+    unsafe {
+        let _ = std::ffi::CString::from_raw(ptr);
+    }
 }

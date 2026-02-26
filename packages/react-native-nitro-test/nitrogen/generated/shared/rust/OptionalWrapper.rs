@@ -9,13 +9,16 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use super::NitroBuffer::NitroBuffer;
 
 /// Struct `OptionalWrapper` — auto-generated from TypeScript.
-#[repr(C)]
+#[derive(Debug, Clone)]
 pub struct OptionalWrapper {
     pub optional_array_buffer: Option<NitroBuffer>,
     pub optional_string: Option<String>,

@@ -25,6 +25,9 @@ ${comment}
  * Creates the standard file header for generated Rust files.
  * Uses `//` regular comments instead of `///` doc comments to avoid
  * interfering with Rust's attribute system.
+ *
+ * Uses `#![allow(...)]` (inner attribute) which is valid in any module file
+ * included via `mod filename;` — not just the crate root.
  */
 export function createRustFileMetadataString(filename: string): string {
   return `//
@@ -33,7 +36,7 @@ export function createRustFileMetadataString(filename: string): string {
 // https://github.com/mrousavy/nitro
 // Copyright © Marc Rousavy @ Margelo
 //
-#![allow(non_camel_case_types, non_snake_case, dead_code, unused_imports, clippy::all)]`.trim();
+#![allow(non_camel_case_types, non_snake_case, dead_code, unused_imports, clippy::needless_return, clippy::redundant_closure, clippy::new_without_default, clippy::useless_conversion)]`.trim();
 }
 
 export function isFunction(type: Type): boolean {
@@ -171,8 +174,11 @@ export function isBooleanPropertyPrefix(name: string): boolean {
 
 export function toSnakeCase(name: string): string {
   return name
-    .replace(/([A-Z])/g, "_$1")
-    .replace(/^_/, "")
+    // Insert underscore between a lowercase letter and an uppercase letter (camelCase boundary)
+    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+    // Insert underscore between consecutive uppercase letters followed by lowercase (acronym boundary)
+    // e.g. "HTTPResponse" -> "HTTP_Response" -> "http_response"
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2")
     .toLowerCase();
 }
 

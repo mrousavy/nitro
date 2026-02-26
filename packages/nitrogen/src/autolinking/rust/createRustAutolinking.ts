@@ -41,9 +41,10 @@ pub struct NitroBuffer {
 
 // SAFETY: NitroBuffer owns its handle and the C++ shared_ptr it points to
 // is thread-safe (reference counting is atomic). The data pointer remains
-// valid as long as the handle is alive.
+// valid as long as the handle is alive. NitroBuffer can be sent between threads.
+// Note: Sync is NOT implemented because as_mut_slice() allows unsynchronized
+// mutable access to the data pointer, which would be a data race if shared.
 unsafe impl Send for NitroBuffer {}
-unsafe impl Sync for NitroBuffer {}
 
 impl NitroBuffer {
     /// Create a NitroBuffer that takes ownership of a Vec<u8>.
@@ -198,6 +199,13 @@ ${createRustFileMetadataString("lib.rs")}
 
 ${modDeclarations}
 ${stubs}
+
+/// Free a Rust-allocated CString from C++.
+/// This is called by the C++ bridge to deallocate strings returned from Rust.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
+    unsafe { let _ = std::ffi::CString::from_raw(ptr); }
+}
   `.trim();
 
   return {
@@ -221,9 +229,17 @@ export function createRustCargoToml(): SourceFile {
 
   const implCrate = NitroConfig.current.getRustImplCrate();
   // Generated crate is at nitrogen/generated/shared/rust/ relative to project root
+  // The impl crate path is relative to the generated Cargo.toml location
+  // which is at: nitrogen/generated/shared/rust/Cargo.toml
+  // The project root (where the user's Cargo.toml lives) is 4 levels up.
+  // TODO: Make this configurable via NitroConfig if projects use non-standard layouts.
   const implCrateDep = implCrate != null
     ? `\n[dependencies]\n${implCrate} = { path = "../../../../" }\n`
     : "";
+
+  // The [lib] name must match what CMake and CocoaPods expect:
+  // `lib${name}_rust.a` where `name` is the raw androidCxxLibName (e.g. NitroTest).
+  const libName = `${name}_rust`;
 
   const code = `
 ${createFileMetadataString("Cargo.toml", "#")}
@@ -233,9 +249,10 @@ ${createFileMetadataString("Cargo.toml", "#")}
 [package]
 name = "${crateName}_rust"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [lib]
+name = "${libName}"
 path = "lib.rs"
 crate-type = ["staticlib"]
 ${implCrateDep}
@@ -468,7 +485,7 @@ export function createRustFactory(
         const call = paramNames.length > 0
           ? `self.0.${parsed.name}(${paramNames})`
           : `self.0.${parsed.name}()`;
-        const body = parsed.returnType != null ? `${call}` : `${call}`;
+        const body = call;
         const allParams = [
           parsed.selfParam,
           ...parsed.params.map((p) => `${p.name}: ${p.type}`),
@@ -487,15 +504,15 @@ ${delegations.join("\n\n")}
       );
     }
 
-    // Factory creates the wrapper, not the raw struct
-    const wrapperName = traitFile != null
-      ? `${rustClassName}Wrapper`
-      : rustClassName;
+    // Factory creates the wrapper (if available), or the raw struct directly
+    const constructExpr = traitFile != null
+      ? `${rustClassName}Wrapper(${rustClassName}::new())`
+      : `${rustClassName}::new()`;
 
     factories.push(`
 #[unsafe(no_mangle)]
 pub extern "C" fn ${factoryFunctionName}() -> *mut std::ffi::c_void {
-    let obj: Box<dyn ${HybridTSpec}> = Box::new(${wrapperName}(${rustClassName}::new()));
+    let obj: Box<dyn ${HybridTSpec}> = Box::new(${constructExpr});
     Box::into_raw(Box::new(obj)) as *mut std::ffi::c_void
 }`.trim());
   }

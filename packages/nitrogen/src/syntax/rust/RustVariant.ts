@@ -33,6 +33,7 @@ export function createRustVariant(variant: VariantType): SourceFile {
 ${createRustFileMetadataString(`${aliasName}.rs`)}
 ${importsBlock}
 /// Tagged union \`${aliasName}\` — auto-generated from TypeScript.
+#[derive(Debug, Clone)]
 pub enum ${aliasName} {
     ${cases}
 }

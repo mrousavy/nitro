@@ -9,10 +9,14 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 /// Tagged union `Variant_bool_Vec_f64__Vec_String__String_f64` — auto-generated from TypeScript.
+#[derive(Debug, Clone)]
 pub enum Variant_bool_Vec_f64__Vec_String__String_f64 {
     First(bool),
     Second(Vec<f64>),

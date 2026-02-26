@@ -9,13 +9,17 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use super::Car::Car;
 use super::Person::Person;
 
 /// Tagged union `Variant_Car_Person` — auto-generated from TypeScript.
+#[derive(Debug, Clone)]
 pub enum Variant_Car_Person {
     First(Car),
     Second(Person),

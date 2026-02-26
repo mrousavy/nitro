@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use std::ffi;
@@ -48,10 +51,10 @@ impl Func_void_std__string {
     /// Call the wrapped function.
     pub unsafe fn call(&self, value: String) {
         unsafe {
-            (self.fn_ptr)(
-                self.userdata,
-                std::ffi::CString::new(value).unwrap().into_raw(),
-            );
+            (self.fn_ptr)(self.userdata, {
+                let __s = value.replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+            });
         }
     }
 }

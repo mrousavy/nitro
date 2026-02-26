@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use super::Person::Person;
@@ -17,7 +20,7 @@ use super::Powertrain::Powertrain;
 use super::Variant_String_f64::Variant_String_f64;
 
 /// Struct `Car` — auto-generated from TypeScript.
-#[repr(C)]
+#[derive(Debug, Clone)]
 pub struct Car {
     pub year: f64,
     pub make: String,

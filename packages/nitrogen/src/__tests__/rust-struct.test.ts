@@ -18,7 +18,7 @@ describe("RustStruct Generator", () => {
     expect(file.name).toBe("Point.rs");
     expect(file.language).toBe("rust");
     expect(file.platform).toBe("shared");
-    expect(file.content).toContain("#[repr(C)]");
+    expect(file.content).toContain("#[derive(Debug, Clone)]");
     expect(file.content).toContain("pub struct Point");
     expect(file.content).toContain("pub x: f64,");
     expect(file.content).toContain("pub y: f64,");
@@ -62,12 +62,12 @@ describe("RustStruct Generator", () => {
     expect(file.content).toContain("pub label: Option<String>,");
   });
 
-  test("includes repr(C) attribute", () => {
+  test("includes derive(Debug, Clone) instead of repr(C)", () => {
     const props = [new NamedWrappingType("x", new NumberType())];
     const file = createRustStruct("Simple", props);
 
-    expect(file.content).toContain("#[repr(C)]");
-    expect(file.content).not.toContain("#[derive(Debug, Clone)]");
+    expect(file.content).toContain("#[derive(Debug, Clone)]");
+    expect(file.content).not.toContain("#[repr(C)]");
   });
 
   test("includes auto-generated comment", () => {

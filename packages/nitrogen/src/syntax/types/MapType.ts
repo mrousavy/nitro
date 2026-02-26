@@ -24,7 +24,10 @@ export class MapType implements Type {
       case "kotlin":
         return "AnyMap";
       case "rust":
-        return "HashMap<String, Box<dyn std::any::Any>>";
+        // AnyMap is an opaque C++ type that cannot be directly represented in Rust.
+        // We pass it through as an opaque pointer. Users can interact with it via
+        // FFI helper functions if needed.
+        return "*mut std::ffi::c_void";
       default:
         throw new Error(
           `Language ${language} is not yet supported for MapType!`,
@@ -59,11 +62,7 @@ export class MapType implements Type {
         });
         break;
       case "rust":
-        imports.push({
-          name: "std::collections::HashMap",
-          language: "rust",
-          space: "system",
-        });
+        // No imports needed — map is an opaque *mut c_void
         break;
     }
     return imports;

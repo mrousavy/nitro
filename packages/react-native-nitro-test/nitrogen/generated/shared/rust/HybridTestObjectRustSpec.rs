@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use super::Car::Car;
@@ -117,27 +120,18 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
         array: Vec<Box<dyn HybridChildSpec>>,
     ) -> Vec<Box<dyn HybridChildSpec>>;
     fn bounce_functions(&mut self, functions: Vec<Box<dyn Fn()>>) -> Vec<Box<dyn Fn()>>;
-    fn bounce_maps(
-        &mut self,
-        maps: Vec<HashMap<String, Box<dyn std::any::Any>>>,
-    ) -> Vec<HashMap<String, Box<dyn std::any::Any>>>;
+    fn bounce_maps(&mut self, maps: Vec<*mut std::ffi::c_void>) -> Vec<*mut std::ffi::c_void>;
     fn bounce_promises(&mut self, promises: Vec<f64>) -> Vec<f64>;
     fn bounce_array_buffers(&mut self, array_buffers: Vec<NitroBuffer>) -> Vec<NitroBuffer>;
-    fn create_map(&mut self) -> HashMap<String, Box<dyn std::any::Any>>;
-    fn map_roundtrip(
-        &mut self,
-        map: HashMap<String, Box<dyn std::any::Any>>,
-    ) -> HashMap<String, Box<dyn std::any::Any>>;
-    fn get_map_keys(&mut self, map: HashMap<String, Box<dyn std::any::Any>>) -> Vec<String>;
+    fn create_map(&mut self) -> *mut std::ffi::c_void;
+    fn map_roundtrip(&mut self, map: *mut std::ffi::c_void) -> *mut std::ffi::c_void;
+    fn get_map_keys(&mut self, map: *mut std::ffi::c_void) -> Vec<String>;
     fn merge_maps(
         &mut self,
-        a: HashMap<String, Box<dyn std::any::Any>>,
-        b: HashMap<String, Box<dyn std::any::Any>>,
-    ) -> HashMap<String, Box<dyn std::any::Any>>;
-    fn copy_any_map(
-        &mut self,
-        map: HashMap<String, Box<dyn std::any::Any>>,
-    ) -> HashMap<String, Box<dyn std::any::Any>>;
+        a: *mut std::ffi::c_void,
+        b: *mut std::ffi::c_void,
+    ) -> *mut std::ffi::c_void;
+    fn copy_any_map(&mut self, map: *mut std::ffi::c_void) -> *mut std::ffi::c_void;
     fn bounce_map(
         &mut self,
         map: HashMap<String, Variant_bool_f64>,
@@ -186,7 +180,7 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
         &mut self,
         wrapping_js_callback: Box<dyn Fn(f64)>,
     ) -> Box<dyn Fn(f64)>;
-    fn get_value_from_j_s_callback_and_wait(&mut self, get_value: Box<dyn Fn() -> f64>) -> f64;
+    fn get_value_from_js_callback_and_wait(&mut self, get_value: Box<dyn Fn() -> f64>) -> f64;
     fn get_value_from_js_callback(
         &mut self,
         callback: Box<dyn Fn() -> String>,
@@ -272,7 +266,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_hybrid())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __opt: __Opt = match obj.get_optional_hybrid() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -283,9 +294,21 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_hybrid(*Box::from_raw(
-            value as *mut Option<Box<dyn HybridTestObjectRustSpec>>,
-        ));
+        obj.set_optional_hybrid({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(*Box::from_raw(
+                    __s.value as *mut Box<dyn HybridTestObjectRustSpec>,
+                ))
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -337,9 +360,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
 ) -> *const std::ffi::c_char {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        std::ffi::CString::new(obj.get_string_value())
-            .unwrap()
-            .into_raw()
+        {
+            let __s = obj.get_string_value().replace('\0', "");
+            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        }
     }
 }
 
@@ -425,7 +449,27 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_string())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *const std::ffi::c_char,
+            }
+            let __opt: __Opt = match obj.get_optional_string() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: {
+                        let __s = __v.replace('\0', "");
+                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                    },
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -436,7 +480,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_string(*Box::from_raw(value as *mut Option<String>));
+        obj.set_optional_string({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *const std::ffi::c_char,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(
+                    std::ffi::CStr::from_ptr(__s.value)
+                        .to_string_lossy()
+                        .into_owned(),
+                )
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -446,7 +506,27 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_string_or_undefined())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *const std::ffi::c_char,
+            }
+            let __opt: __Opt = match obj.get_string_or_undefined() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: {
+                        let __s = __v.replace('\0', "");
+                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                    },
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -457,7 +537,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_string_or_undefined(*Box::from_raw(value as *mut Option<String>));
+        obj.set_string_or_undefined({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *const std::ffi::c_char,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(
+                    std::ffi::CStr::from_ptr(__s.value)
+                        .to_string_lossy()
+                        .into_owned(),
+                )
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -488,7 +584,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_array())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __opt: __Opt = match obj.get_optional_array() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -499,7 +612,19 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_array(*Box::from_raw(value as *mut Option<Vec<String>>));
+        obj.set_optional_array({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(*Box::from_raw(__s.value as *mut Vec<String>))
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -509,7 +634,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_enum())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __opt: __Opt = match obj.get_optional_enum() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: __v as i32,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -520,7 +662,19 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_enum(*Box::from_raw(value as *mut Option<Powertrain>));
+        obj.set_optional_enum({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -530,7 +684,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_old_enum())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __opt: __Opt = match obj.get_optional_old_enum() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: __v as i32,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -541,7 +712,19 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_old_enum(*Box::from_raw(value as *mut Option<OldEnum>));
+        obj.set_optional_old_enum({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(OldEnum::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -551,7 +734,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_optional_callback())) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __opt: __Opt = match obj.get_optional_callback() {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -562,7 +762,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_callback(*Box::from_raw(value as *mut Option<Box<dyn Fn(f64)>>));
+        obj.set_optional_callback({
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some({
+                    let __wrapper =
+                        Box::from_raw(__s.value as *mut super::Func_void_double::Func_void_double);
+                    let __cb: Box<dyn Fn(f64)> =
+                        Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                    __cb
+                })
+            } else {
+                None
+            }
+        });
     }
 }
 
@@ -643,7 +861,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_strings(
         let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
         let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
         let __result = obj.add_strings(__a, __b);
-        std::ffi::CString::new(__result).unwrap().into_raw()
+        {
+            let __s = __result.replace('\0', "");
+            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        }
     }
 }
 
@@ -662,13 +883,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(
-    ptr: *mut std::ffi::c_void,
-    value: (),
-) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(ptr: *mut std::ffi::c_void) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.bounce_null(value)
+        obj.bounce_null()
     }
 }
 
@@ -733,7 +951,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
         let __cars = *Box::from_raw(cars as *mut Vec<Car>);
         let __result = obj.sum_up_all_passengers(__cars);
-        std::ffi::CString::new(__result).unwrap().into_raw()
+        {
+            let __s = __result.replace('\0', "");
+            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        }
     }
 }
 
@@ -802,7 +1023,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __maps = *Box::from_raw(maps as *mut Vec<HashMap<String, Box<dyn std::any::Any>>>);
+        let __maps = *Box::from_raw(maps as *mut Vec<*mut std::ffi::c_void>);
         let __result = obj.bounce_maps(__maps);
         Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
     }
@@ -852,7 +1073,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut HashMap<String, Box<dyn std::any::Any>>);
+        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
         let __result = obj.map_roundtrip(__map);
         Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
     }
@@ -865,7 +1086,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_map_keys(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut HashMap<String, Box<dyn std::any::Any>>);
+        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
         let __result = obj.get_map_keys(__map);
         Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
     }
@@ -879,8 +1100,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __a = *Box::from_raw(a as *mut HashMap<String, Box<dyn std::any::Any>>);
-        let __b = *Box::from_raw(b as *mut HashMap<String, Box<dyn std::any::Any>>);
+        let __a = *Box::from_raw(a as *mut *mut std::ffi::c_void);
+        let __b = *Box::from_raw(b as *mut *mut std::ffi::c_void);
         let __result = obj.merge_maps(__a, __b);
         Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
     }
@@ -893,7 +1114,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut HashMap<String, Box<dyn std::any::Any>>);
+        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
         let __result = obj.copy_any_map(__map);
         Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
     }
@@ -981,9 +1202,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
 ) -> *const std::ffi::c_char {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __str = *Box::from_raw(str as *mut Option<String>);
+        let __str = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *const std::ffi::c_char,
+            }
+            let __s = *Box::from_raw(str as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(
+                    std::ffi::CStr::from_ptr(__s.value)
+                        .to_string_lossy()
+                        .into_owned(),
+                )
+            } else {
+                None
+            }
+        };
         let __result = obj.try_optional_params(num, boo, __str);
-        std::ffi::CString::new(__result).unwrap().into_raw()
+        {
+            let __s = __result.replace('\0', "");
+            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        }
     }
 }
 
@@ -996,10 +1236,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
 ) -> *const std::ffi::c_char {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __boo = *Box::from_raw(boo as *mut Option<bool>);
+        let __boo = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: bool,
+            }
+            let __s = *Box::from_raw(boo as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(__s.value)
+            } else {
+                None
+            }
+        };
         let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
         let __result = obj.try_middle_param(num, __boo, __str);
-        std::ffi::CString::new(__result).unwrap().into_raw()
+        {
+            let __s = __result.replace('\0', "");
+            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        }
     }
 }
 
@@ -1010,9 +1265,38 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
 ) -> *mut std::ffi::c_void {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = *Box::from_raw(value as *mut Option<Powertrain>);
+        let __value = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
+            } else {
+                None
+            }
+        };
         let __result = obj.try_optional_enum(__value);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: i32,
+            }
+            let __opt: __Opt = match __result {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: __v as i32,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -1026,7 +1310,19 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
         let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-        let __boo = *Box::from_raw(boo as *mut Option<bool>);
+        let __boo = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: bool,
+            }
+            let __s = *Box::from_raw(boo as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(__s.value)
+            } else {
+                None
+            }
+        };
         obj.try_trailing_optional(num, __str, __boo)
     }
 }
@@ -1128,7 +1424,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undef
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
         let __result = obj.promise_that_resolves_to_undefined();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: f64,
+            }
+            let __opt: __Opt = match __result {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: __v,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 
@@ -1237,7 +1550,19 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = *Box::from_raw(value as *mut Option<f64>);
+        let __value = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: f64,
+            }
+            let __s = *Box::from_raw(value as *mut __Opt);
+            if __s.has_value != 0 {
+                Some(__s.value)
+            } else {
+                None
+            }
+        };
         let __callback = {
             let __wrapper = Box::from_raw(
                 callback
@@ -1324,8 +1649,45 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
 ) {
     unsafe {
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __first = *Box::from_raw(first as *mut Option<Box<dyn Fn(f64)>>);
-        let __second = *Box::from_raw(second as *mut Option<Box<dyn Fn(String)>>);
+        let __first = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __s = *Box::from_raw(first as *mut __Opt);
+            if __s.has_value != 0 {
+                Some({
+                    let __wrapper =
+                        Box::from_raw(__s.value as *mut super::Func_void_double::Func_void_double);
+                    let __cb: Box<dyn Fn(f64)> =
+                        Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                    __cb
+                })
+            } else {
+                None
+            }
+        };
+        let __second = {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __s = *Box::from_raw(second as *mut __Opt);
+            if __s.has_value != 0 {
+                Some({
+                    let __wrapper = Box::from_raw(
+                        __s.value as *mut super::Func_void_std__string::Func_void_std__string,
+                    );
+                    let __cb: Box<dyn Fn(String)> =
+                        Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                    __cb
+                })
+            } else {
+                None
+            }
+        };
         obj.two_optional_callbacks(value, __first, __second)
     }
 }
@@ -1369,7 +1731,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_j_s_callback_and_wait(
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback_and_wait(
     ptr: *mut std::ffi::c_void,
     get_value: *mut std::ffi::c_void,
 ) -> f64 {
@@ -1381,7 +1743,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_j_s_callback_an
                 Box::new(move || -> f64 { unsafe { __wrapper.call() } });
             __cb
         };
-        obj.get_value_from_j_s_callback_and_wait(__get_value)
+        obj.get_value_from_js_callback_and_wait(__get_value)
     }
 }
 
@@ -1443,7 +1805,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
         let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
         let __car = *Box::from_raw(car as *mut Car);
         let __result = obj.get_driver(__car);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        {
+            #[repr(C)]
+            struct __Opt {
+                has_value: u8,
+                value: *mut std::ffi::c_void,
+            }
+            let __opt: __Opt = match __result {
+                Some(__v) => __Opt {
+                    has_value: 1,
+                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                },
+                None => __Opt {
+                    has_value: 0,
+                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                },
+            };
+            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        }
     }
 }
 

@@ -20,8 +20,8 @@ describe('toSnakeCase', () => {
   test('PascalCase -> pascal_case', () => {
     expect(toSnakeCase('MyMethod')).toBe('my_method')
   })
-  test('multiple capitals', () => {
-    expect(toSnakeCase('getHTTPResponse')).toBe('get_h_t_t_p_response')
+  test('multiple capitals (acronyms)', () => {
+    expect(toSnakeCase('getHTTPResponse')).toBe('get_http_response')
   })
   test('already snake_case stays the same', () => {
     expect(toSnakeCase('my_method')).toBe('my_method')

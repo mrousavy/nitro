@@ -9,8 +9,9 @@ import type { NamedType } from "../types/Type.js";
 /**
  * Creates a Rust struct definition from a Nitro StructType's properties.
  *
- * Generates a Rust struct with `#[repr(C)]` for FFI compatibility,
- * plus derived traits for common operations.
+ * Structs are passed across the FFI boundary as opaque `void*` pointers
+ * (boxed/unboxed), so `#[repr(C)]` is not needed and would be incorrect
+ * for fields containing non-C-compatible types like String, Vec, etc.
  */
 export function createRustStruct(
   structName: string,
@@ -38,7 +39,7 @@ export function createRustStruct(
 ${createRustFileMetadataString(`${structName}.rs`)}
 ${importsBlock}
 /// Struct \`${structName}\` — auto-generated from TypeScript.
-#[repr(C)]
+#[derive(Debug, Clone)]
 pub struct ${structName} {
     ${fields}
 }

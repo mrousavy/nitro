@@ -9,11 +9,14 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 /// Struct `PartialPerson` — auto-generated from TypeScript.
-#[repr(C)]
+#[derive(Debug, Clone)]
 pub struct PartialPerson {
     pub name: Option<String>,
     pub age: Option<f64>,

@@ -9,10 +9,14 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 /// Tagged union `Variant____String` — auto-generated from TypeScript.
+#[derive(Debug, Clone)]
 pub enum Variant____String {
     First(()),
     Second(String),

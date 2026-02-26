@@ -9,19 +9,22 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use super::NitroBuffer::NitroBuffer;
 use super::WrappedJsStruct::WrappedJsStruct;
-use std::collections::HashMap;
 
 /// Tagged union `CoreTypesVariant` — auto-generated from TypeScript.
+#[derive(Debug, Clone)]
 pub enum CoreTypesVariant {
     First(NitroBuffer),
     Second(Box<dyn Fn(f64)>),
     Third(WrappedJsStruct),
     Fourth(f64),
     Fifth(f64),
-    Sixth(HashMap<String, Box<dyn std::any::Any>>),
+    Sixth(*mut std::ffi::c_void),
 }

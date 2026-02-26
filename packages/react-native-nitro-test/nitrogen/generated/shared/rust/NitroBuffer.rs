@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use std::ffi::c_void;
@@ -34,9 +37,10 @@ pub struct NitroBuffer {
 
 // SAFETY: NitroBuffer owns its handle and the C++ shared_ptr it points to
 // is thread-safe (reference counting is atomic). The data pointer remains
-// valid as long as the handle is alive.
+// valid as long as the handle is alive. NitroBuffer can be sent between threads.
+// Note: Sync is NOT implemented because as_mut_slice() allows unsynchronized
+// mutable access to the data pointer, which would be a data race if shared.
 unsafe impl Send for NitroBuffer {}
-unsafe impl Sync for NitroBuffer {}
 
 impl NitroBuffer {
     /// Create a NitroBuffer that takes ownership of a Vec<u8>.

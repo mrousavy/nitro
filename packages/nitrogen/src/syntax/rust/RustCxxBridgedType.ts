@@ -194,7 +194,9 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
         const enumType = getTypeAs(this.type, EnumType);
         switch (inLanguage) {
           case "rust":
-            return `${enumType.enumName}::from_i32(${parameterName}).unwrap()`;
+            // Use unwrap_or_else with eprintln + abort to produce a useful error message
+            // without panicking across FFI (which is UB).
+            return `${enumType.enumName}::from_i32(${parameterName}).unwrap_or_else(|| { eprintln!("[Nitro] Invalid ${enumType.enumName} discriminant: {}", ${parameterName}); std::process::abort() })`;
           case "c++":
             return `static_cast<int32_t>(${parameterName})`;
           default:
@@ -402,11 +404,13 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "hybrid-object":
         switch (inLanguage) {
           case "rust":
-            // Reconstruct Box<dyn Trait> from opaque void pointer
+            // Reconstruct Box<dyn Trait> from opaque void pointer.
+            // The C++ side passes a new'd clone, so Rust takes ownership.
             return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
           case "c++":
-            // Extract raw pointer from shared_ptr
-            return `static_cast<void*>(${parameterName}.get())`;
+            // Clone the shared_ptr onto the heap so Rust can take ownership via Box::from_raw.
+            // Using .get() would be a non-owning pointer that Rust would double-free.
+            return `static_cast<void*>(new ${this.type.getCode("c++")}(${parameterName}))`;
           default:
             return parameterName;
         }
@@ -469,7 +473,9 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "string":
         switch (inLanguage) {
           case "rust":
-            return `std::ffi::CString::new(${parameterName}).unwrap().into_raw()`;
+            // Strip interior null bytes instead of panicking (which is UB across FFI).
+            // CString::new fails on interior nulls, so we replace them first.
+            return `{ let __s = ${parameterName}.replace('\\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }`;
           case "c++":
             // Copy the Rust-allocated CString into std::string, then free the original.
             return `([](const char* __p) -> std::string { std::string __s(__p); __nitrogen_free_cstring(const_cast<char*>(__p)); return __s; })(${parameterName})`;
@@ -497,7 +503,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "error":
         switch (inLanguage) {
           case "rust":
-            return `std::ffi::CString::new(${parameterName}).unwrap().into_raw()`;
+            return `{ let __s = ${parameterName}.replace('\\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }`;
           case "c++":
             // Copy the Rust-allocated CString into exception, then free the original.
             return `([](const char* __p) -> std::exception_ptr { auto __e = std::make_exception_ptr(std::runtime_error(__p)); __nitrogen_free_cstring(const_cast<char*>(__p)); return __e; })(${parameterName})`;
@@ -521,7 +527,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
                 `{ #[repr(C)] struct __Opt { has_value: u8, value: ${innerFfiRust} } ` +
                 `let __opt: __Opt = match ${parameterName} { ` +
                 `Some(__v) => __Opt { has_value: 1, value: ${innerConvert} }, ` +
-                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } } }; ` +
+                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
                 `Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }`
               );
             } else {
@@ -529,7 +535,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
                 `{ #[repr(C)] struct __Opt { has_value: u8, value: ${innerFfiRust} } ` +
                 `let __opt: __Opt = match ${parameterName} { ` +
                 `Some(__v) => __Opt { has_value: 1, value: __v }, ` +
-                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } } }; ` +
+                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
                 `Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }`
               );
             }

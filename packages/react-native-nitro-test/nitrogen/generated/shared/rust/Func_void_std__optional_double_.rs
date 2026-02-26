@@ -9,7 +9,10 @@
     non_snake_case,
     dead_code,
     unused_imports,
-    clippy::all
+    clippy::needless_return,
+    clippy::redundant_closure,
+    clippy::new_without_default,
+    clippy::useless_conversion
 )]
 
 use std::ffi;
@@ -48,10 +51,24 @@ impl Func_void_std__optional_double_ {
     /// Call the wrapped function.
     pub unsafe fn call(&self, maybe: Option<f64>) {
         unsafe {
-            (self.fn_ptr)(
-                self.userdata,
-                Box::into_raw(Box::new(maybe)) as *mut std::ffi::c_void,
-            );
+            (self.fn_ptr)(self.userdata, {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: f64,
+                }
+                let __opt: __Opt = match maybe {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: __v,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+            });
         }
     }
 }

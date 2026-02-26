@@ -23,13 +23,13 @@ export function createRustHybridObject(spec: HybridObjectSpec): SourceFile[] {
   // 1. Generate combined Rust trait + FFI shim file
   files.push(createRustTraitAndFfi(spec));
 
-  // 3. Generate C++ bridge header (uses C-compatible types at boundary)
+  // 2. Generate C++ bridge header (uses C-compatible types at boundary)
   files.push(createCppRustBridgeHeader(spec));
 
-  // 4. Generate C++ bridge implementation
+  // 3. Generate C++ bridge implementation
   files.push(createCppRustBridgeImpl(spec));
 
-  // 5. Collect extra Rust files for referenced types (enums, structs, etc.)
+  // 4. Collect extra Rust files for referenced types (enums, structs, etc.)
   const allTypes = [
     ...spec.properties.map((p) => p.type),
     ...spec.methods.map((m) => m.returnType),
@@ -131,8 +131,11 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_set_${rustPropName}(ptr: *mut std::
     const ffiReturnSuffix =
       ffiReturnType === "()" ? "" : ` -> ${ffiReturnType}`;
 
-    // Build FFI params with C-compatible types
-    const ffiParams = method.parameters.map((p) => {
+    // Build FFI params with C-compatible types (skip void/null params)
+    const validMethodParams = method.parameters.filter(
+      (p) => p.type.kind !== "void" && p.type.kind !== "null",
+    );
+    const ffiParams = validMethodParams.map((p) => {
       const bridged = new RustCxxBridgedType(p.type);
       return `${toSnakeCase(p.name)}: ${bridged.getRustFfiType()}`;
     });
@@ -143,7 +146,7 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_set_${rustPropName}(ptr: *mut std::
     const paramConversions: string[] = [];
     const traitCallArgs: string[] = [];
 
-    for (const p of method.parameters) {
+    for (const p of validMethodParams) {
       const pName = toSnakeCase(p.name);
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
@@ -216,16 +219,8 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_destroy(ptr: *mut std::ffi::c_void)
   `.trim(),
   );
 
-  // Free a Rust-allocated CString from C++.
-  // Each bridge file emits this; the linker deduplicates via #[no_mangle].
-  shims.push(
-    `
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
-    unsafe { let _ = std::ffi::CString::from_raw(ptr); }
-}
-  `.trim(),
-  );
+  // Note: __nitrogen_free_cstring is emitted once in lib.rs (via createRustLibRs)
+  // to avoid duplicate symbol errors when multiple HybridObjects exist.
 
   // Collect Rust use imports from all property/method types
   const rustImports = [
@@ -317,6 +312,7 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     const returnBridged = new RustCxxBridgedType(effectiveReturnType);
     const ffiReturnType = returnBridged.getCppFfiType();
     const params = method.parameters
+      .filter((p) => p.type.kind !== "void" && p.type.kind !== "null")
       .map((p) => {
         const bridged = new RustCxxBridgedType(p.type);
         return `${bridged.getCppFfiType()} ${p.name}`;
@@ -384,8 +380,11 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     const returnBridged = new RustCxxBridgedType(effectiveReturnType);
     const hasReturn = effectiveReturnType.kind !== "void";
 
-    // C++ method params use native C++ types
-    const params = method.parameters
+    // C++ method params use native C++ types (skip void/null params)
+    const validParams = method.parameters.filter(
+      (p) => p.type.kind !== "void" && p.type.kind !== "null",
+    );
+    const params = validParams
       .map((p) => {
         const t = p.type.getCode("c++");
         return p.type.canBePassedByReference
@@ -395,7 +394,7 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
       .join(", ");
 
     // Convert C++ args to FFI types for the extern "C" call
-    const ffiArgs = method.parameters.map((p) => {
+    const ffiArgs = validParams.map((p) => {
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
         return bridged.parseFromCppToRust(p.name, "c++");
