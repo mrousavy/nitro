@@ -1,62 +1,75 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
-import { createCppHybridObjectRegistration } from '../../syntax/c++/CppHybridObjectRegistration.js'
-import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
+import { NitroConfig } from "../../config/NitroConfig.js";
+import { createCppHybridObjectRegistration } from "../../syntax/c++/CppHybridObjectRegistration.js";
+import { includeHeader } from "../../syntax/c++/includeNitroHeader.js";
 import {
   createFileMetadataString,
   isNotDuplicate,
-} from '../../syntax/helpers.js'
-import { getJNINativeRegistrations } from '../../syntax/kotlin/JNINativeRegistrations.js'
-import { createJNIHybridObjectRegistration } from '../../syntax/kotlin/KotlinHybridObjectRegistration.js'
-import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
-import { indent } from '../../utils.js'
-import { getBuildingWithGeneratedCmakeDefinition } from './createCMakeExtension.js'
+} from "../../syntax/helpers.js";
+import { getJNINativeRegistrations } from "../../syntax/kotlin/JNINativeRegistrations.js";
+import { createJNIHybridObjectRegistration } from "../../syntax/kotlin/KotlinHybridObjectRegistration.js";
+import { createRustHybridObjectRegistration } from "../../syntax/rust/RustHybridObjectRegistration.js";
+import type { SourceFile, SourceImport } from "../../syntax/SourceFile.js";
+import { indent } from "../../utils.js";
+import { getBuildingWithGeneratedCmakeDefinition } from "./createCMakeExtension.js";
 
 export function createHybridObjectIntializer(): SourceFile[] {
-  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
-  const cppLibName = NitroConfig.current.getAndroidCxxLibName()
-  const javaNamespace = NitroConfig.current.getAndroidPackage('java/kotlin')
-  const autolinkingClassName = `${NitroConfig.current.getAndroidCxxLibName()}OnLoad`
+  const cxxNamespace = NitroConfig.current.getCxxNamespace("c++");
+  const cppLibName = NitroConfig.current.getAndroidCxxLibName();
+  const javaNamespace = NitroConfig.current.getAndroidPackage("java/kotlin");
+  const autolinkingClassName = `${NitroConfig.current.getAndroidCxxLibName()}OnLoad`;
 
   const jniRegistrations = getJNINativeRegistrations()
     .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
-    .filter(isNotDuplicate)
+    .filter(isNotDuplicate);
 
   const autolinkedHybridObjects =
-    NitroConfig.current.getAutolinkedHybridObjects()
+    NitroConfig.current.getAutolinkedHybridObjects();
 
-  const cppHybridObjectImports: SourceImport[] = []
-  const cppRegistrations: string[] = []
+  const cppHybridObjectImports: SourceImport[] = [];
+  const cppRegistrations: string[] = [];
+  const cppExternDecls: string[] = [];
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
+    const config = autolinkedHybridObjects[hybridObjectName];
 
     if (config?.cpp != null) {
       // Autolink a C++ HybridObject!
       const { cppCode, requiredImports } = createCppHybridObjectRegistration({
         hybridObjectName: hybridObjectName,
         cppClassName: config.cpp,
-      })
-      cppHybridObjectImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+      });
+      cppHybridObjectImports.push(...requiredImports);
+      cppRegistrations.push(cppCode);
     }
     if (config?.kotlin != null) {
       // Autolink a Kotlin HybridObject through JNI/C++!
       const { cppCode, requiredImports } = createJNIHybridObjectRegistration({
         hybridObjectName: hybridObjectName,
         jniClassName: config.kotlin,
-      })
-      cppHybridObjectImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+      });
+      cppHybridObjectImports.push(...requiredImports);
+      cppRegistrations.push(cppCode);
+    }
+    if (config?.rust != null) {
+      // Autolink a Rust HybridObject through FFI/C++!
+      const { cppCode, cppExternDeclarations, requiredImports } =
+        createRustHybridObjectRegistration({
+          hybridObjectName: hybridObjectName,
+          rustClassName: config.rust,
+        });
+      cppHybridObjectImports.push(...requiredImports);
+      cppExternDecls.push(cppExternDeclarations);
+      cppRegistrations.push(cppCode);
     }
   }
 
-  const buildingWithDefinition = getBuildingWithGeneratedCmakeDefinition()
+  const buildingWithDefinition = getBuildingWithGeneratedCmakeDefinition();
 
   const includes = [
     ...getJNINativeRegistrations().map((r) => includeHeader(r.import)),
     ...cppHybridObjectImports.map((i) => includeHeader(i)),
   ]
     .filter(isNotDuplicate)
-    .join('\n')
+    .join("\n");
 
   const hppCode = `
 ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
@@ -89,7 +102,10 @@ namespace ${cxxNamespace} {
 
 } // namespace ${cxxNamespace}
 
-    `
+    `;
+  const externDecls =
+    cppExternDecls.length > 0 ? "\n" + cppExternDecls.join("\n") + "\n" : "";
+
   const cppCode = `
 ${createFileMetadataString(`${autolinkingClassName}.cpp`)}
 
@@ -104,7 +120,7 @@ ${createFileMetadataString(`${autolinkingClassName}.cpp`)}
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 ${includes}
-
+${externDecls}
 namespace ${cxxNamespace} {
 
 int initialize(JavaVM* vm) {
@@ -125,7 +141,7 @@ void registerAllNatives() {
 }
 
 } // namespace ${cxxNamespace}
-  `.trim()
+  `.trim();
 
   const kotlinCode = `
 ${createFileMetadataString(`${autolinkingClassName}.kt`)}
@@ -158,29 +174,29 @@ internal class ${autolinkingClassName} {
     }
   }
 }
-  `.trim()
+  `.trim();
 
   return [
     {
       content: hppCode,
-      language: 'c++',
+      language: "c++",
       name: `${autolinkingClassName}.hpp`,
-      platform: 'android',
+      platform: "android",
       subdirectory: [],
     },
     {
       content: cppCode,
-      language: 'c++',
+      language: "c++",
       name: `${autolinkingClassName}.cpp`,
-      platform: 'android',
+      platform: "android",
       subdirectory: [],
     },
     {
       content: kotlinCode,
-      language: 'kotlin',
+      language: "kotlin",
       name: `${autolinkingClassName}.kt`,
-      platform: 'android',
-      subdirectory: ['kotlin', ...javaNamespace.split('.')],
+      platform: "android",
+      subdirectory: ["kotlin", ...javaNamespace.split(".")],
     },
-  ]
+  ];
 }

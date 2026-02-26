@@ -27,6 +27,7 @@
   },
   "scripts": {
     "build": "bun tsc",
+    "test": "bun test",
     "start": "tsc && node lib/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
