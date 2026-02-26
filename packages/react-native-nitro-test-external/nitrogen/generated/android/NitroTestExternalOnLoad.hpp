@@ -11,20 +11,24 @@
 
 namespace margelo::nitro::test::external {
 
+  [[deprecated("Use registerNatives() instead.")]]
+  int initialize(JavaVM* vm);
+
   /**
-   * Initializes the native (C++) part of NitroTestExternal, and autolinks all Hybrid Objects.
-   * Call this in your `JNI_OnLoad` function (probably inside `cpp-adapter.cpp`).
+   * Register the native (C++) part of NitroTestExternal, and autolinks all Hybrid Objects.
+   * Call this in your `JNI_OnLoad` function (probably inside `cpp-adapter.cpp`),
+   * inside a `facebook::jni::initialize(vm, ...)` call.
    * Example:
    * ```cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return margelo::nitro::test::external::initialize(vm, []() {
-   *     // any custom registrations go here.
+   *   return facebook::jni::initialize(vm, []() {
+   *     // register all NitroTestExternal HybridObjects
+   *     margelo::nitro::test::external::registerNatives();
+   *     // any other custom registrations go here.
    *   });
    * }
    * ```
    */
-  int initialize(JavaVM* vm, std::function<void()>&& extraRegistrations);
-
-  int initialize(JavaVM* vm);
+  void registerAllNatives();
 
 } // namespace margelo::nitro::test::external
