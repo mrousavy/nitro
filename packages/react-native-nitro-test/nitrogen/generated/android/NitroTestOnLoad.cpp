@@ -42,7 +42,7 @@
 namespace margelo::nitro::test {
 
 int initialize(JavaVM* vm) {
-  initialize(vm, []() {
+  return initialize(vm, []() {
     // no extra initializations.
   });
 }
