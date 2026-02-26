@@ -43,6 +43,12 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalOldEnum);
       prototype.registerHybridGetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::getOptionalCallback);
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::setOptionalCallback);
+      prototype.registerHybridGetter("hasBoolean", &HybridTestObjectSwiftKotlinSpec::getHasBoolean);
+      prototype.registerHybridGetter("isBoolean", &HybridTestObjectSwiftKotlinSpec::getIsBoolean);
+      prototype.registerHybridGetter("hasBooleanWritable", &HybridTestObjectSwiftKotlinSpec::getHasBooleanWritable);
+      prototype.registerHybridSetter("hasBooleanWritable", &HybridTestObjectSwiftKotlinSpec::setHasBooleanWritable);
+      prototype.registerHybridGetter("isBooleanWritable", &HybridTestObjectSwiftKotlinSpec::getIsBooleanWritable);
+      prototype.registerHybridSetter("isBooleanWritable", &HybridTestObjectSwiftKotlinSpec::setIsBooleanWritable);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);

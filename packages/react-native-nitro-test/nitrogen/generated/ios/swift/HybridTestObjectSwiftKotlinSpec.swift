@@ -26,6 +26,10 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
   var optionalCallback: ((_ value: Double) -> Void)? { get set }
+  var hasBoolean: Bool { get }
+  var isBoolean: Bool { get }
+  var hasBooleanWritable: Bool { get set }
+  var isBooleanWritable: Bool { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods

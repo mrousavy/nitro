@@ -403,6 +403,42 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var hasBoolean: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.hasBoolean
+    }
+  }
+  
+  public final var isBoolean: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.isBoolean
+    }
+  }
+  
+  public final var hasBooleanWritable: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.hasBooleanWritable
+    }
+    @inline(__always)
+    set {
+      self.__implementation.hasBooleanWritable = newValue
+    }
+  }
+  
+  public final var isBooleanWritable: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.isBooleanWritable
+    }
+    @inline(__always)
+    set {
+      self.__implementation.isBooleanWritable = newValue
+    }
+  }
+  
   public final var someVariant: bridge.std__variant_std__string__double_ {
     @inline(__always)
     get {

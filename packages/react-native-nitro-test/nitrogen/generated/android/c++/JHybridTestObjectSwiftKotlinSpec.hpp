@@ -80,6 +80,12 @@ namespace margelo::nitro::test {
     void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
     std::optional<std::function<void(double /* value */)>> getOptionalCallback() override;
     void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) override;
+    bool getHasBoolean() override;
+    bool getIsBoolean() override;
+    bool getHasBooleanWritable() override;
+    void setHasBooleanWritable(bool hasBooleanWritable) override;
+    bool getIsBooleanWritable() override;
+    void setIsBooleanWritable(bool isBooleanWritable) override;
     std::variant<std::string, double> getSomeVariant() override;
     void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
 
