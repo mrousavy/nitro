@@ -239,7 +239,7 @@ describe("Rust HybridObject Generator", () => {
       const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
       expect(hpp.content).toContain('extern "C"');
       expect(hpp.content).toContain(
-        "double HybridImageSpec_get_width(void* rustPtr)",
+        "__FfiResult_f64 HybridImageSpec_get_width(void* rustPtr)",
       );
       expect(hpp.content).toContain(
         "void HybridImageSpec_destroy(void* rustPtr)",
@@ -397,9 +397,9 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
 
-      // extern "C" should use const char* not std::string
+      // extern "C" should use result struct with const char* value
       expect(hpp.content).toContain(
-        "const char* HybridImageSpec_get_name(void* rustPtr)",
+        "__FfiResult_cstr HybridImageSpec_get_name(void* rustPtr)",
       );
       // C++ method should convert const char* back to std::string and free the Rust CString
       expect(hpp.content).toContain("std::string getName() override");
@@ -407,7 +407,7 @@ describe("Rust HybridObject Generator", () => {
       expect(hpp.content).toContain("__nitrogen_free_cstring");
     });
 
-    test("string property uses *const c_char at FFI boundary in Rust shims", () => {
+    test("string property uses __FfiResult_cstr at FFI boundary in Rust shims", () => {
       const spec = makeSpec(
         "Image",
         [new Property("name", new StringType(), true)],
@@ -416,11 +416,12 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
 
-      // FFI shim should use *const c_char return type
-      expect(rsFile.content).toContain("*const std::ffi::c_char");
-      // Should convert String to CString
+      // FFI shim should return __FfiResult_cstr (wrapping *const c_char)
+      expect(rsFile.content).toContain("__FfiResult_cstr");
+      // Should convert String to CString inside catch_unwind
       expect(rsFile.content).toContain("CString::new");
       expect(rsFile.content).toContain("into_raw");
+      expect(rsFile.content).toContain("catch_unwind");
     });
 
     test("string method parameter uses const char* at FFI boundary", () => {
@@ -443,7 +444,7 @@ describe("Rust HybridObject Generator", () => {
       expect(rsFile.content).toContain("to_string_lossy");
     });
 
-    test("string method return uses const char* at FFI boundary in C++ bridge", () => {
+    test("string method return uses __FfiResult_cstr at FFI boundary in C++ bridge", () => {
       const spec = makeSpec(
         "Image",
         [],
@@ -452,9 +453,9 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
 
-      // extern "C" should return const char*
+      // extern "C" should return __FfiResult_cstr
       expect(hpp.content).toContain(
-        "const char* HybridImageSpec_get_name(void* rustPtr)",
+        "__FfiResult_cstr HybridImageSpec_get_name(void* rustPtr)",
       );
       // C++ method should return std::string
       expect(hpp.content).toContain("std::string getName(");
@@ -471,9 +472,9 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
 
-      // extern "C" should use double for dates
+      // extern "C" should use __FfiResult_f64 for dates
       expect(hpp.content).toContain(
-        "double HybridImageSpec_get_created_at(void* rustPtr)",
+        "__FfiResult_f64 HybridImageSpec_get_created_at(void* rustPtr)",
       );
     });
   });
@@ -546,11 +547,11 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
 
-      // FFI shim should return *const c_char (inner type), not void* (Promise)
-      expect(rsFile.content).toContain("-> *const std::ffi::c_char");
-      // The FFI shim function should not return void* (that would mean Promise was not unwrapped)
+      // FFI shim should return __FfiResult_cstr (inner type wrapped in result), not __FfiResult_ptr (Promise)
+      expect(rsFile.content).toContain("-> __FfiResult_cstr");
+      // The FFI shim function should not return __FfiResult_ptr (that would mean Promise was not unwrapped)
       expect(rsFile.content).not.toContain(
-        "fn HybridImageSpec_fetch_name(ptr: *mut std::ffi::c_void) -> *mut std::ffi::c_void",
+        "fn HybridImageSpec_fetch_name(ptr: *mut std::ffi::c_void) -> __FfiResult_ptr",
       );
     });
 
@@ -573,9 +574,9 @@ describe("Rust HybridObject Generator", () => {
       );
       // Should wrap in Promise::async
       expect(hpp.content).toContain("Promise<std::string>::async(");
-      // extern "C" should use const char* (inner type FFI), not void*
+      // extern "C" should use __FfiResult_cstr (inner type FFI result), not void*
       expect(hpp.content).toContain(
-        "const char* HybridImageSpec_fetch_name(void* rustPtr",
+        "__FfiResult_cstr HybridImageSpec_fetch_name(void* rustPtr",
       );
     });
 
@@ -592,9 +593,9 @@ describe("Rust HybridObject Generator", () => {
       expect(hpp.content).toContain("std::shared_ptr<Promise<void>> doWork(");
       // Should wrap in Promise<void>::async
       expect(hpp.content).toContain("Promise<void>::async(");
-      // extern "C" should return void
+      // extern "C" should return __FfiResult_void
       expect(hpp.content).toContain(
-        "void HybridImageSpec_do_work(void* rustPtr)",
+        "__FfiResult_void HybridImageSpec_do_work(void* rustPtr)",
       );
     });
 
@@ -620,9 +621,9 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
 
-      // extern "C" should return double (not void*)
+      // extern "C" should return __FfiResult_f64 (not __FfiResult_ptr)
       expect(hpp.content).toContain(
-        "double HybridImageSpec_compute(void* rustPtr)",
+        "__FfiResult_f64 HybridImageSpec_compute(void* rustPtr)",
       );
       // C++ method should wrap in Promise::async
       expect(hpp.content).toContain("Promise<double>::async(");

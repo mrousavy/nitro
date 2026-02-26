@@ -253,36 +253,62 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_this_object(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_this_object())) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            Box::into_raw(Box::new(obj.get_this_object())) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __opt: __Opt = match obj.get_optional_hybrid() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match obj.get_optional_hybrid() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -291,34 +317,58 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_hybrid({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(*Box::from_raw(
-                    __s.value as *mut Box<dyn HybridTestObjectRustSpec>,
-                ))
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_hybrid({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(*Box::from_raw(
+                        __s.value as *mut Box<dyn HybridTestObjectRustSpec>,
+                    ))
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_number_value(
     ptr: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.get_number_value()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.get_number_value()
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -326,20 +376,44 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_number_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
     ptr: *mut std::ffi::c_void,
     value: f64,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_number_value(value);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_number_value(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_bool_value(
     ptr: *mut std::ffi::c_void,
-) -> bool {
+) -> __FfiResult_bool {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.get_bool_value()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.get_bool_value()
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -347,22 +421,46 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_bool_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
     ptr: *mut std::ffi::c_void,
     value: bool,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_bool_value(value);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_bool_value(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
     ptr: *mut std::ffi::c_void,
-) -> *const std::ffi::c_char {
+) -> __FfiResult_cstr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            let __s = obj.get_string_value().replace('\0', "");
-            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                let __s = obj.get_string_value().replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+            }
+        })) {
+            Ok(__result) => __FfiResult_cstr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_cstr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -371,24 +469,48 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
     ptr: *mut std::ffi::c_void,
     value: *const std::ffi::c_char,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_string_value(
-            std::ffi::CStr::from_ptr(value)
-                .to_string_lossy()
-                .into_owned(),
-        );
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_string_value(
+                std::ffi::CStr::from_ptr(value)
+                    .to_string_lossy()
+                    .into_owned(),
+            );
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_int64_value(
     ptr: *mut std::ffi::c_void,
-) -> i64 {
+) -> __FfiResult_i64 {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.get_int64_value()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.get_int64_value()
+        })) {
+            Ok(__result) => __FfiResult_i64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_i64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -396,20 +518,44 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_int64_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
     ptr: *mut std::ffi::c_void,
     value: i64,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_int64_value(value);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_int64_value(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_uint64_value(
     ptr: *mut std::ffi::c_void,
-) -> u64 {
+) -> __FfiResult_u64 {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.get_uint64_value()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.get_uint64_value()
+        })) {
+            Ok(__result) => __FfiResult_u64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_u64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -417,18 +563,42 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_uint64_value(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
     ptr: *mut std::ffi::c_void,
     value: u64,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_uint64_value(value);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_uint64_value(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(ptr: *mut std::ffi::c_void) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_void {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.get_null_value()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.get_null_value()
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -436,39 +606,63 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(ptr: *mut std::
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
     ptr: *mut std::ffi::c_void,
     value: (),
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_null_value(value);
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_null_value(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *const std::ffi::c_char,
-            }
-            let __opt: __Opt = match obj.get_optional_string() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: {
-                        let __s = __v.replace('\0', "");
-                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *const std::ffi::c_char,
+                }
+                let __opt: __Opt = match obj.get_optional_string() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
                     },
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+            }
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -477,55 +671,79 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_string({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *const std::ffi::c_char,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(
-                    std::ffi::CStr::from_ptr(__s.value)
-                        .to_string_lossy()
-                        .into_owned(),
-                )
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_string({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *const std::ffi::c_char,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(
+                        std::ffi::CStr::from_ptr(__s.value)
+                            .to_string_lossy()
+                            .into_owned(),
+                    )
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *const std::ffi::c_char,
-            }
-            let __opt: __Opt = match obj.get_string_or_undefined() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: {
-                        let __s = __v.replace('\0', "");
-                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *const std::ffi::c_char,
+                }
+                let __opt: __Opt = match obj.get_string_or_undefined() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
                     },
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+            }
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -534,36 +752,60 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_string_or_undefined({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *const std::ffi::c_char,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(
-                    std::ffi::CStr::from_ptr(__s.value)
-                        .to_string_lossy()
-                        .into_owned(),
-                )
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_string_or_undefined({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *const std::ffi::c_char,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(
+                        std::ffi::CStr::from_ptr(__s.value)
+                            .to_string_lossy()
+                            .into_owned(),
+                    )
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_null(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_string_or_null())) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            Box::into_raw(Box::new(obj.get_string_or_null())) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -571,36 +813,60 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_null(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_string_or_null(*Box::from_raw(value as *mut Variant____String));
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_string_or_null(*Box::from_raw(value as *mut Variant____String));
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __opt: __Opt = match obj.get_optional_array() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match obj.get_optional_array() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -609,48 +875,72 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_array({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(*Box::from_raw(__s.value as *mut Vec<String>))
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_array({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(*Box::from_raw(__s.value as *mut Vec<String>))
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __opt: __Opt = match obj.get_optional_enum() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: __v as i32,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match obj.get_optional_enum() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: __v as i32,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -659,48 +949,74 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_enum({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_enum({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| {
+                        panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
+                    }))
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __opt: __Opt = match obj.get_optional_old_enum() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: __v as i32,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match obj.get_optional_old_enum() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: __v as i32,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -709,48 +1025,74 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_old_enum({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(OldEnum::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_old_enum({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(OldEnum::from_i32(__s.value).unwrap_or_else(|| {
+                        panic!("[Nitro] Invalid OldEnum discriminant: {}", __s.value)
+                    }))
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __opt: __Opt = match obj.get_optional_callback() {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match obj.get_optional_callback() {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -759,38 +1101,63 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_optional_callback({
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some({
-                    let __wrapper =
-                        Box::from_raw(__s.value as *mut super::Func_void_double::Func_void_double);
-                    let __cb: Box<dyn Fn(f64)> =
-                        Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
-                    __cb
-                })
-            } else {
-                None
-            }
-        });
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_optional_callback({
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some({
+                        let __wrapper = Box::from_raw(
+                            __s.value as *mut super::Func_void_double::Func_void_double,
+                        );
+                        let __cb: Box<dyn Fn(f64)> =
+                            Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                        __cb
+                    })
+                } else {
+                    None
+                }
+            });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_some_variant(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        Box::into_raw(Box::new(obj.get_some_variant())) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            Box::into_raw(Box::new(obj.get_some_variant())) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -798,21 +1165,45 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_some_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.set_some_variant(*Box::from_raw(value as *mut Variant_String_f64));
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_some_variant(*Box::from_raw(value as *mut Variant_String_f64));
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_new_test_object(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.new_test_object();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.new_test_object();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -820,21 +1211,47 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_new_test_object(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_hybrid(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant =
-            *Box::from_raw(variant as *mut Variant_Box_dyn_HybridTestObjectRustSpec__Person);
-        let __result = obj.get_variant_hybrid(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant =
+                *Box::from_raw(variant as *mut Variant_Box_dyn_HybridTestObjectRustSpec__Person);
+            let __result = obj.get_variant_hybrid(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_simple_func(ptr: *mut std::ffi::c_void) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_simple_func(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.simple_func()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.simple_func();
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -843,10 +1260,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_numbers(
     ptr: *mut std::ffi::c_void,
     a: f64,
     b: f64,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.add_numbers(a, b)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.add_numbers(a, b)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -855,15 +1285,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_strings(
     ptr: *mut std::ffi::c_void,
     a: *const std::ffi::c_char,
     b: *const std::ffi::c_char,
-) -> *const std::ffi::c_char {
+) -> __FfiResult_cstr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
-        let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
-        let __result = obj.add_strings(__a, __b);
-        {
-            let __s = __result.replace('\0', "");
-            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
+            let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
+            let __result = obj.add_strings(__a, __b);
+            {
+                let __s = __result.replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+            }
+        })) {
+            Ok(__result) => __FfiResult_cstr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_cstr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -874,19 +1317,43 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
     num: f64,
     str: *const std::ffi::c_char,
     boo: bool,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-        obj.multiple_arguments(num, __str, boo)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
+            obj.multiple_arguments(num, __str, boo);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(ptr: *mut std::ffi::c_void) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.bounce_null()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.bounce_null();
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -894,12 +1361,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(ptr: *mut std::ffi
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_strings(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<String>);
-        let __result = obj.bounce_strings(__array);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<String>);
+            let __result = obj.bounce_strings(__array);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -907,12 +1387,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_strings(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_numbers(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<f64>);
-        let __result = obj.bounce_numbers(__array);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<f64>);
+            let __result = obj.bounce_numbers(__array);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -920,12 +1413,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_numbers(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_structs(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<Person>);
-        let __result = obj.bounce_structs(__array);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<Person>);
+            let __result = obj.bounce_structs(__array);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -933,12 +1439,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_structs(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_partial_struct(
     ptr: *mut std::ffi::c_void,
     person: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __person = *Box::from_raw(person as *mut PartialPerson);
-        let __result = obj.bounce_partial_struct(__person);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __person = *Box::from_raw(person as *mut PartialPerson);
+            let __result = obj.bounce_partial_struct(__person);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -946,14 +1465,27 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_partial_struct(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
     ptr: *mut std::ffi::c_void,
     cars: *mut std::ffi::c_void,
-) -> *const std::ffi::c_char {
+) -> __FfiResult_cstr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __cars = *Box::from_raw(cars as *mut Vec<Car>);
-        let __result = obj.sum_up_all_passengers(__cars);
-        {
-            let __s = __result.replace('\0', "");
-            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __cars = *Box::from_raw(cars as *mut Vec<Car>);
+            let __result = obj.sum_up_all_passengers(__cars);
+            {
+                let __s = __result.replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+            }
+        })) {
+            Ok(__result) => __FfiResult_cstr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_cstr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -962,12 +1494,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_enums(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
-        let __result = obj.bounce_enums(__array);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
+            let __result = obj.bounce_enums(__array);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -976,17 +1521,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_void_std__vector_Powertrain_::Func_void_std__vector_Powertrain_);
-            let __cb: Box<dyn Fn(Vec<Powertrain>)> =
-                Box::new(move |__p0: Vec<Powertrain>| unsafe { __wrapper.call(__p0) });
-            __cb
-        };
-        obj.complex_enum_callback(__array, __callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_void_std__vector_Powertrain_::Func_void_std__vector_Powertrain_);
+                let __cb: Box<dyn Fn(Vec<Powertrain>)> =
+                    Box::new(move |__p0: Vec<Powertrain>| unsafe { __wrapper.call(__p0) });
+                __cb
+            };
+            obj.complex_enum_callback(__array, __callback);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -994,12 +1550,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_hybrid_objects(
     ptr: *mut std::ffi::c_void,
     array: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array = *Box::from_raw(array as *mut Vec<Box<dyn HybridChildSpec>>);
-        let __result = obj.bounce_hybrid_objects(__array);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array = *Box::from_raw(array as *mut Vec<Box<dyn HybridChildSpec>>);
+            let __result = obj.bounce_hybrid_objects(__array);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1007,12 +1576,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_hybrid_objects(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_functions(
     ptr: *mut std::ffi::c_void,
     functions: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn()>>);
-        let __result = obj.bounce_functions(__functions);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn()>>);
+            let __result = obj.bounce_functions(__functions);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1020,12 +1602,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_functions(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
     ptr: *mut std::ffi::c_void,
     maps: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __maps = *Box::from_raw(maps as *mut Vec<*mut std::ffi::c_void>);
-        let __result = obj.bounce_maps(__maps);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __maps = *Box::from_raw(maps as *mut Vec<*mut std::ffi::c_void>);
+            let __result = obj.bounce_maps(__maps);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1033,12 +1628,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_promises(
     ptr: *mut std::ffi::c_void,
     promises: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __promises = *Box::from_raw(promises as *mut Vec<f64>);
-        let __result = obj.bounce_promises(__promises);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __promises = *Box::from_raw(promises as *mut Vec<f64>);
+            let __result = obj.bounce_promises(__promises);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1046,23 +1654,49 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_promises(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffers(
     ptr: *mut std::ffi::c_void,
     array_buffers: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __array_buffers = *Box::from_raw(array_buffers as *mut Vec<NitroBuffer>);
-        let __result = obj.bounce_array_buffers(__array_buffers);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __array_buffers = *Box::from_raw(array_buffers as *mut Vec<NitroBuffer>);
+            let __result = obj.bounce_array_buffers(__array_buffers);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_map(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_map();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_map();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1070,12 +1704,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_map(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-        let __result = obj.map_roundtrip(__map);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
+            let __result = obj.map_roundtrip(__map);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1083,12 +1730,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_map_keys(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-        let __result = obj.get_map_keys(__map);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
+            let __result = obj.get_map_keys(__map);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1097,13 +1757,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
     ptr: *mut std::ffi::c_void,
     a: *mut std::ffi::c_void,
     b: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __a = *Box::from_raw(a as *mut *mut std::ffi::c_void);
-        let __b = *Box::from_raw(b as *mut *mut std::ffi::c_void);
-        let __result = obj.merge_maps(__a, __b);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __a = *Box::from_raw(a as *mut *mut std::ffi::c_void);
+            let __b = *Box::from_raw(b as *mut *mut std::ffi::c_void);
+            let __result = obj.merge_maps(__a, __b);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1111,12 +1784,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
-        let __result = obj.copy_any_map(__map);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map = *Box::from_raw(map as *mut *mut std::ffi::c_void);
+            let __result = obj.copy_any_map(__map);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1124,12 +1810,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut HashMap<String, Variant_bool_f64>);
-        let __result = obj.bounce_map(__map);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map = *Box::from_raw(map as *mut HashMap<String, Variant_bool_f64>);
+            let __result = obj.bounce_map(__map);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1137,12 +1836,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_map(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_simple_map(
     ptr: *mut std::ffi::c_void,
     map: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map = *Box::from_raw(map as *mut HashMap<String, f64>);
-        let __result = obj.bounce_simple_map(__map);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map = *Box::from_raw(map as *mut HashMap<String, f64>);
+            let __result = obj.bounce_simple_map(__map);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1150,32 +1862,69 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_simple_map(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_extract_map(
     ptr: *mut std::ffi::c_void,
     map_wrapper: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __map_wrapper = *Box::from_raw(map_wrapper as *mut MapWrapper);
-        let __result = obj.extract_map(__map_wrapper);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __map_wrapper = *Box::from_raw(map_wrapper as *mut MapWrapper);
+            let __result = obj.extract_map(__map_wrapper);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws(
     ptr: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.func_that_throws()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.func_that_throws()
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws_before_promise(
     ptr: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.func_that_throws_before_promise()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.func_that_throws_before_promise();
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1183,13 +1932,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws_before_promis
 pub unsafe extern "C" fn HybridTestObjectRustSpec_throw_error(
     ptr: *mut std::ffi::c_void,
     error: *const std::ffi::c_char,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __error = std::ffi::CStr::from_ptr(error)
-            .to_string_lossy()
-            .into_owned();
-        obj.throw_error(__error)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __error = std::ffi::CStr::from_ptr(error)
+                .to_string_lossy()
+                .into_owned();
+            obj.throw_error(__error);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1199,30 +1959,43 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
     num: f64,
     boo: bool,
     str: *mut std::ffi::c_void,
-) -> *const std::ffi::c_char {
+) -> __FfiResult_cstr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __str = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *const std::ffi::c_char,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __str = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *const std::ffi::c_char,
+                }
+                let __s = *Box::from_raw(str as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(
+                        std::ffi::CStr::from_ptr(__s.value)
+                            .to_string_lossy()
+                            .into_owned(),
+                    )
+                } else {
+                    None
+                }
+            };
+            let __result = obj.try_optional_params(num, boo, __str);
+            {
+                let __s = __result.replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
             }
-            let __s = *Box::from_raw(str as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(
-                    std::ffi::CStr::from_ptr(__s.value)
-                        .to_string_lossy()
-                        .into_owned(),
-                )
-            } else {
-                None
-            }
-        };
-        let __result = obj.try_optional_params(num, boo, __str);
-        {
-            let __s = __result.replace('\0', "");
-            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        })) {
+            Ok(__result) => __FfiResult_cstr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_cstr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -1233,27 +2006,40 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
     num: f64,
     boo: *mut std::ffi::c_void,
     str: *const std::ffi::c_char,
-) -> *const std::ffi::c_char {
+) -> __FfiResult_cstr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __boo = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: bool,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __boo = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: bool,
+                }
+                let __s = *Box::from_raw(boo as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(__s.value)
+                } else {
+                    None
+                }
+            };
+            let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
+            let __result = obj.try_middle_param(num, __boo, __str);
+            {
+                let __s = __result.replace('\0', "");
+                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
             }
-            let __s = *Box::from_raw(boo as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(__s.value)
-            } else {
-                None
-            }
-        };
-        let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-        let __result = obj.try_middle_param(num, __boo, __str);
-        {
-            let __s = __result.replace('\0', "");
-            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+        })) {
+            Ok(__result) => __FfiResult_cstr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_cstr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -1262,40 +2048,55 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| std::process::abort()))
-            } else {
-                None
-            }
-        };
-        let __result = obj.try_optional_enum(__value);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: i32,
-            }
-            let __opt: __Opt = match __result {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: __v as i32,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __value = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| {
+                        panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
+                    }))
+                } else {
+                    None
+                }
             };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+            let __result = obj.try_optional_enum(__value);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: i32,
+                }
+                let __opt: __Opt = match __result {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: __v as i32,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+            }
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -1306,24 +2107,37 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
     num: f64,
     str: *const std::ffi::c_char,
     boo: *mut std::ffi::c_void,
-) -> bool {
+) -> __FfiResult_bool {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
-        let __boo = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: bool,
-            }
-            let __s = *Box::from_raw(boo as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(__s.value)
-            } else {
-                None
-            }
-        };
-        obj.try_trailing_optional(num, __str, __boo)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
+            let __boo = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: bool,
+                }
+                let __s = *Box::from_raw(boo as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(__s.value)
+                } else {
+                    None
+                }
+            };
+            obj.try_trailing_optional(num, __str, __boo)
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1331,21 +2145,49 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_add1_hour(
     ptr: *mut std::ffi::c_void,
     date: f64,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __date = date;
-        let __result = obj.add1_hour(__date);
-        __result
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __date = date;
+            let __result = obj.add1_hour(__date);
+            __result
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(ptr: *mut std::ffi::c_void) -> f64 {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.current_date();
-        __result
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.current_date();
+            __result
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1353,10 +2195,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(ptr: *mut std::ff
 pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_sync(
     ptr: *mut std::ffi::c_void,
     value: f64,
-) -> i64 {
+) -> __FfiResult_i64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.calculate_fibonacci_sync(value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.calculate_fibonacci_sync(value)
+        })) {
+            Ok(__result) => __FfiResult_i64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_i64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1364,83 +2219,173 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_sync(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_async(
     ptr: *mut std::ffi::c_void,
     value: f64,
-) -> i64 {
+) -> __FfiResult_i64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.calculate_fibonacci_async(value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.calculate_fibonacci_async(value)
+        })) {
+            Ok(__result) => __FfiResult_i64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_i64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(ptr: *mut std::ffi::c_void, seconds: f64) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(
+    ptr: *mut std::ffi::c_void,
+    seconds: f64,
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.wait(seconds)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.wait(seconds);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(ptr: *mut std::ffi::c_void) {
+pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.promise_throws()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.promise_throws();
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly(
     ptr: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.promise_returns_instantly()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.promise_returns_instantly()
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly_async(
     ptr: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.promise_returns_instantly_async()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.promise_returns_instantly_async()
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_void_instantly(
     ptr: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        obj.promise_that_resolves_void_instantly()
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.promise_that_resolves_void_instantly();
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undefined(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.promise_that_resolves_to_undefined();
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: f64,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.promise_that_resolves_to_undefined();
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: f64,
+                }
+                let __opt: __Opt = match __result {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: __v,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match __result {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: __v,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -1449,11 +2394,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undef
 pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __promise = *Box::from_raw(promise as *mut f64);
-        obj.await_and_get_promise(__promise)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __promise = *Box::from_raw(promise as *mut f64);
+            obj.await_and_get_promise(__promise)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1461,12 +2419,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_promise(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_complex_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __promise = *Box::from_raw(promise as *mut Car);
-        let __result = obj.await_and_get_complex_promise(__promise);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __promise = *Box::from_raw(promise as *mut Car);
+            let __result = obj.await_and_get_complex_promise(__promise);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1474,11 +2445,22 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_complex_promise(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_await_promise(
     ptr: *mut std::ffi::c_void,
     promise: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __promise = *Box::from_raw(promise as *mut ());
-        obj.await_promise(__promise)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __promise = *Box::from_raw(promise as *mut ());
+            obj.await_promise(__promise);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1486,15 +2468,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_promise(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_void::Func_void);
-            let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
-            __cb
-        };
-        obj.call_callback(__callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_void::Func_void);
+                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                __cb
+            };
+            obj.call_callback(__callback);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1502,15 +2495,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback_that_returns_promise_void(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____);
-            let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
-            __cb
-        };
-        obj.call_callback_that_returns_promise_void(__callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____);
+                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                __cb
+            };
+            obj.call_callback_that_returns_promise_void(__callback);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1520,25 +2524,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_all(
     first: *mut std::ffi::c_void,
     second: *mut std::ffi::c_void,
     third: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __first = {
-            let __wrapper = Box::from_raw(first as *mut super::Func_void::Func_void);
-            let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
-            __cb
-        };
-        let __second = {
-            let __wrapper = Box::from_raw(second as *mut super::Func_void::Func_void);
-            let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
-            __cb
-        };
-        let __third = {
-            let __wrapper = Box::from_raw(third as *mut super::Func_void::Func_void);
-            let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
-            __cb
-        };
-        obj.call_all(__first, __second, __third)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __first = {
+                let __wrapper = Box::from_raw(first as *mut super::Func_void::Func_void);
+                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                __cb
+            };
+            let __second = {
+                let __wrapper = Box::from_raw(second as *mut super::Func_void::Func_void);
+                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                __cb
+            };
+            let __third = {
+                let __wrapper = Box::from_raw(third as *mut super::Func_void::Func_void);
+                let __cb: Box<dyn Fn()> = Box::new(move || unsafe { __wrapper.call() });
+                __cb
+            };
+            obj.call_all(__first, __second, __third);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1547,32 +2562,40 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: f64,
-            }
-            let __s = *Box::from_raw(value as *mut __Opt);
-            if __s.has_value != 0 {
-                Some(__s.value)
-            } else {
-                None
-            }
-        };
-        let __callback = {
-            let __wrapper = Box::from_raw(
-                callback
-                    as *mut super::Func_void_std__optional_double_::Func_void_std__optional_double_,
-            );
-            let __cb: Box<dyn Fn(Option<f64>)> =
-                Box::new(move |__p0: Option<f64>| unsafe { __wrapper.call(__p0) });
-            __cb
-        };
-        obj.call_with_optional(__value, __callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __value = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: f64,
+                }
+                let __s = *Box::from_raw(value as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some(__s.value)
+                } else {
+                    None
+                }
+            };
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_void_std__optional_double_::Func_void_std__optional_double_);
+                let __cb: Box<dyn Fn(Option<f64>)> =
+                    Box::new(move |__p0: Option<f64>| unsafe { __wrapper.call(__p0) });
+                __cb
+            };
+            obj.call_with_optional(__value, __callback);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1581,16 +2604,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_sum_up_n_times(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
     n: f64,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
-            let __cb: Box<dyn Fn() -> f64> =
-                Box::new(move || -> f64 { unsafe { __wrapper.call() } });
-            __cb
-        };
-        obj.call_sum_up_n_times(__callback, n)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
+                let __cb: Box<dyn Fn() -> f64> =
+                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                __cb
+            };
+            obj.call_sum_up_n_times(__callback, n)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1598,16 +2634,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_sum_up_n_times(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____);
-            let __cb: Box<dyn Fn() -> f64> =
-                Box::new(move || -> f64 { unsafe { __wrapper.call() } });
-            __cb
-        };
-        obj.callback_async_promise(__callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____);
+                let __cb: Box<dyn Fn() -> f64> =
+                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                __cb
+            };
+            obj.callback_async_promise(__callback)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1615,28 +2664,54 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise_buffer(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____);
-            let __cb: Box<dyn Fn() -> NitroBuffer> =
-                Box::new(move || -> NitroBuffer { unsafe { __wrapper.call() } });
-            __cb
-        };
-        let __result = obj.callback_async_promise_buffer(__callback);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____);
+                let __cb: Box<dyn Fn() -> NitroBuffer> =
+                    Box::new(move || -> NitroBuffer { unsafe { __wrapper.call() } });
+                __cb
+            };
+            let __result = obj.callback_async_promise_buffer(__callback);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_complex_callback(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.get_complex_callback();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.get_complex_callback();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1646,49 +2721,61 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
     value: f64,
     first: *mut std::ffi::c_void,
     second: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __first = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
-            }
-            let __s = *Box::from_raw(first as *mut __Opt);
-            if __s.has_value != 0 {
-                Some({
-                    let __wrapper =
-                        Box::from_raw(__s.value as *mut super::Func_void_double::Func_void_double);
-                    let __cb: Box<dyn Fn(f64)> =
-                        Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
-                    __cb
-                })
-            } else {
-                None
-            }
-        };
-        let __second = {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
-            }
-            let __s = *Box::from_raw(second as *mut __Opt);
-            if __s.has_value != 0 {
-                Some({
-                    let __wrapper = Box::from_raw(
-                        __s.value as *mut super::Func_void_std__string::Func_void_std__string,
-                    );
-                    let __cb: Box<dyn Fn(String)> =
-                        Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
-                    __cb
-                })
-            } else {
-                None
-            }
-        };
-        obj.two_optional_callbacks(value, __first, __second)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __first = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(first as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some({
+                        let __wrapper = Box::from_raw(
+                            __s.value as *mut super::Func_void_double::Func_void_double,
+                        );
+                        let __cb: Box<dyn Fn(f64)> =
+                            Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                        __cb
+                    })
+                } else {
+                    None
+                }
+            };
+            let __second = {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(second as *mut __Opt);
+                if __s.has_value != 0 {
+                    Some({
+                        let __wrapper = Box::from_raw(
+                            __s.value as *mut super::Func_void_std__string::Func_void_std__string,
+                        );
+                        let __cb: Box<dyn Fn(String)> =
+                            Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                        __cb
+                    })
+                } else {
+                    None
+                }
+            };
+            obj.two_optional_callbacks(value, __first, __second);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1696,18 +2783,30 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
     ptr: *mut std::ffi::c_void,
     on_error: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __on_error = {
-            let __wrapper = Box::from_raw(
-                on_error as *mut super::Func_void_std__exception_ptr::Func_void_std__exception_ptr,
-            );
-            let __cb: Box<dyn Fn(String)> =
-                Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
-            __cb
-        };
-        obj.error_callback(__on_error)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __on_error = {
+                let __wrapper = Box::from_raw(
+                    on_error
+                        as *mut super::Func_void_std__exception_ptr::Func_void_std__exception_ptr,
+                );
+                let __cb: Box<dyn Fn(String)> =
+                    Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                __cb
+            };
+            obj.error_callback(__on_error);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1715,18 +2814,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
     ptr: *mut std::ffi::c_void,
     wrapping_js_callback: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __wrapping_js_callback = {
-            let __wrapper = Box::from_raw(
-                wrapping_js_callback as *mut super::Func_void_double::Func_void_double,
-            );
-            let __cb: Box<dyn Fn(f64)> = Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
-            __cb
-        };
-        let __result = obj.create_native_callback(__wrapping_js_callback);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __wrapping_js_callback = {
+                let __wrapper = Box::from_raw(
+                    wrapping_js_callback as *mut super::Func_void_double::Func_void_double,
+                );
+                let __cb: Box<dyn Fn(f64)> =
+                    Box::new(move |__p0: f64| unsafe { __wrapper.call(__p0) });
+                __cb
+            };
+            let __result = obj.create_native_callback(__wrapping_js_callback);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1734,16 +2847,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback_and_wait(
     ptr: *mut std::ffi::c_void,
     get_value: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __get_value = {
-            let __wrapper = Box::from_raw(get_value as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
-            let __cb: Box<dyn Fn() -> f64> =
-                Box::new(move || -> f64 { unsafe { __wrapper.call() } });
-            __cb
-        };
-        obj.get_value_from_js_callback_and_wait(__get_value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __get_value = {
+                let __wrapper = Box::from_raw(get_value as *mut super::Func_std__shared_ptr_Promise_double__::Func_std__shared_ptr_Promise_double__);
+                let __cb: Box<dyn Fn() -> f64> =
+                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                __cb
+            };
+            obj.get_value_from_js_callback_and_wait(__get_value)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1752,35 +2878,59 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
     and_then_call: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__string__::Func_std__shared_ptr_Promise_std__string__);
-            let __cb: Box<dyn Fn() -> String> =
-                Box::new(move || -> String { unsafe { __wrapper.call() } });
-            __cb
-        };
-        let __and_then_call = {
-            let __wrapper = Box::from_raw(
-                and_then_call as *mut super::Func_void_std__string::Func_void_std__string,
-            );
-            let __cb: Box<dyn Fn(String)> =
-                Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
-            __cb
-        };
-        obj.get_value_from_js_callback(__callback, __and_then_call)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_std__shared_ptr_Promise_std__string__::Func_std__shared_ptr_Promise_std__string__);
+                let __cb: Box<dyn Fn() -> String> =
+                    Box::new(move || -> String { unsafe { __wrapper.call() } });
+                __cb
+            };
+            let __and_then_call = {
+                let __wrapper = Box::from_raw(
+                    and_then_call as *mut super::Func_void_std__string::Func_void_std__string,
+                );
+                let __cb: Box<dyn Fn(String)> =
+                    Box::new(move |__p0: String| unsafe { __wrapper.call(__p0) });
+                __cb
+            };
+            obj.get_value_from_js_callback(__callback, __and_then_call);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_car(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.get_car();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.get_car();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1788,11 +2938,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_car(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_is_car_electric(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
-) -> bool {
+) -> __FfiResult_bool {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __car = *Box::from_raw(car as *mut Car);
-        obj.is_car_electric(__car)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __car = *Box::from_raw(car as *mut Car);
+            obj.is_car_electric(__car)
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1800,28 +2963,41 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_is_car_electric(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __car = *Box::from_raw(car as *mut Car);
-        let __result = obj.get_driver(__car);
-        {
-            #[repr(C)]
-            struct __Opt {
-                has_value: u8,
-                value: *mut std::ffi::c_void,
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __car = *Box::from_raw(car as *mut Car);
+            let __result = obj.get_driver(__car);
+            {
+                #[repr(C)]
+                struct __Opt {
+                    has_value: u8,
+                    value: *mut std::ffi::c_void,
+                }
+                let __opt: __Opt = match __result {
+                    Some(__v) => __Opt {
+                        has_value: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                    None => __Opt {
+                        has_value: 0,
+                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                    },
+                };
+                Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
             }
-            let __opt: __Opt = match __result {
-                Some(__v) => __Opt {
-                    has_value: 1,
-                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
-                },
-                None => __Opt {
-                    has_value: 0,
-                    value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
-                },
-            };
-            Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
         }
     }
 }
@@ -1830,12 +3006,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_car(
     ptr: *mut std::ffi::c_void,
     car: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __car = *Box::from_raw(car as *mut Car);
-        let __result = obj.bounce_car(__car);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __car = *Box::from_raw(car as *mut Car);
+            let __result = obj.bounce_car(__car);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1843,11 +3032,22 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_car(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_js_style_object_as_parameters(
     ptr: *mut std::ffi::c_void,
     params: *mut std::ffi::c_void,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __params = *Box::from_raw(params as *mut JsStyleStruct);
-        obj.js_style_object_as_parameters(__params)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __params = *Box::from_raw(params as *mut JsStyleStruct);
+            obj.js_style_object_as_parameters(__params);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
@@ -1855,12 +3055,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_js_style_object_as_parameters(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_wrapped_js_style_struct(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = *Box::from_raw(value as *mut WrappedJsStruct);
-        let __result = obj.bounce_wrapped_js_style_struct(__value);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __value = *Box::from_raw(value as *mut WrappedJsStruct);
+            let __result = obj.bounce_wrapped_js_style_struct(__value);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1868,12 +3081,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_wrapped_js_style_struct
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_wrapper(
     ptr: *mut std::ffi::c_void,
     wrapper: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __wrapper = *Box::from_raw(wrapper as *mut OptionalWrapper);
-        let __result = obj.bounce_optional_wrapper(__wrapper);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __wrapper = *Box::from_raw(wrapper as *mut OptionalWrapper);
+            let __result = obj.bounce_optional_wrapper(__wrapper);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1881,23 +3107,49 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_wrapper(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_callback(
     ptr: *mut std::ffi::c_void,
     value: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __value = *Box::from_raw(value as *mut OptionalCallback);
-        let __result = obj.bounce_optional_callback(__value);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __value = *Box::from_raw(value as *mut OptionalCallback);
+            let __result = obj.bounce_optional_callback(__value);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_array_buffer();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_array_buffer();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1905,11 +3157,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_from_native_buffer(
     ptr: *mut std::ffi::c_void,
     copy: bool,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_array_buffer_from_native_buffer(copy);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_array_buffer_from_native_buffer(copy);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1917,12 +3182,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_from_nativ
 pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_buffer(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-        let __result = obj.copy_buffer(__buffer);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
+            let __result = obj.copy_buffer(__buffer);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1930,11 +3208,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_buffer(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_buffer_last_item(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-        obj.get_buffer_last_item(__buffer)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
+            obj.get_buffer_last_item(__buffer)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1943,22 +3234,46 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_all_values_to(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
     value: f64,
-) {
+) -> __FfiResult_void {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-        obj.set_all_values_to(__buffer, value)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
+            obj.set_all_values_to(__buffer, value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_async(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_array_buffer_async();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_array_buffer_async();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1966,12 +3281,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_async(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffer(
     ptr: *mut std::ffi::c_void,
     buffer: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
-        let __result = obj.bounce_array_buffer(__buffer);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __buffer = *Box::from_raw(buffer as *mut super::NitroBuffer::NitroBuffer);
+            let __result = obj.bounce_array_buffer(__buffer);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1979,12 +3307,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffer(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_variant(
     ptr: *mut std::ffi::c_void,
     either: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __either = *Box::from_raw(either as *mut Variant_bool_Vec_f64__Vec_String__String_f64);
-        let __result = obj.pass_variant(__either);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __either =
+                *Box::from_raw(either as *mut Variant_bool_Vec_f64__Vec_String__String_f64);
+            let __result = obj.pass_variant(__either);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -1992,12 +3334,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_enum(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut Variant_bool_OldEnum);
-        let __result = obj.get_variant_enum(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut Variant_bool_OldEnum);
+            let __result = obj.get_variant_enum(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2005,12 +3360,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_enum(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_weird_numbers_enum(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut Variant_bool_WeirdNumbersEnum);
-        let __result = obj.get_variant_weird_numbers_enum(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut Variant_bool_WeirdNumbersEnum);
+            let __result = obj.get_variant_weird_numbers_enum(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2018,12 +3386,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_weird_numbers_enum
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_objects(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut Variant_Car_Person);
-        let __result = obj.get_variant_objects(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut Variant_Car_Person);
+            let __result = obj.get_variant_objects(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2031,12 +3412,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_objects(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_named_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut NamedVariant);
-        let __result = obj.pass_named_variant(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut NamedVariant);
+            let __result = obj.pass_named_variant(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2044,13 +3438,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_named_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_all_empty_object_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant =
-            *Box::from_raw(variant as *mut Variant_Box_dyn_HybridBaseSpec__OptionalWrapper);
-        let __result = obj.pass_all_empty_object_variant(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant =
+                *Box::from_raw(variant as *mut Variant_Box_dyn_HybridBaseSpec__OptionalWrapper);
+            let __result = obj.pass_all_empty_object_variant(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2058,45 +3465,97 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_all_empty_object_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_complex_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut CoreTypesVariant);
-        let __result = obj.bounce_complex_variant(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut CoreTypesVariant);
+            let __result = obj.bounce_complex_variant(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_child(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_child();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_child();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_base();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_base();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base_actual_child(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_base_actual_child();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_base_actual_child();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2104,12 +3563,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base_actual_child(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child(
     ptr: *mut std::ffi::c_void,
     child: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
-        let __result = obj.bounce_child(__child);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
+            let __result = obj.bounce_child(__child);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2117,12 +3589,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_base(
     ptr: *mut std::ffi::c_void,
     base: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
-        let __result = obj.bounce_base(__base);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
+            let __result = obj.bounce_base(__base);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2130,12 +3615,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_base(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child_base(
     ptr: *mut std::ffi::c_void,
     child: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
-        let __result = obj.bounce_child_base(__child);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
+            let __result = obj.bounce_child_base(__child);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2143,12 +3641,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child_base(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_cast_base(
     ptr: *mut std::ffi::c_void,
     base: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
-        let __result = obj.cast_base(__base);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
+            let __result = obj.cast_base(__base);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2156,16 +3667,29 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_cast_base(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_sync(
     ptr: *mut std::ffi::c_void,
     callback: *mut std::ffi::c_void,
-) -> f64 {
+) -> __FfiResult_f64 {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __callback = {
-            let __wrapper = Box::from_raw(callback as *mut super::Func_double::Func_double);
-            let __cb: Box<dyn Fn() -> f64> =
-                Box::new(move || -> f64 { unsafe { __wrapper.call() } });
-            __cb
-        };
-        obj.callback_sync(__callback)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __callback = {
+                let __wrapper = Box::from_raw(callback as *mut super::Func_double::Func_double);
+                let __cb: Box<dyn Fn() -> f64> =
+                    Box::new(move || -> f64 { unsafe { __wrapper.call() } });
+                __cb
+            };
+            obj.callback_sync(__callback)
+        })) {
+            Ok(__result) => __FfiResult_f64 {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_f64 {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2173,11 +3697,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_sync(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_view_blue(
     ptr: *mut std::ffi::c_void,
     view: *mut std::ffi::c_void,
-) -> bool {
+) -> __FfiResult_bool {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __view = *Box::from_raw(view as *mut Box<dyn HybridTestViewSpec>);
-        obj.get_is_view_blue(__view)
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __view = *Box::from_raw(view as *mut Box<dyn HybridTestViewSpec>);
+            obj.get_is_view_blue(__view)
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2185,24 +3722,50 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_view_blue(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_hybrid(
     ptr: *mut std::ffi::c_void,
     external_object: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __external_object =
-            *Box::from_raw(external_object as *mut Box<dyn HybridSomeExternalObjectSpec>);
-        let __result = obj.bounce_external_hybrid(__external_object);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __external_object =
+                *Box::from_raw(external_object as *mut Box<dyn HybridSomeExternalObjectSpec>);
+            let __result = obj.bounce_external_hybrid(__external_object);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_internal_object(
     ptr: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __result = obj.create_internal_object();
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __result = obj.create_internal_object();
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2210,12 +3773,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_internal_object(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_struct(
     ptr: *mut std::ffi::c_void,
     external_struct: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __external_struct = *Box::from_raw(external_struct as *mut ExternalObjectStruct);
-        let __result = obj.bounce_external_struct(__external_struct);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __external_struct = *Box::from_raw(external_struct as *mut ExternalObjectStruct);
+            let __result = obj.bounce_external_struct(__external_struct);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2223,12 +3799,25 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_struct(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_variant(
     ptr: *mut std::ffi::c_void,
     variant: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __variant = *Box::from_raw(variant as *mut StringOrExternal);
-        let __result = obj.bounce_external_variant(__variant);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __variant = *Box::from_raw(variant as *mut StringOrExternal);
+            let __result = obj.bounce_external_variant(__variant);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 
@@ -2236,19 +3825,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_variant(
 pub unsafe extern "C" fn HybridTestObjectRustSpec_create_external_variant_from_func(
     ptr: *mut std::ffi::c_void,
     factory: *mut std::ffi::c_void,
-) -> *mut std::ffi::c_void {
+) -> __FfiResult_ptr {
     unsafe {
-        let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-        let __factory = {
-            let __wrapper = Box::from_raw(factory as *mut super::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_);
-            let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>> =
-                Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> {
-                    unsafe { __wrapper.call() }
-                });
-            __cb
-        };
-        let __result = obj.create_external_variant_from_func(__factory);
-        Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __factory = {
+                let __wrapper = Box::from_raw(factory as *mut super::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_);
+                let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>> =
+                    Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> {
+                        unsafe { __wrapper.call() }
+                    });
+                __cb
+            };
+            let __result = obj.create_external_variant_from_func(__factory);
+            Box::into_raw(Box::new(__result)) as *mut std::ffi::c_void
+        })) {
+            Ok(__result) => __FfiResult_ptr {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            Err(__panic) => __FfiResult_ptr {
+                is_ok: 0,
+                error: super::lib::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
     }
 }
 

@@ -194,9 +194,9 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
         const enumType = getTypeAs(this.type, EnumType);
         switch (inLanguage) {
           case "rust":
-            // Use unwrap_or_else with eprintln + abort to produce a useful error message
-            // without panicking across FFI (which is UB).
-            return `${enumType.enumName}::from_i32(${parameterName}).unwrap_or_else(|| { eprintln!("[Nitro] Invalid ${enumType.enumName} discriminant: {}", ${parameterName}); std::process::abort() })`;
+            // Panic on invalid discriminant — catch_unwind in the FFI shim will
+            // catch this and propagate the error to C++ as a result struct.
+            return `${enumType.enumName}::from_i32(${parameterName}).unwrap_or_else(|| { panic!("[Nitro] Invalid ${enumType.enumName} discriminant: {}", ${parameterName}) })`;
           case "c++":
             return `static_cast<int32_t>(${parameterName})`;
           default:
@@ -665,5 +665,63 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
    */
   getCppFfiType(): string {
     return this.getTypeCode("c++");
+  }
+
+  /**
+   * Returns the Rust `__FfiResult_*` type name for this type's FFI representation.
+   */
+  getRustFfiResultType(): string {
+    const ffiType = this.getRustFfiType();
+    switch (ffiType) {
+      case "()":
+        return "__FfiResult_void";
+      case "f64":
+        return "__FfiResult_f64";
+      case "bool":
+        return "__FfiResult_bool";
+      case "i32":
+        return "__FfiResult_i32";
+      case "i64":
+        return "__FfiResult_i64";
+      case "u64":
+        return "__FfiResult_u64";
+      case "usize":
+        return "__FfiResult_usize";
+      case "*const std::ffi::c_char":
+        return "__FfiResult_cstr";
+      case "*mut std::ffi::c_void":
+        return "__FfiResult_ptr";
+      default:
+        return "__FfiResult_ptr";
+    }
+  }
+
+  /**
+   * Returns the C++ FFI result struct name for this type's FFI representation.
+   */
+  getCppFfiResultType(): string {
+    const ffiType = this.getRustFfiType();
+    switch (ffiType) {
+      case "()":
+        return "__FfiResult_void";
+      case "f64":
+        return "__FfiResult_f64";
+      case "bool":
+        return "__FfiResult_bool";
+      case "i32":
+        return "__FfiResult_i32";
+      case "i64":
+        return "__FfiResult_i64";
+      case "u64":
+        return "__FfiResult_u64";
+      case "usize":
+        return "__FfiResult_usize";
+      case "*const std::ffi::c_char":
+        return "__FfiResult_cstr";
+      case "*mut std::ffi::c_void":
+        return "__FfiResult_ptr";
+      default:
+        return "__FfiResult_ptr";
+    }
   }
 }

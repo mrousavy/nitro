@@ -81,3 +81,82 @@ pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
         let _ = std::ffi::CString::from_raw(ptr);
     }
 }
+
+/// Convert a panic payload into a C string for FFI error propagation.
+pub fn __nitro_panic_to_cstring(panic: Box<dyn std::any::Any + Send>) -> *mut std::ffi::c_char {
+    let msg = if let Some(s) = panic.downcast_ref::<&str>() {
+        s.to_string()
+    } else if let Some(s) = panic.downcast_ref::<String>() {
+        s.clone()
+    } else {
+        "unknown Rust panic".to_string()
+    };
+    let safe = msg.replace('\0', "");
+    std::ffi::CString::new(safe).unwrap_or_default().into_raw()
+}
+
+// FFI result structs for error propagation across the Rust/C++ boundary.
+// Each shim returns one of these instead of a bare value, so panics
+// can be caught with catch_unwind and reported to C++ as errors.
+
+#[repr(C)]
+pub struct __FfiResult_void {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+}
+
+#[repr(C)]
+pub struct __FfiResult_f64 {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: f64,
+}
+
+#[repr(C)]
+pub struct __FfiResult_bool {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: bool,
+}
+
+#[repr(C)]
+pub struct __FfiResult_i32 {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: i32,
+}
+
+#[repr(C)]
+pub struct __FfiResult_i64 {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: i64,
+}
+
+#[repr(C)]
+pub struct __FfiResult_u64 {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: u64,
+}
+
+#[repr(C)]
+pub struct __FfiResult_usize {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: usize,
+}
+
+#[repr(C)]
+pub struct __FfiResult_cstr {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: *const std::ffi::c_char,
+}
+
+#[repr(C)]
+pub struct __FfiResult_ptr {
+    pub is_ok: u8,
+    pub error: *mut std::ffi::c_char,
+    pub value: *mut std::ffi::c_void,
+}
