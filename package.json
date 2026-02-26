@@ -2,7 +2,7 @@
   "name": "react-native-nitro",
   "packageManager": "bun@1.3.6",
   "private": true,
-  "version": "0.33.9",
+  "version": "0.34.0",
   "repository": "https://github.com/mrousavy/nitro.git",
   "author": "Marc Rousavy <me@mrousavy.com> (https://github.com/mrousavy)",
   "workspaces": [
