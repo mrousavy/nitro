@@ -4,5 +4,7 @@
 #include "NitroTestOnLoad.hpp"
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-  return facebook::jni::initialize(vm, [=] { margelo::nitro::test::initialize(vm); });
+  return margelo::nitro::test::initialize(vm, []() {
+    // register custom fbjni/JNI bindings, if any.
+  });
 }
