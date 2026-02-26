@@ -30,6 +30,8 @@ export class ResultWrappingType implements Type {
         return `Result<${type}>`
       case 'swift':
         return type
+      case 'rust':
+        return `Result<${type}, String>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

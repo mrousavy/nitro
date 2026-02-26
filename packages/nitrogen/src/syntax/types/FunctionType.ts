@@ -141,6 +141,16 @@ export class FunctionType implements Type {
         const returnType = this.returnType.getCode(language, options)
         return `(${params}) -> ${returnType}`
       }
+      case 'rust': {
+        const params = this.parameters
+          .map((p) => p.getCode(language, options))
+          .join(', ')
+        const returnType = this.returnType.getCode(language, options)
+        if (returnType === '()') {
+          return `Box<dyn Fn(${params})>`
+        }
+        return `Box<dyn Fn(${params}) -> ${returnType}>`
+      }
       default:
         throw new Error(
           `Language ${language} is not yet supported for FunctionType!`

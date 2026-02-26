@@ -6,6 +6,7 @@ import type { Type } from './types/Type.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
+import { isBooleanPropertyPrefix, toSnakeCase } from './helpers.js'
 
 export interface PropertyBody {
   getter: string
@@ -210,6 +211,18 @@ set {
   }
             `)
           }
+        }
+        return lines.join('\n')
+      }
+      case 'rust': {
+        const type = this.type.getCode('rust')
+        const rustName = toSnakeCase(this.name)
+        const getterName = `get_${rustName}`
+        const lines: string[] = []
+        lines.push(`fn ${getterName}(&self) -> ${type};`)
+        if (!this.isReadonly) {
+          const setterName = `set_${rustName}`
+          lines.push(`fn ${setterName}(&mut self, value: ${type});`)
         }
         return lines.join('\n')
       }

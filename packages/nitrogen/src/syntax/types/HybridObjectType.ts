@@ -1,28 +1,28 @@
-import { type NitroConfig } from '../../config/NitroConfig.js'
-import type { Language } from '../../getPlatformSpecs.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
-import { getHybridObjectName } from '../getHybridObjectName.js'
-import type { HybridObjectSpec } from '../HybridObjectSpec.js'
-import type { SourceFile, SourceImport } from '../SourceFile.js'
-import type { GetCodeOptions, Type, TypeKind } from './Type.js'
+import { type NitroConfig } from "../../config/NitroConfig.js";
+import type { Language } from "../../getPlatformSpecs.js";
+import { getForwardDeclaration } from "../c++/getForwardDeclaration.js";
+import { getHybridObjectName } from "../getHybridObjectName.js";
+import type { HybridObjectSpec } from "../HybridObjectSpec.js";
+import type { SourceFile, SourceImport } from "../SourceFile.js";
+import type { GetCodeOptions, Type, TypeKind } from "./Type.js";
 
 interface GetHybridObjectCodeOptions extends GetCodeOptions {
-  mode?: 'strong' | 'weak'
+  mode?: "strong" | "weak";
 }
 
 export class HybridObjectType implements Type {
-  readonly hybridObjectName: string
-  readonly implementationLanguage: Language
-  readonly baseTypes: HybridObjectType[]
-  readonly sourceConfig: NitroConfig
+  readonly hybridObjectName: string;
+  readonly implementationLanguage: Language;
+  readonly baseTypes: HybridObjectType[];
+  readonly sourceConfig: NitroConfig;
 
   constructor(
     hybridObjectName: string,
     implementationLanguage: Language,
     baseTypes: HybridObjectType[],
-    sourceConfig: NitroConfig
-  )
-  constructor(spec: HybridObjectSpec)
+    sourceConfig: NitroConfig,
+  );
+  constructor(spec: HybridObjectSpec);
   constructor(
     ...args:
       | [
@@ -34,90 +34,93 @@ export class HybridObjectType implements Type {
       | [HybridObjectSpec]
   ) {
     if (args.length === 1) {
-      const [spec] = args
+      const [spec] = args;
 
-      this.hybridObjectName = spec.name
-      this.implementationLanguage = spec.language
-      this.sourceConfig = spec.config
-      this.baseTypes = spec.baseTypes.map((b) => new HybridObjectType(b))
+      this.hybridObjectName = spec.name;
+      this.implementationLanguage = spec.language;
+      this.sourceConfig = spec.config;
+      this.baseTypes = spec.baseTypes.map((b) => new HybridObjectType(b));
     } else {
       const [
         hybridObjectName,
         implementationLanguage,
         baseTypes,
         sourceConfig,
-      ] = args
+      ] = args;
 
-      this.hybridObjectName = hybridObjectName
-      this.implementationLanguage = implementationLanguage
-      this.baseTypes = baseTypes
-      this.sourceConfig = sourceConfig
+      this.hybridObjectName = hybridObjectName;
+      this.implementationLanguage = implementationLanguage;
+      this.baseTypes = baseTypes;
+      this.sourceConfig = sourceConfig;
     }
 
-    if (this.hybridObjectName.startsWith('__')) {
+    if (this.hybridObjectName.startsWith("__")) {
       throw new Error(
-        `HybridObject name cannot start with two underscores (__)! (In ${this.hybridObjectName})`
-      )
+        `HybridObject name cannot start with two underscores (__)! (In ${this.hybridObjectName})`,
+      );
     }
   }
 
   get canBePassedByReference(): boolean {
     // It's a shared_ptr<..>, no copy.
-    return true
+    return true;
   }
 
   get kind(): TypeKind {
-    return 'hybrid-object'
+    return "hybrid-object";
   }
   get isEquatable(): boolean {
-    return true
+    return true;
   }
 
   getCode(
     language: Language,
-    options: GetHybridObjectCodeOptions = {}
+    options: GetHybridObjectCodeOptions = {},
   ): string {
-    const name = getHybridObjectName(this.hybridObjectName)
-    const mode = options.mode ?? 'strong'
+    const name = getHybridObjectName(this.hybridObjectName);
+    const mode = options.mode ?? "strong";
     const fullyQualified =
-      options.fullyQualified ?? this.sourceConfig.isExternalConfig
+      options.fullyQualified ?? this.sourceConfig.isExternalConfig;
 
     switch (language) {
-      case 'c++': {
-        const ptrType = mode === 'strong' ? 'std::shared_ptr' : 'std::weak_ptr'
+      case "c++": {
+        const ptrType = mode === "strong" ? "std::shared_ptr" : "std::weak_ptr";
         if (fullyQualified) {
           const fullName = this.sourceConfig.getCxxNamespace(
-            'c++',
-            name.HybridTSpec
-          )
-          return `${ptrType}<${fullName}>`
+            "c++",
+            name.HybridTSpec,
+          );
+          return `${ptrType}<${fullName}>`;
         } else {
-          return `${ptrType}<${name.HybridTSpec}>`
+          return `${ptrType}<${name.HybridTSpec}>`;
         }
       }
-      case 'swift': {
-        return `(any ${name.HybridTSpec})`
+      case "swift": {
+        return `(any ${name.HybridTSpec})`;
       }
-      case 'kotlin': {
+      case "kotlin": {
         if (fullyQualified) {
           // full qualified name: "com.margelo.nitro.image.Image"
           return this.sourceConfig.getAndroidPackage(
-            'java/kotlin',
-            name.HybridTSpec
-          )
+            "java/kotlin",
+            name.HybridTSpec,
+          );
         } else {
           // "Image"
-          return name.HybridTSpec
+          return name.HybridTSpec;
         }
+      }
+      case "rust": {
+        return `Box<dyn ${name.HybridTSpec}>`;
       }
       default:
         throw new Error(
-          `Language ${language} is not yet supported for HybridObjectType!`
-        )
+          `Language ${language} is not yet supported for HybridObjectType!`,
+        );
     }
   }
   getExtraFiles(): SourceFile[] {
-    return []
+    return [];
   }
 
   private getExternalCxxImportName(): string {
@@ -127,75 +130,87 @@ export class HybridObjectType implements Type {
       this.sourceConfig.getAndroidCxxLibName()
     ) {
       throw new Error(
-        `Cannot import external HybridObject "${this.hybridObjectName}" if it's nitro.json's iosModuleName and androidCxxLibName are not the same value!`
-      )
+        `Cannot import external HybridObject "${this.hybridObjectName}" if it's nitro.json's iosModuleName and androidCxxLibName are not the same value!`,
+      );
     }
-    return this.sourceConfig.getIosModuleName()
+    return this.sourceConfig.getIosModuleName();
   }
 
   getRequiredImports(language: Language): SourceImport[] {
-    const name = getHybridObjectName(this.hybridObjectName)
-    const cxxNamespace = this.sourceConfig.getCxxNamespace('c++')
-    const imports: SourceImport[] = []
+    const name = getHybridObjectName(this.hybridObjectName);
+    const cxxNamespace = this.sourceConfig.getCxxNamespace("c++");
+    const imports: SourceImport[] = [];
 
     switch (language) {
-      case 'c++': {
+      case "c++": {
         imports.push({
-          language: 'c++',
-          name: 'memory',
-          space: 'system',
-        })
+          language: "c++",
+          name: "memory",
+          space: "system",
+        });
         if (this.sourceConfig.isExternalConfig) {
-          const cxxImport = this.getExternalCxxImportName()
+          const cxxImport = this.getExternalCxxImportName();
           imports.push({
             name: `${cxxImport}/${name.HybridTSpec}.hpp`,
             forwardDeclaration: getForwardDeclaration(
-              'class',
+              "class",
               name.HybridTSpec,
-              cxxNamespace
+              cxxNamespace,
             ),
-            language: 'c++',
-            space: 'system',
-          })
+            language: "c++",
+            space: "system",
+          });
         } else {
           imports.push({
             name: `${name.HybridTSpec}.hpp`,
             forwardDeclaration: getForwardDeclaration(
-              'class',
+              "class",
               name.HybridTSpec,
-              cxxNamespace
+              cxxNamespace,
             ),
-            language: 'c++',
-            space: 'user',
-          })
+            language: "c++",
+            space: "user",
+          });
         }
-        break
+        break;
       }
-      case 'kotlin': {
+      case "kotlin": {
         if (this.sourceConfig.isExternalConfig) {
           imports.push({
-            language: 'kotlin',
+            language: "kotlin",
             name: this.sourceConfig.getAndroidPackage(
-              'java/kotlin',
-              name.HybridTSpec
+              "java/kotlin",
+              name.HybridTSpec,
             ),
-            space: 'system',
-          })
+            space: "system",
+          });
         }
-        break
+        break;
       }
-      case 'swift': {
+      case "swift": {
         if (this.sourceConfig.isExternalConfig) {
           imports.push({
-            language: 'swift',
+            language: "swift",
             name: this.sourceConfig.getIosModuleName(),
-            space: 'system',
-          })
+            space: "system",
+          });
         }
-        break
+        break;
+      }
+      case "rust": {
+        // Import the trait from its sibling module.
+        // Generated traits live in super::ModuleName::TraitName.
+        // Non-generated traits (external/other-language) also use this
+        // pattern — the user's crate must provide matching modules.
+        imports.push({
+          name: `super::${name.HybridTSpec}::${name.HybridTSpec}`,
+          language: "rust",
+          space: "user",
+        });
+        break;
       }
     }
 
-    return imports
+    return imports;
   }
 }

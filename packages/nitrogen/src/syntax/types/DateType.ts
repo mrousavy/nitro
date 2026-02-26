@@ -23,6 +23,8 @@ export class DateType implements Type {
         return 'Date'
       case 'kotlin':
         return 'java.time.Instant'
+      case 'rust':
+        return 'f64'
       default:
         throw new Error(
           `Language ${language} is not yet supported for DateType!`
