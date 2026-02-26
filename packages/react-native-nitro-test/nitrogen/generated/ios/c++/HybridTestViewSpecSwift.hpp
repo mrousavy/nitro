@@ -68,7 +68,7 @@ namespace margelo::nitro::test {
       return _swiftPart.isBlue();
     }
     inline void setIsBlue(bool isBlue) noexcept override {
-      _swiftPart.setBlue(std::forward<decltype(isBlue)>(isBlue));
+      _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
     }
     inline bool getHasBeenCalled() noexcept override {
       return _swiftPart.hasBeenCalled();

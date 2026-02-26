@@ -244,7 +244,7 @@ namespace margelo::nitro::test {
       return _swiftPart.isBooleanWritable();
     }
     inline void setIsBooleanWritable(bool isBooleanWritable) noexcept override {
-      _swiftPart.setBooleanWritable(std::forward<decltype(isBooleanWritable)>(isBooleanWritable));
+      _swiftPart.setIsBooleanWritable(std::forward<decltype(isBooleanWritable)>(isBooleanWritable));
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();
