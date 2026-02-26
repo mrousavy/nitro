@@ -217,9 +217,8 @@ set {
       case 'rust': {
         const type = this.type.getCode('rust')
         const rustName = toSnakeCase(this.name)
-        const getterName = `get_${rustName}`
         const lines: string[] = []
-        lines.push(`fn ${getterName}(&self) -> ${type};`)
+        lines.push(`fn ${rustName}(&self) -> ${type};`)
         if (!this.isReadonly) {
           const setterName = `set_${rustName}`
           lines.push(`fn ${setterName}(&mut self, value: ${type});`)

@@ -4,6 +4,7 @@ import { getForwardDeclaration } from "../c++/getForwardDeclaration.js";
 import { getHybridObjectName } from "../getHybridObjectName.js";
 import type { HybridObjectSpec } from "../HybridObjectSpec.js";
 import type { SourceFile, SourceImport } from "../SourceFile.js";
+import { toSnakeCase } from "../helpers.js";
 import type { GetCodeOptions, Type, TypeKind } from "./Type.js";
 
 interface GetHybridObjectCodeOptions extends GetCodeOptions {
@@ -203,7 +204,7 @@ export class HybridObjectType implements Type {
         // Non-generated traits (external/other-language) also use this
         // pattern — the user's crate must provide matching modules.
         imports.push({
-          name: `super::${name.HybridTSpec}::${name.HybridTSpec}`,
+          name: `super::${toSnakeCase(name.HybridTSpec)}::${name.HybridTSpec}`,
           language: "rust",
           space: "user",
         });

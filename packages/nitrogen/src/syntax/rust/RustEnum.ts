@@ -1,5 +1,5 @@
 import type { SourceFile } from "../SourceFile.js";
-import { createRustFileMetadataString } from "../helpers.js";
+import { createRustFileMetadataString, toSnakeCase } from "../helpers.js";
 import type { EnumMember, EnumType } from "../types/EnumType.js";
 
 /**
@@ -20,8 +20,10 @@ export function createRustEnum(enumType: EnumType): SourceFile {
     .map((m) => `${m.value} => Some(${enumName}::${toRustEnumMemberName(m)}),`)
     .join("\n            ");
 
+  const moduleName = toSnakeCase(enumName);
+
   const code = `
-${createRustFileMetadataString(`${enumName}.rs`)}
+${createRustFileMetadataString(`${moduleName}.rs`)}
 
 /// Enum \`${enumName}\` — auto-generated from TypeScript.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -44,7 +46,7 @@ impl ${enumName} {
 
   return {
     content: code,
-    name: `${enumName}.rs`,
+    name: `${moduleName}.rs`,
     subdirectory: [],
     language: "rust",
     platform: "shared",

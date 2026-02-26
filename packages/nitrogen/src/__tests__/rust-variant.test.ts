@@ -15,19 +15,19 @@ describe("RustVariant Generator", () => {
     );
     const file = createRustVariant(variant);
 
-    expect(file.name).toBe("NumberOrString.rs");
+    expect(file.name).toBe("number_or_string.rs");
     expect(file.language).toBe("rust");
     expect(file.platform).toBe("shared");
   });
 
-  test("generates enum with #[derive(Debug, Clone)]", () => {
+  test("generates enum with #[derive(Debug, Clone, PartialEq)]", () => {
     const variant = new VariantType(
       [new NumberType(), new StringType()],
       "NumberOrString",
     );
     const file = createRustVariant(variant);
 
-    expect(file.content).toContain("#[derive(Debug, Clone)]");
+    expect(file.content).toContain("#[derive(Debug, Clone, PartialEq)]");
   });
 
   test("does not use #[repr(C)] (variants are passed as opaque pointers)", () => {

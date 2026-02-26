@@ -60,7 +60,7 @@ export class ArrayBufferType implements Type {
         break;
       case "rust":
         imports.push({
-          name: "super::NitroBuffer::NitroBuffer",
+          name: "super::nitro_buffer::NitroBuffer",
           language: "rust",
           space: "user",
         });

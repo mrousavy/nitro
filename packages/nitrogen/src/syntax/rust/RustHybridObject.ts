@@ -143,7 +143,7 @@ ${closureBody}
     const isVoidReturn = bridgedType.getRustFfiType() === "()";
 
     if (bridgedType.needsSpecialHandling) {
-      const traitCall = `obj.get_${rustPropName}()`;
+      const traitCall = `obj.${rustPropName}()`;
       const convertedReturn = bridgedType.parseFromRustToCpp(traitCall, "rust");
       shims.push(
         wrapCatchUnwind(
@@ -161,7 +161,7 @@ ${closureBody}
           `ptr: *mut std::ffi::c_void`,
           resultType,
           isVoidReturn,
-          `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.get_${rustPropName}()`,
+          `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.${rustPropName}()`,
         ),
       );
     }
@@ -316,8 +316,10 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_destroy(ptr: *mut std::ffi::c_void)
   const properties = spec.properties.map((p) => p.getCode("rust")).join("\n");
   const methods = spec.methods.map((m) => m.getCode("rust")).join("\n");
 
+  const moduleName = toSnakeCase(name.HybridTSpec);
+
   const code = `
-${createRustFileMetadataString(`${name.HybridTSpec}.rs`)}
+${createRustFileMetadataString(`${moduleName}.rs`)}
 ${importsBlock}
 /// Implement this trait to create a Rust-backed HybridObject for \`${spec.name}\`.
 ///
@@ -351,7 +353,7 @@ ${shims.join("\n\n")}
 
   return {
     content: code,
-    name: `${name.HybridTSpec}.rs`,
+    name: `${moduleName}.rs`,
     subdirectory: [],
     language: "rust",
     platform: "shared",

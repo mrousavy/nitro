@@ -88,7 +88,7 @@ describe("FFI Error Propagation", () => {
         [],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       expect(rsFile.content).toContain("catch_unwind");
       expect(rsFile.content).toContain("AssertUnwindSafe");
@@ -105,7 +105,7 @@ describe("FFI Error Propagation", () => {
         [],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       // Setter should return __FfiResult_void
       expect(rsFile.content).toContain(
@@ -126,7 +126,7 @@ describe("FFI Error Propagation", () => {
         ],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       expect(rsFile.content).toContain("catch_unwind");
       expect(rsFile.content).toContain("__FfiResult_void");
@@ -135,7 +135,7 @@ describe("FFI Error Propagation", () => {
     test("memory_size is NOT wrapped in catch_unwind", () => {
       const spec = makeSpec("Image", [], []);
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       // memory_size should return usize directly, not __FfiResult_usize
       expect(rsFile.content).toContain(
@@ -151,7 +151,7 @@ describe("FFI Error Propagation", () => {
     test("destroy is NOT wrapped in catch_unwind", () => {
       const spec = makeSpec("Image", [], []);
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       // destroy should return void, not __FfiResult_void
       expect(rsFile.content).toContain(
@@ -287,7 +287,7 @@ describe("FFI Error Propagation", () => {
         [new Method("compute", new NumberType(), [])],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       // Should have three-way match: Ok(Ok(..)), Ok(Err(..)), Err(..)
       expect(rsFile.content).toContain("Ok(Ok(__value))");
@@ -302,7 +302,7 @@ describe("FFI Error Propagation", () => {
         [new Method("doWork", new VoidType(), [])],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       expect(rsFile.content).toContain("Ok(Ok(_))");
       expect(rsFile.content).toContain("Ok(Err(__err))");
@@ -315,7 +315,7 @@ describe("FFI Error Propagation", () => {
         [],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       // Property getters should use two-way match (Ok/Err), not three-way
       expect(rsFile.content).toContain("Ok(__result)");
@@ -333,7 +333,7 @@ describe("FFI Error Propagation", () => {
         [new Method("compute", new NumberType(), [])],
       );
       const files = createRustHybridObject(spec);
-      const rsFile = files.find((f) => f.name === "HybridImageSpec.rs")!;
+      const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       expect(rsFile.content).toContain(
         "fn compute(&mut self) -> Result<f64, String>;",

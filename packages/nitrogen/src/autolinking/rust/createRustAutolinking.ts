@@ -2,6 +2,7 @@ import { NitroConfig } from "../../config/NitroConfig.js";
 import {
   createFileMetadataString,
   createRustFileMetadataString,
+  toSnakeCase,
 } from "../../syntax/helpers.js";
 import { getHybridObjectName } from "../../syntax/getHybridObjectName.js";
 import type { SourceFile } from "../../syntax/SourceFile.js";
@@ -17,7 +18,7 @@ import type { SourceFile } from "../../syntax/SourceFile.js";
  */
 export function createRustNitroBuffer(): SourceFile {
   const code = `
-${createRustFileMetadataString("NitroBuffer.rs")}
+${createRustFileMetadataString("nitro_buffer.rs")}
 
 use std::ffi::c_void;
 
@@ -121,7 +122,7 @@ impl Drop for NitroBuffer {
 
   return {
     content: code,
-    name: "NitroBuffer.rs",
+    name: "nitro_buffer.rs",
     subdirectory: [],
     language: "rust",
     platform: "shared",
@@ -135,10 +136,12 @@ impl Drop for NitroBuffer {
  * This must be called after all Rust files have been collected.
  */
 export function createRustLibRs(allFiles: SourceFile[]): SourceFile {
-  const rustFiles = allFiles
-    .filter((f) => f.language === "rust" && f.name.endsWith(".rs"))
-    .map((f) => f.name.replace(".rs", ""))
-    .filter((name) => name !== "lib");
+  const rustFiles = [...new Set(
+    allFiles
+      .filter((f) => f.language === "rust" && f.name.endsWith(".rs"))
+      .map((f) => f.name.replace(".rs", ""))
+      .filter((name) => name !== "lib"),
+  )];
 
   // Scan generated file content for `use super::X` or `use super::X::Y` imports
   // to find referenced modules that aren't generated
@@ -175,14 +178,17 @@ export function createRustLibRs(allFiles: SourceFile[]): SourceFile {
       "// Replace these stubs with real implementations or external crate imports as needed.",
     );
     for (const moduleName of [...referencedModules].sort()) {
-      if (moduleName === "Promise") {
+      if (moduleName === "promise") {
         // Promise is a Nitro built-in type — provide a generic stub
         stubLines.push(
-          `pub mod Promise { pub struct Promise<T>(pub std::marker::PhantomData<T>); }`,
+          `pub mod promise { pub struct Promise<T>(pub std::marker::PhantomData<T>); }`,
         );
-      } else if (moduleName.startsWith("Hybrid")) {
-        // HybridObject trait stub
-        const traitName = moduleName;
+      } else if (moduleName.startsWith("hybrid_")) {
+        // HybridObject trait stub — reconstruct PascalCase trait name from snake_case module
+        const traitName = moduleName
+          .split("_")
+          .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+          .join("");
         stubLines.push(
           `pub mod ${moduleName} { pub trait ${traitName}: Send + Sync {} }`,
         );
@@ -546,7 +552,8 @@ export function createRustFactory(
     const { HybridTSpec } = getHybridObjectName(hybridObjectName);
     const factoryFunctionName = `create_${HybridTSpec}`;
 
-    traitImports.push(`use super::${HybridTSpec}::${HybridTSpec};`);
+    const traitModuleName = toSnakeCase(HybridTSpec);
+    traitImports.push(`use super::${traitModuleName}::${HybridTSpec};`);
 
     if (implCrateIdent != null) {
       implImports.push(`use ${implCrateIdent}::${rustClassName};`);
@@ -554,7 +561,7 @@ export function createRustFactory(
 
     // Find the generated trait file and extract method signatures
     const traitFile = allFiles.find(
-      (f) => f.name === `${HybridTSpec}.rs` && f.language === "rust",
+      (f) => f.name === `${traitModuleName}.rs` && f.language === "rust",
     );
     if (traitFile != null) {
       const methods = extractTraitMethods(traitFile.content, HybridTSpec);

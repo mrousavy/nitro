@@ -35,11 +35,13 @@ export function createRustStruct(
     })
     .join("\n    ");
 
+  const moduleName = toSnakeCase(structName);
+
   const code = `
-${createRustFileMetadataString(`${structName}.rs`)}
+${createRustFileMetadataString(`${moduleName}.rs`)}
 ${importsBlock}
 /// Struct \`${structName}\` — auto-generated from TypeScript.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ${structName} {
     ${fields}
 }
@@ -47,7 +49,7 @@ pub struct ${structName} {
 
   return {
     content: code,
-    name: `${structName}.rs`,
+    name: `${moduleName}.rs`,
     subdirectory: [],
     language: "rust",
     platform: "shared",

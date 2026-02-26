@@ -1,5 +1,5 @@
 import type { SourceFile } from "../SourceFile.js";
-import { createRustFileMetadataString, isNotDuplicate } from "../helpers.js";
+import { createRustFileMetadataString, isNotDuplicate, toSnakeCase } from "../helpers.js";
 import type { FunctionType } from "../types/FunctionType.js";
 import { RustCxxBridgedType } from "./RustCxxBridgedType.js";
 
@@ -83,8 +83,10 @@ export function createRustFunction(funcType: FunctionType): SourceFile {
   const importsBlock =
     rustImports.length > 0 ? rustImports.join("\n") + "\n" : "";
 
+  const moduleName = toSnakeCase(name);
+
   const code = `
-${createRustFileMetadataString(`${name}.rs`)}
+${createRustFileMetadataString(`${moduleName}.rs`)}
 
 use std::ffi;
 ${importsBlock}
@@ -124,7 +126,7 @@ impl Drop for ${name} {
 
   return {
     content: code,
-    name: `${name}.rs`,
+    name: `${moduleName}.rs`,
     subdirectory: [],
     language: "rust",
     platform: "shared",

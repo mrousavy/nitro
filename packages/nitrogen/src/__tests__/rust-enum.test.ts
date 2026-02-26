@@ -26,7 +26,7 @@ describe("RustEnum Generator", () => {
     ]);
     const file = createRustEnum(enumType);
 
-    expect(file.name).toBe("Color.rs");
+    expect(file.name).toBe("color.rs");
     expect(file.language).toBe("rust");
     expect(file.platform).toBe("shared");
   });

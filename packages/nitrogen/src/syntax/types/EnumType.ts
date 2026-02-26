@@ -5,7 +5,7 @@ import { getForwardDeclaration } from "../c++/getForwardDeclaration.js";
 import { type SourceFile, type SourceImport } from "../SourceFile.js";
 import type { GetCodeOptions, Type, TypeKind } from "./Type.js";
 import { createCppEnum } from "../c++/CppEnum.js";
-import { escapeCppName } from "../helpers.js";
+import { escapeCppName, toSnakeCase } from "../helpers.js";
 import { createCppUnion } from "../c++/CppUnion.js";
 import { NitroConfig } from "../../config/NitroConfig.js";
 
@@ -131,7 +131,7 @@ export class EnumType implements Type {
       });
     } else if (language === "rust") {
       imports.push({
-        name: `super::${this.enumName}::${this.enumName}`,
+        name: `super::${toSnakeCase(this.enumName)}::${this.enumName}`,
         language: "rust",
         space: "user",
       });

@@ -15,61 +15,62 @@
     clippy::useless_conversion
 )]
 
-pub mod Car;
-pub mod CoreTypesVariant;
-pub mod ExternalObjectStruct;
-pub mod Func_double;
-pub mod Func_std__shared_ptr_Promise_double__;
-pub mod Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____;
-pub mod Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____;
-pub mod Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____;
-pub mod Func_std__shared_ptr_Promise_std__string__;
-pub mod Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_;
-pub mod Func_void;
-pub mod Func_void_double;
-pub mod Func_void_std__exception_ptr;
-pub mod Func_void_std__optional_double_;
-pub mod Func_void_std__string;
-pub mod Func_void_std__vector_Powertrain_;
-pub mod HybridTestObjectRustSpec;
-pub mod JsStyleStruct;
-pub mod MapWrapper;
-pub mod NamedVariant;
-pub mod NitroBuffer;
-pub mod OldEnum;
-pub mod OptionalCallback;
-pub mod OptionalWrapper;
-pub mod PartialPerson;
-pub mod Person;
-pub mod Powertrain;
-pub mod SecondMapWrapper;
-pub mod StringOrExternal;
-pub mod Variant_Box_dyn_Fn____f64;
-pub mod Variant_Box_dyn_HybridBaseSpec__OptionalWrapper;
-pub mod Variant_Box_dyn_HybridTestObjectRustSpec__Person;
-pub mod Variant_Car_Person;
-pub mod Variant_String_f64;
-pub mod Variant____String;
-pub mod Variant_bool_OldEnum;
-pub mod Variant_bool_Vec_f64__Vec_String__String_f64;
-pub mod Variant_bool_WeirdNumbersEnum;
-pub mod Variant_bool_f64;
-pub mod WeirdNumbersEnum;
-pub mod WrappedJsStruct;
+pub mod any_map;
+pub mod car;
+pub mod core_types_variant;
+pub mod external_object_struct;
+pub mod func_double;
+pub mod func_std__shared_ptr_margelo__nitro__test__external__hybrid_some_external_object_spec_;
+pub mod func_std__shared_ptr_promise_double__;
+pub mod func_std__shared_ptr_promise_std__shared_ptr_promise_double____;
+pub mod func_std__shared_ptr_promise_std__shared_ptr_promise_std__shared_ptr_array_buffer_____;
+pub mod func_std__shared_ptr_promise_std__shared_ptr_promise_void____;
+pub mod func_std__shared_ptr_promise_std__string__;
+pub mod func_void;
+pub mod func_void_double;
+pub mod func_void_std__exception_ptr;
+pub mod func_void_std__optional_double_;
+pub mod func_void_std__string;
+pub mod func_void_std__vector_powertrain_;
+pub mod hybrid_test_object_rust_spec;
+pub mod js_style_struct;
+pub mod map_wrapper;
+pub mod named_variant;
+pub mod nitro_buffer;
+pub mod old_enum;
+pub mod optional_callback;
+pub mod optional_wrapper;
+pub mod partial_person;
+pub mod person;
+pub mod powertrain;
+pub mod second_map_wrapper;
+pub mod string_or_external;
+pub mod variant____string;
+pub mod variant_bool_f64;
+pub mod variant_bool_old_enum;
+pub mod variant_bool_vec_f64__vec_string__string_f64;
+pub mod variant_bool_weird_numbers_enum;
+pub mod variant_box_dyn_fn____f64;
+pub mod variant_box_dyn_hybrid_base_spec__optional_wrapper;
+pub mod variant_box_dyn_hybrid_test_object_rust_spec__person;
+pub mod variant_car_person;
+pub mod variant_string_f64;
+pub mod weird_numbers_enum;
+pub mod wrapped_js_struct;
 
 // Stub modules for externally referenced types.
 // These are types referenced by the generated code but not implemented in Rust.
 // Replace these stubs with real implementations or external crate imports as needed.
-pub mod HybridBaseSpec {
+pub mod hybrid_base_spec {
     pub trait HybridBaseSpec: Send + Sync {}
 }
-pub mod HybridChildSpec {
+pub mod hybrid_child_spec {
     pub trait HybridChildSpec: Send + Sync {}
 }
-pub mod HybridSomeExternalObjectSpec {
+pub mod hybrid_some_external_object_spec {
     pub trait HybridSomeExternalObjectSpec: Send + Sync {}
 }
-pub mod HybridTestViewSpec {
+pub mod hybrid_test_view_spec {
     pub trait HybridTestViewSpec: Send + Sync {}
 }
 

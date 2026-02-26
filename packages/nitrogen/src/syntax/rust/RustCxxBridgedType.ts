@@ -13,6 +13,8 @@ import { createRustEnum } from "./RustEnum.js";
 import { createRustFunction } from "./RustFunction.js";
 import { createRustStruct } from "./RustStruct.js";
 import { createRustVariant } from "./RustVariant.js";
+import { createRustAnyMap } from "./RustAnyMap.js";
+import { toSnakeCase } from "../helpers.js";
 
 /**
  * Bridges types between Rust and C++ across the `extern "C"` FFI boundary.
@@ -98,6 +100,10 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "function": {
         const funcType = getTypeAs(this.type, FunctionType);
         files.push(createRustFunction(funcType));
+        break;
+      }
+      case "map": {
+        files.push(createRustAnyMap());
         break;
       }
     }
@@ -327,7 +333,8 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
             // Reconstruct Func_* wrapper from void pointer, then wrap in a closure
             // so the trait receives Box<dyn Fn(...)> as expected.
             const funcStructName = funcType.specializationName;
-            const funcStructPath = `super::${funcStructName}::${funcStructName}`;
+            const funcModuleName = toSnakeCase(funcStructName);
+            const funcStructPath = `super::${funcModuleName}::${funcStructName}`;
             const rustParams = funcType.parameters.map(
               (p, i) => `__p${i}: ${p.getCode("rust")}`,
             );
@@ -434,7 +441,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
         switch (inLanguage) {
           case "rust":
             // Reconstruct NitroBuffer from void pointer
-            return `*Box::from_raw(${parameterName} as *mut super::NitroBuffer::NitroBuffer)`;
+            return `*Box::from_raw(${parameterName} as *mut super::nitro_buffer::NitroBuffer)`;
           case "c++":
             // Create a NitroBuffer C struct on the heap with zero-copy access to the ArrayBuffer's data.
             // The handle holds a boxed shared_ptr<ArrayBuffer> to prevent deallocation.
@@ -455,7 +462,8 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "map":
         switch (inLanguage) {
           case "rust":
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
+            // Wrap the opaque void* in our AnyMap newtype
+            return `AnyMap::from_raw(${parameterName})`;
           case "c++":
             return `static_cast<void*>(new ${this.type.getCode("c++")}(std::move(${parameterName})))`;
           default:
@@ -579,12 +587,22 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "array":
       case "record":
       case "tuple":
-      case "map":
       case "promise":
         switch (inLanguage) {
           case "rust":
             // Box the value and leak it as a void pointer
             return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
+          case "c++":
+            // Unbox: cast void* back to the C++ type and move out
+            return `std::move(*static_cast<${this.type.getCode("c++")}*>(${parameterName}))`;
+          default:
+            return parameterName;
+        }
+      case "map":
+        switch (inLanguage) {
+          case "rust":
+            // Extract the raw pointer from the AnyMap wrapper
+            return `${parameterName}.as_raw()`;
           case "c++":
             // Unbox: cast void* back to the C++ type and move out
             return `std::move(*static_cast<${this.type.getCode("c++")}*>(${parameterName}))`;

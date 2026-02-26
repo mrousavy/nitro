@@ -88,26 +88,26 @@ describe('Rust Property Code Generation', () => {
   test('readonly property generates getter only', () => {
     const prop = new Property('width', new NumberType(), true)
     const code = prop.getCode('rust')
-    expect(code).toBe('fn get_width(&self) -> f64;')
+    expect(code).toBe('fn width(&self) -> f64;')
   })
 
   test('readwrite property generates getter and setter', () => {
     const prop = new Property('name', new StringType(), false)
     const code = prop.getCode('rust')
-    expect(code).toContain('fn get_name(&self) -> String;')
+    expect(code).toContain('fn name(&self) -> String;')
     expect(code).toContain('fn set_name(&mut self, value: String);')
   })
 
   test('boolean property', () => {
     const prop = new Property('isFast', new BooleanType(), true)
     const code = prop.getCode('rust')
-    expect(code).toBe('fn get_is_fast(&self) -> bool;')
+    expect(code).toBe('fn is_fast(&self) -> bool;')
   })
 
   test('optional property', () => {
     const prop = new Property('label', new OptionalType(new StringType()), false)
     const code = prop.getCode('rust')
-    expect(code).toContain('fn get_label(&self) -> Option<String>;')
+    expect(code).toContain('fn label(&self) -> Option<String>;')
     expect(code).toContain('fn set_label(&mut self, value: Option<String>);')
   })
 })

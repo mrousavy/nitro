@@ -100,10 +100,8 @@ describe("Rust Type Mappings", () => {
       ]);
       expect(type.getCode("rust")).toBe("(f64, String, bool)");
     });
-    test("Map -> *mut std::ffi::c_void (opaque pass-through)", () => {
-      expect(new MapType().getCode("rust")).toBe(
-        "*mut std::ffi::c_void",
-      );
+    test("Map -> AnyMap (opaque wrapper type)", () => {
+      expect(new MapType().getCode("rust")).toBe("AnyMap");
     });
   });
 

@@ -1,5 +1,5 @@
 import type { SourceFile } from "../SourceFile.js";
-import { createRustFileMetadataString, isNotDuplicate } from "../helpers.js";
+import { createRustFileMetadataString, isNotDuplicate, toSnakeCase } from "../helpers.js";
 import type { VariantType } from "../types/VariantType.js";
 
 /**
@@ -29,11 +29,13 @@ export function createRustVariant(variant: VariantType): SourceFile {
     })
     .join("\n    ");
 
+  const moduleName = toSnakeCase(aliasName);
+
   const code = `
-${createRustFileMetadataString(`${aliasName}.rs`)}
+${createRustFileMetadataString(`${moduleName}.rs`)}
 ${importsBlock}
 /// Tagged union \`${aliasName}\` — auto-generated from TypeScript.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ${aliasName} {
     ${cases}
 }
@@ -41,7 +43,7 @@ pub enum ${aliasName} {
 
   return {
     content: code,
-    name: `${aliasName}.rs`,
+    name: `${moduleName}.rs`,
     subdirectory: [],
     language: "rust",
     platform: "shared",

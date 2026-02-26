@@ -14,7 +14,7 @@ describe("RustFunction Generator", () => {
     ]);
     const file = createRustFunction(funcType);
 
-    expect(file.name).toContain("Func_");
+    expect(file.name).toContain("func_");
     expect(file.name).toEndWith(".rs");
     expect(file.language).toBe("rust");
     expect(file.platform).toBe("shared");

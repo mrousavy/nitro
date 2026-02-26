@@ -1,6 +1,7 @@
 import type { Language } from "../../getPlatformSpecs.js";
 import type { SourceFile, SourceImport } from "../SourceFile.js";
 import type { Type, TypeKind } from "./Type.js";
+import { createRustAnyMap } from "../rust/RustAnyMap.js";
 
 export class MapType implements Type {
   get canBePassedByReference(): boolean {
@@ -24,10 +25,8 @@ export class MapType implements Type {
       case "kotlin":
         return "AnyMap";
       case "rust":
-        // AnyMap is an opaque C++ type that cannot be directly represented in Rust.
-        // We pass it through as an opaque pointer. Users can interact with it via
-        // FFI helper functions if needed.
-        return "*mut std::ffi::c_void";
+        // AnyMap is an opaque C++ type wrapped in a type-safe Rust newtype.
+        return "AnyMap";
       default:
         throw new Error(
           `Language ${language} is not yet supported for MapType!`,
@@ -35,7 +34,7 @@ export class MapType implements Type {
     }
   }
   getExtraFiles(): SourceFile[] {
-    return [];
+    return [createRustAnyMap()];
   }
   getRequiredImports(language: Language): SourceImport[] {
     const imports: SourceImport[] = [];
@@ -62,7 +61,11 @@ export class MapType implements Type {
         });
         break;
       case "rust":
-        // No imports needed — map is an opaque *mut c_void
+        imports.push({
+          name: "super::any_map::AnyMap",
+          language: "rust",
+          space: "user",
+        });
         break;
     }
     return imports;

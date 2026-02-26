@@ -7,6 +7,7 @@ import {
   type SourceFile,
   type SourceImport,
 } from "../SourceFile.js";
+import { toSnakeCase } from "../helpers.js";
 import type { GetCodeOptions, NamedType, Type, TypeKind } from "./Type.js";
 
 export class StructType implements Type {
@@ -84,7 +85,7 @@ export class StructType implements Type {
       });
     } else if (language === "rust") {
       imports.push({
-        name: `super::${this.structName}::${this.structName}`,
+        name: `super::${toSnakeCase(this.structName)}::${this.structName}`,
         language: "rust",
         space: "user",
       });

@@ -1,5 +1,5 @@
 import type { Language } from "../../getPlatformSpecs.js";
-import { escapeCppName, isNotDuplicate } from "../helpers.js";
+import { escapeCppName, isNotDuplicate, toSnakeCase } from "../helpers.js";
 import { type SourceFile, type SourceImport } from "../SourceFile.js";
 import type { GetCodeOptions, Type, TypeKind } from "./Type.js";
 
@@ -97,7 +97,7 @@ export class VariantType implements Type {
       const aliasName = this.getAliasName("rust");
       imports.push({
         language: "rust",
-        name: `super::${aliasName}::${aliasName}`,
+        name: `super::${toSnakeCase(aliasName)}::${aliasName}`,
         space: "user",
       });
     }
