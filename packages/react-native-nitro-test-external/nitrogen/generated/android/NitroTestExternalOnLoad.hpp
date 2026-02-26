@@ -11,6 +11,7 @@
 
 namespace margelo::nitro::test::external {
 
+  [[deprecated("Use registerNatives() instead.")]]
   int initialize(JavaVM* vm);
 
   /**

@@ -67,6 +67,7 @@ ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
 namespace ${cxxNamespace} {
 
+  [[deprecated("Use registerNatives() instead.")]]
   int initialize(JavaVM* vm);
 
   /**
