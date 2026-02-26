@@ -238,7 +238,7 @@ namespace margelo::nitro::test {
       return _swiftPart.hasBooleanWritable();
     }
     inline void setHasBooleanWritable(bool hasBooleanWritable) noexcept override {
-      _swiftPart.setBooleanWritable(std::forward<decltype(hasBooleanWritable)>(hasBooleanWritable));
+      _swiftPart.setHasBooleanWritable(std::forward<decltype(hasBooleanWritable)>(hasBooleanWritable));
     }
     inline bool getIsBooleanWritable() noexcept override {
       return _swiftPart.isBooleanWritable();

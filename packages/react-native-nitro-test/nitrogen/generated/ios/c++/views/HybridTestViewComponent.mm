@@ -79,7 +79,7 @@ using namespace margelo::nitro::test::views;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setBeenCalled(newViewProps.hasBeenCalled.value);
+    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
