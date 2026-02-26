@@ -22,11 +22,11 @@ namespace margelo::nitro::test::external {
 
 int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, []() {
-    ::margelo::nitro::test::external::registerNatives();
+    ::margelo::nitro::test::external::registerAllNatives();
   });
 }
 
-void registerNatives() {
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test::external;
 

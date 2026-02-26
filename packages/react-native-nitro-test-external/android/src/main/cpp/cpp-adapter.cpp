@@ -3,5 +3,5 @@
 #include <jni.h>
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-  return facebook::jni::initialize(vm, []() { margelo::nitro::test::external::registerNatives(); });
+  return facebook::jni::initialize(vm, []() { margelo::nitro::test::external::registerAllNatives(); });
 }

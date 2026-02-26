@@ -85,7 +85,7 @@ namespace ${cxxNamespace} {
    * }
    * \`\`\`
    */
-  void registerNatives();
+  void registerAllNatives();
 
 } // namespace ${cxxNamespace}
 
@@ -109,11 +109,11 @@ namespace ${cxxNamespace} {
 
 int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, []() {
-    ::${cxxNamespace}::registerNatives();
+    ::${cxxNamespace}::registerAllNatives();
   });
 }
 
-void registerNatives() {
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace ${cxxNamespace};
 

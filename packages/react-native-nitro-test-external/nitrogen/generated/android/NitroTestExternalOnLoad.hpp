@@ -29,6 +29,6 @@ namespace margelo::nitro::test::external {
    * }
    * ```
    */
-  void registerNatives();
+  void registerAllNatives();
 
 } // namespace margelo::nitro::test::external

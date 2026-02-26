@@ -43,11 +43,11 @@ namespace margelo::nitro::test {
 
 int initialize(JavaVM* vm) {
   return facebook::jni::initialize(vm, []() {
-    ::margelo::nitro::test::registerNatives();
+    ::margelo::nitro::test::registerAllNatives();
   });
 }
 
-void registerNatives() {
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test;
 
