@@ -31,6 +31,10 @@ public:
    */
   explicit HardwareBufferArrayBuffer(AHardwareBuffer* hardwareBuffer)
       : _hardwareBuffer(hardwareBuffer), _dataCached(nullptr), _isLocked(false) {
+    if (!isHardwareBufferCPUReadable(hardwareBuffer)) [[unlikely]] {
+      throw std::runtime_error("Cannot create HardwareBuffer-backed ArrayBuffer - the given HardwareBuffer does not allow CPU reads!");
+    }
+
     AHardwareBuffer_acquire(hardwareBuffer);
   }
 
@@ -38,6 +42,13 @@ public:
     // Hermes GC can destroy JS objects on a non-JNI Thread.
     unlock();
     jni::ThreadScope::WithClassLoader([&] { AHardwareBuffer_release(_hardwareBuffer); });
+  }
+
+public:
+  static bool isHardwareBufferCPUReadable(AHardwareBuffer* hardwareBuffer) {
+    AHardwareBuffer_Desc description;
+    AHardwareBuffer_describe(hardwareBuffer, &description);
+    return (description.usage & AHARDWAREBUFFER_USAGE_CPU_READ_MASK) == 0;
   }
 
 public:
