@@ -77,12 +77,12 @@ void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* 
   // 3. Copy data over
   void* sourceData;
   void* destinationData;
-  int lockSource = AHardwareBuffer_lock(sourceHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &sourceData);
+  int lockSource = AHardwareBuffer_lock(sourceHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, nullptr, &sourceData);
   if (lockSource != 0) {
     throw std::runtime_error("Failed to lock source HardwareBuffer! Error: " + std::to_string(lockSource));
   }
   int lockDestination =
-      AHardwareBuffer_lock(destinationHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_MASK, -1, nullptr, &destinationData);
+      AHardwareBuffer_lock(destinationHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_OFTEN, -1, nullptr, &destinationData);
   if (lockDestination != 0) {
     AHardwareBuffer_unlock(sourceHardwareBuffer, nullptr);
     throw std::runtime_error("Failed to lock destination HardwareBuffer! Error: " + std::to_string(lockDestination));

@@ -63,7 +63,7 @@ public:
       return _dataCached;
     }
     void* buffer;
-    int result = AHardwareBuffer_lock(_hardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_MASK, -1, nullptr, &buffer);
+    int result = AHardwareBuffer_lock(_hardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_READ_OFTEN, -1, nullptr, &buffer);
     if (result != 0) {
       throw std::runtime_error("Failed to read HardwareBuffer bytes!");
     }
