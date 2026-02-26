@@ -65,7 +65,7 @@ pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
 ${closureBody}
         })) {
             Ok(_) => ${resultType} { is_ok: 1, error: std::ptr::null_mut() },
-            Err(__panic) => ${resultType} { is_ok: 0, error: super::lib::__nitro_panic_to_cstring(__panic) },
+            Err(__panic) => ${resultType} { is_ok: 0, error: crate::__nitro_panic_to_cstring(__panic) },
         }
     }
 }
@@ -79,7 +79,7 @@ pub unsafe extern "C" fn ${funcName}(${params}) -> ${resultType} {
 ${closureBody}
         })) {
             Ok(__result) => ${resultType} { is_ok: 1, error: std::ptr::null_mut(), value: __result },
-            Err(__panic) => ${resultType} { is_ok: 0, error: super::lib::__nitro_panic_to_cstring(__panic), value: std::mem::zeroed() },
+            Err(__panic) => ${resultType} { is_ok: 0, error: crate::__nitro_panic_to_cstring(__panic), value: std::mem::zeroed() },
         }
     }
 }
@@ -257,8 +257,9 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_destroy(ptr: *mut std::ffi::c_void)
     .filter((i) => !i.name.endsWith(`::${name.HybridTSpec}`))
     .map((i) => `use ${i.name};`)
     .filter(isNotDuplicate);
-  const importsBlock =
-    rustImports.length > 0 ? "\n" + rustImports.join("\n") + "\n" : "";
+  // Always import crate-level FFI result types and helpers
+  rustImports.unshift("use crate::*;");
+  const importsBlock = "\n" + rustImports.join("\n") + "\n";
 
   // Generate trait definition
   const properties = spec.properties.map((p) => p.getCode("rust")).join("\n");

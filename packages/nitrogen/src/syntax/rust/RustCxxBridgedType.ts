@@ -337,7 +337,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
               rustReturnType === "()" ? "" : ` -> ${rustReturnType}`;
             return (
               `{ let __wrapper = Box::from_raw(${parameterName} as *mut ${funcStructPath}); ` +
-              `let __cb: ${this.type.getCode("rust")} = Box::new(move |${rustParams.join(", ")}|${returnSuffix} { unsafe { __wrapper.call(${callArgs.join(", ")}) } }); ` +
+              `let __cb: ${this.type.getCode("rust")} = Box::new(move |${rustParams.join(", ")}|${returnSuffix} { __wrapper.call(${callArgs.join(", ")}) }); ` +
               `__cb }`
             );
           }
