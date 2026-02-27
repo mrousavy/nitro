@@ -48,7 +48,7 @@ public:
   static bool isHardwareBufferCPUReadable(AHardwareBuffer* hardwareBuffer) {
     AHardwareBuffer_Desc description;
     AHardwareBuffer_describe(hardwareBuffer, &description);
-    return (description.usage & AHARDWAREBUFFER_USAGE_CPU_READ_MASK) == 0;
+    return (description.usage & AHARDWAREBUFFER_USAGE_CPU_READ_MASK) != 0;
   }
 
 public:
