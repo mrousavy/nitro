@@ -32,33 +32,11 @@ Pod::Spec.new do |s|
   ]
   s.public_header_files = [
     # Public C++ headers will be exposed in modulemap (for Swift)
-    "cpp/core/AnyMap.hpp",
-    "cpp/core/ArrayBuffer.hpp",
-    "cpp/core/HybridObject.hpp",
-    "cpp/core/Null.hpp",
-    "cpp/core/Promise.hpp",
-    "cpp/entrypoint/HybridNitroModulesProxy.hpp",
-    "cpp/entrypoint/InstallNitro.hpp",
-    "cpp/registry/HybridObjectRegistry.hpp",
-    "cpp/jsi/JSIConverter.hpp",
-    "cpp/jsi/JSIHelpers.hpp",
-    "cpp/platform/NitroLogger.hpp",
-    "cpp/threading/Dispatcher.hpp",
-    "cpp/utils/JSCallback.hpp",
-    "cpp/utils/FastVectorCopy.hpp",
-    "cpp/utils/NitroHash.hpp",
-    "cpp/utils/NitroDefines.hpp",
-    "cpp/utils/PropNameIDCache.hpp",
-    "cpp/views/CachedProp.hpp",
+    "cpp/**/*.hpp",
+   
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
-    "ios/core/ArrayBufferHolder.hpp",
-    "ios/core/PromiseHolder.hpp",
-    "ios/utils/AnyMapUtils.hpp",
-    "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
-    "ios/utils/Result.hpp",
-    "ios/utils/DateToChronoDate.hpp",
-    "ios/utils/RuntimeError.hpp",
-    "ios/utils/SwiftClosure.hpp",
+    "ios/**/*.hpp",
+
   ]
 
   xcconfig = {
