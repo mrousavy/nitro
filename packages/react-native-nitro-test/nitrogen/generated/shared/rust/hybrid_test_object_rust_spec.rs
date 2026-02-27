@@ -96,6 +96,12 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     fn set_optional_old_enum(&self, value: Option<OldEnum>);
     fn optional_callback(&self) -> Option<Box<dyn Fn(f64) + Send + Sync>>;
     fn set_optional_callback(&self, value: Option<Box<dyn Fn(f64) + Send + Sync>>);
+    fn has_boolean(&self) -> bool;
+    fn is_boolean(&self) -> bool;
+    fn has_boolean_writable(&self) -> bool;
+    fn set_has_boolean_writable(&self, value: bool);
+    fn is_boolean_writable(&self) -> bool;
+    fn set_is_boolean_writable(&self, value: bool);
     fn some_variant(&self) -> Variant_String_f64;
     fn set_some_variant(&self, value: Variant_String_f64);
 
@@ -1287,6 +1293,164 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
                     None
                 }
             });
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_has_boolean(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.has_boolean()
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_boolean(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.is_boolean()
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_has_boolean_writable(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.has_boolean_writable()
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_set_has_boolean_writable(
+    ptr: *mut std::ffi::c_void,
+    value: bool,
+) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_has_boolean_writable(value);
+        })) {
+            Ok(_) => __FfiResult_void {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+            },
+            Err(__panic) => __FfiResult_void {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_boolean_writable(
+    ptr: *mut std::ffi::c_void,
+) -> __FfiResult_bool {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.is_boolean_writable()
+        })) {
+            Ok(__result) => __FfiResult_bool {
+                is_ok: 1,
+                error: std::ptr::null_mut(),
+                value: __result,
+            },
+            // SAFETY: value is intentionally zeroed on error — C++ checks is_ok before reading it.
+            Err(__panic) => __FfiResult_bool {
+                is_ok: 0,
+                error: crate::__nitro_panic_to_cstring(__panic),
+                value: std::mem::zeroed(),
+            },
+        }
+    }
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn HybridTestObjectRustSpec_set_is_boolean_writable(
+    ptr: *mut std::ffi::c_void,
+    value: bool,
+) -> __FfiResult_void {
+    // NOTE: AssertUnwindSafe is used because UnwindSafe cannot be required on the trait
+    // without making it viral across all implementations. If a panic occurs mid-mutation,
+    // the object's internal state may be inconsistent on subsequent calls.
+    unsafe {
+        match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            obj.set_is_boolean_writable(value);
         })) {
             Ok(_) => __FfiResult_void {
                 is_ok: 1,

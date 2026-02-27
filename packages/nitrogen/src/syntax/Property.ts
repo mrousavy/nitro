@@ -6,7 +6,7 @@ import type { Type } from './types/Type.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
-import { isBooleanPropertyPrefix, toSnakeCase } from './helpers.js'
+import { toSnakeCase } from './helpers.js'
 
 export interface PropertyBody {
   getter: string

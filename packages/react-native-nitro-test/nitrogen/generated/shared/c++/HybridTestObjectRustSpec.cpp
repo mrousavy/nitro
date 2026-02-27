@@ -43,6 +43,12 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectRustSpec::setOptionalOldEnum);
       prototype.registerHybridGetter("optionalCallback", &HybridTestObjectRustSpec::getOptionalCallback);
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectRustSpec::setOptionalCallback);
+      prototype.registerHybridGetter("hasBoolean", &HybridTestObjectRustSpec::getHasBoolean);
+      prototype.registerHybridGetter("isBoolean", &HybridTestObjectRustSpec::getIsBoolean);
+      prototype.registerHybridGetter("hasBooleanWritable", &HybridTestObjectRustSpec::getHasBooleanWritable);
+      prototype.registerHybridSetter("hasBooleanWritable", &HybridTestObjectRustSpec::setHasBooleanWritable);
+      prototype.registerHybridGetter("isBooleanWritable", &HybridTestObjectRustSpec::getIsBooleanWritable);
+      prototype.registerHybridSetter("isBooleanWritable", &HybridTestObjectRustSpec::setIsBooleanWritable);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectRustSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectRustSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectRustSpec::newTestObject);
