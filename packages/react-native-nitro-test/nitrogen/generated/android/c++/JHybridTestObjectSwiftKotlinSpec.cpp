@@ -6,6 +6,7 @@
 ///
 
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
+#include <NitroModules/JNIConverter.hpp>
 
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
@@ -159,7 +160,7 @@ namespace margelo::nitro::test {
   std::string JHybridTestObjectSwiftKotlinSpec::toString() {
     static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
-    return javaString->toStdString();
+    return nitro::JNIConverter<std::string>::fromJNI(javaString);
   }
 
   // Properties
@@ -288,11 +289,11 @@ namespace margelo::nitro::test {
   std::optional<Powertrain> JHybridTestObjectSwiftKotlinSpec::getOptionalEnum() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPowertrain>()>("getOptionalEnum");
     auto __result = method(_javaPart);
-    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+    return JNIConverter<std::optional<Powertrain>>::fromJNI<JPowertrain>(__result);
   }
   void JHybridTestObjectSwiftKotlinSpec::setOptionalEnum(std::optional<Powertrain> optionalEnum) {
     static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JPowertrain> /* optionalEnum */)>("setOptionalEnum");
-    method(_javaPart, optionalEnum.has_value() ? JPowertrain::fromCpp(optionalEnum.value()) : nullptr);
+    method(_javaPart, JNIConverter<std::optional<Powertrain>>::toJNI<JPowertrain>(optionalEnum));
   }
   std::optional<OldEnum> JHybridTestObjectSwiftKotlinSpec::getOptionalOldEnum() {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOldEnum>()>("getOptionalOldEnum");
