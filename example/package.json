@@ -23,7 +23,7 @@
     "@react-navigation/bottom-tabs": "^7.4.5",
     "@react-navigation/native": "^7.1.26",
     "deep-equal": "^2.2.3",
-    "react": "19.2.0",
+    "react": "19.2.4",
     "react-native": "0.83.0",
     "react-native-nitro-test": "*",
     "react-native-nitro-test-external": "*",
