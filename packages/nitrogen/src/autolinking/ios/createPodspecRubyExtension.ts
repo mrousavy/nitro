@@ -8,6 +8,9 @@ export interface RubyFile extends Omit<SourceFile, "language"> {
 
 export function createPodspecRubyExtension(): RubyFile {
   const name = NitroConfig.current.getIosModuleName();
+  // The Rust lib name is derived from androidCxxLibName in Cargo.toml,
+  // so we must use the same name here for linking to succeed.
+  const rustLibName = NitroConfig.current.getAndroidCxxLibName();
   const autolinkedHybridObjects =
     NitroConfig.current.getAutolinkedHybridObjects();
   const hasRust = Object.values(autolinkedHybridObjects).some(
@@ -77,7 +80,8 @@ ${
   rust_src_dir = File.join(__dir__, '..', 'shared', 'rust')
   rust_lib_dir = ENV['NITRO_RUST_LIB_DIR'] || File.join(rust_src_dir, 'target')
 
-  spec.script_phases = [{
+  current_script_phases = Array(spec.attributes_hash['script_phases'])
+  spec.script_phases = current_script_phases + [{
     :name => 'Build Rust Library',
     :script => %Q{
       set -e
@@ -119,7 +123,7 @@ ${
 
   current_vendored_libraries = Array(spec.attributes_hash['vendored_libraries'])
   spec.vendored_libraries = current_vendored_libraries + [
-    File.join(rust_lib_dir, "lib${name}_rust.a")
+    File.join(rust_lib_dir, "lib${rustLibName}_rust.a")
   ]
 `
     : ""

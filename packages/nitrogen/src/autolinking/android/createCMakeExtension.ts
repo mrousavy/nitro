@@ -137,7 +137,18 @@ elseif(ANDROID_ABI STREQUAL "x86")
   set(RUST_TARGET "i686-linux-android")
 endif()
 
+# Cargo requires CARGO_TARGET_<TRIPLE>_LINKER with the triple uppercased
+# and hyphens replaced by underscores (e.g. AARCH64_LINUX_ANDROID)
+string(TOUPPER "\${RUST_TARGET}" RUST_TARGET_UPPER)
+string(REPLACE "-" "_" RUST_TARGET_UPPER "\${RUST_TARGET_UPPER}")
+
 set(NITRO_RUST_LIB_OUTPUT "\${NITRO_RUST_LIB_DIR}/lib${name}_rust.a")
+
+# Collect Rust source files so CMake re-runs cargo when they change
+file(GLOB_RECURSE NITRO_RUST_SOURCES
+  "\${NITRO_RUST_SRC_DIR}/*.rs"
+  "\${NITRO_RUST_SRC_DIR}/Cargo.toml"
+)
 
 add_custom_command(
   OUTPUT \${NITRO_RUST_LIB_OUTPUT}
@@ -146,13 +157,14 @@ add_custom_command(
     "CARGO_TARGET_DIR=\${NITRO_RUST_SRC_DIR}/target"
     "CC=\${CMAKE_C_COMPILER}"
     "AR=\${CMAKE_AR}"
-    "CARGO_TARGET_\${RUST_TARGET}_LINKER=\${CMAKE_C_COMPILER}"
+    "CARGO_TARGET_\${RUST_TARGET_UPPER}_LINKER=\${CMAKE_C_COMPILER}"
     cargo build --release --target \${RUST_TARGET}
   COMMAND ${"${CMAKE_COMMAND}"} -E make_directory \${NITRO_RUST_LIB_DIR}
   COMMAND ${"${CMAKE_COMMAND}"} -E copy
     "\${NITRO_RUST_SRC_DIR}/target/\${RUST_TARGET}/release/lib${name}_rust.a"
     \${NITRO_RUST_LIB_OUTPUT}
   WORKING_DIRECTORY \${NITRO_RUST_SRC_DIR}
+  DEPENDS \${NITRO_RUST_SOURCES}
   COMMENT "Building Rust library for \${ANDROID_ABI} (\${RUST_TARGET})"
 )
 add_custom_target(${name}_rust_build DEPENDS \${NITRO_RUST_LIB_OUTPUT})

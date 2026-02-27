@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <stdexcept>
@@ -44,13 +45,34 @@
 #include "ExternalObjectStruct.hpp"
 
 // FFI result structs for error propagation from Rust
+#ifndef NITRO___FFIRESULT_BOOL_DEFINED
+#define NITRO___FFIRESULT_BOOL_DEFINED
 struct __FfiResult_bool { uint8_t is_ok; char* error; bool value; };
+#endif
+#ifndef NITRO___FFIRESULT_CSTR_DEFINED
+#define NITRO___FFIRESULT_CSTR_DEFINED
 struct __FfiResult_cstr { uint8_t is_ok; char* error; const char* value; };
+#endif
+#ifndef NITRO___FFIRESULT_F64_DEFINED
+#define NITRO___FFIRESULT_F64_DEFINED
 struct __FfiResult_f64 { uint8_t is_ok; char* error; double value; };
+#endif
+#ifndef NITRO___FFIRESULT_I64_DEFINED
+#define NITRO___FFIRESULT_I64_DEFINED
 struct __FfiResult_i64 { uint8_t is_ok; char* error; int64_t value; };
+#endif
+#ifndef NITRO___FFIRESULT_PTR_DEFINED
+#define NITRO___FFIRESULT_PTR_DEFINED
 struct __FfiResult_ptr { uint8_t is_ok; char* error; void* value; };
+#endif
+#ifndef NITRO___FFIRESULT_U64_DEFINED
+#define NITRO___FFIRESULT_U64_DEFINED
 struct __FfiResult_u64 { uint8_t is_ok; char* error; uint64_t value; };
+#endif
+#ifndef NITRO___FFIRESULT_VOID_DEFINED
+#define NITRO___FFIRESULT_VOID_DEFINED
 struct __FfiResult_void { uint8_t is_ok; char* error; };
+#endif
 
 // Forward declarations for Rust FFI functions
 extern "C" {
@@ -197,14 +219,19 @@ namespace margelo::nitro::test {
       HybridObject(HybridTestObjectRustSpec::TAG),
       _rustPtr(rustPtr) { }
 
-    ~HybridTestObjectRustSpecRust() override {
+    ~HybridTestObjectRustSpecRust() noexcept override {
       HybridTestObjectRustSpec_destroy(_rustPtr);
     }
 
+    HybridTestObjectRustSpecRust(const HybridTestObjectRustSpecRust&) = delete;
+    HybridTestObjectRustSpecRust& operator=(const HybridTestObjectRustSpecRust&) = delete;
+    HybridTestObjectRustSpecRust(HybridTestObjectRustSpecRust&&) = delete;
+    HybridTestObjectRustSpecRust& operator=(HybridTestObjectRustSpecRust&&) = delete;
+
   public:
     // Properties
-    inline std::shared_ptr<HybridTestObjectRustSpec> getThisObject() override { auto __ffi = HybridTestObjectRustSpec_get_this_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::optional<std::shared_ptr<HybridTestObjectRustSpec>> getOptionalHybrid() override { auto __ffi = HybridTestObjectRustSpec_get_optional_hybrid(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return [&]() -> std::optional<std::shared_ptr<HybridTestObjectRustSpec>> { struct __Opt { uint8_t has_value; void* value; }; auto __s = static_cast<__Opt*>(__ffi.value); std::optional<std::shared_ptr<HybridTestObjectRustSpec>> __r; if (__s->has_value) { __r = __s->value; } delete __s; return __r; }(); }
+    inline std::shared_ptr<HybridTestObjectRustSpec> getThisObject() override { auto __ffi = HybridTestObjectRustSpec_get_this_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridTestObjectRustSpecRust>(__ffi.value); }
+    inline std::optional<std::shared_ptr<HybridTestObjectRustSpec>> getOptionalHybrid() override { auto __ffi = HybridTestObjectRustSpec_get_optional_hybrid(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return [&]() -> std::optional<std::shared_ptr<HybridTestObjectRustSpec>> { struct __Opt { uint8_t has_value; void* value; }; auto __s = static_cast<__Opt*>(__ffi.value); std::optional<std::shared_ptr<HybridTestObjectRustSpec>> __r; if (__s->has_value) { __r = std::make_shared<HybridTestObjectRustSpecRust>(__s->value); } delete __s; return __r; }(); }
     inline void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectRustSpec>>& optionalHybrid) override { auto __ffi = HybridTestObjectRustSpec_set_optional_hybrid(_rustPtr, [&]() -> void* { struct __Opt { uint8_t has_value; void* value; }; auto __opt = new __Opt(); if (optionalHybrid.has_value()) { const auto& __inner = optionalHybrid.value(); __opt->has_value = 1; __opt->value = static_cast<void*>(new std::shared_ptr<HybridTestObjectRustSpec>(__inner)); } else { __opt->has_value = 0; __opt->value = {}; } return static_cast<void*>(__opt); }()); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }
     inline double getNumberValue() override { auto __ffi = HybridTestObjectRustSpec_get_number_value(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
     inline void setNumberValue(double numberValue) override { auto __ffi = HybridTestObjectRustSpec_set_number_value(_rustPtr, numberValue); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }
@@ -237,7 +264,7 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    inline std::shared_ptr<HybridTestObjectRustSpec> newTestObject() override { auto __ffi = HybridTestObjectRustSpec_new_test_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
+    inline std::shared_ptr<HybridTestObjectRustSpec> newTestObject() override { auto __ffi = HybridTestObjectRustSpec_new_test_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridTestObjectRustSpecRust>(__ffi.value); }
     inline std::variant<std::shared_ptr<HybridTestObjectRustSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectRustSpec>, Person>& variant) override { auto __ffi = HybridTestObjectRustSpec_get_variant_hybrid(_rustPtr, static_cast<void*>(new std::variant<std::shared_ptr<HybridTestObjectRustSpec>, Person>(std::move(variant)))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::move(*static_cast<std::variant<std::shared_ptr<HybridTestObjectRustSpec>, Person>*>(__ffi.value)); }
     inline void simpleFunc() override { auto __ffi = HybridTestObjectRustSpec_simple_func(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }
     inline double addNumbers(double a, double b) override { auto __ffi = HybridTestObjectRustSpec_add_numbers(_rustPtr, a, b); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
@@ -420,20 +447,20 @@ namespace margelo::nitro::test {
     inline std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override { auto __ffi = HybridTestObjectRustSpec_pass_named_variant(_rustPtr, static_cast<void*>(new std::variant<std::string, Car>(std::move(variant)))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::move(*static_cast<std::variant<std::string, Car>*>(__ffi.value)); }
     inline std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override { auto __ffi = HybridTestObjectRustSpec_pass_all_empty_object_variant(_rustPtr, static_cast<void*>(new std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>(std::move(variant)))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::move(*static_cast<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>*>(__ffi.value)); }
     inline std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override { auto __ffi = HybridTestObjectRustSpec_bounce_complex_variant(_rustPtr, static_cast<void*>(new std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>(std::move(variant)))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::move(*static_cast<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>*>(__ffi.value)); }
-    inline std::shared_ptr<HybridChildSpec> createChild() override { auto __ffi = HybridTestObjectRustSpec_create_child(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridBaseSpec> createBase() override { auto __ffi = HybridTestObjectRustSpec_create_base(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridBaseSpec> createBaseActualChild() override { auto __ffi = HybridTestObjectRustSpec_create_base_actual_child(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override { auto __ffi = HybridTestObjectRustSpec_bounce_child(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridChildSpec>(child))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override { auto __ffi = HybridTestObjectRustSpec_bounce_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridBaseSpec>(base))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override { auto __ffi = HybridTestObjectRustSpec_bounce_child_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridChildSpec>(child))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override { auto __ffi = HybridTestObjectRustSpec_cast_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridBaseSpec>(base))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
+    inline std::shared_ptr<HybridChildSpec> createChild() override { auto __ffi = HybridTestObjectRustSpec_create_child(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridChildSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridBaseSpec> createBase() override { auto __ffi = HybridTestObjectRustSpec_create_base(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridBaseSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridBaseSpec> createBaseActualChild() override { auto __ffi = HybridTestObjectRustSpec_create_base_actual_child(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridBaseSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override { auto __ffi = HybridTestObjectRustSpec_bounce_child(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridChildSpec>(child))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridChildSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override { auto __ffi = HybridTestObjectRustSpec_bounce_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridBaseSpec>(base))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridBaseSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override { auto __ffi = HybridTestObjectRustSpec_bounce_child_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridChildSpec>(child))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridBaseSpecRust>(__ffi.value); }
+    inline std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override { auto __ffi = HybridTestObjectRustSpec_cast_base(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridBaseSpec>(base))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridChildSpecRust>(__ffi.value); }
     inline double callbackSync(const std::function<double()>& callback) override { auto __ffi = HybridTestObjectRustSpec_callback_sync(_rustPtr, [&]() -> void* { struct __W { double(*fn_ptr)(void*); void* userdata; void(*destroy_fn)(void*); }; return static_cast<void*>(new __W { [](void* __ud) -> double { try { return (*static_cast<std::function<double()>*>(__ud))(); } catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\n", __e.what()); std::abort(); } catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\n"); std::abort(); } }, static_cast<void*>(new std::function<double()>(std::move(callback))), [](void* __ud) { delete static_cast<std::function<double()>*>(__ud); } }); }()); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
     inline bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override { auto __ffi = HybridTestObjectRustSpec_get_is_view_blue(_rustPtr, static_cast<void*>(new std::shared_ptr<HybridTestViewSpec>(view))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override { auto __ffi = HybridTestObjectRustSpec_bounce_external_hybrid(_rustPtr, static_cast<void*>(new std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>(externalObject))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
-    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override { auto __ffi = HybridTestObjectRustSpec_create_internal_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
+    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override { auto __ffi = HybridTestObjectRustSpec_bounce_external_hybrid(_rustPtr, static_cast<void*>(new std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>(externalObject))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridSomeExternalObjectSpecRust>(__ffi.value); }
+    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override { auto __ffi = HybridTestObjectRustSpec_create_internal_object(_rustPtr); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridSomeExternalObjectSpecRust>(__ffi.value); }
     inline ExternalObjectStruct bounceExternalStruct(const ExternalObjectStruct& externalStruct) override { auto __ffi = HybridTestObjectRustSpec_bounce_external_struct(_rustPtr, static_cast<void*>(new ExternalObjectStruct(externalStruct))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return *static_cast<ExternalObjectStruct*>(__ffi.value); }
     inline std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string> bounceExternalVariant(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& variant) override { auto __ffi = HybridTestObjectRustSpec_bounce_external_variant(_rustPtr, static_cast<void*>(new std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>(std::move(variant)))); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::move(*static_cast<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>*>(__ffi.value)); }
-    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override { auto __ffi = HybridTestObjectRustSpec_create_external_variant_from_func(_rustPtr, [&]() -> void* { struct __W { void*(*fn_ptr)(void*); void* userdata; void(*destroy_fn)(void*); }; return static_cast<void*>(new __W { [](void* __ud) -> void* { try { auto __r = (*static_cast<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>*>(__ud))(); return static_cast<void*>(new std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>(__r)); } catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\n", __e.what()); std::abort(); } catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\n"); std::abort(); } }, static_cast<void*>(new std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>(std::move(factory))), [](void* __ud) { delete static_cast<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>*>(__ud); } }); }()); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }
+    inline std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override { auto __ffi = HybridTestObjectRustSpec_create_external_variant_from_func(_rustPtr, [&]() -> void* { struct __W { void*(*fn_ptr)(void*); void* userdata; void(*destroy_fn)(void*); }; return static_cast<void*>(new __W { [](void* __ud) -> void* { try { auto __r = (*static_cast<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>*>(__ud))(); return static_cast<void*>(new std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>(__r)); } catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\n", __e.what()); std::abort(); } catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\n"); std::abort(); } }, static_cast<void*>(new std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>(std::move(factory))), [](void* __ud) { delete static_cast<std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>*>(__ud); } }); }()); if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return std::make_shared<HybridSomeExternalObjectSpecRust>(__ffi.value); }
 
   public:
     inline size_t getExternalMemorySize() noexcept override {
@@ -442,8 +469,8 @@ namespace margelo::nitro::test {
 
   private:
     [[noreturn]] static void __throwRustError(char* error) {
-      std::string msg(error);
-      __nitrogen_free_cstring(error);
+      std::string msg(error ? error : "unknown Rust error");
+      if (error) __nitrogen_free_cstring(error);
       throw std::runtime_error(msg);
     }
 

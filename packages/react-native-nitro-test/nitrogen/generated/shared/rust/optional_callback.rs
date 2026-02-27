@@ -15,10 +15,10 @@
     clippy::useless_conversion
 )]
 
-use super::variant_box_dyn_fn____f64::Variant_Box_dyn_Fn____f64;
+use super::variant_box_dyn_fn_____send___sync__f64::Variant_Box_dyn_Fn_____Send___Sync__f64;
 
 /// Struct `OptionalCallback` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub struct OptionalCallback {
-    pub callback: Option<Variant_Box_dyn_Fn____f64>,
+    pub callback: Option<Variant_Box_dyn_Fn_____Send___Sync__f64>,
 }

@@ -47,7 +47,7 @@ export async function writeFile(
 
   // Format Rust files with rustfmt if available
   let content = file.content.trim() + "\n";
-  if (file.language === "rust") {
+  if (file.language === "rust" && file.name.endsWith(".rs")) {
     content = await formatRust(content);
   }
 

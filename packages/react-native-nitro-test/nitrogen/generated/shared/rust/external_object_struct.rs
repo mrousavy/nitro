@@ -18,7 +18,7 @@
 use super::hybrid_some_external_object_spec::HybridSomeExternalObjectSpec;
 
 /// Struct `ExternalObjectStruct` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub struct ExternalObjectStruct {
     pub some_external: Box<dyn HybridSomeExternalObjectSpec>,
 }

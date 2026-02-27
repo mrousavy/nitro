@@ -150,7 +150,7 @@ ${signature} {
             : `Result<${returnType}, String>`;
         const returnSuffix = ` -> ${resultType}`;
         const allParams =
-          params.length > 0 ? `&mut self, ${params.join(", ")}` : "&mut self";
+          params.length > 0 ? `&self, ${params.join(", ")}` : "&self";
         let signature = `fn ${rustName}(${allParams})${returnSuffix}`;
 
         if (body == null) {

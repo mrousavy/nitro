@@ -18,7 +18,7 @@
 use super::hybrid_some_external_object_spec::HybridSomeExternalObjectSpec;
 
 /// Tagged union `StringOrExternal` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub enum StringOrExternal {
     First(Box<dyn HybridSomeExternalObjectSpec>),
     Second(String),

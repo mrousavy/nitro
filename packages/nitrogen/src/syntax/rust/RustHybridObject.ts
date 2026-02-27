@@ -177,7 +177,7 @@ ${closureBody}
             `ptr: *mut std::ffi::c_void, value: ${ffiParamType}`,
             "__FfiResult_void",
             true,
-            `            let obj = &mut *(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(${convertedParam});`,
+            `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(${convertedParam});`,
           ),
         );
       } else {
@@ -187,7 +187,7 @@ ${closureBody}
             `ptr: *mut std::ffi::c_void, value: ${ffiParamType}`,
             "__FfiResult_void",
             true,
-            `            let obj = &mut *(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(value);`,
+            `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(value);`,
           ),
         );
       }
@@ -243,7 +243,7 @@ ${closureBody}
     // so wrapCatchUnwind can three-way match on Ok(Ok(v)) / Ok(Err(e)) / Err(panic).
     const closureLines: string[] = [];
     closureLines.push(
-      `            let obj = &mut *(ptr as *mut Box<dyn ${name.HybridTSpec}>);`,
+      `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);`,
     );
     for (const conv of paramConversions) {
       closureLines.push(`            ${conv}`);
@@ -334,6 +334,10 @@ ${importsBlock}
 ///
 /// Note: The factory returns a \`Box<Box<dyn ${name.HybridTSpec}>>\` (double-boxed)
 /// because the C++ bridge stores it as an opaque \`void*\` pointing to the trait object.
+///
+/// All methods take \`&self\` (shared reference) because the C++ bridge may call
+/// methods concurrently from multiple threads. Use interior mutability
+/// (\`Mutex\`, \`RwLock\`, \`AtomicXxx\`, etc.) for any mutable state.
 pub trait ${name.HybridTSpec}: Send + Sync {
     // Properties
     ${indent(properties, "    ")}
@@ -435,14 +439,15 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     __FfiResult_ptr: "void* value;",
   };
   for (const resultType of [...usedResultTypes].sort()) {
+    const guard = `NITRO_${resultType.toUpperCase()}_DEFINED`;
     const valueField = cppFfiTypeMap[resultType] ?? "void* value;";
     if (resultType === "__FfiResult_void") {
       cppResultStructDefs.push(
-        `struct ${resultType} { uint8_t is_ok; char* error; };`,
+        `#ifndef ${guard}\n#define ${guard}\nstruct ${resultType} { uint8_t is_ok; char* error; };\n#endif`,
       );
     } else {
       cppResultStructDefs.push(
-        `struct ${resultType} { uint8_t is_ok; char* error; ${valueField} };`,
+        `#ifndef ${guard}\n#define ${guard}\nstruct ${resultType} { uint8_t is_ok; char* error; ${valueField} };\n#endif`,
       );
     }
   }
@@ -598,6 +603,7 @@ ${createFileMetadataString(`${name.HybridTSpecRust}.hpp`)}
 
 #pragma once
 
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <stdexcept>
@@ -624,9 +630,14 @@ namespace ${cxxNamespace} {
       HybridObject(${name.HybridTSpec}::TAG),
       _rustPtr(rustPtr) { }
 
-    ~${name.HybridTSpecRust}() override {
+    ~${name.HybridTSpecRust}() noexcept override {
       ${name.HybridTSpec}_destroy(_rustPtr);
     }
+
+    ${name.HybridTSpecRust}(const ${name.HybridTSpecRust}&) = delete;
+    ${name.HybridTSpecRust}& operator=(const ${name.HybridTSpecRust}&) = delete;
+    ${name.HybridTSpecRust}(${name.HybridTSpecRust}&&) = delete;
+    ${name.HybridTSpecRust}& operator=(${name.HybridTSpecRust}&&) = delete;
 
   public:
     // Properties
@@ -643,8 +654,8 @@ namespace ${cxxNamespace} {
 
   private:
     [[noreturn]] static void __throwRustError(char* error) {
-      std::string msg(error);
-      __nitrogen_free_cstring(error);
+      std::string msg(error ? error : "unknown Rust error");
+      if (error) __nitrogen_free_cstring(error);
       throw std::runtime_error(msg);
     }
 

@@ -20,10 +20,10 @@ use super::nitro_buffer::NitroBuffer;
 use super::wrapped_js_struct::WrappedJsStruct;
 
 /// Tagged union `CoreTypesVariant` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub enum CoreTypesVariant {
     First(NitroBuffer),
-    Second(Box<dyn Fn(f64)>),
+    Second(Box<dyn Fn(f64) + Send + Sync>),
     Third(WrappedJsStruct),
     Fourth(f64),
     Fifth(f64),

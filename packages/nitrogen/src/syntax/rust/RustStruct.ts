@@ -5,6 +5,7 @@ import {
   toSnakeCase,
 } from "../helpers.js";
 import type { NamedType } from "../types/Type.js";
+import { canDeriveRustTraits } from "./rustDeriveHelper.js";
 
 /**
  * Creates a Rust struct definition from a Nitro StructType's properties.
@@ -41,7 +42,7 @@ export function createRustStruct(
 ${createRustFileMetadataString(`${moduleName}.rs`)}
 ${importsBlock}
 /// Struct \`${structName}\` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+${canDeriveRustTraits(properties) ? "#[derive(Debug, Clone, PartialEq)]" : "// Note: derives omitted because this type contains closures or trait objects"}
 pub struct ${structName} {
     ${fields}
 }

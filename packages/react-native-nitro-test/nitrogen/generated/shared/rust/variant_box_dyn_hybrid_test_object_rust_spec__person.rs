@@ -19,7 +19,7 @@ use super::hybrid_test_object_rust_spec::HybridTestObjectRustSpec;
 use super::person::Person;
 
 /// Tagged union `Variant_Box_dyn_HybridTestObjectRustSpec__Person` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub enum Variant_Box_dyn_HybridTestObjectRustSpec__Person {
     First(Box<dyn HybridTestObjectRustSpec>),
     Second(Person),

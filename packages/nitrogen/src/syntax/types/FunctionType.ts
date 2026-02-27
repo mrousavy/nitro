@@ -147,9 +147,9 @@ export class FunctionType implements Type {
           .join(', ')
         const returnType = this.returnType.getCode(language, options)
         if (returnType === '()') {
-          return `Box<dyn Fn(${params})>`
+          return `Box<dyn Fn(${params}) + Send + Sync>`
         }
-        return `Box<dyn Fn(${params}) -> ${returnType}>`
+        return `Box<dyn Fn(${params}) -> ${returnType} + Send + Sync>`
       }
       default:
         throw new Error(

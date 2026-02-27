@@ -336,7 +336,7 @@ describe("FFI Error Propagation", () => {
       const rsFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
 
       expect(rsFile.content).toContain(
-        "fn compute(&mut self) -> Result<f64, String>;",
+        "fn compute(&self) -> Result<f64, String>;",
       );
     });
   });

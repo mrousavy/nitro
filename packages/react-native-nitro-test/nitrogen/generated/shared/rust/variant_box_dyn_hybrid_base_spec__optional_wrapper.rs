@@ -19,7 +19,7 @@ use super::hybrid_base_spec::HybridBaseSpec;
 use super::optional_wrapper::OptionalWrapper;
 
 /// Tagged union `Variant_Box_dyn_HybridBaseSpec__OptionalWrapper` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub enum Variant_Box_dyn_HybridBaseSpec__OptionalWrapper {
     First(Box<dyn HybridBaseSpec>),
     Second(OptionalWrapper),

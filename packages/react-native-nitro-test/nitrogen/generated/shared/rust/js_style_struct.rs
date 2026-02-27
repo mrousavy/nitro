@@ -16,8 +16,8 @@
 )]
 
 /// Struct `JsStyleStruct` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub struct JsStyleStruct {
     pub value: f64,
-    pub on_changed: Box<dyn Fn(f64)>,
+    pub on_changed: Box<dyn Fn(f64) + Send + Sync>,
 }

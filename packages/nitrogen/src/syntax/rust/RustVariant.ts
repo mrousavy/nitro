@@ -1,6 +1,7 @@
 import type { SourceFile } from "../SourceFile.js";
 import { createRustFileMetadataString, isNotDuplicate, toSnakeCase } from "../helpers.js";
 import type { VariantType } from "../types/VariantType.js";
+import { canDeriveRustTraits } from "./rustDeriveHelper.js";
 
 /**
  * Creates a Rust enum (tagged union) from a Nitro VariantType.
@@ -35,7 +36,7 @@ export function createRustVariant(variant: VariantType): SourceFile {
 ${createRustFileMetadataString(`${moduleName}.rs`)}
 ${importsBlock}
 /// Tagged union \`${aliasName}\` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+${canDeriveRustTraits(variant.variants) ? "#[derive(Debug, Clone, PartialEq)]" : "// Note: derives omitted because this type contains closures or trait objects"}
 pub enum ${aliasName} {
     ${cases}
 }

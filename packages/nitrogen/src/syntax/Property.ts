@@ -221,7 +221,7 @@ set {
         lines.push(`fn ${rustName}(&self) -> ${type};`)
         if (!this.isReadonly) {
           const setterName = `set_${rustName}`
-          lines.push(`fn ${setterName}(&mut self, value: ${type});`)
+          lines.push(`fn ${setterName}(&self, value: ${type});`)
         }
         return lines.join('\n')
       }

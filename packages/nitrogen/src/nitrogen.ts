@@ -201,37 +201,47 @@ export async function runNitrogen({
   // Generate Rust crate files (lib.rs + Cargo.toml) if any Rust files were generated
   const rustFiles = writtenFiles.filter((f) => f.language === "rust");
   if (rustFiles.length > 0) {
-    Logger.info(`🦀  Generating Rust crate files...`);
-    // Generate NitroBuffer.rs (zero-copy ArrayBuffer type) and write it first
-    // so it's included in lib.rs module declarations
-    const nitroBuffer = createRustNitroBuffer();
-    const nitroBufferPath = path.join(
-      outputDirectory,
-      nitroBuffer.platform,
-      nitroBuffer.language,
-    );
-    const nitroBufferActual = await writeFile(nitroBufferPath, nitroBuffer);
-    filesAfter.push(nitroBufferActual);
-    rustFiles.push(nitroBuffer);
-    // Generate factory.rs with create_ functions for Rust-autolinked HybridObjects
-    const factory = createRustFactory(rustFiles);
-    if (factory != null) {
-      const factoryPath = path.join(
+    try {
+      Logger.info(`🦀  Generating Rust crate files...`);
+      // Generate NitroBuffer.rs (zero-copy ArrayBuffer type) and write it first
+      // so it's included in lib.rs module declarations
+      const nitroBuffer = createRustNitroBuffer();
+      const nitroBufferPath = path.join(
         outputDirectory,
-        factory.platform,
-        factory.language,
+        nitroBuffer.platform,
+        nitroBuffer.language,
       );
-      const factoryActual = await writeFile(factoryPath, factory);
-      filesAfter.push(factoryActual);
-      rustFiles.push(factory);
-    }
-    const libRs = createRustLibRs(rustFiles);
-    const cargoToml = createRustCargoToml();
-    for (const file of [libRs, cargoToml]) {
-      const basePath = path.join(outputDirectory, file.platform, file.language);
-      const actualPath = await writeFile(basePath, file);
-      filesAfter.push(actualPath);
-      writtenFiles.push(file);
+      const nitroBufferActual = await writeFile(nitroBufferPath, nitroBuffer);
+      filesAfter.push(nitroBufferActual);
+      rustFiles.push(nitroBuffer);
+      // Generate factory.rs with create_ functions for Rust-autolinked HybridObjects
+      const factory = createRustFactory(rustFiles);
+      if (factory != null) {
+        const factoryPath = path.join(
+          outputDirectory,
+          factory.platform,
+          factory.language,
+        );
+        const factoryActual = await writeFile(factoryPath, factory);
+        filesAfter.push(factoryActual);
+        rustFiles.push(factory);
+      }
+      const libRs = createRustLibRs(rustFiles);
+      const cargoToml = createRustCargoToml();
+      for (const file of [libRs, cargoToml]) {
+        const basePath = path.join(outputDirectory, file.platform, file.language);
+        const actualPath = await writeFile(basePath, file);
+        filesAfter.push(actualPath);
+        writtenFiles.push(file);
+      }
+    } catch (error) {
+      const message = indent(errorToString(error), "    ");
+      Logger.error(
+        chalk.redBright(
+          `    ❌  Failed to generate Rust crate files! ${message}`,
+        ),
+      );
+      process.exitCode = 1;
     }
   }
 

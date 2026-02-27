@@ -18,7 +18,7 @@
 use super::js_style_struct::JsStyleStruct;
 
 /// Struct `WrappedJsStruct` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub struct WrappedJsStruct {
     pub value: JsStyleStruct,
     pub items: Vec<JsStyleStruct>,

@@ -50,7 +50,7 @@ pub mod variant_bool_f64;
 pub mod variant_bool_old_enum;
 pub mod variant_bool_vec_f64__vec_string__string_f64;
 pub mod variant_bool_weird_numbers_enum;
-pub mod variant_box_dyn_fn____f64;
+pub mod variant_box_dyn_fn_____send___sync__f64;
 pub mod variant_box_dyn_hybrid_base_spec__optional_wrapper;
 pub mod variant_box_dyn_hybrid_test_object_rust_spec__person;
 pub mod variant_car_person;

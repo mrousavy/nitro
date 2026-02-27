@@ -109,7 +109,7 @@ describe("Rust HybridObject Generator", () => {
       const traitFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
       expect(traitFile.content).toContain("fn name(&self) -> String;");
       expect(traitFile.content).toContain(
-        "fn set_name(&mut self, value: String);",
+        "fn set_name(&self, value: String);",
       );
     });
 
@@ -127,7 +127,7 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const traitFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
       expect(traitFile.content).toContain(
-        "fn resize(&mut self, width: f64, height: f64) -> Result<(), String>;",
+        "fn resize(&self, width: f64, height: f64) -> Result<(), String>;",
       );
     });
 
@@ -140,7 +140,7 @@ describe("Rust HybridObject Generator", () => {
       const files = createRustHybridObject(spec);
       const traitFile = files.find((f) => f.name === "hybrid_image_spec.rs")!;
       expect(traitFile.content).toContain(
-        "fn get_name(&mut self) -> Result<String, String>;",
+        "fn get_name(&self) -> Result<String, String>;",
       );
     });
 
@@ -360,16 +360,16 @@ describe("Rust HybridObject Generator", () => {
       expect(trait.content).toContain("fn height(&self) -> f64;");
       expect(trait.content).toContain("fn label(&self) -> String;");
       expect(trait.content).toContain(
-        "fn set_label(&mut self, value: String);",
+        "fn set_label(&self, value: String);",
       );
       expect(trait.content).toContain(
-        "fn resize(&mut self, width: f64, height: f64) -> Result<(), String>;",
+        "fn resize(&self, width: f64, height: f64) -> Result<(), String>;",
       );
       expect(trait.content).toContain(
-        "fn to_array(&mut self) -> Result<Vec<f64>, String>;",
+        "fn to_array(&self) -> Result<Vec<f64>, String>;",
       );
       expect(trait.content).toContain(
-        "fn get_pixel(&mut self, x: f64, y: f64) -> Result<Option<f64>, String>;",
+        "fn get_pixel(&self, x: f64, y: f64) -> Result<Option<f64>, String>;",
       );
 
       // FFI shims (in the same .rs file)
@@ -536,7 +536,7 @@ describe("Rust HybridObject Generator", () => {
 
       // Trait should return Result<String, String>, not Promise<String>
       expect(rsFile.content).toContain(
-        "fn fetch_name(&mut self, id: f64) -> Result<String, String>;",
+        "fn fetch_name(&self, id: f64) -> Result<String, String>;",
       );
       // Should NOT reference Promise in the Rust file
       expect(rsFile.content).not.toContain("Promise");
@@ -614,7 +614,7 @@ describe("Rust HybridObject Generator", () => {
 
       // Trait should return Result<(), String> (void wrapped in Result)
       expect(rsFile.content).toContain(
-        "fn do_work(&mut self) -> Result<(), String>;",
+        "fn do_work(&self) -> Result<(), String>;",
       );
     });
 

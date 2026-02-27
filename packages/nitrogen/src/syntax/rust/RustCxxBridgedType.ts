@@ -5,6 +5,7 @@ import type { SourceFile, SourceImport } from "../SourceFile.js";
 import { EnumType } from "../types/EnumType.js";
 import { FunctionType } from "../types/FunctionType.js";
 import { getTypeAs } from "../types/getTypeAs.js";
+import { HybridObjectType } from "../types/HybridObjectType.js";
 import { OptionalType } from "../types/OptionalType.js";
 import { StructType } from "../types/StructType.js";
 import type { Type } from "../types/Type.js";
@@ -14,6 +15,7 @@ import { createRustFunction } from "./RustFunction.js";
 import { createRustStruct } from "./RustStruct.js";
 import { createRustVariant } from "./RustVariant.js";
 import { createRustAnyMap } from "./RustAnyMap.js";
+import { getHybridObjectName } from "../getHybridObjectName.js";
 import { toSnakeCase } from "../helpers.js";
 
 /**
@@ -24,6 +26,12 @@ import { toSnakeCase } from "../helpers.js";
  * - Strings become *const c_char
  * - Enums pass as i32 discriminants
  * - Complex types (arrays, optionals, structs, etc.) pass as opaque void* pointers
+ *
+ * Cross-allocator note: Complex types are heap-allocated by one side (C++ `new`)
+ * and freed by the other (Rust `Box::from_raw`). This relies on both sides using
+ * the same system allocator, which is guaranteed on Android NDK and iOS/macOS.
+ * Custom allocators (e.g. `#[global_allocator]` or overridden `operator new`)
+ * would break this assumption.
  */
 export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
   readonly type: Type;
@@ -65,6 +73,18 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
 
   getRequiredImports(language: Language): SourceImport[] {
     const imports = this.type.getRequiredImports(language);
+
+    // When a hybrid-object is used in a Rust bridge context (e.g. as a return type),
+    // the C++ side needs the Rust bridge header to reconstruct a shared_ptr.
+    if (language === "c++" && this.type.kind === "hybrid-object") {
+      const hybridType = getTypeAs(this.type, HybridObjectType);
+      const hybridName = getHybridObjectName(hybridType.hybridObjectName);
+      imports.push({
+        name: `${hybridName.HybridTSpecRust}.hpp`,
+        language: "c++",
+        space: "user",
+      });
+    }
 
     const referencedTypes = getReferencedTypes(this.type);
     for (const t of referencedTypes) {
@@ -638,17 +658,21 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
           default:
             return parameterName;
         }
-      case "hybrid-object":
+      case "hybrid-object": {
+        const hybridType = getTypeAs(this.type, HybridObjectType);
+        const hybridName = getHybridObjectName(hybridType.hybridObjectName);
         switch (inLanguage) {
           case "rust":
             // Box the trait object and leak it as a void pointer
             return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
           case "c++":
-            // This would require reconstructing a shared_ptr — complex
-            return parameterName;
+            // Wrap the void* (pointing to a Box<dyn Trait>) in the C++ Rust bridge class
+            // which manages the Rust-side lifetime and delegates calls back over FFI.
+            return `std::make_shared<${hybridName.HybridTSpecRust}>(${parameterName})`;
           default:
             return parameterName;
         }
+      }
       case "array-buffer":
         switch (inLanguage) {
           case "rust":

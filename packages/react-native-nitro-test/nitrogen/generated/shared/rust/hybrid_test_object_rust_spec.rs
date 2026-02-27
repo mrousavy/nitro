@@ -61,262 +61,245 @@ use std::collections::HashMap;
 ///
 /// Note: The factory returns a `Box<Box<dyn HybridTestObjectRustSpec>>` (double-boxed)
 /// because the C++ bridge stores it as an opaque `void*` pointing to the trait object.
+///
+/// All methods take `&self` (shared reference) because the C++ bridge may call
+/// methods concurrently from multiple threads. Use interior mutability
+/// (`Mutex`, `RwLock`, `AtomicXxx`, etc.) for any mutable state.
 pub trait HybridTestObjectRustSpec: Send + Sync {
     // Properties
     fn this_object(&self) -> Box<dyn HybridTestObjectRustSpec>;
     fn optional_hybrid(&self) -> Option<Box<dyn HybridTestObjectRustSpec>>;
-    fn set_optional_hybrid(&mut self, value: Option<Box<dyn HybridTestObjectRustSpec>>);
+    fn set_optional_hybrid(&self, value: Option<Box<dyn HybridTestObjectRustSpec>>);
     fn number_value(&self) -> f64;
-    fn set_number_value(&mut self, value: f64);
+    fn set_number_value(&self, value: f64);
     fn bool_value(&self) -> bool;
-    fn set_bool_value(&mut self, value: bool);
+    fn set_bool_value(&self, value: bool);
     fn string_value(&self) -> String;
-    fn set_string_value(&mut self, value: String);
+    fn set_string_value(&self, value: String);
     fn int64_value(&self) -> i64;
-    fn set_int64_value(&mut self, value: i64);
+    fn set_int64_value(&self, value: i64);
     fn uint64_value(&self) -> u64;
-    fn set_uint64_value(&mut self, value: u64);
+    fn set_uint64_value(&self, value: u64);
     fn null_value(&self) -> ();
-    fn set_null_value(&mut self, value: ());
+    fn set_null_value(&self, value: ());
     fn optional_string(&self) -> Option<String>;
-    fn set_optional_string(&mut self, value: Option<String>);
+    fn set_optional_string(&self, value: Option<String>);
     fn string_or_undefined(&self) -> Option<String>;
-    fn set_string_or_undefined(&mut self, value: Option<String>);
+    fn set_string_or_undefined(&self, value: Option<String>);
     fn string_or_null(&self) -> Variant____String;
-    fn set_string_or_null(&mut self, value: Variant____String);
+    fn set_string_or_null(&self, value: Variant____String);
     fn optional_array(&self) -> Option<Vec<String>>;
-    fn set_optional_array(&mut self, value: Option<Vec<String>>);
+    fn set_optional_array(&self, value: Option<Vec<String>>);
     fn optional_enum(&self) -> Option<Powertrain>;
-    fn set_optional_enum(&mut self, value: Option<Powertrain>);
+    fn set_optional_enum(&self, value: Option<Powertrain>);
     fn optional_old_enum(&self) -> Option<OldEnum>;
-    fn set_optional_old_enum(&mut self, value: Option<OldEnum>);
-    fn optional_callback(&self) -> Option<Box<dyn Fn(f64)>>;
-    fn set_optional_callback(&mut self, value: Option<Box<dyn Fn(f64)>>);
+    fn set_optional_old_enum(&self, value: Option<OldEnum>);
+    fn optional_callback(&self) -> Option<Box<dyn Fn(f64) + Send + Sync>>;
+    fn set_optional_callback(&self, value: Option<Box<dyn Fn(f64) + Send + Sync>>);
     fn some_variant(&self) -> Variant_String_f64;
-    fn set_some_variant(&mut self, value: Variant_String_f64);
+    fn set_some_variant(&self, value: Variant_String_f64);
 
     // Methods
-    fn new_test_object(&mut self) -> Result<Box<dyn HybridTestObjectRustSpec>, String>;
+    fn new_test_object(&self) -> Result<Box<dyn HybridTestObjectRustSpec>, String>;
     fn get_variant_hybrid(
-        &mut self,
+        &self,
         variant: Variant_Box_dyn_HybridTestObjectRustSpec__Person,
     ) -> Result<Variant_Box_dyn_HybridTestObjectRustSpec__Person, String>;
-    fn simple_func(&mut self) -> Result<(), String>;
-    fn add_numbers(&mut self, a: f64, b: f64) -> Result<f64, String>;
-    fn add_strings(&mut self, a: String, b: String) -> Result<String, String>;
-    fn multiple_arguments(&mut self, num: f64, str: String, boo: bool) -> Result<(), String>;
-    fn bounce_null(&mut self, value: ()) -> Result<(), String>;
-    fn bounce_strings(&mut self, array: Vec<String>) -> Result<Vec<String>, String>;
-    fn bounce_numbers(&mut self, array: Vec<f64>) -> Result<Vec<f64>, String>;
-    fn bounce_structs(&mut self, array: Vec<Person>) -> Result<Vec<Person>, String>;
-    fn bounce_partial_struct(&mut self, person: PartialPerson) -> Result<PartialPerson, String>;
-    fn sum_up_all_passengers(&mut self, cars: Vec<Car>) -> Result<String, String>;
-    fn bounce_enums(&mut self, array: Vec<Powertrain>) -> Result<Vec<Powertrain>, String>;
+    fn simple_func(&self) -> Result<(), String>;
+    fn add_numbers(&self, a: f64, b: f64) -> Result<f64, String>;
+    fn add_strings(&self, a: String, b: String) -> Result<String, String>;
+    fn multiple_arguments(&self, num: f64, str: String, boo: bool) -> Result<(), String>;
+    fn bounce_null(&self, value: ()) -> Result<(), String>;
+    fn bounce_strings(&self, array: Vec<String>) -> Result<Vec<String>, String>;
+    fn bounce_numbers(&self, array: Vec<f64>) -> Result<Vec<f64>, String>;
+    fn bounce_structs(&self, array: Vec<Person>) -> Result<Vec<Person>, String>;
+    fn bounce_partial_struct(&self, person: PartialPerson) -> Result<PartialPerson, String>;
+    fn sum_up_all_passengers(&self, cars: Vec<Car>) -> Result<String, String>;
+    fn bounce_enums(&self, array: Vec<Powertrain>) -> Result<Vec<Powertrain>, String>;
     fn complex_enum_callback(
-        &mut self,
+        &self,
         array: Vec<Powertrain>,
-        callback: Box<dyn Fn(Vec<Powertrain>)>,
+        callback: Box<dyn Fn(Vec<Powertrain>) + Send + Sync>,
     ) -> Result<(), String>;
     fn bounce_hybrid_objects(
-        &mut self,
+        &self,
         array: Vec<Box<dyn HybridChildSpec>>,
     ) -> Result<Vec<Box<dyn HybridChildSpec>>, String>;
     fn bounce_functions(
-        &mut self,
-        functions: Vec<Box<dyn Fn()>>,
-    ) -> Result<Vec<Box<dyn Fn()>>, String>;
-    fn bounce_maps(&mut self, maps: Vec<AnyMap>) -> Result<Vec<AnyMap>, String>;
-    fn bounce_promises(&mut self, promises: Vec<f64>) -> Result<Vec<f64>, String>;
+        &self,
+        functions: Vec<Box<dyn Fn() + Send + Sync>>,
+    ) -> Result<Vec<Box<dyn Fn() + Send + Sync>>, String>;
+    fn bounce_maps(&self, maps: Vec<AnyMap>) -> Result<Vec<AnyMap>, String>;
+    fn bounce_promises(&self, promises: Vec<f64>) -> Result<Vec<f64>, String>;
     fn bounce_array_buffers(
-        &mut self,
+        &self,
         array_buffers: Vec<NitroBuffer>,
     ) -> Result<Vec<NitroBuffer>, String>;
-    fn create_map(&mut self) -> Result<AnyMap, String>;
-    fn map_roundtrip(&mut self, map: AnyMap) -> Result<AnyMap, String>;
-    fn get_map_keys(&mut self, map: AnyMap) -> Result<Vec<String>, String>;
-    fn merge_maps(&mut self, a: AnyMap, b: AnyMap) -> Result<AnyMap, String>;
-    fn copy_any_map(&mut self, map: AnyMap) -> Result<AnyMap, String>;
+    fn create_map(&self) -> Result<AnyMap, String>;
+    fn map_roundtrip(&self, map: AnyMap) -> Result<AnyMap, String>;
+    fn get_map_keys(&self, map: AnyMap) -> Result<Vec<String>, String>;
+    fn merge_maps(&self, a: AnyMap, b: AnyMap) -> Result<AnyMap, String>;
+    fn copy_any_map(&self, map: AnyMap) -> Result<AnyMap, String>;
     fn bounce_map(
-        &mut self,
+        &self,
         map: HashMap<String, Variant_bool_f64>,
     ) -> Result<HashMap<String, Variant_bool_f64>, String>;
-    fn bounce_simple_map(
-        &mut self,
-        map: HashMap<String, f64>,
-    ) -> Result<HashMap<String, f64>, String>;
-    fn extract_map(&mut self, map_wrapper: MapWrapper) -> Result<HashMap<String, String>, String>;
-    fn func_that_throws(&mut self) -> Result<f64, String>;
-    fn func_that_throws_before_promise(&mut self) -> Result<(), String>;
-    fn throw_error(&mut self, error: String) -> Result<(), String>;
+    fn bounce_simple_map(&self, map: HashMap<String, f64>) -> Result<HashMap<String, f64>, String>;
+    fn extract_map(&self, map_wrapper: MapWrapper) -> Result<HashMap<String, String>, String>;
+    fn func_that_throws(&self) -> Result<f64, String>;
+    fn func_that_throws_before_promise(&self) -> Result<(), String>;
+    fn throw_error(&self, error: String) -> Result<(), String>;
     fn try_optional_params(
-        &mut self,
+        &self,
         num: f64,
         boo: bool,
         str: Option<String>,
     ) -> Result<String, String>;
-    fn try_middle_param(
-        &mut self,
-        num: f64,
-        boo: Option<bool>,
-        str: String,
-    ) -> Result<String, String>;
-    fn try_optional_enum(
-        &mut self,
-        value: Option<Powertrain>,
-    ) -> Result<Option<Powertrain>, String>;
+    fn try_middle_param(&self, num: f64, boo: Option<bool>, str: String) -> Result<String, String>;
+    fn try_optional_enum(&self, value: Option<Powertrain>) -> Result<Option<Powertrain>, String>;
     fn try_trailing_optional(
-        &mut self,
+        &self,
         num: f64,
         str: String,
         boo: Option<bool>,
     ) -> Result<bool, String>;
-    fn add1_hour(&mut self, date: f64) -> Result<f64, String>;
-    fn current_date(&mut self) -> Result<f64, String>;
-    fn calculate_fibonacci_sync(&mut self, value: f64) -> Result<i64, String>;
-    fn calculate_fibonacci_async(&mut self, value: f64) -> Result<i64, String>;
-    fn wait(&mut self, seconds: f64) -> Result<(), String>;
-    fn promise_throws(&mut self) -> Result<(), String>;
-    fn promise_returns_instantly(&mut self) -> Result<f64, String>;
-    fn promise_returns_instantly_async(&mut self) -> Result<f64, String>;
-    fn promise_that_resolves_void_instantly(&mut self) -> Result<(), String>;
-    fn promise_that_resolves_to_undefined(&mut self) -> Result<Option<f64>, String>;
-    fn await_and_get_promise(&mut self, promise: f64) -> Result<f64, String>;
-    fn await_and_get_complex_promise(&mut self, promise: Car) -> Result<Car, String>;
-    fn await_promise(&mut self, promise: ()) -> Result<(), String>;
-    fn call_callback(&mut self, callback: Box<dyn Fn()>) -> Result<(), String>;
+    fn add1_hour(&self, date: f64) -> Result<f64, String>;
+    fn current_date(&self) -> Result<f64, String>;
+    fn calculate_fibonacci_sync(&self, value: f64) -> Result<i64, String>;
+    fn calculate_fibonacci_async(&self, value: f64) -> Result<i64, String>;
+    fn wait(&self, seconds: f64) -> Result<(), String>;
+    fn promise_throws(&self) -> Result<(), String>;
+    fn promise_returns_instantly(&self) -> Result<f64, String>;
+    fn promise_returns_instantly_async(&self) -> Result<f64, String>;
+    fn promise_that_resolves_void_instantly(&self) -> Result<(), String>;
+    fn promise_that_resolves_to_undefined(&self) -> Result<Option<f64>, String>;
+    fn await_and_get_promise(&self, promise: f64) -> Result<f64, String>;
+    fn await_and_get_complex_promise(&self, promise: Car) -> Result<Car, String>;
+    fn await_promise(&self, promise: ()) -> Result<(), String>;
+    fn call_callback(&self, callback: Box<dyn Fn() + Send + Sync>) -> Result<(), String>;
     fn call_callback_that_returns_promise_void(
-        &mut self,
-        callback: Box<dyn Fn()>,
+        &self,
+        callback: Box<dyn Fn() + Send + Sync>,
     ) -> Result<(), String>;
     fn call_all(
-        &mut self,
-        first: Box<dyn Fn()>,
-        second: Box<dyn Fn()>,
-        third: Box<dyn Fn()>,
+        &self,
+        first: Box<dyn Fn() + Send + Sync>,
+        second: Box<dyn Fn() + Send + Sync>,
+        third: Box<dyn Fn() + Send + Sync>,
     ) -> Result<(), String>;
     fn call_with_optional(
-        &mut self,
+        &self,
         value: Option<f64>,
-        callback: Box<dyn Fn(Option<f64>)>,
+        callback: Box<dyn Fn(Option<f64>) + Send + Sync>,
     ) -> Result<(), String>;
     fn call_sum_up_n_times(
-        &mut self,
-        callback: Box<dyn Fn() -> f64>,
+        &self,
+        callback: Box<dyn Fn() -> f64 + Send + Sync>,
         n: f64,
     ) -> Result<f64, String>;
-    fn callback_async_promise(&mut self, callback: Box<dyn Fn() -> f64>) -> Result<f64, String>;
+    fn callback_async_promise(
+        &self,
+        callback: Box<dyn Fn() -> f64 + Send + Sync>,
+    ) -> Result<f64, String>;
     fn callback_async_promise_buffer(
-        &mut self,
-        callback: Box<dyn Fn() -> NitroBuffer>,
+        &self,
+        callback: Box<dyn Fn() -> NitroBuffer + Send + Sync>,
     ) -> Result<NitroBuffer, String>;
-    fn get_complex_callback(&mut self) -> Result<Box<dyn Fn(f64)>, String>;
+    fn get_complex_callback(&self) -> Result<Box<dyn Fn(f64) + Send + Sync>, String>;
     fn two_optional_callbacks(
-        &mut self,
+        &self,
         value: f64,
-        first: Option<Box<dyn Fn(f64)>>,
-        second: Option<Box<dyn Fn(String)>>,
+        first: Option<Box<dyn Fn(f64) + Send + Sync>>,
+        second: Option<Box<dyn Fn(String) + Send + Sync>>,
     ) -> Result<(), String>;
-    fn error_callback(&mut self, on_error: Box<dyn Fn(String)>) -> Result<(), String>;
+    fn error_callback(&self, on_error: Box<dyn Fn(String) + Send + Sync>) -> Result<(), String>;
     fn create_native_callback(
-        &mut self,
-        wrapping_js_callback: Box<dyn Fn(f64)>,
-    ) -> Result<Box<dyn Fn(f64)>, String>;
+        &self,
+        wrapping_js_callback: Box<dyn Fn(f64) + Send + Sync>,
+    ) -> Result<Box<dyn Fn(f64) + Send + Sync>, String>;
     fn get_value_from_js_callback_and_wait(
-        &mut self,
-        get_value: Box<dyn Fn() -> f64>,
+        &self,
+        get_value: Box<dyn Fn() -> f64 + Send + Sync>,
     ) -> Result<f64, String>;
     fn get_value_from_js_callback(
-        &mut self,
-        callback: Box<dyn Fn() -> String>,
-        and_then_call: Box<dyn Fn(String)>,
+        &self,
+        callback: Box<dyn Fn() -> String + Send + Sync>,
+        and_then_call: Box<dyn Fn(String) + Send + Sync>,
     ) -> Result<(), String>;
-    fn get_car(&mut self) -> Result<Car, String>;
-    fn is_car_electric(&mut self, car: Car) -> Result<bool, String>;
-    fn get_driver(&mut self, car: Car) -> Result<Option<Person>, String>;
-    fn bounce_car(&mut self, car: Car) -> Result<Car, String>;
-    fn js_style_object_as_parameters(&mut self, params: JsStyleStruct) -> Result<(), String>;
+    fn get_car(&self) -> Result<Car, String>;
+    fn is_car_electric(&self, car: Car) -> Result<bool, String>;
+    fn get_driver(&self, car: Car) -> Result<Option<Person>, String>;
+    fn bounce_car(&self, car: Car) -> Result<Car, String>;
+    fn js_style_object_as_parameters(&self, params: JsStyleStruct) -> Result<(), String>;
     fn bounce_wrapped_js_style_struct(
-        &mut self,
+        &self,
         value: WrappedJsStruct,
     ) -> Result<WrappedJsStruct, String>;
-    fn bounce_optional_wrapper(
-        &mut self,
-        wrapper: OptionalWrapper,
-    ) -> Result<OptionalWrapper, String>;
-    fn bounce_optional_callback(
-        &mut self,
-        value: OptionalCallback,
-    ) -> Result<OptionalCallback, String>;
-    fn create_array_buffer(&mut self) -> Result<NitroBuffer, String>;
-    fn create_array_buffer_from_native_buffer(&mut self, copy: bool)
-        -> Result<NitroBuffer, String>;
-    fn copy_buffer(&mut self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
-    fn get_buffer_last_item(&mut self, buffer: NitroBuffer) -> Result<f64, String>;
-    fn set_all_values_to(&mut self, buffer: NitroBuffer, value: f64) -> Result<(), String>;
-    fn create_array_buffer_async(&mut self) -> Result<NitroBuffer, String>;
-    fn bounce_array_buffer(&mut self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
+    fn bounce_optional_wrapper(&self, wrapper: OptionalWrapper) -> Result<OptionalWrapper, String>;
+    fn bounce_optional_callback(&self, value: OptionalCallback)
+        -> Result<OptionalCallback, String>;
+    fn create_array_buffer(&self) -> Result<NitroBuffer, String>;
+    fn create_array_buffer_from_native_buffer(&self, copy: bool) -> Result<NitroBuffer, String>;
+    fn copy_buffer(&self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
+    fn get_buffer_last_item(&self, buffer: NitroBuffer) -> Result<f64, String>;
+    fn set_all_values_to(&self, buffer: NitroBuffer, value: f64) -> Result<(), String>;
+    fn create_array_buffer_async(&self) -> Result<NitroBuffer, String>;
+    fn bounce_array_buffer(&self, buffer: NitroBuffer) -> Result<NitroBuffer, String>;
     fn pass_variant(
-        &mut self,
+        &self,
         either: Variant_bool_Vec_f64__Vec_String__String_f64,
     ) -> Result<Variant_String_f64, String>;
     fn get_variant_enum(
-        &mut self,
+        &self,
         variant: Variant_bool_OldEnum,
     ) -> Result<Variant_bool_OldEnum, String>;
     fn get_variant_weird_numbers_enum(
-        &mut self,
+        &self,
         variant: Variant_bool_WeirdNumbersEnum,
     ) -> Result<Variant_bool_WeirdNumbersEnum, String>;
     fn get_variant_objects(
-        &mut self,
+        &self,
         variant: Variant_Car_Person,
     ) -> Result<Variant_Car_Person, String>;
-    fn pass_named_variant(&mut self, variant: NamedVariant) -> Result<NamedVariant, String>;
+    fn pass_named_variant(&self, variant: NamedVariant) -> Result<NamedVariant, String>;
     fn pass_all_empty_object_variant(
-        &mut self,
+        &self,
         variant: Variant_Box_dyn_HybridBaseSpec__OptionalWrapper,
     ) -> Result<Variant_Box_dyn_HybridBaseSpec__OptionalWrapper, String>;
-    fn bounce_complex_variant(
-        &mut self,
-        variant: CoreTypesVariant,
-    ) -> Result<CoreTypesVariant, String>;
-    fn create_child(&mut self) -> Result<Box<dyn HybridChildSpec>, String>;
-    fn create_base(&mut self) -> Result<Box<dyn HybridBaseSpec>, String>;
-    fn create_base_actual_child(&mut self) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn bounce_complex_variant(&self, variant: CoreTypesVariant)
+        -> Result<CoreTypesVariant, String>;
+    fn create_child(&self) -> Result<Box<dyn HybridChildSpec>, String>;
+    fn create_base(&self) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn create_base_actual_child(&self) -> Result<Box<dyn HybridBaseSpec>, String>;
     fn bounce_child(
-        &mut self,
+        &self,
         child: Box<dyn HybridChildSpec>,
     ) -> Result<Box<dyn HybridChildSpec>, String>;
-    fn bounce_base(
-        &mut self,
-        base: Box<dyn HybridBaseSpec>,
-    ) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn bounce_base(&self, base: Box<dyn HybridBaseSpec>)
+        -> Result<Box<dyn HybridBaseSpec>, String>;
     fn bounce_child_base(
-        &mut self,
+        &self,
         child: Box<dyn HybridChildSpec>,
     ) -> Result<Box<dyn HybridBaseSpec>, String>;
-    fn cast_base(
-        &mut self,
-        base: Box<dyn HybridBaseSpec>,
-    ) -> Result<Box<dyn HybridChildSpec>, String>;
-    fn callback_sync(&mut self, callback: Box<dyn Fn() -> f64>) -> Result<f64, String>;
-    fn get_is_view_blue(&mut self, view: Box<dyn HybridTestViewSpec>) -> Result<bool, String>;
+    fn cast_base(&self, base: Box<dyn HybridBaseSpec>) -> Result<Box<dyn HybridChildSpec>, String>;
+    fn callback_sync(&self, callback: Box<dyn Fn() -> f64 + Send + Sync>) -> Result<f64, String>;
+    fn get_is_view_blue(&self, view: Box<dyn HybridTestViewSpec>) -> Result<bool, String>;
     fn bounce_external_hybrid(
-        &mut self,
+        &self,
         external_object: Box<dyn HybridSomeExternalObjectSpec>,
     ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
-    fn create_internal_object(&mut self) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
+    fn create_internal_object(&self) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
     fn bounce_external_struct(
-        &mut self,
+        &self,
         external_struct: ExternalObjectStruct,
     ) -> Result<ExternalObjectStruct, String>;
     fn bounce_external_variant(
-        &mut self,
+        &self,
         variant: StringOrExternal,
     ) -> Result<StringOrExternal, String>;
     fn create_external_variant_from_func(
-        &mut self,
-        factory: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>>,
+        &self,
+        factory: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec> + Send + Sync>,
     ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
 
     /// Return the size of any external heap allocations, in bytes.
@@ -409,7 +392,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_hybrid({
                 #[repr(C)]
                 struct __Opt {
@@ -475,7 +458,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_number_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -527,7 +510,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_bool_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -582,7 +565,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_string_value(
                 std::ffi::CStr::from_ptr(value)
                     .to_string_lossy()
@@ -638,7 +621,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_int64_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -690,7 +673,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_uint64_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -739,7 +722,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_null_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -811,7 +794,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_string({
                 #[repr(C)]
                 struct __Opt {
@@ -899,7 +882,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_string_or_undefined({
                 #[repr(C)]
                 struct __Opt {
@@ -967,7 +950,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_string_or_null(*Box::from_raw(value as *mut Variant____String));
         })) {
             Ok(_) => __FfiResult_void {
@@ -1036,7 +1019,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_array({
                 #[repr(C)]
                 struct __Opt {
@@ -1117,7 +1100,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_enum({
                 #[repr(C)]
                 struct __Opt {
@@ -1200,7 +1183,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_old_enum({
                 #[repr(C)]
                 struct __Opt {
@@ -1283,7 +1266,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_optional_callback({
                 #[repr(C)]
                 struct __Opt {
@@ -1296,7 +1279,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
                         let __wrapper = Box::from_raw(
                             __s.value as *mut super::func_void_double::Func_void_double,
                         );
-                        let __cb: Box<dyn Fn(f64)> =
+                        let __cb: Box<dyn Fn(f64) + Send + Sync> =
                             Box::new(move |__p0: f64| __wrapper.call(__p0));
                         __cb
                     })
@@ -1354,7 +1337,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.set_some_variant(*Box::from_raw(value as *mut Variant_String_f64));
         })) {
             Ok(_) => __FfiResult_void {
@@ -1378,7 +1361,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_new_test_object(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.new_test_object()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -1415,7 +1398,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant =
                 *Box::from_raw(variant as *mut Variant_Box_dyn_HybridTestObjectRustSpec__Person);
             obj.get_variant_hybrid(__variant)
@@ -1453,7 +1436,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_simple_func(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.simple_func()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -1486,7 +1469,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_numbers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.add_numbers(a, b)
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -1523,7 +1506,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_strings(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
             let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
             obj.add_strings(__a, __b).map(|__value| {
@@ -1566,7 +1549,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
             obj.multiple_arguments(num, __str, boo)
         })) {
@@ -1598,7 +1581,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.bounce_null()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -1630,7 +1613,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_strings(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<String>);
             obj.bounce_strings(__array)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1668,7 +1651,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_numbers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<f64>);
             obj.bounce_numbers(__array)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1706,7 +1689,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_structs(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Person>);
             obj.bounce_structs(__array)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1744,7 +1727,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_partial_struct(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __person = *Box::from_raw(person as *mut PartialPerson);
             obj.bounce_partial_struct(__person)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1782,7 +1765,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __cars = *Box::from_raw(cars as *mut Vec<Car>);
             obj.sum_up_all_passengers(__cars).map(|__value| {
                 let __s = __value.replace('\0', "");
@@ -1822,7 +1805,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_enums(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
             obj.bounce_enums(__array)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1861,11 +1844,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_void_std__vector_powertrain_::Func_void_std__vector_Powertrain_);
-                let __cb: Box<dyn Fn(Vec<Powertrain>)> =
+                let __cb: Box<dyn Fn(Vec<Powertrain>) + Send + Sync> =
                     Box::new(move |__p0: Vec<Powertrain>| __wrapper.call(__p0));
                 __cb
             };
@@ -1900,7 +1883,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_hybrid_objects(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array = *Box::from_raw(array as *mut Vec<Box<dyn HybridChildSpec>>);
             obj.bounce_hybrid_objects(__array)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -1938,8 +1921,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_functions(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn()>>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn() + Send + Sync>>);
             obj.bounce_functions(__functions)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -1976,7 +1959,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __maps = *Box::from_raw(maps as *mut Vec<AnyMap>);
             obj.bounce_maps(__maps)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2014,7 +1997,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_promises(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promises = *Box::from_raw(promises as *mut Vec<f64>);
             obj.bounce_promises(__promises)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2052,7 +2035,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __array_buffers = *Box::from_raw(array_buffers as *mut Vec<NitroBuffer>);
             obj.bounce_array_buffers(__array_buffers)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2089,7 +2072,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_map().map(|__value| __value.as_raw())
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
@@ -2125,7 +2108,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
             obj.map_roundtrip(__map).map(|__value| __value.as_raw())
         })) {
@@ -2162,7 +2145,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_map_keys(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
             obj.get_map_keys(__map)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2201,7 +2184,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __a = AnyMap::from_raw(a);
             let __b = AnyMap::from_raw(b);
             obj.merge_maps(__a, __b).map(|__value| __value.as_raw())
@@ -2239,7 +2222,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
             obj.copy_any_map(__map).map(|__value| __value.as_raw())
         })) {
@@ -2276,7 +2259,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut HashMap<String, Variant_bool_f64>);
             obj.bounce_map(__map)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2314,7 +2297,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_simple_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map = *Box::from_raw(map as *mut HashMap<String, f64>);
             obj.bounce_simple_map(__map)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2352,7 +2335,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_extract_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __map_wrapper = *Box::from_raw(map_wrapper as *mut MapWrapper);
             obj.extract_map(__map_wrapper)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -2389,7 +2372,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.func_that_throws()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2424,7 +2407,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws_before_promis
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.func_that_throws_before_promise()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -2456,7 +2439,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_throw_error(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __error = std::ffi::CStr::from_ptr(error)
                 .to_string_lossy()
                 .into_owned();
@@ -2493,7 +2476,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __str = {
                 #[repr(C)]
                 struct __Opt {
@@ -2551,7 +2534,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __boo = {
                 #[repr(C)]
                 struct __Opt {
@@ -2604,7 +2587,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = {
                 #[repr(C)]
                 struct __Opt {
@@ -2657,7 +2640,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
             let __boo = {
                 #[repr(C)]
@@ -2707,7 +2690,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add1_hour(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __date = date;
             obj.add1_hour(__date).map(|__value| __value)
         })) {
@@ -2743,7 +2726,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.current_date().map(|__value| __value)
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2779,7 +2762,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_sync(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_sync(value)
         })) {
             Ok(Ok(__value)) => __FfiResult_i64 {
@@ -2815,7 +2798,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_async(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_async(value)
         })) {
             Ok(Ok(__value)) => __FfiResult_i64 {
@@ -2851,7 +2834,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.wait(seconds)
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -2882,7 +2865,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_throws()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -2913,7 +2896,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2948,7 +2931,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly_asyn
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly_async()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2983,7 +2966,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_void_ins
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_that_resolves_void_instantly()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -3014,7 +2997,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undef
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.promise_that_resolves_to_undefined().map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: f64 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
@@ -3050,7 +3033,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut f64);
             obj.await_and_get_promise(__promise)
         })) {
@@ -3087,7 +3070,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_complex_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut Car);
             obj.await_and_get_complex_promise(__promise)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -3125,7 +3108,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut ());
             obj.await_promise(__promise)
         })) {
@@ -3158,10 +3141,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
                 __cb
             };
             obj.call_callback(__callback)
@@ -3195,10 +3178,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback_that_returns_pro
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_void____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____);
-                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
                 __cb
             };
             obj.call_callback_that_returns_promise_void(__callback)
@@ -3234,20 +3217,20 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_all(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __first = {
                 let __wrapper = Box::from_raw(first as *mut super::func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
                 __cb
             };
             let __second = {
                 let __wrapper = Box::from_raw(second as *mut super::func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
                 __cb
             };
             let __third = {
                 let __wrapper = Box::from_raw(third as *mut super::func_void::Func_void);
-                let __cb: Box<dyn Fn()> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
                 __cb
             };
             obj.call_all(__first, __second, __third)
@@ -3282,7 +3265,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = {
                 #[repr(C)]
                 struct __Opt {
@@ -3298,7 +3281,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
             };
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_void_std__optional_double_::Func_void_std__optional_double_);
-                let __cb: Box<dyn Fn(Option<f64>)> =
+                let __cb: Box<dyn Fn(Option<f64>) + Send + Sync> =
                     Box::new(move |__p0: Option<f64>| __wrapper.call(__p0));
                 __cb
             };
@@ -3334,10 +3317,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_sum_up_n_times(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
+                    Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.call_sum_up_n_times(__callback, n)
@@ -3375,10 +3359,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_double____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____);
-                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
+                    Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.callback_async_promise(__callback)
@@ -3416,10 +3401,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_std__shared_ptr_array_buffer_____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____);
-                let __cb: Box<dyn Fn() -> NitroBuffer> =
+                let __cb: Box<dyn Fn() -> NitroBuffer + Send + Sync> =
                     Box::new(move || -> NitroBuffer { __wrapper.call() });
                 __cb
             };
@@ -3458,7 +3443,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_complex_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.get_complex_callback()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -3497,7 +3482,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __first = {
                 #[repr(C)]
                 struct __Opt {
@@ -3510,7 +3495,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
                         let __wrapper = Box::from_raw(
                             __s.value as *mut super::func_void_double::Func_void_double,
                         );
-                        let __cb: Box<dyn Fn(f64)> =
+                        let __cb: Box<dyn Fn(f64) + Send + Sync> =
                             Box::new(move |__p0: f64| __wrapper.call(__p0));
                         __cb
                     })
@@ -3530,7 +3515,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
                         let __wrapper = Box::from_raw(
                             __s.value as *mut super::func_void_std__string::Func_void_std__string,
                         );
-                        let __cb: Box<dyn Fn(String)> =
+                        let __cb: Box<dyn Fn(String) + Send + Sync> =
                             Box::new(move |__p0: String| __wrapper.call(__p0));
                         __cb
                     })
@@ -3569,13 +3554,14 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __on_error = {
                 let __wrapper = Box::from_raw(
                     on_error
                         as *mut super::func_void_std__exception_ptr::Func_void_std__exception_ptr,
                 );
-                let __cb: Box<dyn Fn(String)> = Box::new(move |__p0: String| __wrapper.call(__p0));
+                let __cb: Box<dyn Fn(String) + Send + Sync> =
+                    Box::new(move |__p0: String| __wrapper.call(__p0));
                 __cb
             };
             obj.error_callback(__on_error)
@@ -3609,12 +3595,13 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __wrapping_js_callback = {
                 let __wrapper = Box::from_raw(
                     wrapping_js_callback as *mut super::func_void_double::Func_void_double,
                 );
-                let __cb: Box<dyn Fn(f64)> = Box::new(move |__p0: f64| __wrapper.call(__p0));
+                let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                    Box::new(move |__p0: f64| __wrapper.call(__p0));
                 __cb
             };
             obj.create_native_callback(__wrapping_js_callback)
@@ -3653,10 +3640,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback_and
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __get_value = {
                 let __wrapper = Box::from_raw(get_value as *mut super::func_std__shared_ptr_promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
+                    Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.get_value_from_js_callback_and_wait(__get_value)
@@ -3695,10 +3683,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__string__::Func_std__shared_ptr_Promise_std__string__);
-                let __cb: Box<dyn Fn() -> String> =
+                let __cb: Box<dyn Fn() -> String + Send + Sync> =
                     Box::new(move || -> String { __wrapper.call() });
                 __cb
             };
@@ -3706,7 +3694,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
                 let __wrapper = Box::from_raw(
                     and_then_call as *mut super::func_void_std__string::Func_void_std__string,
                 );
-                let __cb: Box<dyn Fn(String)> = Box::new(move |__p0: String| __wrapper.call(__p0));
+                let __cb: Box<dyn Fn(String) + Send + Sync> =
+                    Box::new(move |__p0: String| __wrapper.call(__p0));
                 __cb
             };
             obj.get_value_from_js_callback(__callback, __and_then_call)
@@ -3739,7 +3728,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_car(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.get_car()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -3776,7 +3765,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_is_car_electric(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
             obj.is_car_electric(__car)
         })) {
@@ -3813,7 +3802,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
             obj.get_driver(__car).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
@@ -3850,7 +3839,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_car(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __car = *Box::from_raw(car as *mut Car);
             obj.bounce_car(__car)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -3888,7 +3877,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_js_style_object_as_parameters(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __params = *Box::from_raw(params as *mut JsStyleStruct);
             obj.js_style_object_as_parameters(__params)
         })) {
@@ -3921,7 +3910,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_wrapped_js_style_struct
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = *Box::from_raw(value as *mut WrappedJsStruct);
             obj.bounce_wrapped_js_style_struct(__value)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -3959,7 +3948,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_wrapper(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __wrapper = *Box::from_raw(wrapper as *mut OptionalWrapper);
             obj.bounce_optional_wrapper(__wrapper)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -3997,7 +3986,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __value = *Box::from_raw(value as *mut OptionalCallback);
             obj.bounce_optional_callback(__value)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4034,7 +4023,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4071,7 +4060,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_from_nativ
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer_from_native_buffer(copy)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4108,7 +4097,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.copy_buffer(__buffer)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4146,7 +4135,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_buffer_last_item(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.get_buffer_last_item(__buffer)
         })) {
@@ -4184,7 +4173,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_all_values_to(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.set_all_values_to(__buffer, value)
         })) {
@@ -4216,7 +4205,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_async(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer_async()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4253,7 +4242,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.bounce_array_buffer(__buffer)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4291,7 +4280,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __either =
                 *Box::from_raw(either as *mut Variant_bool_Vec_f64__Vec_String__String_f64);
             obj.pass_variant(__either)
@@ -4330,7 +4319,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_bool_OldEnum);
             obj.get_variant_enum(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4368,7 +4357,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_weird_numbers_enum
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_bool_WeirdNumbersEnum);
             obj.get_variant_weird_numbers_enum(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4406,7 +4395,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_objects(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut Variant_Car_Person);
             obj.get_variant_objects(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4444,7 +4433,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_named_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut NamedVariant);
             obj.pass_named_variant(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4482,7 +4471,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_all_empty_object_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant =
                 *Box::from_raw(variant as *mut Variant_Box_dyn_HybridBaseSpec__OptionalWrapper);
             obj.pass_all_empty_object_variant(__variant)
@@ -4521,7 +4510,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_complex_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut CoreTypesVariant);
             obj.bounce_complex_variant(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4558,7 +4547,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_child()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4594,7 +4583,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_base()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4630,7 +4619,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base_actual_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_base_actual_child()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4667,7 +4656,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
             obj.bounce_child(__child)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4705,7 +4694,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
             obj.bounce_base(__base)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4743,7 +4732,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
             obj.bounce_child_base(__child)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4781,7 +4770,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_cast_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
             obj.cast_base(__base)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4819,10 +4808,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_sync(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_double::Func_double);
-                let __cb: Box<dyn Fn() -> f64> = Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
+                    Box::new(move || -> f64 { __wrapper.call() });
                 __cb
             };
             obj.callback_sync(__callback)
@@ -4860,7 +4850,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_view_blue(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __view = *Box::from_raw(view as *mut Box<dyn HybridTestViewSpec>);
             obj.get_is_view_blue(__view)
         })) {
@@ -4897,7 +4887,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __external_object =
                 *Box::from_raw(external_object as *mut Box<dyn HybridSomeExternalObjectSpec>);
             obj.bounce_external_hybrid(__external_object)
@@ -4935,7 +4925,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_internal_object(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             obj.create_internal_object()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4972,7 +4962,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_struct(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __external_struct = *Box::from_raw(external_struct as *mut ExternalObjectStruct);
             obj.bounce_external_struct(__external_struct)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -5010,7 +5000,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __variant = *Box::from_raw(variant as *mut StringOrExternal);
             obj.bounce_external_variant(__variant)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -5048,10 +5038,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_external_variant_from_f
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &mut *(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
             let __factory = {
                 let __wrapper = Box::from_raw(factory as *mut super::func_std__shared_ptr_margelo__nitro__test__external__hybrid_some_external_object_spec_::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_);
-                let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec>> =
+                let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec> + Send + Sync> =
                     Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> { __wrapper.call() });
                 __cb
             };
