@@ -31,6 +31,8 @@ export class TupleType implements Type {
         throw new Error(
           `Tuple (${types.join(', ')}) is not yet supported in Swift due to a Swift bug! See https://github.com/swiftlang/swift/issues/75865`
         )
+      case 'rust':
+        return `(${types.join(', ')})`
       default:
         throw new Error(
           `Language ${language} is not yet supported for TupleType!`

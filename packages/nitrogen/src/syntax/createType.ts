@@ -1,36 +1,36 @@
-import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
-import type { Type } from './types/Type.js'
-import { BooleanType } from './types/BooleanType.js'
-import { NumberType } from './types/NumberType.js'
-import { StringType } from './types/StringType.js'
-import { Int64Type } from './types/Int64Type.js'
-import { VoidType } from './types/VoidType.js'
-import { ArrayType } from './types/ArrayType.js'
-import { FunctionType } from './types/FunctionType.js'
-import { PromiseType } from './types/PromiseType.js'
-import { RecordType } from './types/RecordType.js'
-import { ArrayBufferType } from './types/ArrayBufferType.js'
-import { EnumType } from './types/EnumType.js'
-import { HybridObjectType } from './types/HybridObjectType.js'
-import { StructType } from './types/StructType.js'
-import { OptionalType } from './types/OptionalType.js'
-import { NamedWrappingType } from './types/NamedWrappingType.js'
-import { getInterfaceProperties } from './getInterfaceProperties.js'
-import { VariantType } from './types/VariantType.js'
-import { MapType } from './types/MapType.js'
-import { TupleType } from './types/TupleType.js'
+import { ts, Type as TSMorphType, type Signature } from "ts-morph";
+import type { Type } from "./types/Type.js";
+import { BooleanType } from "./types/BooleanType.js";
+import { NumberType } from "./types/NumberType.js";
+import { StringType } from "./types/StringType.js";
+import { Int64Type } from "./types/Int64Type.js";
+import { VoidType } from "./types/VoidType.js";
+import { ArrayType } from "./types/ArrayType.js";
+import { FunctionType } from "./types/FunctionType.js";
+import { PromiseType } from "./types/PromiseType.js";
+import { RecordType } from "./types/RecordType.js";
+import { ArrayBufferType } from "./types/ArrayBufferType.js";
+import { EnumType } from "./types/EnumType.js";
+import { HybridObjectType } from "./types/HybridObjectType.js";
+import { StructType } from "./types/StructType.js";
+import { OptionalType } from "./types/OptionalType.js";
+import { NamedWrappingType } from "./types/NamedWrappingType.js";
+import { getInterfaceProperties } from "./getInterfaceProperties.js";
+import { VariantType } from "./types/VariantType.js";
+import { MapType } from "./types/MapType.js";
+import { TupleType } from "./types/TupleType.js";
 import {
   isAnyHybridSubclass,
   isDirectlyAnyHybridObject,
   isHybridView,
   type Language,
-} from '../getPlatformSpecs.js'
-import { AnyHybridObjectType } from './types/AnyHybridObjectType.js'
-import { ErrorType } from './types/ErrorType.js'
-import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
-import { DateType } from './types/DateType.js'
-import { NitroConfig } from '../config/NitroConfig.js'
-import { CustomType } from './types/CustomType.js'
+} from "../getPlatformSpecs.js";
+import { AnyHybridObjectType } from "./types/AnyHybridObjectType.js";
+import { ErrorType } from "./types/ErrorType.js";
+import { getBaseTypes, getHybridObjectNitroModuleConfig } from "../utils.js";
+import { DateType } from "./types/DateType.js";
+import { NitroConfig } from "../config/NitroConfig.js";
+import { CustomType } from "./types/CustomType.js";
 import {
   isSyncFunction,
   isArrayBuffer,
@@ -42,92 +42,93 @@ import {
   isRecord,
   isInt64,
   isUInt64,
-} from './isCoreType.js'
-import { getCustomTypeConfig } from './getCustomTypeConfig.js'
-import { compareLooselyness } from './helpers.js'
-import { NullType } from './types/NullType.js'
-import { UInt64Type } from './types/UInt64Type.js'
+} from "./isCoreType.js";
+import { getCustomTypeConfig } from "./getCustomTypeConfig.js";
+import { compareLooselyness } from "./helpers.js";
+import { NullType } from "./types/NullType.js";
+import { UInt64Type } from "./types/UInt64Type.js";
 
 function getHybridObjectName(type: TSMorphType): string {
-  const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
+  const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol();
   if (symbol == null) {
     throw new Error(
-      `Cannot get name of \`${type.getText()}\` - symbol not found!`
-    )
+      `Cannot get name of \`${type.getText()}\` - symbol not found!`,
+    );
   }
-  return symbol.getEscapedName()
+  return symbol.getEscapedName();
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
-  const callSignatures = func.getCallSignatures()
-  const callSignature = callSignatures[0]
+  const callSignatures = func.getCallSignatures();
+  const callSignature = callSignatures[0];
   if (callSignatures.length !== 1 || callSignature == null) {
     throw new Error(
-      `Function overloads are not supported in Nitrogen! (in ${func.getText()})`
-    )
+      `Function overloads are not supported in Nitrogen! (in ${func.getText()})`,
+    );
   }
-  return callSignature
+  return callSignature;
 }
 
 function removeDuplicates(types: Type[]): Type[] {
   return types.filter((t1, index, array) => {
     const firstIndexOfType = array.findIndex(
-      (t2) => t1.getCode('c++') === t2.getCode('c++')
-    )
-    return firstIndexOfType === index
-  })
+      (t2) => t1.getCode("c++") === t2.getCode("c++"),
+    );
+    return firstIndexOfType === index;
+  });
 }
 
 type Tuple<
   T,
   N extends number,
   R extends unknown[] = [],
-> = R['length'] extends N ? R : Tuple<T, N, [T, ...R]>
+> = R["length"] extends N ? R : Tuple<T, N, [T, ...R]>;
 function getArguments<N extends number>(
   type: TSMorphType,
   typename: string,
-  count: N
+  count: N,
 ): Tuple<TSMorphType<ts.Type>, N> {
-  const typeArguments = type.getTypeArguments()
+  const typeArguments = type.getTypeArguments();
   if (typeArguments.length === count) {
-    return typeArguments as Tuple<TSMorphType<ts.Type>, N>
+    return typeArguments as Tuple<TSMorphType<ts.Type>, N>;
   }
 
-  const aliasTypeArguments = type.getAliasTypeArguments()
+  const aliasTypeArguments = type.getAliasTypeArguments();
   if (aliasTypeArguments.length === count) {
-    return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>
+    return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>;
   }
 
   throw new Error(
-    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} or ${aliasTypeArguments.length} type arguments instead of ${count}!`
-  )
+    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} or ${aliasTypeArguments.length} type arguments instead of ${count}!`,
+  );
 }
 
 export function createNamedType(
   language: Language,
   name: string,
   type: TSMorphType,
-  isOptional: boolean
+  isOptional: boolean,
 ) {
-  if (name.startsWith('__')) {
+  if (name.startsWith("__")) {
     throw new Error(
-      `Name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${type.getText()})`
-    )
+      `Name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${type.getText()})`,
+    );
   }
-  return new NamedWrappingType(name, createType(language, type, isOptional))
+  return new NamedWrappingType(name, createType(language, type, isOptional));
 }
 
 export function createVoidType(): Type {
-  return new VoidType()
+  return new VoidType();
 }
 
 // Caches complex types (types that have a symbol)
-type TypeId = string
+type TypeId = string;
 const knownTypes: Record<Language, Map<TypeId, Type>> = {
-  'c++': new Map<TypeId, Type>(),
-  'swift': new Map<TypeId, Type>(),
-  'kotlin': new Map<TypeId, Type>(),
-}
+  "c++": new Map<TypeId, Type>(),
+  swift: new Map<TypeId, Type>(),
+  kotlin: new Map<TypeId, Type>(),
+  rust: new Map<TypeId, Type>(),
+};
 
 /**
  * Get a list of all currently known complex types.
@@ -135,34 +136,34 @@ const knownTypes: Record<Language, Map<TypeId, Type>> = {
 export function getAllKnownTypes(language?: Language): Type[] {
   if (language != null) {
     // Get types for the given language
-    return Array.from(knownTypes[language].values())
+    return Array.from(knownTypes[language].values());
   } else {
     // Get types for all languages alltogether
-    const allMaps = Object.values(knownTypes)
-    return allMaps.flatMap((m) => Array.from(m.values()))
+    const allMaps = Object.values(knownTypes);
+    return allMaps.flatMap((m) => Array.from(m.values()));
   }
 }
 
 function getTypeId(type: TSMorphType, isOptional: boolean): string {
-  const symbol = type.getSymbol()
-  let key = type.getText()
+  const symbol = type.getSymbol();
+  let key = type.getText();
   if (symbol != null) {
-    key += '_' + symbol.getFullyQualifiedName()
+    key += "_" + symbol.getFullyQualifiedName();
   }
-  if (isOptional) key += '?'
-  return key
+  if (isOptional) key += "?";
+  return key;
 }
 
 export function addKnownType(
   key: string,
   type: Type,
-  language: Language
+  language: Language,
 ): void {
   if (knownTypes[language].has(key)) {
     // type is already known
-    return
+    return;
   }
-  knownTypes[language].set(key, type)
+  knownTypes[language].set(key, type);
 }
 
 /**
@@ -171,138 +172,143 @@ export function addKnownType(
 export function createType(
   language: Language,
   type: TSMorphType,
-  isOptional: boolean
+  isOptional: boolean,
 ): Type {
-  const key = getTypeId(type, isOptional)
+  const key = getTypeId(type, isOptional);
   if (key != null && knownTypes[language].has(key)) {
-    const known = knownTypes[language].get(key)!
+    const known = knownTypes[language].get(key)!;
     if (isOptional === known instanceof OptionalType) {
-      return known
+      return known;
     }
   }
 
   const get = () => {
     if (isOptional) {
-      const wrapping = createType(language, type, false)
-      return new OptionalType(wrapping)
+      const wrapping = createType(language, type, false);
+      return new OptionalType(wrapping);
     }
 
     if (type.isNull()) {
-      return new NullType()
+      return new NullType();
     } else if (type.isBoolean() || type.isBooleanLiteral()) {
-      return new BooleanType()
+      return new BooleanType();
     } else if (type.isNumber() || type.isNumberLiteral()) {
       if (type.isEnumLiteral()) {
         // An enum is just a number, that's why it's a number literal.
         // Get the base of the literal, which would be our enum's definition.
-        const baseType = type.getBaseTypeOfLiteralType()
+        const baseType = type.getBaseTypeOfLiteralType();
         if (!baseType.isEnum()) {
           // The base of the literal is not the enum definition, we need to throw.
           throw new Error(
-            `The enum "${type.getLiteralValue()}" (${type.getText()}) is either a single-value-enum, or an enum-literal. Use a separately defined enum with at least 2 cases instead!`
-          )
+            `The enum "${type.getLiteralValue()}" (${type.getText()}) is either a single-value-enum, or an enum-literal. Use a separately defined enum with at least 2 cases instead!`,
+          );
         }
         // Call createType(...) now with the enum type.
-        return createType(language, baseType, isOptional)
+        return createType(language, baseType, isOptional);
       }
-      return new NumberType()
+      return new NumberType();
     } else if (type.isString()) {
-      return new StringType()
+      return new StringType();
     } else if (isInt64(type)) {
-      return new Int64Type()
+      return new Int64Type();
     } else if (isUInt64(type)) {
-      return new UInt64Type()
+      return new UInt64Type();
     } else if (type.isVoid()) {
-      return new VoidType()
+      return new VoidType();
     } else if (type.isArray()) {
-      const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = createType(language, arrayElementType, false)
-      return new ArrayType(elementType)
+      const arrayElementType = type.getArrayElementTypeOrThrow();
+      const elementType = createType(language, arrayElementType, false);
+      return new ArrayType(elementType);
     } else if (type.isTuple()) {
       const itemTypes = type
         .getTupleElements()
-        .map((t) => createType(language, t, t.isNullable()))
-      return new TupleType(itemTypes)
+        .map((t) => createType(language, t, t.isNullable()));
+      return new TupleType(itemTypes);
     } else if (type.getCallSignatures().length > 0) {
       // It's a function!
-      const callSignature = getFunctionCallSignature(type)
-      const funcReturnType = callSignature.getReturnType()
+      const callSignature = getFunctionCallSignature(type);
+      const funcReturnType = callSignature.getReturnType();
       const isReturnOptional = funcReturnType
         .getUnionTypes()
-        .some((t) => t.isUndefined())
-      const returnType = createType(language, funcReturnType, isReturnOptional)
+        .some((t) => t.isUndefined());
+      const returnType = createType(language, funcReturnType, isReturnOptional);
       const parameters = callSignature.getParameters().map((p) => {
-        const declaration = p.getValueDeclarationOrThrow()
-        const parameterType = p.getTypeAtLocation(declaration)
-        const isNullable = parameterType.isNullable() || p.isOptional()
-        return createNamedType(language, p.getName(), parameterType, isNullable)
-      })
-      const isSync = isSyncFunction(type)
-      return new FunctionType(returnType, parameters, isSync)
+        const declaration = p.getValueDeclarationOrThrow();
+        const parameterType = p.getTypeAtLocation(declaration);
+        const isNullable = parameterType.isNullable() || p.isOptional();
+        return createNamedType(
+          language,
+          p.getName(),
+          parameterType,
+          isNullable,
+        );
+      });
+      const isSync = isSyncFunction(type);
+      return new FunctionType(returnType, parameters, isSync);
     } else if (isPromise(type)) {
       // It's a Promise!
-      const [promiseResolvingType] = getArguments(type, 'Promise', 1)
+      const [promiseResolvingType] = getArguments(type, "Promise", 1);
       const isResolvingOptional = promiseResolvingType
         .getUnionTypes()
-        .some((t) => t.isUndefined())
+        .some((t) => t.isUndefined());
       const resolvingType = createType(
         language,
         promiseResolvingType,
-        isResolvingOptional
-      )
-      return new PromiseType(resolvingType)
+        isResolvingOptional,
+      );
+      return new PromiseType(resolvingType);
     } else if (isRecord(type)) {
       // Record<K, V> -> unordered_map<K, V>
-      const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
-      const keyType = createType(language, keyTypeT, false)
-      const valueType = createType(language, valueTypeT, false)
-      return new RecordType(keyType, valueType)
+      const [keyTypeT, valueTypeT] = getArguments(type, "Record", 2);
+      const keyType = createType(language, keyTypeT, false);
+      const valueType = createType(language, valueTypeT, false);
+      return new RecordType(keyType, valueType);
     } else if (isArrayBuffer(type)) {
       // ArrayBuffer
-      return new ArrayBufferType()
+      return new ArrayBufferType();
     } else if (isMap(type)) {
       // Map
-      return new MapType()
+      return new MapType();
     } else if (isDate(type)) {
       // Date
-      return new DateType()
+      return new DateType();
     } else if (isError(type)) {
       // Error
-      return new ErrorType()
+      return new ErrorType();
     } else if (isCustomType(type)) {
       // Custom C++ type (manually written)
-      const { name, config } = getCustomTypeConfig(type)
-      return new CustomType(name, config)
+      const { name, config } = getCustomTypeConfig(type);
+      return new CustomType(name, config);
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
-      const typename = type.getSymbolOrThrow().getEscapedName()
-      const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow()
+      const typename = type.getSymbolOrThrow().getEscapedName();
+      const declaration = type.getSymbolOrThrow().getValueDeclarationOrThrow();
       const enumDeclaration = declaration.asKindOrThrow(
-        ts.SyntaxKind.EnumDeclaration
-      )
-      return new EnumType(typename, enumDeclaration)
+        ts.SyntaxKind.EnumDeclaration,
+      );
+      return new EnumType(typename, enumDeclaration);
     } else if (type.isUnion()) {
       // It is some kind of union;
       // - of string literals (then it's an enum)
       // - of type `T | undefined` (then it's just optional `T`)
       // - of different types (then it's a variant `A | B | C`)
-      const types = type.getUnionTypes()
+      const types = type.getUnionTypes();
       const nonNullTypes = types.filter(
-        (t) => !t.isNull() && !t.isUndefined() && !t.isVoid()
-      )
-      const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
+        (t) => !t.isNull() && !t.isUndefined() && !t.isVoid(),
+      );
+      const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral());
       if (isEnumUnion) {
         // It consists only of string literaly - that means it's describing an enum!
-        const symbol = type.getNonNullableType().getAliasSymbol()
+        const symbol = type.getNonNullableType().getAliasSymbol();
         if (symbol == null) {
           // If there is no alias, it is an inline union instead of a separate type declaration!
           throw new Error(
             `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
-              `Extract the union to a separate type, and re-run nitrogen!`
-          )
+              `Extract the union to a separate type, and re-run nitrogen!`,
+          );
         }
-        const typename = symbol.getEscapedName()
-        return new EnumType(typename, type)
+        const typename = symbol.getEscapedName();
+        return new EnumType(typename, type);
       } else {
         // It consists of different types - that means it's a variant!
         let variants = type
@@ -310,96 +316,105 @@ export function createType(
           // Filter out any undefineds/voids, as those are already treated as `isOptional`.
           .filter((t) => !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
-          .toSorted(compareLooselyness)
-        variants = removeDuplicates(variants)
+          .toSorted(compareLooselyness);
+        variants = removeDuplicates(variants);
 
         if (variants.length === 1) {
           // It's just one type with undefined/null variant(s) - so we treat it like a simple optional.
-          return variants[0]!
+          return variants[0]!;
         }
 
-        const name = type.getAliasSymbol()?.getName()
-        return new VariantType(variants, name)
+        const name = type.getAliasSymbol()?.getName();
+        return new VariantType(variants, name);
       }
     } else if (isDirectlyAnyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
-      return new AnyHybridObjectType()
+      return new AnyHybridObjectType();
     } else if (isAnyHybridSubclass(type)) {
       // It is another HybridObject being referenced!
-      const typename = getHybridObjectName(type)
+      const typename = getHybridObjectName(type);
       const baseTypes = getBaseTypes(type)
         .filter((t) => isAnyHybridSubclass(t))
-        .map((b) => createType(language, b, false))
-      const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
+        .map((b) => createType(language, b, false));
+      const baseHybrids = baseTypes.filter(
+        (b) => b instanceof HybridObjectType,
+      );
       const sourceConfig =
-        getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
-      return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
+        getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current;
+      return new HybridObjectType(
+        typename,
+        language,
+        baseHybrids,
+        sourceConfig,
+      );
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
-      const symbol = type.getAliasSymbol() ?? type.getSymbol()
+      const symbol = type.getAliasSymbol() ?? type.getSymbol();
       if (symbol == null)
-        throw new Error(`Interface "${type.getText()}" does not have a Symbol!`)
-      const typename = symbol.getName()
-      const properties = getInterfaceProperties(language, type)
-      return new StructType(typename, properties)
+        throw new Error(
+          `Interface "${type.getText()}" does not have a Symbol!`,
+        );
+      const typename = symbol.getName();
+      const properties = getInterfaceProperties(language, type);
+      return new StructType(typename, properties);
     } else if (type.isObject()) {
       // It is an object. If it has a symbol/name, it is a `type T = ...` declaration, so a `struct`.
       // Otherwise, it is an anonymous/inline object, which cannot be represented in native.
-      const symbol = type.getAliasSymbol()
+      const symbol = type.getAliasSymbol();
       if (symbol != null) {
         // it has a `type T = ...` declaration
-        const typename = symbol.getName()
-        const properties = getInterfaceProperties(language, type)
-        return new StructType(typename, properties)
+        const typename = symbol.getName();
+        const properties = getInterfaceProperties(language, type);
+        return new StructType(typename, properties);
       } else {
         // It's an anonymous object (`{ ... }`)
         throw new Error(
-          `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`
-        )
+          `Anonymous objects cannot be represented in C++! Extract "${type.getText()}" to a separate interface/type declaration.`,
+        );
       }
     } else if (type.isStringLiteral()) {
       throw new Error(
-        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
-      )
+        `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`,
+      );
     } else if (type.isUndefined()) {
       throw new Error(
         `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
           `- If you want to make a type optional, add \`?\` to its name, or make it an union with \`undefined\`.\n` +
           `- If you want a method that returns nothing, use \`void\` instead.\n` +
-          `- If you want to represent an explicit absence of a value, use \`null\` instead.`
-      )
+          `- If you want to represent an explicit absence of a value, use \`null\` instead.`,
+      );
     } else if (type.isAny()) {
       throw new Error(
-        `The TypeScript type "${type.getText()}" resolved to any - any is not supported in Nitro.`
-      )
+        `The TypeScript type "${type.getText()}" resolved to any - any is not supported in Nitro.`,
+      );
     } else if (type.isBigInt()) {
       throw new Error(
-        `Using a bigint without specifying signedness is deprecated! Use \`Int64\` or \`UInt64\` instead.`
-      )
+        `Using a bigint without specifying signedness is deprecated! Use \`Int64\` or \`UInt64\` instead.`,
+      );
     } else if (type.isLiteral()) {
       throw new Error(
-        `The literal "${type.getLiteralValue()}" cannot be used as a type!`
-      )
+        `The literal "${type.getLiteralValue()}" cannot be used as a type!`,
+      );
     } else {
       if (type.getSymbol() == null) {
         // There is no declaration for it!
         // Could be an invalid import, e.g. an alias
         throw new Error(
           `The TypeScript type "${type.getText()}" cannot be resolved - is it imported properly? ` +
-            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
-        )
+            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`,
+        );
       } else {
         // A different error
         throw new Error(
-          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
-        )
+          `The TypeScript type "${type.getText()}" cannot be represented in C++!`,
+        );
       }
     }
-  }
+  };
 
-  const result = get()
+  const result = get();
   if (key != null) {
-    knownTypes[language].set(key, result)
+    knownTypes[language].set(key, result);
   }
-  return result
+  return result;
 }

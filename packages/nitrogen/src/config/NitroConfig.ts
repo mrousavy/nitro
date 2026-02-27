@@ -102,6 +102,14 @@ export class NitroConfig {
   }
 
   /**
+   * Get the Rust implementation crate name, if configured.
+   * Returns `undefined` if no `rust` section is in nitro.json.
+   */
+  getRustImplCrate(): string | undefined {
+    return this.config.rust?.implCrate
+  }
+
+  /**
    * Get the autolinking configuration of all HybridObjects.
    * Those will be generated and default-constructed.
    */

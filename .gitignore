@@ -86,3 +86,10 @@ lib/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Rust
+target/
+Cargo.lock
+
+# agents
+.claude

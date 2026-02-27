@@ -23,6 +23,8 @@ export class UInt64Type implements Type {
         return 'UInt64'
       case 'kotlin':
         return 'ULong'
+      case 'rust':
+        return 'u64'
       default:
         throw new Error(
           `Language ${language} is not yet supported for UInt64Type!`

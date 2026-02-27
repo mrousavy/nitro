@@ -6,6 +6,7 @@ import type { Type } from './types/Type.js'
 import { Method } from './Method.js'
 import { VoidType } from './types/VoidType.js'
 import { Parameter } from './Parameter.js'
+import { toSnakeCase } from './helpers.js'
 
 export interface PropertyBody {
   getter: string
@@ -210,6 +211,17 @@ set {
   }
             `)
           }
+        }
+        return lines.join('\n')
+      }
+      case 'rust': {
+        const type = this.type.getCode('rust')
+        const rustName = toSnakeCase(this.name)
+        const lines: string[] = []
+        lines.push(`fn ${rustName}(&self) -> ${type};`)
+        if (!this.isReadonly) {
+          const setterName = `set_${rustName}`
+          lines.push(`fn ${setterName}(&self, value: ${type});`)
         }
         return lines.join('\n')
       }

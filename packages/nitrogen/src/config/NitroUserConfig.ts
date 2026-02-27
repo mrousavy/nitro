@@ -1,13 +1,13 @@
-import { z } from 'zod'
+import { z } from "zod";
 
 // Namespaces and package names in C++/Java will be matched with a regex.
-const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/
+const safeNamePattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
 
 const isNotReservedKeyword = (val: string) =>
-  !['core', 'nitro', 'NitroModules'].includes(val)
+  !["core", "nitro", "NitroModules"].includes(val);
 const isReservedKeywordError = {
   message: `This value is reserved and cannot be used!`,
-}
+};
 
 export const NitroUserConfigSchema = z.object({
   /**
@@ -21,7 +21,7 @@ export const NitroUserConfigSchema = z.object({
       z
         .string()
         .regex(safeNamePattern)
-        .refine(isNotReservedKeyword, isReservedKeywordError)
+        .refine(isNotReservedKeyword, isReservedKeywordError),
     )
     .min(1),
   /**
@@ -56,7 +56,7 @@ export const NitroUserConfigSchema = z.object({
         z
           .string()
           .regex(safeNamePattern)
-          .refine(isNotReservedKeyword, isReservedKeywordError)
+          .refine(isNotReservedKeyword, isReservedKeywordError),
       )
       .min(1),
 
@@ -71,6 +71,20 @@ export const NitroUserConfigSchema = z.object({
       .refine(isNotReservedKeyword, isReservedKeywordError),
   }),
   /**
+   * Rust-specific options for the generated Rust crate.
+   */
+  rust: z
+    .object({
+      /**
+       * The Cargo crate name of the user's Rust implementation crate.
+       * This is added as a dependency in the generated Cargo.toml so that
+       * factory.rs can import the implementation structs.
+       * @example `"jazz-nitro"`
+       */
+      implCrate: z.string(),
+    })
+    .optional(),
+  /**
    * Configures the code that gets generated for autolinking (registering)
    * Hybrid Object constructors.
    *
@@ -83,7 +97,8 @@ export const NitroUserConfigSchema = z.object({
       cpp: z.string().optional(),
       swift: z.string().optional(),
       kotlin: z.string().optional(),
-    })
+      rust: z.string().optional(),
+    }),
   ),
   /**
    * A list of paths relative to the project directory that should be ignored by nitrogen.
@@ -97,9 +112,9 @@ export const NitroUserConfigSchema = z.object({
    * This is controlled via `nitrogen/generated/.gitattributes`.
    */
   gitAttributesGeneratedFlag: z.boolean().optional().default(true),
-})
+});
 
 /**
  * Represents the structure of a `nitro.json` config file.
  */
-export type NitroUserConfig = z.infer<typeof NitroUserConfigSchema>
+export type NitroUserConfig = z.infer<typeof NitroUserConfigSchema>;

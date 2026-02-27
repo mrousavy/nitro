@@ -22,6 +22,8 @@ export class NumberType implements Type {
         return 'Double'
       case 'kotlin':
         return 'Double'
+      case 'rust':
+        return 'f64'
       default:
         throw new Error(
           `Language ${language} is not yet supported for NumberType!`
