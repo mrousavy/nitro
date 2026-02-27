@@ -49,6 +49,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
 | **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
 | **react-native-superconfig** | Superfast typesafe config library | [GitHub](https://github.com/riteshshukla04/react-native-superconfig) |
+| **react-native-nitro-unzip** | High-performance zip extraction and compression | [GitHub](https://github.com/isaacrowntree/react-native-nitro-unzip) |
 
 ### Networking
 
