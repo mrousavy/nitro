@@ -42,6 +42,10 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
+// Forward declaration of `SomeEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeEnum; }
+// Forward declaration of `SomeOtherEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeOtherEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
@@ -79,6 +83,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
+#include "SomeEnum.hpp"
+#include "SomeOtherEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
@@ -852,6 +858,46 @@ namespace margelo::nitro::test {
     }
     inline std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override {
       auto __result = _swiftPart.getVariantWeirdNumbersEnum(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<bool, SomeEnum> getVariantSomeEnum(const std::variant<bool, SomeEnum>& variant) override {
+      auto __result = _swiftPart.getVariantSomeEnum(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<SomeEnum, SomeOtherEnum> getVariantMultipleEnums(const std::variant<SomeEnum, SomeOtherEnum>& variant) override {
+      auto __result = _swiftPart.getVariantMultipleEnums(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::string getVariantStringAndEnum(const std::string& variant) override {
+      auto __result = _swiftPart.getVariantStringAndEnum(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<bool, SomeEnum, SomeOtherEnum> getVariantThreeTypes(const std::variant<bool, SomeEnum, SomeOtherEnum>& variant) override {
+      auto __result = _swiftPart.getVariantThreeTypes(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<SomeEnum, double> getVariantNumberAndEnum(const std::variant<SomeEnum, double>& variant) override {
+      auto __result = _swiftPart.getVariantNumberAndEnum(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

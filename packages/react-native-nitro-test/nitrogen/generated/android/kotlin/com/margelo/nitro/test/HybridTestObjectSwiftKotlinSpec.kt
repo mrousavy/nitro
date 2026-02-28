@@ -567,6 +567,26 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun getVariantSomeEnum(variant: Variant_Boolean_SomeEnum): Variant_Boolean_SomeEnum
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantMultipleEnums(variant: Variant_SomeEnum_SomeOtherEnum): Variant_SomeEnum_SomeOtherEnum
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantStringAndEnum(variant: String): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantThreeTypes(variant: Variant_Boolean_SomeEnum_SomeOtherEnum): Variant_Boolean_SomeEnum_SomeOtherEnum
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantNumberAndEnum(variant: Variant_SomeEnum_Double): Variant_SomeEnum_Double
+  
+  @DoNotStrip
+  @Keep
   abstract fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person
   
   @DoNotStrip

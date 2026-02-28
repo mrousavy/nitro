@@ -25,6 +25,12 @@ export type NamedVariant = string | Car
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
 
+// Another string union used to test boolean | StringEnum variants
+export type SomeEnum = 'foo' | 'bar'
+
+// Another string union used to test variants consisting of multiple string unions
+export type SomeOtherEnum = 'baz' | 'qux'
+
 // A classic TypeScript enum also becomes an `enum` in C++.
 // This one is number-backed.
 export enum OldEnum {
@@ -265,6 +271,15 @@ interface SharedTestObjectProps {
   getVariantWeirdNumbersEnum(
     variant: WeirdNumbersEnum | boolean
   ): WeirdNumbersEnum | boolean
+  getVariantSomeEnum(variant: boolean | SomeEnum): boolean | SomeEnum
+  getVariantMultipleEnums(
+    variant: SomeEnum | SomeOtherEnum
+  ): SomeEnum | SomeOtherEnum
+  getVariantStringAndEnum(variant: string | SomeEnum): string | SomeEnum
+  getVariantThreeTypes(
+    variant: boolean | SomeEnum | SomeOtherEnum
+  ): boolean | SomeEnum | SomeOtherEnum
+  getVariantNumberAndEnum(variant: number | SomeEnum): number | SomeEnum
   getVariantObjects(variant: Person | Car): Person | Car
   passNamedVariant(variant: NamedVariant): NamedVariant
   passAllEmptyObjectVariant(

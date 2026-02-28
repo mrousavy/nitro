@@ -363,6 +363,30 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
+  func getVariantSomeEnum(variant: Variant_Bool_SomeEnum) throws -> Variant_Bool_SomeEnum {
+    return variant
+  }
+
+  func getVariantMultipleEnums(variant: Variant_SomeEnum_SomeOtherEnum) throws
+    -> Variant_SomeEnum_SomeOtherEnum
+  {
+    return variant
+  }
+
+  func getVariantStringAndEnum(variant: String) throws -> String {
+    return variant
+  }
+
+  func getVariantThreeTypes(variant: Variant_Bool_SomeEnum_SomeOtherEnum) throws
+    -> Variant_Bool_SomeEnum_SomeOtherEnum
+  {
+    return variant
+  }
+
+  func getVariantNumberAndEnum(variant: Variant_SomeEnum_Double) throws -> Variant_SomeEnum_Double {
+    return variant
+  }
+
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
     return variant
   }

@@ -42,6 +42,10 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `SomeEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeEnum; }
+// Forward declaration of `SomeOtherEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeOtherEnum; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -79,6 +83,8 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "SomeEnum.hpp"
+#include "SomeOtherEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -1355,6 +1361,128 @@ namespace margelo::nitro::test::bridge::swift {
     return std__variant_bool__WeirdNumbersEnum_(value);
   }
   
+  // pragma MARK: std::variant<bool, SomeEnum>
+  /**
+   * Wrapper struct for `std::variant<bool, SomeEnum>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_bool__SomeEnum_ {
+    std::variant<bool, SomeEnum> variant;
+    std__variant_bool__SomeEnum_(std::variant<bool, SomeEnum> variant): variant(variant) { }
+    operator std::variant<bool, SomeEnum>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline bool get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline SomeEnum get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_bool__SomeEnum_ create_std__variant_bool__SomeEnum_(bool value) noexcept {
+    return std__variant_bool__SomeEnum_(value);
+  }
+  inline std__variant_bool__SomeEnum_ create_std__variant_bool__SomeEnum_(SomeEnum value) noexcept {
+    return std__variant_bool__SomeEnum_(value);
+  }
+  
+  // pragma MARK: std::variant<SomeEnum, SomeOtherEnum>
+  /**
+   * Wrapper struct for `std::variant<SomeEnum, SomeOtherEnum>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_SomeEnum__SomeOtherEnum_ {
+    std::variant<SomeEnum, SomeOtherEnum> variant;
+    std__variant_SomeEnum__SomeOtherEnum_(std::variant<SomeEnum, SomeOtherEnum> variant): variant(variant) { }
+    operator std::variant<SomeEnum, SomeOtherEnum>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline SomeEnum get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline SomeOtherEnum get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_SomeEnum__SomeOtherEnum_ create_std__variant_SomeEnum__SomeOtherEnum_(SomeEnum value) noexcept {
+    return std__variant_SomeEnum__SomeOtherEnum_(value);
+  }
+  inline std__variant_SomeEnum__SomeOtherEnum_ create_std__variant_SomeEnum__SomeOtherEnum_(SomeOtherEnum value) noexcept {
+    return std__variant_SomeEnum__SomeOtherEnum_(value);
+  }
+  
+  // pragma MARK: std::variant<bool, SomeEnum, SomeOtherEnum>
+  /**
+   * Wrapper struct for `std::variant<bool, SomeEnum, SomeOtherEnum>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_bool__SomeEnum__SomeOtherEnum_ {
+    std::variant<bool, SomeEnum, SomeOtherEnum> variant;
+    std__variant_bool__SomeEnum__SomeOtherEnum_(std::variant<bool, SomeEnum, SomeOtherEnum> variant): variant(variant) { }
+    operator std::variant<bool, SomeEnum, SomeOtherEnum>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline bool get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline SomeEnum get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+    inline SomeOtherEnum get_2() const noexcept {
+      return std::get<2>(variant);
+    }
+  };
+  inline std__variant_bool__SomeEnum__SomeOtherEnum_ create_std__variant_bool__SomeEnum__SomeOtherEnum_(bool value) noexcept {
+    return std__variant_bool__SomeEnum__SomeOtherEnum_(value);
+  }
+  inline std__variant_bool__SomeEnum__SomeOtherEnum_ create_std__variant_bool__SomeEnum__SomeOtherEnum_(SomeEnum value) noexcept {
+    return std__variant_bool__SomeEnum__SomeOtherEnum_(value);
+  }
+  inline std__variant_bool__SomeEnum__SomeOtherEnum_ create_std__variant_bool__SomeEnum__SomeOtherEnum_(SomeOtherEnum value) noexcept {
+    return std__variant_bool__SomeEnum__SomeOtherEnum_(value);
+  }
+  
+  // pragma MARK: std::variant<SomeEnum, double>
+  /**
+   * Wrapper struct for `std::variant<SomeEnum, double>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_SomeEnum__double_ {
+    std::variant<SomeEnum, double> variant;
+    std__variant_SomeEnum__double_(std::variant<SomeEnum, double> variant): variant(variant) { }
+    operator std::variant<SomeEnum, double>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline SomeEnum get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline double get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_SomeEnum__double_ create_std__variant_SomeEnum__double_(SomeEnum value) noexcept {
+    return std__variant_SomeEnum__double_(value);
+  }
+  inline std__variant_SomeEnum__double_ create_std__variant_SomeEnum__double_(double value) noexcept {
+    return std__variant_SomeEnum__double_(value);
+  }
+  
   // pragma MARK: std::variant<Car, Person>
   /**
    * Wrapper struct for `std::variant<Car, Person>`.
@@ -1923,6 +2051,42 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__variant_bool__WeirdNumbersEnum__ create_Result_std__variant_bool__WeirdNumbersEnum__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<bool, WeirdNumbersEnum>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<bool, SomeEnum>>
+  using Result_std__variant_bool__SomeEnum__ = Result<std::variant<bool, SomeEnum>>;
+  inline Result_std__variant_bool__SomeEnum__ create_Result_std__variant_bool__SomeEnum__(const std::variant<bool, SomeEnum>& value) noexcept {
+    return Result<std::variant<bool, SomeEnum>>::withValue(value);
+  }
+  inline Result_std__variant_bool__SomeEnum__ create_Result_std__variant_bool__SomeEnum__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<bool, SomeEnum>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<SomeEnum, SomeOtherEnum>>
+  using Result_std__variant_SomeEnum__SomeOtherEnum__ = Result<std::variant<SomeEnum, SomeOtherEnum>>;
+  inline Result_std__variant_SomeEnum__SomeOtherEnum__ create_Result_std__variant_SomeEnum__SomeOtherEnum__(const std::variant<SomeEnum, SomeOtherEnum>& value) noexcept {
+    return Result<std::variant<SomeEnum, SomeOtherEnum>>::withValue(value);
+  }
+  inline Result_std__variant_SomeEnum__SomeOtherEnum__ create_Result_std__variant_SomeEnum__SomeOtherEnum__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<SomeEnum, SomeOtherEnum>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<bool, SomeEnum, SomeOtherEnum>>
+  using Result_std__variant_bool__SomeEnum__SomeOtherEnum__ = Result<std::variant<bool, SomeEnum, SomeOtherEnum>>;
+  inline Result_std__variant_bool__SomeEnum__SomeOtherEnum__ create_Result_std__variant_bool__SomeEnum__SomeOtherEnum__(const std::variant<bool, SomeEnum, SomeOtherEnum>& value) noexcept {
+    return Result<std::variant<bool, SomeEnum, SomeOtherEnum>>::withValue(value);
+  }
+  inline Result_std__variant_bool__SomeEnum__SomeOtherEnum__ create_Result_std__variant_bool__SomeEnum__SomeOtherEnum__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<bool, SomeEnum, SomeOtherEnum>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::variant<SomeEnum, double>>
+  using Result_std__variant_SomeEnum__double__ = Result<std::variant<SomeEnum, double>>;
+  inline Result_std__variant_SomeEnum__double__ create_Result_std__variant_SomeEnum__double__(const std::variant<SomeEnum, double>& value) noexcept {
+    return Result<std::variant<SomeEnum, double>>::withValue(value);
+  }
+  inline Result_std__variant_SomeEnum__double__ create_Result_std__variant_SomeEnum__double__(const std::exception_ptr& error) noexcept {
+    return Result<std::variant<SomeEnum, double>>::withError(error);
   }
   
   // pragma MARK: Result<std::variant<Car, Person>>

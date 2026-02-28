@@ -1,4 +1,10 @@
-import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
+import {
+  ts,
+  Type as TSMorphType,
+  type Project,
+  type Signature,
+  type TypeAliasDeclaration,
+} from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
@@ -48,6 +54,27 @@ import { compareLooselyness } from './helpers.js'
 import { NullType } from './types/NullType.js'
 import { UInt64Type } from './types/UInt64Type.js'
 
+// Cache of type alias name -> TypeAliasDeclarations for efficient lookups during enum reconstruction.
+// Multiple declarations may exist for the same name across different files.
+let typeAliasCache: Map<string, TypeAliasDeclaration[]> | undefined
+
+/**
+ * Initialize the type creation context with the ts-morph Project.
+ * Must be called before createType() to enable enum reconstruction from flattened unions.
+ */
+export function initializeTypeCreation(project: Project): void {
+  // Build type alias cache for efficient lookups
+  typeAliasCache = new Map()
+  for (const sf of project.getSourceFiles()) {
+    for (const ta of sf.getTypeAliases()) {
+      const name = ta.getName()
+      const existing = typeAliasCache.get(name) ?? []
+      existing.push(ta)
+      typeAliasCache.set(name, existing)
+    }
+  }
+}
+
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
   if (symbol == null) {
@@ -76,6 +103,81 @@ function removeDuplicates(types: Type[]): Type[] {
     )
     return firstIndexOfType === index
   })
+}
+
+/**
+ * When TypeScript flattens a union like `boolean | FooBar` into `boolean | 'foo' | 'bar'`,
+ * we lose the information that 'foo' and 'bar' came from the named type `FooBar`.
+ * This function reconstructs enum types by parsing the type text for named types
+ * and matching their values against the string literals in the union.
+ */
+function reconstructEnumTypesFromStringLiterals(
+  _type: TSMorphType,
+  stringLiterals: TSMorphType[]
+): { enumTypes: EnumType[]; uncoveredLiterals: TSMorphType[] } {
+  const stringLiteralValues = new Set(stringLiterals.map((t) => t.getText()))
+  const coveredLiterals = new Set<string>()
+  const enumTypes: EnumType[] = []
+
+  if (typeAliasCache == null) {
+    throw new Error(
+      'initializeTypeCreation() must be called before processing types with string literal unions'
+    )
+  }
+
+  // Collect all candidate enums whose values are all present in our string literals
+  const candidateEnums: { name: string; enumType: EnumType; values: Set<string> }[] = []
+
+  for (const typeAliases of typeAliasCache.values()) {
+    for (const typeAlias of typeAliases) {
+      const aliasType = typeAlias.getType()
+      if (!aliasType.isUnion() || !aliasType.getAliasSymbol()) continue
+
+      const aliasUnionTypes = aliasType.getUnionTypes()
+      const isStringLiteralEnum = aliasUnionTypes.every((t) =>
+        t.isStringLiteral()
+      )
+      if (!isStringLiteralEnum) continue
+
+      const enumValues = aliasUnionTypes.map((t) => t.getText())
+      const allValuesPresent = enumValues.every((v) =>
+        stringLiteralValues.has(v)
+      )
+      if (!allValuesPresent) continue
+
+      candidateEnums.push({
+        name: typeAlias.getName(),
+        enumType: new EnumType(typeAlias.getName(), aliasType),
+        values: new Set(enumValues),
+      })
+    }
+  }
+
+  // Check for overlapping enums - if any two candidate enums share a value, it's ambiguous
+  for (let i = 0; i < candidateEnums.length; i++) {
+    for (let j = i + 1; j < candidateEnums.length; j++) {
+      const enumA = candidateEnums[i]!
+      const enumB = candidateEnums[j]!
+      for (const value of enumA.values) {
+        if (enumB.values.has(value)) {
+          throw new Error(
+            `Cannot create variant with overlapping string enum types: ${enumA.name} and ${enumB.name} both contain ${value}. Use enums with distinct values.`
+          )
+        }
+      }
+    }
+  }
+
+  // No overlaps - add all candidate enums
+  for (const candidate of candidateEnums) {
+    enumTypes.push(candidate.enumType)
+    candidate.values.forEach((v) => coveredLiterals.add(v))
+  }
+
+  const uncoveredLiterals = stringLiterals.filter(
+    (t) => !coveredLiterals.has(t.getText())
+  )
+  return { enumTypes, uncoveredLiterals }
 }
 
 type Tuple<
@@ -292,25 +394,68 @@ export function createType(
       )
       const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
       if (isEnumUnion) {
-        // It consists only of string literaly - that means it's describing an enum!
+        // It consists only of string literals - that means it's describing an enum!
         const symbol = type.getNonNullableType().getAliasSymbol()
         if (symbol == null) {
-          // If there is no alias, it is an inline union instead of a separate type declaration!
-          throw new Error(
-            `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
-              `Extract the union to a separate type, and re-run nitrogen!`
-          )
+          // No alias symbol - could be multiple enum types flattened together (e.g., SomeEnum | SomeOtherEnum)
+          // Try to reconstruct the original enum types from the string literals
+          const { enumTypes, uncoveredLiterals } =
+            reconstructEnumTypesFromStringLiterals(type, nonNullTypes)
+
+          if (enumTypes.length === 0 || uncoveredLiterals.length > 0) {
+            // Could not reconstruct enums - it's an inline union
+            throw new Error(
+              `Inline union types ("${type.getText()}") are not supported by Nitrogen!\n` +
+                `Extract the union to a separate type, and re-run nitrogen!`
+            )
+          }
+
+          if (enumTypes.length === 1) {
+            // Single enum reconstructed
+            return enumTypes[0]!
+          }
+
+          // Multiple enums - return as variant
+          const name = type.getAliasSymbol()?.getName()
+          return new VariantType(enumTypes, name)
         }
         const typename = symbol.getEscapedName()
         return new EnumType(typename, type)
       } else {
         // It consists of different types - that means it's a variant!
-        let variants = type
+        const unionTypes = type
           .getUnionTypes()
           // Filter out any undefineds/voids, as those are already treated as `isOptional`.
           .filter((t) => !t.isUndefined() && !t.isVoid())
-          .map((t) => createType(language, t, false))
-          .toSorted(compareLooselyness)
+
+        // Separate string literals from other types
+        // String literals might belong to a named enum type that got flattened
+        const stringLiterals = unionTypes.filter((t) => t.isStringLiteral())
+        const otherTypes = unionTypes.filter((t) => !t.isStringLiteral())
+
+        let variants: Type[] = []
+
+        // Process non-string-literal types
+        for (const t of otherTypes) {
+          variants.push(createType(language, t, false))
+        }
+
+        // For string literals, try to find named enum types from the original type text.
+        // TypeScript flattens `boolean | FooBar` into `boolean | 'foo' | 'bar'`, losing the
+        // enum type info. We reconstruct it by parsing the type text for named types.
+        if (stringLiterals.length > 0) {
+          const { enumTypes, uncoveredLiterals } =
+            reconstructEnumTypesFromStringLiterals(type, stringLiterals)
+          variants.push(...enumTypes)
+
+          if (uncoveredLiterals.length > 0) {
+            throw new Error(
+              `String literal ${uncoveredLiterals[0]!.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
+            )
+          }
+        }
+
+        variants = variants.toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {

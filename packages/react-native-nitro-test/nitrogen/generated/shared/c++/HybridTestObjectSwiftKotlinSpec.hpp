@@ -39,6 +39,10 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
+// Forward declaration of `SomeEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeEnum; }
+// Forward declaration of `SomeOtherEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeOtherEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
@@ -74,6 +78,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
+#include "SomeEnum.hpp"
+#include "SomeOtherEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
@@ -224,6 +230,11 @@ namespace margelo::nitro::test {
       virtual std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) = 0;
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
+      virtual std::variant<bool, SomeEnum> getVariantSomeEnum(const std::variant<bool, SomeEnum>& variant) = 0;
+      virtual std::variant<SomeEnum, SomeOtherEnum> getVariantMultipleEnums(const std::variant<SomeEnum, SomeOtherEnum>& variant) = 0;
+      virtual std::string getVariantStringAndEnum(const std::string& variant) = 0;
+      virtual std::variant<bool, SomeEnum, SomeOtherEnum> getVariantThreeTypes(const std::variant<bool, SomeEnum, SomeOtherEnum>& variant) = 0;
+      virtual std::variant<SomeEnum, double> getVariantNumberAndEnum(const std::variant<SomeEnum, double>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;

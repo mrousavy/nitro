@@ -498,6 +498,26 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
+  override fun getVariantSomeEnum(variant: Variant_Boolean_SomeEnum): Variant_Boolean_SomeEnum {
+    return variant
+  }
+
+  override fun getVariantMultipleEnums(variant: Variant_SomeEnum_SomeOtherEnum): Variant_SomeEnum_SomeOtherEnum {
+    return variant
+  }
+
+  override fun getVariantStringAndEnum(variant: String): String {
+    return variant
+  }
+
+  override fun getVariantThreeTypes(variant: Variant_Boolean_SomeEnum_SomeOtherEnum): Variant_Boolean_SomeEnum_SomeOtherEnum {
+    return variant
+  }
+
+  override fun getVariantNumberAndEnum(variant: Variant_SomeEnum_Double): Variant_SomeEnum_Double {
+    return variant
+  }
+
   override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
     return variant
   }

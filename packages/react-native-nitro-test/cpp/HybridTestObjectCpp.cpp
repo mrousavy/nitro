@@ -390,6 +390,26 @@ std::variant<bool, WeirdNumbersEnum> HybridTestObjectCpp::getVariantWeirdNumbers
   return variant;
 }
 
+std::variant<bool, SomeEnum> HybridTestObjectCpp::getVariantSomeEnum(const std::variant<bool, SomeEnum>& variant) {
+  return variant;
+}
+
+std::variant<SomeEnum, SomeOtherEnum> HybridTestObjectCpp::getVariantMultipleEnums(const std::variant<SomeEnum, SomeOtherEnum>& variant) {
+  return variant;
+}
+
+std::string HybridTestObjectCpp::getVariantStringAndEnum(const std::string& variant) {
+  return variant;
+}
+
+std::variant<bool, SomeEnum, SomeOtherEnum> HybridTestObjectCpp::getVariantThreeTypes(const std::variant<bool, SomeEnum, SomeOtherEnum>& variant) {
+  return variant;
+}
+
+std::variant<SomeEnum, double> HybridTestObjectCpp::getVariantNumberAndEnum(const std::variant<SomeEnum, double>& variant) {
+  return variant;
+}
+
 std::variant<Car, Person> HybridTestObjectCpp::getVariantObjects(const std::variant<Car, Person>& variant) {
   return variant;
 }
