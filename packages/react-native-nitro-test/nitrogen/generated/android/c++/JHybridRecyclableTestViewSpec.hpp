@@ -27,7 +27,7 @@ namespace margelo::nitro::test {
 
       std::shared_ptr<JHybridRecyclableTestViewSpec> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
-        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        jni::local_ref<JavaPart> javaPart = jni::make_local(self());
         return std::make_shared<JHybridRecyclableTestViewSpec>(javaPart);
       }
     };

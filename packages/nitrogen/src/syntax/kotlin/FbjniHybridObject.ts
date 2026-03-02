@@ -116,7 +116,7 @@ namespace ${cxxNamespace} {
 
       std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
-        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        jni::local_ref<JavaPart> javaPart = jni::make_local(self());
         return std::make_shared<${name.JHybridTSpec}>(javaPart);
       }
     };

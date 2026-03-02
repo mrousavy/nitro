@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
 
       std::shared_ptr<JHybridChildSpec> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
-        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        jni::local_ref<JavaPart> javaPart = jni::make_local(self());
         return std::make_shared<JHybridChildSpec>(javaPart);
       }
     };
