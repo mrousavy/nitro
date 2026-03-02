@@ -131,6 +131,14 @@ export interface Gallery {
   owner: UserInfo
 }
 
+// A self-referential struct that references itself through reference types (arrays, callbacks).
+// This exercises cyclic struct reference support.
+export interface TreeNode {
+  value: number
+  children: TreeNode[]
+  onChange?: (node: TreeNode) => void
+}
+
 interface SecondMapWrapper {
   second: Record<string, string>
 }
@@ -296,6 +304,7 @@ interface SharedTestObjectProps {
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
   bounceGallery(gallery: Gallery): Gallery
+  bounceTreeNode(node: TreeNode): TreeNode
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
