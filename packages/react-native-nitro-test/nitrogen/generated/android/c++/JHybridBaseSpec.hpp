@@ -18,10 +18,10 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridBaseSpec: public virtual HybridBaseSpec {
+  class JHybridBaseSpec: public virtual HybridBaseSpec, public virtual JHybridObject {
   public:
     // Java part for JHybridBaseSpec
-    struct JavaPart: public jni::JavaClass<JHybridBaseSpec::JavaPart, JHybridObject> {
+    struct JavaPart: public jni::JavaClass<JHybridBaseSpec::JavaPart, JHybridObject::JavaPart> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
 
@@ -36,18 +36,13 @@ namespace margelo::nitro::test {
     // C++ constructor that wraps the Java Part
     explicit JHybridBaseSpec(const jni::local_ref<JavaPart>& javaPart) :
       HybridObject(HybridBaseSpec::TAG),
+      JHybridObject(javaPart),
       _javaPart(jni::make_global(javaPart)) {}
 
     ~JHybridBaseSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
-
-  public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
 
   public:
     inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {

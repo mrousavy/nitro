@@ -18,29 +18,6 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 namespace margelo::nitro::test {
 
-  size_t JHybridTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridTestViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridTestViewSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridTestViewSpec::dispose() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridTestViewSpec::toString() {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
-  }
-
   // Properties
   bool JHybridTestViewSpec::getIsBlue() {
     static const auto method = JavaPart::javaClassStatic()->getMethod<jboolean()>("isBlue");

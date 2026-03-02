@@ -36,7 +36,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   )
   const cxxNamespace = spec.config.getCxxNamespace('c++')
 
-  let cppJavaBase = 'JHybridObject'
+  let cppJavaBase = 'JHybridObject::JavaPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -70,8 +70,14 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     })
   }
 
-  const cppBaseClasses = [`public virtual ${name.HybridTSpec}`]
-  const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
+  const cppBaseClasses = [
+    `public virtual ${name.HybridTSpec}`,
+    `public virtual JHybridObject`,
+  ]
+  const cppBaseCtorCalls = [
+    `HybridObject(${name.HybridTSpec}::TAG)`,
+    `JHybridObject(javaPart)`,
+  ]
   for (const base of spec.baseTypes) {
     const baseName = getHybridObjectName(base.name)
     cppBaseClasses.push(`public virtual ${baseName.JHybridTSpec}`)
@@ -133,12 +139,6 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
     inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
@@ -188,29 +188,6 @@ ${cppForwardDeclarations.join('\n')}
 ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
-
-  size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool ${name.JHybridTSpec}::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<${name.JHybridTSpec}>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void ${name.JHybridTSpec}::dispose() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string ${name.JHybridTSpec}::toString() {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
-  }
 
   // Properties
   ${indent(propertiesImpl, '  ')}

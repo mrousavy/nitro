@@ -18,10 +18,10 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridTestObjectSwiftKotlinSpec: public virtual HybridTestObjectSwiftKotlinSpec {
+  class JHybridTestObjectSwiftKotlinSpec: public virtual HybridTestObjectSwiftKotlinSpec, public virtual JHybridObject {
   public:
     // Java part for JHybridTestObjectSwiftKotlinSpec
-    struct JavaPart: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec::JavaPart, JHybridObject> {
+    struct JavaPart: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec::JavaPart, JHybridObject::JavaPart> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
 
@@ -36,18 +36,13 @@ namespace margelo::nitro::test {
     // C++ constructor that wraps the Java Part
     explicit JHybridTestObjectSwiftKotlinSpec(const jni::local_ref<JavaPart>& javaPart) :
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
+      JHybridObject(javaPart),
       _javaPart(jni::make_global(javaPart)) {}
 
     ~JHybridTestObjectSwiftKotlinSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
-
-  public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
 
   public:
     inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {

@@ -129,29 +129,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 
 namespace margelo::nitro::test {
 
-  size_t JHybridTestObjectSwiftKotlinSpec::getExternalMemorySize() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridTestObjectSwiftKotlinSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridTestObjectSwiftKotlinSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridTestObjectSwiftKotlinSpec::dispose() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridTestObjectSwiftKotlinSpec::toString() {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
-  }
-
   // Properties
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> JHybridTestObjectSwiftKotlinSpec::getThisObject() {
     static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>()>("getThisObject");

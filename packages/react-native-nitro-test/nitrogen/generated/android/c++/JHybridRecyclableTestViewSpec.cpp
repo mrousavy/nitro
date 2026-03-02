@@ -13,29 +13,6 @@
 
 namespace margelo::nitro::test {
 
-  size_t JHybridRecyclableTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridRecyclableTestViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridRecyclableTestViewSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridRecyclableTestViewSpec::dispose() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridRecyclableTestViewSpec::toString() {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
-  }
-
   // Properties
   bool JHybridRecyclableTestViewSpec::getIsBlue() {
     static const auto method = JavaPart::javaClassStatic()->getMethod<jboolean()>("isBlue");

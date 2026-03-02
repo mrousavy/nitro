@@ -29,29 +29,6 @@ namespace margelo::nitro::test { struct Person; }
 
 namespace margelo::nitro::test {
 
-  size_t JHybridChildSpec::getExternalMemorySize() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridChildSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridChildSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridChildSpec::dispose() noexcept {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridChildSpec::toString() {
-    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
-  }
-
   // Properties
   double JHybridChildSpec::getChildValue() {
     static const auto method = JavaPart::javaClassStatic()->getMethod<double()>("getChildValue");
