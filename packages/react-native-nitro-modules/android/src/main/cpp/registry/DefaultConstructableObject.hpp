@@ -21,7 +21,7 @@ public:
     try {
       // Find JNI class and default constructor
       _javaClass = jni::findClassStatic(javaClassDescriptor);
-      _defaultConstructor = _javaClass->getConstructor<T()>();
+      _defaultConstructor = _javaClass->getConstructor<jni::local_ref<T>()>();
     } catch (const jni::JniException& exc) {
       std::string message = exc.what();
       std::string descriptor = javaClassDescriptor;
@@ -73,7 +73,7 @@ private:
 
 private:
   jni::alias_ref<jni::JClass> _javaClass;
-  jni::JConstructor<T()> _defaultConstructor;
+  jni::JConstructor<jni::local_ref<T>()> _defaultConstructor;
 };
 
 } // namespace margelo::nitro

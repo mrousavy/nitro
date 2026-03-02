@@ -114,13 +114,12 @@ namespace ${cxxNamespace} {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
     };
 
-  protected:
-    // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<JavaPart> jThis) :
-      HybridObject(${name.HybridTSpec}::TAG),
-      _javaPart(jni::make_global(jThis)) {}
-
   public:
+    // C++ constructor that wraps the Java Part
+    explicit ${name.JHybridTSpec}(const jni::local_ref<JavaPart>& javaPart) :
+      HybridObject(${name.HybridTSpec}::TAG),
+      _javaPart(jni::make_global(javaPart)) {}
+
     ~${name.JHybridTSpec}() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });

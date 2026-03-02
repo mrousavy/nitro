@@ -26,13 +26,12 @@ namespace margelo::nitro::test {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
     };
 
-  protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridRecyclableTestViewSpec(jni::alias_ref<JavaPart> jThis) :
-      HybridObject(HybridRecyclableTestViewSpec::TAG),
-      _javaPart(jni::make_global(jThis)) {}
-
   public:
+    // C++ constructor that wraps the Java Part
+    explicit JHybridRecyclableTestViewSpec(const jni::local_ref<JavaPart>& javaPart) :
+      HybridObject(HybridRecyclableTestViewSpec::TAG),
+      _javaPart(jni::make_global(javaPart)) {}
+
     ~JHybridRecyclableTestViewSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
