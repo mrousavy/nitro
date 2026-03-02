@@ -22,8 +22,6 @@ namespace margelo::nitro::test::external {
                                        public virtual HybridSomeExternalObjectSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
@@ -59,8 +57,6 @@ namespace margelo::nitro::test::external {
     OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<JHybridSomeExternalObjectSpec::javaobject> _javaPart;
   };
 

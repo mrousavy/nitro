@@ -22,8 +22,6 @@ namespace margelo::nitro::test {
                                           public virtual HybridTestObjectSwiftKotlinSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
@@ -189,8 +187,6 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> _javaPart;
   };
 

@@ -22,8 +22,6 @@ namespace margelo::nitro::test {
                                        public virtual HybridRecyclableTestViewSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
@@ -59,8 +57,6 @@ namespace margelo::nitro::test {
     
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<JHybridRecyclableTestViewSpec::javaobject> _javaPart;
   };
 

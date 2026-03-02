@@ -22,8 +22,6 @@ namespace margelo::nitro::test {
                                    public virtual HybridPlatformObjectSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
@@ -58,8 +56,6 @@ namespace margelo::nitro::test {
     std::string getOSVersion() override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<JHybridPlatformObjectSpec::javaobject> _javaPart;
   };
 

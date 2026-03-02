@@ -31,7 +31,7 @@ void registerAllNatives() {
   using namespace margelo::nitro::test::external;
 
   // Register native JNI methods
-  margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
+  
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(

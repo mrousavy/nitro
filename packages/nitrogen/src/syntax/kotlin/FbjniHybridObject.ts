@@ -9,7 +9,6 @@ import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type } from '../types/Type.js'
-import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -94,8 +93,6 @@ namespace ${cxxNamespace} {
 ${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via \`initHybrid()\`)
@@ -130,24 +127,11 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     ${indent(methodsDecl, '    ')}
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<${name.JHybridTSpec}::javaobject> _javaPart;
   };
 
 } // namespace ${cxxNamespace}
   `.trim()
-
-  // Make sure we register all native JNI methods on app startup
-  addJNINativeRegistration({
-    namespace: cxxNamespace,
-    className: `${name.JHybridTSpec}`,
-    import: {
-      name: `${name.JHybridTSpec}.hpp`,
-      space: 'user',
-      language: 'c++',
-    },
-  })
 
   const propertiesImpl = properties
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
@@ -179,16 +163,6 @@ ${cppForwardDeclarations.join('\n')}
 ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
-
-  jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void ${name.JHybridTSpec}::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", ${name.JHybridTSpec}::initHybrid),
-    });
-  }
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");

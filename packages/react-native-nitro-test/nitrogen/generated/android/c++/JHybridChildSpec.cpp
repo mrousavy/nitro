@@ -29,16 +29,6 @@ namespace margelo::nitro::test { struct Person; }
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridChildSpec::jhybriddata> JHybridChildSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void JHybridChildSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridChildSpec::initHybrid),
-    });
-  }
-
   size_t JHybridChildSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);

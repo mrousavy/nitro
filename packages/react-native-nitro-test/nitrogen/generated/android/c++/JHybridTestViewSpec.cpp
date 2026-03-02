@@ -18,16 +18,6 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridTestViewSpec::jhybriddata> JHybridTestViewSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void JHybridTestViewSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridTestViewSpec::initHybrid),
-    });
-  }
-
   size_t JHybridTestViewSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);

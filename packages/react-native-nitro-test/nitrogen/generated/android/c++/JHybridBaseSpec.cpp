@@ -13,16 +13,6 @@
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridBaseSpec::jhybriddata> JHybridBaseSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void JHybridBaseSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridBaseSpec::initHybrid),
-    });
-  }
-
   size_t JHybridBaseSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);

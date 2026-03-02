@@ -1,7 +1,6 @@
 package com.margelo.nitro.core
 
 import androidx.annotation.Keep
-import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
 /**

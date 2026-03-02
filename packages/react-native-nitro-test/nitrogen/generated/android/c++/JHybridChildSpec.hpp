@@ -23,8 +23,6 @@ namespace margelo::nitro::test {
                           public virtual HybridChildSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
@@ -60,8 +58,6 @@ namespace margelo::nitro::test {
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
     jni::global_ref<JHybridChildSpec::javaobject> _javaPart;
   };
 

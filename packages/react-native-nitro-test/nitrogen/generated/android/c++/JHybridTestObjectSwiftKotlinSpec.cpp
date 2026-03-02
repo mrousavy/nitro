@@ -129,16 +129,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridTestObjectSwiftKotlinSpec::jhybriddata> JHybridTestObjectSwiftKotlinSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void JHybridTestObjectSwiftKotlinSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridTestObjectSwiftKotlinSpec::initHybrid),
-    });
-  }
-
   size_t JHybridTestObjectSwiftKotlinSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);

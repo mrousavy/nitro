@@ -17,16 +17,6 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 namespace margelo::nitro::test::external {
 
-  jni::local_ref<JHybridSomeExternalObjectSpec::jhybriddata> JHybridSomeExternalObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-    return makeCxxInstance(jThis);
-  }
-
-  void JHybridSomeExternalObjectSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridSomeExternalObjectSpec::initHybrid),
-    });
-  }
-
   size_t JHybridSomeExternalObjectSpec::getExternalMemorySize() noexcept {
     static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
