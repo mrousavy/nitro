@@ -41,6 +41,13 @@ abstract class HybridPlatformObjectSpec: HybridObject() {
     return "[HybridObject PlatformObject]"
   }
 
+  // Default implementation of `HybridObject.dispose()`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   
 

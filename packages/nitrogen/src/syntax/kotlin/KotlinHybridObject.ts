@@ -99,6 +99,13 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     return "[HybridObject ${name.T}]"
   }
 
+  // Default implementation of \`HybridObject.dispose()\`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   ${indent(properties, '  ')}
 

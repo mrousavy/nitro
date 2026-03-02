@@ -41,6 +41,13 @@ abstract class HybridBaseSpec: HybridObject() {
     return "[HybridObject Base]"
   }
 
+  // Default implementation of `HybridObject.dispose()`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   @get:DoNotStrip
   @get:Keep

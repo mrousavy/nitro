@@ -46,6 +46,13 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return "[HybridObject TestObjectSwiftKotlin]"
   }
 
+  // Default implementation of `HybridObject.dispose()`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   @get:DoNotStrip
   @get:Keep

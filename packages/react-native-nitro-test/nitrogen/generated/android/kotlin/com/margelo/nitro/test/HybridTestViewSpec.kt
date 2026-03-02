@@ -41,6 +41,13 @@ abstract class HybridTestViewSpec: HybridView() {
     return "[HybridObject TestView]"
   }
 
+  // Default implementation of `HybridObject.dispose()`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   @get:DoNotStrip
   @get:Keep

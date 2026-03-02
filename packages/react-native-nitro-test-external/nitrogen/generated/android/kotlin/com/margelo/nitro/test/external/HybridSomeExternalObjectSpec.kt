@@ -41,6 +41,13 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
     return "[HybridObject SomeExternalObject]"
   }
 
+  // Default implementation of `HybridObject.dispose()`
+  @Synchronized
+  override fun dispose() {
+    super.dispose()
+    mHybridData.resetNative()
+  }
+
   // Properties
   
 
