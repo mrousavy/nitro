@@ -31,13 +31,19 @@ public:
     }
     explicit CppPart(jni::alias_ref<CppPart::javaobject> jThis): _jThis(jni::make_global(jThis)) { }
 
-    std::shared_ptr<JHybridObject> getHybridObject() {
+    template <typename T>
+    // TODO: Requires T extends JHybridObject
+    std::shared_ptr<T> getHybridObject() {
       if (auto hybridObject = _hybridObject.lock()) {
-        return hybridObject;
+        auto castHybridObject = std::dynamic_pointer_cast<T>(hybridObject);
+        if (castHybridObject == nullptr) {
+          throw std::runtime_error("Failed to cast JHybridObject to T!");
+        }
+        return castHybridObject;
       }
       static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
       auto javaPart = _jThis->getFieldValue(javaPartField);
-      auto hybridObject = std::make_shared<JHybridObject>(javaPart);
+      auto hybridObject = std::make_shared<T>(javaPart);
       _hybridObject = hybridObject;
       return hybridObject;
     }
@@ -55,6 +61,7 @@ public:
 
 public:
   explicit JHybridObject(const jni::local_ref<JavaPart>& javaPart):
+    HybridObject("JHybridObject"),
     _javaPart(jni::make_global(javaPart)) {}
 
   size_t getExternalMemorySize() noexcept override;

@@ -28,15 +28,9 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridChildSpec::JavaPart, JHybridBaseSpec::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
       std::shared_ptr<JHybridChildSpec> getCppPart() {
-        // TODO: Cache this in the Java part via weak_ptr
         static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
         jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
-        std::shared_ptr<JHybridObject> hybridObject = cppPart->cthis()->getHybridObject();
-        auto cast = std::dynamic_pointer_cast<JHybridChildSpec>(hybridObject);
-        if (cast == nullptr) {
-          throw std::runtime_error("Failed to cast!");
-        }
-        return cast;
+        return cppPart->cthis()->getHybridObject<JHybridChildSpec>();
       }
     };
 

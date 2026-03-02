@@ -130,15 +130,9 @@ namespace ${cxxNamespace} {
     struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppJavaBase}> {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
       std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
-        // TODO: Cache this in the Java part via weak_ptr
         static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
         jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
-        std::shared_ptr<JHybridObject> hybridObject = cppPart->cthis()->getHybridObject();
-        auto cast = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
-        if (cast == nullptr) {
-          throw std::runtime_error("Failed to cast!");
-        }
-        return cast;
+        return cppPart->cthis()->getHybridObject<${name.JHybridTSpec}>();
       }
     };
 
