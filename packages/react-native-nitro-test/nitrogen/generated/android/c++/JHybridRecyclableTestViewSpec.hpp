@@ -25,6 +25,12 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
 
+      std::shared_ptr<JHybridRecyclableTestViewSpec> getCppPart() {
+        // TODO: Cache this in the Java part via weak_ptr
+        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        return std::make_shared<JHybridRecyclableTestViewSpec>(javaPart);
+      }
+
       // Create a new instance of JHybridRecyclableTestViewSpec::JavaPart.
       // This method throws if there is no default-constructor in Java.
       static jni::local_ref<JavaPart> callDefaultConstructor() {

@@ -16,7 +16,7 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridRecyclableTestViewState>;
 
 void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridRecyclableTestViewSpec> view,
+                                           jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> view,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -36,7 +36,8 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
 
   // Update all props if they are dirty
   if (props->isBlue.isDirty) {
-    view->setIsBlue(props->isBlue.value);
+    // TODO: Make this work again with ::JavaPart (we dont have cthis())
+    // view->setIsBlue(props->isBlue.value);
     props->isBlue.isDirty = false;
   }
 
@@ -45,8 +46,9 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<JHybridRecyclableTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridRecyclableTestViewSpec>();
-      maybeFunc.value()(shared);
+      // TODO: Make this work again with ::JavaPart (we dont have cthis())
+      // std::shared_ptr<JHybridRecyclableTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridRecyclableTestViewSpec>();
+      // maybeFunc.value()(shared);
     }
     props->hybridRef.isDirty = false;
   }

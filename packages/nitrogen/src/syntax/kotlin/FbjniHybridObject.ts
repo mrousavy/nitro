@@ -114,6 +114,12 @@ namespace ${cxxNamespace} {
     public:
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
 
+      std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
+        // TODO: Cache this in the Java part via weak_ptr
+        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        return std::make_shared<${name.JHybridTSpec}>(javaPart);
+      }
+
       // Create a new instance of ${name.JHybridTSpec}::JavaPart.
       // This method throws if there is no default-constructor in Java.
       static jni::local_ref<JavaPart> callDefaultConstructor() {

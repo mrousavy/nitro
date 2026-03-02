@@ -29,8 +29,8 @@ namespace margelo::nitro::test {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person;";
 
-    static jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> create_0(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JVariant_HybridTestObjectSwiftKotlinSpec_Person(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec>)>("create");
+    static jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> create_0(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JVariant_HybridTestObjectSwiftKotlinSpec_Person(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> create_1(jni::alias_ref<JPerson> value) {
@@ -54,8 +54,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$First;";
     
-      [[nodiscard]] jni::local_ref<JHybridTestObjectSwiftKotlinSpec> getValue() const {
-        static const auto field = javaClassStatic()->getField<JHybridTestObjectSwiftKotlinSpec>("value");
+      [[nodiscard]] jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> getValue() const {
+        static const auto field = javaClassStatic()->getField<JHybridTestObjectSwiftKotlinSpec::JavaPart>("value");
         return getFieldValue(field);
       }
     };

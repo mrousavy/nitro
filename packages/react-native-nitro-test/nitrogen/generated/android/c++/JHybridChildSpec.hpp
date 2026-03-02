@@ -29,6 +29,12 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
 
+      std::shared_ptr<JHybridChildSpec> getCppPart() {
+        // TODO: Cache this in the Java part via weak_ptr
+        jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
+        return std::make_shared<JHybridChildSpec>(javaPart);
+      }
+
       // Create a new instance of JHybridChildSpec::JavaPart.
       // This method throws if there is no default-constructor in Java.
       static jni::local_ref<JavaPart> callDefaultConstructor() {

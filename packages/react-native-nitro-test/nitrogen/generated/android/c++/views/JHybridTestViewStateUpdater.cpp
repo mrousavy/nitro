@@ -16,7 +16,7 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 
 void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridTestViewSpec> view,
+                                           jni::alias_ref<JHybridTestViewSpec::JavaPart> view,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -36,19 +36,23 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
 
   // Update all props if they are dirty
   if (props->isBlue.isDirty) {
-    view->setIsBlue(props->isBlue.value);
+    // TODO: Make this work again with ::JavaPart (we dont have cthis())
+    // view->setIsBlue(props->isBlue.value);
     props->isBlue.isDirty = false;
   }
   if (props->hasBeenCalled.isDirty) {
-    view->setHasBeenCalled(props->hasBeenCalled.value);
+    // TODO: Make this work again with ::JavaPart (we dont have cthis())
+    // view->setHasBeenCalled(props->hasBeenCalled.value);
     props->hasBeenCalled.isDirty = false;
   }
   if (props->colorScheme.isDirty) {
-    view->setColorScheme(props->colorScheme.value);
+    // TODO: Make this work again with ::JavaPart (we dont have cthis())
+    // view->setColorScheme(props->colorScheme.value);
     props->colorScheme.isDirty = false;
   }
   if (props->someCallback.isDirty) {
-    view->setSomeCallback(props->someCallback.value);
+    // TODO: Make this work again with ::JavaPart (we dont have cthis())
+    // view->setSomeCallback(props->someCallback.value);
     props->someCallback.isDirty = false;
   }
 
@@ -57,8 +61,9 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<JHybridTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridTestViewSpec>();
-      maybeFunc.value()(shared);
+      // TODO: Make this work again with ::JavaPart (we dont have cthis())
+      // std::shared_ptr<JHybridTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridTestViewSpec>();
+      // maybeFunc.value()(shared);
     }
     props->hybridRef.isDirty = false;
   }
