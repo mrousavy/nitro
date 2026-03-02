@@ -24,9 +24,7 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridTestViewSpec::JavaPart, JHybridObject::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestViewSpec;";
       std::shared_ptr<JHybridTestViewSpec> getCppPart() {
-        static auto field = javaClassStatic()->getField<JHybridTestViewSpec::CppPart::javaobject>("cppPart");
-        jni::local_ref<JHybridTestViewSpec::CppPart::javaobject> cppPart = getFieldValue(field);
-        auto hybridObject = cppPart->cthis()->getHybridObject();
+        auto hybridObject = JHybridObject::JavaPart::getCppPart();
         auto castHybridObject = std::dynamic_pointer_cast<JHybridTestViewSpec>(hybridObject);
         if (castHybridObject == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to downcast JHybridObject!");
@@ -43,6 +41,15 @@ namespace margelo::nitro::test {
           throw std::runtime_error("Failed to downcast JavaPart!");
         }
         return std::make_shared<JHybridTestViewSpec>(castJavaPart);
+      }
+      static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> jThis) {
+        return makeCxxInstance(jThis);
+      }
+      explicit CppPart(jni::alias_ref<CppPart::javaobject> jThis): HybridBase(jThis) { }
+      static void registerNatives() {
+        registerHybrid({
+          makeNativeMethod("initHybrid", CppPart::initHybrid),
+        });
       }
     };
 

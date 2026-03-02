@@ -26,13 +26,10 @@ abstract class HybridObject {
     }
     private external fun initHybrid(): HybridData
   }
-
-  /**
-   * Represents the C++ part.
-   * This is implemented via a weak_ref to the C++ part
-   * to break the cyclic chain.
-   */
-  abstract val cppPart: CppPart
+  private var cppPart: CppPart = CppPart(this)
+  protected open fun updateCppPart(cppPart: CppPart) {
+    this.cppPart = cppPart
+  }
 
     /**
    * Get the memory size of the Kotlin instance (plus any external heap allocations),

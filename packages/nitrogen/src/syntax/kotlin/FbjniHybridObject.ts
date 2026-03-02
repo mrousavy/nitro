@@ -133,9 +133,7 @@ namespace ${cxxNamespace} {
     struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppJavaBase}> {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
       std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
-        static auto field = javaClassStatic()->getField<${name.JHybridTSpec}::CppPart::javaobject>("cppPart");
-        jni::local_ref<${name.JHybridTSpec}::CppPart::javaobject> cppPart = getFieldValue(field);
-        auto hybridObject = cppPart->cthis()->getHybridObject();
+        auto hybridObject = ${cppJavaBase}::getCppPart();
         auto castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
         if (castHybridObject == nullptr) [[unlikely]] {
           throw std::runtime_error("Failed to downcast JHybridObject!");
@@ -152,6 +150,15 @@ namespace ${cxxNamespace} {
           throw std::runtime_error("Failed to downcast JavaPart!");
         }
         return std::make_shared<${name.JHybridTSpec}>(castJavaPart);
+      }
+      static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> jThis) {
+        return makeCxxInstance(jThis);
+      }
+      explicit CppPart(jni::alias_ref<CppPart::javaobject> jThis): HybridBase(jThis) { }
+      static void registerNatives() {
+        registerHybrid({
+          makeNativeMethod("initHybrid", CppPart::initHybrid),
+        });
       }
     };
 

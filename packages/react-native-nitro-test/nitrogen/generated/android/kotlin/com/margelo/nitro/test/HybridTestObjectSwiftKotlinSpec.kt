@@ -32,7 +32,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Suppress("KotlinJniMissingFunction")
   @Keep
   @DoNotStrip
-  open class CppPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CppPart(javaPart) {
+  open class CppPart(
+    @Keep
+    @DoNotStrip
+    override val javaPart: HybridTestObjectSwiftKotlinSpec
+  ): HybridObject.CppPart(javaPart) {
     @DoNotStrip
     @Keep
     private var mHybridData: HybridData = initHybrid()
@@ -44,8 +48,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     }
     private external fun initHybrid(): HybridData
   }
+  private var cppPart = CppPart(this)
 
-  override val cppPart: HybridObject.CppPart = CppPart(this)
+  init {
+    super.updateCppPart(cppPart)
+  }
+  protected fun updateCppPart(cppPart: CppPart) {
+    this.cppPart = cppPart
+    super.updateCppPart(cppPart)
+  }
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

@@ -22,6 +22,11 @@ public:
   // Java part for JHybridObject
   struct JavaPart: public jni::JavaClass<JHybridObject::JavaPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+    std::shared_ptr<JHybridObject> getCppPart() {
+      static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
+      jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
+      return cppPart->cthis()->getHybridObject();
+    }
   };
   // C++ part for JHybridObject
   struct CppPart: public jni::HybridClass<JHybridObject::CppPart> {
