@@ -39,9 +39,9 @@ use super::variant_bool_f64::Variant_bool_f64;
 use super::variant_bool_old_enum::Variant_bool_OldEnum;
 use super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64;
 use super::variant_bool_weird_numbers_enum::Variant_bool_WeirdNumbersEnum;
-use super::variant_box_dyn_hybrid_base_spec__optional_wrapper::Variant_Box_dyn_HybridBaseSpec__OptionalWrapper;
-use super::variant_box_dyn_hybrid_test_object_rust_spec__person::Variant_Box_dyn_HybridTestObjectRustSpec__Person;
 use super::variant_car_person::Variant_Car_Person;
+use super::variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper::Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper;
+use super::variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person::Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person;
 use super::variant_string_f64::Variant_String_f64;
 use super::weird_numbers_enum::WeirdNumbersEnum;
 use super::wrapped_js_struct::WrappedJsStruct;
@@ -54,22 +54,22 @@ use std::collections::HashMap;
 /// ```rust
 /// #[unsafe(no_mangle)]
 /// pub extern "C" fn create_HybridTestObjectRustSpec() -> *mut std::ffi::c_void {
-///     let obj: Box<dyn HybridTestObjectRustSpec> = Box::new(MyTestObjectRust::new());
+///     let obj: std::sync::Arc<dyn HybridTestObjectRustSpec> = std::sync::Arc::new(MyTestObjectRust::new());
 ///     Box::into_raw(Box::new(obj)) as *mut std::ffi::c_void
 /// }
 /// ```
 ///
-/// Note: The factory returns a `Box<Box<dyn HybridTestObjectRustSpec>>` (double-boxed)
-/// because the C++ bridge stores it as an opaque `void*` pointing to the trait object.
+/// Note: The factory returns a `Box<Arc<dyn HybridTestObjectRustSpec>>` — the outer Box
+/// provides a stable thin pointer for C++, while the inner Arc enables shared ownership.
 ///
 /// All methods take `&self` (shared reference) because the C++ bridge may call
 /// methods concurrently from multiple threads. Use interior mutability
 /// (`Mutex`, `RwLock`, `AtomicXxx`, etc.) for any mutable state.
 pub trait HybridTestObjectRustSpec: Send + Sync {
     // Properties
-    fn this_object(&self) -> Box<dyn HybridTestObjectRustSpec>;
-    fn optional_hybrid(&self) -> Option<Box<dyn HybridTestObjectRustSpec>>;
-    fn set_optional_hybrid(&self, value: Option<Box<dyn HybridTestObjectRustSpec>>);
+    fn this_object(&self) -> std::sync::Arc<dyn HybridTestObjectRustSpec>;
+    fn optional_hybrid(&self) -> Option<std::sync::Arc<dyn HybridTestObjectRustSpec>>;
+    fn set_optional_hybrid(&self, value: Option<std::sync::Arc<dyn HybridTestObjectRustSpec>>);
     fn number_value(&self) -> f64;
     fn set_number_value(&self, value: f64);
     fn bool_value(&self) -> bool;
@@ -106,11 +106,11 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     fn set_some_variant(&self, value: Variant_String_f64);
 
     // Methods
-    fn new_test_object(&self) -> Result<Box<dyn HybridTestObjectRustSpec>, String>;
+    fn new_test_object(&self) -> Result<std::sync::Arc<dyn HybridTestObjectRustSpec>, String>;
     fn get_variant_hybrid(
         &self,
-        variant: Variant_Box_dyn_HybridTestObjectRustSpec__Person,
-    ) -> Result<Variant_Box_dyn_HybridTestObjectRustSpec__Person, String>;
+        variant: Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person,
+    ) -> Result<Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person, String>;
     fn simple_func(&self) -> Result<(), String>;
     fn add_numbers(&self, a: f64, b: f64) -> Result<f64, String>;
     fn add_strings(&self, a: String, b: String) -> Result<String, String>;
@@ -129,8 +129,8 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     ) -> Result<(), String>;
     fn bounce_hybrid_objects(
         &self,
-        array: Vec<Box<dyn HybridChildSpec>>,
-    ) -> Result<Vec<Box<dyn HybridChildSpec>>, String>;
+        array: Vec<std::sync::Arc<dyn HybridChildSpec>>,
+    ) -> Result<Vec<std::sync::Arc<dyn HybridChildSpec>>, String>;
     fn bounce_functions(
         &self,
         functions: Vec<Box<dyn Fn() + Send + Sync>>,
@@ -185,7 +185,7 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     fn call_callback(&self, callback: Box<dyn Fn() + Send + Sync>) -> Result<(), String>;
     fn call_callback_that_returns_promise_void(
         &self,
-        callback: Box<dyn Fn() + Send + Sync>,
+        callback: Box<dyn Fn() -> Result<(), String> + Send + Sync>,
     ) -> Result<(), String>;
     fn call_all(
         &self,
@@ -200,16 +200,16 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     ) -> Result<(), String>;
     fn call_sum_up_n_times(
         &self,
-        callback: Box<dyn Fn() -> f64 + Send + Sync>,
+        callback: Box<dyn Fn() -> Result<f64, String> + Send + Sync>,
         n: f64,
     ) -> Result<f64, String>;
     fn callback_async_promise(
         &self,
-        callback: Box<dyn Fn() -> f64 + Send + Sync>,
+        callback: Box<dyn Fn() -> Result<f64, String> + Send + Sync>,
     ) -> Result<f64, String>;
     fn callback_async_promise_buffer(
         &self,
-        callback: Box<dyn Fn() -> NitroBuffer + Send + Sync>,
+        callback: Box<dyn Fn() -> Result<NitroBuffer, String> + Send + Sync>,
     ) -> Result<NitroBuffer, String>;
     fn get_complex_callback(&self) -> Result<Box<dyn Fn(f64) + Send + Sync>, String>;
     fn two_optional_callbacks(
@@ -225,11 +225,11 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     ) -> Result<Box<dyn Fn(f64) + Send + Sync>, String>;
     fn get_value_from_js_callback_and_wait(
         &self,
-        get_value: Box<dyn Fn() -> f64 + Send + Sync>,
+        get_value: Box<dyn Fn() -> Result<f64, String> + Send + Sync>,
     ) -> Result<f64, String>;
     fn get_value_from_js_callback(
         &self,
-        callback: Box<dyn Fn() -> String + Send + Sync>,
+        callback: Box<dyn Fn() -> Result<String, String> + Send + Sync>,
         and_then_call: Box<dyn Fn(String) + Send + Sync>,
     ) -> Result<(), String>;
     fn get_car(&self) -> Result<Car, String>;
@@ -270,31 +270,41 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     fn pass_named_variant(&self, variant: NamedVariant) -> Result<NamedVariant, String>;
     fn pass_all_empty_object_variant(
         &self,
-        variant: Variant_Box_dyn_HybridBaseSpec__OptionalWrapper,
-    ) -> Result<Variant_Box_dyn_HybridBaseSpec__OptionalWrapper, String>;
+        variant: Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper,
+    ) -> Result<Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper, String>;
     fn bounce_complex_variant(&self, variant: CoreTypesVariant)
         -> Result<CoreTypesVariant, String>;
-    fn create_child(&self) -> Result<Box<dyn HybridChildSpec>, String>;
-    fn create_base(&self) -> Result<Box<dyn HybridBaseSpec>, String>;
-    fn create_base_actual_child(&self) -> Result<Box<dyn HybridBaseSpec>, String>;
+    fn create_child(&self) -> Result<std::sync::Arc<dyn HybridChildSpec>, String>;
+    fn create_base(&self) -> Result<std::sync::Arc<dyn HybridBaseSpec>, String>;
+    fn create_base_actual_child(&self) -> Result<std::sync::Arc<dyn HybridBaseSpec>, String>;
     fn bounce_child(
         &self,
-        child: Box<dyn HybridChildSpec>,
-    ) -> Result<Box<dyn HybridChildSpec>, String>;
-    fn bounce_base(&self, base: Box<dyn HybridBaseSpec>)
-        -> Result<Box<dyn HybridBaseSpec>, String>;
+        child: std::sync::Arc<dyn HybridChildSpec>,
+    ) -> Result<std::sync::Arc<dyn HybridChildSpec>, String>;
+    fn bounce_base(
+        &self,
+        base: std::sync::Arc<dyn HybridBaseSpec>,
+    ) -> Result<std::sync::Arc<dyn HybridBaseSpec>, String>;
     fn bounce_child_base(
         &self,
-        child: Box<dyn HybridChildSpec>,
-    ) -> Result<Box<dyn HybridBaseSpec>, String>;
-    fn cast_base(&self, base: Box<dyn HybridBaseSpec>) -> Result<Box<dyn HybridChildSpec>, String>;
+        child: std::sync::Arc<dyn HybridChildSpec>,
+    ) -> Result<std::sync::Arc<dyn HybridBaseSpec>, String>;
+    fn cast_base(
+        &self,
+        base: std::sync::Arc<dyn HybridBaseSpec>,
+    ) -> Result<std::sync::Arc<dyn HybridChildSpec>, String>;
     fn callback_sync(&self, callback: Box<dyn Fn() -> f64 + Send + Sync>) -> Result<f64, String>;
-    fn get_is_view_blue(&self, view: Box<dyn HybridTestViewSpec>) -> Result<bool, String>;
+    fn get_is_view_blue(
+        &self,
+        view: std::sync::Arc<dyn HybridTestViewSpec>,
+    ) -> Result<bool, String>;
     fn bounce_external_hybrid(
         &self,
-        external_object: Box<dyn HybridSomeExternalObjectSpec>,
-    ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
-    fn create_internal_object(&self) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
+        external_object: std::sync::Arc<dyn HybridSomeExternalObjectSpec>,
+    ) -> Result<std::sync::Arc<dyn HybridSomeExternalObjectSpec>, String>;
+    fn create_internal_object(
+        &self,
+    ) -> Result<std::sync::Arc<dyn HybridSomeExternalObjectSpec>, String>;
     fn bounce_external_struct(
         &self,
         external_struct: ExternalObjectStruct,
@@ -305,8 +315,8 @@ pub trait HybridTestObjectRustSpec: Send + Sync {
     ) -> Result<StringOrExternal, String>;
     fn create_external_variant_from_func(
         &self,
-        factory: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec> + Send + Sync>,
-    ) -> Result<Box<dyn HybridSomeExternalObjectSpec>, String>;
+        factory: Box<dyn Fn() -> std::sync::Arc<dyn HybridSomeExternalObjectSpec> + Send + Sync>,
+    ) -> Result<std::sync::Arc<dyn HybridSomeExternalObjectSpec>, String>;
 
     /// Return the size of any external heap allocations, in bytes.
     /// This is used to inform the JavaScript GC about native memory pressure.
@@ -326,7 +336,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_this_object(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             Box::into_raw(Box::new(obj.this_object())) as *mut std::ffi::c_void
         })) {
             Ok(__result) => __FfiResult_ptr {
@@ -353,7 +363,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -367,7 +377,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_hybrid(
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -398,7 +408,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_hybrid({
                 #[repr(C)]
                 struct __Opt {
@@ -407,8 +417,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_hybrid(
                 }
                 let __s = *Box::from_raw(value as *mut __Opt);
                 if __s.has_value != 0 {
-                    Some(*Box::from_raw(
-                        __s.value as *mut Box<dyn HybridTestObjectRustSpec>,
+                    Some(std::sync::Arc::clone(
+                        &*(__s.value as *const std::sync::Arc<dyn HybridTestObjectRustSpec>),
                     ))
                 } else {
                     None
@@ -436,7 +446,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_number_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.number_value()
         })) {
             Ok(__result) => __FfiResult_f64 {
@@ -464,7 +474,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_number_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_number_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -488,7 +498,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_bool_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.bool_value()
         })) {
             Ok(__result) => __FfiResult_bool {
@@ -516,7 +526,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_bool_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_bool_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -540,7 +550,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 let __s = obj.string_value().replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
@@ -571,7 +581,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_string_value(
                 std::ffi::CStr::from_ptr(value)
                     .to_string_lossy()
@@ -599,7 +609,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_int64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.int64_value()
         })) {
             Ok(__result) => __FfiResult_i64 {
@@ -627,7 +637,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_int64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_int64_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -651,7 +661,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_uint64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.uint64_value()
         })) {
             Ok(__result) => __FfiResult_u64 {
@@ -679,7 +689,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_uint64_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_uint64_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -703,7 +713,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_null_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.null_value()
         })) {
             Ok(_) => __FfiResult_void {
@@ -728,7 +738,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_null_value(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_null_value(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -752,7 +762,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -769,7 +779,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_string(
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -800,7 +810,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_string(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_string({
                 #[repr(C)]
                 struct __Opt {
@@ -840,7 +850,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -857,7 +867,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_undefined(
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -888,7 +898,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_undefined(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_string_or_undefined({
                 #[repr(C)]
                 struct __Opt {
@@ -928,8 +938,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_string_or_null(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            Box::into_raw(Box::new(obj.string_or_null())) as *mut std::ffi::c_void
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var: __Var = match obj.string_or_null() {
+                    super::variant____string::Variant____String::First(_) => __Var {
+                        index: 0,
+                        value: std::ptr::null_mut(),
+                    },
+                    super::variant____string::Variant____String::Second(__v) => {
+                        let __ffi: *const std::ffi::c_char = {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        };
+                        __Var {
+                            index: 1,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                };
+                Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+            }
         })) {
             Ok(__result) => __FfiResult_ptr {
                 is_ok: 1,
@@ -956,8 +989,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_string_or_null(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.set_string_or_null(*Box::from_raw(value as *mut Variant____String));
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.set_string_or_null({
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(value as *mut __Var);
+                match __var.index {
+                    0 => super::variant____string::Variant____String::First(()),
+                    1 => super::variant____string::Variant____String::Second(
+                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                            __var.value as *mut *const std::ffi::c_char,
+                        ))
+                        .to_string_lossy()
+                        .into_owned(),
+                    ),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            });
         })) {
             Ok(_) => __FfiResult_void {
                 is_ok: 1,
@@ -980,7 +1031,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -990,11 +1041,35 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_array(
                 let __opt: __Opt = match obj.optional_array() {
                     Some(__v) => __Opt {
                         has_value: 1,
-                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                        value: {
+                            #[repr(C)]
+                            struct __Array {
+                                data: *mut *const std::ffi::c_char,
+                                len: usize,
+                            }
+                            let mut __items: Vec<_> = __v
+                                .into_iter()
+                                .map(|__e| {
+                                    let __s = __e.replace('\0', "");
+                                    std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                                })
+                                .collect();
+                            let __len = __items.len();
+                            let __data = if __items.is_empty() {
+                                std::ptr::null_mut()
+                            } else {
+                                __items.as_mut_ptr() as *mut *const std::ffi::c_char
+                            };
+                            std::mem::forget(__items);
+                            Box::into_raw(Box::new(__Array {
+                                data: __data,
+                                len: __len,
+                            })) as *mut std::ffi::c_void
+                        },
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -1025,7 +1100,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_array({
                 #[repr(C)]
                 struct __Opt {
@@ -1034,7 +1109,22 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_array(
                 }
                 let __s = *Box::from_raw(value as *mut __Opt);
                 if __s.has_value != 0 {
-                    Some(*Box::from_raw(__s.value as *mut Vec<String>))
+                    Some({
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *const std::ffi::c_char,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.value as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                std::ffi::CStr::from_ptr(__elem)
+                                    .to_string_lossy()
+                                    .into_owned()
+                            })
+                            .collect::<Vec<_>>()
+                    })
                 } else {
                     None
                 }
@@ -1061,7 +1151,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -1075,7 +1165,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_enum(
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -1106,7 +1196,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_enum({
                 #[repr(C)]
                 struct __Opt {
@@ -1115,9 +1205,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_enum(
                 }
                 let __s = *Box::from_raw(value as *mut __Opt);
                 if __s.has_value != 0 {
-                    Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| {
-                        panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
-                    }))
+                    Some(
+                        super::powertrain::Powertrain::from_i32(__s.value).unwrap_or_else(|| {
+                            panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
+                        }),
+                    )
                 } else {
                     None
                 }
@@ -1144,7 +1236,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -1158,7 +1250,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_old_enum(
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -1189,7 +1281,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_old_enum({
                 #[repr(C)]
                 struct __Opt {
@@ -1198,9 +1290,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_old_enum(
                 }
                 let __s = *Box::from_raw(value as *mut __Opt);
                 if __s.has_value != 0 {
-                    Some(OldEnum::from_i32(__s.value).unwrap_or_else(|| {
-                        panic!("[Nitro] Invalid OldEnum discriminant: {}", __s.value)
-                    }))
+                    Some(
+                        super::old_enum::OldEnum::from_i32(__s.value).unwrap_or_else(|| {
+                            panic!("[Nitro] Invalid OldEnum discriminant: {}", __s.value)
+                        }),
+                    )
                 } else {
                     None
                 }
@@ -1227,7 +1321,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             {
                 #[repr(C)]
                 struct __Opt {
@@ -1237,11 +1331,32 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_optional_callback(
                 let __opt: __Opt = match obj.optional_callback() {
                     Some(__v) => __Opt {
                         has_value: 1,
-                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                        value: {
+                            unsafe extern "C" fn __trampoline_0(
+                                __ud: *mut std::ffi::c_void,
+                                __a0: f64,
+                            ) {
+                                let __f =
+                                    unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) };
+                                unsafe { __f(__a0) };
+                            }
+                            unsafe extern "C" fn __destroy_0(__ud: *mut std::ffi::c_void) {
+                                unsafe {
+                                    let _ =
+                                        Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>);
+                                }
+                            }
+                            let __wrapper = super::func_void_double::Func_void_double::new(
+                                __trampoline_0,
+                                Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                                __destroy_0,
+                            );
+                            Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+                        },
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void
@@ -1272,7 +1387,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_optional_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_optional_callback({
                 #[repr(C)]
                 struct __Opt {
@@ -1315,7 +1430,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_has_boolean(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.has_boolean()
         })) {
             Ok(__result) => __FfiResult_bool {
@@ -1342,7 +1457,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_boolean(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.is_boolean()
         })) {
             Ok(__result) => __FfiResult_bool {
@@ -1369,7 +1484,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_has_boolean_writable(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.has_boolean_writable()
         })) {
             Ok(__result) => __FfiResult_bool {
@@ -1397,7 +1512,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_has_boolean_writable(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_has_boolean_writable(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -1421,7 +1536,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_boolean_writable(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.is_boolean_writable()
         })) {
             Ok(__result) => __FfiResult_bool {
@@ -1449,7 +1564,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_is_boolean_writable(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.set_is_boolean_writable(value);
         })) {
             Ok(_) => __FfiResult_void {
@@ -1473,8 +1588,31 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_some_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            Box::into_raw(Box::new(obj.some_variant())) as *mut std::ffi::c_void
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var: __Var = match obj.some_variant() {
+                    super::variant_string_f64::Variant_String_f64::First(__v) => {
+                        let __ffi: *const std::ffi::c_char = {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        };
+                        __Var {
+                            index: 0,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                    super::variant_string_f64::Variant_String_f64::Second(__v) => __Var {
+                        index: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                };
+                Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+            }
         })) {
             Ok(__result) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1501,8 +1639,28 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_some_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.set_some_variant(*Box::from_raw(value as *mut Variant_String_f64));
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.set_some_variant({
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(value as *mut __Var);
+                match __var.index {
+                    0 => super::variant_string_f64::Variant_String_f64::First(
+                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                            __var.value as *mut *const std::ffi::c_char,
+                        ))
+                        .to_string_lossy()
+                        .into_owned(),
+                    ),
+                    1 => super::variant_string_f64::Variant_String_f64::Second(*Box::from_raw(
+                        __var.value as *mut f64,
+                    )),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            });
         })) {
             Ok(_) => __FfiResult_void {
                 is_ok: 1,
@@ -1525,7 +1683,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_new_test_object(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.new_test_object()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -1562,11 +1720,17 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant =
-                *Box::from_raw(variant as *mut Variant_Box_dyn_HybridTestObjectRustSpec__Person);
-            obj.get_variant_hybrid(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index { 0 => super::variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person::Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person::First(std::sync::Arc::clone(&*(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *const std::sync::Arc<dyn HybridTestObjectRustSpec>))), 1 => super::variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person::Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person::Second({ #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } let __s = *Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut __Struct); super::person::Person { name: std::ffi::CStr::from_ptr(__s.name).to_string_lossy().into_owned(), age: __s.age } }), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+            };
+            obj.get_variant_hybrid(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person::Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person::First(__v) => { let __ffi: *mut std::ffi::c_void = Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person::Variant_std__sync__Arc_dyn_HybridTestObjectRustSpec__Person::Second(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void }; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1600,7 +1764,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_simple_func(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.simple_func()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -1633,7 +1797,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_numbers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.add_numbers(a, b)
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -1670,7 +1834,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add_strings(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __a = std::ffi::CStr::from_ptr(a).to_string_lossy().into_owned();
             let __b = std::ffi::CStr::from_ptr(b).to_string_lossy().into_owned();
             obj.add_strings(__a, __b).map(|__value| {
@@ -1713,7 +1877,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_multiple_arguments(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
             obj.multiple_arguments(num, __str, boo)
         })) {
@@ -1745,8 +1909,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_null(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.bounce_null()
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.bounce_null(())
         })) {
             Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
@@ -1777,10 +1941,48 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_strings(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<String>);
-            obj.bounce_strings(__array)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *const std::ffi::c_char,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        std::ffi::CStr::from_ptr(__elem)
+                            .to_string_lossy()
+                            .into_owned()
+                    })
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_strings(__array).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *const std::ffi::c_char,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| {
+                        let __s = __e.replace('\0', "");
+                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *const std::ffi::c_char
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1815,10 +2017,36 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_numbers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<f64>);
-            obj.bounce_numbers(__array)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut f64,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+            };
+            obj.bounce_numbers(__array).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut f64,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value.into_iter().map(|__e| __e).collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut f64
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1853,10 +2081,67 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_structs(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<Person>);
-            obj.bounce_structs(__array)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        #[repr(C)]
+                        struct __Struct {
+                            name: *const std::ffi::c_char,
+                            age: f64,
+                        }
+                        let __s = *Box::from_raw(__elem as *mut __Struct);
+                        super::person::Person {
+                            name: std::ffi::CStr::from_ptr(__s.name)
+                                .to_string_lossy()
+                                .into_owned(),
+                            age: __s.age,
+                        }
+                    })
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_structs(__array).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| {
+                        #[repr(C)]
+                        struct __Struct {
+                            name: *const std::ffi::c_char,
+                            age: f64,
+                        }
+                        Box::into_raw(Box::new(__Struct {
+                            name: {
+                                let __s = __e.name.replace('\0', "");
+                                std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                            },
+                            age: __e.age,
+                        })) as *mut std::ffi::c_void
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1891,10 +2176,48 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_partial_struct(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __person = *Box::from_raw(person as *mut PartialPerson);
-            obj.bounce_partial_struct(__person)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __person = {
+                #[repr(C)]
+                struct __Struct {
+                    name: *mut std::ffi::c_void,
+                    age: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(person as *mut __Struct);
+                super::partial_person::PartialPerson {
+                    name: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.name as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                    age: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: f64,
+                        }
+                        let __s = *Box::from_raw(__s.age as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(__s.value)
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.bounce_partial_struct(__person).map(|__value| { #[repr(C)] struct __Struct { name: *mut std::ffi::c_void, age: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { name: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __value.name { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, age: { #[repr(C)] struct __Opt { has_value: u8, value: f64 } let __opt: __Opt = match __value.age { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -1929,8 +2252,17 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_sum_up_all_passengers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __cars = *Box::from_raw(cars as *mut Vec<Car>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __cars = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(cars as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter().map(|__elem| { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } let __s = *Box::from_raw(__elem as *mut __Struct); super::car::Car { year: __s.year, make: std::ffi::CStr::from_ptr(__s.make).to_string_lossy().into_owned(), model: std::ffi::CStr::from_ptr(__s.model).to_string_lossy().into_owned(), power: __s.power, powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain).unwrap_or_else(|| { panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.powertrain) }), driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __s = *Box::from_raw(__s.driver as *mut __Opt); if __s.has_value != 0 { Some({ #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } let __s = *Box::from_raw(__s.value as *mut __Struct); super::person::Person { name: std::ffi::CStr::from_ptr(__s.name).to_string_lossy().into_owned(), age: __s.age } }) } else { None } }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let __arr = Box::from_raw(__s.passengers as *mut __Array); let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len); __v.into_iter().map(|__elem| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } let __s = *Box::from_raw(__elem as *mut __Struct); super::person::Person { name: std::ffi::CStr::from_ptr(__s.name).to_string_lossy().into_owned(), age: __s.age } }).collect::<Vec<_>>() }, is_fast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __s = *Box::from_raw(__s.isFast as *mut __Opt); if __s.has_value != 0 { Some(__s.value) } else { None } }, favourite_track: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt); if __s.has_value != 0 { Some(std::ffi::CStr::from_ptr(__s.value).to_string_lossy().into_owned()) } else { None } }, performance_scores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let __arr = Box::from_raw(__s.performanceScores as *mut __Array); let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len); __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>() }, some_variant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __s = *Box::from_raw(__s.someVariant as *mut __Opt); if __s.has_value != 0 { Some({ #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var = *Box::from_raw(__s.value as *mut __Var); match __var.index { 0 => super::variant_string_f64::Variant_String_f64::First(std::ffi::CStr::from_ptr(*Box::from_raw(__var.value as *mut *const std::ffi::c_char)).to_string_lossy().into_owned()), 1 => super::variant_string_f64::Variant_String_f64::Second(*Box::from_raw(__var.value as *mut f64)), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) } }) } else { None } } } }).collect::<Vec<_>>()
+            };
             obj.sum_up_all_passengers(__cars).map(|__value| {
                 let __s = __value.replace('\0', "");
                 std::ffi::CString::new(__s).unwrap_or_default().into_raw()
@@ -1969,10 +2301,42 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_enums(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
-            obj.bounce_enums(__array)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut i32,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        super::powertrain::Powertrain::from_i32(__elem).unwrap_or_else(|| {
+                            panic!("[Nitro] Invalid Powertrain discriminant: {}", __elem)
+                        })
+                    })
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_enums(__array).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut i32,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value.into_iter().map(|__e| __e as i32).collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut i32
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2008,8 +2372,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_complex_enum_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<Powertrain>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut i32,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        super::powertrain::Powertrain::from_i32(__elem).unwrap_or_else(|| {
+                            panic!("[Nitro] Invalid Powertrain discriminant: {}", __elem)
+                        })
+                    })
+                    .collect::<Vec<_>>()
+            };
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_void_std__vector_powertrain_::Func_void_std__vector_Powertrain_);
                 let __cb: Box<dyn Fn(Vec<Powertrain>) + Send + Sync> =
@@ -2047,10 +2426,43 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_hybrid_objects(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array = *Box::from_raw(array as *mut Vec<Box<dyn HybridChildSpec>>);
-            obj.bounce_hybrid_objects(__array)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        *Box::from_raw(__elem as *mut std::sync::Arc<dyn HybridChildSpec>)
+                    })
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_hybrid_objects(__array).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| Box::into_raw(Box::new(__e)) as *mut std::ffi::c_void)
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2085,10 +2497,61 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_functions(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __functions = *Box::from_raw(functions as *mut Vec<Box<dyn Fn() + Send + Sync>>);
-            obj.bounce_functions(__functions)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __functions = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(functions as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| {
+                        let __wrapper = Box::from_raw(__elem as *mut super::func_void::Func_void);
+                        let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
+                        __cb
+                    })
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_functions(__functions).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| {
+                        unsafe extern "C" fn __trampoline_1(__ud: *mut std::ffi::c_void) {
+                            let __f = unsafe { &*(__ud as *mut Box<dyn Fn() + Send + Sync>) };
+                            unsafe { __f() };
+                        }
+                        unsafe extern "C" fn __destroy_1(__ud: *mut std::ffi::c_void) {
+                            unsafe {
+                                let _ = Box::from_raw(__ud as *mut Box<dyn Fn() + Send + Sync>);
+                            }
+                        }
+                        let __wrapper = super::func_void::Func_void::new(
+                            __trampoline_1,
+                            Box::into_raw(Box::new(__e)) as *mut std::ffi::c_void,
+                            __destroy_1,
+                        );
+                        Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2123,10 +2586,38 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_maps(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __maps = *Box::from_raw(maps as *mut Vec<AnyMap>);
-            obj.bounce_maps(__maps)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __maps = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(maps as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| AnyMap::from_raw(__elem))
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_maps(__maps).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value.into_iter().map(|__e| __e.as_raw()).collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2161,10 +2652,41 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_promises(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __promises = *Box::from_raw(promises as *mut Vec<f64>);
-            obj.bounce_promises(__promises)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __promises = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(promises as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| *Box::from_raw(__elem as *mut f64))
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_promises(__promises).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| Box::into_raw(Box::new(__e)) as *mut std::ffi::c_void)
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2199,10 +2721,41 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffers(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __array_buffers = *Box::from_raw(array_buffers as *mut Vec<NitroBuffer>);
-            obj.bounce_array_buffers(__array_buffers)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __array_buffers = {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let __arr = Box::from_raw(array_buffers as *mut __Array);
+                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                __v.into_iter()
+                    .map(|__elem| *Box::from_raw(__elem as *mut super::nitro_buffer::NitroBuffer))
+                    .collect::<Vec<_>>()
+            };
+            obj.bounce_array_buffers(__array_buffers).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *mut std::ffi::c_void,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| Box::into_raw(Box::new(__e)) as *mut std::ffi::c_void)
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2236,7 +2789,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_map().map(|__value| __value.as_raw())
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
@@ -2272,7 +2825,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_map_roundtrip(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
             obj.map_roundtrip(__map).map(|__value| __value.as_raw())
         })) {
@@ -2309,10 +2862,33 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_map_keys(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
-            obj.get_map_keys(__map)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            obj.get_map_keys(__map).map(|__value| {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut *const std::ffi::c_char,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = __value
+                    .into_iter()
+                    .map(|__e| {
+                        let __s = __e.replace('\0', "");
+                        std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut *const std::ffi::c_char
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2348,7 +2924,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_merge_maps(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __a = AnyMap::from_raw(a);
             let __b = AnyMap::from_raw(b);
             obj.merge_maps(__a, __b).map(|__value| __value.as_raw())
@@ -2386,7 +2962,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_any_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __map = AnyMap::from_raw(map);
             obj.copy_any_map(__map).map(|__value| __value.as_raw())
         })) {
@@ -2423,10 +2999,97 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __map = *Box::from_raw(map as *mut HashMap<String, Variant_bool_f64>);
-            obj.bounce_map(__map)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __map = {
+                #[repr(C)]
+                struct __Entry {
+                    key: *const std::ffi::c_char,
+                    val: *mut std::ffi::c_void,
+                }
+                #[repr(C)]
+                struct __Record {
+                    data: *mut __Entry,
+                    len: usize,
+                }
+                let __rec = Box::from_raw(map as *mut __Record);
+                let __v = Vec::from_raw_parts(__rec.data, __rec.len, __rec.len);
+                let mut __map = std::collections::HashMap::with_capacity(__v.len());
+                for __e in __v {
+                    __map.insert(
+                        std::ffi::CStr::from_ptr(__e.key)
+                            .to_string_lossy()
+                            .into_owned(),
+                        {
+                            #[repr(C)]
+                            struct __Var {
+                                index: i32,
+                                value: *mut std::ffi::c_void,
+                            }
+                            let __var = *Box::from_raw(__e.val as *mut __Var);
+                            match __var.index {
+                                0 => super::variant_bool_f64::Variant_bool_f64::First(
+                                    *Box::from_raw(__var.value as *mut bool),
+                                ),
+                                1 => super::variant_bool_f64::Variant_bool_f64::Second(
+                                    *Box::from_raw(__var.value as *mut f64),
+                                ),
+                                _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                            }
+                        },
+                    );
+                }
+                __map
+            };
+            obj.bounce_map(__map).map(|__value| {
+                #[repr(C)]
+                struct __Entry {
+                    key: *const std::ffi::c_char,
+                    val: *mut std::ffi::c_void,
+                }
+                #[repr(C)]
+                struct __Record {
+                    data: *mut __Entry,
+                    len: usize,
+                }
+                let mut __items: Vec<__Entry> = __value
+                    .into_iter()
+                    .map(|(__k, __v)| __Entry {
+                        key: {
+                            let __s = __k.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
+                        val: {
+                            #[repr(C)]
+                            struct __Var {
+                                index: i32,
+                                value: *mut std::ffi::c_void,
+                            }
+                            let __var: __Var = match __v {
+                                super::variant_bool_f64::Variant_bool_f64::First(__v) => __Var {
+                                    index: 0,
+                                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                                },
+                                super::variant_bool_f64::Variant_bool_f64::Second(__v) => __Var {
+                                    index: 1,
+                                    value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                                },
+                            };
+                            Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+                        },
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr()
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Record {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2461,10 +3124,64 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_simple_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __map = *Box::from_raw(map as *mut HashMap<String, f64>);
-            obj.bounce_simple_map(__map)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __map = {
+                #[repr(C)]
+                struct __Entry {
+                    key: *const std::ffi::c_char,
+                    val: f64,
+                }
+                #[repr(C)]
+                struct __Record {
+                    data: *mut __Entry,
+                    len: usize,
+                }
+                let __rec = Box::from_raw(map as *mut __Record);
+                let __v = Vec::from_raw_parts(__rec.data, __rec.len, __rec.len);
+                let mut __map = std::collections::HashMap::with_capacity(__v.len());
+                for __e in __v {
+                    __map.insert(
+                        std::ffi::CStr::from_ptr(__e.key)
+                            .to_string_lossy()
+                            .into_owned(),
+                        __e.val,
+                    );
+                }
+                __map
+            };
+            obj.bounce_simple_map(__map).map(|__value| {
+                #[repr(C)]
+                struct __Entry {
+                    key: *const std::ffi::c_char,
+                    val: f64,
+                }
+                #[repr(C)]
+                struct __Record {
+                    data: *mut __Entry,
+                    len: usize,
+                }
+                let mut __items: Vec<__Entry> = __value
+                    .into_iter()
+                    .map(|(__k, __v)| __Entry {
+                        key: {
+                            let __s = __k.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
+                        val: __v,
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr()
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Record {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2499,10 +3216,114 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_extract_map(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __map_wrapper = *Box::from_raw(map_wrapper as *mut MapWrapper);
-            obj.extract_map(__map_wrapper)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __map_wrapper = {
+                #[repr(C)]
+                struct __Struct {
+                    map: *mut std::ffi::c_void,
+                    secondMap: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(map_wrapper as *mut __Struct);
+                super::map_wrapper::MapWrapper {
+                    map: {
+                        #[repr(C)]
+                        struct __Entry {
+                            key: *const std::ffi::c_char,
+                            val: *const std::ffi::c_char,
+                        }
+                        #[repr(C)]
+                        struct __Record {
+                            data: *mut __Entry,
+                            len: usize,
+                        }
+                        let __rec = Box::from_raw(__s.map as *mut __Record);
+                        let __v = Vec::from_raw_parts(__rec.data, __rec.len, __rec.len);
+                        let mut __map = std::collections::HashMap::with_capacity(__v.len());
+                        for __e in __v {
+                            __map.insert(
+                                std::ffi::CStr::from_ptr(__e.key)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                                std::ffi::CStr::from_ptr(__e.val)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            );
+                        }
+                        __map
+                    },
+                    second_map: {
+                        #[repr(C)]
+                        struct __Struct {
+                            second: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.secondMap as *mut __Struct);
+                        super::second_map_wrapper::SecondMapWrapper {
+                            second: {
+                                #[repr(C)]
+                                struct __Entry {
+                                    key: *const std::ffi::c_char,
+                                    val: *const std::ffi::c_char,
+                                }
+                                #[repr(C)]
+                                struct __Record {
+                                    data: *mut __Entry,
+                                    len: usize,
+                                }
+                                let __rec = Box::from_raw(__s.second as *mut __Record);
+                                let __v = Vec::from_raw_parts(__rec.data, __rec.len, __rec.len);
+                                let mut __map = std::collections::HashMap::with_capacity(__v.len());
+                                for __e in __v {
+                                    __map.insert(
+                                        std::ffi::CStr::from_ptr(__e.key)
+                                            .to_string_lossy()
+                                            .into_owned(),
+                                        std::ffi::CStr::from_ptr(__e.val)
+                                            .to_string_lossy()
+                                            .into_owned(),
+                                    );
+                                }
+                                __map
+                            },
+                        }
+                    },
+                }
+            };
+            obj.extract_map(__map_wrapper).map(|__value| {
+                #[repr(C)]
+                struct __Entry {
+                    key: *const std::ffi::c_char,
+                    val: *const std::ffi::c_char,
+                }
+                #[repr(C)]
+                struct __Record {
+                    data: *mut __Entry,
+                    len: usize,
+                }
+                let mut __items: Vec<__Entry> = __value
+                    .into_iter()
+                    .map(|(__k, __v)| __Entry {
+                        key: {
+                            let __s = __k.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
+                        val: {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        },
+                    })
+                    .collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr()
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Record {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2536,7 +3357,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.func_that_throws()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2571,7 +3392,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_func_that_throws_before_promis
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.func_that_throws_before_promise()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -2603,7 +3424,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_throw_error(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __error = std::ffi::CStr::from_ptr(error)
                 .to_string_lossy()
                 .into_owned();
@@ -2640,7 +3461,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_params(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __str = {
                 #[repr(C)]
                 struct __Opt {
@@ -2698,7 +3519,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_middle_param(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __boo = {
                 #[repr(C)]
                 struct __Opt {
@@ -2751,7 +3572,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __value = {
                 #[repr(C)]
                 struct __Opt {
@@ -2760,14 +3581,16 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_optional_enum(
                 }
                 let __s = *Box::from_raw(value as *mut __Opt);
                 if __s.has_value != 0 {
-                    Some(Powertrain::from_i32(__s.value).unwrap_or_else(|| {
-                        panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
-                    }))
+                    Some(
+                        super::powertrain::Powertrain::from_i32(__s.value).unwrap_or_else(|| {
+                            panic!("[Nitro] Invalid Powertrain discriminant: {}", __s.value)
+                        }),
+                    )
                 } else {
                     None
                 }
             };
-            obj.try_optional_enum(__value).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: i32 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v as i32 }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
+            obj.try_optional_enum(__value).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: i32 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v as i32 }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -2804,7 +3627,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_try_trailing_optional(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __str = std::ffi::CStr::from_ptr(str).to_string_lossy().into_owned();
             let __boo = {
                 #[repr(C)]
@@ -2854,7 +3677,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_add1_hour(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __date = date;
             obj.add1_hour(__date).map(|__value| __value)
         })) {
@@ -2890,7 +3713,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_current_date(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.current_date().map(|__value| __value)
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -2926,7 +3749,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_sync(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_sync(value)
         })) {
             Ok(Ok(__value)) => __FfiResult_i64 {
@@ -2962,7 +3785,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_calculate_fibonacci_async(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.calculate_fibonacci_async(value)
         })) {
             Ok(Ok(__value)) => __FfiResult_i64 {
@@ -2998,7 +3821,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_wait(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.wait(seconds)
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -3029,7 +3852,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_throws(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.promise_throws()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -3060,7 +3883,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -3095,7 +3918,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_returns_instantly_asyn
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.promise_returns_instantly_async()
         })) {
             Ok(Ok(__value)) => __FfiResult_f64 {
@@ -3130,7 +3953,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_void_ins
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.promise_that_resolves_void_instantly()
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -3161,8 +3984,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_promise_that_resolves_to_undef
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.promise_that_resolves_to_undefined().map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: f64 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.promise_that_resolves_to_undefined().map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: f64 } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -3197,7 +4020,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __promise = *Box::from_raw(promise as *mut f64);
             obj.await_and_get_promise(__promise)
         })) {
@@ -3234,10 +4057,166 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_and_get_complex_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __promise = *Box::from_raw(promise as *mut Car);
-            obj.await_and_get_complex_promise(__promise)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __promise = {
+                #[repr(C)]
+                struct __Struct {
+                    year: f64,
+                    make: *const std::ffi::c_char,
+                    model: *const std::ffi::c_char,
+                    power: f64,
+                    powertrain: i32,
+                    driver: *mut std::ffi::c_void,
+                    passengers: *mut std::ffi::c_void,
+                    isFast: *mut std::ffi::c_void,
+                    favouriteTrack: *mut std::ffi::c_void,
+                    performanceScores: *mut std::ffi::c_void,
+                    someVariant: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(promise as *mut __Struct);
+                super::car::Car {
+                    year: __s.year,
+                    make: std::ffi::CStr::from_ptr(__s.make)
+                        .to_string_lossy()
+                        .into_owned(),
+                    model: std::ffi::CStr::from_ptr(__s.model)
+                        .to_string_lossy()
+                        .into_owned(),
+                    power: __s.power,
+                    powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                        .unwrap_or_else(|| {
+                            panic!(
+                                "[Nitro] Invalid Powertrain discriminant: {}",
+                                __s.powertrain
+                            )
+                        }),
+                    driver: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                    passengers: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__elem as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    },
+                    is_fast: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: bool,
+                        }
+                        let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(__s.value)
+                        } else {
+                            None
+                        }
+                    },
+                    favourite_track: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                    performance_scores: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut f64,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                    },
+                    some_variant: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Var {
+                                    index: i32,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __var = *Box::from_raw(__s.value as *mut __Var);
+                                match __var.index {
+                                    0 => super::variant_string_f64::Variant_String_f64::First(
+                                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                                            __var.value as *mut *const std::ffi::c_char,
+                                        ))
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    ),
+                                    1 => super::variant_string_f64::Variant_String_f64::Second(
+                                        *Box::from_raw(__var.value as *mut f64),
+                                    ),
+                                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.await_and_get_complex_promise(__promise).map(|__value| { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { year: __value.year, make: { let __s = __value.make.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, model: { let __s = __value.model.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, power: __value.power, powertrain: __value.powertrain as i32, driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.driver { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __value.passengers.into_iter().map(|__e| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __e.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __e.age })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, isFast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __opt: __Opt = match __value.is_fast { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, favouriteTrack: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __value.favourite_track { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, performanceScores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let mut __items: Vec<_> = __value.performance_scores.into_iter().map(|__e| __e).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut f64 }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, someVariant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.some_variant { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_string_f64::Variant_String_f64::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_string_f64::Variant_String_f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -3272,9 +4251,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_await_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __promise = *Box::from_raw(promise as *mut ());
-            obj.await_promise(__promise)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.await_promise(())
         })) {
             Ok(Ok(_)) => __FfiResult_void {
                 is_ok: 1,
@@ -3305,7 +4283,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_void::Func_void);
                 let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
@@ -3342,10 +4320,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_callback_that_returns_pro
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_void____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____);
-                let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
+                let __cb: Box<dyn Fn() -> Result<(), String> + Send + Sync> =
+                    Box::new(move || -> Result<(), String> { __wrapper.call() });
                 __cb
             };
             obj.call_callback_that_returns_promise_void(__callback)
@@ -3381,7 +4360,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_all(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __first = {
                 let __wrapper = Box::from_raw(first as *mut super::func_void::Func_void);
                 let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || __wrapper.call());
@@ -3429,7 +4408,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_with_optional(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __value = {
                 #[repr(C)]
                 struct __Opt {
@@ -3481,11 +4460,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_call_sum_up_n_times(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
-                    Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> Result<f64, String> + Send + Sync> =
+                    Box::new(move || -> Result<f64, String> { __wrapper.call() });
                 __cb
             };
             obj.call_sum_up_n_times(__callback, n)
@@ -3523,11 +4502,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_double____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____);
-                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
-                    Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> Result<f64, String> + Send + Sync> =
+                    Box::new(move || -> Result<f64, String> { __wrapper.call() });
                 __cb
             };
             obj.callback_async_promise(__callback)
@@ -3565,11 +4544,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_async_promise_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__shared_ptr_promise_std__shared_ptr_array_buffer_____::Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____);
-                let __cb: Box<dyn Fn() -> NitroBuffer + Send + Sync> =
-                    Box::new(move || -> NitroBuffer { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> Result<NitroBuffer, String> + Send + Sync> =
+                    Box::new(move || -> Result<NitroBuffer, String> { __wrapper.call() });
                 __cb
             };
             obj.callback_async_promise_buffer(__callback)
@@ -3607,9 +4586,24 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_complex_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.get_complex_callback()
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.get_complex_callback().map(|__value| {
+                unsafe extern "C" fn __trampoline_2(__ud: *mut std::ffi::c_void, __a0: f64) {
+                    let __f = unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) };
+                    unsafe { __f(__a0) };
+                }
+                unsafe extern "C" fn __destroy_2(__ud: *mut std::ffi::c_void) {
+                    unsafe {
+                        let _ = Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>);
+                    }
+                }
+                let __wrapper = super::func_void_double::Func_void_double::new(
+                    __trampoline_2,
+                    Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void,
+                    __destroy_2,
+                );
+                Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -3646,7 +4640,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_two_optional_callbacks(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __first = {
                 #[repr(C)]
                 struct __Opt {
@@ -3718,7 +4712,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_error_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __on_error = {
                 let __wrapper = Box::from_raw(
                     on_error
@@ -3759,7 +4753,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __wrapping_js_callback = {
                 let __wrapper = Box::from_raw(
                     wrapping_js_callback as *mut super::func_void_double::Func_void_double,
@@ -3769,7 +4763,23 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_native_callback(
                 __cb
             };
             obj.create_native_callback(__wrapping_js_callback)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+                .map(|__value| {
+                    unsafe extern "C" fn __trampoline_3(__ud: *mut std::ffi::c_void, __a0: f64) {
+                        let __f = unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) };
+                        unsafe { __f(__a0) };
+                    }
+                    unsafe extern "C" fn __destroy_3(__ud: *mut std::ffi::c_void) {
+                        unsafe {
+                            let _ = Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>);
+                        }
+                    }
+                    let __wrapper = super::func_void_double::Func_void_double::new(
+                        __trampoline_3,
+                        Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void,
+                        __destroy_3,
+                    );
+                    Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+                })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -3804,11 +4814,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback_and
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __get_value = {
                 let __wrapper = Box::from_raw(get_value as *mut super::func_std__shared_ptr_promise_double__::Func_std__shared_ptr_Promise_double__);
-                let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
-                    Box::new(move || -> f64 { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> Result<f64, String> + Send + Sync> =
+                    Box::new(move || -> Result<f64, String> { __wrapper.call() });
                 __cb
             };
             obj.get_value_from_js_callback_and_wait(__get_value)
@@ -3847,11 +4857,11 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_value_from_js_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_std__shared_ptr_promise_std__string__::Func_std__shared_ptr_Promise_std__string__);
-                let __cb: Box<dyn Fn() -> String + Send + Sync> =
-                    Box::new(move || -> String { __wrapper.call() });
+                let __cb: Box<dyn Fn() -> Result<String, String> + Send + Sync> =
+                    Box::new(move || -> Result<String, String> { __wrapper.call() });
                 __cb
             };
             let __and_then_call = {
@@ -3892,9 +4902,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_car(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            obj.get_car()
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            obj.get_car().map(|__value| { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { year: __value.year, make: { let __s = __value.make.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, model: { let __s = __value.model.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, power: __value.power, powertrain: __value.powertrain as i32, driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.driver { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __value.passengers.into_iter().map(|__e| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __e.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __e.age })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, isFast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __opt: __Opt = match __value.is_fast { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, favouriteTrack: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __value.favourite_track { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, performanceScores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let mut __items: Vec<_> = __value.performance_scores.into_iter().map(|__e| __e).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut f64 }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, someVariant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.some_variant { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_string_f64::Variant_String_f64::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_string_f64::Variant_String_f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -3929,8 +4938,165 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_is_car_electric(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __car = *Box::from_raw(car as *mut Car);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __car = {
+                #[repr(C)]
+                struct __Struct {
+                    year: f64,
+                    make: *const std::ffi::c_char,
+                    model: *const std::ffi::c_char,
+                    power: f64,
+                    powertrain: i32,
+                    driver: *mut std::ffi::c_void,
+                    passengers: *mut std::ffi::c_void,
+                    isFast: *mut std::ffi::c_void,
+                    favouriteTrack: *mut std::ffi::c_void,
+                    performanceScores: *mut std::ffi::c_void,
+                    someVariant: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(car as *mut __Struct);
+                super::car::Car {
+                    year: __s.year,
+                    make: std::ffi::CStr::from_ptr(__s.make)
+                        .to_string_lossy()
+                        .into_owned(),
+                    model: std::ffi::CStr::from_ptr(__s.model)
+                        .to_string_lossy()
+                        .into_owned(),
+                    power: __s.power,
+                    powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                        .unwrap_or_else(|| {
+                            panic!(
+                                "[Nitro] Invalid Powertrain discriminant: {}",
+                                __s.powertrain
+                            )
+                        }),
+                    driver: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                    passengers: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__elem as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    },
+                    is_fast: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: bool,
+                        }
+                        let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(__s.value)
+                        } else {
+                            None
+                        }
+                    },
+                    favourite_track: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                    performance_scores: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut f64,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                    },
+                    some_variant: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Var {
+                                    index: i32,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __var = *Box::from_raw(__s.value as *mut __Var);
+                                match __var.index {
+                                    0 => super::variant_string_f64::Variant_String_f64::First(
+                                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                                            __var.value as *mut *const std::ffi::c_char,
+                                        ))
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    ),
+                                    1 => super::variant_string_f64::Variant_String_f64::Second(
+                                        *Box::from_raw(__var.value as *mut f64),
+                                    ),
+                                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
             obj.is_car_electric(__car)
         })) {
             Ok(Ok(__value)) => __FfiResult_bool {
@@ -3966,9 +5132,166 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_driver(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __car = *Box::from_raw(car as *mut Car);
-            obj.get_driver(__car).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __car = {
+                #[repr(C)]
+                struct __Struct {
+                    year: f64,
+                    make: *const std::ffi::c_char,
+                    model: *const std::ffi::c_char,
+                    power: f64,
+                    powertrain: i32,
+                    driver: *mut std::ffi::c_void,
+                    passengers: *mut std::ffi::c_void,
+                    isFast: *mut std::ffi::c_void,
+                    favouriteTrack: *mut std::ffi::c_void,
+                    performanceScores: *mut std::ffi::c_void,
+                    someVariant: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(car as *mut __Struct);
+                super::car::Car {
+                    year: __s.year,
+                    make: std::ffi::CStr::from_ptr(__s.make)
+                        .to_string_lossy()
+                        .into_owned(),
+                    model: std::ffi::CStr::from_ptr(__s.model)
+                        .to_string_lossy()
+                        .into_owned(),
+                    power: __s.power,
+                    powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                        .unwrap_or_else(|| {
+                            panic!(
+                                "[Nitro] Invalid Powertrain discriminant: {}",
+                                __s.powertrain
+                            )
+                        }),
+                    driver: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                    passengers: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__elem as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    },
+                    is_fast: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: bool,
+                        }
+                        let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(__s.value)
+                        } else {
+                            None
+                        }
+                    },
+                    favourite_track: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                    performance_scores: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut f64,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                    },
+                    some_variant: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Var {
+                                    index: i32,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __var = *Box::from_raw(__s.value as *mut __Var);
+                                match __var.index {
+                                    0 => super::variant_string_f64::Variant_String_f64::First(
+                                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                                            __var.value as *mut *const std::ffi::c_char,
+                                        ))
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    ),
+                                    1 => super::variant_string_f64::Variant_String_f64::Second(
+                                        *Box::from_raw(__var.value as *mut f64),
+                                    ),
+                                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.get_driver(__car).map(|__value| { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4003,10 +5326,166 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_car(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __car = *Box::from_raw(car as *mut Car);
-            obj.bounce_car(__car)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __car = {
+                #[repr(C)]
+                struct __Struct {
+                    year: f64,
+                    make: *const std::ffi::c_char,
+                    model: *const std::ffi::c_char,
+                    power: f64,
+                    powertrain: i32,
+                    driver: *mut std::ffi::c_void,
+                    passengers: *mut std::ffi::c_void,
+                    isFast: *mut std::ffi::c_void,
+                    favouriteTrack: *mut std::ffi::c_void,
+                    performanceScores: *mut std::ffi::c_void,
+                    someVariant: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(car as *mut __Struct);
+                super::car::Car {
+                    year: __s.year,
+                    make: std::ffi::CStr::from_ptr(__s.make)
+                        .to_string_lossy()
+                        .into_owned(),
+                    model: std::ffi::CStr::from_ptr(__s.model)
+                        .to_string_lossy()
+                        .into_owned(),
+                    power: __s.power,
+                    powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                        .unwrap_or_else(|| {
+                            panic!(
+                                "[Nitro] Invalid Powertrain discriminant: {}",
+                                __s.powertrain
+                            )
+                        }),
+                    driver: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                    passengers: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    name: *const std::ffi::c_char,
+                                    age: f64,
+                                }
+                                let __s = *Box::from_raw(__elem as *mut __Struct);
+                                super::person::Person {
+                                    name: std::ffi::CStr::from_ptr(__s.name)
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    age: __s.age,
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    },
+                    is_fast: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: bool,
+                        }
+                        let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(__s.value)
+                        } else {
+                            None
+                        }
+                    },
+                    favourite_track: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                    performance_scores: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut f64,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                    },
+                    some_variant: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Var {
+                                    index: i32,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __var = *Box::from_raw(__s.value as *mut __Var);
+                                match __var.index {
+                                    0 => super::variant_string_f64::Variant_String_f64::First(
+                                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                                            __var.value as *mut *const std::ffi::c_char,
+                                        ))
+                                        .to_string_lossy()
+                                        .into_owned(),
+                                    ),
+                                    1 => super::variant_string_f64::Variant_String_f64::Second(
+                                        *Box::from_raw(__var.value as *mut f64),
+                                    ),
+                                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                                }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.bounce_car(__car).map(|__value| { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { year: __value.year, make: { let __s = __value.make.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, model: { let __s = __value.model.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, power: __value.power, powertrain: __value.powertrain as i32, driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.driver { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __value.passengers.into_iter().map(|__e| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __e.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __e.age })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, isFast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __opt: __Opt = match __value.is_fast { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, favouriteTrack: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __value.favourite_track { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, performanceScores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let mut __items: Vec<_> = __value.performance_scores.into_iter().map(|__e| __e).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut f64 }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, someVariant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.some_variant { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_string_f64::Variant_String_f64::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_string_f64::Variant_String_f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4041,8 +5520,26 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_js_style_object_as_parameters(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __params = *Box::from_raw(params as *mut JsStyleStruct);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __params = {
+                #[repr(C)]
+                struct __Struct {
+                    value: f64,
+                    onChanged: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(params as *mut __Struct);
+                super::js_style_struct::JsStyleStruct {
+                    value: __s.value,
+                    on_changed: {
+                        let __wrapper = Box::from_raw(
+                            __s.onChanged as *mut super::func_void_double::Func_void_double,
+                        );
+                        let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                            Box::new(move |__p0: f64| __wrapper.call(__p0));
+                        __cb
+                    },
+                }
+            };
             obj.js_style_object_as_parameters(__params)
         })) {
             Ok(Ok(_)) => __FfiResult_void {
@@ -4074,10 +5571,170 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_wrapped_js_style_struct
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __value = *Box::from_raw(value as *mut WrappedJsStruct);
-            obj.bounce_wrapped_js_style_struct(__value)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __value = {
+                #[repr(C)]
+                struct __Struct {
+                    value: *mut std::ffi::c_void,
+                    items: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(value as *mut __Struct);
+                super::wrapped_js_struct::WrappedJsStruct {
+                    value: {
+                        #[repr(C)]
+                        struct __Struct {
+                            value: f64,
+                            onChanged: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.value as *mut __Struct);
+                        super::js_style_struct::JsStyleStruct {
+                            value: __s.value,
+                            on_changed: {
+                                let __wrapper = Box::from_raw(
+                                    __s.onChanged as *mut super::func_void_double::Func_void_double,
+                                );
+                                let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                                    Box::new(move |__p0: f64| __wrapper.call(__p0));
+                                __cb
+                            },
+                        }
+                    },
+                    items: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let __arr = Box::from_raw(__s.items as *mut __Array);
+                        let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                        __v.into_iter()
+                            .map(|__elem| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    value: f64,
+                                    onChanged: *mut std::ffi::c_void,
+                                }
+                                let __s = *Box::from_raw(__elem as *mut __Struct);
+                                super::js_style_struct::JsStyleStruct {
+                                    value: __s.value,
+                                    on_changed: {
+                                        let __wrapper = Box::from_raw(
+                                            __s.onChanged
+                                                as *mut super::func_void_double::Func_void_double,
+                                        );
+                                        let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                                            Box::new(move |__p0: f64| __wrapper.call(__p0));
+                                        __cb
+                                    },
+                                }
+                            })
+                            .collect::<Vec<_>>()
+                    },
+                }
+            };
+            obj.bounce_wrapped_js_style_struct(__value).map(|__value| {
+                #[repr(C)]
+                struct __Struct {
+                    value: *mut std::ffi::c_void,
+                    items: *mut std::ffi::c_void,
+                }
+                Box::into_raw(Box::new(__Struct {
+                    value: {
+                        #[repr(C)]
+                        struct __Struct {
+                            value: f64,
+                            onChanged: *mut std::ffi::c_void,
+                        }
+                        Box::into_raw(Box::new(__Struct {
+                            value: __value.value.value,
+                            onChanged: {
+                                unsafe extern "C" fn __trampoline_4(
+                                    __ud: *mut std::ffi::c_void,
+                                    __a0: f64,
+                                ) {
+                                    let __f =
+                                        unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) };
+                                    unsafe { __f(__a0) };
+                                }
+                                unsafe extern "C" fn __destroy_4(__ud: *mut std::ffi::c_void) {
+                                    unsafe {
+                                        let _ = Box::from_raw(
+                                            __ud as *mut Box<dyn Fn(f64) + Send + Sync>,
+                                        );
+                                    }
+                                }
+                                let __wrapper = super::func_void_double::Func_void_double::new(
+                                    __trampoline_4,
+                                    Box::into_raw(Box::new(__value.value.on_changed))
+                                        as *mut std::ffi::c_void,
+                                    __destroy_4,
+                                );
+                                Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+                            },
+                        })) as *mut std::ffi::c_void
+                    },
+                    items: {
+                        #[repr(C)]
+                        struct __Array {
+                            data: *mut *mut std::ffi::c_void,
+                            len: usize,
+                        }
+                        let mut __items: Vec<_> = __value
+                            .items
+                            .into_iter()
+                            .map(|__e| {
+                                #[repr(C)]
+                                struct __Struct {
+                                    value: f64,
+                                    onChanged: *mut std::ffi::c_void,
+                                }
+                                Box::into_raw(Box::new(__Struct {
+                                    value: __e.value,
+                                    onChanged: {
+                                        unsafe extern "C" fn __trampoline_5(
+                                            __ud: *mut std::ffi::c_void,
+                                            __a0: f64,
+                                        ) {
+                                            let __f = unsafe {
+                                                &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>)
+                                            };
+                                            unsafe { __f(__a0) };
+                                        }
+                                        unsafe extern "C" fn __destroy_5(
+                                            __ud: *mut std::ffi::c_void,
+                                        ) {
+                                            unsafe {
+                                                let _ = Box::from_raw(
+                                                    __ud as *mut Box<dyn Fn(f64) + Send + Sync>,
+                                                );
+                                            }
+                                        }
+                                        let __wrapper =
+                                            super::func_void_double::Func_void_double::new(
+                                                __trampoline_5,
+                                                Box::into_raw(Box::new(__e.on_changed))
+                                                    as *mut std::ffi::c_void,
+                                                __destroy_5,
+                                            );
+                                        Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void
+                                    },
+                                })) as *mut std::ffi::c_void
+                            })
+                            .collect();
+                        let __len = __items.len();
+                        let __data = if __items.is_empty() {
+                            std::ptr::null_mut()
+                        } else {
+                            __items.as_mut_ptr() as *mut *mut std::ffi::c_void
+                        };
+                        std::mem::forget(__items);
+                        Box::into_raw(Box::new(__Array {
+                            data: __data,
+                            len: __len,
+                        })) as *mut std::ffi::c_void
+                    },
+                })) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4112,10 +5769,50 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_wrapper(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __wrapper = *Box::from_raw(wrapper as *mut OptionalWrapper);
-            obj.bounce_optional_wrapper(__wrapper)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __wrapper = {
+                #[repr(C)]
+                struct __Struct {
+                    optionalArrayBuffer: *mut std::ffi::c_void,
+                    optionalString: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(wrapper as *mut __Struct);
+                super::optional_wrapper::OptionalWrapper {
+                    optional_array_buffer: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.optionalArrayBuffer as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(*Box::from_raw(
+                                __s.value as *mut super::nitro_buffer::NitroBuffer,
+                            ))
+                        } else {
+                            None
+                        }
+                    },
+                    optional_string: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *const std::ffi::c_char,
+                        }
+                        let __s = *Box::from_raw(__s.optionalString as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some(
+                                std::ffi::CStr::from_ptr(__s.value)
+                                    .to_string_lossy()
+                                    .into_owned(),
+                            )
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.bounce_optional_wrapper(__wrapper).map(|__value| { #[repr(C)] struct __Struct { optionalArrayBuffer: *mut std::ffi::c_void, optionalString: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { optionalArrayBuffer: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.optional_array_buffer { Some(__v) => __Opt { has_value: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, optionalString: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __value.optional_string { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4150,10 +5847,38 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_optional_callback(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __value = *Box::from_raw(value as *mut OptionalCallback);
-            obj.bounce_optional_callback(__value)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __value = {
+                #[repr(C)]
+                struct __Struct {
+                    callback: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(value as *mut __Struct);
+                super::optional_callback::OptionalCallback {
+                    callback: {
+                        #[repr(C)]
+                        struct __Opt {
+                            has_value: u8,
+                            value: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(__s.callback as *mut __Opt);
+                        if __s.has_value != 0 {
+                            Some({
+                                #[repr(C)]
+                                struct __Var {
+                                    index: i32,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __var = *Box::from_raw(__s.value as *mut __Var);
+                                match __var.index { 0 => super::variant_box_dyn_fn_____send___sync__f64::Variant_Box_dyn_Fn_____Send___Sync__f64::First({ let __wrapper = Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut super::func_void::Func_void); let __cb: Box<dyn Fn() + Send + Sync> = Box::new(move || { __wrapper.call() }); __cb }), 1 => super::variant_box_dyn_fn_____send___sync__f64::Variant_Box_dyn_Fn_____Send___Sync__f64::Second(*Box::from_raw(__var.value as *mut f64)), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+                            })
+                        } else {
+                            None
+                        }
+                    },
+                }
+            };
+            obj.bounce_optional_callback(__value).map(|__value| { #[repr(C)] struct __Struct { callback: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { callback: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __value.callback { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_box_dyn_fn_____send___sync__f64::Variant_Box_dyn_Fn_____Send___Sync__f64::First(__v) => { let __ffi: *mut std::ffi::c_void = { unsafe extern "C" fn __trampoline_6(__ud: *mut std::ffi::c_void) { let __f = unsafe { &*(__ud as *mut Box<dyn Fn() + Send + Sync>) }; unsafe { __f() }; } unsafe extern "C" fn __destroy_6(__ud: *mut std::ffi::c_void) { unsafe { let _ = Box::from_raw(__ud as *mut Box<dyn Fn() + Send + Sync>); } } let __wrapper = super::func_void::Func_void::new(__trampoline_6, Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void, __destroy_6); Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_box_dyn_fn_____send___sync__f64::Variant_Box_dyn_Fn_____Send___Sync__f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4187,7 +5912,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4224,7 +5949,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_from_nativ
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer_from_native_buffer(copy)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4261,7 +5986,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_copy_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.copy_buffer(__buffer)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4299,7 +6024,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_buffer_last_item(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.get_buffer_last_item(__buffer)
         })) {
@@ -4337,7 +6062,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_set_all_values_to(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.set_all_values_to(__buffer, value)
         })) {
@@ -4369,7 +6094,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_array_buffer_async(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_array_buffer_async()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4406,7 +6131,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_array_buffer(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __buffer = *Box::from_raw(buffer as *mut super::nitro_buffer::NitroBuffer);
             obj.bounce_array_buffer(__buffer)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
@@ -4444,11 +6169,40 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __either =
-                *Box::from_raw(either as *mut Variant_bool_Vec_f64__Vec_String__String_f64);
-            obj.pass_variant(__either)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __either = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(either as *mut __Var);
+                match __var.index { 0 => super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64::First(*Box::from_raw(__var.value as *mut bool)), 1 => super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64::Second({ #[repr(C)] struct __Array { data: *mut f64, len: usize } let __arr = Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut __Array); let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len); __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>() }), 2 => super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64::Third({ #[repr(C)] struct __Array { data: *mut *const std::ffi::c_char, len: usize } let __arr = Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut __Array); let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len); __v.into_iter().map(|__elem| std::ffi::CStr::from_ptr(__elem).to_string_lossy().into_owned()).collect::<Vec<_>>() }), 3 => super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64::Fourth(std::ffi::CStr::from_ptr(*Box::from_raw(__var.value as *mut *const std::ffi::c_char)).to_string_lossy().into_owned()), 4 => super::variant_bool_vec_f64__vec_string__string_f64::Variant_bool_Vec_f64__Vec_String__String_f64::Fifth(*Box::from_raw(__var.value as *mut f64)), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+            };
+            obj.pass_variant(__either).map(|__value| {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var: __Var = match __value {
+                    super::variant_string_f64::Variant_String_f64::First(__v) => {
+                        let __ffi: *const std::ffi::c_char = {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        };
+                        __Var {
+                            index: 0,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                    super::variant_string_f64::Variant_String_f64::Second(__v) => __Var {
+                        index: 1,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                };
+                Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4483,10 +6237,51 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_enum(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut Variant_bool_OldEnum);
-            obj.get_variant_enum(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index {
+                    0 => super::variant_bool_old_enum::Variant_bool_OldEnum::First(*Box::from_raw(
+                        __var.value as *mut bool,
+                    )),
+                    1 => super::variant_bool_old_enum::Variant_bool_OldEnum::Second(
+                        super::old_enum::OldEnum::from_i32(*Box::from_raw(__var.value as *mut i32))
+                            .unwrap_or_else(|| {
+                                panic!(
+                                    "[Nitro] Invalid OldEnum discriminant: {}",
+                                    *Box::from_raw(__var.value as *mut i32)
+                                )
+                            }),
+                    ),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            };
+            obj.get_variant_enum(__variant).map(|__value| {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var: __Var = match __value {
+                    super::variant_bool_old_enum::Variant_bool_OldEnum::First(__v) => __Var {
+                        index: 0,
+                        value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void,
+                    },
+                    super::variant_bool_old_enum::Variant_bool_OldEnum::Second(__v) => {
+                        let __ffi: i32 = __v as i32;
+                        __Var {
+                            index: 1,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                };
+                Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4521,10 +6316,17 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_weird_numbers_enum
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut Variant_bool_WeirdNumbersEnum);
-            obj.get_variant_weird_numbers_enum(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index { 0 => super::variant_bool_weird_numbers_enum::Variant_bool_WeirdNumbersEnum::First(*Box::from_raw(__var.value as *mut bool)), 1 => super::variant_bool_weird_numbers_enum::Variant_bool_WeirdNumbersEnum::Second(super::weird_numbers_enum::WeirdNumbersEnum::from_i32(*Box::from_raw(__var.value as *mut i32)).unwrap_or_else(|| { panic!("[Nitro] Invalid WeirdNumbersEnum discriminant: {}", *Box::from_raw(__var.value as *mut i32)) })), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+            };
+            obj.get_variant_weird_numbers_enum(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::variant_bool_weird_numbers_enum::Variant_bool_WeirdNumbersEnum::First(__v) => __Var { index: 0, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, super::variant_bool_weird_numbers_enum::Variant_bool_WeirdNumbersEnum::Second(__v) => { let __ffi: i32 = __v as i32; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4559,10 +6361,183 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_variant_objects(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut Variant_Car_Person);
-            obj.get_variant_objects(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index {
+                    0 => super::variant_car_person::Variant_Car_Person::First({
+                        #[repr(C)]
+                        struct __Struct {
+                            year: f64,
+                            make: *const std::ffi::c_char,
+                            model: *const std::ffi::c_char,
+                            power: f64,
+                            powertrain: i32,
+                            driver: *mut std::ffi::c_void,
+                            passengers: *mut std::ffi::c_void,
+                            isFast: *mut std::ffi::c_void,
+                            favouriteTrack: *mut std::ffi::c_void,
+                            performanceScores: *mut std::ffi::c_void,
+                            someVariant: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(*Box::from_raw(
+                            __var.value as *mut *mut std::ffi::c_void,
+                        ) as *mut __Struct);
+                        super::car::Car {
+                            year: __s.year,
+                            make: std::ffi::CStr::from_ptr(__s.make)
+                                .to_string_lossy()
+                                .into_owned(),
+                            model: std::ffi::CStr::from_ptr(__s.model)
+                                .to_string_lossy()
+                                .into_owned(),
+                            power: __s.power,
+                            powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                                .unwrap_or_else(|| {
+                                    panic!(
+                                        "[Nitro] Invalid Powertrain discriminant: {}",
+                                        __s.powertrain
+                                    )
+                                }),
+                            driver: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some({
+                                        #[repr(C)]
+                                        struct __Struct {
+                                            name: *const std::ffi::c_char,
+                                            age: f64,
+                                        }
+                                        let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                        super::person::Person {
+                                            name: std::ffi::CStr::from_ptr(__s.name)
+                                                .to_string_lossy()
+                                                .into_owned(),
+                                            age: __s.age,
+                                        }
+                                    })
+                                } else {
+                                    None
+                                }
+                            },
+                            passengers: {
+                                #[repr(C)]
+                                struct __Array {
+                                    data: *mut *mut std::ffi::c_void,
+                                    len: usize,
+                                }
+                                let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                                __v.into_iter()
+                                    .map(|__elem| {
+                                        #[repr(C)]
+                                        struct __Struct {
+                                            name: *const std::ffi::c_char,
+                                            age: f64,
+                                        }
+                                        let __s = *Box::from_raw(__elem as *mut __Struct);
+                                        super::person::Person {
+                                            name: std::ffi::CStr::from_ptr(__s.name)
+                                                .to_string_lossy()
+                                                .into_owned(),
+                                            age: __s.age,
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                            },
+                            is_fast: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: bool,
+                                }
+                                let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some(__s.value)
+                                } else {
+                                    None
+                                }
+                            },
+                            favourite_track: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *const std::ffi::c_char,
+                                }
+                                let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some(
+                                        std::ffi::CStr::from_ptr(__s.value)
+                                            .to_string_lossy()
+                                            .into_owned(),
+                                    )
+                                } else {
+                                    None
+                                }
+                            },
+                            performance_scores: {
+                                #[repr(C)]
+                                struct __Array {
+                                    data: *mut f64,
+                                    len: usize,
+                                }
+                                let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                                __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                            },
+                            some_variant: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some({
+                                        #[repr(C)]
+                                        struct __Var {
+                                            index: i32,
+                                            value: *mut std::ffi::c_void,
+                                        }
+                                        let __var = *Box::from_raw(__s.value as *mut __Var);
+                                        match __var.index { 0 => super::variant_string_f64::Variant_String_f64::First(std::ffi::CStr::from_ptr(*Box::from_raw(__var.value as *mut *const std::ffi::c_char)).to_string_lossy().into_owned()), 1 => super::variant_string_f64::Variant_String_f64::Second(*Box::from_raw(__var.value as *mut f64)), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+                                    })
+                                } else {
+                                    None
+                                }
+                            },
+                        }
+                    }),
+                    1 => super::variant_car_person::Variant_Car_Person::Second({
+                        #[repr(C)]
+                        struct __Struct {
+                            name: *const std::ffi::c_char,
+                            age: f64,
+                        }
+                        let __s = *Box::from_raw(*Box::from_raw(
+                            __var.value as *mut *mut std::ffi::c_void,
+                        ) as *mut __Struct);
+                        super::person::Person {
+                            name: std::ffi::CStr::from_ptr(__s.name)
+                                .to_string_lossy()
+                                .into_owned(),
+                            age: __s.age,
+                        }
+                    }),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            };
+            obj.get_variant_objects(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::variant_car_person::Variant_Car_Person::First(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { year: __v.year, make: { let __s = __v.make.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, model: { let __s = __v.model.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, power: __v.power, powertrain: __v.powertrain as i32, driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __v.driver { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __v.passengers.into_iter().map(|__e| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __e.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __e.age })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, isFast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __opt: __Opt = match __v.is_fast { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, favouriteTrack: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __v.favourite_track { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, performanceScores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let mut __items: Vec<_> = __v.performance_scores.into_iter().map(|__e| __e).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut f64 }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, someVariant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __v.some_variant { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_string_f64::Variant_String_f64::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_string_f64::Variant_String_f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_car_person::Variant_Car_Person::Second(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void }; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4597,10 +6572,174 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_named_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut NamedVariant);
-            obj.pass_named_variant(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index {
+                    0 => super::named_variant::NamedVariant::First(
+                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                            __var.value as *mut *const std::ffi::c_char,
+                        ))
+                        .to_string_lossy()
+                        .into_owned(),
+                    ),
+                    1 => super::named_variant::NamedVariant::Second({
+                        #[repr(C)]
+                        struct __Struct {
+                            year: f64,
+                            make: *const std::ffi::c_char,
+                            model: *const std::ffi::c_char,
+                            power: f64,
+                            powertrain: i32,
+                            driver: *mut std::ffi::c_void,
+                            passengers: *mut std::ffi::c_void,
+                            isFast: *mut std::ffi::c_void,
+                            favouriteTrack: *mut std::ffi::c_void,
+                            performanceScores: *mut std::ffi::c_void,
+                            someVariant: *mut std::ffi::c_void,
+                        }
+                        let __s = *Box::from_raw(*Box::from_raw(
+                            __var.value as *mut *mut std::ffi::c_void,
+                        ) as *mut __Struct);
+                        super::car::Car {
+                            year: __s.year,
+                            make: std::ffi::CStr::from_ptr(__s.make)
+                                .to_string_lossy()
+                                .into_owned(),
+                            model: std::ffi::CStr::from_ptr(__s.model)
+                                .to_string_lossy()
+                                .into_owned(),
+                            power: __s.power,
+                            powertrain: super::powertrain::Powertrain::from_i32(__s.powertrain)
+                                .unwrap_or_else(|| {
+                                    panic!(
+                                        "[Nitro] Invalid Powertrain discriminant: {}",
+                                        __s.powertrain
+                                    )
+                                }),
+                            driver: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __s = *Box::from_raw(__s.driver as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some({
+                                        #[repr(C)]
+                                        struct __Struct {
+                                            name: *const std::ffi::c_char,
+                                            age: f64,
+                                        }
+                                        let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                        super::person::Person {
+                                            name: std::ffi::CStr::from_ptr(__s.name)
+                                                .to_string_lossy()
+                                                .into_owned(),
+                                            age: __s.age,
+                                        }
+                                    })
+                                } else {
+                                    None
+                                }
+                            },
+                            passengers: {
+                                #[repr(C)]
+                                struct __Array {
+                                    data: *mut *mut std::ffi::c_void,
+                                    len: usize,
+                                }
+                                let __arr = Box::from_raw(__s.passengers as *mut __Array);
+                                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                                __v.into_iter()
+                                    .map(|__elem| {
+                                        #[repr(C)]
+                                        struct __Struct {
+                                            name: *const std::ffi::c_char,
+                                            age: f64,
+                                        }
+                                        let __s = *Box::from_raw(__elem as *mut __Struct);
+                                        super::person::Person {
+                                            name: std::ffi::CStr::from_ptr(__s.name)
+                                                .to_string_lossy()
+                                                .into_owned(),
+                                            age: __s.age,
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                            },
+                            is_fast: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: bool,
+                                }
+                                let __s = *Box::from_raw(__s.isFast as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some(__s.value)
+                                } else {
+                                    None
+                                }
+                            },
+                            favourite_track: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *const std::ffi::c_char,
+                                }
+                                let __s = *Box::from_raw(__s.favouriteTrack as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some(
+                                        std::ffi::CStr::from_ptr(__s.value)
+                                            .to_string_lossy()
+                                            .into_owned(),
+                                    )
+                                } else {
+                                    None
+                                }
+                            },
+                            performance_scores: {
+                                #[repr(C)]
+                                struct __Array {
+                                    data: *mut f64,
+                                    len: usize,
+                                }
+                                let __arr = Box::from_raw(__s.performanceScores as *mut __Array);
+                                let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                                __v.into_iter().map(|__elem| __elem).collect::<Vec<_>>()
+                            },
+                            some_variant: {
+                                #[repr(C)]
+                                struct __Opt {
+                                    has_value: u8,
+                                    value: *mut std::ffi::c_void,
+                                }
+                                let __s = *Box::from_raw(__s.someVariant as *mut __Opt);
+                                if __s.has_value != 0 {
+                                    Some({
+                                        #[repr(C)]
+                                        struct __Var {
+                                            index: i32,
+                                            value: *mut std::ffi::c_void,
+                                        }
+                                        let __var = *Box::from_raw(__s.value as *mut __Var);
+                                        match __var.index { 0 => super::variant_string_f64::Variant_String_f64::First(std::ffi::CStr::from_ptr(*Box::from_raw(__var.value as *mut *const std::ffi::c_char)).to_string_lossy().into_owned()), 1 => super::variant_string_f64::Variant_String_f64::Second(*Box::from_raw(__var.value as *mut f64)), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+                                    })
+                                } else {
+                                    None
+                                }
+                            },
+                        }
+                    }),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            };
+            obj.pass_named_variant(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::named_variant::NamedVariant::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::named_variant::NamedVariant::Second(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { year: f64, make: *const std::ffi::c_char, model: *const std::ffi::c_char, power: f64, powertrain: i32, driver: *mut std::ffi::c_void, passengers: *mut std::ffi::c_void, isFast: *mut std::ffi::c_void, favouriteTrack: *mut std::ffi::c_void, performanceScores: *mut std::ffi::c_void, someVariant: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { year: __v.year, make: { let __s = __v.make.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, model: { let __s = __v.model.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, power: __v.power, powertrain: __v.powertrain as i32, driver: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __v.driver { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __v.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __v.age })) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, passengers: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __v.passengers.into_iter().map(|__e| { #[repr(C)] struct __Struct { name: *const std::ffi::c_char, age: f64 } Box::into_raw(Box::new(__Struct { name: { let __s = __e.name.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }, age: __e.age })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, isFast: { #[repr(C)] struct __Opt { has_value: u8, value: bool } let __opt: __Opt = match __v.is_fast { Some(__v) => __Opt { has_value: 1, value: __v }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, favouriteTrack: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __v.favourite_track { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, performanceScores: { #[repr(C)] struct __Array { data: *mut f64, len: usize } let mut __items: Vec<_> = __v.performance_scores.into_iter().map(|__e| __e).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut f64 }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }, someVariant: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __v.some_variant { Some(__v) => __Opt { has_value: 1, value: { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __v { super::variant_string_f64::Variant_String_f64::First(__v) => { let __ffi: *const std::ffi::c_char = { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() }; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_string_f64::Variant_String_f64::Second(__v) => __Var { index: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4635,11 +6774,17 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_pass_all_empty_object_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant =
-                *Box::from_raw(variant as *mut Variant_Box_dyn_HybridBaseSpec__OptionalWrapper);
-            obj.pass_all_empty_object_variant(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index { 0 => super::variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper::Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper::First(*Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut std::sync::Arc<dyn HybridBaseSpec>)), 1 => super::variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper::Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper::Second({ #[repr(C)] struct __Struct { optionalArrayBuffer: *mut std::ffi::c_void, optionalString: *mut std::ffi::c_void } let __s = *Box::from_raw(*Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut __Struct); super::optional_wrapper::OptionalWrapper { optional_array_buffer: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __s = *Box::from_raw(__s.optionalArrayBuffer as *mut __Opt); if __s.has_value != 0 { Some(*Box::from_raw(__s.value as *mut super::nitro_buffer::NitroBuffer)) } else { None } }, optional_string: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __s = *Box::from_raw(__s.optionalString as *mut __Opt); if __s.has_value != 0 { Some(std::ffi::CStr::from_ptr(__s.value).to_string_lossy().into_owned()) } else { None } } } }), _ => panic!("[Nitro] Invalid variant index: {}", __var.index) }
+            };
+            obj.pass_all_empty_object_variant(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper::Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper::First(__v) => { let __ffi: *mut std::ffi::c_void = Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper::Variant_std__sync__Arc_dyn_HybridBaseSpec__OptionalWrapper::Second(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { optionalArrayBuffer: *mut std::ffi::c_void, optionalString: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { optionalArrayBuffer: { #[repr(C)] struct __Opt { has_value: u8, value: *mut std::ffi::c_void } let __opt: __Opt = match __v.optional_array_buffer { Some(__v) => __Opt { has_value: 1, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }, optionalString: { #[repr(C)] struct __Opt { has_value: u8, value: *const std::ffi::c_char } let __opt: __Opt = match __v.optional_string { Some(__v) => __Opt { has_value: 1, value: { let __s = __v.replace('\0', ""); std::ffi::CString::new(__s).unwrap_or_default().into_raw() } }, None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4674,10 +6819,83 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_complex_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut CoreTypesVariant);
-            obj.bounce_complex_variant(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index {
+                    0 => super::core_types_variant::CoreTypesVariant::First(*Box::from_raw(
+                        *Box::from_raw(__var.value as *mut *mut std::ffi::c_void)
+                            as *mut super::nitro_buffer::NitroBuffer,
+                    )),
+                    1 => super::core_types_variant::CoreTypesVariant::Second({
+                        let __wrapper = Box::from_raw(*Box::from_raw(
+                            __var.value as *mut *mut std::ffi::c_void,
+                        )
+                            as *mut super::func_void_double::Func_void_double);
+                        let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                            Box::new(move |__p0: f64| __wrapper.call(__p0));
+                        __cb
+                    }),
+                    2 => {
+                        super::core_types_variant::CoreTypesVariant::Third({
+                            #[repr(C)]
+                            struct __Struct {
+                                value: *mut std::ffi::c_void,
+                                items: *mut std::ffi::c_void,
+                            }
+                            let __s = *Box::from_raw(*Box::from_raw(
+                                __var.value as *mut *mut std::ffi::c_void,
+                            )
+                                as *mut __Struct);
+                            super::wrapped_js_struct::WrappedJsStruct {
+                                value: {
+                                    #[repr(C)]
+                                    struct __Struct {
+                                        value: f64,
+                                        onChanged: *mut std::ffi::c_void,
+                                    }
+                                    let __s = *Box::from_raw(__s.value as *mut __Struct);
+                                    super::js_style_struct::JsStyleStruct {
+                                        value: __s.value,
+                                        on_changed: {
+                                            let __wrapper = Box::from_raw(__s.onChanged as *mut super::func_void_double::Func_void_double);
+                                            let __cb: Box<dyn Fn(f64) + Send + Sync> =
+                                                Box::new(move |__p0: f64| __wrapper.call(__p0));
+                                            __cb
+                                        },
+                                    }
+                                },
+                                items: {
+                                    #[repr(C)]
+                                    struct __Array {
+                                        data: *mut *mut std::ffi::c_void,
+                                        len: usize,
+                                    }
+                                    let __arr = Box::from_raw(__s.items as *mut __Array);
+                                    let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len);
+                                    __v.into_iter().map(|__elem| { #[repr(C)] struct __Struct { value: f64, onChanged: *mut std::ffi::c_void } let __s = *Box::from_raw(__elem as *mut __Struct); super::js_style_struct::JsStyleStruct { value: __s.value, on_changed: { let __wrapper = Box::from_raw(__s.onChanged as *mut super::func_void_double::Func_void_double); let __cb: Box<dyn Fn(f64) + Send + Sync> = Box::new(move |__p0: f64| { __wrapper.call(__p0) }); __cb } } }).collect::<Vec<_>>()
+                                },
+                            }
+                        })
+                    }
+                    3 => super::core_types_variant::CoreTypesVariant::Fourth(*Box::from_raw(
+                        *Box::from_raw(__var.value as *mut *mut std::ffi::c_void) as *mut f64,
+                    )),
+                    4 => super::core_types_variant::CoreTypesVariant::Fifth(*Box::from_raw(
+                        __var.value as *mut f64,
+                    )),
+                    5 => super::core_types_variant::CoreTypesVariant::Sixth(AnyMap::from_raw(
+                        *Box::from_raw(__var.value as *mut *mut std::ffi::c_void),
+                    )),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            };
+            obj.bounce_complex_variant(__variant).map(|__value| { #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } let __var: __Var = match __value { super::core_types_variant::CoreTypesVariant::First(__v) => { let __ffi: *mut std::ffi::c_void = Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void; __Var { index: 0, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::core_types_variant::CoreTypesVariant::Second(__v) => { let __ffi: *mut std::ffi::c_void = { unsafe extern "C" fn __trampoline_7(__ud: *mut std::ffi::c_void, __a0: f64) { let __f = unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) }; unsafe { __f(__a0) }; } unsafe extern "C" fn __destroy_7(__ud: *mut std::ffi::c_void) { unsafe { let _ = Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>); } } let __wrapper = super::func_void_double::Func_void_double::new(__trampoline_7, Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void, __destroy_7); Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void }; __Var { index: 1, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::core_types_variant::CoreTypesVariant::Third(__v) => { let __ffi: *mut std::ffi::c_void = { #[repr(C)] struct __Struct { value: *mut std::ffi::c_void, items: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { value: { #[repr(C)] struct __Struct { value: f64, onChanged: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { value: __v.value.value, onChanged: { unsafe extern "C" fn __trampoline_8(__ud: *mut std::ffi::c_void, __a0: f64) { let __f = unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) }; unsafe { __f(__a0) }; } unsafe extern "C" fn __destroy_8(__ud: *mut std::ffi::c_void) { unsafe { let _ = Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>); } } let __wrapper = super::func_void_double::Func_void_double::new(__trampoline_8, Box::into_raw(Box::new(__v.value.on_changed)) as *mut std::ffi::c_void, __destroy_8); Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }, items: { #[repr(C)] struct __Array { data: *mut *mut std::ffi::c_void, len: usize } let mut __items: Vec<_> = __v.items.into_iter().map(|__e| { #[repr(C)] struct __Struct { value: f64, onChanged: *mut std::ffi::c_void } Box::into_raw(Box::new(__Struct { value: __e.value, onChanged: { unsafe extern "C" fn __trampoline_9(__ud: *mut std::ffi::c_void, __a0: f64) { let __f = unsafe { &*(__ud as *mut Box<dyn Fn(f64) + Send + Sync>) }; unsafe { __f(__a0) }; } unsafe extern "C" fn __destroy_9(__ud: *mut std::ffi::c_void) { unsafe { let _ = Box::from_raw(__ud as *mut Box<dyn Fn(f64) + Send + Sync>); } } let __wrapper = super::func_void_double::Func_void_double::new(__trampoline_9, Box::into_raw(Box::new(__e.on_changed)) as *mut std::ffi::c_void, __destroy_9); Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }).collect(); let __len = __items.len(); let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut *mut std::ffi::c_void }; std::mem::forget(__items); Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void } })) as *mut std::ffi::c_void }; __Var { index: 2, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::core_types_variant::CoreTypesVariant::Fourth(__v) => { let __ffi: *mut std::ffi::c_void = Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void; __Var { index: 3, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::core_types_variant::CoreTypesVariant::Fifth(__v) => { let __ffi: f64 = __v; __Var { index: 4, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, super::core_types_variant::CoreTypesVariant::Sixth(__v) => { let __ffi: *mut std::ffi::c_void = __v.as_raw(); __Var { index: 5, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } }, }; Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -4711,7 +6929,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_child()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4747,7 +6965,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_base()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4783,7 +7001,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_base_actual_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_base_actual_child()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4820,8 +7038,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __child = *Box::from_raw(child as *mut std::sync::Arc<dyn HybridChildSpec>);
             obj.bounce_child(__child)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4858,8 +7076,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __base = *Box::from_raw(base as *mut std::sync::Arc<dyn HybridBaseSpec>);
             obj.bounce_base(__base)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4896,8 +7114,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_child_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __child = *Box::from_raw(child as *mut Box<dyn HybridChildSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __child = *Box::from_raw(child as *mut std::sync::Arc<dyn HybridChildSpec>);
             obj.bounce_child_base(__child)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4934,8 +7152,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_cast_base(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __base = *Box::from_raw(base as *mut Box<dyn HybridBaseSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __base = *Box::from_raw(base as *mut std::sync::Arc<dyn HybridBaseSpec>);
             obj.cast_base(__base)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -4972,7 +7190,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_callback_sync(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __callback = {
                 let __wrapper = Box::from_raw(callback as *mut super::func_double::Func_double);
                 let __cb: Box<dyn Fn() -> f64 + Send + Sync> =
@@ -5014,8 +7232,8 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_get_is_view_blue(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __view = *Box::from_raw(view as *mut Box<dyn HybridTestViewSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __view = *Box::from_raw(view as *mut std::sync::Arc<dyn HybridTestViewSpec>);
             obj.get_is_view_blue(__view)
         })) {
             Ok(Ok(__value)) => __FfiResult_bool {
@@ -5051,9 +7269,10 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_hybrid(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __external_object =
-                *Box::from_raw(external_object as *mut Box<dyn HybridSomeExternalObjectSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __external_object = *Box::from_raw(
+                external_object as *mut std::sync::Arc<dyn HybridSomeExternalObjectSpec>,
+            );
             obj.bounce_external_hybrid(__external_object)
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -5089,7 +7308,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_internal_object(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             obj.create_internal_object()
                 .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
         })) {
@@ -5126,10 +7345,30 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_struct(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __external_struct = *Box::from_raw(external_struct as *mut ExternalObjectStruct);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __external_struct = {
+                #[repr(C)]
+                struct __Struct {
+                    someExternal: *mut std::ffi::c_void,
+                }
+                let __s = *Box::from_raw(external_struct as *mut __Struct);
+                super::external_object_struct::ExternalObjectStruct {
+                    some_external: *Box::from_raw(
+                        __s.someExternal as *mut std::sync::Arc<dyn HybridSomeExternalObjectSpec>,
+                    ),
+                }
+            };
             obj.bounce_external_struct(__external_struct)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+                .map(|__value| {
+                    #[repr(C)]
+                    struct __Struct {
+                        someExternal: *mut std::ffi::c_void,
+                    }
+                    Box::into_raw(Box::new(__Struct {
+                        someExternal: Box::into_raw(Box::new(__value.some_external))
+                            as *mut std::ffi::c_void,
+                    })) as *mut std::ffi::c_void
+                })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -5164,10 +7403,57 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_bounce_external_variant(
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
-            let __variant = *Box::from_raw(variant as *mut StringOrExternal);
-            obj.bounce_external_variant(__variant)
-                .map(|__value| Box::into_raw(Box::new(__value)) as *mut std::ffi::c_void)
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
+            let __variant = {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var = *Box::from_raw(variant as *mut __Var);
+                match __var.index {
+                    0 => super::string_or_external::StringOrExternal::First(*Box::from_raw(
+                        *Box::from_raw(__var.value as *mut *mut std::ffi::c_void)
+                            as *mut std::sync::Arc<dyn HybridSomeExternalObjectSpec>,
+                    )),
+                    1 => super::string_or_external::StringOrExternal::Second(
+                        std::ffi::CStr::from_ptr(*Box::from_raw(
+                            __var.value as *mut *const std::ffi::c_char,
+                        ))
+                        .to_string_lossy()
+                        .into_owned(),
+                    ),
+                    _ => panic!("[Nitro] Invalid variant index: {}", __var.index),
+                }
+            };
+            obj.bounce_external_variant(__variant).map(|__value| {
+                #[repr(C)]
+                struct __Var {
+                    index: i32,
+                    value: *mut std::ffi::c_void,
+                }
+                let __var: __Var = match __value {
+                    super::string_or_external::StringOrExternal::First(__v) => {
+                        let __ffi: *mut std::ffi::c_void =
+                            Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void;
+                        __Var {
+                            index: 0,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                    super::string_or_external::StringOrExternal::Second(__v) => {
+                        let __ffi: *const std::ffi::c_char = {
+                            let __s = __v.replace('\0', "");
+                            std::ffi::CString::new(__s).unwrap_or_default().into_raw()
+                        };
+                        __Var {
+                            index: 1,
+                            value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void,
+                        }
+                    }
+                };
+                Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void
+            })
         })) {
             Ok(Ok(__value)) => __FfiResult_ptr {
                 is_ok: 1,
@@ -5202,11 +7488,16 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_external_variant_from_f
     // the object's internal state may be inconsistent on subsequent calls.
     unsafe {
         match std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+            let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
             let __factory = {
                 let __wrapper = Box::from_raw(factory as *mut super::func_std__shared_ptr_margelo__nitro__test__external__hybrid_some_external_object_spec_::Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_);
-                let __cb: Box<dyn Fn() -> Box<dyn HybridSomeExternalObjectSpec> + Send + Sync> =
-                    Box::new(move || -> Box<dyn HybridSomeExternalObjectSpec> { __wrapper.call() });
+                let __cb: Box<
+                    dyn Fn() -> std::sync::Arc<dyn HybridSomeExternalObjectSpec> + Send + Sync,
+                > = Box::new(
+                    move || -> std::sync::Arc<dyn HybridSomeExternalObjectSpec> {
+                        __wrapper.call()
+                    },
+                );
                 __cb
             };
             obj.create_external_variant_from_func(__factory)
@@ -5238,7 +7529,7 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_create_external_variant_from_f
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_memory_size(ptr: *mut std::ffi::c_void) -> usize {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+        let obj = &*(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
         obj.memory_size()
     }
 }
@@ -5246,6 +7537,6 @@ pub unsafe extern "C" fn HybridTestObjectRustSpec_memory_size(ptr: *mut std::ffi
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn HybridTestObjectRustSpec_destroy(ptr: *mut std::ffi::c_void) {
     unsafe {
-        let _ = Box::from_raw(ptr as *mut Box<dyn HybridTestObjectRustSpec>);
+        let _ = Box::from_raw(ptr as *mut std::sync::Arc<dyn HybridTestObjectRustSpec>);
     }
 }

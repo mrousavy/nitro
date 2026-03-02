@@ -56,10 +56,10 @@ impl Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObje
     }
 
     /// Call the wrapped function.
-    pub unsafe fn call(&self) -> Box<dyn HybridSomeExternalObjectSpec> {
+    pub unsafe fn call(&self) -> std::sync::Arc<dyn HybridSomeExternalObjectSpec> {
         unsafe {
             let __result = (self.fn_ptr)(self.userdata);
-            *Box::from_raw(__result as *mut Box<dyn HybridSomeExternalObjectSpec>)
+            *Box::from_raw(__result as *mut std::sync::Arc<dyn HybridSomeExternalObjectSpec>)
         }
     }
 }

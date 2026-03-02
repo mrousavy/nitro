@@ -24,7 +24,7 @@ use std::ffi;
 /// the Rust side can call it safely through this wrapper.
 #[repr(C)]
 pub struct Func_std__shared_ptr_Promise_std__string__ {
-    fn_ptr: unsafe extern "C" fn(*mut std::ffi::c_void) -> *mut std::ffi::c_void,
+    fn_ptr: unsafe extern "C" fn(*mut std::ffi::c_void) -> crate::__FfiResult_cstr,
     userdata: *mut std::ffi::c_void,
     destroy_fn: unsafe extern "C" fn(*mut std::ffi::c_void),
 }
@@ -37,7 +37,7 @@ unsafe impl Sync for Func_std__shared_ptr_Promise_std__string__ {}
 impl Func_std__shared_ptr_Promise_std__string__ {
     /// Create a new wrapper from a C function pointer, userdata, and destroy function.
     pub fn new(
-        fn_ptr: unsafe extern "C" fn(*mut std::ffi::c_void) -> *mut std::ffi::c_void,
+        fn_ptr: unsafe extern "C" fn(*mut std::ffi::c_void) -> crate::__FfiResult_cstr,
         userdata: *mut ffi::c_void,
         destroy_fn: unsafe extern "C" fn(*mut ffi::c_void),
     ) -> Self {
@@ -49,10 +49,25 @@ impl Func_std__shared_ptr_Promise_std__string__ {
     }
 
     /// Call the wrapped function.
-    pub unsafe fn call(&self) -> String {
+    pub unsafe fn call(&self) -> Result<String, String> {
         unsafe {
-            let __result = (self.fn_ptr)(self.userdata);
-            *Box::from_raw(__result as *mut String)
+            let __ffi_result = (self.fn_ptr)(self.userdata);
+            if __ffi_result.is_ok != 0 {
+                Ok(std::ffi::CStr::from_ptr(__ffi_result.value)
+                    .to_string_lossy()
+                    .into_owned())
+            } else {
+                let msg = if __ffi_result.error.is_null() {
+                    "unknown callback error".to_string()
+                } else {
+                    let s = std::ffi::CStr::from_ptr(__ffi_result.error)
+                        .to_string_lossy()
+                        .into_owned();
+                    crate::__nitrogen_free_cstring(__ffi_result.error);
+                    s
+                };
+                Err(msg)
+            }
         }
     }
 }

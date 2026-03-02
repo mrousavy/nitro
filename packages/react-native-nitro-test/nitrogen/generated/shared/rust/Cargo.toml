@@ -5,14 +5,11 @@
 # Copyright © Marc Rousavy @ Margelo
 #
 
-[workspace]
-
 [package]
 name = "nitro_test_rust"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "NitroTest_rust"
 path = "lib.rs"
-crate-type = ["staticlib"]
+crate-type = ["rlib"]

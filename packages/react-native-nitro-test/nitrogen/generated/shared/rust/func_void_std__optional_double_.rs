@@ -64,7 +64,7 @@ impl Func_void_std__optional_double_ {
                     },
                     None => __Opt {
                         has_value: 0,
-                        value: unsafe { std::mem::zeroed() }, /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
+                        value: std::mem::zeroed(), /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */
                     },
                 };
                 Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void

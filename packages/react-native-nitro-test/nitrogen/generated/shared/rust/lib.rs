@@ -51,9 +51,9 @@ pub mod variant_bool_old_enum;
 pub mod variant_bool_vec_f64__vec_string__string_f64;
 pub mod variant_bool_weird_numbers_enum;
 pub mod variant_box_dyn_fn_____send___sync__f64;
-pub mod variant_box_dyn_hybrid_base_spec__optional_wrapper;
-pub mod variant_box_dyn_hybrid_test_object_rust_spec__person;
 pub mod variant_car_person;
+pub mod variant_std__sync__arc_dyn_hybrid_base_spec__optional_wrapper;
+pub mod variant_std__sync__arc_dyn_hybrid_test_object_rust_spec__person;
 pub mod variant_string_f64;
 pub mod weird_numbers_enum;
 pub mod wrapped_js_struct;
@@ -80,6 +80,22 @@ pub mod hybrid_test_view_spec {
 pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
     unsafe {
         let _ = std::ffi::CString::from_raw(ptr);
+    }
+}
+
+/// Duplicate a C string using Rust's allocator.
+/// Called by C++ callback trampolines to allocate error strings that can
+/// later be freed by __nitrogen_free_cstring on the Rust side.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn __nitrogen_dup_cstring(
+    src: *const std::ffi::c_char,
+) -> *mut std::ffi::c_char {
+    if src.is_null() {
+        return std::ptr::null_mut();
+    }
+    unsafe {
+        let s = std::ffi::CStr::from_ptr(src).to_string_lossy().into_owned();
+        std::ffi::CString::new(s).unwrap_or_default().into_raw()
     }
 }
 

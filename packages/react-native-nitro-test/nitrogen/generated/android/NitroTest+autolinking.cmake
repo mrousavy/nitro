@@ -120,7 +120,7 @@ target_sources(
 
 # Build and link the Rust static library.
 # cargo is invoked automatically during the build for the correct Android ABI.
-set(NITRO_RUST_SRC_DIR "${CMAKE_SOURCE_DIR}/../nitrogen/generated/shared/rust")
+set(NITRO_RUST_SRC_DIR "${CMAKE_SOURCE_DIR}/..")
 if(NOT DEFINED NITRO_RUST_LIB_DIR)
   set(NITRO_RUST_LIB_DIR "${NITRO_RUST_SRC_DIR}/target/${ANDROID_ABI}")
 endif()

@@ -52,10 +52,25 @@ impl Func_void_std__vector_Powertrain_ {
     /// Call the wrapped function.
     pub unsafe fn call(&self, array: Vec<Powertrain>) {
         unsafe {
-            (self.fn_ptr)(
-                self.userdata,
-                Box::into_raw(Box::new(array)) as *mut std::ffi::c_void,
-            );
+            (self.fn_ptr)(self.userdata, {
+                #[repr(C)]
+                struct __Array {
+                    data: *mut i32,
+                    len: usize,
+                }
+                let mut __items: Vec<_> = array.into_iter().map(|__e| __e as i32).collect();
+                let __len = __items.len();
+                let __data = if __items.is_empty() {
+                    std::ptr::null_mut()
+                } else {
+                    __items.as_mut_ptr() as *mut i32
+                };
+                std::mem::forget(__items);
+                Box::into_raw(Box::new(__Array {
+                    data: __data,
+                    len: __len,
+                })) as *mut std::ffi::c_void
+            });
         }
     }
 }

@@ -11,12 +11,22 @@
 #import <type_traits>
 
 #include "HybridTestObjectCpp.hpp"
+#include "HybridTestObjectRustSpecRust.hpp"
 #include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
 #include "HybridBaseSpecSwift.hpp"
 #include "HybridChildSpecSwift.hpp"
 #include "HybridPlatformObjectSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "HybridRecyclableTestViewSpecSwift.hpp"
+
+// Rust factory function — auto-generated in factory.rs for "HybridTestObjectRust".
+// The Rust side defines (in factory.rs):
+//   #[unsafe(no_mangle)]
+//   pub extern "C" fn create_HybridTestObjectRustSpec() -> *mut std::ffi::c_void {
+//       let obj: Box<dyn HybridTestObjectRustSpec> = Box::new(HybridTestObjectRust::new());
+//       Box::into_raw(Box::new(obj)) as *mut std::ffi::c_void
+//   }
+extern "C" void* create_HybridTestObjectRustSpec();
 
 @interface NitroTestAutolinking : NSObject
 @end
@@ -34,6 +44,13 @@
                     "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
                     "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
       return std::make_shared<HybridTestObjectCpp>();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestObjectRust",
+    []() -> std::shared_ptr<HybridObject> {
+      void* rustPtr = create_HybridTestObjectRustSpec();
+      return std::make_shared<HybridTestObjectRustSpecRust>(rustPtr);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(

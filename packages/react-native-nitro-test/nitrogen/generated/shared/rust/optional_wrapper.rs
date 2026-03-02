@@ -18,7 +18,7 @@
 use super::nitro_buffer::NitroBuffer;
 
 /// Struct `OptionalWrapper` — auto-generated from TypeScript.
-#[derive(Debug, Clone, PartialEq)]
+// Note: derives omitted because this type contains closures or trait objects
 pub struct OptionalWrapper {
     pub optional_array_buffer: Option<NitroBuffer>,
     pub optional_string: Option<String>,
