@@ -312,24 +312,8 @@ export function createRustCargoToml(): SourceFile {
     .toLowerCase()
     .replace(/[^a-z0-9_]/g, "_");
 
-  const implCrate = NitroConfig.current.getRustImplCrate();
-  // Generated crate is at nitrogen/generated/shared/rust/ relative to project root
-  // The impl crate path is relative to the generated Cargo.toml location
-  // which is at: nitrogen/generated/shared/rust/Cargo.toml
-  // The project root (where the user's Cargo.toml lives) is 4 levels up.
-  // TODO: Make this configurable via NitroConfig if projects use non-standard layouts.
-  const implCrateDep = implCrate != null
-    ? `\n[dependencies]\n${implCrate} = { path = "../../../../" }\n`
-    : "";
-
-  // The [lib] name must match what CMake and CocoaPods expect:
-  // `lib${name}_rust.a` where `name` is the raw androidCxxLibName (e.g. NitroTest).
-  const libName = `${name}_rust`;
-
   const code = `
 ${createFileMetadataString("Cargo.toml", "#")}
-
-[workspace]
 
 [package]
 name = "${crateName}_rust"
@@ -337,10 +321,8 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "${libName}"
 path = "lib.rs"
-crate-type = ["staticlib"]
-${implCrateDep}
+crate-type = ["rlib"]
   `.trim();
 
   return {

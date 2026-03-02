@@ -76,24 +76,29 @@ ${
   hasRust
     ? `
   # Include Rust C++ FFI bridge files
-  spec.source_files = Array(spec.source_files) + [
+  current_source_files_rust = Array(spec.attributes_hash['source_files'])
+  spec.source_files = current_source_files_rust + [
     "nitrogen/generated/shared/rust/**/*.{h,hpp,c,cpp}",
   ]
-  spec.public_header_files = Array(spec.public_header_files) + [
+  current_public_header_files_rust = Array(spec.attributes_hash['public_header_files'])
+  spec.public_header_files = current_public_header_files_rust + [
     "nitrogen/generated/shared/rust/**/*.{h,hpp}",
   ]
 
   # Build and link the Rust static library.
-  # cargo is invoked automatically as a script phase before compilation.
-  rust_src_dir = File.join(__dir__, '..', 'shared', 'rust')
-  rust_lib_dir = ENV['NITRO_RUST_LIB_DIR'] || File.join(rust_src_dir, 'target')
+  # The impl crate's Cargo.toml lives at the package root (3 levels up from this file).
+  package_root = File.expand_path(File.join(__dir__, '..', '..', '..'))
+  # Absolute path for script phase and xcconfig
+  rust_lib_dir = ENV['NITRO_RUST_LIB_DIR'] || File.join(package_root, 'target', 'apple')
+  # Relative path for CocoaPods file patterns (vendored_libraries must be relative)
+  rust_lib_dir_relative = 'target/apple'
 
   current_script_phases = Array(spec.attributes_hash['script_phases'])
   spec.script_phases = current_script_phases + [{
-    :name => 'Build Rust Library',
+    :name => 'Build Rust Library (${rustLibName}_rust)',
     :script => %Q{
       set -e
-      RUST_SRC_DIR="#{rust_src_dir}"
+      RUST_SRC_DIR="#{package_root}"
       RUST_LIB_DIR="#{rust_lib_dir}"
 
       # Determine Rust target triple from Xcode build settings
@@ -117,13 +122,22 @@ ${
         export PATH="$HOME/.cargo/bin:$PATH"
       fi
 
-      echo "Building Rust library for $RUST_TARGET..."
+      # Xcode sets CC/CXX/LD/SDKROOT to the iOS SDK, which breaks build scripts
+      # that must compile and run on the host.
+      unset CC CXX LD AR CFLAGS CXXFLAGS LDFLAGS LIBRARY_PATH
+      export SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+
+      # Tell cargo which linker to use for cross-compile targets.
+      export CARGO_TARGET_AARCH64_APPLE_IOS_SIM_LINKER="$(xcrun --sdk iphonesimulator --find clang)"
+      export CARGO_TARGET_AARCH64_APPLE_IOS_LINKER="$(xcrun --sdk iphoneos --find clang)"
+      export CARGO_TARGET_X86_64_APPLE_IOS_LINKER="$(xcrun --sdk iphonesimulator --find clang)"
+
+      echo "Building ${rustLibName}_rust for $RUST_TARGET..."
       cd "$RUST_SRC_DIR"
       cargo build --release --target "$RUST_TARGET"
 
-      # Copy the built library to the expected location
       mkdir -p "$RUST_LIB_DIR"
-      cp "target/$RUST_TARGET/release/lib*.a" "$RUST_LIB_DIR/" 2>/dev/null || true
+      cp "target/$RUST_TARGET/release/lib${rustLibName}_rust.a" "$RUST_LIB_DIR/"
     },
     :execution_position => :before_compile,
     :shell_path => '/bin/sh',
@@ -131,8 +145,20 @@ ${
 
   current_vendored_libraries = Array(spec.attributes_hash['vendored_libraries'])
   spec.vendored_libraries = current_vendored_libraries + [
-    File.join(rust_lib_dir, "lib${rustLibName}_rust.a")
+    File.join(rust_lib_dir_relative, "lib${rustLibName}_rust.a")
   ]
+
+  current_pod_target_xcconfig_rust = spec.attributes_hash['pod_target_xcconfig'] || {}
+  spec.pod_target_xcconfig = current_pod_target_xcconfig_rust.merge({
+    "LIBRARY_SEARCH_PATHS" => %Q("#{rust_lib_dir}"),
+    "OTHER_LDFLAGS" => "-l${rustLibName}_rust",
+  })
+
+  current_user_target_xcconfig = spec.attributes_hash['user_target_xcconfig'] || {}
+  spec.user_target_xcconfig = current_user_target_xcconfig.merge({
+    "LIBRARY_SEARCH_PATHS" => %Q("#{rust_lib_dir}"),
+    "OTHER_LDFLAGS" => "-l${rustLibName}_rust",
+  })
 `
     : ""
 }end

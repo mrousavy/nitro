@@ -10,7 +10,7 @@ import { getReferencedTypes } from "../getReferencedTypes.js";
  * these standard traits.
  */
 export function canDeriveRustTraits(types: Type[]): boolean {
-  const nonDerivableKinds = new Set(["function", "hybrid-object"]);
+  const nonDerivableKinds = new Set(["function", "hybrid-object", "array-buffer"]);
   for (const type of types) {
     const referenced = getReferencedTypes(type);
     for (const t of referenced) {

@@ -224,7 +224,12 @@ ${closureBody}
     const paramConversions: string[] = [];
     const traitCallArgs: string[] = [];
 
-    for (const p of validMethodParams) {
+    for (const p of method.parameters) {
+      if (p.type.kind === "void" || p.type.kind === "null") {
+        // void/null params are not passed over FFI but the Rust trait still expects ()
+        traitCallArgs.push("()");
+        continue;
+      }
       const pName = toSnakeCase(p.name);
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
@@ -461,8 +466,13 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     const bridged = new RustCxxBridgedType(prop.type);
 
     const ffiCall = `${name.HybridTSpec}_get_${rustPropName}(_rustPtr)`;
-    if (!bridged.hasType) {
-      // void/null property — no value to return
+    if (prop.type.kind === "null") {
+      // null property returns NullType::null
+      propertyImpls.push(
+        `inline ${cppType} ${getterName}() override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return nitro::NullType::null; }`,
+      );
+    } else if (!bridged.hasType) {
+      // void property — no value to return
       propertyImpls.push(
         `inline ${cppType} ${getterName}() override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }`,
       );
@@ -511,12 +521,10 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
       ? getTypeAs(method.returnType, PromiseType).resultingType
       : method.returnType;
     const returnBridged = new RustCxxBridgedType(effectiveReturnType);
-    const hasReturn = effectiveReturnType.kind !== "void";
+    const hasReturn = effectiveReturnType.kind !== "void" && effectiveReturnType.kind !== "null";
 
-    const validParams = method.parameters.filter(
-      (p) => p.type.kind !== "void" && p.type.kind !== "null",
-    );
-    const params = validParams
+    // All params for C++ override signature (must match base class)
+    const params = method.parameters
       .map((p) => {
         const t = p.type.getCode("c++");
         return p.type.canBePassedByReference
@@ -525,6 +533,10 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
       })
       .join(", ");
 
+    // Only non-void/null params cross the FFI boundary
+    const validParams = method.parameters.filter(
+      (p) => p.type.kind !== "void" && p.type.kind !== "null",
+    );
     const ffiArgs = validParams.map((p) => {
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
@@ -581,6 +593,11 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     } else if (hasReturn) {
       methodImpls.push(
         `inline ${returnType} ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }`,
+      );
+    } else if (effectiveReturnType.kind === "null") {
+      // null returns NullType::null (not void)
+      methodImpls.push(
+        `inline ${returnType} ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return nitro::NullType::null; }`,
       );
     } else {
       methodImpls.push(

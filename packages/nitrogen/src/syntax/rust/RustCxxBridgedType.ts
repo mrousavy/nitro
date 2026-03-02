@@ -17,6 +17,7 @@ import { createRustVariant } from "./RustVariant.js";
 import { createRustAnyMap } from "./RustAnyMap.js";
 import { getHybridObjectName } from "../getHybridObjectName.js";
 import { toSnakeCase } from "../helpers.js";
+import { NitroConfig } from "../../config/NitroConfig.js";
 
 /**
  * Bridges types between Rust and C++ across the `extern "C"` FFI boundary.
@@ -74,16 +75,19 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
   getRequiredImports(language: Language): SourceImport[] {
     const imports = this.type.getRequiredImports(language);
 
-    // When a hybrid-object is used in a Rust bridge context (e.g. as a return type),
+    // When a Rust-implemented hybrid-object is used in a Rust bridge context,
     // the C++ side needs the Rust bridge header to reconstruct a shared_ptr.
+    // Non-Rust HybridObjects are passed through as opaque shared_ptr<Spec>.
     if (language === "c++" && this.type.kind === "hybrid-object") {
       const hybridType = getTypeAs(this.type, HybridObjectType);
-      const hybridName = getHybridObjectName(hybridType.hybridObjectName);
-      imports.push({
-        name: `${hybridName.HybridTSpecRust}.hpp`,
-        language: "c++",
-        space: "user",
-      });
+      if (this.isRustImplementedHybridObject(hybridType)) {
+        const hybridName = getHybridObjectName(hybridType.hybridObjectName);
+        imports.push({
+          name: `${hybridName.HybridTSpecRust}.hpp`,
+          language: "c++",
+          space: "user",
+        });
+      }
     }
 
     const referencedTypes = getReferencedTypes(this.type);
@@ -562,7 +566,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
                 `{ #[repr(C)] struct __Opt { has_value: u8, value: ${innerFfiRust} } ` +
                 `let __opt: __Opt = match ${parameterName} { ` +
                 `Some(__v) => __Opt { has_value: 1, value: ${innerConvert} }, ` +
-                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
+                `None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
                 `Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }`
               );
             } else {
@@ -570,7 +574,7 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
                 `{ #[repr(C)] struct __Opt { has_value: u8, value: ${innerFfiRust} } ` +
                 `let __opt: __Opt = match ${parameterName} { ` +
                 `Some(__v) => __Opt { has_value: 1, value: __v }, ` +
-                `None => __Opt { has_value: 0, value: unsafe { std::mem::zeroed() } /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
+                `None => __Opt { has_value: 0, value: std::mem::zeroed() /* SAFETY: value is never read when has_value=0; all FFI types are zero-safe */ } }; ` +
                 `Box::into_raw(Box::new(__opt)) as *mut std::ffi::c_void }`
               );
             }
@@ -661,14 +665,22 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       case "hybrid-object": {
         const hybridType = getTypeAs(this.type, HybridObjectType);
         const hybridName = getHybridObjectName(hybridType.hybridObjectName);
+        const isRust = this.isRustImplementedHybridObject(hybridType);
         switch (inLanguage) {
           case "rust":
             // Box the trait object and leak it as a void pointer
             return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
           case "c++":
-            // Wrap the void* (pointing to a Box<dyn Trait>) in the C++ Rust bridge class
-            // which manages the Rust-side lifetime and delegates calls back over FFI.
-            return `std::make_shared<${hybridName.HybridTSpecRust}>(${parameterName})`;
+            if (isRust) {
+              // Rust-implemented: wrap the void* (pointing to a Box<dyn Trait>)
+              // in the C++ Rust bridge class.
+              return `std::make_shared<${hybridName.HybridTSpecRust}>(${parameterName})`;
+            } else {
+              // Non-Rust HybridObject: the void* points to a heap-allocated shared_ptr
+              // that was boxed when passing C++ → Rust. Unwrap it back.
+              const cppType = this.type.getCode("c++");
+              return `([](void* __p) -> ${cppType} { auto __sp = static_cast<${cppType}*>(__p); auto __r = std::move(*__sp); delete __sp; return __r; })(${parameterName})`;
+            }
           default:
             return parameterName;
         }
@@ -772,5 +784,13 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
       default:
         return "__FfiResult_ptr";
     }
+  }
+
+  /**
+   * Check if a HybridObject type has a Rust implementation in the autolinking config.
+   */
+  private isRustImplementedHybridObject(hybridType: HybridObjectType): boolean {
+    const autolinked = NitroConfig.current.getAutolinkedHybridObjects();
+    return autolinked[hybridType.hybridObjectName]?.rust != null;
   }
 }
