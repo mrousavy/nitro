@@ -29,18 +29,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject TestObjectSwiftKotlin]"
@@ -646,8 +634,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     val __result = createExternalVariantFromFunc(factory)
     return __result
   }
-
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "HybridTestObjectSwiftKotlinSpec"

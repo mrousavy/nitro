@@ -81,16 +81,16 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 #include "${name.HybridTSpec}.hpp"
 
 ${cppImports
-  .map((i) => i.forwardDeclaration)
-  .filter((f) => f != null)
-  .join('\n')}
+      .map((i) => i.forwardDeclaration)
+      .filter((f) => f != null)
+      .join('\n')}
 ${cppImports.map((i) => includeHeader(i)).join('\n')}
 
 namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
+  class ${name.JHybridTSpec}: public jni::JavaClass<${name.JHybridTSpec}, ${cppBase}>,
 ${spaces}          public virtual ${name.HybridTSpec} {
   public:
     static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";

@@ -24,18 +24,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridBaseSpec: HybridObject() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject Base]"
@@ -48,8 +36,6 @@ abstract class HybridBaseSpec: HybridObject() {
 
   // Methods
   
-
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "HybridBaseSpec"

@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridPlatformObjectSpec: public jni::HybridClass<JHybridPlatformObjectSpec, JHybridObject>,
+  class JHybridPlatformObjectSpec: public jni::JavaClass<JHybridPlatformObjectSpec, JHybridObject>,
                                    public virtual HybridPlatformObjectSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";

@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridRecyclableTestViewSpec: public jni::HybridClass<JHybridRecyclableTestViewSpec, JHybridObject>,
+  class JHybridRecyclableTestViewSpec: public jni::JavaClass<JHybridRecyclableTestViewSpec, JHybridObject>,
                                        public virtual HybridRecyclableTestViewSpec {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";

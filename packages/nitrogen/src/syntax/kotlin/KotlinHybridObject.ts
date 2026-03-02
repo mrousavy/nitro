@@ -82,18 +82,6 @@ ${imports.join('\n')}
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
   // Default implementation of \`HybridObject.toString()\`
   override fun toString(): String {
     return "[HybridObject ${name.T}]"
@@ -104,8 +92,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
 
   // Methods
   ${indent(methods, '  ')}
-
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "${name.HybridTSpec}"

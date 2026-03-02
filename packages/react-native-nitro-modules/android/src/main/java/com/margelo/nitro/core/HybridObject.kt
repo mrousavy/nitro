@@ -55,23 +55,4 @@ abstract class HybridObject {
     val ownName = this::class.simpleName
     return "[HybridObject $ownName]"
   }
-
-  /**
-   * Holds the native C++ instance.
-   * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of its specs.
-   * This is `null`, until `updateNative(..)` is called.
-   */
-  private var mHybridData: HybridData? = null
-
-  /**
-   * If `HybridObject` is subclassed, the sub-class needs to create its own `HybridData`
-   * with a C++ `jni::HybridClass` representing the subclass directly.
-   * Then, that `HybridData` must be passed upwards to `HybridObject` using `updateNative(..)`.
-   *
-   * This must happen for each sub/base class in the whole inheritance chain to ensure
-   * overrides and type-erasure works as expected.
-   */
-  protected open fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-  }
 }

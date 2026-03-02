@@ -19,13 +19,13 @@ using namespace facebook;
  * HybridData is passed up from inherited members, so this acts like a base class
  * and has to be inherited as "virtual" in C++ to properly avoid creating multiple `HybridObject` instances.
  */
-class JHybridObject : public jni::HybridClass<JHybridObject>, public virtual HybridObject {
+class JHybridObject : public jni::JavaClass<JHybridObject>, public virtual HybridObject {
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
 
 public:
   // C++ constructor (called from Java via `initHybrid()`)
-  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+  [[deprecated]] explicit JHybridObject(jni::alias_ref<JHybridObject::javaobject> jThis) : _javaPart(jni::make_global(jThis)) {}
   // C++ default constructor used by older Nitro versions (deprecated in favor of the jThis one)
   [[deprecated]] JHybridObject() = default;
 
@@ -38,7 +38,6 @@ public:
 
 private:
   jni::global_ref<JHybridObject::javaobject> _javaPart;
-  friend HybridBase;
 };
 
 } // namespace margelo::nitro

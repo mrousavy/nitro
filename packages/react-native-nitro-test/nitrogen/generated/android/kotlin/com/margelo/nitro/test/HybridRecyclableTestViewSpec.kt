@@ -24,18 +24,6 @@ import com.margelo.nitro.views.HybridView
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridRecyclableTestViewSpec: HybridView() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject RecyclableTestView]"
@@ -50,8 +38,6 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
 
   // Methods
   
-
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "HybridRecyclableTestViewSpec"
