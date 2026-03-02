@@ -43,7 +43,11 @@ public:
       }
       static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
       auto javaPart = _jThis->getFieldValue(javaPartField);
-      auto hybridObject = std::make_shared<T>(javaPart);
+      auto castJavaPart = jni::dynamic_ref_cast<typename T::JavaPart>(javaPart);
+      if (castJavaPart == nullptr) [[unlikely]] {
+        throw std::runtime_error("Failed to cast JavaPart to T::JavaPart!");
+      }
+      auto hybridObject = std::make_shared<T>(castJavaPart);
       _hybridObject = hybridObject;
       return hybridObject;
     }
