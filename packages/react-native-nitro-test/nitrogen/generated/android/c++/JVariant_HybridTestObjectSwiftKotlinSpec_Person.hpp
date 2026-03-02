@@ -10,13 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <memory>
-#include "HybridTestObjectSwiftKotlinSpec.hpp"
-#include "Person.hpp"
-#include <variant>
-#include "JHybridTestObjectSwiftKotlinSpec.hpp"
-#include "JPerson.hpp"
-#include <string>
+
 
 namespace margelo::nitro::test {
 

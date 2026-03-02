@@ -14,8 +14,6 @@
 #include <NitroModules/Promise.hpp>
 #include <functional>
 #include <NitroModules/JNICallable.hpp>
-#include <NitroModules/JPromise.hpp>
-#include <NitroModules/JArrayBuffer.hpp>
 
 namespace margelo::nitro::test {
 

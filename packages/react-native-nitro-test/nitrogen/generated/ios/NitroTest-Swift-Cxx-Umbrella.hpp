@@ -8,12 +8,20 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AlbumItem` to properly resolve imports.
+namespace margelo::nitro::test { struct AlbumItem; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
+// Forward declaration of `EntityInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct EntityInfo; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `GalleryItem` to properly resolve imports.
+namespace margelo::nitro::test { struct GalleryItem; }
+// Forward declaration of `Gallery` to properly resolve imports.
+namespace margelo::nitro::test { struct Gallery; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -32,6 +40,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `MediaInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct MediaInfo; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -46,15 +56,23 @@ namespace margelo::nitro::test { struct Person; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `TagInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct TagInfo; }
+// Forward declaration of `UserInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct UserInfo; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
+#include "AlbumItem.hpp"
 #include "Car.hpp"
 #include "ColorScheme.hpp"
+#include "EntityInfo.hpp"
 #include "ExternalObjectStruct.hpp"
+#include "Gallery.hpp"
+#include "GalleryItem.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -63,6 +81,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
+#include "MediaInfo.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
@@ -70,6 +89,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include "SecondMapWrapper.hpp"
+#include "TagInfo.hpp"
+#include "UserInfo.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>

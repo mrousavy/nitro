@@ -10,17 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <string>
-#include "Car.hpp"
-#include <variant>
-#include "JCar.hpp"
-#include "Powertrain.hpp"
-#include "JPowertrain.hpp"
-#include "Person.hpp"
-#include <optional>
-#include "JPerson.hpp"
-#include <vector>
-#include "JVariant_String_Double.hpp"
+
 
 namespace margelo::nitro::test {
 

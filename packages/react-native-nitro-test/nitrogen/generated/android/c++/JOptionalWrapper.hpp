@@ -10,10 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "OptionalWrapper.hpp"
 
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/JArrayBuffer.hpp>
-#include <optional>
-#include <string>
+
 
 namespace margelo::nitro::test {
 

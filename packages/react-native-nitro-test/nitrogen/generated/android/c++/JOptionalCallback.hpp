@@ -10,12 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "OptionalCallback.hpp"
 
-#include "JFunc_void.hpp"
-#include "JVariant_______Unit_Double.hpp"
-#include <NitroModules/JNICallable.hpp>
-#include <functional>
-#include <optional>
-#include <variant>
+
 
 namespace margelo::nitro::test {
 

@@ -12,9 +12,6 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include "JColorScheme.hpp"
-#include <functional>
-#include "JFunc_void.hpp"
-#include <NitroModules/JNICallable.hpp>
 
 namespace margelo::nitro::test {
 

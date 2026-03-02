@@ -10,10 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "MapWrapper.hpp"
 
-#include "JSecondMapWrapper.hpp"
-#include "SecondMapWrapper.hpp"
-#include <string>
-#include <unordered_map>
+
 
 namespace margelo::nitro::test {
 

@@ -10,9 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "WeirdNumbersEnum.hpp"
-#include <variant>
-#include "JWeirdNumbersEnum.hpp"
+
 
 namespace margelo::nitro::test {
 

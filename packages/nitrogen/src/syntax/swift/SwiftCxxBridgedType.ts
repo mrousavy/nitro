@@ -33,6 +33,10 @@ import { ErrorType } from '../types/ErrorType.js'
 import { createSwiftFunctionBridge } from './SwiftFunction.js'
 import type { Language } from '../../getPlatformSpecs.js'
 
+// Module-level re-entrancy guards for cyclic types.
+const requiredImportsVisited = new Set<Type>()
+const extraFilesVisited = new Set<Type>()
+
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
 export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
@@ -129,6 +133,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
 
   getRequiredImports(language: Language): SourceImport[] {
+    if (requiredImportsVisited.has(this.type)) return []
+    requiredImportsVisited.add(this.type)
+
     const imports = this.type.getRequiredImports(language)
 
     if (language === 'c++') {
@@ -161,6 +168,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
 
   getExtraFiles(): SourceFile[] {
+    if (extraFilesVisited.has(this.type)) return []
+    extraFilesVisited.add(this.type)
+
     const files: SourceFile[] = []
 
     switch (this.type.kind) {

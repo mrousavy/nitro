@@ -10,16 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <memory>
-#include "HybridBaseSpec.hpp"
-#include "OptionalWrapper.hpp"
-#include <variant>
-#include "JHybridBaseSpec.hpp"
-#include "JOptionalWrapper.hpp"
-#include <NitroModules/ArrayBuffer.hpp>
-#include <optional>
-#include <NitroModules/JArrayBuffer.hpp>
-#include <string>
+
 
 namespace margelo::nitro::test {
 

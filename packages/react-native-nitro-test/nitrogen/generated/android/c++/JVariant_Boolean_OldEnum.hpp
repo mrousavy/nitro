@@ -10,9 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "OldEnum.hpp"
-#include <variant>
-#include "JOldEnum.hpp"
+
 
 namespace margelo::nitro::test {
 

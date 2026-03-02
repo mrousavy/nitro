@@ -10,12 +10,7 @@
 #include <fbjni/fbjni.h>
 #include "WrappedJsStruct.hpp"
 
-#include "JFunc_void_double.hpp"
-#include "JJsStyleStruct.hpp"
-#include "JsStyleStruct.hpp"
-#include <NitroModules/JNICallable.hpp>
-#include <functional>
-#include <vector>
+
 
 namespace margelo::nitro::test {
 

@@ -16,7 +16,6 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
-#include <functional>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 

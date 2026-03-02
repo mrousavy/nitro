@@ -21,6 +21,10 @@ import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
 import { createKotlinVariant } from './KotlinVariant.js'
 
+// Module-level re-entrancy guards for cyclic types.
+const requiredImportsVisited = new Set<Type>()
+const extraFilesVisited = new Set<Type>()
+
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
 
@@ -67,6 +71,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   getRequiredImports(language: Language): SourceImport[] {
+    if (requiredImportsVisited.has(this.type)) return []
+    requiredImportsVisited.add(this.type)
+
     const imports = this.type.getRequiredImports(language)
 
     if (language === 'c++') {
@@ -192,6 +199,9 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   }
 
   getExtraFiles(): SourceFile[] {
+    if (extraFilesVisited.has(this.type)) return []
+    extraFilesVisited.add(this.type)
+
     const files: SourceFile[] = []
 
     switch (this.type.kind) {

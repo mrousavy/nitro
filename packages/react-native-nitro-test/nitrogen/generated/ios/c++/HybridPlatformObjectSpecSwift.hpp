@@ -14,7 +14,7 @@ namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 
 
 
-#include <string>
+
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 

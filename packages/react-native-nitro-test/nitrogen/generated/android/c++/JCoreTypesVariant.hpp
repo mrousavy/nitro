@@ -10,23 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include <NitroModules/ArrayBuffer.hpp>
-#include <functional>
-#include "WrappedJsStruct.hpp"
-#include <NitroModules/Promise.hpp>
-#include <chrono>
-#include <NitroModules/AnyMap.hpp>
-#include <variant>
-#include <NitroModules/JArrayBuffer.hpp>
-#include "JFunc_void_double.hpp"
-#include <NitroModules/JNICallable.hpp>
-#include "JWrappedJsStruct.hpp"
-#include "JsStyleStruct.hpp"
-#include "JJsStyleStruct.hpp"
-#include <vector>
-#include <NitroModules/JPromise.hpp>
-#include <NitroModules/JInstant.hpp>
-#include <NitroModules/JAnyMap.hpp>
+
 
 namespace margelo::nitro::test {
 

@@ -14,7 +14,6 @@
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <functional>
 #include <NitroModules/JNICallable.hpp>
-#include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
 
 namespace margelo::nitro::test {
 

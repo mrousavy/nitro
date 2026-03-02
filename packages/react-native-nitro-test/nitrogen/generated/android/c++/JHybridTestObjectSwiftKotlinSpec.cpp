@@ -29,6 +29,20 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `Gallery` to properly resolve imports.
+namespace margelo::nitro::test { struct Gallery; }
+// Forward declaration of `AlbumItem` to properly resolve imports.
+namespace margelo::nitro::test { struct AlbumItem; }
+// Forward declaration of `MediaInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct MediaInfo; }
+// Forward declaration of `GalleryItem` to properly resolve imports.
+namespace margelo::nitro::test { struct GalleryItem; }
+// Forward declaration of `TagInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct TagInfo; }
+// Forward declaration of `EntityInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct EntityInfo; }
+// Forward declaration of `UserInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct UserInfo; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -48,9 +62,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include <optional>
-#include <string>
 #include <NitroModules/Null.hpp>
 #include <NitroModules/JNull.hpp>
+#include <string>
 #include <variant>
 #include "JVariant_NullType_String.hpp"
 #include <vector>
@@ -64,7 +78,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
-#include "JPerson.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
@@ -82,7 +95,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <chrono>
 #include <NitroModules/JInstant.hpp>
 #include "Car.hpp"
-#include "JCar.hpp"
 #include "WrappedJsStruct.hpp"
 #include "JWrappedJsStruct.hpp"
 #include "JsStyleStruct.hpp"
@@ -92,12 +104,25 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
+#include "Gallery.hpp"
+#include "JGallery.hpp"
+#include "AlbumItem.hpp"
+#include "JAlbumItem.hpp"
+#include "MediaInfo.hpp"
+#include "JMediaInfo.hpp"
+#include "GalleryItem.hpp"
+#include "JGalleryItem.hpp"
+#include "TagInfo.hpp"
+#include "JTagInfo.hpp"
+#include "EntityInfo.hpp"
+#include "JEntityInfo.hpp"
+#include "UserInfo.hpp"
+#include "JUserInfo.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
 #include "JWeirdNumbersEnum.hpp"
 #include "JVariant_Car_Person.hpp"
-#include "JNamedVariant.hpp"
 #include "HybridBaseSpec.hpp"
 #include "JVariant_HybridBaseSpec_OptionalWrapper.hpp"
 #include "JHybridBaseSpec.hpp"
@@ -121,7 +146,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "JCar.hpp"
 #include "JVariant_Boolean_DoubleArray_Array_String__String_Double.hpp"
+#include "JNamedVariant.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
@@ -1160,6 +1187,11 @@ namespace margelo::nitro::test {
   OptionalCallback JHybridTestObjectSwiftKotlinSpec::bounceOptionalCallback(const OptionalCallback& value) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
+    return __result->toCpp();
+  }
+  Gallery JHybridTestObjectSwiftKotlinSpec::bounceGallery(const Gallery& gallery) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JGallery>(jni::alias_ref<JGallery> /* gallery */)>("bounceGallery");
+    auto __result = method(_javaPart, JGallery::fromCpp(gallery));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
