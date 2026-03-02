@@ -3,12 +3,13 @@ import { NitroModules } from 'react-native-nitro-modules'
 import type {
   TestObjectCpp,
   TestObjectSwiftKotlin,
+  TestObjectRust,
 } from 'react-native-nitro-test'
 import { getTests } from '../src/getTests'
 import { harnessBackend } from '../src/testing/backends/harness'
 
 function createTestRunner(
-  testObject: TestObjectCpp | TestObjectSwiftKotlin
+  testObject: TestObjectCpp | TestObjectSwiftKotlin | TestObjectRust
 ): () => void {
   return () => {
     const tests = getTests(testObject, { backend: harnessBackend })
@@ -30,5 +31,9 @@ const testObjectSwiftKotlin =
     'TestObjectSwiftKotlin'
   )
 
+const testObjectRust =
+  NitroModules.createHybridObject<TestObjectRust>('TestObjectRust')
+
 describe('TestObject (C++)', createTestRunner(testObjectCpp))
 describe('TestObject (Swift/Kotlin)', createTestRunner(testObjectSwiftKotlin))
+describe('TestObject (Rust)', createTestRunner(testObjectRust))

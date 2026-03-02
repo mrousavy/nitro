@@ -1,6 +1,7 @@
 import {
   type TestObjectCpp,
   type TestObjectSwiftKotlin,
+  type TestObjectRust,
   OldEnum,
   type Car,
   type Person,
@@ -188,7 +189,7 @@ function debugOnly(string: string): string {
 }
 
 export function getTests(
-  testObject: TestObjectCpp | TestObjectSwiftKotlin,
+  testObject: TestObjectCpp | TestObjectSwiftKotlin | TestObjectRust,
   options: GetTestsOptions = {}
 ): TestRunner[] {
   const backend = options.backend ?? throwingBackend

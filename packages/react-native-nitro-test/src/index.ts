@@ -2,6 +2,7 @@ import { NitroModules } from 'react-native-nitro-modules'
 import {
   type TestObjectCpp,
   type TestObjectSwiftKotlin,
+  type TestObjectRust,
 } from './specs/TestObject.nitro'
 import { type PlatformObject } from './specs/PlatformObject.nitro'
 import type { Base } from './specs/Base.nitro'
@@ -21,6 +22,8 @@ export const HybridTestObjectSwiftKotlin =
   NitroModules.createHybridObject<TestObjectSwiftKotlin>(
     'TestObjectSwiftKotlin'
   )
+export const HybridTestObjectRust =
+  NitroModules.createHybridObject<TestObjectRust>('TestObjectRust')
 export const HybridBase = NitroModules.createHybridObject<Base>('Base')
 export const HybridChild = NitroModules.createHybridObject<Child>('Child')
 export const HybridPlatformObject =
