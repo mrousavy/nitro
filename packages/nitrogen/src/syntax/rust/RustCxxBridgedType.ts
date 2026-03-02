@@ -9,7 +9,11 @@ import { HybridObjectType } from "../types/HybridObjectType.js";
 import { OptionalType } from "../types/OptionalType.js";
 import { StructType } from "../types/StructType.js";
 import type { Type } from "../types/Type.js";
+import { PromiseType } from "../types/PromiseType.js";
 import { VariantType } from "../types/VariantType.js";
+import { ArrayType } from "../types/ArrayType.js";
+import { RecordType } from "../types/RecordType.js";
+import { TupleType } from "../types/TupleType.js";
 import { createRustEnum } from "./RustEnum.js";
 import { createRustFunction } from "./RustFunction.js";
 import { createRustStruct } from "./RustStruct.js";
@@ -18,6 +22,16 @@ import { createRustAnyMap } from "./RustAnyMap.js";
 import { getHybridObjectName } from "../getHybridObjectName.js";
 import { toSnakeCase } from "../helpers.js";
 import { NitroConfig } from "../../config/NitroConfig.js";
+
+/**
+ * Monotonic counter for generating unique C++ variable names in nested
+ * conversions. Without this, nested struct/optional/array conversions would
+ * reuse variable names like `__s`, causing "cannot appear in its own initializer" errors.
+ */
+let _cppVarId = 0;
+function nextCppId(): number {
+  return _cppVarId++;
+}
 
 /**
  * Bridges types between Rust and C++ across the `extern "C"` FFI boundary.
@@ -222,11 +236,12 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
         }
       case "enum": {
         const enumType = getTypeAs(this.type, EnumType);
+        const qualifiedEnumName = this.getQualifiedRustName();
         switch (inLanguage) {
           case "rust":
             // Panic on invalid discriminant — catch_unwind in the FFI shim will
             // catch this and propagate the error to C++ as a result struct.
-            return `${enumType.enumName}::from_i32(${parameterName}).unwrap_or_else(|| { panic!("[Nitro] Invalid ${enumType.enumName} discriminant: {}", ${parameterName}) })`;
+            return `${qualifiedEnumName}::from_i32(${parameterName}).unwrap_or_else(|| { panic!("[Nitro] Invalid ${enumType.enumName} discriminant: {}", ${parameterName}) })`;
           case "c++":
             return `static_cast<int32_t>(${parameterName})`;
           default:
@@ -251,17 +266,43 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
           default:
             return parameterName;
         }
-      case "array":
+      case "array": {
+        const arrType = getTypeAs(this.type, ArrayType);
+        const elemBridged = new RustCxxBridgedType(arrType.itemType);
+        const elemFfiRust = elemBridged.getTypeCode("rust");
+        const elemFfiCpp = elemBridged.getTypeCode("c++");
         switch (inLanguage) {
-          case "rust":
-            // Reconstruct Vec from boxed raw pointer
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
-          case "c++":
-            // Box the vector and pass as void*
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(std::move(${parameterName})))`;
+          case "rust": {
+            // Deserialize C array struct into Vec<T>
+            const elemConvert = elemBridged.needsSpecialHandling
+              ? elemBridged.parseFromCppToRust("__elem", "rust")
+              : "__elem";
+            return (
+              `{ #[repr(C)] struct __Array { data: *mut ${elemFfiRust}, len: usize } ` +
+              `let __arr = Box::from_raw(${parameterName} as *mut __Array); ` +
+              `let __v = Vec::from_raw_parts(__arr.data, __arr.len, __arr.len); ` +
+              `__v.into_iter().map(|__elem| ${elemConvert}).collect::<Vec<_>>() }`
+            );
+          }
+          case "c++": {
+            // Serialize std::vector into C array struct.
+            const aId = nextCppId();
+            const elemConvert = elemBridged.needsSpecialHandling
+              ? elemBridged.parseFromCppToRust(`${parameterName}[__i_${aId}]`, "c++")
+              : `static_cast<${elemFfiCpp}>(${parameterName}[__i_${aId}])`;
+            return (
+              `[&]() -> void* { ` +
+              `struct __Array_${aId} { ${elemFfiCpp}* data; size_t len; }; ` +
+              `auto __len_${aId} = ${parameterName}.size(); ` +
+              `auto __data_${aId} = static_cast<${elemFfiCpp}*>(malloc(__len_${aId} * sizeof(${elemFfiCpp}))); ` +
+              `for (size_t __i_${aId} = 0; __i_${aId} < __len_${aId}; __i_${aId}++) { __data_${aId}[__i_${aId}] = ${elemConvert}; } ` +
+              `return static_cast<void*>(new __Array_${aId} { __data_${aId}, __len_${aId} }); }()`
+            );
+          }
           default:
             return parameterName;
         }
+      }
       case "optional": {
         const optType = getTypeAs(this.type, OptionalType);
         const innerBridged = new RustCxxBridgedType(optType.wrappingType);
@@ -288,25 +329,26 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
           }
           case "c++": {
             // Convert std::optional<CppT> to C struct and box as void*.
-            // Extract the inner value into a local so inner bridging sees a plain value.
+            // Use unique variable names to avoid collisions with nested conversions.
+            const optId = nextCppId();
             if (innerBridged.needsSpecialHandling) {
-              const innerConvert = innerBridged.parseFromCppToRust("__inner", "c++");
+              const innerConvert = innerBridged.parseFromCppToRust(`__inner_${optId}`, "c++");
               return (
                 `[&]() -> void* { ` +
-                `struct __Opt { uint8_t has_value; ${innerFfiCpp} value; }; ` +
-                `auto __opt = new __Opt(); ` +
-                `if (${parameterName}.has_value()) { const auto& __inner = ${parameterName}.value(); __opt->has_value = 1; __opt->value = ${innerConvert}; } ` +
-                `else { __opt->has_value = 0; __opt->value = {}; } ` +
-                `return static_cast<void*>(__opt); }()`
+                `struct __Opt_${optId} { uint8_t has_value; ${innerFfiCpp} value; }; ` +
+                `auto __opt_${optId} = new __Opt_${optId}(); ` +
+                `if (${parameterName}.has_value()) { const auto& __inner_${optId} = ${parameterName}.value(); __opt_${optId}->has_value = 1; __opt_${optId}->value = ${innerConvert}; } ` +
+                `else { __opt_${optId}->has_value = 0; __opt_${optId}->value = {}; } ` +
+                `return static_cast<void*>(__opt_${optId}); }()`
               );
             } else {
               return (
                 `[&]() -> void* { ` +
-                `struct __Opt { uint8_t has_value; ${innerFfiCpp} value; }; ` +
-                `auto __opt = new __Opt(); ` +
-                `if (${parameterName}.has_value()) { __opt->has_value = 1; __opt->value = static_cast<${innerFfiCpp}>(${parameterName}.value()); } ` +
-                `else { __opt->has_value = 0; __opt->value = {}; } ` +
-                `return static_cast<void*>(__opt); }()`
+                `struct __Opt_${optId} { uint8_t has_value; ${innerFfiCpp} value; }; ` +
+                `auto __opt_${optId} = new __Opt_${optId}(); ` +
+                `if (${parameterName}.has_value()) { __opt_${optId}->has_value = 1; __opt_${optId}->value = static_cast<${innerFfiCpp}>(${parameterName}.value()); } ` +
+                `else { __opt_${optId}->has_value = 0; __opt_${optId}->value = {}; } ` +
+                `return static_cast<void*>(__opt_${optId}); }()`
               );
             }
           }
@@ -314,42 +356,236 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
             return parameterName;
         }
       }
-      case "struct":
+      case "struct": {
+        const structType = getTypeAs(this.type, StructType);
         switch (inLanguage) {
-          case "rust":
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
-          case "c++":
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(${parameterName}))`;
+          case "rust": {
+            // Deserialize C struct with FFI-compatible fields into Rust struct.
+            // FFI struct uses escapedName (camelCase); Rust struct uses snake_case.
+            // Use qualified path since nested struct types may not be imported.
+            const fields = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              return `${p.escapedName}: ${b.getTypeCode("rust")}`;
+            });
+            const reconstruct = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              const rustFieldName = toSnakeCase(p.name);
+              return b.needsSpecialHandling
+                ? `${rustFieldName}: ${b.parseFromCppToRust(`__s.${p.escapedName}`, "rust")}`
+                : `${rustFieldName}: __s.${p.escapedName}`;
+            });
+            return (
+              `{ #[repr(C)] struct __Struct { ${fields.join(", ")} } ` +
+              `let __s = *Box::from_raw(${parameterName} as *mut __Struct); ` +
+              `${this.getQualifiedRustName()} { ${reconstruct.join(", ")} } }`
+            );
+          }
+          case "c++": {
+            // Serialize C++ struct into C struct with FFI-compatible fields.
+            // Use unique IDs to avoid name collisions with nested conversions.
+            const sId = nextCppId();
+            const fields = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              return `${b.getTypeCode("c++")} ${p.escapedName};`;
+            });
+            const extracts = structType.properties.map((p, i) => {
+              return `const auto& __f${sId}_${i} = ${parameterName}.${p.escapedName};`;
+            });
+            const assigns = structType.properties.map((p, i) => {
+              const b = new RustCxxBridgedType(p);
+              const val = b.needsSpecialHandling
+                ? b.parseFromCppToRust(`__f${sId}_${i}`, "c++")
+                : `__f${sId}_${i}`;
+              return `__s_${sId}->${p.escapedName} = ${val};`;
+            });
+            return (
+              `[&]() -> void* { ` +
+              `struct __Struct_${sId} { ${fields.join(" ")} }; ` +
+              `${extracts.join(" ")} ` +
+              `auto __s_${sId} = new __Struct_${sId}(); ` +
+              `${assigns.join(" ")} ` +
+              `return static_cast<void*>(__s_${sId}); }()`
+            );
+          }
           default:
             return parameterName;
         }
-      case "variant":
+      }
+      case "variant": {
+        const variantType = getTypeAs(this.type, VariantType);
         switch (inLanguage) {
-          case "rust":
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
-          case "c++":
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(std::move(${parameterName})))`;
+          case "rust": {
+            // Unbox the C tagged-union struct and reconstruct the Rust enum.
+            // The struct layout: { index: i32, value: *mut c_void }
+            // Inner values are always boxed through a pointer regardless of type.
+            const rustEnumName = this.getQualifiedRustName();
+            const matchArms = variantType.cases
+              .map(([label, innerType], i) => {
+                const caseName =
+                  label.charAt(0).toUpperCase() + label.slice(1);
+                const innerBridged = new RustCxxBridgedType(innerType);
+                if (
+                  innerType.kind === "void" ||
+                  innerType.kind === "null"
+                ) {
+                  return `${i} => ${rustEnumName}::${caseName}(()),`;
+                } else {
+                  // Unbox the inner FFI value from the heap pointer
+                  const innerFfiRust = innerBridged.getTypeCode("rust");
+                  const unboxed = `*Box::from_raw(__var.value as *mut ${innerFfiRust})`;
+                  if (innerBridged.needsSpecialHandling) {
+                    const innerConvert = innerBridged.parseFromCppToRust(
+                      unboxed,
+                      "rust",
+                    );
+                    return `${i} => ${rustEnumName}::${caseName}(${innerConvert}),`;
+                  } else {
+                    return `${i} => ${rustEnumName}::${caseName}(${unboxed}),`;
+                  }
+                }
+              })
+              .join(" ");
+            return (
+              `{ #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } ` +
+              `let __var = *Box::from_raw(${parameterName} as *mut __Var); ` +
+              `match __var.index { ${matchArms} _ => panic!("[Nitro] Invalid variant index: {}", __var.index) } }`
+            );
+          }
+          case "c++": {
+            // Convert std::variant to a C tagged-union struct: { int32_t index; void* value; }
+            // Inner values are always heap-allocated regardless of type.
+            const vId = nextCppId();
+            const visitBranches = variantType.cases
+              .map(([_label, innerType], i) => {
+                const innerBridged = new RustCxxBridgedType(innerType);
+                const innerFfiCpp = innerBridged.getTypeCode("c++");
+                if (
+                  innerType.kind === "void" ||
+                  innerType.kind === "null"
+                ) {
+                  return `if (${parameterName}.index() == ${i}) { __var_${vId}->index = ${i}; __var_${vId}->value = nullptr; }`;
+                } else if (innerBridged.needsSpecialHandling) {
+                  const innerConvert = innerBridged.parseFromCppToRust(
+                    `std::get<${i}>(${parameterName})`,
+                    "c++",
+                  );
+                  return `if (${parameterName}.index() == ${i}) { __var_${vId}->index = ${i}; __var_${vId}->value = static_cast<void*>(new ${innerFfiCpp}(${innerConvert})); }`;
+                } else {
+                  return `if (${parameterName}.index() == ${i}) { __var_${vId}->index = ${i}; __var_${vId}->value = static_cast<void*>(new ${innerFfiCpp}(std::get<${i}>(${parameterName}))); }`;
+                }
+              })
+              .join(" else ");
+            return (
+              `[&]() -> void* { ` +
+              `struct __Var_${vId} { int32_t index; void* value; }; ` +
+              `auto __var_${vId} = new __Var_${vId}(); ` +
+              `${visitBranches} ` +
+              `return static_cast<void*>(__var_${vId}); }()`
+            );
+          }
           default:
             return parameterName;
         }
-      case "tuple":
+      }
+      case "tuple": {
+        const tupType = getTypeAs(this.type, TupleType);
         switch (inLanguage) {
-          case "rust":
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
-          case "c++":
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(std::move(${parameterName})))`;
+          case "rust": {
+            // Deserialize C struct with one field per tuple element
+            const fields = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              return `f${i}: ${b.getTypeCode("rust")}`;
+            });
+            const reconstruct = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              return b.needsSpecialHandling
+                ? b.parseFromCppToRust(`__tup.f${i}`, "rust")
+                : `__tup.f${i}`;
+            });
+            return (
+              `{ #[repr(C)] struct __Tuple { ${fields.join(", ")} } ` +
+              `let __tup = *Box::from_raw(${parameterName} as *mut __Tuple); ` +
+              `(${reconstruct.join(", ")}) }`
+            );
+          }
+          case "c++": {
+            // Serialize std::tuple into C struct
+            const tId = nextCppId();
+            const fields = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              return `${b.getTypeCode("c++")} f${i};`;
+            });
+            const assigns = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              const getter = `std::get<${i}>(${parameterName})`;
+              const val = b.needsSpecialHandling
+                ? b.parseFromCppToRust(getter, "c++")
+                : getter;
+              return `__tup_${tId}->f${i} = ${val};`;
+            });
+            return (
+              `[&]() -> void* { ` +
+              `struct __Tuple_${tId} { ${fields.join(" ")} }; ` +
+              `auto __tup_${tId} = new __Tuple_${tId}(); ` +
+              `${assigns.join(" ")} ` +
+              `return static_cast<void*>(__tup_${tId}); }()`
+            );
+          }
           default:
             return parameterName;
         }
-      case "record":
+      }
+      case "record": {
+        const recType = getTypeAs(this.type, RecordType);
+        const keyBridged = new RustCxxBridgedType(recType.keyType);
+        const valBridged = new RustCxxBridgedType(recType.valueType);
+        const keyFfiRust = keyBridged.getTypeCode("rust");
+        const valFfiRust = valBridged.getTypeCode("rust");
+        const keyFfiCpp = keyBridged.getTypeCode("c++");
+        const valFfiCpp = valBridged.getTypeCode("c++");
         switch (inLanguage) {
-          case "rust":
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
-          case "c++":
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(std::move(${parameterName})))`;
+          case "rust": {
+            // Deserialize C array-of-pairs struct into HashMap
+            const keyConvert = keyBridged.needsSpecialHandling
+              ? keyBridged.parseFromCppToRust("__e.key", "rust")
+              : "__e.key";
+            const valConvert = valBridged.needsSpecialHandling
+              ? valBridged.parseFromCppToRust("__e.val", "rust")
+              : "__e.val";
+            return (
+              `{ #[repr(C)] struct __Entry { key: ${keyFfiRust}, val: ${valFfiRust} } ` +
+              `#[repr(C)] struct __Record { data: *mut __Entry, len: usize } ` +
+              `let __rec = Box::from_raw(${parameterName} as *mut __Record); ` +
+              `let __v = Vec::from_raw_parts(__rec.data, __rec.len, __rec.len); ` +
+              `let mut __map = std::collections::HashMap::with_capacity(__v.len()); ` +
+              `for __e in __v { __map.insert(${keyConvert}, ${valConvert}); } ` +
+              `__map }`
+            );
+          }
+          case "c++": {
+            // Serialize unordered_map into C array-of-pairs struct
+            const rId = nextCppId();
+            const keyConvert = keyBridged.needsSpecialHandling
+              ? keyBridged.parseFromCppToRust(`__kv_${rId}.first`, "c++")
+              : `static_cast<${keyFfiCpp}>(__kv_${rId}.first)`;
+            const valConvert = valBridged.needsSpecialHandling
+              ? valBridged.parseFromCppToRust(`__kv_${rId}.second`, "c++")
+              : `static_cast<${valFfiCpp}>(__kv_${rId}.second)`;
+            return (
+              `[&]() -> void* { ` +
+              `struct __Entry_${rId} { ${keyFfiCpp} key; ${valFfiCpp} val; }; ` +
+              `struct __Record_${rId} { __Entry_${rId}* data; size_t len; }; ` +
+              `auto __len_${rId} = ${parameterName}.size(); ` +
+              `auto __data_${rId} = static_cast<__Entry_${rId}*>(malloc(__len_${rId} * sizeof(__Entry_${rId}))); ` +
+              `size_t __i_${rId} = 0; ` +
+              `for (const auto& __kv_${rId} : ${parameterName}) { __data_${rId}[__i_${rId}] = { ${keyConvert}, ${valConvert} }; __i_${rId}++; } ` +
+              `return static_cast<void*>(new __Record_${rId} { __data_${rId}, __len_${rId} }); }()`
+            );
+          }
           default:
             return parameterName;
         }
+      }
       case "function": {
         const funcType = getTypeAs(this.type, FunctionType);
         switch (inLanguage) {
@@ -363,9 +599,24 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
               (p, i) => `__p${i}: ${p.getCode("rust")}`,
             );
             const callArgs = funcType.parameters.map((_p, i) => `__p${i}`);
-            const rustReturnType = funcType.returnType.getCode("rust");
-            const returnSuffix =
-              rustReturnType === "()" ? "" : ` -> ${rustReturnType}`;
+            // For Promise-returning callbacks, call() returns Result<T, String>,
+            // so the closure return type must match the trait's callback type.
+            let returnSuffix: string;
+            if (funcType.returnType.kind === "promise") {
+              let innerType: Type = funcType.returnType;
+              while (innerType.kind === "promise") {
+                innerType = getTypeAs(innerType, PromiseType).resultingType;
+              }
+              const innerRustType = innerType.getCode("rust");
+              returnSuffix =
+                innerRustType === "()"
+                  ? ` -> Result<(), String>`
+                  : ` -> Result<${innerRustType}, String>`;
+            } else {
+              const rustReturnType = funcType.returnType.getCode("rust");
+              returnSuffix =
+                rustReturnType === "()" ? "" : ` -> ${rustReturnType}`;
+            }
             return (
               `{ let __wrapper = Box::from_raw(${parameterName} as *mut ${funcStructPath}); ` +
               `let __cb: ${this.type.getCode("rust")} = Box::new(move |${rustParams.join(", ")}|${returnSuffix} { __wrapper.call(${callArgs.join(", ")}) }); ` +
@@ -379,7 +630,27 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
             // destroy_fn frees the boxed std::function when Rust drops the Func_*.
             const cppFnType = this.type.getCode("c++");
             const returnBridged = new RustCxxBridgedType(funcType.returnType);
-            const ffiReturnType = returnBridged.getCppFfiType();
+            const isPromiseReturn = funcType.returnType.kind === "promise";
+            // For Promise returns, use the innermost type's FFI representation
+            // (the C++ trampoline awaits all Promise layers).
+            let effectiveReturnType: Type = funcType.returnType;
+            if (isPromiseReturn) {
+              while (effectiveReturnType.kind === "promise") {
+                effectiveReturnType = getTypeAs(
+                  effectiveReturnType,
+                  PromiseType,
+                ).resultingType;
+              }
+            }
+            const effectiveReturnBridged = new RustCxxBridgedType(
+              effectiveReturnType,
+            );
+
+            // For Promise-returning callbacks, use a result struct as the FFI
+            // return type so errors can be propagated instead of aborting.
+            const ffiReturnType = isPromiseReturn
+              ? effectiveReturnBridged.getCppFfiResultType()
+              : effectiveReturnBridged.getCppFfiType();
 
             // Trampoline parameters (FFI-compatible types)
             const trampolineParams = funcType.parameters.map((p, i) => {
@@ -406,22 +677,73 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
               return `__a${i}`;
             });
 
-            // Wrap the trampoline body in try/catch to prevent C++ exceptions from
-            // unwinding through Rust stack frames (which is UB). Since the callback
-            // returns via a bare function pointer with no error channel, we must abort.
-            let trampolineInner: string;
-            if (funcType.returnType.kind === "void") {
-              trampolineInner = `(*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
-            } else if (returnBridged.needsSpecialHandling) {
-              const converted = returnBridged.parseFromCppToRust("__r", "c++");
-              trampolineInner = `auto __r = (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")}); return ${converted};`;
+            let trampolineBody: string;
+            if (isPromiseReturn) {
+              // Promise return: await all layers, return result struct.
+              // Errors are propagated via the result struct instead of aborting.
+              const resultStructType =
+                effectiveReturnBridged.getCppFfiResultType();
+              let innerType: Type = funcType.returnType;
+              const awaitStmts: string[] = [];
+              let prevVar = `__pr`;
+              awaitStmts.push(
+                `auto ${prevVar} = (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`,
+              );
+              let idx = 0;
+              while (innerType.kind === "promise") {
+                const pt = getTypeAs(innerType, PromiseType);
+                innerType = pt.resultingType;
+                if (innerType.kind === "void") {
+                  awaitStmts.push(`${prevVar}->await().get();`);
+                } else {
+                  const nextVar = `__aw${idx++}`;
+                  awaitStmts.push(
+                    `auto ${nextVar} = ${prevVar}->await().get();`,
+                  );
+                  prevVar = nextVar;
+                }
+              }
+
+              let successReturn: string;
+              if (innerType.kind === "void") {
+                successReturn = `${awaitStmts.join(" ")} return ${resultStructType} { 1, nullptr };`;
+              } else if (effectiveReturnBridged.needsSpecialHandling) {
+                const converted = effectiveReturnBridged.parseFromCppToRust(
+                  prevVar,
+                  "c++",
+                );
+                successReturn = `${awaitStmts.join(" ")} return ${resultStructType} { 1, nullptr, ${converted} };`;
+              } else {
+                successReturn = `${awaitStmts.join(" ")} return ${resultStructType} { 1, nullptr, ${prevVar} };`;
+              }
+
+              const zeroInit =
+                innerType.kind === "void" ? "" : ", {}";
+              trampolineBody =
+                `try { ${successReturn} } ` +
+                `catch (const std::exception& __e) { return ${resultStructType} { 0, __nitrogen_dup_cstring(__e.what())${zeroInit} }; } ` +
+                `catch (...) { return ${resultStructType} { 0, __nitrogen_dup_cstring("unknown C++ exception in callback")${zeroInit} }; }`;
             } else {
-              trampolineInner = `return (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
+              // Non-Promise return: wrap in try/catch to prevent C++ exceptions
+              // from unwinding through Rust stack frames (which is UB).
+              // Since non-Promise callbacks have no error channel, we must abort.
+              let trampolineInner: string;
+              if (funcType.returnType.kind === "void") {
+                trampolineInner = `(*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
+              } else if (returnBridged.needsSpecialHandling) {
+                const converted = returnBridged.parseFromCppToRust(
+                  "__r",
+                  "c++",
+                );
+                trampolineInner = `auto __r = (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")}); return ${converted};`;
+              } else {
+                trampolineInner = `return (*static_cast<${cppFnType}*>(__ud))(${callArgs.join(", ")});`;
+              }
+              trampolineBody =
+                `try { ${trampolineInner} } ` +
+                `catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\\n", __e.what()); std::abort(); } ` +
+                `catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\\n"); std::abort(); }`;
             }
-            const trampolineBody =
-              `try { ${trampolineInner} } ` +
-              `catch (const std::exception& __e) { fprintf(stderr, "Unhandled C++ exception in callback: %s\\n", __e.what()); std::abort(); } ` +
-              `catch (...) { fprintf(stderr, "Unhandled C++ exception in callback\\n"); std::abort(); }`;
 
             const returnArrow =
               ffiReturnType === "void" ? "" : `-> ${ffiReturnType} `;
@@ -439,20 +761,40 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
             return parameterName;
         }
       }
-      case "hybrid-object":
+      case "hybrid-object": {
+        const hybridType = getTypeAs(this.type, HybridObjectType);
+        const hybridName = getHybridObjectName(hybridType.hybridObjectName);
+        const isRust = this.isRustImplementedHybridObject(hybridType);
         switch (inLanguage) {
           case "rust":
-            // Reconstruct Box<dyn Trait> from opaque void pointer.
-            // The C++ side passes a new'd clone, so Rust takes ownership.
-            return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
+            if (isRust) {
+              // Rust-implemented: the void* is _rustPtr pointing to a heap-allocated
+              // Arc<dyn Trait>. Clone the Arc (non-owning read + refcount increment).
+              return `std::sync::Arc::clone(&*(${parameterName} as *const ${this.type.getCode("rust")}))`;
+            } else {
+              // Non-Rust HybridObject: the void* points to a heap-allocated shared_ptr.
+              // TODO: This needs a proper Rust wrapper around the C++ shared_ptr.
+              return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
+            }
           case "c++":
-            // Clone the shared_ptr onto the heap so Rust can take ownership via Box::from_raw.
-            // Using .get() would be a non-owning pointer that Rust would double-free.
-            return `static_cast<void*>(new ${this.type.getCode("c++")}(${parameterName}))`;
+            if (isRust) {
+              // Rust-implemented: extract the _rustPtr from the C++ bridge wrapper
+              // and pass it directly. Rust will Arc::clone it (non-owning).
+              return `dynamic_cast<${hybridName.HybridTSpecRust}*>(${parameterName}.get())->rustPtr()`;
+            } else {
+              // Non-Rust HybridObject: clone the shared_ptr onto the heap.
+              // TODO: Rust side needs a proper wrapper to use this.
+              return `static_cast<void*>(new ${this.type.getCode("c++")}(${parameterName}))`;
+            }
           default:
             return parameterName;
         }
+      }
       case "promise":
+        // Promise values are boxed as void* through FFI (same as other complex types).
+        // Method-level Promise *parameters* are handled specially in RustHybridObject.ts
+        // (awaited on C++ side before crossing FFI), but this generic conversion handles
+        // Promises in all other contexts (callback returns, variant cases, etc.).
         switch (inLanguage) {
           case "rust":
             return `*Box::from_raw(${parameterName} as *mut ${this.type.getCode("rust")})`;
@@ -581,26 +923,26 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
           }
           case "c++": {
             // Unbox the C struct and reconstruct std::optional<CppType>.
-            // The struct has { uint8_t has_value; <ffi_type> value; }.
+            const optId2 = nextCppId();
             const cppInnerType = optType.wrappingType.getCode("c++");
             if (innerBridged.needsSpecialHandling) {
-              const innerConvert = innerBridged.parseFromRustToCpp("__s->value", "c++");
+              const innerConvert = innerBridged.parseFromRustToCpp(`__o_${optId2}->value`, "c++");
               return (
                 `[&]() -> ${this.type.getCode("c++")} { ` +
-                `struct __Opt { uint8_t has_value; ${innerFfiCpp} value; }; ` +
-                `auto __s = static_cast<__Opt*>(${parameterName}); ` +
-                `${this.type.getCode("c++")} __r; ` +
-                `if (__s->has_value) { __r = ${innerConvert}; } ` +
-                `delete __s; return __r; }()`
+                `struct __Opt_${optId2} { uint8_t has_value; ${innerFfiCpp} value; }; ` +
+                `auto __o_${optId2} = static_cast<__Opt_${optId2}*>(${parameterName}); ` +
+                `${this.type.getCode("c++")} __r_${optId2}; ` +
+                `if (__o_${optId2}->has_value) { __r_${optId2} = ${innerConvert}; } ` +
+                `delete __o_${optId2}; return __r_${optId2}; }()`
               );
             } else {
               return (
                 `[&]() -> ${this.type.getCode("c++")} { ` +
-                `struct __Opt { uint8_t has_value; ${innerFfiCpp} value; }; ` +
-                `auto __s = static_cast<__Opt*>(${parameterName}); ` +
-                `${this.type.getCode("c++")} __r; ` +
-                `if (__s->has_value) { __r = static_cast<${cppInnerType}>(__s->value); } ` +
-                `delete __s; return __r; }()`
+                `struct __Opt_${optId2} { uint8_t has_value; ${innerFfiCpp} value; }; ` +
+                `auto __o_${optId2} = static_cast<__Opt_${optId2}*>(${parameterName}); ` +
+                `${this.type.getCode("c++")} __r_${optId2}; ` +
+                `if (__o_${optId2}->has_value) { __r_${optId2} = static_cast<${cppInnerType}>(__o_${optId2}->value); } ` +
+                `delete __o_${optId2}; return __r_${optId2}; }()`
               );
             }
           }
@@ -608,9 +950,149 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
             return parameterName;
         }
       }
-      case "array":
-      case "record":
-      case "tuple":
+      case "array": {
+        const arrType = getTypeAs(this.type, ArrayType);
+        const elemBridged = new RustCxxBridgedType(arrType.itemType);
+        const elemFfiRust = elemBridged.getTypeCode("rust");
+        const elemFfiCpp = elemBridged.getTypeCode("c++");
+        switch (inLanguage) {
+          case "rust": {
+            // Serialize Vec<T> into C array struct
+            const elemConvert = elemBridged.needsSpecialHandling
+              ? elemBridged.parseFromRustToCpp("__e", "rust")
+              : "__e";
+            return (
+              `{ #[repr(C)] struct __Array { data: *mut ${elemFfiRust}, len: usize } ` +
+              `let mut __items: Vec<_> = ${parameterName}.into_iter().map(|__e| ${elemConvert}).collect(); ` +
+              `let __len = __items.len(); ` +
+              `let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() as *mut ${elemFfiRust} }; ` +
+              `std::mem::forget(__items); ` +
+              `Box::into_raw(Box::new(__Array { data: __data, len: __len })) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Deserialize C array struct into std::vector
+            const aId2 = nextCppId();
+            const cppElemType = arrType.itemType.getCode("c++");
+            const elemConvert = elemBridged.needsSpecialHandling
+              ? elemBridged.parseFromRustToCpp(`__arr_${aId2}->data[__i_${aId2}]`, "c++")
+              : `static_cast<${cppElemType}>(__arr_${aId2}->data[__i_${aId2}])`;
+            return (
+              `[&]() -> ${this.type.getCode("c++")} { ` +
+              `struct __Array_${aId2} { ${elemFfiCpp}* data; size_t len; }; ` +
+              `auto __arr_${aId2} = static_cast<__Array_${aId2}*>(${parameterName}); ` +
+              `${this.type.getCode("c++")} __result_${aId2}; ` +
+              `__result_${aId2}.reserve(__arr_${aId2}->len); ` +
+              `for (size_t __i_${aId2} = 0; __i_${aId2} < __arr_${aId2}->len; __i_${aId2}++) { __result_${aId2}.push_back(${elemConvert}); } ` +
+              `free(__arr_${aId2}->data); ` +
+              `delete __arr_${aId2}; return __result_${aId2}; }()`
+            );
+          }
+          default:
+            return parameterName;
+        }
+      }
+      case "record": {
+        const recType = getTypeAs(this.type, RecordType);
+        const keyBridged = new RustCxxBridgedType(recType.keyType);
+        const valBridged = new RustCxxBridgedType(recType.valueType);
+        const keyFfiRust = keyBridged.getTypeCode("rust");
+        const valFfiRust = valBridged.getTypeCode("rust");
+        const keyFfiCpp = keyBridged.getTypeCode("c++");
+        const valFfiCpp = valBridged.getTypeCode("c++");
+        switch (inLanguage) {
+          case "rust": {
+            // Serialize HashMap into C array-of-pairs struct
+            const keyConvert = keyBridged.needsSpecialHandling
+              ? keyBridged.parseFromRustToCpp("__k", "rust")
+              : "__k";
+            const valConvert = valBridged.needsSpecialHandling
+              ? valBridged.parseFromRustToCpp("__v", "rust")
+              : "__v";
+            return (
+              `{ #[repr(C)] struct __Entry { key: ${keyFfiRust}, val: ${valFfiRust} } ` +
+              `#[repr(C)] struct __Record { data: *mut __Entry, len: usize } ` +
+              `let mut __items: Vec<__Entry> = ${parameterName}.into_iter().map(|(__k, __v)| __Entry { key: ${keyConvert}, val: ${valConvert} }).collect(); ` +
+              `let __len = __items.len(); ` +
+              `let __data = if __items.is_empty() { std::ptr::null_mut() } else { __items.as_mut_ptr() }; ` +
+              `std::mem::forget(__items); ` +
+              `Box::into_raw(Box::new(__Record { data: __data, len: __len })) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Deserialize C array-of-pairs struct into unordered_map
+            const rId2 = nextCppId();
+            const cppKeyType = recType.keyType.getCode("c++");
+            const cppValType = recType.valueType.getCode("c++");
+            const keyConvert = keyBridged.needsSpecialHandling
+              ? keyBridged.parseFromRustToCpp(`__rec_${rId2}->data[__i_${rId2}].key`, "c++")
+              : `static_cast<${cppKeyType}>(__rec_${rId2}->data[__i_${rId2}].key)`;
+            const valConvert = valBridged.needsSpecialHandling
+              ? valBridged.parseFromRustToCpp(`__rec_${rId2}->data[__i_${rId2}].val`, "c++")
+              : `static_cast<${cppValType}>(__rec_${rId2}->data[__i_${rId2}].val)`;
+            return (
+              `[&]() -> ${this.type.getCode("c++")} { ` +
+              `struct __Entry_${rId2} { ${keyFfiCpp} key; ${valFfiCpp} val; }; ` +
+              `struct __Record_${rId2} { __Entry_${rId2}* data; size_t len; }; ` +
+              `auto __rec_${rId2} = static_cast<__Record_${rId2}*>(${parameterName}); ` +
+              `${this.type.getCode("c++")} __result_${rId2}; ` +
+              `__result_${rId2}.reserve(__rec_${rId2}->len); ` +
+              `for (size_t __i_${rId2} = 0; __i_${rId2} < __rec_${rId2}->len; __i_${rId2}++) { __result_${rId2}.emplace(${keyConvert}, ${valConvert}); } ` +
+              `free(__rec_${rId2}->data); ` +
+              `delete __rec_${rId2}; return __result_${rId2}; }()`
+            );
+          }
+          default:
+            return parameterName;
+        }
+      }
+      case "tuple": {
+        const tupType = getTypeAs(this.type, TupleType);
+        switch (inLanguage) {
+          case "rust": {
+            // Serialize Rust tuple into C struct
+            const fields = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              return `f${i}: ${b.getTypeCode("rust")}`;
+            });
+            const assigns = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              const val = b.needsSpecialHandling
+                ? b.parseFromRustToCpp(`${parameterName}.${i}`, "rust")
+                : `${parameterName}.${i}`;
+              return `f${i}: ${val}`;
+            });
+            return (
+              `{ #[repr(C)] struct __Tuple { ${fields.join(", ")} } ` +
+              `Box::into_raw(Box::new(__Tuple { ${assigns.join(", ")} })) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Deserialize C struct into std::tuple
+            const tId2 = nextCppId();
+            const cppFields = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              return `${b.getTypeCode("c++")} f${i};`;
+            });
+            const elems = tupType.itemTypes.map((t, i) => {
+              const b = new RustCxxBridgedType(t);
+              const cppElemType = t.getCode("c++");
+              return b.needsSpecialHandling
+                ? b.parseFromRustToCpp(`__tup_${tId2}->f${i}`, "c++")
+                : `static_cast<${cppElemType}>(__tup_${tId2}->f${i})`;
+            });
+            return (
+              `[&]() -> ${this.type.getCode("c++")} { ` +
+              `struct __Tuple_${tId2} { ${cppFields.join(" ")} }; ` +
+              `auto __tup_${tId2} = static_cast<__Tuple_${tId2}*>(${parameterName}); ` +
+              `auto __result_${tId2} = ${this.type.getCode("c++")}(${elems.join(", ")}); ` +
+              `delete __tup_${tId2}; return __result_${tId2}; }()`
+            );
+          }
+          default:
+            return parameterName;
+        }
+      }
       case "promise":
         switch (inLanguage) {
           case "rust":
@@ -633,47 +1115,274 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
           default:
             return parameterName;
         }
-      case "struct":
+      case "struct": {
+        const structType = getTypeAs(this.type, StructType);
         switch (inLanguage) {
-          case "rust":
-            return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
-          case "c++":
-            return `*static_cast<${this.type.getCode("c++")}*>(${parameterName})`;
+          case "rust": {
+            // Serialize Rust struct into C struct with FFI-compatible fields.
+            // FFI struct uses escapedName (camelCase); Rust struct uses snake_case.
+            const fields = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              return `${p.escapedName}: ${b.getTypeCode("rust")}`;
+            });
+            const assigns = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              const rustFieldName = toSnakeCase(p.name);
+              const val = b.needsSpecialHandling
+                ? b.parseFromRustToCpp(`${parameterName}.${rustFieldName}`, "rust")
+                : `${parameterName}.${rustFieldName}`;
+              return `${p.escapedName}: ${val}`;
+            });
+            return (
+              `{ #[repr(C)] struct __Struct { ${fields.join(", ")} } ` +
+              `Box::into_raw(Box::new(__Struct { ${assigns.join(", ")} })) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Deserialize C struct with FFI-compatible fields into C++ struct.
+            const sId2 = nextCppId();
+            const cppFields = structType.properties.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              return `${b.getTypeCode("c++")} ${p.escapedName};`;
+            });
+            const extracts = structType.properties.map((p, i) => {
+              return `auto __f${sId2}_${i} = __s_${sId2}->${p.escapedName};`;
+            });
+            const elems = structType.properties.map((p, i) => {
+              const b = new RustCxxBridgedType(p);
+              const cppFieldType = p.getCode("c++");
+              return b.needsSpecialHandling
+                ? b.parseFromRustToCpp(`__f${sId2}_${i}`, "c++")
+                : `static_cast<${cppFieldType}>(__f${sId2}_${i})`;
+            });
+            return (
+              `[&]() -> ${this.type.getCode("c++")} { ` +
+              `struct __Struct_${sId2} { ${cppFields.join(" ")} }; ` +
+              `auto __s_${sId2} = static_cast<__Struct_${sId2}*>(${parameterName}); ` +
+              `${extracts.join(" ")} ` +
+              `delete __s_${sId2}; ` +
+              `return ${this.type.getCode("c++")}(${elems.join(", ")}); }()`
+            );
+          }
           default:
             return parameterName;
         }
-      case "variant":
+      }
+      case "variant": {
+        const variantType = getTypeAs(this.type, VariantType);
         switch (inLanguage) {
-          case "rust":
-            return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
-          case "c++":
-            return `std::move(*static_cast<${this.type.getCode("c++")}*>(${parameterName}))`;
+          case "rust": {
+            // Convert Rust enum to C tagged-union struct: { index: i32, value: *mut c_void }
+            // Inner values are always boxed through a pointer regardless of type.
+            const rustEnumName = this.getQualifiedRustName();
+            const matchArms = variantType.cases
+              .map(([label, innerType], i) => {
+                const caseName =
+                  label.charAt(0).toUpperCase() + label.slice(1);
+                const innerBridged = new RustCxxBridgedType(innerType);
+                if (
+                  innerType.kind === "void" ||
+                  innerType.kind === "null"
+                ) {
+                  return `${rustEnumName}::${caseName}(_) => __Var { index: ${i}, value: std::ptr::null_mut() },`;
+                } else {
+                  // Convert the Rust value to FFI type, then box it
+                  const innerFfiRust = innerBridged.getTypeCode("rust");
+                  if (innerBridged.needsSpecialHandling) {
+                    const innerConvert = innerBridged.parseFromRustToCpp(
+                      "__v",
+                      "rust",
+                    );
+                    return `${rustEnumName}::${caseName}(__v) => { let __ffi: ${innerFfiRust} = ${innerConvert}; __Var { index: ${i}, value: Box::into_raw(Box::new(__ffi)) as *mut std::ffi::c_void } },`;
+                  } else {
+                    return `${rustEnumName}::${caseName}(__v) => __Var { index: ${i}, value: Box::into_raw(Box::new(__v)) as *mut std::ffi::c_void },`;
+                  }
+                }
+              })
+              .join(" ");
+            return (
+              `{ #[repr(C)] struct __Var { index: i32, value: *mut std::ffi::c_void } ` +
+              `let __var: __Var = match ${parameterName} { ${matchArms} }; ` +
+              `Box::into_raw(Box::new(__var)) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Unbox the C tagged-union struct and reconstruct std::variant.
+            const vId2 = nextCppId();
+            const cppType = this.type.getCode("c++");
+            const branches = variantType.cases
+              .map(([_label, innerType], i) => {
+                const innerBridged = new RustCxxBridgedType(innerType);
+                const innerFfiCpp = innerBridged.getTypeCode("c++");
+                const cppInnerType = innerType.getCode("c++");
+                if (
+                  innerType.kind === "void" ||
+                  innerType.kind === "null"
+                ) {
+                  return `if (__var_${vId2}->index == ${i}) { __r_${vId2} = ${cppInnerType}(); }`;
+                } else if (innerBridged.needsSpecialHandling) {
+                  const unboxed = `*static_cast<${innerFfiCpp}*>(__var_${vId2}->value)`;
+                  const innerConvert = innerBridged.parseFromRustToCpp(
+                    unboxed,
+                    "c++",
+                  );
+                  return `if (__var_${vId2}->index == ${i}) { __r_${vId2} = ${cppType}(std::in_place_index<${i}>, ${innerConvert}); delete static_cast<${innerFfiCpp}*>(__var_${vId2}->value); }`;
+                } else {
+                  return `if (__var_${vId2}->index == ${i}) { __r_${vId2} = ${cppType}(std::in_place_index<${i}>, *static_cast<${innerFfiCpp}*>(__var_${vId2}->value)); delete static_cast<${innerFfiCpp}*>(__var_${vId2}->value); }`;
+                }
+              })
+              .join(" else ");
+            return (
+              `[&]() -> ${cppType} { ` +
+              `struct __Var_${vId2} { int32_t index; void* value; }; ` +
+              `auto __var_${vId2} = static_cast<__Var_${vId2}*>(${parameterName}); ` +
+              `${cppType} __r_${vId2}; ` +
+              `${branches} ` +
+              `delete __var_${vId2}; return __r_${vId2}; }()`
+            );
+          }
           default:
             return parameterName;
         }
-      case "function":
+      }
+      case "function": {
+        const funcType2 = getTypeAs(this.type, FunctionType);
         switch (inLanguage) {
-          case "rust":
-            // Box the Func_* wrapper and leak as void pointer
-            return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
-          case "c++":
-            // Reconstruct std::function from Func_* struct
-            return `std::move(*static_cast<${this.type.getCode("c++")}*>(${parameterName}))`;
+          case "rust": {
+            // Wrap Box<dyn Fn(...)> in a Func_* C struct so C++ can call it
+            // through a fn_ptr/userdata/destroy_fn triple — the same layout that
+            // parseFromCppToRust uses when passing callbacks in the other direction.
+            const funcStructName2 = funcType2.specializationName;
+            const funcModuleName2 = toSnakeCase(funcStructName2);
+            const funcStructPath2 = `super::${funcModuleName2}::${funcStructName2}`;
+            const rustFnType2 = this.type.getCode("rust");
+            const returnBridged2 = new RustCxxBridgedType(funcType2.returnType);
+            const ffiReturnTypeRust2 = returnBridged2.getTypeCode("rust");
+            const hasReturn2 = ffiReturnTypeRust2 !== "()";
+
+            // Trampoline signature uses FFI types (matching the Func_* fn_ptr type)
+            const trampolineParams2 = funcType2.parameters.map((p, i) => {
+              const b = new RustCxxBridgedType(p);
+              return `__a${i}: ${b.getTypeCode("rust")}`;
+            });
+            const trampolineSig2 = [
+              "__ud: *mut std::ffi::c_void",
+              ...trampolineParams2,
+            ].join(", ");
+
+            // Convert FFI args to Rust args inside the trampoline
+            const argConversions2 = funcType2.parameters.map((p, i) => {
+              const b = new RustCxxBridgedType(p);
+              if (b.needsSpecialHandling) {
+                return b.parseFromCppToRust(`__a${i}`, "rust");
+              }
+              return `__a${i}`;
+            });
+
+            const returnArrowRust2 = hasReturn2
+              ? ` -> ${ffiReturnTypeRust2}`
+              : "";
+            let callExpr2: string;
+            if (hasReturn2) {
+              const resultConvert2 = returnBridged2.needsSpecialHandling
+                ? returnBridged2.parseFromRustToCpp("__result", "rust")
+                : "__result";
+              callExpr2 =
+                `let __result = unsafe { __f(${argConversions2.join(", ")}) }; ` +
+                `${resultConvert2}`;
+            } else {
+              callExpr2 = `unsafe { __f(${argConversions2.join(", ")}) };`;
+            }
+
+            // Use a unique numeric suffix to avoid name collisions when multiple
+            // callbacks are converted in the same Rust function scope.
+            const uid2 = nextCppId();
+            return (
+              `{ ` +
+              `unsafe extern "C" fn __trampoline_${uid2}(${trampolineSig2})${returnArrowRust2} { ` +
+              `let __f = unsafe { &*(__ud as *mut ${rustFnType2}) }; ` +
+              `${callExpr2} ` +
+              `} ` +
+              `unsafe extern "C" fn __destroy_${uid2}(__ud: *mut std::ffi::c_void) { ` +
+              `unsafe { let _ = Box::from_raw(__ud as *mut ${rustFnType2}); } ` +
+              `} ` +
+              `let __wrapper = ${funcStructPath2}::new(__trampoline_${uid2}, Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void, __destroy_${uid2}); ` +
+              `Box::into_raw(Box::new(__wrapper)) as *mut std::ffi::c_void }`
+            );
+          }
+          case "c++": {
+            // Reconstruct std::function from the Func_* struct received from Rust.
+            // The Func_* has layout: { fn_ptr, userdata, destroy_fn }.
+            // We capture it in a shared_ptr so destroy_fn is called exactly once
+            // when the last copy of the std::function is destroyed.
+            const cppFnType2 = this.type.getCode("c++");
+            const returnBridged2cpp = new RustCxxBridgedType(funcType2.returnType);
+            const ffiReturnTypeCpp2 = returnBridged2cpp.getCppFfiType();
+            const hasReturn2cpp = ffiReturnTypeCpp2 !== "void";
+
+            const ffiParamTypes2 = funcType2.parameters.map((p) => {
+              const b = new RustCxxBridgedType(p);
+              return b.getCppFfiType();
+            });
+            const fnPtrSig2 = ["void*", ...ffiParamTypes2].join(", ");
+
+            // C++ lambda parameters (native C++ types)
+            const cppParams2 = funcType2.parameters.map((p, i) => {
+              if (p.canBePassedByReference) {
+                return `const ${p.getCode("c++")}& __a${i}`;
+              }
+              return `${p.getCode("c++")} __a${i}`;
+            });
+
+            // Convert C++ args to FFI args when calling fn_ptr
+            const ffiCallArgs2 = funcType2.parameters.map((p, i) => {
+              const b = new RustCxxBridgedType(p);
+              if (b.needsSpecialHandling) {
+                return b.parseFromCppToRust(`__a${i}`, "c++");
+              }
+              return `__a${i}`;
+            });
+
+            const ffiCallArgStr2 =
+              ffiCallArgs2.length > 0
+                ? `, ${ffiCallArgs2.join(", ")}`
+                : "";
+            let lambdaBody2: string;
+            if (hasReturn2cpp) {
+              const ffiResultConvert2 = returnBridged2cpp.needsSpecialHandling
+                ? returnBridged2cpp.parseFromRustToCpp("__ffi_result", "c++")
+                : "__ffi_result";
+              lambdaBody2 =
+                `auto __ffi_result = __shared_w->fn_ptr(__shared_w->userdata${ffiCallArgStr2}); ` +
+                `return ${ffiResultConvert2};`;
+            } else {
+              lambdaBody2 = `__shared_w->fn_ptr(__shared_w->userdata${ffiCallArgStr2});`;
+            }
+
+            return (
+              `[&]() -> ${cppFnType2} { ` +
+              `struct __W { ${ffiReturnTypeCpp2}(*fn_ptr)(${fnPtrSig2}); void* userdata; void(*destroy_fn)(void*); }; ` +
+              `auto __shared_w = std::shared_ptr<__W>(static_cast<__W*>(${parameterName}), [](__W* __pw) { __pw->destroy_fn(__pw->userdata); delete __pw; }); ` +
+              `return ${cppFnType2}([__shared_w](${cppParams2.join(", ")}) { ${lambdaBody2} }); ` +
+              `}()`
+            );
+          }
           default:
             return parameterName;
         }
+      }
       case "hybrid-object": {
         const hybridType = getTypeAs(this.type, HybridObjectType);
         const hybridName = getHybridObjectName(hybridType.hybridObjectName);
         const isRust = this.isRustImplementedHybridObject(hybridType);
         switch (inLanguage) {
           case "rust":
-            // Box the trait object and leak it as a void pointer
+            // Heap-allocate the Arc<dyn Trait> and leak it as a void pointer.
             return `Box::into_raw(Box::new(${parameterName})) as *mut std::ffi::c_void`;
           case "c++":
             if (isRust) {
-              // Rust-implemented: wrap the void* (pointing to a Box<dyn Trait>)
-              // in the C++ Rust bridge class.
+              // Rust-implemented: wrap the void* (pointing to a heap-allocated
+              // Arc<dyn Trait>) in the C++ Rust bridge class.
               return `std::make_shared<${hybridName.HybridTSpecRust}>(${parameterName})`;
             } else {
               // Non-Rust HybridObject: the void* points to a heap-allocated shared_ptr
@@ -792,5 +1501,22 @@ export class RustCxxBridgedType implements BridgedType<"rust", "c++"> {
   private isRustImplementedHybridObject(hybridType: HybridObjectType): boolean {
     const autolinked = NitroConfig.current.getAutolinkedHybridObjects();
     return autolinked[hybridType.hybridObjectName]?.rust != null;
+  }
+
+  /**
+   * Returns the fully qualified Rust path for types that define their own modules.
+   * This is needed because nested types (e.g. struct fields' types) may not be
+   * individually imported in the file where the bridge code is generated.
+   */
+  getQualifiedRustName(): string {
+    const name = this.type.getCode("rust");
+    switch (this.type.kind) {
+      case "struct":
+      case "variant":
+      case "enum":
+        return `super::${toSnakeCase(name)}::${name}`;
+      default:
+        return name;
+    }
   }
 }

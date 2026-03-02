@@ -11,6 +11,7 @@ import { includeHeader } from "../c++/includeNitroHeader.js";
 import { getHybridObjectName } from "../getHybridObjectName.js";
 import { RustCxxBridgedType } from "./RustCxxBridgedType.js";
 import { PromiseType } from "../types/PromiseType.js";
+import { FunctionType } from "../types/FunctionType.js";
 import { getTypeAs } from "../types/getTypeAs.js";
 
 /**
@@ -151,7 +152,7 @@ ${closureBody}
           `ptr: *mut std::ffi::c_void`,
           resultType,
           isVoidReturn,
-          `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            ${convertedReturn}`,
+          `            let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);\n            ${convertedReturn}`,
         ),
       );
     } else {
@@ -161,7 +162,7 @@ ${closureBody}
           `ptr: *mut std::ffi::c_void`,
           resultType,
           isVoidReturn,
-          `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.${rustPropName}()`,
+          `            let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);\n            obj.${rustPropName}()`,
         ),
       );
     }
@@ -177,7 +178,7 @@ ${closureBody}
             `ptr: *mut std::ffi::c_void, value: ${ffiParamType}`,
             "__FfiResult_void",
             true,
-            `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(${convertedParam});`,
+            `            let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(${convertedParam});`,
           ),
         );
       } else {
@@ -187,7 +188,7 @@ ${closureBody}
             `ptr: *mut std::ffi::c_void, value: ${ffiParamType}`,
             "__FfiResult_void",
             true,
-            `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(value);`,
+            `            let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);\n            obj.set_${rustPropName}(value);`,
           ),
         );
       }
@@ -231,6 +232,29 @@ ${closureBody}
         continue;
       }
       const pName = toSnakeCase(p.name);
+      if (p.type.kind === "promise") {
+        // Promise params: C++ already awaited the promise and sent the inner
+        // value through FFI. Use the inner type's conversion on the Rust side.
+        const promiseType = getTypeAs(p.type, PromiseType);
+        const innerType = promiseType.resultingType;
+        if (innerType.kind === "void" || innerType.kind === "null") {
+          traitCallArgs.push("()");
+          continue;
+        }
+        const innerBridged = new RustCxxBridgedType(innerType);
+        const convertedName = `__${pName}`;
+        if (innerBridged.needsSpecialHandling) {
+          const conversion = innerBridged.parseFromCppToRust(pName, "rust");
+          paramConversions.push(`let ${convertedName} = ${conversion};`);
+        } else {
+          // Primitive: unbox from void*
+          paramConversions.push(
+            `let ${convertedName} = *Box::from_raw(${pName} as *mut ${innerType.getCode("rust")});`,
+          );
+        }
+        traitCallArgs.push(convertedName);
+        continue;
+      }
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
         const convertedName = `__${pName}`;
@@ -248,7 +272,7 @@ ${closureBody}
     // so wrapCatchUnwind can three-way match on Ok(Ok(v)) / Ok(Err(e)) / Err(panic).
     const closureLines: string[] = [];
     closureLines.push(
-      `            let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);`,
+      `            let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);`,
     );
     for (const conv of paramConversions) {
       closureLines.push(`            ${conv}`);
@@ -282,7 +306,7 @@ ${closureBody}
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn ${name.HybridTSpec}_memory_size(ptr: *mut std::ffi::c_void) -> usize {
     unsafe {
-        let obj = &*(ptr as *mut Box<dyn ${name.HybridTSpec}>);
+        let obj = &*(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);
         obj.memory_size()
     }
 }
@@ -295,7 +319,7 @@ pub unsafe extern "C" fn ${name.HybridTSpec}_memory_size(ptr: *mut std::ffi::c_v
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn ${name.HybridTSpec}_destroy(ptr: *mut std::ffi::c_void) {
     unsafe {
-        let _ = Box::from_raw(ptr as *mut Box<dyn ${name.HybridTSpec}>);
+        let _ = Box::from_raw(ptr as *mut std::sync::Arc<dyn ${name.HybridTSpec}>);
     }
 }
   `.trim(),
@@ -332,13 +356,13 @@ ${importsBlock}
 /// \`\`\`rust
 /// #[unsafe(no_mangle)]
 /// pub extern "C" fn create_${name.HybridTSpec}() -> *mut std::ffi::c_void {
-///     let obj: Box<dyn ${name.HybridTSpec}> = Box::new(My${spec.name}::new());
+///     let obj: std::sync::Arc<dyn ${name.HybridTSpec}> = std::sync::Arc::new(My${spec.name}::new());
 ///     Box::into_raw(Box::new(obj)) as *mut std::ffi::c_void
 /// }
 /// \`\`\`
 ///
-/// Note: The factory returns a \`Box<Box<dyn ${name.HybridTSpec}>>\` (double-boxed)
-/// because the C++ bridge stores it as an opaque \`void*\` pointing to the trait object.
+/// Note: The factory returns a \`Box<Arc<dyn ${name.HybridTSpec}>>\` — the outer Box
+/// provides a stable thin pointer for C++, while the inner Arc enables shared ownership.
 ///
 /// All methods take \`&self\` (shared reference) because the C++ bridge may call
 /// methods concurrently from multiple threads. Use interior mutability
@@ -426,9 +450,28 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     );
   }
 
+  // Also collect result struct types from Promise-returning callback parameters.
+  // These callbacks use result structs to propagate errors instead of aborting.
+  for (const method of spec.methods) {
+    for (const param of method.parameters) {
+      if (param.type.kind === "function") {
+        const funcType = getTypeAs(param.type, FunctionType);
+        if (funcType.returnType.kind === "promise") {
+          let innerType = funcType.returnType;
+          while (innerType.kind === "promise") {
+            innerType = getTypeAs(innerType, PromiseType).resultingType;
+          }
+          const innerBridged = new RustCxxBridgedType(innerType);
+          usedResultTypes.add(innerBridged.getCppFfiResultType());
+        }
+      }
+    }
+  }
+
   externDecls.push(`size_t ${name.HybridTSpec}_memory_size(void* rustPtr);`);
   externDecls.push(`void ${name.HybridTSpec}_destroy(void* rustPtr);`);
   externDecls.push(`void __nitrogen_free_cstring(char* ptr);`);
+  externDecls.push(`char* __nitrogen_dup_cstring(const char* src);`);
 
   // Generate C++ result struct definitions matching Rust #[repr(C)] layout
   const cppResultStructDefs: string[] = [];
@@ -537,7 +580,34 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     const validParams = method.parameters.filter(
       (p) => p.type.kind !== "void" && p.type.kind !== "null",
     );
+    // Pre-call statements for awaiting Promise parameters. The awaited values
+    // must stay alive during the FFI call so that any .c_str() pointers in
+    // serialized structs remain valid.
+    const cppPreCallStatements: string[] = [];
     const ffiArgs = validParams.map((p) => {
+      if (p.type.kind === "promise") {
+        const promiseType = getTypeAs(p.type, PromiseType);
+        const innerType = promiseType.resultingType;
+        if (innerType.kind === "void" || innerType.kind === "null") {
+          // Await the void promise as a side effect, pass nullptr as dummy
+          cppPreCallStatements.push(`${p.name}->await().get();`);
+          return `nullptr`;
+        }
+        // Await the promise and store the resolved value in a local variable.
+        // Promise::await() returns std::future<T>; .get() blocks until resolved.
+        const awaitedName = `__awaited_${p.name}`;
+        const innerCppType = innerType.getCode("c++");
+        cppPreCallStatements.push(
+          `${innerCppType} ${awaitedName} = ${p.name}->await().get();`,
+        );
+        // Convert the awaited value (inner type) for FFI (always void*)
+        const innerBridged = new RustCxxBridgedType(innerType);
+        if (innerBridged.needsSpecialHandling) {
+          return innerBridged.parseFromCppToRust(awaitedName, "c++");
+        }
+        // Primitive: box into void* for FFI
+        return `static_cast<void*>(new ${innerCppType}(${awaitedName}))`;
+      }
       const bridged = new RustCxxBridgedType(p.type);
       if (bridged.needsSpecialHandling) {
         return bridged.parseFromCppToRust(p.name, "c++");
@@ -546,6 +616,10 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     });
     const ffiArgsWithComma =
       ffiArgs.length > 0 ? `, ${ffiArgs.join(", ")}` : "";
+    const cppPreCallCode =
+      cppPreCallStatements.length > 0
+        ? cppPreCallStatements.map((s) => `        ${s}\n`).join("")
+        : "";
 
     const ffiCall = `${name.HybridTSpec}_${rustMethodName}(_rustPtr${ffiArgsWithComma})`;
 
@@ -557,6 +631,7 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
           methodImpls.push(
             `inline ${returnType} ${method.name}(${params}) override {\n` +
               `      return Promise<${innerCppType}>::async([=]() -> ${innerCppType} {\n` +
+              `${cppPreCallCode}` +
               `        auto __ffi = ${ffiCall};\n` +
               `        if (!__ffi.is_ok) { __throwRustError(__ffi.error); }\n` +
               `        return ${converted};\n` +
@@ -567,6 +642,7 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
           methodImpls.push(
             `inline ${returnType} ${method.name}(${params}) override {\n` +
               `      return Promise<${innerCppType}>::async([=]() -> ${innerCppType} {\n` +
+              `${cppPreCallCode}` +
               `        auto __ffi = ${ffiCall};\n` +
               `        if (!__ffi.is_ok) { __throwRustError(__ffi.error); }\n` +
               `        return __ffi.value;\n` +
@@ -579,6 +655,7 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
         methodImpls.push(
           `inline ${returnType} ${method.name}(${params}) override {\n` +
             `      return Promise<void>::async([=]() {\n` +
+            `${cppPreCallCode}` +
             `        auto __ffi = ${ffiCall};\n` +
             `        if (!__ffi.is_ok) { __throwRustError(__ffi.error); }\n` +
             `      });\n` +
@@ -588,20 +665,20 @@ function createCppRustBridgeHeader(spec: HybridObjectSpec): SourceFile {
     } else if (hasReturn && returnBridged.needsSpecialHandling) {
       const converted = returnBridged.parseFromRustToCpp("__ffi.value", "c++");
       methodImpls.push(
-        `inline ${returnType} ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return ${converted}; }`,
+        `inline ${returnType} ${method.name}(${params}) override { ${cppPreCallCode}auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return ${converted}; }`,
       );
     } else if (hasReturn) {
       methodImpls.push(
-        `inline ${returnType} ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }`,
+        `inline ${returnType} ${method.name}(${params}) override { ${cppPreCallCode}auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return __ffi.value; }`,
       );
     } else if (effectiveReturnType.kind === "null") {
       // null returns NullType::null (not void)
       methodImpls.push(
-        `inline ${returnType} ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return nitro::NullType::null; }`,
+        `inline ${returnType} ${method.name}(${params}) override { ${cppPreCallCode}auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } return nitro::NullType::null; }`,
       );
     } else {
       methodImpls.push(
-        `inline void ${method.name}(${params}) override { auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }`,
+        `inline void ${method.name}(${params}) override { ${cppPreCallCode}auto __ffi = ${ffiCall}; if (!__ffi.is_ok) { __throwRustError(__ffi.error); } }`,
       );
     }
   }
@@ -668,6 +745,11 @@ namespace ${cxxNamespace} {
     inline size_t getExternalMemorySize() noexcept override {
       return ${name.HybridTSpec}_memory_size(_rustPtr);
     }
+
+  public:
+    /// Returns the raw Rust pointer (pointing to a heap-allocated Arc<dyn Trait>).
+    /// Used by the FFI bridge when passing this object back to Rust.
+    void* rustPtr() const { return _rustPtr; }
 
   private:
     [[noreturn]] static void __throwRustError(char* error) {

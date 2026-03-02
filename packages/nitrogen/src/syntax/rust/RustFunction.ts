@@ -1,6 +1,9 @@
 import type { SourceFile } from "../SourceFile.js";
 import { createRustFileMetadataString, isNotDuplicate, toSnakeCase } from "../helpers.js";
 import type { FunctionType } from "../types/FunctionType.js";
+import { getTypeAs } from "../types/getTypeAs.js";
+import { PromiseType } from "../types/PromiseType.js";
+import type { Type } from "../types/Type.js";
 import { RustCxxBridgedType } from "./RustCxxBridgedType.js";
 
 /**
@@ -21,10 +24,30 @@ export function createRustFunction(funcType: FunctionType): SourceFile {
     return bridged.getRustFfiType();
   });
 
-  // FFI return type
-  const returnBridged = new RustCxxBridgedType(funcType.returnType);
-  const ffiReturnType = returnBridged.getRustFfiType();
-  const ffiReturnSuffix = ffiReturnType === "()" ? "" : ` -> ${ffiReturnType}`;
+  // FFI return type — for Promise returns, use the innermost non-Promise
+  // type's FFI representation because the C++ trampoline awaits all Promise
+  // layers before returning the resolved value.
+  let effectiveReturnType: Type = funcType.returnType;
+  if (funcType.returnType.kind === "promise") {
+    while (effectiveReturnType.kind === "promise") {
+      effectiveReturnType = getTypeAs(effectiveReturnType, PromiseType).resultingType;
+    }
+  }
+  const effectiveReturnBridged = new RustCxxBridgedType(effectiveReturnType);
+  const isPromiseReturn = funcType.returnType.kind === "promise";
+
+  // For Promise-returning callbacks, use a result struct as the FFI return type
+  // so that Promise rejection errors can be propagated instead of aborting.
+  let ffiReturnType: string;
+  let ffiReturnSuffix: string;
+  if (isPromiseReturn) {
+    const resultStructType = effectiveReturnBridged.getRustFfiResultType();
+    ffiReturnType = `crate::${resultStructType}`;
+    ffiReturnSuffix = ` -> ${ffiReturnType}`;
+  } else {
+    ffiReturnType = effectiveReturnBridged.getRustFfiType();
+    ffiReturnSuffix = ffiReturnType === "()" ? "" : ` -> ${ffiReturnType}`;
+  }
 
   // The C function pointer type: fn(userdata, args...) -> ret
   const ffiParamsWithUserdata = ["*mut std::ffi::c_void", ...ffiParams].join(
@@ -34,9 +57,20 @@ export function createRustFunction(funcType: FunctionType): SourceFile {
 
   // Native Rust parameter types
   const rustParams = funcType.parameters.map((p) => p.getCode("rust"));
-  const rustReturnType = funcType.returnType.getCode("rust");
-  const rustReturnSuffix =
-    rustReturnType === "()" ? "" : ` -> ${rustReturnType}`;
+
+  // For Promise-returning callbacks, call() returns Result<T, String>
+  let rustReturnSuffix: string;
+  if (isPromiseReturn) {
+    const innerRustType = effectiveReturnType.getCode("rust");
+    rustReturnSuffix =
+      innerRustType === "()"
+        ? ` -> Result<(), String>`
+        : ` -> Result<${innerRustType}, String>`;
+  } else {
+    const rustReturnType = funcType.returnType.getCode("rust");
+    rustReturnSuffix =
+      rustReturnType === "()" ? "" : ` -> ${rustReturnType}`;
+  }
 
   // Build the wrapper struct
   const wrapperFields =
@@ -56,16 +90,50 @@ export function createRustFunction(funcType: FunctionType): SourceFile {
   const ffiCallArgs = ["self.userdata", ...callFfiArgs].join(", ");
 
   let callBody: string;
-  if (returnBridged.needsSpecialHandling) {
-    const resultConversion = returnBridged.parseFromCppToRust(
+  if (isPromiseReturn) {
+    // Promise-returning callback: FFI returns a result struct.
+    // Parse it into Result<T, String>.
+    const innerRustType = effectiveReturnType.getCode("rust");
+    const errorParsing =
+      `let msg = if __ffi_result.error.is_null() { "unknown callback error".to_string() } ` +
+      `else { let s = std::ffi::CStr::from_ptr(__ffi_result.error).to_string_lossy().into_owned(); ` +
+      `crate::__nitrogen_free_cstring(__ffi_result.error); s }; Err(msg)`;
+    if (innerRustType === "()") {
+      callBody =
+        `        unsafe {\n` +
+        `            let __ffi_result = (self.fn_ptr)(${ffiCallArgs});\n` +
+        `            if __ffi_result.is_ok != 0 { Ok(()) } else { ${errorParsing} }\n` +
+        `        }`;
+    } else if (effectiveReturnBridged.needsSpecialHandling) {
+      const resultConversion = effectiveReturnBridged.parseFromCppToRust(
+        "__ffi_result.value",
+        "rust",
+      );
+      callBody =
+        `        unsafe {\n` +
+        `            let __ffi_result = (self.fn_ptr)(${ffiCallArgs});\n` +
+        `            if __ffi_result.is_ok != 0 { Ok(${resultConversion}) } else { ${errorParsing} }\n` +
+        `        }`;
+    } else {
+      callBody =
+        `        unsafe {\n` +
+        `            let __ffi_result = (self.fn_ptr)(${ffiCallArgs});\n` +
+        `            if __ffi_result.is_ok != 0 { Ok(__ffi_result.value) } else { ${errorParsing} }\n` +
+        `        }`;
+    }
+  } else if (effectiveReturnBridged.needsSpecialHandling) {
+    const resultConversion = effectiveReturnBridged.parseFromCppToRust(
       "__result",
       "rust",
     );
     callBody = `        unsafe {\n            let __result = (self.fn_ptr)(${ffiCallArgs});\n            ${resultConversion}\n        }`;
-  } else if (rustReturnType === "()") {
-    callBody = `        unsafe { (self.fn_ptr)(${ffiCallArgs}); }`;
   } else {
-    callBody = `        unsafe { (self.fn_ptr)(${ffiCallArgs}) }`;
+    const rustReturnType = funcType.returnType.getCode("rust");
+    if (rustReturnType === "()") {
+      callBody = `        unsafe { (self.fn_ptr)(${ffiCallArgs}); }`;
+    } else {
+      callBody = `        unsafe { (self.fn_ptr)(${ffiCallArgs}) }`;
+    }
   }
 
   const callParams = funcType.parameters

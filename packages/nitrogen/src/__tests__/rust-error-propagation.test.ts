@@ -13,6 +13,8 @@ import { RustCxxBridgedType } from "../syntax/rust/RustCxxBridgedType.js";
 import { BooleanType } from "../syntax/types/BooleanType.js";
 import { Int64Type } from "../syntax/types/Int64Type.js";
 import { ArrayType } from "../syntax/types/ArrayType.js";
+import { FunctionType } from "../syntax/types/FunctionType.js";
+import { createRustFunction } from "../syntax/rust/RustFunction.js";
 import type { HybridObjectSpec } from "../syntax/HybridObjectSpec.js";
 
 const mockConfig = new NitroConfig({
@@ -381,6 +383,90 @@ describe("FFI Error Propagation", () => {
       expect(bridgedTypeSource).toContain("panic!(");
       // Should NOT use abort for enum conversion
       expect(bridgedTypeSource).not.toContain("std::process::abort");
+    });
+  });
+
+  describe("Promise callback error propagation", () => {
+    test("lib.rs includes __nitrogen_dup_cstring", () => {
+      const libRs = createRustLibRs([]);
+      expect(libRs.content).toContain("fn __nitrogen_dup_cstring");
+      expect(libRs.content).toContain("CStr::from_ptr");
+      expect(libRs.content).toContain("CString::new");
+    });
+
+    test("Rust callback wrapper for Promise return uses result struct", () => {
+      const funcType = new FunctionType(
+        new PromiseType(new NumberType()),
+        [],
+      );
+      const file = createRustFunction(funcType);
+      // FFI fn_ptr should return a result struct, not bare f64
+      expect(file.content).toContain("crate::__FfiResult_f64");
+      // call() should return Result<f64, String>
+      expect(file.content).toContain("-> Result<f64, String>");
+      // Should check is_ok
+      expect(file.content).toContain("is_ok");
+      // Should free error string with __nitrogen_free_cstring
+      expect(file.content).toContain("__nitrogen_free_cstring");
+    });
+
+    test("Rust callback wrapper for Promise<void> return uses void result struct", () => {
+      const funcType = new FunctionType(
+        new PromiseType(new VoidType()),
+        [],
+      );
+      const file = createRustFunction(funcType);
+      expect(file.content).toContain("crate::__FfiResult_void");
+      expect(file.content).toContain("-> Result<(), String>");
+    });
+
+    test("C++ trampoline for Promise callback returns result struct instead of aborting", () => {
+      const spec = makeSpec(
+        "Image",
+        [],
+        [
+          new Method("compute", new PromiseType(new NumberType()), [
+            new Parameter(
+              "callback",
+              new FunctionType(new PromiseType(new NumberType()), []),
+            ),
+          ]),
+        ],
+      );
+      const files = createRustHybridObject(spec);
+      const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
+
+      // Should use __nitrogen_dup_cstring for error propagation
+      expect(hpp.content).toContain("__nitrogen_dup_cstring");
+      // Should return result struct, not abort
+      expect(hpp.content).toContain("__FfiResult_f64 {");
+    });
+
+    test("C++ HPP declares __nitrogen_dup_cstring", () => {
+      const spec = makeSpec("Image", [], []);
+      const files = createRustHybridObject(spec);
+      const hpp = files.find((f) => f.name === "HybridImageSpecRust.hpp")!;
+      expect(hpp.content).toContain("__nitrogen_dup_cstring");
+    });
+
+    test("Rust trait callback type for Promise return includes Result", () => {
+      const funcType = new FunctionType(
+        new PromiseType(new NumberType()),
+        [],
+      );
+      const rustCode = funcType.getCode("rust");
+      expect(rustCode).toContain("Result<f64, String>");
+    });
+
+    test("Non-Promise callbacks still abort on exception", () => {
+      const fs = require("fs");
+      const path = require("path");
+      const bridgedTypeSource = fs.readFileSync(
+        path.resolve(__dirname, "../syntax/rust/RustCxxBridgedType.ts"),
+        "utf-8",
+      );
+      // Non-Promise callbacks should still abort (the abort code path remains)
+      expect(bridgedTypeSource).toContain("std::abort()");
     });
   });
 });

@@ -213,6 +213,20 @@ pub unsafe extern "C" fn __nitrogen_free_cstring(ptr: *mut std::ffi::c_char) {
     unsafe { let _ = std::ffi::CString::from_raw(ptr); }
 }
 
+/// Duplicate a C string using Rust's allocator.
+/// Called by C++ callback trampolines to allocate error strings that can
+/// later be freed by __nitrogen_free_cstring on the Rust side.
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn __nitrogen_dup_cstring(src: *const std::ffi::c_char) -> *mut std::ffi::c_char {
+    if src.is_null() {
+        return std::ptr::null_mut();
+    }
+    unsafe {
+        let s = std::ffi::CStr::from_ptr(src).to_string_lossy().into_owned();
+        std::ffi::CString::new(s).unwrap_or_default().into_raw()
+    }
+}
+
 /// Convert a panic payload into a C string for FFI error propagation.
 pub fn __nitro_panic_to_cstring(panic: Box<dyn std::any::Any + Send>) -> *mut std::ffi::c_char {
     let msg = if let Some(s) = panic.downcast_ref::<&str>() {
@@ -307,10 +321,7 @@ pub struct __FfiResult_ptr {
  */
 export function createRustCargoToml(): SourceFile {
   const name = NitroConfig.current.getAndroidCxxLibName();
-  const crateName = name
-    .replace(/([a-z])([A-Z])/g, "$1_$2")
-    .toLowerCase()
-    .replace(/[^a-z0-9_]/g, "_");
+  const crateName = toSnakeCase(name);
 
   const code = `
 ${createFileMetadataString("Cargo.toml", "#")}

@@ -145,7 +145,15 @@ export class FunctionType implements Type {
         const params = this.parameters
           .map((p) => p.getCode(language, options))
           .join(', ')
-        const returnType = this.returnType.getCode(language, options)
+        let returnType = this.returnType.getCode(language, options)
+        // Promise-returning callbacks: wrap inner type in Result<T, String>
+        // because Promise rejection is a normal error path that needs propagation.
+        if (this.returnType.kind === 'promise') {
+          returnType =
+            returnType === '()'
+              ? 'Result<(), String>'
+              : `Result<${returnType}, String>`
+        }
         if (returnType === '()') {
           return `Box<dyn Fn(${params}) + Send + Sync>`
         }
