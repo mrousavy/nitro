@@ -28,7 +28,7 @@ abstract class HybridTestViewSpec: HybridView() {
   private var mHybridData: HybridData? = initHybrid()
 
   init {
-    super.updateNative(mHybridData)
+    super.updateNative(mHybridData!!)
   }
 
   override fun updateNative(hybridData: HybridData) {
@@ -43,7 +43,7 @@ abstract class HybridTestViewSpec: HybridView() {
 
   // Default implementation of `HybridObject.dispose()`
   @Synchronized
-  protected override fun dispose() {
+  override fun dispose() {
     super.dispose()
     mHybridData?.resetNative()
     mHybridData = null
