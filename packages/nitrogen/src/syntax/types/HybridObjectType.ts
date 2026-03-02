@@ -112,7 +112,7 @@ export class HybridObjectType implements Type {
         }
       }
       case "rust": {
-        return `Box<dyn ${name.HybridTSpec}>`;
+        return `std::sync::Arc<dyn ${name.HybridTSpec}>`;
       }
       default:
         throw new Error(

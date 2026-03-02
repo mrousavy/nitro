@@ -1,5 +1,5 @@
 import { NitroConfig } from "../../config/NitroConfig.js";
-import { createFileMetadataString } from "../../syntax/helpers.js";
+import { createFileMetadataString, toSnakeCase } from "../../syntax/helpers.js";
 import type { SourceFile } from "../../syntax/SourceFile.js";
 
 export interface RubyFile extends Omit<SourceFile, "language"> {
@@ -10,7 +10,7 @@ export function createPodspecRubyExtension(): RubyFile {
   const name = NitroConfig.current.getIosModuleName();
   // The Rust lib name is derived from androidCxxLibName in Cargo.toml,
   // so we must use the same name here for linking to succeed.
-  const rustLibName = NitroConfig.current.getAndroidCxxLibName();
+  const rustLibName = toSnakeCase(NitroConfig.current.getAndroidCxxLibName());
   const autolinkedHybridObjects =
     NitroConfig.current.getAutolinkedHybridObjects();
   const hasRust = Object.values(autolinkedHybridObjects).some(
