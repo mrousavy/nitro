@@ -83,6 +83,54 @@ interface OptionalCallback {
   callback?: (() => void) | number
 }
 
+// A deep/wide struct graph where multiple structs reference the same shared
+// types from many paths. This exercises the BridgedType visited-set fix:
+// without it, shared types get re-traversed from every path, causing
+// exponential blowup and stack overflow during code generation (#1079).
+interface MediaInfo {
+  title: string
+  description?: string
+  tags?: string[]
+  coverUrl?: string
+}
+interface EntityInfo {
+  entityId: number
+  title: string
+  media?: MediaInfo
+}
+interface UserInfo {
+  userId: number
+  name: string
+  avatar?: MediaInfo
+  entity?: EntityInfo
+}
+interface TagInfo {
+  x: number
+  y: number
+  entity?: EntityInfo
+  user?: UserInfo
+}
+interface GalleryItem {
+  mediaId: number
+  uri: string
+  media: MediaInfo
+  tags?: TagInfo[]
+  owner?: UserInfo
+  entity?: EntityInfo
+}
+interface AlbumItem {
+  albumId: number
+  name: string
+  cover?: MediaInfo
+  items?: GalleryItem[]
+  owner?: UserInfo
+}
+export interface Gallery {
+  albums: AlbumItem[]
+  featured?: GalleryItem
+  owner: UserInfo
+}
+
 interface SecondMapWrapper {
   second: Record<string, string>
 }
@@ -247,6 +295,7 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  bounceGallery(gallery: Gallery): Gallery
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
