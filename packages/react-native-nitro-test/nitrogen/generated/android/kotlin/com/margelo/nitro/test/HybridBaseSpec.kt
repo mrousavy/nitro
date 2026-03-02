@@ -25,10 +25,12 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridBaseSpec: HybridObject() {
   @DoNotStrip
-  private var mHybridData: HybridData? = initHybrid()
+  private var mHybridData: HybridData?
 
   init {
-    super.updateNative(mHybridData!!)
+    val hybridData = initHybrid()
+    mHybridData = hybridData
+    super.updateNative(hybridData)
   }
 
   override fun updateNative(hybridData: HybridData) {
