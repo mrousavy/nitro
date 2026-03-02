@@ -22,6 +22,8 @@ export class StringType implements Type {
         return 'String'
       case 'kotlin':
         return 'String'
+      case 'rust':
+        return 'String'
       default:
         throw new Error(
           `Language ${language} is not yet supported for StringType!`

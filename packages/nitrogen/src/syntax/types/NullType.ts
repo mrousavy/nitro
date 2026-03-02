@@ -22,6 +22,8 @@ export class NullType implements Type {
         return 'NullType'
       case 'kotlin':
         return 'NullType'
+      case 'rust':
+        return '()'
       default:
         throw new Error(
           `Language ${language} is not yet supported for NullType!`

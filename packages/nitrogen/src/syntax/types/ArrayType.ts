@@ -43,6 +43,8 @@ export class ArrayType implements Type {
           default:
             return `Array<${itemCode}>`
         }
+      case 'rust':
+        return `Vec<${itemCode}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for ArrayType!`

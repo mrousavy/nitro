@@ -1,35 +1,38 @@
-import type { HybridObject } from 'react-native-nitro-modules'
-import type { Language } from '../getPlatformSpecs.js'
-import type { HybridObjectSpec } from './HybridObjectSpec.js'
+import type { HybridObject } from "react-native-nitro-modules";
+import type { Language } from "../getPlatformSpecs.js";
+import type { HybridObjectSpec } from "./HybridObjectSpec.js";
 
 function getMemberNamesOfBaseType(language: Language): string[] {
   switch (language) {
-    case 'c++':
+    case "c++":
       // C++ classes don't have any base type.
-      return []
-    case 'swift':
+      return [];
+    case "swift":
       // Swift classes conform to `AnyObject`, but that doesn't have any properties
-      return []
-    case 'kotlin':
+      return [];
+    case "kotlin":
       // Kotlin/JVM classes always extends `Any`, which has 3 methods
-      return ['toString', 'equals', 'hashCode']
+      return ["toString", "equals", "hashCode"];
+    case "rust":
+      // Rust traits don't have any implicit base members.
+      return [];
   }
 }
 function getMemberNamesOfHybridObject(): string[] {
-  type MemberName = keyof HybridObject<{}>
-  type HasToContainAllKeys = { [P in MemberName]: boolean }
+  type MemberName = keyof HybridObject<{}>;
+  type HasToContainAllKeys = { [P in MemberName]: boolean };
   const allKeys: HasToContainAllKeys = {
     __type: true,
     dispose: true,
     equals: true,
     name: true,
     toString: true,
-  }
-  return Object.keys(allKeys)
+  };
+  return Object.keys(allKeys);
 }
 
 function flatBaseTypes(type: HybridObjectSpec): HybridObjectSpec[] {
-  return type.baseTypes.flatMap((b) => [b, ...flatBaseTypes(b)])
+  return type.baseTypes.flatMap((b) => [b, ...flatBaseTypes(b)]);
 }
 
 /**
@@ -43,37 +46,37 @@ function flatBaseTypes(type: HybridObjectSpec): HybridObjectSpec[] {
 export function isMemberOverridingFromBase(
   memberName: string,
   hybridObject: HybridObjectSpec,
-  language: Language
+  language: Language,
 ): boolean {
   // 1. Check if the HybridObject inherits from other HybridObjects,
   //    if yes, check if those have properties of that given name.
-  const allBases = flatBaseTypes(hybridObject)
+  const allBases = flatBaseTypes(hybridObject);
   const anyBaseOverrides = allBases.some((h) => {
     if (h.properties.some((p) => p.name === memberName)) {
-      return true
+      return true;
     }
     if (h.methods.some((m) => m.name === memberName)) {
-      return true
+      return true;
     }
-    return false
-  })
+    return false;
+  });
   if (anyBaseOverrides) {
     // A HybridObject base type has the same property name - we need to override it.
-    return true
+    return true;
   }
 
   // 2. Check if the base `HybridObject` type contains a property of the given name
-  const baseHybridObjectProps = getMemberNamesOfHybridObject()
+  const baseHybridObjectProps = getMemberNamesOfHybridObject();
   if (baseHybridObjectProps.includes(memberName)) {
-    return true
+    return true;
   }
 
   // 3. Check if the base type in our language contains a property of the given name
-  const baseTypeProps = getMemberNamesOfBaseType(language)
+  const baseTypeProps = getMemberNamesOfBaseType(language);
   if (baseTypeProps.includes(memberName)) {
-    return true
+    return true;
   }
 
   // 4. Apparently no base type has a property of that name - we are safe!
-  return false
+  return false;
 }

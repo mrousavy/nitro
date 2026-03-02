@@ -12,6 +12,7 @@ import {
 import {
   HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
+  HybridTestObjectRust,
   HybridChild,
   HybridBase,
 } from 'react-native-nitro-test'
@@ -48,9 +49,11 @@ export function HybridObjectTestsScreen() {
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const [searchQuery, setSearchQuery] = React.useState('')
   const [statusFilter, setStatusFilter] = React.useState<TestFilter>('all')
-  const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
-    selectedIndex
-  ]
+  const selectedObject = [
+    HybridTestObjectCpp,
+    HybridTestObjectSwiftKotlin,
+    HybridTestObjectRust,
+  ][selectedIndex]
   console.log(`Showing Tests for HybridObject "${selectedObject?.name}"`)
   const allTests = React.useMemo(
     () => getTests(selectedObject ?? HybridTestObjectCpp),
@@ -209,7 +212,7 @@ export function HybridObjectTestsScreen() {
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
-          values={['C++', PLATFORM_LANGUAGE]}
+          values={['C++', PLATFORM_LANGUAGE, 'Rust']}
           selectedIndex={selectedIndex}
           onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
             setSelectedIndex(selectedSegmentIndex)

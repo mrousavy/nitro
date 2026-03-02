@@ -45,6 +45,8 @@ export class OptionalType implements Type {
         } else {
           return `${wrapping}?`
         }
+      case 'rust':
+        return `Option<${wrapping}>`
       default:
         throw new Error(
           `Language ${language} is not yet supported for OptionalType!`

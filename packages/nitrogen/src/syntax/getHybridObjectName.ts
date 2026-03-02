@@ -32,6 +32,11 @@ export interface HybridObjectName {
    * @example "HybridImageSwift"
    */
   HybridTSpecSwift: string
+  /**
+   * The name of the C++ class that extends the Hybrid Object and bridges over to Rust via extern "C" FFI.
+   * @example "HybridImageSpecRust"
+   */
+  HybridTSpecRust: string
 }
 
 export function getHybridObjectName(
@@ -44,5 +49,6 @@ export function getHybridObjectName(
     HybridTSpecCxx: `Hybrid${hybridObjectName}Spec_cxx`,
     JHybridTSpec: `JHybrid${hybridObjectName}Spec`,
     HybridTSpecSwift: `Hybrid${hybridObjectName}SpecSwift`,
+    HybridTSpecRust: `Hybrid${hybridObjectName}SpecRust`,
   }
 }

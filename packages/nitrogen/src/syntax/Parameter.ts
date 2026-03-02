@@ -1,6 +1,6 @@
 import type { ParameterDeclaration } from 'ts-morph'
 import type { CodeNode } from './CodeNode.js'
-import { escapeCppName, toReferenceType } from './helpers.js'
+import { escapeCppName, toReferenceType, toSnakeCase } from './helpers.js'
 import type { Language } from '../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from './SourceFile.js'
 import type { NamedType, Type } from './types/Type.js'
@@ -64,6 +64,9 @@ export class Parameter implements CodeNode {
         return `${name}: ${flags + this.type.getCode('swift')}`
       case 'kotlin':
         return `${name}: ${this.type.getCode('kotlin')}`
+      case 'rust':
+        const rustName = toSnakeCase(name)
+        return `${rustName}: ${this.type.getCode('rust')}`
       default:
         throw new Error(
           `Language ${language} is not yet supported for parameters!`

@@ -23,6 +23,8 @@ export class BooleanType implements Type {
         return 'Bool'
       case 'kotlin':
         return 'Boolean'
+      case 'rust':
+        return 'bool'
       default:
         throw new Error(
           `Language ${language} is not yet supported for BooleanType!`

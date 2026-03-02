@@ -1,0 +1,14 @@
+[workspace]
+
+[package]
+name = "nitro-test-rust"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "nitro_test_rust"
+path = "src/rust/lib.rs"
+crate-type = ["staticlib"]
+
+[dependencies]
+nitro_test_rust = { path = "nitrogen/generated/shared/rust/" }

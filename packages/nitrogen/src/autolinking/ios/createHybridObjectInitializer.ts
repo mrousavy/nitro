@@ -1,62 +1,78 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
-import { createCppHybridObjectRegistration } from '../../syntax/c++/CppHybridObjectRegistration.js'
-import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
-import { createFileMetadataString } from '../../syntax/helpers.js'
-import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
-import { createSwiftHybridObjectRegistration } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
-import { indent } from '../../utils.js'
-import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
+import { NitroConfig } from "../../config/NitroConfig.js";
+import { createCppHybridObjectRegistration } from "../../syntax/c++/CppHybridObjectRegistration.js";
+import { includeHeader } from "../../syntax/c++/includeNitroHeader.js";
+import { createFileMetadataString } from "../../syntax/helpers.js";
+import type { SourceFile, SourceImport } from "../../syntax/SourceFile.js";
+import { createRustHybridObjectRegistration } from "../../syntax/rust/RustHybridObjectRegistration.js";
+import { createSwiftHybridObjectRegistration } from "../../syntax/swift/SwiftHybridObjectRegistration.js";
+import { indent } from "../../utils.js";
+import { getUmbrellaHeaderName } from "./createSwiftUmbrellaHeader.js";
 
-type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
-type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
+type ObjcFile = Omit<SourceFile, "language"> & { language: "objective-c++" };
+type SwiftFile = Omit<SourceFile, "language"> & { language: "swift" };
 
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
-  const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
-  const umbrellaHeaderName = getUmbrellaHeaderName()
-  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
+  const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`;
+  const umbrellaHeaderName = getUmbrellaHeaderName();
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace("swift");
 
   const autolinkedHybridObjects =
-    NitroConfig.current.getAutolinkedHybridObjects()
+    NitroConfig.current.getAutolinkedHybridObjects();
 
-  const swiftRegistrations: string[] = []
-  const cppRegistrations: string[] = []
-  const cppImports: SourceImport[] = []
-  let containsSwiftObjects = false
+  const swiftRegistrations: string[] = [];
+  const cppRegistrations: string[] = [];
+  const cppExternDecls: string[] = [];
+  const cppImports: SourceImport[] = [];
+  let containsSwiftObjects = false;
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
+    const config = autolinkedHybridObjects[hybridObjectName];
 
     if (config?.cpp != null) {
       // Autolink a C++ HybridObject!
       const { cppCode, requiredImports } = createCppHybridObjectRegistration({
         hybridObjectName: hybridObjectName,
         cppClassName: config.cpp,
-      })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+      });
+      cppImports.push(...requiredImports);
+      cppRegistrations.push(cppCode);
     }
     if (config?.swift != null) {
       // Autolink a Swift HybridObject!
-      containsSwiftObjects = true
+      containsSwiftObjects = true;
       const { cppCode, requiredImports, swiftRegistrationMethods } =
         createSwiftHybridObjectRegistration({
           hybridObjectName: hybridObjectName,
           swiftClassName: config.swift,
-        })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
-      swiftRegistrations.push(swiftRegistrationMethods)
+        });
+      cppImports.push(...requiredImports);
+      cppRegistrations.push(cppCode);
+      swiftRegistrations.push(swiftRegistrationMethods);
+    }
+    if (config?.rust != null) {
+      // Autolink a Rust HybridObject through FFI/C++!
+      const { cppCode, cppExternDeclarations, requiredImports } =
+        createRustHybridObjectRegistration({
+          hybridObjectName: hybridObjectName,
+          rustClassName: config.rust,
+        });
+      cppImports.push(...requiredImports);
+      cppExternDecls.push(cppExternDeclarations);
+      cppRegistrations.push(cppCode);
     }
   }
 
   if (cppRegistrations.length === 0) {
     // Nothing to autolink!
-    return []
+    return [];
   }
 
   const umbrellaImport = containsSwiftObjects
     ? `#import "${umbrellaHeaderName}"`
-    : ''
-  const imports = cppImports.map((i) => includeHeader(i, true)).join('\n')
+    : "";
+  const imports = cppImports.map((i) => includeHeader(i, true)).join("\n");
+
+  const externDecls =
+    cppExternDecls.length > 0 ? "\n" + cppExternDecls.join("\n") + "\n" : "";
 
   const objcCode = `
 ${createFileMetadataString(`${autolinkingClassName}.mm`)}
@@ -67,7 +83,7 @@ ${umbrellaImport}
 #import <type_traits>
 
 ${imports}
-
+${externDecls}
 @interface ${autolinkingClassName} : NSObject
 @end
 
@@ -75,13 +91,13 @@ ${imports}
 
 + (void) load {
   using namespace margelo::nitro;
-  using namespace ${NitroConfig.current.getCxxNamespace('c++')};
+  using namespace ${NitroConfig.current.getCxxNamespace("c++")};
 
-  ${indent(cppRegistrations.join('\n'), '  ')}
+  ${indent(cppRegistrations.join("\n"), "  ")}
 }
 
 @end
-  `.trim()
+  `.trim();
 
   const swiftCode = `
 ${createFileMetadataString(`${autolinkingClassName}.swift`)}
@@ -93,24 +109,24 @@ import NitroModules
 public final class ${autolinkingClassName} {
   public typealias bridge = ${bridgeNamespace}
 
-  ${indent(swiftRegistrations.join('\n\n'), '  ')}
+  ${indent(swiftRegistrations.join("\n\n"), "  ")}
 }
-  `.trim()
+  `.trim();
 
   return [
     {
       content: objcCode,
-      language: 'objective-c++',
+      language: "objective-c++",
       name: `${autolinkingClassName}.mm`,
-      platform: 'ios',
+      platform: "ios",
       subdirectory: [],
     },
     {
       content: swiftCode,
-      language: 'swift',
+      language: "swift",
       name: `${autolinkingClassName}.swift`,
-      platform: 'ios',
+      platform: "ios",
       subdirectory: [],
     },
-  ]
+  ];
 }

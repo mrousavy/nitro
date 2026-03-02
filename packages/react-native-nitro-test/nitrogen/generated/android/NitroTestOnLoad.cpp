@@ -37,7 +37,17 @@
 #include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
+#include "HybridTestObjectRustSpecRust.hpp"
 #include <NitroModules/DefaultConstructableObject.hpp>
+
+// Rust factory function — auto-generated in factory.rs for "HybridTestObjectRust".
+// The Rust side defines (in factory.rs):
+//   #[unsafe(no_mangle)]
+//   pub extern "C" fn create_HybridTestObjectRustSpec() -> *mut std::ffi::c_void {
+//       let obj: Box<dyn HybridTestObjectRustSpec> = Box::new(HybridTestObjectRust::new());
+//       Box::into_raw(Box::new(obj)) as *mut std::ffi::c_void
+//   }
+extern "C" void* create_HybridTestObjectRustSpec();
 
 namespace margelo::nitro::test {
 
@@ -82,6 +92,13 @@ void registerAllNatives() {
                     "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
                     "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
       return std::make_shared<HybridTestObjectCpp>();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestObjectRust",
+    []() -> std::shared_ptr<HybridObject> {
+      void* rustPtr = create_HybridTestObjectRustSpec();
+      return std::make_shared<HybridTestObjectRustSpecRust>(rustPtr);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(

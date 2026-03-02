@@ -24,6 +24,8 @@ export class ErrorType implements Type {
         return `Error`
       case 'kotlin':
         return `Throwable`
+      case 'rust':
+        return `String`
       default:
         throw new Error(
           `Language ${language} is not yet supported for ThrowableType!`

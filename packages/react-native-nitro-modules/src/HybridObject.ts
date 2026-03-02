@@ -5,8 +5,8 @@
  * to platform-specific languages like Swift or Kotlin
  */
 export interface PlatformSpec {
-  ios?: 'c++' | 'swift'
-  android?: 'c++' | 'kotlin'
+  ios?: 'c++' | 'swift' | 'rust'
+  android?: 'c++' | 'kotlin' | 'rust'
 }
 
 /**
