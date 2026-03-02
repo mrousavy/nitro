@@ -1478,6 +1478,61 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
+    createTest('Frame-like HybridObject churn does not leak refs', () =>
+      it(() => {
+        // Allocate/dispose a lot of short-lived HybridObjects in steady batches.
+        // If JNI refs leak, this will typically overflow before completion.
+        const frameCount = 11_000
+        const planesPerFrame = 4
+        const gcEveryNFrames = 250
+        const expectedObjects = frameCount * (planesPerFrame + 1)
+
+        let allocatedObjects = 0
+
+        gc()
+        for (let frameIndex = 0; frameIndex < frameCount; frameIndex++) {
+          const frame = testObject.newTestObject()
+          const planes = frame.bounceHybridObjects([
+            frame.createChild(),
+            frame.createChild(),
+            frame.createChild(),
+            frame.createChild(),
+          ])
+
+          if (planes.length !== planesPerFrame) {
+            throw new Error(
+              `Expected ${planesPerFrame} planes, got ${planes.length}!`
+            )
+          }
+
+          for (const plane of planes) {
+            // Touch values so this behaves like real frame processing work.
+            const baseValue = plane.baseValue
+            const childValue = plane.childValue
+            if (
+              typeof baseValue !== 'number' ||
+              typeof childValue !== 'number'
+            ) {
+              throw new Error(`Invalid plane values!`)
+            }
+            plane.dispose()
+            allocatedObjects++
+          }
+
+          frame.dispose()
+          allocatedObjects++
+
+          if ((frameIndex + 1) % gcEveryNFrames === 0) {
+            gc()
+          }
+        }
+
+        gc()
+        return allocatedObjects === expectedObjects
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('callWithOptional(undefined)', async () =>
       (
         await it<number | undefined>(() => {
