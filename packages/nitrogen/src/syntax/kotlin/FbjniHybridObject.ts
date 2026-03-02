@@ -34,9 +34,11 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     'c++/jni',
     name.HybridTSpec
   )
+  const jniCppPartClassDescriptor = jniClassDescriptor.replace(';', '$CppPart;')
   const cxxNamespace = spec.config.getCxxNamespace('c++')
 
   let cppJavaBase = 'JHybridObject::JavaPart'
+  let cppCppBase = 'JHybridObject::CppPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -46,6 +48,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const base = spec.baseTypes[0]!
     const jBaseType = getHybridObjectName(base.name).JHybridTSpec
     cppJavaBase = `${jBaseType}::JavaPart`
+    cppCppBase = `${jBaseType}::CppPart`
     if (base.config.isExternalConfig) {
       // It's an external type we inherit from - we have to prefix the namespace
       cppJavaBase = base.config.getCxxNamespace('c++', cppJavaBase)
@@ -115,16 +118,34 @@ namespace ${cxxNamespace} {
 
   class ${name.JHybridTSpec}: ${cppBaseClasses.join(', ')} {
   public:
-    // Java part for ${name.JHybridTSpec}
+    // Java part for ${name.JHybridTSpec} - this is the abstract Kotlin spec class.
     struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppJavaBase}> {
-    public:
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-
       std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
         jni::local_ref<JavaPart> javaPart = jni::make_local(self());
         return std::make_shared<${name.JHybridTSpec}>(javaPart);
       }
+    };
+  public:
+    // C++ part for ${name.JHybridTSpec} - this holds a weak_ptr to the C++ class to break the retain cycle.
+    struct CppPart: public jni::HybridClass<CppPart, ${cppCppBase}> {
+      static auto constexpr kJavaDescriptor = "L${jniCppPartClassDescriptor}";
+      static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> javaPart) {
+        return makeCxxInstance(javaPart);
+      }
+      explicit CppPart(jni::alias_ref<CppPart::javaobject> javaPart):
+        HybridBase(javaPart),
+        _javaPart(jni::make_global(javaPart)) { }
+
+      std::shared_ptr<JHybridObject> getCppPart() override {
+        // TODO: Override this with actual implementation
+        return HybridBase::getCppPart();
+      }
+
+    private:
+      jni::global_ref<CppPart::javaobject> _javaPart;
+      std::weak_ptr<${name.JHybridTSpec}> _cppPart;
     };
 
   public:

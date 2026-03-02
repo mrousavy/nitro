@@ -8,6 +8,7 @@
 package com.margelo.nitro.test
 
 import androidx.annotation.Keep
+import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.AnyMap
@@ -28,6 +29,22 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(
+    @Keep
+    @DoNotStrip
+    override val javaPart: HybridTestObjectSwiftKotlinSpec
+  ): HybridObject.CppPart(javaPart) {
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    private external fun initHybrid(): HybridData
+  }
+  override val cppPart: HybridObject.CppPart = CppPart(this)
+
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject TestObjectSwiftKotlin]"

@@ -26,16 +26,15 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.baseTypes.flatMap((b) =>
       new HybridObjectType(b).getRequiredImports('kotlin')
     ),
+    {
+      name: 'com.margelo.nitro.core.HybridObject',
+      space: 'system',
+      language: 'kotlin',
+    },
   ]
   if (spec.isHybridView) {
     extraImports.push({
       name: 'com.margelo.nitro.views.HybridView',
-      space: 'system',
-      language: 'kotlin',
-    })
-  } else {
-    extraImports.push({
-      name: 'com.margelo.nitro.core.HybridObject',
       space: 'system',
       language: 'kotlin',
     })
@@ -66,6 +65,7 @@ ${createFileMetadataString(`${name.HybridTSpec}.kt`)}
 package ${javaPackage}
 
 import androidx.annotation.Keep
+import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 ${imports.join('\n')}
 
@@ -81,6 +81,22 @@ ${imports.join('\n')}
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(
+    @Keep
+    @DoNotStrip
+    override val javaPart: ${name.HybridTSpec}
+  ): HybridObject.CppPart(javaPart) {
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    private external fun initHybrid(): HybridData
+  }
+  override val cppPart: HybridObject.CppPart = CppPart(this)
+
   // Default implementation of \`HybridObject.toString()\`
   override fun toString(): String {
     return "[HybridObject ${name.T}]"

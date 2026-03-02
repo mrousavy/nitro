@@ -20,16 +20,34 @@ namespace margelo::nitro::test {
 
   class JHybridBaseSpec: public virtual HybridBaseSpec, public virtual JHybridObject {
   public:
-    // Java part for JHybridBaseSpec
+    // Java part for JHybridBaseSpec - this is the abstract Kotlin spec class.
     struct JavaPart: public jni::JavaClass<JHybridBaseSpec::JavaPart, JHybridObject::JavaPart> {
-    public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
-
       std::shared_ptr<JHybridBaseSpec> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
         jni::local_ref<JavaPart> javaPart = jni::make_local(self());
         return std::make_shared<JHybridBaseSpec>(javaPart);
       }
+    };
+  public:
+    // C++ part for JHybridBaseSpec - this holds a weak_ptr to the C++ class to break the retain cycle.
+    struct CppPart: public jni::HybridClass<CppPart, JHybridObject::CppPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec";
+      static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> javaPart) {
+        return makeCxxInstance(javaPart);
+      }
+      explicit CppPart(jni::alias_ref<CppPart::javaobject> javaPart):
+        HybridBase(javaPart),
+        _javaPart(jni::make_global(javaPart)) { }
+
+      std::shared_ptr<JHybridObject> getCppPart() override {
+        // TODO: Override this with actual implementation
+        return HybridBase::getCppPart();
+      }
+
+    private:
+      jni::global_ref<CppPart::javaobject> _javaPart;
+      std::weak_ptr<JHybridBaseSpec> _cppPart;
     };
 
   public:

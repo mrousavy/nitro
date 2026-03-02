@@ -1,6 +1,7 @@
 package com.margelo.nitro.core
 
 import androidx.annotation.Keep
+import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 
 /**
@@ -9,7 +10,31 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 @DoNotStrip
 abstract class HybridObject {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(
+    @DoNotStrip
+    @Keep
+    open val javaPart: HybridObject
+  ) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+    private external fun initHybrid(): HybridData
+  }
+
   /**
+   * Represents the C++ part.
+   * This is implemented via a weak_ref to the C++ part
+   * to break the cyclic chain.
+   */
+  abstract val cppPart: CppPart
+
+    /**
    * Get the memory size of the Kotlin instance (plus any external heap allocations),
    * in bytes.
    *
