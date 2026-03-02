@@ -46,6 +46,54 @@ int initialize(JavaVM* vm) {
   });
 }
 
+struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpecImpl, JHybridTestObjectSwiftKotlinSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectKotlin;";
+  static std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> create() {
+    jni::local_ref<JHybridTestObjectSwiftKotlinSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridTestObjectSwiftKotlinSpec>(javaPart);
+  }
+};
+
+struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBase;";
+  static std::shared_ptr<JHybridBaseSpec> create() {
+    jni::local_ref<JHybridBaseSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridBaseSpec>(javaPart);
+  }
+};
+
+struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybridChildSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChild;";
+  static std::shared_ptr<JHybridChildSpec> create() {
+    jni::local_ref<JHybridChildSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridChildSpec>(javaPart);
+  }
+};
+
+struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjectSpecImpl, JHybridPlatformObjectSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObject;";
+  static std::shared_ptr<JHybridPlatformObjectSpec> create() {
+    jni::local_ref<JHybridPlatformObjectSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridPlatformObjectSpec>(javaPart);
+  }
+};
+
+struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestView;";
+  static std::shared_ptr<JHybridTestViewSpec> create() {
+    jni::local_ref<JHybridTestViewSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridTestViewSpec>(javaPart);
+  }
+};
+
+struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclableTestViewSpecImpl, JHybridRecyclableTestViewSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestView;";
+  static std::shared_ptr<JHybridRecyclableTestViewSpec> create() {
+    jni::local_ref<JHybridRecyclableTestViewSpecImpl> javaPart = newInstance();
+    return std::make_shared<JHybridRecyclableTestViewSpec>(javaPart);
+  }
+};
+
 void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test;
@@ -80,43 +128,37 @@ void registerAllNatives() {
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> javaPart = JHybridTestObjectSwiftKotlinSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridTestObjectSwiftKotlinSpec>(javaPart);
+      return JHybridTestObjectSwiftKotlinSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = JHybridBaseSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridBaseSpec>(javaPart);
+      return JHybridBaseSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridChildSpec::JavaPart> javaPart = JHybridChildSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridChildSpec>(javaPart);
+      return JHybridChildSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "PlatformObject",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridPlatformObjectSpec::JavaPart> javaPart = JHybridPlatformObjectSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridPlatformObjectSpec>(javaPart);
+      return JHybridPlatformObjectSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridTestViewSpec::JavaPart> javaPart = JHybridTestViewSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridTestViewSpec>(javaPart);
+      return JHybridTestViewSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
-      jni::local_ref<JHybridRecyclableTestViewSpec::JavaPart> javaPart = JHybridRecyclableTestViewSpec::JavaPart::callDefaultConstructor();
-      return std::make_shared<JHybridRecyclableTestViewSpec>(javaPart);
+      return JHybridRecyclableTestViewSpecImpl::create();
     }
   );
 }

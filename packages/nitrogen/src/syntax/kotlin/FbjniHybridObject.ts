@@ -119,12 +119,6 @@ namespace ${cxxNamespace} {
         jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
         return std::make_shared<${name.JHybridTSpec}>(javaPart);
       }
-
-      // Create a new instance of ${name.JHybridTSpec}::JavaPart.
-      // This method throws if there is no default-constructor in Java.
-      static jni::local_ref<JavaPart> callDefaultConstructor() {
-        return newInstance();
-      }
     };
 
   public:

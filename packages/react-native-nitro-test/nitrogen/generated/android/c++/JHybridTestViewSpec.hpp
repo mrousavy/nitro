@@ -30,12 +30,6 @@ namespace margelo::nitro::test {
         jni::local_ref<JavaPart> javaPart = jni::adopt_local(self());
         return std::make_shared<JHybridTestViewSpec>(javaPart);
       }
-
-      // Create a new instance of JHybridTestViewSpec::JavaPart.
-      // This method throws if there is no default-constructor in Java.
-      static jni::local_ref<JavaPart> callDefaultConstructor() {
-        return newInstance();
-      }
     };
 
   public:
