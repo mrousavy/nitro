@@ -58,6 +58,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { struct SecondMapWrapper; }
 // Forward declaration of `TagInfo` to properly resolve imports.
 namespace margelo::nitro::test { struct TagInfo; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
 // Forward declaration of `UserInfo` to properly resolve imports.
 namespace margelo::nitro::test { struct UserInfo; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
@@ -90,6 +92,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "Powertrain.hpp"
 #include "SecondMapWrapper.hpp"
 #include "TagInfo.hpp"
+#include "TreeNode.hpp"
 #include "UserInfo.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"

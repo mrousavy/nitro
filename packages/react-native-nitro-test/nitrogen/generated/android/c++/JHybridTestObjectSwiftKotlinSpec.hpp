@@ -159,6 +159,7 @@ namespace margelo::nitro::test {
     OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
     OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override;
     Gallery bounceGallery(const Gallery& gallery) override;
+    TreeNode bounceTreeNode(const TreeNode& node) override;
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override;
     std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;

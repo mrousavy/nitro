@@ -54,6 +54,8 @@ namespace margelo::nitro::test { struct TagInfo; }
 namespace margelo::nitro::test { struct EntityInfo; }
 // Forward declaration of `UserInfo` to properly resolve imports.
 namespace margelo::nitro::test { struct UserInfo; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -99,6 +101,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "TagInfo.hpp"
 #include "EntityInfo.hpp"
 #include "UserInfo.hpp"
+#include "TreeNode.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -803,6 +806,14 @@ namespace margelo::nitro::test {
     }
     inline Gallery bounceGallery(const Gallery& gallery) override {
       auto __result = _swiftPart.bounceGallery(std::forward<decltype(gallery)>(gallery));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline TreeNode bounceTreeNode(const TreeNode& node) override {
+      auto __result = _swiftPart.bounceTreeNode(std::forward<decltype(node)>(node));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

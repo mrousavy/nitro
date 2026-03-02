@@ -43,6 +43,8 @@ namespace margelo::nitro::test { struct TagInfo; }
 namespace margelo::nitro::test { struct EntityInfo; }
 // Forward declaration of `UserInfo` to properly resolve imports.
 namespace margelo::nitro::test { struct UserInfo; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -120,6 +122,9 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JEntityInfo.hpp"
 #include "UserInfo.hpp"
 #include "JUserInfo.hpp"
+#include "TreeNode.hpp"
+#include "JTreeNode.hpp"
+#include "JFunc_void_TreeNode.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -1187,6 +1192,11 @@ namespace margelo::nitro::test {
   Gallery JHybridTestObjectSwiftKotlinSpec::bounceGallery(const Gallery& gallery) {
     static const auto method = javaClassStatic()->getMethod<jni::local_ref<JGallery>(jni::alias_ref<JGallery> /* gallery */)>("bounceGallery");
     auto __result = method(_javaPart, JGallery::fromCpp(gallery));
+    return __result->toCpp();
+  }
+  TreeNode JHybridTestObjectSwiftKotlinSpec::bounceTreeNode(const TreeNode& node) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JTreeNode>(jni::alias_ref<JTreeNode> /* node */)>("bounceTreeNode");
+    auto __result = method(_javaPart, JTreeNode::fromCpp(node));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
