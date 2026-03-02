@@ -18,16 +18,18 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridPlatformObjectSpec: public jni::JavaClass<JHybridPlatformObjectSpec, JHybridObject>,
-                                   public virtual HybridPlatformObjectSpec {
+  class JHybridPlatformObjectSpec: public virtual HybridPlatformObjectSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";
+    // Java part for JHybridPlatformObjectSpec
+    struct JavaPart: public jni::JavaClass<JHybridPlatformObjectSpec::JavaPart, JHybridObject> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridPlatformObjectSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridPlatformObjectSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridPlatformObjectSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -43,7 +45,7 @@ namespace margelo::nitro::test {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridPlatformObjectSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -56,7 +58,7 @@ namespace margelo::nitro::test {
     std::string getOSVersion() override;
 
   private:
-    jni::global_ref<JHybridPlatformObjectSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

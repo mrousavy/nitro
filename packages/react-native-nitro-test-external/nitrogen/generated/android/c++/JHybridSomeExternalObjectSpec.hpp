@@ -18,16 +18,18 @@ namespace margelo::nitro::test::external {
 
   using namespace facebook;
 
-  class JHybridSomeExternalObjectSpec: public jni::JavaClass<JHybridSomeExternalObjectSpec, JHybridObject>,
-                                       public virtual HybridSomeExternalObjectSpec {
+  class JHybridSomeExternalObjectSpec: public virtual HybridSomeExternalObjectSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
+    // Java part for JHybridSomeExternalObjectSpec
+    struct JavaPart: public jni::JavaClass<JHybridSomeExternalObjectSpec::JavaPart, JHybridObject> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridSomeExternalObjectSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridSomeExternalObjectSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridSomeExternalObjectSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -43,7 +45,7 @@ namespace margelo::nitro::test::external {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridSomeExternalObjectSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -57,7 +59,7 @@ namespace margelo::nitro::test::external {
     OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override;
 
   private:
-    jni::global_ref<JHybridSomeExternalObjectSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test::external

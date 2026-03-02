@@ -37,9 +37,9 @@ void registerAllNatives() {
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridSomeExternalObjectSpec::javaobject> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
-      auto instance = object.create();
-      return instance->cthis()->shared();
+      static DefaultConstructableObject<JHybridSomeExternalObjectSpec::JavaPart> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
+      jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = object.create();
+      return std::make_shared<JHybridSomeExternalObjectSpec>(javaPart);
     }
   );
 }

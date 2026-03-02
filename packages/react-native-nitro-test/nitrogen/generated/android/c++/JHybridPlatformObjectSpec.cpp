@@ -14,7 +14,7 @@
 namespace margelo::nitro::test {
 
   size_t JHybridPlatformObjectSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -26,12 +26,12 @@ namespace margelo::nitro::test {
   }
 
   void JHybridPlatformObjectSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string JHybridPlatformObjectSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
@@ -41,7 +41,7 @@ namespace margelo::nitro::test {
 
   // Methods
   std::string JHybridPlatformObjectSpec::getOSVersion() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
     auto __result = method(_javaPart);
     return __result->toStdString();
   }

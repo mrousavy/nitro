@@ -18,16 +18,18 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridBaseSpec: public jni::JavaClass<JHybridBaseSpec, JHybridObject>,
-                         public virtual HybridBaseSpec {
+  class JHybridBaseSpec: public virtual HybridBaseSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
+    // Java part for JHybridBaseSpec
+    struct JavaPart: public jni::JavaClass<JHybridBaseSpec::JavaPart, JHybridObject> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridBaseSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridBaseSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridBaseSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -43,7 +45,7 @@ namespace margelo::nitro::test {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridBaseSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -56,7 +58,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    jni::global_ref<JHybridBaseSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

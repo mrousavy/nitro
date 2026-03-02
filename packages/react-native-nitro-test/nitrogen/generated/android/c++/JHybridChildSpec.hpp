@@ -13,22 +13,27 @@
 
 // Forward declaration of `JHybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class JHybridBaseSpec; }
+// Forward declaration of `JHybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::test { class JHybridBaseSpec; }
+#include "JHybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 
 namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridChildSpec: public jni::JavaClass<JHybridChildSpec, JHybridBaseSpec>,
-                          public virtual HybridChildSpec {
+  class JHybridChildSpec: public virtual HybridChildSpec, public virtual JHybridBaseSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
+    // Java part for JHybridChildSpec
+    struct JavaPart: public jni::JavaClass<JHybridChildSpec::JavaPart, JHybridBaseSpec> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridChildSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridChildSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridChildSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -44,7 +49,7 @@ namespace margelo::nitro::test {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridChildSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -58,7 +63,7 @@ namespace margelo::nitro::test {
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    jni::global_ref<JHybridChildSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

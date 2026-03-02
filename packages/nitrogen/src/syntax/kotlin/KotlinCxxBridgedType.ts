@@ -363,7 +363,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybridObjectType = getTypeAs(this.type, HybridObjectType)
             const fullName = this.getFullJHybridObjectName(hybridObjectType)
-            return `${fullName}::javaobject`
+            return fullName
           default:
             return this.type.getCode(language)
         }

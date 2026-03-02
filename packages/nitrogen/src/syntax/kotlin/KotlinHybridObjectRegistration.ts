@@ -41,9 +41,9 @@ export function createJNIHybridObjectRegistration({
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static DefaultConstructableObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
-    auto instance = object.create();
-    return instance->cthis()->shared();
+    static DefaultConstructableObject<${JHybridTSpec}::JavaPart> object("${jniNamespace}");
+    jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = object.create();
+    return std::make_shared<${JHybridTSpec}>(javaPart);
   }
 );
       `.trim(),

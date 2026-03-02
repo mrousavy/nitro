@@ -14,7 +14,7 @@
 namespace margelo::nitro::test {
 
   size_t JHybridBaseSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -26,19 +26,19 @@ namespace margelo::nitro::test {
   }
 
   void JHybridBaseSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string JHybridBaseSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
 
   // Properties
   double JHybridBaseSpec::getBaseValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }

@@ -18,16 +18,18 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridTestObjectSwiftKotlinSpec: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
-                                          public virtual HybridTestObjectSwiftKotlinSpec {
+  class JHybridTestObjectSwiftKotlinSpec: public virtual HybridTestObjectSwiftKotlinSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
+    // Java part for JHybridTestObjectSwiftKotlinSpec
+    struct JavaPart: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec::JavaPart, JHybridObject> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -43,7 +45,7 @@ namespace margelo::nitro::test {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -187,7 +189,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
 
   private:
-    jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

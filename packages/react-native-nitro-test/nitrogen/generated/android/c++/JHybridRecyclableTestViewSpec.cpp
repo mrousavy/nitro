@@ -14,7 +14,7 @@
 namespace margelo::nitro::test {
 
   size_t JHybridRecyclableTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -26,24 +26,24 @@ namespace margelo::nitro::test {
   }
 
   void JHybridRecyclableTestViewSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string JHybridRecyclableTestViewSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
 
   // Properties
   bool JHybridRecyclableTestViewSpec::getIsBlue() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jboolean()>("isBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
   void JHybridRecyclableTestViewSpec::setIsBlue(bool isBlue) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
 

@@ -18,16 +18,18 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridRecyclableTestViewSpec: public jni::JavaClass<JHybridRecyclableTestViewSpec, JHybridObject>,
-                                       public virtual HybridRecyclableTestViewSpec {
+  class JHybridRecyclableTestViewSpec: public virtual HybridRecyclableTestViewSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
+    // Java part for JHybridRecyclableTestViewSpec
+    struct JavaPart: public jni::JavaClass<JHybridRecyclableTestViewSpec::JavaPart, JHybridObject> {
+    public:
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
+    };
 
   protected:
     // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridRecyclableTestViewSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridRecyclableTestViewSpec(jni::alias_ref<JavaPart> jThis) :
       HybridObject(HybridRecyclableTestViewSpec::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -43,7 +45,7 @@ namespace margelo::nitro::test {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<JHybridRecyclableTestViewSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -57,7 +59,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    jni::global_ref<JHybridRecyclableTestViewSpec::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

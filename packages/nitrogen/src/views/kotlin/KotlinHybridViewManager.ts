@@ -158,7 +158,7 @@ public:
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<${JHybridTSpec}::javaobject> view,
+                              jni::alias_ref<${JHybridTSpec}> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
@@ -201,10 +201,8 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
+                                           jni::alias_ref<${JHybridTSpec}> view,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  ${JHybridTSpec}* view = javaView->cthis();
-
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {

@@ -18,7 +18,7 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 namespace margelo::nitro::test::external {
 
   size_t JHybridSomeExternalObjectSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -30,12 +30,12 @@ namespace margelo::nitro::test::external {
   }
 
   void JHybridSomeExternalObjectSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string JHybridSomeExternalObjectSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
@@ -45,12 +45,12 @@ namespace margelo::nitro::test::external {
 
   // Methods
   std::string JHybridSomeExternalObjectSpec::getValue() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getValue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getValue");
     auto __result = method(_javaPart);
     return __result->toStdString();
   }
   OptionalPrimitivesHolder JHybridSomeExternalObjectSpec::createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JOptionalPrimitivesHolder>(jni::alias_ref<jni::JDouble> /* optionalNumber */, jni::alias_ref<jni::JBoolean> /* optionalBoolean */, jni::alias_ref<jni::JLong> /* optionalUInt64 */, jni::alias_ref<jni::JLong> /* optionalInt64 */)>("createOptionalPrimitivesHolder_cxx");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<JOptionalPrimitivesHolder>(jni::alias_ref<jni::JDouble> /* optionalNumber */, jni::alias_ref<jni::JBoolean> /* optionalBoolean */, jni::alias_ref<jni::JLong> /* optionalUInt64 */, jni::alias_ref<jni::JLong> /* optionalInt64 */)>("createOptionalPrimitivesHolder_cxx");
     auto __result = method(_javaPart, optionalNumber.has_value() ? jni::JDouble::valueOf(optionalNumber.value()) : nullptr, optionalBoolean.has_value() ? jni::JBoolean::valueOf(optionalBoolean.value()) : nullptr, optionalUInt64.has_value() ? jni::JLong::valueOf(optionalUInt64.value()) : nullptr, optionalInt64.has_value() ? jni::JLong::valueOf(optionalInt64.value()) : nullptr);
     return __result->toCpp();
   }

@@ -19,7 +19,7 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 namespace margelo::nitro::test {
 
   size_t JHybridTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -31,46 +31,46 @@ namespace margelo::nitro::test {
   }
 
   void JHybridTestViewSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string JHybridTestViewSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
 
   // Properties
   bool JHybridTestViewSpec::getIsBlue() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jboolean()>("isBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
   void JHybridTestViewSpec::setIsBlue(bool isBlue) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
   bool JHybridTestViewSpec::getHasBeenCalled() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("getHasBeenCalled");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jboolean()>("getHasBeenCalled");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
   void JHybridTestViewSpec::setHasBeenCalled(bool hasBeenCalled) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* hasBeenCalled */)>("setHasBeenCalled");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void(jboolean /* hasBeenCalled */)>("setHasBeenCalled");
     method(_javaPart, hasBeenCalled);
   }
   ColorScheme JHybridTestViewSpec::getColorScheme() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
     auto __result = method(_javaPart);
     return __result->toCpp();
   }
   void JHybridTestViewSpec::setColorScheme(ColorScheme colorScheme) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JColorScheme> /* colorScheme */)>("setColorScheme");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void(jni::alias_ref<JColorScheme> /* colorScheme */)>("setColorScheme");
     method(_javaPart, JColorScheme::fromCpp(colorScheme));
   }
   std::function<void()> JHybridTestViewSpec::getSomeCallback() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");
     auto __result = method(_javaPart);
     return [&]() -> std::function<void()> {
       if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
@@ -83,13 +83,13 @@ namespace margelo::nitro::test {
     }();
   }
   void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
   }
 
   // Methods
   void JHybridTestViewSpec::someMethod() {
-    static const auto method = javaClassStatic()->getMethod<void()>("someMethod");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("someMethod");
     method(_javaPart);
   }
 

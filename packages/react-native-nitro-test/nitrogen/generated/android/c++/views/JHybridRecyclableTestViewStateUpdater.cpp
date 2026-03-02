@@ -16,10 +16,8 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridRecyclableTestViewState>;
 
 void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridRecyclableTestViewSpec::javaobject> javaView,
+                                           jni::alias_ref<JHybridRecyclableTestViewSpec> view,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  JHybridRecyclableTestViewSpec* view = javaView->cthis();
-
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {

@@ -1,4 +1,4 @@
-import { createIndentation, indent } from '../../utils.js'
+import { indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
@@ -35,7 +35,6 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     name.HybridTSpec
   )
   const cxxNamespace = spec.config.getCxxNamespace('c++')
-  const spaces = createIndentation(name.JHybridTSpec.length)
 
   let cppBase = 'JHybridObject'
   if (spec.baseTypes.length > 0) {
@@ -70,6 +69,24 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     })
   }
 
+  const cppBaseClasses = [`public virtual ${name.HybridTSpec}`]
+  const cppBaseCtorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
+  for (const base of spec.baseTypes) {
+    const baseName = getHybridObjectName(base.name)
+    cppBaseClasses.push(`public virtual ${baseName.JHybridTSpec}`)
+    cppBaseCtorCalls.push(`${baseName.JHybridTSpec}()`)
+    cppImports.push({
+      language: 'c++',
+      name: `${baseName.JHybridTSpec}.hpp`,
+      space: 'user',
+      forwardDeclaration: getForwardDeclaration(
+        'class',
+        baseName.JHybridTSpec,
+        cxxNamespace
+      ),
+    })
+  }
+
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
@@ -89,16 +106,18 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::JavaClass<${name.JHybridTSpec}, ${cppBase}>,
-${spaces}          public virtual ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: ${cppBaseClasses.join(', ')} {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    // Java part for ${name.JHybridTSpec}
+    struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppBase}> {
+    public:
+      static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    };
 
   protected:
     // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
+    explicit ${name.JHybridTSpec}(jni::alias_ref<JavaPart> jThis) :
       HybridObject(${name.HybridTSpec}::TAG),
-      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -114,7 +133,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     std::string toString() override;
 
   public:
-    inline const jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -127,7 +146,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     ${indent(methodsDecl, '    ')}
 
   private:
-    jni::global_ref<${name.JHybridTSpec}::javaobject> _javaPart;
+    jni::global_ref<JavaPart> _javaPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -165,7 +184,7 @@ ${cppIncludes.join('\n')}
 namespace ${cxxNamespace} {
 
   size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jlong()>("getMemorySize");
     return method(_javaPart);
   }
 
@@ -177,12 +196,12 @@ namespace ${cxxNamespace} {
   }
 
   void ${name.JHybridTSpec}::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
   }
 
   std::string ${name.JHybridTSpec}::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    static const auto method = JavaPart::javaClassStatic()->getMethod<jni::JString()>("toString");
     auto javaString = method(_javaPart);
     return javaString->toStdString();
   }
@@ -249,14 +268,14 @@ function getFbjniMethodForwardImplementation(
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
+static const auto method = JavaPart::javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 auto __result = method(${paramsForward.join(', ')});
 return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
+static const auto method = JavaPart::javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 method(${paramsForward.join(', ')});
    `
   }
