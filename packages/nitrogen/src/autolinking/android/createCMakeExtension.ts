@@ -22,7 +22,16 @@ export function getBuildingWithGeneratedCmakeDefinition(): string {
 export function createCMakeExtension(files: SourceFile[]): CMakeFile {
   const name = NitroConfig.current.getAndroidCxxLibName();
   const sharedFiles = files
-    .filter((f) => f.platform === "shared" && isCppFile(f))
+    .filter(
+      (f) => f.platform === "shared" && isCppFile(f) && f.language !== "rust",
+    )
+    .map((f) => getRelativeDirectory(f))
+    .map((p) => toUnixPath(p))
+    .filter(isNotDuplicate);
+  const sharedRustBridgeFiles = files
+    .filter(
+      (f) => f.platform === "shared" && isCppFile(f) && f.language === "rust",
+    )
     .map((f) => getRelativeDirectory(f))
     .map((p) => toUnixPath(p))
     .filter(isNotDuplicate);
@@ -119,6 +128,15 @@ endif()
 ${
   hasRustFiles
     ? `
+# Add Rust C++ FFI bridge headers and sources
+include_directories(
+  "../nitrogen/generated/shared/rust"
+)
+target_sources(
+  ${name} PRIVATE
+  ${indent(sharedRustBridgeFiles.join("\n"), "  ")}
+)
+
 # Build and link the Rust static library.
 # cargo is invoked automatically during the build for the correct Android ABI.
 set(NITRO_RUST_SRC_DIR "\${CMAKE_SOURCE_DIR}/../nitrogen/generated/shared/rust")

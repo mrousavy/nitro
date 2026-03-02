@@ -41,7 +41,6 @@ target_sources(
   ../nitrogen/generated/shared/c++/HybridTestObjectCppSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectSwiftKotlinSpec.cpp
   ../nitrogen/generated/shared/c++/HybridTestObjectRustSpec.cpp
-  ../nitrogen/generated/shared/c++/HybridTestObjectRustSpecRust.cpp
   ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
   ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
@@ -109,6 +108,15 @@ else()
         ReactAndroid::react_nativemodule_core     # <-- RN: TurboModules Core
     )
 endif()
+
+# Add Rust C++ FFI bridge headers and sources
+include_directories(
+  "../nitrogen/generated/shared/rust"
+)
+target_sources(
+  NitroTest PRIVATE
+  ../nitrogen/generated/shared/rust/HybridTestObjectRustSpecRust.cpp
+)
 
 # Build and link the Rust static library.
 # cargo is invoked automatically during the build for the correct Android ABI.

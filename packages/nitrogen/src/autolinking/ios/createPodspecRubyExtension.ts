@@ -41,8 +41,8 @@ def add_nitrogen_files(spec)
 
   current_source_files = Array(spec.attributes_hash['source_files'])
   spec.source_files = current_source_files + [
-    # Generated cross-platform specs
-    "nitrogen/generated/shared/**/*.{h,hpp,c,cpp,swift}",
+    # Generated cross-platform C++ specs
+    "nitrogen/generated/shared/c++/**/*.{h,hpp,c,cpp,swift}",
     # Generated bridges for the cross-platform specs
     "nitrogen/generated/ios/**/*.{h,hpp,c,cpp,mm,swift}",
   ]
@@ -50,7 +50,7 @@ def add_nitrogen_files(spec)
   current_public_header_files = Array(spec.attributes_hash['public_header_files'])
   spec.public_header_files = current_public_header_files + [
     # Generated specs
-    "nitrogen/generated/shared/**/*.{h,hpp}",
+    "nitrogen/generated/shared/c++/**/*.{h,hpp}",
     # Swift to C++ bridging helpers
     "nitrogen/generated/ios/${name}-Swift-Cxx-Bridge.hpp"
   ]
@@ -75,6 +75,14 @@ def add_nitrogen_files(spec)
 ${
   hasRust
     ? `
+  # Include Rust C++ FFI bridge files
+  spec.source_files = Array(spec.source_files) + [
+    "nitrogen/generated/shared/rust/**/*.{h,hpp,c,cpp}",
+  ]
+  spec.public_header_files = Array(spec.public_header_files) + [
+    "nitrogen/generated/shared/rust/**/*.{h,hpp}",
+  ]
+
   # Build and link the Rust static library.
   # cargo is invoked automatically as a script phase before compilation.
   rust_src_dir = File.join(__dir__, '..', 'shared', 'rust')

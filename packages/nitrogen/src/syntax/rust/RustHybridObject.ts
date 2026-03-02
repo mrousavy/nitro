@@ -670,7 +670,7 @@ namespace ${cxxNamespace} {
     content: headerCode,
     name: `${name.HybridTSpecRust}.hpp`,
     subdirectory: [],
-    language: "c++",
+    language: "rust",
     platform: "shared",
   };
 }
@@ -692,7 +692,7 @@ namespace ${cxxNamespace} {
     content: implCode,
     name: `${name.HybridTSpecRust}.cpp`,
     subdirectory: [],
-    language: "c++",
+    language: "rust",
     platform: "shared",
   };
 }
