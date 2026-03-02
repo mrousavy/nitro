@@ -38,13 +38,17 @@ abstract class HybridObject {
    * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
-   * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
-   * if required.
+   * By default, this method only deletes the C++ hybrid part.
+   * It can be overridden to perform more disposing/cleanup if required.
    * This method must not throw.
    */
   @DoNotStrip
   @Keep
-  open fun dispose() { }
+  @Synchronized
+  protected open fun dispose() {
+    mHybridData?.resetNative()
+    mHybridData = null
+  }
 
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.

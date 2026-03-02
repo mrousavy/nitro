@@ -83,7 +83,7 @@ ${imports.join('\n')}
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
+  private var mHybridData: HybridData? = initHybrid()
 
   init {
     super.updateNative(mHybridData)
@@ -101,9 +101,10 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
 
   // Default implementation of \`HybridObject.dispose()\`
   @Synchronized
-  override fun dispose() {
+  protected override fun dispose() {
     super.dispose()
-    mHybridData.resetNative()
+    mHybridData?.resetNative()
+    mHybridData = null
   }
 
   // Properties

@@ -25,7 +25,7 @@ import com.margelo.nitro.views.HybridView
 )
 abstract class HybridRecyclableTestViewSpec: HybridView() {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
+  private var mHybridData: HybridData? = initHybrid()
 
   init {
     super.updateNative(mHybridData)
@@ -43,9 +43,10 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
 
   // Default implementation of `HybridObject.dispose()`
   @Synchronized
-  override fun dispose() {
+  protected override fun dispose() {
     super.dispose()
-    mHybridData.resetNative()
+    mHybridData?.resetNative()
+    mHybridData = null
   }
 
   // Properties
