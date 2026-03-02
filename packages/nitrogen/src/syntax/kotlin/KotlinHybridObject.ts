@@ -41,6 +41,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   }
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
+  let cppPartBase = 'HybridObject.CppPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -49,7 +50,9 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     }
     const base = spec.baseTypes[0]!
     const baseHybrid = new HybridObjectType(base)
-    kotlinBase = baseHybrid.getCode('kotlin')
+    const baseName = getHybridObjectName(baseHybrid.hybridObjectName)
+    kotlinBase = baseName.HybridTSpec
+    cppPartBase = `${baseName.HybridTSpec}.CppPart`
   }
 
   const imports = extraImports
@@ -81,6 +84,22 @@ ${imports.join('\n')}
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(javaPart: ${name.HybridTSpec}): ${cppPartBase}(javaPart) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+    private external fun initHybrid(): HybridData
+  }
+
   override val cppPart: HybridObject.CppPart = CppPart(this)
 
   // Default implementation of \`HybridObject.toString()\`

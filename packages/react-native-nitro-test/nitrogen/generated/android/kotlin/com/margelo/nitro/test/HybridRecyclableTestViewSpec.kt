@@ -25,6 +25,22 @@ import com.margelo.nitro.views.HybridView
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridRecyclableTestViewSpec: HybridView() {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(javaPart: HybridRecyclableTestViewSpec): HybridObject.CppPart(javaPart) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+    private external fun initHybrid(): HybridData
+  }
+
   override val cppPart: HybridObject.CppPart = CppPart(this)
 
   // Default implementation of `HybridObject.toString()`

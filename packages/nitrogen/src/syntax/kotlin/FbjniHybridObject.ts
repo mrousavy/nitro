@@ -35,9 +35,11 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     'c++/jni',
     name.HybridTSpec
   )
+  const jniCppPartClassDescriptor = `${jniClassDescriptor}$CppPart`
   const cxxNamespace = spec.config.getCxxNamespace('c++')
 
   let cppJavaBase = 'JHybridObject::JavaPart'
+  let cppCppBase = 'JHybridObject::CppPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -47,6 +49,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const base = spec.baseTypes[0]!
     const jBaseType = getHybridObjectName(base.name).JHybridTSpec
     cppJavaBase = `${jBaseType}::JavaPart`
+    cppCppBase = `${jBaseType}::CppPart`
     if (base.config.isExternalConfig) {
       // It's an external type we inherit from - we have to prefix the namespace
       cppJavaBase = base.config.getCxxNamespace('c++', cppJavaBase)
@@ -130,9 +133,25 @@ namespace ${cxxNamespace} {
     struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppJavaBase}> {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
       std::shared_ptr<${name.JHybridTSpec}> getCppPart() {
-        static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
-        jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
-        return cppPart->cthis()->getHybridObject<${name.JHybridTSpec}>();
+        static auto field = javaClassStatic()->getField<${name.JHybridTSpec}::CppPart::javaobject>("cppPart");
+        jni::local_ref<${name.JHybridTSpec}::CppPart::javaobject> cppPart = getFieldValue(field);
+        auto hybridObject = cppPart->cthis()->getHybridObject();
+        auto castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
+        if (castHybridObject == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JHybridObject!");
+        }
+        return castHybridObject;
+      }
+    };
+    // C++ part for ${name.JHybridTSpec} - this holds a weak_ptr to the HybridObject.
+    struct CppPart: public jni::HybridClass<${name.JHybridTSpec}::CppPart, ${cppCppBase}> {
+      static auto constexpr kJavaDescriptor = "L${jniCppPartClassDescriptor};";
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override {
+        auto castJavaPart = jni::dynamic_ref_cast<${name.JHybridTSpec}::JavaPart>(javaPart);
+        if (castJavaPart == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JavaPart!");
+        }
+        return std::make_shared<${name.JHybridTSpec}>(castJavaPart);
       }
     };
 

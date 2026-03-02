@@ -24,6 +24,22 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
+  @Suppress("KotlinJniMissingFunction")
+  @Keep
+  @DoNotStrip
+  open class CppPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CppPart(javaPart) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+    private external fun initHybrid(): HybridData
+  }
+
   override val cppPart: HybridObject.CppPart = CppPart(this)
 
   // Default implementation of `HybridObject.toString()`

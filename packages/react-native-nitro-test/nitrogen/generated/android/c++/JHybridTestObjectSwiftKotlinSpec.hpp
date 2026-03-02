@@ -24,9 +24,25 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec::JavaPart, JHybridObject::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
       std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> getCppPart() {
-        static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
-        jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
-        return cppPart->cthis()->getHybridObject<JHybridTestObjectSwiftKotlinSpec>();
+        static auto field = javaClassStatic()->getField<JHybridTestObjectSwiftKotlinSpec::CppPart::javaobject>("cppPart");
+        jni::local_ref<JHybridTestObjectSwiftKotlinSpec::CppPart::javaobject> cppPart = getFieldValue(field);
+        auto hybridObject = cppPart->cthis()->getHybridObject();
+        auto castHybridObject = std::dynamic_pointer_cast<JHybridTestObjectSwiftKotlinSpec>(hybridObject);
+        if (castHybridObject == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JHybridObject!");
+        }
+        return castHybridObject;
+      }
+    };
+    // C++ part for JHybridTestObjectSwiftKotlinSpec - this holds a weak_ptr to the HybridObject.
+    struct CppPart: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec::CppPart, JHybridObject::CppPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec$CppPart;";
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override {
+        auto castJavaPart = jni::dynamic_ref_cast<JHybridTestObjectSwiftKotlinSpec::JavaPart>(javaPart);
+        if (castJavaPart == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JavaPart!");
+        }
+        return std::make_shared<JHybridTestObjectSwiftKotlinSpec>(castJavaPart);
       }
     };
 

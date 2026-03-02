@@ -24,9 +24,25 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridPlatformObjectSpec::JavaPart, JHybridObject::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";
       std::shared_ptr<JHybridPlatformObjectSpec> getCppPart() {
-        static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
-        jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
-        return cppPart->cthis()->getHybridObject<JHybridPlatformObjectSpec>();
+        static auto field = javaClassStatic()->getField<JHybridPlatformObjectSpec::CppPart::javaobject>("cppPart");
+        jni::local_ref<JHybridPlatformObjectSpec::CppPart::javaobject> cppPart = getFieldValue(field);
+        auto hybridObject = cppPart->cthis()->getHybridObject();
+        auto castHybridObject = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(hybridObject);
+        if (castHybridObject == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JHybridObject!");
+        }
+        return castHybridObject;
+      }
+    };
+    // C++ part for JHybridPlatformObjectSpec - this holds a weak_ptr to the HybridObject.
+    struct CppPart: public jni::HybridClass<JHybridPlatformObjectSpec::CppPart, JHybridObject::CppPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec$CppPart;";
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override {
+        auto castJavaPart = jni::dynamic_ref_cast<JHybridPlatformObjectSpec::JavaPart>(javaPart);
+        if (castJavaPart == nullptr) [[unlikely]] {
+          throw std::runtime_error("Failed to downcast JavaPart!");
+        }
+        return std::make_shared<JHybridPlatformObjectSpec>(castJavaPart);
       }
     };
 

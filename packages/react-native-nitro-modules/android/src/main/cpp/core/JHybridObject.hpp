@@ -31,25 +31,18 @@ public:
     }
     explicit CppPart(jni::alias_ref<CppPart::javaobject> jThis): _jThis(jni::make_global(jThis)) { }
 
-    template <typename T>
-    // TODO: Requires T extends JHybridObject
-    std::shared_ptr<T> getHybridObject() {
+    std::shared_ptr<JHybridObject> getHybridObject() {
       if (auto hybridObject = _hybridObject.lock()) {
-        auto castHybridObject = std::dynamic_pointer_cast<T>(hybridObject);
-        if (castHybridObject == nullptr) {
-          throw std::runtime_error("Failed to cast JHybridObject to T!");
-        }
-        return castHybridObject;
+        return hybridObject;
       }
       static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
       auto javaPart = _jThis->getFieldValue(javaPartField);
-      auto castJavaPart = jni::dynamic_ref_cast<typename T::JavaPart>(javaPart);
-      if (castJavaPart == nullptr) [[unlikely]] {
-        throw std::runtime_error("Failed to cast JavaPart to T::JavaPart!");
-      }
-      auto hybridObject = std::make_shared<T>(castJavaPart);
+      auto hybridObject = createHybridObject(javaPart);
       _hybridObject = hybridObject;
       return hybridObject;
+    }
+    virtual std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+      return std::make_shared<JHybridObject>(javaPart);
     }
 
     static void registerNatives() {

@@ -21,7 +21,7 @@ abstract class HybridObject {
     @DoNotStrip
     @Keep
     private var mHybridData: HybridData = initHybrid()
-    fun updateNative(hybridData: HybridData) {
+    protected open fun updateNative(hybridData: HybridData) {
       mHybridData = hybridData
     }
     private external fun initHybrid(): HybridData
