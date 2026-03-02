@@ -9,6 +9,7 @@ import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type } from '../types/Type.js'
+import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
@@ -34,7 +35,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     'c++/jni',
     name.HybridTSpec
   )
-  const jniCppPartClassDescriptor = jniClassDescriptor.replace(';', '$CppPart;')
+  const jniCppPartClassDescriptor = jniClassDescriptor + '$CppPart'
   const cxxNamespace = spec.config.getCxxNamespace('c++')
 
   let cppJavaBase = 'JHybridObject::JavaPart'
@@ -72,6 +73,16 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
       ),
     })
   }
+
+  addJNINativeRegistration({
+    namespace: cxxNamespace,
+    className: `${name.JHybridTSpec}::CppPart`,
+    import: {
+      name: `${name.JHybridTSpec}.hpp`,
+      space: 'user',
+      language: 'c++',
+    },
+  })
 
   const cppBaseClasses = [
     `public virtual ${name.HybridTSpec}`,
@@ -130,7 +141,7 @@ namespace ${cxxNamespace} {
   public:
     // C++ part for ${name.JHybridTSpec} - this holds a weak_ptr to the C++ class to break the retain cycle.
     struct CppPart: public jni::HybridClass<CppPart, ${cppCppBase}> {
-      static auto constexpr kJavaDescriptor = "L${jniCppPartClassDescriptor}";
+      static auto constexpr kJavaDescriptor = "L${jniCppPartClassDescriptor};";
       static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> javaPart) {
         return makeCxxInstance(javaPart);
       }
@@ -141,6 +152,12 @@ namespace ${cxxNamespace} {
       std::shared_ptr<JHybridObject> getCppPart() override {
         // TODO: Override this with actual implementation
         return HybridBase::getCppPart();
+      }
+
+      static void registerNatives() {
+        registerHybrid({
+          makeNativeMethod("initHybrid", CppPart::initHybrid),
+        });
       }
 
     private:

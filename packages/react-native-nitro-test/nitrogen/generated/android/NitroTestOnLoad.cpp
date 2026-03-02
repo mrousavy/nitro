@@ -15,7 +15,12 @@
 #include <fbjni/fbjni.h>
 #include <NitroModules/HybridObjectRegistry.hpp>
 
+#include "JHybridBaseSpec.hpp"
+#include "JHybridChildSpec.hpp"
+#include "JHybridPlatformObjectSpec.hpp"
+#include "JHybridRecyclableTestViewSpec.hpp"
 #include "views/JHybridRecyclableTestViewStateUpdater.hpp"
+#include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JFunc_void_double.hpp"
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
@@ -29,14 +34,9 @@
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
 #include "JFunc_double.hpp"
 #include "JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_.hpp"
+#include "JHybridTestViewSpec.hpp"
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
-#include "JHybridTestObjectSwiftKotlinSpec.hpp"
-#include "JHybridBaseSpec.hpp"
-#include "JHybridChildSpec.hpp"
-#include "JHybridPlatformObjectSpec.hpp"
-#include "JHybridTestViewSpec.hpp"
-#include "JHybridRecyclableTestViewSpec.hpp"
 
 namespace margelo::nitro::test {
 
@@ -99,7 +99,12 @@ void registerAllNatives() {
   using namespace margelo::nitro::test;
 
   // Register native JNI methods
+  margelo::nitro::test::JHybridBaseSpec::CppPart::registerNatives();
+  margelo::nitro::test::JHybridChildSpec::CppPart::registerNatives();
+  margelo::nitro::test::JHybridPlatformObjectSpec::CppPart::registerNatives();
+  margelo::nitro::test::JHybridRecyclableTestViewSpec::CppPart::registerNatives();
   margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
+  margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::CppPart::registerNatives();
   margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
   margelo::nitro::test::JFunc_void_cxx::registerNatives();
   margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
@@ -113,6 +118,7 @@ void registerAllNatives() {
   margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
   margelo::nitro::test::JFunc_double_cxx::registerNatives();
   margelo::nitro::test::JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::registerNatives();
+  margelo::nitro::test::JHybridTestViewSpec::CppPart::registerNatives();
   margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
 
   // Register Nitro Hybrid Objects

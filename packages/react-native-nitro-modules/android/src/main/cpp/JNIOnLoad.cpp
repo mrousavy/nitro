@@ -5,6 +5,7 @@
 #include "JArrayBuffer.hpp"
 #include "JHardwareBufferUtils.hpp"
 #include "JNativeRunnable.hpp"
+#include "JHybridObject.hpp"
 #include "JNitroModules.hpp"
 #include "JPromise.hpp"
 #include <fbjni/fbjni.h>
@@ -21,6 +22,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
     JHardwareBufferUtils::registerNatives();
     JPromise::registerNatives();
     JNativeRunnable::registerNatives();
+    JHybridObject::CppPart::registerNatives();
 
     // 2. Initialize the React Native TurboModule C++ part
     JNitroModules::registerNatives();

@@ -43,6 +43,12 @@ public:
       return _jThis->getFieldValue(field);
     }
 
+    static void registerNatives() {
+      registerHybrid({
+        makeNativeMethod("initHybrid", CppPart::initHybrid),
+      });
+    }
+
    private:
     jni::global_ref<CppPart::javaobject> _jThis;
     std::weak_ptr<JHybridObject> _cppPart;

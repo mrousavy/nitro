@@ -36,7 +36,7 @@ namespace margelo::nitro::test {
   public:
     // C++ part for JHybridChildSpec - this holds a weak_ptr to the C++ class to break the retain cycle.
     struct CppPart: public jni::HybridClass<CppPart, JHybridBaseSpec::CppPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec";
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec$CppPart;";
       static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> javaPart) {
         return makeCxxInstance(javaPart);
       }
@@ -47,6 +47,12 @@ namespace margelo::nitro::test {
       std::shared_ptr<JHybridObject> getCppPart() override {
         // TODO: Override this with actual implementation
         return HybridBase::getCppPart();
+      }
+
+      static void registerNatives() {
+        registerHybrid({
+          makeNativeMethod("initHybrid", CppPart::initHybrid),
+        });
       }
 
     private:
