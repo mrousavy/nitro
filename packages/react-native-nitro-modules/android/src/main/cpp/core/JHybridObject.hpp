@@ -31,16 +31,15 @@ public:
     }
     explicit CppPart(jni::alias_ref<CppPart::javaobject> jThis): _jThis(jni::make_global(jThis)) { }
 
-    virtual std::shared_ptr<JHybridObject> getCppPart() {
-      if (auto cppPart = _cppPart.lock()) {
-        return cppPart;
+    std::shared_ptr<JHybridObject> getHybridObject() {
+      if (auto hybridObject = _hybridObject.lock()) {
+        return hybridObject;
       }
-      auto javaPart = getJavaPart();
-      return std::make_shared<JHybridObject>(javaPart);
-    }
-    virtual jni::local_ref<JHybridObject::JavaPart> getJavaPart() {
-      static auto field = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
-      return _jThis->getFieldValue(field);
+      static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
+      auto javaPart = _jThis->getFieldValue(javaPartField);
+      auto hybridObject = std::make_shared<JHybridObject>(javaPart);
+      _hybridObject = hybridObject;
+      return hybridObject;
     }
 
     static void registerNatives() {
@@ -51,7 +50,7 @@ public:
 
    private:
     jni::global_ref<CppPart::javaobject> _jThis;
-    std::weak_ptr<JHybridObject> _cppPart;
+    std::weak_ptr<JHybridObject> _hybridObject;
   };
 
 public:

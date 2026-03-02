@@ -25,35 +25,15 @@ namespace margelo::nitro::test {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
       std::shared_ptr<JHybridBaseSpec> getCppPart() {
         // TODO: Cache this in the Java part via weak_ptr
-        jni::local_ref<JavaPart> javaPart = jni::make_local(self());
-        return std::make_shared<JHybridBaseSpec>(javaPart);
+        static auto field = javaClassStatic()->getField<JHybridObject::CppPart::javaobject>("cppPart");
+        jni::local_ref<JHybridObject::CppPart::javaobject> cppPart = getFieldValue(field);
+        std::shared_ptr<JHybridObject> hybridObject = cppPart->cthis()->getHybridObject();
+        auto cast = std::dynamic_pointer_cast<JHybridBaseSpec>(hybridObject);
+        if (cast == nullptr) {
+          throw std::runtime_error("Failed to cast!");
+        }
+        return cast;
       }
-    };
-  public:
-    // C++ part for JHybridBaseSpec - this holds a weak_ptr to the C++ class to break the retain cycle.
-    struct CppPart: public jni::HybridClass<CppPart, JHybridObject::CppPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec$CppPart;";
-      static jni::local_ref<CppPart::jhybriddata> initHybrid(jni::alias_ref<CppPart::javaobject> javaPart) {
-        return makeCxxInstance(javaPart);
-      }
-      explicit CppPart(jni::alias_ref<CppPart::javaobject> javaPart):
-        HybridBase(javaPart),
-        _javaPart(jni::make_global(javaPart)) { }
-
-      std::shared_ptr<JHybridObject> getCppPart() override {
-        // TODO: Override this with actual implementation
-        return HybridBase::getCppPart();
-      }
-
-      static void registerNatives() {
-        registerHybrid({
-          makeNativeMethod("initHybrid", CppPart::initHybrid),
-        });
-      }
-
-    private:
-      jni::global_ref<CppPart::javaobject> _javaPart;
-      std::weak_ptr<JHybridBaseSpec> _cppPart;
     };
 
   public:
