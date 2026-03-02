@@ -1478,57 +1478,63 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
-    createTest('Frame-like HybridObject churn does not leak refs', () =>
+    createTest('Survives JNI global ref limit (51,200)', () =>
       it(() => {
-        // Allocate/dispose a lot of short-lived HybridObjects in steady batches.
-        // If JNI refs leak, this will typically overflow before completion.
-        const frameCount = 11_000
-        const planesPerFrame = 4
-        const gcEveryNFrames = 250
-        const expectedObjects = frameCount * (planesPerFrame + 1)
+        // Stress JNI global refs with many short-lived HybridObjects while
+        // forcing regular GC so we detect leaks instead of measuring GC speed.
+        const globalRefLimit = 51_200
+        const relatedObjectsPerIteration = 4
+        const objectsPerIteration = relatedObjectsPerIteration + 1
+        const iterations = 12_000 // 12k * 5 = 60k object refs churned
+        const gcEveryNIterations = 125
+        const expectedObjects = iterations * objectsPerIteration
 
         let allocatedObjects = 0
 
         gc()
-        for (let frameIndex = 0; frameIndex < frameCount; frameIndex++) {
-          const frame = testObject.newTestObject()
-          const planes = frame.bounceHybridObjects([
-            frame.createChild(),
-            frame.createChild(),
-            frame.createChild(),
-            frame.createChild(),
+        for (let iteration = 0; iteration < iterations; iteration++) {
+          const container = testObject.newTestObject()
+          const relatedObjects = container.bounceHybridObjects([
+            container.createChild(),
+            container.createChild(),
+            container.createChild(),
+            container.createChild(),
           ])
 
-          if (planes.length !== planesPerFrame) {
+          if (relatedObjects.length !== relatedObjectsPerIteration) {
             throw new Error(
-              `Expected ${planesPerFrame} planes, got ${planes.length}!`
+              `Expected ${relatedObjectsPerIteration} related objects, got ${relatedObjects.length}!`
             )
           }
 
-          for (const plane of planes) {
-            // Touch values so this behaves like real frame processing work.
-            const baseValue = plane.baseValue
-            const childValue = plane.childValue
+          for (const relatedObject of relatedObjects) {
+            // Touch values so objects are actually used.
+            const baseValue = relatedObject.baseValue
+            const childValue = relatedObject.childValue
             if (
               typeof baseValue !== 'number' ||
               typeof childValue !== 'number'
             ) {
-              throw new Error(`Invalid plane values!`)
+              throw new Error(`Invalid related object values!`)
             }
-            plane.dispose()
+            relatedObject.dispose()
             allocatedObjects++
           }
 
-          frame.dispose()
+          container.dispose()
           allocatedObjects++
 
-          if ((frameIndex + 1) % gcEveryNFrames === 0) {
+          if ((iteration + 1) % gcEveryNIterations === 0) {
+            gc()
             gc()
           }
         }
 
         gc()
-        return allocatedObjects === expectedObjects
+        return (
+          allocatedObjects === expectedObjects &&
+          expectedObjects > globalRefLimit
+        )
       })
         .didNotThrow()
         .equals(true)
