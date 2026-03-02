@@ -25,15 +25,22 @@ namespace margelo::nitro::test {
   class JHybridChildSpec: public virtual HybridChildSpec, public virtual JHybridBaseSpec {
   public:
     // Java part for JHybridChildSpec
-    struct JavaPart: public jni::JavaClass<JHybridChildSpec::JavaPart, JHybridBaseSpec> {
+    struct JavaPart: public jni::JavaClass<JHybridChildSpec::JavaPart, JHybridBaseSpec::JavaPart> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
+
+      // Create a new instance of JHybridChildSpec::JavaPart.
+      // This method throws if there is no default-constructor in Java.
+      static jni::local_ref<JavaPart> callDefaultConstructor() {
+        return newInstance();
+      }
     };
 
   public:
     // C++ constructor that wraps the Java Part
     explicit JHybridChildSpec(const jni::local_ref<JavaPart>& javaPart) :
       HybridObject(HybridChildSpec::TAG),
+      JHybridBaseSpec(javaPart),
       _javaPart(jni::make_global(javaPart)) {}
 
     ~JHybridChildSpec() override {

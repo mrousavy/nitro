@@ -24,6 +24,12 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridPlatformObjectSpec::JavaPart, JHybridObject> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec;";
+
+      // Create a new instance of JHybridPlatformObjectSpec::JavaPart.
+      // This method throws if there is no default-constructor in Java.
+      static jni::local_ref<JavaPart> callDefaultConstructor() {
+        return newInstance();
+      }
     };
 
   public:

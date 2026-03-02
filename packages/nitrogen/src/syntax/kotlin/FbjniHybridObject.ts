@@ -36,7 +36,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   )
   const cxxNamespace = spec.config.getCxxNamespace('c++')
 
-  let cppBase = 'JHybridObject'
+  let cppJavaBase = 'JHybridObject'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -44,10 +44,11 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
       )
     }
     const base = spec.baseTypes[0]!
-    cppBase = getHybridObjectName(base.name).JHybridTSpec
+    const jBaseType = getHybridObjectName(base.name).JHybridTSpec
+    cppJavaBase = `${jBaseType}::JavaPart`
     if (base.config.isExternalConfig) {
       // It's an external type we inherit from - we have to prefix the namespace
-      cppBase = base.config.getCxxNamespace('c++', cppBase)
+      cppJavaBase = base.config.getCxxNamespace('c++', cppJavaBase)
     }
   }
   const cppImports: SourceImport[] = []
@@ -74,7 +75,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   for (const base of spec.baseTypes) {
     const baseName = getHybridObjectName(base.name)
     cppBaseClasses.push(`public virtual ${baseName.JHybridTSpec}`)
-    cppBaseCtorCalls.push(`${baseName.JHybridTSpec}()`)
+    cppBaseCtorCalls.push(`${baseName.JHybridTSpec}(javaPart)`)
     cppImports.push({
       language: 'c++',
       name: `${baseName.JHybridTSpec}.hpp`,
@@ -109,15 +110,21 @@ namespace ${cxxNamespace} {
   class ${name.JHybridTSpec}: ${cppBaseClasses.join(', ')} {
   public:
     // Java part for ${name.JHybridTSpec}
-    struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppBase}> {
+    struct JavaPart: public jni::JavaClass<${name.JHybridTSpec}::JavaPart, ${cppJavaBase}> {
     public:
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+
+      // Create a new instance of ${name.JHybridTSpec}::JavaPart.
+      // This method throws if there is no default-constructor in Java.
+      static jni::local_ref<JavaPart> callDefaultConstructor() {
+        return newInstance();
+      }
     };
 
   public:
     // C++ constructor that wraps the Java Part
     explicit ${name.JHybridTSpec}(const jni::local_ref<JavaPart>& javaPart) :
-      HybridObject(${name.HybridTSpec}::TAG),
+      ${indent(cppBaseCtorCalls.join(',\n'), '      ')},
       _javaPart(jni::make_global(javaPart)) {}
 
     ~${name.JHybridTSpec}() override {

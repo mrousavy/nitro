@@ -14,6 +14,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+[[deprecated("Upgrade Nitrogen.")]]
 template <typename T>
 class DefaultConstructableObject final {
 public:

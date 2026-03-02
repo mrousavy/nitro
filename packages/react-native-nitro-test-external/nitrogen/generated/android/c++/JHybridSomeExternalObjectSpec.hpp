@@ -24,6 +24,12 @@ namespace margelo::nitro::test::external {
     struct JavaPart: public jni::JavaClass<JHybridSomeExternalObjectSpec::JavaPart, JHybridObject> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
+
+      // Create a new instance of JHybridSomeExternalObjectSpec::JavaPart.
+      // This method throws if there is no default-constructor in Java.
+      static jni::local_ref<JavaPart> callDefaultConstructor() {
+        return newInstance();
+      }
     };
 
   public:

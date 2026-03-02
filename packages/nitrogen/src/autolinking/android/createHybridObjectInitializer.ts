@@ -42,7 +42,6 @@ export function createHybridObjectIntializer(): SourceFile[] {
       // Autolink a Kotlin HybridObject through JNI/C++!
       const { cppCode, requiredImports } = createJNIHybridObjectRegistration({
         hybridObjectName: hybridObjectName,
-        jniClassName: config.kotlin,
       })
       cppHybridObjectImports.push(...requiredImports)
       cppRegistrations.push(cppCode)

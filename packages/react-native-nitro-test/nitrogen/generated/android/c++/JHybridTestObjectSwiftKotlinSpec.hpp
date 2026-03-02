@@ -24,6 +24,12 @@ namespace margelo::nitro::test {
     struct JavaPart: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpec::JavaPart, JHybridObject> {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
+
+      // Create a new instance of JHybridTestObjectSwiftKotlinSpec::JavaPart.
+      // This method throws if there is no default-constructor in Java.
+      static jni::local_ref<JavaPart> callDefaultConstructor() {
+        return newInstance();
+      }
     };
 
   public:

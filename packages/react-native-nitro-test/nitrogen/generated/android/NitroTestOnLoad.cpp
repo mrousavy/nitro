@@ -32,7 +32,6 @@
 #include "views/JHybridTestViewStateUpdater.hpp"
 #include "HybridTestObjectCpp.hpp"
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
-#include <NitroModules/DefaultConstructableObject.hpp>
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
@@ -81,48 +80,42 @@ void registerAllNatives() {
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridTestObjectSwiftKotlinSpec::JavaPart> object("com/margelo/nitro/test/HybridTestObjectKotlin");
-      jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> javaPart = JHybridTestObjectSwiftKotlinSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridTestObjectSwiftKotlinSpec>(javaPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridBaseSpec::JavaPart> object("com/margelo/nitro/test/HybridBase");
-      jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = JHybridBaseSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridBaseSpec>(javaPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridChildSpec::JavaPart> object("com/margelo/nitro/test/HybridChild");
-      jni::local_ref<JHybridChildSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridChildSpec::JavaPart> javaPart = JHybridChildSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridChildSpec>(javaPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "PlatformObject",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridPlatformObjectSpec::JavaPart> object("com/margelo/nitro/test/HybridPlatformObject");
-      jni::local_ref<JHybridPlatformObjectSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridPlatformObjectSpec::JavaPart> javaPart = JHybridPlatformObjectSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridPlatformObjectSpec>(javaPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridTestViewSpec::JavaPart> object("com/margelo/nitro/test/HybridTestView");
-      jni::local_ref<JHybridTestViewSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridTestViewSpec::JavaPart> javaPart = JHybridTestViewSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridTestViewSpec>(javaPart);
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridRecyclableTestViewSpec::JavaPart> object("com/margelo/nitro/test/HybridRecyclableTestView");
-      jni::local_ref<JHybridRecyclableTestViewSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridRecyclableTestViewSpec::JavaPart> javaPart = JHybridRecyclableTestViewSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridRecyclableTestViewSpec>(javaPart);
     }
   );

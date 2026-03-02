@@ -1,4 +1,3 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { SourceImport } from '../SourceFile.js'
 
@@ -7,10 +6,6 @@ interface Props {
    * The name of the Hybrid Object under which it should be registered and exposed to JS to.
    */
   hybridObjectName: string
-  /**
-   * The name of the Kotlin/Java class that will be default-constructed
-   */
-  jniClassName: string
 }
 
 interface JNIHybridObjectRegistration {
@@ -20,29 +15,18 @@ interface JNIHybridObjectRegistration {
 
 export function createJNIHybridObjectRegistration({
   hybridObjectName,
-  jniClassName,
 }: Props): JNIHybridObjectRegistration {
   const { JHybridTSpec } = getHybridObjectName(hybridObjectName)
-  const jniNamespace = NitroConfig.current.getAndroidPackage(
-    'c++/jni',
-    jniClassName
-  )
 
   return {
     requiredImports: [
       { name: `${JHybridTSpec}.hpp`, language: 'c++', space: 'user' },
-      {
-        name: 'NitroModules/DefaultConstructableObject.hpp',
-        language: 'c++',
-        space: 'system',
-      },
     ],
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static DefaultConstructableObject<${JHybridTSpec}::JavaPart> object("${jniNamespace}");
-    jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = object.create();
+    jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = ${JHybridTSpec}::JavaPart::callDefaultConstructor();
     return std::make_shared<${JHybridTSpec}>(javaPart);
   }
 );

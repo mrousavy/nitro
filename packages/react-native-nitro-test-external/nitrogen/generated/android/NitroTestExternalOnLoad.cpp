@@ -16,7 +16,6 @@
 #include <NitroModules/HybridObjectRegistry.hpp>
 
 #include "JHybridSomeExternalObjectSpec.hpp"
-#include <NitroModules/DefaultConstructableObject.hpp>
 
 namespace margelo::nitro::test::external {
 
@@ -37,8 +36,7 @@ void registerAllNatives() {
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridSomeExternalObjectSpec::JavaPart> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
-      jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = object.create();
+      jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = JHybridSomeExternalObjectSpec::JavaPart::callDefaultConstructor();
       return std::make_shared<JHybridSomeExternalObjectSpec>(javaPart);
     }
   );
