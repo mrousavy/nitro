@@ -233,7 +233,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     if (maybeFunc.has_value()) {
       // TODO: Implement this
       // std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
-      maybeFunc.value()(shared);
+      // maybeFunc.value()(shared);
     }
     props->hybridRef.isDirty = false;
   }

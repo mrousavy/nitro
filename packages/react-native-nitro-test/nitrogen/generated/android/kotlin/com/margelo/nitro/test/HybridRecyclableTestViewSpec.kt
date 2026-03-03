@@ -10,6 +10,7 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.core.HybridObject
 import com.margelo.nitro.views.HybridView
 
 /**
@@ -25,7 +26,7 @@ import com.margelo.nitro.views.HybridView
 )
 abstract class HybridRecyclableTestViewSpec: HybridView() {
   @DoNotStrip
-  protected class CxxPart(self: HybridRecyclableTestViewSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(self: HybridRecyclableTestViewSpec): HybridObject.CxxPart(self) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {
@@ -39,7 +40,7 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
   }
   protected override fun getCxxPart(): CxxPart {
     // TODO: (weak-)cache this!
-    return CxxPart()
+    return CxxPart(this)
   }
 
   // Default implementation of `HybridObject.toString()`

@@ -41,6 +41,10 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   let cppBaseClass = 'JHybridObject'
   let javaPartBaseClass = 'JHybridObject::JavaPart'
   let cxxPartBaseClass = 'JHybridObject::CxxPart'
+  const constructorCalls = [
+    `HybridObject(${name.HybridTSpec}::TAG)`,
+    `JHybridObject(jThis)`,
+  ]
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -56,6 +60,7 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     cppBaseClass = baseTypename
     javaPartBaseClass = `${baseTypename}::JavaPart`
     cxxPartBaseClass = `${baseTypename}::CxxPart`
+    constructorCalls.push(`${baseTypename}(jThis)`)
   }
   const cppImports: SourceImport[] = []
   for (const base of spec.baseTypes) {
@@ -113,8 +118,7 @@ namespace ${cxxNamespace} {
 
   protected:
     explicit ${name.JHybridTSpec}(jni::alias_ref<${name.JHybridTSpec}::JavaPart> jThis) :
-      HybridObject(${name.HybridTSpec}::TAG),
-      ${cppBaseClass}(jThis),
+      ${indent(constructorCalls.join(',\n'), '      ')},
       _javaPart(jni::make_global(jThis)) {}
 
   public:

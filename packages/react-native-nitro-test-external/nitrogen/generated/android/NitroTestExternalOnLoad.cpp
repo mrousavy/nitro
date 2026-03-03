@@ -29,7 +29,7 @@ int initialize(JavaVM* vm) {
 struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExternalObjectSpecImpl, JHybridSomeExternalObjectSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObject;";
   static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }

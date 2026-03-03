@@ -51,7 +51,7 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
     if (maybeFunc.has_value()) {
       // TODO: Implement this
       // std::shared_ptr<JHybridRecyclableTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridRecyclableTestViewSpec>();
-      maybeFunc.value()(shared);
+      // maybeFunc.value()(shared);
     }
     props->hybridRef.isDirty = false;
   }

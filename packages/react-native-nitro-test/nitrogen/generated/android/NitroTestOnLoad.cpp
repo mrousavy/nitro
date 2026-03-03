@@ -50,7 +50,7 @@ int initialize(JavaVM* vm) {
 struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpecImpl, JHybridTestObjectSwiftKotlinSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectKotlin;";
   static std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestObjectSwiftKotlinSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestObjectSwiftKotlinSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }
@@ -58,7 +58,7 @@ struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestOb
 struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBase;";
   static std::shared_ptr<JHybridBaseSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }
@@ -66,7 +66,7 @@ struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBa
 struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybridChildSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChild;";
   static std::shared_ptr<JHybridChildSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridChildSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridChildSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }
@@ -74,7 +74,7 @@ struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybrid
 struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjectSpecImpl, JHybridPlatformObjectSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObject;";
   static std::shared_ptr<JHybridPlatformObjectSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridPlatformObjectSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridPlatformObjectSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }
@@ -82,7 +82,7 @@ struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjec
 struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestView;";
   static std::shared_ptr<JHybridTestViewSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestViewSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestViewSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }
@@ -90,7 +90,7 @@ struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, J
 struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclableTestViewSpecImpl, JHybridRecyclableTestViewSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestView;";
   static std::shared_ptr<JHybridRecyclableTestViewSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridRecyclableTestViewSpecImpl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridRecyclableTestViewSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }

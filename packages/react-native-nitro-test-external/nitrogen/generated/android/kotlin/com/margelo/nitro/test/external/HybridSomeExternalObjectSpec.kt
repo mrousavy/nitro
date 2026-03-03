@@ -25,7 +25,7 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @DoNotStrip
-  protected class CxxPart(self: HybridSomeExternalObjectSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(self: HybridSomeExternalObjectSpec): HybridObject.CxxPart(self) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {
@@ -39,7 +39,7 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   }
   protected override fun getCxxPart(): CxxPart {
     // TODO: (weak-)cache this!
-    return CxxPart()
+    return CxxPart(this)
   }
 
   // Default implementation of `HybridObject.toString()`

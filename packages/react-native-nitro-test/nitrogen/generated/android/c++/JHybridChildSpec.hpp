@@ -38,6 +38,7 @@ namespace margelo::nitro::test {
   protected:
     explicit JHybridChildSpec(jni::alias_ref<JHybridChildSpec::JavaPart> jThis) :
       HybridObject(HybridChildSpec::TAG),
+      JHybridObject(jThis),
       JHybridBaseSpec(jThis),
       _javaPart(jni::make_global(jThis)) {}
 

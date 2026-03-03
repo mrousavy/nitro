@@ -26,16 +26,15 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.baseTypes.flatMap((b) =>
       new HybridObjectType(b).getRequiredImports('kotlin')
     ),
+    {
+      name: 'com.margelo.nitro.core.HybridObject',
+      space: 'system',
+      language: 'kotlin',
+    },
   ]
   if (spec.isHybridView) {
     extraImports.push({
       name: 'com.margelo.nitro.views.HybridView',
-      space: 'system',
-      language: 'kotlin',
-    })
-  } else {
-    extraImports.push({
-      name: 'com.margelo.nitro.core.HybridObject',
       space: 'system',
       language: 'kotlin',
     })
@@ -85,7 +84,7 @@ ${imports.join('\n')}
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
-  protected class CxxPart(self: ${name.HybridTSpec}): ${cxxPartBase}(self) {
+  protected open class CxxPart(self: ${name.HybridTSpec}): ${cxxPartBase}(self) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {
@@ -99,7 +98,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   }
   protected override fun getCxxPart(): CxxPart {
     // TODO: (weak-)cache this!
-    return CxxPart()
+    return CxxPart(this)
   }
 
   // Default implementation of \`HybridObject.toString()\`

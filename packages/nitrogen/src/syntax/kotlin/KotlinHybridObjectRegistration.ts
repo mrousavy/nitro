@@ -42,7 +42,7 @@ export function createJNIHybridObjectRegistration({
 struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybridTSpec}::JavaPart> {
   static auto constexpr kJavaDescriptor = "L${jniNamespace};";
   static std::shared_ptr<${JHybridTSpec}> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl()>();
+    static auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
     throw std::runtime_error("not yet implemented");
   }

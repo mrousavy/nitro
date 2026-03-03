@@ -30,7 +30,7 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
-  protected class CxxPart(self: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(self: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(self) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {
@@ -44,7 +44,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   }
   protected override fun getCxxPart(): CxxPart {
     // TODO: (weak-)cache this!
-    return CxxPart()
+    return CxxPart(this)
   }
 
   // Default implementation of `HybridObject.toString()`

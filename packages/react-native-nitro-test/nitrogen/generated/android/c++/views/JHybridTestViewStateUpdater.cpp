@@ -66,7 +66,7 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     if (maybeFunc.has_value()) {
       // TODO: Implement this
       // std::shared_ptr<JHybridTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridTestViewSpec>();
-      maybeFunc.value()(shared);
+      // maybeFunc.value()(shared);
     }
     props->hybridRef.isDirty = false;
   }
