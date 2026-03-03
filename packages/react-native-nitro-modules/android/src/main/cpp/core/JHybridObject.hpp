@@ -20,11 +20,11 @@ using namespace facebook;
  * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain
  */
 class JHybridObject : public virtual HybridObject {
- public:
-  struct JavaPart: jni::JavaClass<JavaPart> {
+public:
+  struct JavaPart : jni::JavaClass<JavaPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
   };
-  struct CxxPart: jni::HybridClass<CxxPart> {
+  struct CxxPart : jni::HybridClass<CxxPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
     static void registerNatives();
@@ -32,7 +32,8 @@ class JHybridObject : public virtual HybridObject {
     ~CxxPart() override;
     virtual std::shared_ptr<JHybridObject> getOrCreateHybridObject();
     jni::local_ref<JHybridObject::JavaPart> getJavaPart();
-   private:
+
+  private:
     std::weak_ptr<JHybridObject> _hybridObject;
     jni::global_ref<CxxPart::jhybridobject> _cxxJavaPart;
   };
@@ -41,9 +42,9 @@ public:
   explicit JHybridObject(jni::alias_ref<JavaPart> javaPart);
   ~JHybridObject() override;
 
- public:
+public:
   void dispose() noexcept override;
-  bool equals(const std::shared_ptr<HybridObject> &other) override;
+  bool equals(const std::shared_ptr<HybridObject>& other) override;
   size_t getExternalMemorySize() noexcept override;
   std::string toString() override;
 

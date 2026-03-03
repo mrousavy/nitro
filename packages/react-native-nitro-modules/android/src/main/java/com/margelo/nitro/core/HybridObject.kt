@@ -14,19 +14,26 @@ abstract class HybridObject {
   @Keep
   @DoNotStrip
   @Suppress("KotlinJniMissingFunction")
-  protected open class CxxPart(open val javaPart: HybridObject) {
+  protected open class CxxPart(
+    open val javaPart: HybridObject,
+  ) {
     @DoNotStrip
     @Keep
     private var mHybridData: HybridData = initHybrid()
+
     protected open fun updateNative(hybridData: HybridData) {
       mHybridData = hybridData
     }
+
     private external fun initHybrid(): HybridData
   }
+
   protected open fun createCxxPart(): CxxPart {
     return CxxPart(this)
   }
+
   private var cxxPartCache: WeakReference<CxxPart>? = null
+
   @Suppress("unused")
   @DoNotStrip
   @Keep

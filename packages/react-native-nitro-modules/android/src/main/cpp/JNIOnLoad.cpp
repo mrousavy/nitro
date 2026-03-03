@@ -4,9 +4,9 @@
 #include "JAnyValue.hpp"
 #include "JArrayBuffer.hpp"
 #include "JHardwareBufferUtils.hpp"
+#include "JHybridObject.hpp"
 #include "JNativeRunnable.hpp"
 #include "JNitroModules.hpp"
-#include "JHybridObject.hpp"
 #include "JPromise.hpp"
 #include <fbjni/fbjni.h>
 #include <jni.h>

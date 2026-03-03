@@ -37,11 +37,11 @@ jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::init
 
 void JHybridObject::CxxPart::registerNatives() {
   registerHybrid({
-     makeNativeMethod("initHybrid", JHybridObject::CxxPart::initHybrid),
+      makeNativeMethod("initHybrid", JHybridObject::CxxPart::initHybrid),
   });
 }
 
-JHybridObject::JHybridObject(jni::alias_ref<JHybridObject::JavaPart> javaPart): _javaPart(jni::make_global(javaPart)) {
+JHybridObject::JHybridObject(jni::alias_ref<JHybridObject::JavaPart> javaPart) : _javaPart(jni::make_global(javaPart)) {
   // called from subclasses
 }
 
