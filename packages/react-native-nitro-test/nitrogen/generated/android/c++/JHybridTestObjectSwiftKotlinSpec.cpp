@@ -144,21 +144,12 @@ namespace margelo::nitro::test {
     return makeCxxInstance(jThis);
   }
 
-  JHybridTestObjectSwiftKotlinSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
-    HybridBase(jThis) {}
-
-  std::shared_ptr<JHybridObject> JHybridTestObjectSwiftKotlinSpec::CxxPart::getOrCreateHybridObject() {
-    if (auto cached = _hybridObject.lock()) {
-      return cached;
-    }
-    auto javaPart = getJavaPart();
+  std::shared_ptr<JHybridObject> JHybridTestObjectSwiftKotlinSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
     auto castJavaPart = jni::dynamic_ref_cast<JHybridTestObjectSwiftKotlinSpec::JavaPart>(javaPart);
-    if (castJavaPart == nullptr) {
+    if (castJavaPart == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridTestObjectSwiftKotlinSpec::JavaPart!");
     }
-    auto hybrid = std::make_shared<JHybridTestObjectSwiftKotlinSpec>(castJavaPart);
-    _hybridObject = hybrid;
-    return hybrid;
+    return std::make_shared<JHybridTestObjectSwiftKotlinSpec>(castJavaPart);
   }
 
   void JHybridTestObjectSwiftKotlinSpec::CxxPart::registerNatives() {

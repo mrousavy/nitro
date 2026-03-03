@@ -26,9 +26,13 @@ std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject()
     return cached;
   }
   auto javaPart = getJavaPart();
-  auto hybridObject = std::make_shared<JHybridObject>(javaPart);
+  auto hybridObject = createHybridObject(javaPart);
   _hybridObject = hybridObject;
   return hybridObject;
+}
+
+std::shared_ptr<JHybridObject> JHybridObject::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+  return std::make_shared<JHybridObject>(javaPart);
 }
 
 jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart) {
@@ -41,7 +45,7 @@ void JHybridObject::CxxPart::registerNatives() {
   });
 }
 
-JHybridObject::JHybridObject(jni::alias_ref<JHybridObject::JavaPart> javaPart) : _javaPart(jni::make_global(javaPart)) {
+JHybridObject::JHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) : _javaPart(jni::make_global(javaPart)) {
   // called from subclasses
 }
 

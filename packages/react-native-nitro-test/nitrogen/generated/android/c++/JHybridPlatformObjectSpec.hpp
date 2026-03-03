@@ -29,18 +29,15 @@ namespace margelo::nitro::test {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObjectSpec$CxxPart;";
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
-      explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
-      virtual std::shared_ptr<JHybridObject> getOrCreateHybridObject() override;
-    private:
-      jni::global_ref<jhybridobject> _javaPart;
-      std::weak_ptr<JHybridPlatformObjectSpec> _hybridObject;
+      using HybridBase::HybridBase;
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override;
     };
 
   public:
-    explicit JHybridPlatformObjectSpec(jni::alias_ref<JHybridPlatformObjectSpec::JavaPart> jThis) :
+    explicit JHybridPlatformObjectSpec(const jni::local_ref<JHybridPlatformObjectSpec::JavaPart>& javaPart):
       HybridObject(HybridPlatformObjectSpec::TAG),
-      JHybridObject(jThis),
-      _javaPart(jni::make_global(jThis)) {}
+      JHybridObject(javaPart),
+      _javaPart(jni::make_global(javaPart)) {}
     ~JHybridPlatformObjectSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
