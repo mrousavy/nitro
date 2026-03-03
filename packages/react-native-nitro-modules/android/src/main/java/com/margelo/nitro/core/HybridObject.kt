@@ -10,6 +10,19 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 @DoNotStrip
 abstract class HybridObject {
+  protected class CxxPart(open val self: HybridObject) {
+    @DoNotStrip
+    private var mHybridData: HybridData = initHybrid()
+    protected open fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+    private external fun initHybrid(): HybridData
+  }
+  protected open fun getCxxPart(): CxxPart {
+    // TODO: Weak cache this
+    return CxxPart(this)
+  }
+
   /**
    * Get the memory size of the Kotlin instance (plus any external heap allocations),
    * in bytes.
@@ -54,24 +67,5 @@ abstract class HybridObject {
   override fun toString(): String {
     val ownName = this::class.simpleName
     return "[HybridObject $ownName]"
-  }
-
-  /**
-   * Holds the native C++ instance.
-   * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of its specs.
-   * This is `null`, until `updateNative(..)` is called.
-   */
-  private var mHybridData: HybridData? = null
-
-  /**
-   * If `HybridObject` is subclassed, the sub-class needs to create its own `HybridData`
-   * with a C++ `jni::HybridClass` representing the subclass directly.
-   * Then, that `HybridData` must be passed upwards to `HybridObject` using `updateNative(..)`.
-   *
-   * This must happen for each sub/base class in the whole inheritance chain to ensure
-   * overrides and type-erasure works as expected.
-   */
-  protected open fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
   }
 }

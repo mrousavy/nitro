@@ -16,29 +16,35 @@ using namespace facebook;
 
 /**
  * Represents the Java `HybridObject` instance.
- * HybridData is passed up from inherited members, so this acts like a base class
- * and has to be inherited as "virtual" in C++ to properly avoid creating multiple `HybridObject` instances.
+ * - JavaPart: The actual Java Class (HybridObject)
+ * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain
  */
-class JHybridObject : public jni::HybridClass<JHybridObject>, public virtual HybridObject {
-public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
-
-public:
-  // C++ constructor (called from Java via `initHybrid()`)
-  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
-  // C++ default constructor used by older Nitro versions (deprecated in favor of the jThis one)
-  [[deprecated]] JHybridObject() = default;
+class JHybridObject : public virtual HybridObject {
+ public:
+  struct JavaPart: jni::JavaClass<JavaPart> {
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+  };
+  struct CxxPart: jni::HybridClass<CxxPart> {
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static void registerNatives();
+    explicit CxxPart(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+    virtual ~CxxPart();
+   private:
+    jni::global_ref<CxxPart::jhybridobject> _javaPart;
+  };
 
 public:
   ~JHybridObject() override;
 
-public:
-  // `shared()` has custom logic because we ref-count using `jni::global_ref`!
-  std::shared_ptr<HybridObject> shared() override;
+ public:
+  void dispose() noexcept override;
+  bool equals(const std::shared_ptr<HybridObject> &other) override;
+  size_t getExternalMemorySize() noexcept override;
+  std::string toString() override;
 
 private:
-  jni::global_ref<JHybridObject::javaobject> _javaPart;
-  friend HybridBase;
+  jni::global_ref<JavaPart> _javaPart;
 };
 
 } // namespace margelo::nitro

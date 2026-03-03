@@ -13,26 +13,45 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-std::shared_ptr<HybridObject> JHybridObject::shared() {
-  if (auto shared = weak_from_this().lock()) {
-    // We have a cached shared_ptr
-    return shared;
-  }
-  if (_javaPart == nullptr) [[unlikely]] {
-    // We don't have a _javaPart! Maybe the implementing JHybridObject
-    // was generated with an old version of nitrogen which doesn't call the JHybridObject(…)
-    // constructor yet. This is bad!
-    throw std::runtime_error(std::string("JHybridObject \"") + getName() +
-                             "\" does not have a _javaPart, "
-                             "and wasn't constructed from a std::shared_ptr! "
-                             "Try upgrading nitrogen and re-generate your specs.");
-  }
-  return JNISharedPtr::make_shared_from_jni<JHybridObject>(_javaPart);
+// virtual destructor lives here, so its not duplicated across all libraries
+JHybridObject::CxxPart::~CxxPart() {}
+
+jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  return makeCxxInstance(jThis);
+}
+
+void JHybridObject::CxxPart::registerNatives() {
+  registerHybrid({
+     makeNativeMethod("initHybrid", JHybridObject::CxxPart::initHybrid),
+  });
 }
 
 JHybridObject::~JHybridObject() {
   // Hermes GC can destroy JS objects on a non-JNI Thread.
   jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
+}
+
+size_t JHybridObject::getExternalMemorySize() noexcept {
+  static const auto method = _javaPart->javaClassStatic()->getMethod<jlong()>("getMemorySize");
+  return method(_javaPart);
+}
+
+bool JHybridObject::equals(const std::shared_ptr<HybridObject>& other) {
+  if (auto otherJHybrid = std::dynamic_pointer_cast<JHybridObject>(other)) {
+    return jni::isSameObject(_javaPart, otherJHybrid->_javaPart);
+  }
+  return false;
+}
+
+void JHybridObject::dispose() noexcept {
+  static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("dispose");
+  method(_javaPart);
+}
+
+std::string JHybridObject::toString() {
+  static const auto method = _javaPart->javaClassStatic()->getMethod<jni::JString()>("toString");
+  auto javaString = method(_javaPart);
+  return javaString->toStdString();
 }
 
 } // namespace margelo::nitro
