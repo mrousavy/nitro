@@ -10,7 +10,8 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 @DoNotStrip
 abstract class HybridObject {
-  protected class CxxPart(open val self: HybridObject) {
+  @Suppress("KotlinJniMissingFunction")
+  protected open class CxxPart(open val self: HybridObject) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     protected open fun updateNative(hybridData: HybridData) {

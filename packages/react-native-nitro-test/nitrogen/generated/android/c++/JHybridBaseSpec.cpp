@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
   }
 
   JHybridBaseSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
-    JHybridObject::CxxPart(jThis) {}
+    HybridBase(jThis) {}
 
   void JHybridBaseSpec::CxxPart::registerNatives() {
     registerHybrid({
@@ -28,7 +28,7 @@ namespace margelo::nitro::test {
 
   // Properties
   double JHybridBaseSpec::getBaseValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }

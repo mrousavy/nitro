@@ -15,6 +15,7 @@ interface Props {
 
 interface JNIHybridObjectRegistration {
   cppCode: string
+  cppDefinition: string
   requiredImports: SourceImport[]
 }
 
@@ -37,13 +38,21 @@ export function createJNIHybridObjectRegistration({
         space: 'system',
       },
     ],
+    cppDefinition: `
+struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybridTSpec}::JavaPart> {
+  static auto constexpr kJavaDescriptor = "L${jniNamespace};";
+  static std::shared_ptr<${JHybridTSpec}> create() {
+    static auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl()>();
+    auto instance = javaClassStatic()->newObject(constructorFn);
+    throw std::runtime_error("not yet implemented");
+  }
+};
+    `.trim(),
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static DefaultConstructableObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
-    auto instance = object.create();
-    return instance->cthis()->shared();
+    return ${JHybridTSpec}Impl::create();
   }
 );
       `.trim(),

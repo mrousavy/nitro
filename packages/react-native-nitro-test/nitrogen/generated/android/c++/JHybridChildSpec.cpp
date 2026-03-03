@@ -34,7 +34,7 @@ namespace margelo::nitro::test {
   }
 
   JHybridChildSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
-    JHybridBaseSpec::CxxPart(jThis) {}
+    HybridBase(jThis) {}
 
   void JHybridChildSpec::CxxPart::registerNatives() {
     registerHybrid({
@@ -44,19 +44,19 @@ namespace margelo::nitro::test {
 
   // Properties
   double JHybridChildSpec::getChildValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getChildValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getChildValue");
     auto __result = method(_javaPart);
     return __result;
   }
   double JHybridChildSpec::getBaseValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }
 
   // Methods
   std::variant<std::string, Car> JHybridChildSpec::bounceVariant(const std::variant<std::string, Car>& variant) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("bounceVariant");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("bounceVariant");
     auto __result = method(_javaPart, JNamedVariant::fromCpp(variant));
     return __result->toCpp();
   }

@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
   }
 
   JHybridPlatformObjectSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
-    JHybridObject::CxxPart(jThis) {}
+    HybridBase(jThis) {}
 
   void JHybridPlatformObjectSpec::CxxPart::registerNatives() {
     registerHybrid({
@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
 
   // Methods
   std::string JHybridPlatformObjectSpec::getOSVersion() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
     auto __result = method(_javaPart);
     return __result->toStdString();
   }

@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
   }
 
   JHybridRecyclableTestViewSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
-    JHybridObject::CxxPart(jThis) {}
+    HybridBase(jThis) {}
 
   void JHybridRecyclableTestViewSpec::CxxPart::registerNatives() {
     registerHybrid({
@@ -28,12 +28,12 @@ namespace margelo::nitro::test {
 
   // Properties
   bool JHybridRecyclableTestViewSpec::getIsBlue() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("isBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
   void JHybridRecyclableTestViewSpec::setIsBlue(bool isBlue) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
 
