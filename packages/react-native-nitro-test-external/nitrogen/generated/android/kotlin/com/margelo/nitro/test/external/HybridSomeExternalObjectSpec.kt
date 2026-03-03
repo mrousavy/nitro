@@ -26,16 +26,14 @@ import com.margelo.nitro.core.HybridObject
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
-  protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
+  protected open class CxxPart(
+    javaPart: HybridSomeExternalObjectSpec,
+    initializeNative: Boolean = true,
+  ): HybridObject.CxxPart(javaPart, false) {
     init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
+      if (initializeNative) {
+        super.updateNative(initHybrid())
+      }
     }
     private external fun initHybrid(): HybridData
   }

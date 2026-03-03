@@ -27,16 +27,14 @@ import com.margelo.nitro.views.HybridView
 abstract class HybridRecyclableTestViewSpec: HybridView() {
   @DoNotStrip
   @Keep
-  protected open class CxxPart(javaPart: HybridRecyclableTestViewSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
+  protected open class CxxPart(
+    javaPart: HybridRecyclableTestViewSpec,
+    initializeNative: Boolean = true,
+  ): HybridObject.CxxPart(javaPart, false) {
     init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
+      if (initializeNative) {
+        super.updateNative(initHybrid())
+      }
     }
     private external fun initHybrid(): HybridData
   }

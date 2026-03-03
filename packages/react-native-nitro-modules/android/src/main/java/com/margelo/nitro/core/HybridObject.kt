@@ -18,10 +18,17 @@ abstract class HybridObject {
     @Keep
     @DoNotStrip
     val javaPart: HybridObject,
+    initializeNative: Boolean = true,
   ) {
     @DoNotStrip
     @Keep
-    private var mHybridData: HybridData = initHybrid()
+    private var mHybridData: HybridData? = null
+
+    init {
+      if (initializeNative) {
+        mHybridData = initHybrid()
+      }
+    }
 
     protected open fun updateNative(hybridData: HybridData) {
       mHybridData = hybridData
