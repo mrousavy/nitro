@@ -111,5 +111,4 @@ void HybridNitroModulesProxy::debug_notifyHybridObjectDeallocated() {
   _hybridObjectInstancesCount.fetch_sub(1, std::memory_order_relaxed);
 }
 
-
 } // namespace margelo::nitro
