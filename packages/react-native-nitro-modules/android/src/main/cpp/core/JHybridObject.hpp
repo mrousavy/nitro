@@ -15,9 +15,9 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * Represents the Java `HybridObject` instance.
- * - JavaPart: The actual Java Class (HybridObject)
- * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain
+ * Bridges a Java `HybridObject` instance over to C++.
+ * - JavaPart: The actual Java Class (HybridObject) - this will be held by `JHybridObject`
+ * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain and caches C++ state
  */
 class JHybridObject : public virtual HybridObject {
 public:
@@ -28,8 +28,7 @@ public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
     static void registerNatives();
-    explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart) : _cxxJavaPart(jni::make_global(cxxJavaPart)) {}
-    ~CxxPart() override;
+    explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart);
     std::shared_ptr<JHybridObject> getOrCreateHybridObject();
     jni::local_ref<JHybridObject::JavaPart> getJavaPart();
     /**

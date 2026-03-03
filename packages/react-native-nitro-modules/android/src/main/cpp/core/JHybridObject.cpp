@@ -13,8 +13,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// virtual destructor lives here, so its not duplicated across all libraries
-JHybridObject::CxxPart::~CxxPart() = default;
+JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart) : _cxxJavaPart(jni::make_global(cxxJavaPart)) {}
 
 jni::local_ref<JHybridObject::JavaPart> JHybridObject::CxxPart::getJavaPart() {
   static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
