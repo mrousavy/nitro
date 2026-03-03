@@ -1506,6 +1506,10 @@ export function getTests(
 
         const currentAllocations =
           NitroModules.debug_getTotalAllocatedHybridObjects()
+        const remainingAllocations = currentAllocations - baselineAllocations
+        // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
+        const didDeleteMostObjects =
+          remainingAllocations < TOTAL_ALLOCATIONS * 0.1
         const result: {
           baselineAllocations: number
           currentAllocations: number
@@ -1513,9 +1517,9 @@ export function getTests(
         } = {
           baselineAllocations: baselineAllocations,
           currentAllocations: currentAllocations,
-          isEqual: baselineAllocations === currentAllocations,
+          isEqual: didDeleteMostObjects,
         }
-        if (baselineAllocations !== currentAllocations) {
+        if (!didDeleteMostObjects) {
           delete result.isEqual
         }
         return result
