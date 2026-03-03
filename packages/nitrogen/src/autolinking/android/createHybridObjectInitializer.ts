@@ -26,6 +26,7 @@ export function createHybridObjectIntializer(): SourceFile[] {
 
   const cppHybridObjectImports: SourceImport[] = []
   const cppRegistrations: string[] = []
+  const cppDefinitions: string[] = []
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
     const config = autolinkedHybridObjects[hybridObjectName]
 
@@ -40,11 +41,13 @@ export function createHybridObjectIntializer(): SourceFile[] {
     }
     if (config?.kotlin != null) {
       // Autolink a Kotlin HybridObject through JNI/C++!
-      const { cppCode, requiredImports } = createJNIHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        jniClassName: config.kotlin,
-      })
+      const { cppCode, cppDefinition, requiredImports } =
+        createJNIHybridObjectRegistration({
+          hybridObjectName: hybridObjectName,
+          jniClassName: config.kotlin,
+        })
       cppHybridObjectImports.push(...requiredImports)
+      cppDefinitions.push(cppDefinition)
       cppRegistrations.push(cppCode)
     }
   }
@@ -112,6 +115,8 @@ int initialize(JavaVM* vm) {
     ::${cxxNamespace}::registerAllNatives();
   });
 }
+
+${cppDefinitions.join('\n')}
 
 void registerAllNatives() {
   using namespace margelo::nitro;

@@ -158,7 +158,7 @@ public:
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<${JHybridTSpec}::javaobject> view,
+                              jni::alias_ref<${JHybridTSpec}::JavaPart> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
@@ -182,7 +182,7 @@ public:
     const setter = p.getSetterName('other')
     return `
 if (props->${name}.isDirty) {
-  view->${setter}(props->${name}.value);
+  hybridView->${setter}(props->${name}.value);
   props->${name}.isDirty = false;
 }
     `.trim()
@@ -201,9 +201,9 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
+                                           jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  ${JHybridTSpec}* view = javaView->cthis();
+  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->get${JHybridTSpec}();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -229,8 +229,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
     props->hybridRef.isDirty = false;
   }

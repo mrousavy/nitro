@@ -18,34 +18,33 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridTestObjectSwiftKotlinSpec: public jni::HybridClass<JHybridTestObjectSwiftKotlinSpec, JHybridObject>,
-                                          public virtual HybridTestObjectSwiftKotlinSpec {
+  class JHybridTestObjectSwiftKotlinSpec: public virtual HybridTestObjectSwiftKotlinSpec, public virtual JHybridObject {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec;";
+      std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> getJHybridTestObjectSwiftKotlinSpec();
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectSwiftKotlinSpec$CxxPart;";
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      using HybridBase::HybridBase;
+    protected:
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override;
+    };
 
-  protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> jThis) :
+  public:
+    explicit JHybridTestObjectSwiftKotlinSpec(const jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>& javaPart):
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
-      HybridBase(jThis),
-      _javaPart(jni::make_global(jThis)) {}
-
-  public:
+      JHybridObject(javaPart),
+      _javaPart(jni::make_global(javaPart)) {}
     ~JHybridTestObjectSwiftKotlinSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -189,9 +188,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createExternalVariantFromFunc(const std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>& factory) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridTestObjectSwiftKotlinSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

@@ -33,10 +33,10 @@ namespace margelo::nitro::test {
     [[nodiscard]]
     ExternalObjectStruct toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldSomeExternal = clazz->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>("someExternal");
-      jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> someExternal = this->getFieldValue(fieldSomeExternal);
+      static const auto fieldSomeExternal = clazz->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>("someExternal");
+      jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> someExternal = this->getFieldValue(fieldSomeExternal);
       return ExternalObjectStruct(
-        someExternal->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>()
+        someExternal->getJHybridSomeExternalObjectSpec()
       );
     }
 
@@ -46,7 +46,7 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JExternalObjectStruct::javaobject> fromCpp(const ExternalObjectStruct& value) {
-      using JSignature = JExternalObjectStruct(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>);
+      using JSignature = JExternalObjectStruct(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(

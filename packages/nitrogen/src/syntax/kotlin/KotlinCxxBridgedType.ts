@@ -363,7 +363,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybridObjectType = getTypeAs(this.type, HybridObjectType)
             const fullName = this.getFullJHybridObjectName(hybridObjectType)
-            return `${fullName}::javaobject`
+            return `${fullName}::JavaPart`
           default:
             return this.type.getCode(language)
         }
@@ -472,7 +472,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       // any jni::HybridClass needs to be dereferenced to jobject with .get()
       case 'array-buffer':
       case 'function':
-      case 'hybrid-object':
       case 'hybrid-object-base':
       case 'map':
       case 'promise':
@@ -849,9 +848,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
-            const hybrid = getTypeAs(this.type, HybridObjectType)
-            const fullName = this.getFullJHybridObjectName(hybrid)
-            return `${parameterName}->cthis()->shared_cast<${fullName}>()`
+            const hybridObject = getTypeAs(this.type, HybridObjectType)
+            const { JHybridTSpec } = getHybridObjectName(
+              hybridObject.hybridObjectName
+            )
+            return `${parameterName}->get${JHybridTSpec}()`
           default:
             return parameterName
         }

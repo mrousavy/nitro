@@ -26,20 +26,27 @@ int initialize(JavaVM* vm) {
   });
 }
 
+struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExternalObjectSpecImpl, JHybridSomeExternalObjectSpec::JavaPart> {
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObject;";
+  static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
+    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
+    jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridSomeExternalObjectSpec();
+  }
+};
+
 void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test::external;
 
   // Register native JNI methods
-  margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
+  margelo::nitro::test::external::JHybridSomeExternalObjectSpec::CxxPart::registerNatives();
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(
     "SomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
-      static DefaultConstructableObject<JHybridSomeExternalObjectSpec::javaobject> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
-      auto instance = object.create();
-      return instance->cthis()->shared();
+      return JHybridSomeExternalObjectSpecImpl::create();
     }
   );
 }

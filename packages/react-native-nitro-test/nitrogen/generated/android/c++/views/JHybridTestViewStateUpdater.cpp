@@ -16,9 +16,9 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 
 void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridTestViewSpec::javaobject> javaView,
+                                           jni::alias_ref<JHybridTestViewSpec::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  JHybridTestViewSpec* view = javaView->cthis();
+  std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getJHybridTestViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -38,19 +38,19 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
 
   // Update all props if they are dirty
   if (props->isBlue.isDirty) {
-    view->setIsBlue(props->isBlue.value);
+    hybridView->setIsBlue(props->isBlue.value);
     props->isBlue.isDirty = false;
   }
   if (props->hasBeenCalled.isDirty) {
-    view->setHasBeenCalled(props->hasBeenCalled.value);
+    hybridView->setHasBeenCalled(props->hasBeenCalled.value);
     props->hasBeenCalled.isDirty = false;
   }
   if (props->colorScheme.isDirty) {
-    view->setColorScheme(props->colorScheme.value);
+    hybridView->setColorScheme(props->colorScheme.value);
     props->colorScheme.isDirty = false;
   }
   if (props->someCallback.isDirty) {
-    view->setSomeCallback(props->someCallback.value);
+    hybridView->setSomeCallback(props->someCallback.value);
     props->someCallback.isDirty = false;
   }
 
@@ -59,8 +59,7 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<JHybridTestViewSpec> shared = javaView->cthis()->shared_cast<JHybridTestViewSpec>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
     props->hybridRef.isDirty = false;
   }

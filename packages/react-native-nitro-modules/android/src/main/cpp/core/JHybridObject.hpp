@@ -15,30 +15,47 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * Represents the Java `HybridObject` instance.
- * HybridData is passed up from inherited members, so this acts like a base class
- * and has to be inherited as "virtual" in C++ to properly avoid creating multiple `HybridObject` instances.
+ * Bridges a Java `HybridObject` instance over to C++.
+ * - JavaPart: The actual Java Class (HybridObject) - this will be held by `JHybridObject`
+ * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain and caches C++ state
  */
-class JHybridObject : public jni::HybridClass<JHybridObject>, public virtual HybridObject {
+class JHybridObject : public virtual HybridObject {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+  struct JavaPart : jni::JavaClass<JavaPart> {
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+    std::shared_ptr<JHybridObject> getJHybridObject();
+  };
+  struct CxxPart : jni::HybridClass<CxxPart> {
+    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
+    static void registerNatives();
+    explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart);
+    std::shared_ptr<JHybridObject> getOrCreateHybridObject();
+
+  protected:
+    jni::local_ref<JHybridObject::JavaPart> getJavaPart();
+    /**
+     * Override this method in your Class' CxxPart to allow type-erased inheritance.
+     */
+    virtual std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart);
+
+  private:
+    std::weak_ptr<JHybridObject> _hybridObject;
+    jni::global_ref<CxxPart::jhybridobject> _cxxJavaPart;
+  };
 
 public:
-  // C++ constructor (called from Java via `initHybrid()`)
-  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
-  // C++ default constructor used by older Nitro versions (deprecated in favor of the jThis one)
-  [[deprecated]] JHybridObject() = default;
-
-public:
+  explicit JHybridObject(const jni::local_ref<JavaPart>& javaPart);
   ~JHybridObject() override;
 
 public:
-  // `shared()` has custom logic because we ref-count using `jni::global_ref`!
-  std::shared_ptr<HybridObject> shared() override;
+  void dispose() noexcept override;
+  bool equals(const std::shared_ptr<HybridObject>& other) override;
+  size_t getExternalMemorySize() noexcept override;
+  std::string toString() override;
 
 private:
-  jni::global_ref<JHybridObject::javaobject> _javaPart;
-  friend HybridBase;
+  jni::global_ref<JavaPart> _javaPart;
 };
 
 } // namespace margelo::nitro
