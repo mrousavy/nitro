@@ -15,7 +15,9 @@ abstract class HybridObject {
   @DoNotStrip
   @Suppress("KotlinJniMissingFunction")
   protected open class CxxPart(
-    open val javaPart: HybridObject,
+    @Keep
+    @DoNotStrip
+    val javaPart: HybridObject,
   ) {
     @DoNotStrip
     @Keep
