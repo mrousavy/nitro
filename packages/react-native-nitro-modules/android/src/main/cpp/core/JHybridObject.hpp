@@ -30,6 +30,8 @@ public:
     static void registerNatives();
     explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart);
     std::shared_ptr<JHybridObject> getOrCreateHybridObject();
+
+  protected:
     jni::local_ref<JHybridObject::JavaPart> getJavaPart();
     /**
      * Override this method in your Class' CxxPart to allow type-erased inheritance.
