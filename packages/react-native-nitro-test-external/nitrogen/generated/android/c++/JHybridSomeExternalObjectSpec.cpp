@@ -17,37 +17,17 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 namespace margelo::nitro::test::external {
 
-  jni::local_ref<JHybridSomeExternalObjectSpec::jhybriddata> JHybridSomeExternalObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  jni::local_ref<JHybridSomeExternalObjectSpec::CxxPart::jhybriddata> JHybridSomeExternalObjectSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridSomeExternalObjectSpec::registerNatives() {
+  JHybridSomeExternalObjectSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
+    JHybridObject::CxxPart(jThis) {}
+
+  void JHybridSomeExternalObjectSpec::CxxPart::registerNatives() {
     registerHybrid({
-      makeNativeMethod("initHybrid", JHybridSomeExternalObjectSpec::initHybrid),
+      makeNativeMethod("initHybrid", JHybridSomeExternalObjectSpec::CxxPart::initHybrid),
     });
-  }
-
-  size_t JHybridSomeExternalObjectSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridSomeExternalObjectSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridSomeExternalObjectSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridSomeExternalObjectSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridSomeExternalObjectSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
   }
 
   // Properties

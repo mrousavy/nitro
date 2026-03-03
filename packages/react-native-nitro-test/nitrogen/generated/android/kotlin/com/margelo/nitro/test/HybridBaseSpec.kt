@@ -25,15 +25,21 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridBaseSpec: HybridObject() {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
+  protected class CxxPart(self: HybridBaseSpec): HybridObject.CxxPart(self) {
+    @DoNotStrip
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+      super.updateNative(hybridData)
+    }
+    private external fun initHybrid(): HybridData
   }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
+  protected override fun getCxxPart(): CxxPart {
+    // TODO: (weak-)cache this!
+    return CxxPart()
   }
 
   // Default implementation of `HybridObject.toString()`
@@ -49,7 +55,6 @@ abstract class HybridBaseSpec: HybridObject() {
   // Methods
   
 
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "HybridBaseSpec"

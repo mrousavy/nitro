@@ -27,8 +27,8 @@ namespace margelo::nitro::test {
   public:
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal;";
 
-    static jni::local_ref<JStringOrExternal> create_0(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JStringOrExternal(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>)>("create");
+    static jni::local_ref<JStringOrExternal> create_0(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JStringOrExternal(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JStringOrExternal> create_1(jni::alias_ref<jni::JString> value) {
@@ -52,8 +52,8 @@ namespace margelo::nitro::test {
     public:
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$First;";
     
-      [[nodiscard]] jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> getValue() const {
-        static const auto field = javaClassStatic()->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>("value");
+      [[nodiscard]] jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> getValue() const {
+        static const auto field = javaClassStatic()->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>("value");
         return getFieldValue(field);
       }
     };

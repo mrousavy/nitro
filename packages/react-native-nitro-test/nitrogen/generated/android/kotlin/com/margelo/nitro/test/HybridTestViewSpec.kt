@@ -25,15 +25,21 @@ import com.margelo.nitro.views.HybridView
 )
 abstract class HybridTestViewSpec: HybridView() {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
+  protected class CxxPart(self: HybridTestViewSpec): HybridObject.CxxPart(self) {
+    @DoNotStrip
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+      super.updateNative(hybridData)
+    }
+    private external fun initHybrid(): HybridData
   }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
+  protected override fun getCxxPart(): CxxPart {
+    // TODO: (weak-)cache this!
+    return CxxPart()
   }
 
   // Default implementation of `HybridObject.toString()`
@@ -79,7 +85,6 @@ abstract class HybridTestViewSpec: HybridView() {
   @Keep
   abstract fun someMethod(): Unit
 
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "HybridTestViewSpec"

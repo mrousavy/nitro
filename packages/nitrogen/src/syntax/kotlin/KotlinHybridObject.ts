@@ -42,6 +42,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
   }
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
+  let cxxPartBase = 'HybridObject.CxxPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
@@ -51,6 +52,7 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     const base = spec.baseTypes[0]!
     const baseHybrid = new HybridObjectType(base)
     kotlinBase = baseHybrid.getCode('kotlin')
+    cxxPartBase = `${kotlinBase}.CxxPart`
   }
 
   const imports = extraImports
@@ -83,15 +85,21 @@ ${imports.join('\n')}
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
+  protected class CxxPart(self: ${name.HybridTSpec}): ${cxxPartBase}(self) {
+    @DoNotStrip
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+      super.updateNative(hybridData)
+    }
+    private external fun initHybrid(): HybridData
   }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
+  protected override fun getCxxPart(): CxxPart {
+    // TODO: (weak-)cache this!
+    return CxxPart()
   }
 
   // Default implementation of \`HybridObject.toString()\`
@@ -105,7 +113,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   // Methods
   ${indent(methods, '  ')}
 
-  private external fun initHybrid(): HybridData
 
   companion object {
     protected const val TAG = "${name.HybridTSpec}"

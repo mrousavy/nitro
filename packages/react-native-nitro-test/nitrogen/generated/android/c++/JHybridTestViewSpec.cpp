@@ -18,37 +18,17 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridTestViewSpec::jhybriddata> JHybridTestViewSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  jni::local_ref<JHybridTestViewSpec::CxxPart::jhybriddata> JHybridTestViewSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridTestViewSpec::registerNatives() {
+  JHybridTestViewSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
+    JHybridObject::CxxPart(jThis) {}
+
+  void JHybridTestViewSpec::CxxPart::registerNatives() {
     registerHybrid({
-      makeNativeMethod("initHybrid", JHybridTestViewSpec::initHybrid),
+      makeNativeMethod("initHybrid", JHybridTestViewSpec::CxxPart::initHybrid),
     });
-  }
-
-  size_t JHybridTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridTestViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridTestViewSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridTestViewSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridTestViewSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
   }
 
   // Properties

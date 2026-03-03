@@ -26,6 +26,10 @@ void JHybridObject::CxxPart::registerNatives() {
   });
 }
 
+JHybridObject::JHybridObject(jni::alias_ref<JHybridObject::JavaPart> javaPart): _javaPart(jni::make_global(javaPart)) {
+  // called from subclasses
+}
+
 JHybridObject::~JHybridObject() {
   // Hermes GC can destroy JS objects on a non-JNI Thread.
   jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });

@@ -18,18 +18,26 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridRecyclableTestViewSpec: public jni::HybridClass<JHybridRecyclableTestViewSpec, JHybridObject>,
-                                       public virtual HybridRecyclableTestViewSpec {
+  class JHybridRecyclableTestViewSpec: public virtual HybridRecyclableTestViewSpec, public virtual JHybridObject {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec$CxxPart;";
+      friend HybridBase;
+      using HybridBase::HybridBase;
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
+    private:
+      jni::global_ref<jhybridobject> _javaPart;
+    };
 
   protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridRecyclableTestViewSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridRecyclableTestViewSpec(jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> jThis) :
       HybridObject(HybridRecyclableTestViewSpec::TAG),
-      HybridBase(jThis),
+      JHybridObject(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -39,13 +47,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridRecyclableTestViewSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridRecyclableTestViewSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -59,9 +61,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridRecyclableTestViewSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridRecyclableTestViewSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

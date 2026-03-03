@@ -52,12 +52,12 @@ void registerAllNatives() {
   using namespace margelo::nitro::test;
 
   // Register native JNI methods
-  margelo::nitro::test::JHybridBaseSpec::registerNatives();
-  margelo::nitro::test::JHybridChildSpec::registerNatives();
-  margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
-  margelo::nitro::test::JHybridRecyclableTestViewSpec::registerNatives();
+  margelo::nitro::test::JHybridBaseSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridChildSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridPlatformObjectSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridRecyclableTestViewSpec::CxxPart::registerNatives();
   margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
-  margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
+  margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::CxxPart::registerNatives();
   margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
   margelo::nitro::test::JFunc_void_cxx::registerNatives();
   margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
@@ -71,7 +71,7 @@ void registerAllNatives() {
   margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
   margelo::nitro::test::JFunc_double_cxx::registerNatives();
   margelo::nitro::test::JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::registerNatives();
-  margelo::nitro::test::JHybridTestViewSpec::registerNatives();
+  margelo::nitro::test::JHybridTestViewSpec::CxxPart::registerNatives();
   margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
 
   // Register Nitro Hybrid Objects

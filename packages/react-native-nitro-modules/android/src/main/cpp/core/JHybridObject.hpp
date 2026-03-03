@@ -35,6 +35,7 @@ class JHybridObject : public virtual HybridObject {
   };
 
 public:
+  explicit JHybridObject(jni::alias_ref<JavaPart> javaPart);
   ~JHybridObject() override;
 
  public:

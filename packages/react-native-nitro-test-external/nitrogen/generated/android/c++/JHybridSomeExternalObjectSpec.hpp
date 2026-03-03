@@ -18,18 +18,26 @@ namespace margelo::nitro::test::external {
 
   using namespace facebook;
 
-  class JHybridSomeExternalObjectSpec: public jni::HybridClass<JHybridSomeExternalObjectSpec, JHybridObject>,
-                                       public virtual HybridSomeExternalObjectSpec {
+  class JHybridSomeExternalObjectSpec: public virtual HybridSomeExternalObjectSpec, public virtual JHybridObject {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec;";
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObjectSpec$CxxPart;";
+      friend HybridBase;
+      using HybridBase::HybridBase;
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
+    private:
+      jni::global_ref<jhybridobject> _javaPart;
+    };
 
   protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridSomeExternalObjectSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridSomeExternalObjectSpec(jni::alias_ref<JHybridSomeExternalObjectSpec::JavaPart> jThis) :
       HybridObject(HybridSomeExternalObjectSpec::TAG),
-      HybridBase(jThis),
+      JHybridObject(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -39,13 +47,7 @@ namespace margelo::nitro::test::external {
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridSomeExternalObjectSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridSomeExternalObjectSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -59,9 +61,7 @@ namespace margelo::nitro::test::external {
     OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridSomeExternalObjectSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridSomeExternalObjectSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test::external

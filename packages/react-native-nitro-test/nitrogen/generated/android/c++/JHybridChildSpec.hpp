@@ -19,18 +19,26 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridChildSpec: public jni::HybridClass<JHybridChildSpec, JHybridBaseSpec>,
-                          public virtual HybridChildSpec {
+  class JHybridChildSpec: public virtual HybridChildSpec, public virtual JHybridBaseSpec {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridBaseSpec::JavaPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridBaseSpec::CxxPart> {
+      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec$CxxPart;";
+      friend HybridBase;
+      using HybridBase::HybridBase;
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
+    private:
+      jni::global_ref<jhybridobject> _javaPart;
+    };
 
   protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridChildSpec(jni::alias_ref<jhybridobject> jThis) :
+    explicit JHybridChildSpec(jni::alias_ref<JHybridChildSpec::JavaPart> jThis) :
       HybridObject(HybridChildSpec::TAG),
-      HybridBase(jThis),
+      JHybridBaseSpec(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -40,13 +48,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridChildSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridChildSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -60,9 +62,7 @@ namespace margelo::nitro::test {
     std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override;
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridChildSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridChildSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

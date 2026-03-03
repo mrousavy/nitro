@@ -13,37 +13,17 @@
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridPlatformObjectSpec::jhybriddata> JHybridPlatformObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  jni::local_ref<JHybridPlatformObjectSpec::CxxPart::jhybriddata> JHybridPlatformObjectSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridPlatformObjectSpec::registerNatives() {
+  JHybridPlatformObjectSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
+    JHybridObject::CxxPart(jThis) {}
+
+  void JHybridPlatformObjectSpec::CxxPart::registerNatives() {
     registerHybrid({
-      makeNativeMethod("initHybrid", JHybridPlatformObjectSpec::initHybrid),
+      makeNativeMethod("initHybrid", JHybridPlatformObjectSpec::CxxPart::initHybrid),
     });
-  }
-
-  size_t JHybridPlatformObjectSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridPlatformObjectSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
-    }
-    return false;
-  }
-
-  void JHybridPlatformObjectSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridPlatformObjectSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
   }
 
   // Properties
