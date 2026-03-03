@@ -93,4 +93,10 @@ export interface NitroModulesProxy
    * owns it - not JS.
    */
   createNativeArrayBuffer(size: number): ArrayBuffer
+
+  /**
+   * Gets a total number of currently allocated {@linkcode HybridObject}s.
+   * @internal
+   */
+  debug_getTotalAllocatedHybridObjects(): number
 }

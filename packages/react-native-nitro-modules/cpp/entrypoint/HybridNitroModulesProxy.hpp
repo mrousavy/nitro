@@ -46,6 +46,11 @@ public:
   std::string getBuildType();
   std::string getVersion();
 
+  // Allocation tests
+  double debug_getTotalAllocatedHybridObjects();
+  static void debug_notifyHybridObjectAllocated();
+  static void debug_notifyHybridObjectDeallocated();
+
 private:
   static constexpr auto TAG = "NitroModulesProxy";
 };
