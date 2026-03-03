@@ -83,6 +83,21 @@ ${imports.join('\n')}
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
+  // Default implementation of \`HybridObject.toString()\`
+  override fun toString(): String {
+    return "[HybridObject ${name.T}]"
+  }
+
+  // Properties
+  ${indent(properties, '  ')}
+
+  // Methods
+  ${indent(methods, '  ')}
+
+  protected override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: ${name.HybridTSpec}): ${cxxPartBase}(javaPart) {
@@ -98,20 +113,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
-  // Default implementation of \`HybridObject.toString()\`
-  override fun toString(): String {
-    return "[HybridObject ${name.T}]"
-  }
-
-  // Properties
-  ${indent(properties, '  ')}
-
-  // Methods
-  ${indent(methods, '  ')}
 
   companion object {
     protected const val TAG = "${name.HybridTSpec}"

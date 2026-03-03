@@ -24,25 +24,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
-  @DoNotStrip
-  @Keep
-  protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
-  }
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject SomeExternalObject]"
@@ -63,6 +44,26 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   private fun createOptionalPrimitivesHolder_cxx(optionalNumber: Double?, optionalBoolean: Boolean?, optionalUInt64: Long?, optionalInt64: Long?): OptionalPrimitivesHolder {
     val __result = createOptionalPrimitivesHolder(optionalNumber, optionalBoolean, optionalUInt64?.let { it.toULong() }, optionalInt64)
     return __result
+  }
+
+  protected override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
+  @DoNotStrip
+  @Keep
+  protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+      super.updateNative(hybridData)
+    }
+    private external fun initHybrid(): HybridData
   }
 
   companion object {

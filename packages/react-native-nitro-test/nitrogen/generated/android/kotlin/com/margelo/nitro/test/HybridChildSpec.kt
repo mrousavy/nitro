@@ -24,6 +24,25 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridChildSpec: HybridBaseSpec() {
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject Child]"
+  }
+
+  // Properties
+  @get:DoNotStrip
+  @get:Keep
+  abstract val childValue: Double
+
+  // Methods
+  @DoNotStrip
+  @Keep
+  abstract fun bounceVariant(variant: NamedVariant): NamedVariant
+
+  protected override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridChildSpec): HybridBaseSpec.CxxPart(javaPart) {
@@ -39,24 +58,6 @@ abstract class HybridChildSpec: HybridBaseSpec() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject Child]"
-  }
-
-  // Properties
-  @get:DoNotStrip
-  @get:Keep
-  abstract val childValue: Double
-
-  // Methods
-  @DoNotStrip
-  @Keep
-  abstract fun bounceVariant(variant: NamedVariant): NamedVariant
 
   companion object {
     protected const val TAG = "HybridChildSpec"

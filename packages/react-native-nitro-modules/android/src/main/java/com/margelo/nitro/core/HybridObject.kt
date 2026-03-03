@@ -11,48 +11,6 @@ import java.lang.ref.WeakReference
 @Keep
 @DoNotStrip
 abstract class HybridObject {
-  @Keep
-  @DoNotStrip
-  @Suppress("KotlinJniMissingFunction")
-  protected open class CxxPart(
-    @Keep
-    @DoNotStrip
-    val javaPart: HybridObject,
-  ) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-
-    protected open fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-    }
-
-    private external fun initHybrid(): HybridData
-  }
-
-  /**
-   * Override this method for each class in the inheritance
-   * chain to connect it to a different C++ class.
-   */
-  protected open fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
-  private var cxxPartCache: WeakReference<CxxPart>? = null
-
-  @Suppress("unused")
-  @DoNotStrip
-  @Keep
-  private fun getCxxPart(): CxxPart {
-    cxxPartCache?.get()?.let {
-      // It's still in strong cache!
-      return it
-    }
-    val cxxPart = createCxxPart()
-    cxxPartCache = WeakReference(cxxPart)
-    return cxxPart
-  }
-
   /**
    * Get the memory size of the Kotlin instance (plus any external heap allocations),
    * in bytes.
@@ -97,5 +55,47 @@ abstract class HybridObject {
   override fun toString(): String {
     val ownName = this::class.simpleName
     return "[HybridObject $ownName]"
+  }
+
+  /**
+   * Override this method for each class in the inheritance
+   * chain to connect it to a different C++ class.
+   */
+  protected open fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
+  private var cxxPartCache: WeakReference<CxxPart>? = null
+
+  @Suppress("unused")
+  @DoNotStrip
+  @Keep
+  private fun getCxxPart(): CxxPart {
+    cxxPartCache?.get()?.let {
+      // It's still in strong cache!
+      return it
+    }
+    val cxxPart = createCxxPart()
+    cxxPartCache = WeakReference(cxxPart)
+    return cxxPart
+  }
+
+  @Keep
+  @DoNotStrip
+  @Suppress("KotlinJniMissingFunction")
+  protected open class CxxPart(
+    @Keep
+    @DoNotStrip
+    val javaPart: HybridObject,
+  ) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+
+    protected open fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+    }
+
+    private external fun initHybrid(): HybridData
   }
 }

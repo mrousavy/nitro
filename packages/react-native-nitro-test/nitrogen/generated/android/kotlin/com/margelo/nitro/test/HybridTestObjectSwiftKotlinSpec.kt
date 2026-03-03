@@ -29,25 +29,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
-  @DoNotStrip
-  @Keep
-  protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
-  }
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
     return "[HybridObject TestObjectSwiftKotlin]"
@@ -652,6 +633,26 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   private fun createExternalVariantFromFunc_cxx(factory: Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec {
     val __result = createExternalVariantFromFunc(factory)
     return __result
+  }
+
+  protected override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
+  @DoNotStrip
+  @Keep
+  protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData = initHybrid()
+    init {
+      super.updateNative(mHybridData)
+    }
+    override fun updateNative(hybridData: HybridData) {
+      mHybridData = hybridData
+      super.updateNative(hybridData)
+    }
+    private external fun initHybrid(): HybridData
   }
 
   companion object {

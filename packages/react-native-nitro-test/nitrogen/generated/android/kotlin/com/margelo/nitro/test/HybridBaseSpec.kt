@@ -24,6 +24,23 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridBaseSpec: HybridObject() {
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject Base]"
+  }
+
+  // Properties
+  @get:DoNotStrip
+  @get:Keep
+  abstract val baseValue: Double
+
+  // Methods
+  
+
+  protected override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
+
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridBaseSpec): HybridObject.CxxPart(javaPart) {
@@ -39,22 +56,6 @@ abstract class HybridBaseSpec: HybridObject() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
-  }
-
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject Base]"
-  }
-
-  // Properties
-  @get:DoNotStrip
-  @get:Keep
-  abstract val baseValue: Double
-
-  // Methods
-  
 
   companion object {
     protected const val TAG = "HybridBaseSpec"
