@@ -192,7 +192,14 @@ ${cppIncludes.join('\n')}
 namespace ${cxxNamespace} {
 
   std::shared_ptr<${name.JHybridTSpec}> ${name.JHybridTSpec}::JavaPart::getHybridObject() {
-    throw std::runtime_error("now we need to get cxxPart");
+    static auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
+    jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
+    std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
+    std::shared_ptr<${name.JHybridTSpec}> castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to ${name.JHybridTSpec}!");
+    }
+    return castHybridObject;
   }
 
   jni::local_ref<${name.JHybridTSpec}::CxxPart::jhybriddata> ${name.JHybridTSpec}::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
