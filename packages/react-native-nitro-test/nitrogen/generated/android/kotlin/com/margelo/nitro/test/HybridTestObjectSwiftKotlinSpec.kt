@@ -30,7 +30,7 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
-  protected open class CxxPart(self: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {

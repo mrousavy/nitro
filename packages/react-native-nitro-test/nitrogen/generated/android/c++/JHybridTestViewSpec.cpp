@@ -18,12 +18,30 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 namespace margelo::nitro::test {
 
+  std::shared_ptr<JHybridTestViewSpec> JHybridTestViewSpec::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<JHybridTestViewSpec::CxxPart::jhybriddata> JHybridTestViewSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   JHybridTestViewSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> JHybridTestViewSpec::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridTestViewSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridTestViewSpec::JavaPart!");
+    }
+    auto hybrid = std::make_shared<JHybridTestViewSpec>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void JHybridTestViewSpec::CxxPart::registerNatives() {
     registerHybrid({

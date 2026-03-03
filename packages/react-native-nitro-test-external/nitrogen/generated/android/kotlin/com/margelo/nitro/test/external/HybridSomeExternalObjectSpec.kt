@@ -25,7 +25,7 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @DoNotStrip
-  protected open class CxxPart(self: HybridSomeExternalObjectSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {

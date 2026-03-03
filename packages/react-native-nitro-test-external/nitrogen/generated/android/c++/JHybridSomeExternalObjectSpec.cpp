@@ -17,12 +17,30 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 namespace margelo::nitro::test::external {
 
+  std::shared_ptr<JHybridSomeExternalObjectSpec> JHybridSomeExternalObjectSpec::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<JHybridSomeExternalObjectSpec::CxxPart::jhybriddata> JHybridSomeExternalObjectSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   JHybridSomeExternalObjectSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> JHybridSomeExternalObjectSpec::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridSomeExternalObjectSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridSomeExternalObjectSpec::JavaPart!");
+    }
+    auto hybrid = std::make_shared<JHybridSomeExternalObjectSpec>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void JHybridSomeExternalObjectSpec::CxxPart::registerNatives() {
     registerHybrid({

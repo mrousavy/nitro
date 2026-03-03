@@ -84,7 +84,7 @@ ${imports.join('\n')}
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
-  protected open class CxxPart(self: ${name.HybridTSpec}): ${cxxPartBase}(self) {
+  protected open class CxxPart(javaPart: ${name.HybridTSpec}): ${cxxPartBase}(javaPart) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {

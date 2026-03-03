@@ -13,12 +13,30 @@
 
 namespace margelo::nitro::test {
 
+  std::shared_ptr<JHybridPlatformObjectSpec> JHybridPlatformObjectSpec::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<JHybridPlatformObjectSpec::CxxPart::jhybriddata> JHybridPlatformObjectSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   JHybridPlatformObjectSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> JHybridPlatformObjectSpec::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridPlatformObjectSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridPlatformObjectSpec::JavaPart!");
+    }
+    auto hybrid = std::make_shared<JHybridPlatformObjectSpec>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void JHybridPlatformObjectSpec::CxxPart::registerNatives() {
     registerHybrid({

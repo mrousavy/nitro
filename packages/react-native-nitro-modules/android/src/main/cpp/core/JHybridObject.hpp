@@ -26,12 +26,15 @@ class JHybridObject : public virtual HybridObject {
   };
   struct CxxPart: jni::HybridClass<CxxPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
     static void registerNatives();
-    explicit CxxPart(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
-    virtual ~CxxPart();
+    explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart) : _cxxJavaPart(jni::make_global(cxxJavaPart)) {}
+    ~CxxPart() override;
+    virtual std::shared_ptr<JHybridObject> getOrCreateHybridObject();
+    jni::local_ref<JHybridObject::JavaPart> getJavaPart();
    private:
-    jni::global_ref<CxxPart::jhybridobject> _javaPart;
+    std::weak_ptr<JHybridObject> _hybridObject;
+    jni::global_ref<CxxPart::jhybridobject> _cxxJavaPart;
   };
 
 public:

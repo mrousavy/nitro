@@ -22,6 +22,8 @@ namespace margelo::nitro::test {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec;";
+      // TODO: This can be defined once in base, no?
+      std::shared_ptr<JHybridRecyclableTestViewSpec> getHybridObject();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestViewSpec$CxxPart;";
@@ -30,17 +32,17 @@ namespace margelo::nitro::test {
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
+      virtual std::shared_ptr<JHybridObject> getOrCreateHybridObject() override;
     private:
       jni::global_ref<jhybridobject> _javaPart;
+      std::weak_ptr<JHybridRecyclableTestViewSpec> _hybridObject;
     };
 
-  protected:
+  public:
     explicit JHybridRecyclableTestViewSpec(jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> jThis) :
       HybridObject(HybridRecyclableTestViewSpec::TAG),
       JHybridObject(jThis),
       _javaPart(jni::make_global(jThis)) {}
-
-  public:
     ~JHybridRecyclableTestViewSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });

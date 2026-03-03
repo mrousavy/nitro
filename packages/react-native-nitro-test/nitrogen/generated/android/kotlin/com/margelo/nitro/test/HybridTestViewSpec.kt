@@ -26,7 +26,7 @@ import com.margelo.nitro.views.HybridView
 )
 abstract class HybridTestViewSpec: HybridView() {
   @DoNotStrip
-  protected open class CxxPart(self: HybridTestViewSpec): HybridObject.CxxPart(self) {
+  protected open class CxxPart(javaPart: HybridTestViewSpec): HybridObject.CxxPart(javaPart) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {

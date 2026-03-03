@@ -13,12 +13,30 @@
 
 namespace margelo::nitro::test {
 
+  std::shared_ptr<JHybridRecyclableTestViewSpec> JHybridRecyclableTestViewSpec::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<JHybridRecyclableTestViewSpec::CxxPart::jhybriddata> JHybridRecyclableTestViewSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   JHybridRecyclableTestViewSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> JHybridRecyclableTestViewSpec::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridRecyclableTestViewSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridRecyclableTestViewSpec::JavaPart!");
+    }
+    auto hybrid = std::make_shared<JHybridRecyclableTestViewSpec>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void JHybridRecyclableTestViewSpec::CxxPart::registerNatives() {
     registerHybrid({

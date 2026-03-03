@@ -25,7 +25,7 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridChildSpec: HybridBaseSpec() {
   @DoNotStrip
-  protected open class CxxPart(self: HybridChildSpec): HybridBaseSpec.CxxPart(self) {
+  protected open class CxxPart(javaPart: HybridChildSpec): HybridBaseSpec.CxxPart(javaPart) {
     @DoNotStrip
     private var mHybridData: HybridData = initHybrid()
     init {

@@ -29,12 +29,30 @@ namespace margelo::nitro::test { struct Person; }
 
 namespace margelo::nitro::test {
 
+  std::shared_ptr<JHybridChildSpec> JHybridChildSpec::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<JHybridChildSpec::CxxPart::jhybriddata> JHybridChildSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   JHybridChildSpec::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> JHybridChildSpec::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridChildSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridChildSpec::JavaPart!");
+    }
+    auto hybrid = std::make_shared<JHybridChildSpec>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void JHybridChildSpec::CxxPart::registerNatives() {
     registerHybrid({

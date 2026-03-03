@@ -104,6 +104,8 @@ namespace ${cxxNamespace} {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, ${javaPartBaseClass}> {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+      // TODO: This can be defined once in base, no?
+      std::shared_ptr<${name.JHybridTSpec}> getHybridObject();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, ${cxxPartBaseClass}> {
       static auto constexpr kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
@@ -112,16 +114,16 @@ namespace ${cxxNamespace} {
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
+      virtual std::shared_ptr<JHybridObject> getOrCreateHybridObject() override;
     private:
       jni::global_ref<jhybridobject> _javaPart;
+      std::weak_ptr<${name.JHybridTSpec}> _hybridObject;
     };
 
-  protected:
+  public:
     explicit ${name.JHybridTSpec}(jni::alias_ref<${name.JHybridTSpec}::JavaPart> jThis) :
       ${indent(constructorCalls.join(',\n'), '      ')},
       _javaPart(jni::make_global(jThis)) {}
-
-  public:
     ~${name.JHybridTSpec}() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
@@ -189,12 +191,30 @@ ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
+  std::shared_ptr<${name.JHybridTSpec}> ${name.JHybridTSpec}::JavaPart::getHybridObject() {
+    throw std::runtime_error("now we need to get cxxPart");
+  }
+
   jni::local_ref<${name.JHybridTSpec}::CxxPart::jhybriddata> ${name.JHybridTSpec}::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
   ${name.JHybridTSpec}::CxxPart::CxxPart(jni::alias_ref<jhybridobject> jThis):
     HybridBase(jThis) {}
+
+  std::shared_ptr<JHybridObject> ${name.JHybridTSpec}::CxxPart::getOrCreateHybridObject() {
+    if (auto cached = _hybridObject.lock()) {
+      return cached;
+    }
+    auto javaPart = getJavaPart();
+    auto castJavaPart = jni::dynamic_ref_cast<${name.JHybridTSpec}::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to ${name.JHybridTSpec}::JavaPart!");
+    }
+    auto hybrid = std::make_shared<${name.JHybridTSpec}>(castJavaPart);
+    _hybridObject = hybrid;
+    return hybrid;
+  }
 
   void ${name.JHybridTSpec}::CxxPart::registerNatives() {
     registerHybrid({

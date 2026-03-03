@@ -14,10 +14,25 @@ namespace margelo::nitro {
 using namespace facebook;
 
 // virtual destructor lives here, so its not duplicated across all libraries
-JHybridObject::CxxPart::~CxxPart() {}
+JHybridObject::CxxPart::~CxxPart() = default;
 
-jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
-  return makeCxxInstance(jThis);
+jni::local_ref<JHybridObject::JavaPart> JHybridObject::CxxPart::getJavaPart() {
+  static auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
+  return _cxxJavaPart->getFieldValue(javaPartField);
+}
+
+std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject() {
+  if (auto cached = _hybridObject.lock()) {
+    return cached;
+  }
+  auto javaPart = getJavaPart();
+  auto hybridObject = std::make_shared<JHybridObject>(javaPart);
+  _hybridObject = hybridObject;
+  return hybridObject;
+}
+
+jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart) {
+  return makeCxxInstance(cxxJavaPart);
 }
 
 void JHybridObject::CxxPart::registerNatives() {
