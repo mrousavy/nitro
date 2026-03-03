@@ -58,7 +58,6 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   @Keep
   abstract fun bounceVariant(variant: NamedVariant): NamedVariant
 
-
   companion object {
     protected const val TAG = "HybridChildSpec"
   }

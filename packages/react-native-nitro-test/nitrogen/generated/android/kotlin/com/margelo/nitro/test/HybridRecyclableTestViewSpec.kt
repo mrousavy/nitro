@@ -59,7 +59,6 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
   // Methods
   
 
-
   companion object {
     protected const val TAG = "HybridRecyclableTestViewSpec"
   }

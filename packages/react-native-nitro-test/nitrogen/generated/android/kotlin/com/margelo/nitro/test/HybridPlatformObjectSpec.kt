@@ -56,7 +56,6 @@ abstract class HybridPlatformObjectSpec: HybridObject() {
   @Keep
   abstract fun getOSVersion(): String
 
-
   companion object {
     protected const val TAG = "HybridPlatformObjectSpec"
   }

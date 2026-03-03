@@ -87,7 +87,6 @@ abstract class HybridTestViewSpec: HybridView() {
   @Keep
   abstract fun someMethod(): Unit
 
-
   companion object {
     protected const val TAG = "HybridTestViewSpec"
   }

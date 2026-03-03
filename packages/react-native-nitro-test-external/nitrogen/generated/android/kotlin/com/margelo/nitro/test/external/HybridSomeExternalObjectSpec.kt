@@ -65,7 +65,6 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
     return __result
   }
 
-
   companion object {
     protected const val TAG = "HybridSomeExternalObjectSpec"
   }

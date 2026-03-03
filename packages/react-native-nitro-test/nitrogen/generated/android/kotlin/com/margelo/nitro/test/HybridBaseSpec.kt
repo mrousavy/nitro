@@ -56,7 +56,6 @@ abstract class HybridBaseSpec: HybridObject() {
   // Methods
   
 
-
   companion object {
     protected const val TAG = "HybridBaseSpec"
   }

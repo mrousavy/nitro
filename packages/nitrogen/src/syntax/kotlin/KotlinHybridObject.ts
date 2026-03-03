@@ -113,7 +113,6 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   // Methods
   ${indent(methods, '  ')}
 
-
   companion object {
     protected const val TAG = "${name.HybridTSpec}"
   }

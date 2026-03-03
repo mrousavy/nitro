@@ -654,7 +654,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
 
-
   companion object {
     protected const val TAG = "HybridTestObjectSwiftKotlinSpec"
   }
