@@ -28,6 +28,7 @@ on:
     paths:
       - ".github/workflows/harness-ios.yml"
       - "example/ios/**"
+      - "example/src/getTests.ts"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/ios/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -46,6 +47,7 @@ on:
     paths:
       - ".github/workflows/harness-ios.yml"
       - "example/ios/**"
+      - "example/src/getTests.ts"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/ios/**"
       - "packages/react-native-nitro-test/cpp/**"

@@ -36,6 +36,7 @@ on:
     paths:
       - ".github/workflows/harness-android.yml"
       - "example/android/**"
+      - "example/src/getTests.ts"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/android/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -53,6 +54,7 @@ on:
     paths:
       - ".github/workflows/harness-android.yml"
       - "example/android/**"
+      - "example/src/getTests.ts"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/android/**"
       - "packages/react-native-nitro-test/cpp/**"
