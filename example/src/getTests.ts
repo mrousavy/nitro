@@ -1478,36 +1478,38 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
-    createTest(
-      'Kotlin HybridObjects deallocate (no 51,200 JNI global_ref leak)',
-      () =>
-        it(() => {
-          const HISTORIC_JNI_GLOBAL_REF_LIMIT = 51_200
-          const MARGIN = 2_048
-          const TOTAL_ALLOCATIONS = HISTORIC_JNI_GLOBAL_REF_LIMIT + MARGIN
-          const BATCH_SIZE = 512
+    createTest('HybridObjects dont leak memory', () =>
+      it(() => {
+        const baselineAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
 
-          const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
-          for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
-            const object = testObject.newTestObject()
-            object.numberValue = i
-            objects.push(object)
+        const BATCH_SIZE = 1000
+        const LOOP_COUNT = 10
+        const TOTAL_ALLOCATIONS = BATCH_SIZE * LOOP_COUNT
 
-            if (objects.length >= BATCH_SIZE) {
-              objects.length = 0
-              gc()
-            }
+        const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
+        for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+          const object = testObject.newTestObject()
+          object.numberValue = i
+          objects.push(object)
+
+          if (objects.length >= BATCH_SIZE) {
+            objects.length = 0
+            gc()
           }
+        }
 
-          objects.length = 0
-          gc()
-          gc()
-          gc()
+        objects.length = 0
+        gc()
+        gc()
+        gc()
 
-          return true
-        })
-          .didNotThrow()
-          .equals(true)
+        const currentAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
+        return baselineAllocations === currentAllocations
+      })
+        .didNotThrow()
+        .equals(true)
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
