@@ -30,7 +30,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
     prototype.registerHybridGetter("version", &HybridNitroModulesProxy::getVersion);
 
-    prototype.registerHybridGetter("debug_getTotalAllocatedHybridObjects", &HybridNitroModulesProxy::debug_getTotalAllocatedHybridObjects);
+    prototype.registerHybridMethod("debug_getTotalAllocatedHybridObjects", &HybridNitroModulesProxy::debug_getTotalAllocatedHybridObjects);
   });
 }
 

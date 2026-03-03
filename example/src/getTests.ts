@@ -1506,10 +1506,22 @@ export function getTests(
 
         const currentAllocations =
           NitroModules.debug_getTotalAllocatedHybridObjects()
-        return baselineAllocations === currentAllocations
+        const result: {
+          baselineAllocations: number
+          currentAllocations: number
+          isEqual?: boolean
+        } = {
+          baselineAllocations: baselineAllocations,
+          currentAllocations: currentAllocations,
+          isEqual: baselineAllocations === currentAllocations,
+        }
+        if (baselineAllocations !== currentAllocations) {
+          delete result.isEqual
+        }
+        return result
       })
         .didNotThrow()
-        .equals(true)
+        .toContain('isEqual')
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
