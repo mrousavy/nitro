@@ -26,8 +26,10 @@ import com.margelo.nitro.views.HybridView
 )
 abstract class HybridTestViewSpec: HybridView() {
   @DoNotStrip
+  @Keep
   protected open class CxxPart(javaPart: HybridTestViewSpec): HybridObject.CxxPart(javaPart) {
     @DoNotStrip
+    @Keep
     private var mHybridData: HybridData = initHybrid()
     init {
       super.updateNative(mHybridData)
@@ -38,8 +40,7 @@ abstract class HybridTestViewSpec: HybridView() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun getCxxPart(): CxxPart {
-    // TODO: (weak-)cache this!
+  protected override fun createCxxPart(): CxxPart {
     return CxxPart(this)
   }
 

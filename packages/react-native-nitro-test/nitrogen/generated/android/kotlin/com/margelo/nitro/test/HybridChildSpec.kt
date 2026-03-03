@@ -25,8 +25,10 @@ import com.margelo.nitro.core.HybridObject
 )
 abstract class HybridChildSpec: HybridBaseSpec() {
   @DoNotStrip
+  @Keep
   protected open class CxxPart(javaPart: HybridChildSpec): HybridBaseSpec.CxxPart(javaPart) {
     @DoNotStrip
+    @Keep
     private var mHybridData: HybridData = initHybrid()
     init {
       super.updateNative(mHybridData)
@@ -37,8 +39,7 @@ abstract class HybridChildSpec: HybridBaseSpec() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun getCxxPart(): CxxPart {
-    // TODO: (weak-)cache this!
+  protected override fun createCxxPart(): CxxPart {
     return CxxPart(this)
   }
 

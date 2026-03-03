@@ -84,8 +84,10 @@ ${imports.join('\n')}
 )
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   @DoNotStrip
+  @Keep
   protected open class CxxPart(javaPart: ${name.HybridTSpec}): ${cxxPartBase}(javaPart) {
     @DoNotStrip
+    @Keep
     private var mHybridData: HybridData = initHybrid()
     init {
       super.updateNative(mHybridData)
@@ -96,8 +98,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     }
     private external fun initHybrid(): HybridData
   }
-  protected override fun getCxxPart(): CxxPart {
-    // TODO: (weak-)cache this!
+  protected override fun createCxxPart(): CxxPart {
     return CxxPart(this)
   }
 

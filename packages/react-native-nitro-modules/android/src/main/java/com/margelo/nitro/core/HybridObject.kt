@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import java.lang.ref.WeakReference
 
 /**
  * A base class for all Kotlin-based HybridObjects.
@@ -10,18 +11,33 @@ import com.facebook.proguard.annotations.DoNotStrip
 @Keep
 @DoNotStrip
 abstract class HybridObject {
+  @Keep
+  @DoNotStrip
   @Suppress("KotlinJniMissingFunction")
   protected open class CxxPart(open val javaPart: HybridObject) {
     @DoNotStrip
+    @Keep
     private var mHybridData: HybridData = initHybrid()
     protected open fun updateNative(hybridData: HybridData) {
       mHybridData = hybridData
     }
     private external fun initHybrid(): HybridData
   }
-  protected open fun getCxxPart(): CxxPart {
-    // TODO: Weak cache this
+  protected open fun createCxxPart(): CxxPart {
     return CxxPart(this)
+  }
+  private var cxxPartCache: WeakReference<CxxPart>? = null
+  @Suppress("unused")
+  @DoNotStrip
+  @Keep
+  private fun getCxxPart(): CxxPart {
+    cxxPartCache?.get()?.let {
+      // It's still in strong cache!
+      return it
+    }
+    val cxxPart = createCxxPart()
+    cxxPartCache = WeakReference(cxxPart)
+    return cxxPart
   }
 
   /**
