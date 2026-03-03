@@ -29,6 +29,8 @@ void HybridNitroModulesProxy::loadHybridMethods() {
 
     prototype.registerHybridGetter("buildType", &HybridNitroModulesProxy::getBuildType);
     prototype.registerHybridGetter("version", &HybridNitroModulesProxy::getVersion);
+
+    prototype.registerHybridMethod("debug_getTotalAllocatedHybridObjects", &HybridNitroModulesProxy::debug_getTotalAllocatedHybridObjects);
   });
 }
 
@@ -92,6 +94,21 @@ std::string HybridNitroModulesProxy::getBuildType() {
 
 std::string HybridNitroModulesProxy::getVersion() {
   return NITRO_VERSION;
+}
+
+// Allocation tests
+static std::atomic_size_t _hybridObjectInstancesCount{0};
+double HybridNitroModulesProxy::debug_getTotalAllocatedHybridObjects() {
+  size_t count = _hybridObjectInstancesCount.load(std::memory_order_relaxed);
+  return static_cast<double>(count);
+}
+
+void HybridNitroModulesProxy::debug_notifyHybridObjectAllocated() {
+  _hybridObjectInstancesCount.fetch_add(1, std::memory_order_relaxed);
+}
+
+void HybridNitroModulesProxy::debug_notifyHybridObjectDeallocated() {
+  _hybridObjectInstancesCount.fetch_sub(1, std::memory_order_relaxed);
 }
 
 } // namespace margelo::nitro

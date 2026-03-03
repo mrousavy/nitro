@@ -193,7 +193,7 @@ export function getTests(
 ): TestRunner[] {
   const backend = options.backend ?? throwingBackend
   const { it } = createTestRunner(backend)
-  const createTest = createCreateTest(it)
+  const createTest = createCreateTest()
 
   return [
     // Basic prototype tests
@@ -1477,6 +1477,55 @@ export function getTests(
       })
         .didNotThrow()
         .equals(10_000)
+    ),
+    createTest('HybridObjects dont leak memory', () =>
+      it(() => {
+        const baselineAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
+
+        const BATCH_SIZE = 1000
+        const LOOP_COUNT = 10
+        const TOTAL_ALLOCATIONS = BATCH_SIZE * LOOP_COUNT
+
+        const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
+        for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+          const object = testObject.newTestObject()
+          object.numberValue = i
+          objects.push(object)
+
+          if (objects.length >= BATCH_SIZE) {
+            objects.length = 0
+            gc()
+          }
+        }
+
+        objects.length = 0
+        gc()
+        gc()
+        gc()
+
+        const currentAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
+        const remainingAllocations = currentAllocations - baselineAllocations
+        // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
+        const didDeleteMostObjects =
+          remainingAllocations < TOTAL_ALLOCATIONS * 0.1
+        const result: {
+          baselineAllocations: number
+          currentAllocations: number
+          isEqual?: boolean
+        } = {
+          baselineAllocations: baselineAllocations,
+          currentAllocations: currentAllocations,
+          isEqual: didDeleteMostObjects,
+        }
+        if (!didDeleteMostObjects) {
+          delete result.isEqual
+        }
+        return result
+      })
+        .didNotThrow()
+        .toContain('isEqual')
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
