@@ -30,6 +30,10 @@ abstract class HybridObject {
     private external fun initHybrid(): HybridData
   }
 
+  /**
+   * Override this method for each class in the inheritance
+   * chain to connect it to a different C++ class.
+   */
   protected open fun createCxxPart(): CxxPart {
     return CxxPart(this)
   }
