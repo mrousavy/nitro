@@ -2214,6 +2214,13 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('testObject.dispose() is idempotent', () =>
+      it(() => {
+        const hybridObject = testObject.newTestObject()
+        hybridObject.dispose()
+        hybridObject.dispose()
+      }).didNotThrow()
+    ),
     createTest('PlatformObject getOSVersion() returns a string', () =>
       it(() => HybridPlatformObject.getOSVersion())
         .didNotThrow()
