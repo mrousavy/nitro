@@ -44,7 +44,7 @@ struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybrid
   static std::shared_ptr<${JHybridTSpec}> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
     `.trim(),

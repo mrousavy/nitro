@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
     if (isInstanceOf(JStringOrExternal_impl::First::javaClassStatic())) {
       // It's a `std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>`
       auto jniValue = static_cast<const JStringOrExternal_impl::First*>(this)->getValue();
-      return jniValue->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
+      return jniValue->getHybridObject();
     } else if (isInstanceOf(JStringOrExternal_impl::Second::javaClassStatic())) {
       // It's a `std::string`
       auto jniValue = static_cast<const JStringOrExternal_impl::Second*>(this)->getValue();

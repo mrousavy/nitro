@@ -31,7 +31,7 @@ struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExter
   static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 

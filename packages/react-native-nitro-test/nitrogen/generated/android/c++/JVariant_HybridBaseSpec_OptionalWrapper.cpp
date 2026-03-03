@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
     if (isInstanceOf(JVariant_HybridBaseSpec_OptionalWrapper_impl::First::javaClassStatic())) {
       // It's a `std::shared_ptr<HybridBaseSpec>`
       auto jniValue = static_cast<const JVariant_HybridBaseSpec_OptionalWrapper_impl::First*>(this)->getValue();
-      return jniValue->cthis()->shared_cast<JHybridBaseSpec>();
+      return jniValue->getHybridObject();
     } else if (isInstanceOf(JVariant_HybridBaseSpec_OptionalWrapper_impl::Second::javaClassStatic())) {
       // It's a `OptionalWrapper`
       auto jniValue = static_cast<const JVariant_HybridBaseSpec_OptionalWrapper_impl::Second*>(this)->getValue();

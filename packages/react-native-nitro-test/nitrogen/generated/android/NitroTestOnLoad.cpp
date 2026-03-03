@@ -52,7 +52,7 @@ struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestOb
   static std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestObjectSwiftKotlinSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
@@ -60,7 +60,7 @@ struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBa
   static std::shared_ptr<JHybridBaseSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybridChildSpec::JavaPart> {
@@ -68,7 +68,7 @@ struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybrid
   static std::shared_ptr<JHybridChildSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridChildSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjectSpecImpl, JHybridPlatformObjectSpec::JavaPart> {
@@ -76,7 +76,7 @@ struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjec
   static std::shared_ptr<JHybridPlatformObjectSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridPlatformObjectSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
@@ -84,7 +84,7 @@ struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, J
   static std::shared_ptr<JHybridTestViewSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridTestViewSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclableTestViewSpecImpl, JHybridRecyclableTestViewSpec::JavaPart> {
@@ -92,7 +92,7 @@ struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclabl
   static std::shared_ptr<JHybridRecyclableTestViewSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridRecyclableTestViewSpecImpl::javaobject()>();
     auto instance = javaClassStatic()->newObject(constructorFn);
-    throw std::runtime_error("not yet implemented");
+    return instance->getHybridObject();
   }
 };
 
