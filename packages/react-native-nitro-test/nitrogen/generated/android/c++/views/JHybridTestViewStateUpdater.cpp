@@ -18,7 +18,7 @@ using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<JHybridTestViewSpec::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getHybridObject();
+  std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getJHybridTestViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();

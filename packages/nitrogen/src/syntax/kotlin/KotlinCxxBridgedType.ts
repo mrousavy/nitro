@@ -848,7 +848,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
       case 'hybrid-object': {
         switch (language) {
           case 'c++':
-            return `${parameterName}->getHybridObject()`
+            const hybridObject = getTypeAs(this.type, HybridObjectType)
+            const { JHybridTSpec } = getHybridObjectName(
+              hybridObject.hybridObjectName
+            )
+            return `${parameterName}->get${JHybridTSpec}()`
           default:
             return parameterName
         }

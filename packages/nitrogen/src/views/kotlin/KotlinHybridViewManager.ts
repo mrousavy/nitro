@@ -203,7 +203,7 @@ using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->getHybridObject();
+  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->get${JHybridTSpec}();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();

@@ -23,6 +23,7 @@ class JHybridObject : public virtual HybridObject {
 public:
   struct JavaPart : jni::JavaClass<JavaPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+    std::shared_ptr<JHybridObject> getJHybridObject();
   };
   struct CxxPart : jni::HybridClass<CxxPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";

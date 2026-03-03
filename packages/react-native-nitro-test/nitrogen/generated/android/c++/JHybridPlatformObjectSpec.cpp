@@ -13,11 +13,9 @@
 
 namespace margelo::nitro::test {
 
-  std::shared_ptr<JHybridPlatformObjectSpec> JHybridPlatformObjectSpec::JavaPart::getHybridObject() {
-    static auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-    jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-    std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
-    std::shared_ptr<JHybridPlatformObjectSpec> castHybridObject = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(hybridObject);
+  std::shared_ptr<JHybridPlatformObjectSpec> JHybridPlatformObjectSpec::JavaPart::getJHybridPlatformObjectSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(hybridObject);
     if (castHybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to downcast JHybridObject to JHybridPlatformObjectSpec!");
     }

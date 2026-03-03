@@ -13,11 +13,9 @@
 
 namespace margelo::nitro::test {
 
-  std::shared_ptr<JHybridRecyclableTestViewSpec> JHybridRecyclableTestViewSpec::JavaPart::getHybridObject() {
-    static auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-    jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-    std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
-    std::shared_ptr<JHybridRecyclableTestViewSpec> castHybridObject = std::dynamic_pointer_cast<JHybridRecyclableTestViewSpec>(hybridObject);
+  std::shared_ptr<JHybridRecyclableTestViewSpec> JHybridRecyclableTestViewSpec::JavaPart::getJHybridRecyclableTestViewSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridRecyclableTestViewSpec>(hybridObject);
     if (castHybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to downcast JHybridObject to JHybridRecyclableTestViewSpec!");
     }

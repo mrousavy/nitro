@@ -43,8 +43,8 @@ struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybrid
   static auto constexpr kJavaDescriptor = "L${jniNamespace};";
   static std::shared_ptr<${JHybridTSpec}> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl::javaobject()>();
-    auto instance = javaClassStatic()->newObject(constructorFn);
-    return instance->getHybridObject();
+    jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->get${JHybridTSpec}();
   }
 };
     `.trim(),

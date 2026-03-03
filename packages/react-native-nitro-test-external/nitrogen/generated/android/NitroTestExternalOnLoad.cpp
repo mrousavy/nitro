@@ -30,8 +30,8 @@ struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExter
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObject;";
   static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
     static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
-    auto instance = javaClassStatic()->newObject(constructorFn);
-    return instance->getHybridObject();
+    jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridSomeExternalObjectSpec();
   }
 };
 

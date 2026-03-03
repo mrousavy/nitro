@@ -104,8 +104,7 @@ namespace ${cxxNamespace} {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, ${javaPartBaseClass}> {
       static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-      // TODO: This can be defined once in base, no?
-      std::shared_ptr<${name.JHybridTSpec}> getHybridObject();
+      std::shared_ptr<${name.JHybridTSpec}> get${name.JHybridTSpec}();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, ${cxxPartBaseClass}> {
       static auto constexpr kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
@@ -187,11 +186,9 @@ ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  std::shared_ptr<${name.JHybridTSpec}> ${name.JHybridTSpec}::JavaPart::getHybridObject() {
-    static auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-    jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-    std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
-    std::shared_ptr<${name.JHybridTSpec}> castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
+  std::shared_ptr<${name.JHybridTSpec}> ${name.JHybridTSpec}::JavaPart::get${name.JHybridTSpec}() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
     if (castHybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to downcast JHybridObject to ${name.JHybridTSpec}!");
     }

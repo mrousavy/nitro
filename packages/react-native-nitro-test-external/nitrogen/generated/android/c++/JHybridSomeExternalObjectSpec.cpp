@@ -17,11 +17,9 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 namespace margelo::nitro::test::external {
 
-  std::shared_ptr<JHybridSomeExternalObjectSpec> JHybridSomeExternalObjectSpec::JavaPart::getHybridObject() {
-    static auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-    jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-    std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
-    std::shared_ptr<JHybridSomeExternalObjectSpec> castHybridObject = std::dynamic_pointer_cast<JHybridSomeExternalObjectSpec>(hybridObject);
+  std::shared_ptr<JHybridSomeExternalObjectSpec> JHybridSomeExternalObjectSpec::JavaPart::getJHybridSomeExternalObjectSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridSomeExternalObjectSpec>(hybridObject);
     if (castHybridObject == nullptr) [[unlikely]] {
       throw std::runtime_error("Failed to downcast JHybridObject to JHybridSomeExternalObjectSpec!");
     }

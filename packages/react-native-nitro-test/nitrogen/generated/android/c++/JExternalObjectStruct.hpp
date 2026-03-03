@@ -36,7 +36,7 @@ namespace margelo::nitro::test {
       static const auto fieldSomeExternal = clazz->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>("someExternal");
       jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> someExternal = this->getFieldValue(fieldSomeExternal);
       return ExternalObjectStruct(
-        someExternal->getHybridObject()
+        someExternal->getJHybridSomeExternalObjectSpec()
       );
     }
 

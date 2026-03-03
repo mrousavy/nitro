@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
     if (isInstanceOf(JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl::First::javaClassStatic())) {
       // It's a `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`
       auto jniValue = static_cast<const JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl::First*>(this)->getValue();
-      return jniValue->getHybridObject();
+      return jniValue->getJHybridTestObjectSwiftKotlinSpec();
     } else if (isInstanceOf(JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl::Second::javaClassStatic())) {
       // It's a `Person`
       auto jniValue = static_cast<const JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl::Second*>(this)->getValue();

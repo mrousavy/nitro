@@ -23,8 +23,7 @@ namespace margelo::nitro::test {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, JHybridBaseSpec::JavaPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec;";
-      // TODO: This can be defined once in base, no?
-      std::shared_ptr<JHybridChildSpec> getHybridObject();
+      std::shared_ptr<JHybridChildSpec> getJHybridChildSpec();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, JHybridBaseSpec::CxxPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChildSpec$CxxPart;";

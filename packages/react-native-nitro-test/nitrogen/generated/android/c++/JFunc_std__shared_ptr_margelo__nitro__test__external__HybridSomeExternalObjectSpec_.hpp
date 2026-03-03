@@ -35,7 +35,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> invoke() const {
       static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>()>("invoke");
       auto __result = method(self());
-      return __result->getHybridObject();
+      return __result->getJHybridSomeExternalObjectSpec();
     }
   };
 
