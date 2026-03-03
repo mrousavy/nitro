@@ -182,8 +182,7 @@ public:
     const setter = p.getSetterName('other')
     return `
 if (props->${name}.isDirty) {
-  // TODO: Implement this
-  // view->${setter}(props->${name}.value);
+  hybridView->${setter}(props->${name}.value);
   props->${name}.isDirty = false;
 }
     `.trim()
@@ -204,8 +203,7 @@ using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  // TODO: Implement this properly
-  // ${JHybridTSpec}* view = javaView->cthis();
+  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->getHybridObject();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -231,9 +229,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      // TODO: Implement this
-      // std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
-      // maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
     props->hybridRef.isDirty = false;
   }
