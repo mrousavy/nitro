@@ -29,11 +29,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject TestObjectSwiftKotlin]"
-  }
-
   // Properties
   @get:DoNotStrip
   @get:Keep
@@ -635,24 +630,20 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
 
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject TestObjectSwiftKotlin]"
   }
 
+  // C++ backing class
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
+    // C++ JHybridTestObjectSwiftKotlinSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
   }
 
   companion object {

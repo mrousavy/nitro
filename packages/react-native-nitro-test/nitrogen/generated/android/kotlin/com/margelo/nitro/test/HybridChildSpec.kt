@@ -24,11 +24,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridChildSpec: HybridBaseSpec() {
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject Child]"
-  }
-
   // Properties
   @get:DoNotStrip
   @get:Keep
@@ -39,24 +34,20 @@ abstract class HybridChildSpec: HybridBaseSpec() {
   @Keep
   abstract fun bounceVariant(variant: NamedVariant): NamedVariant
 
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject Child]"
   }
 
+  // C++ backing class
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridChildSpec): HybridBaseSpec.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
+    // C++ JHybridChildSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
   }
 
   companion object {

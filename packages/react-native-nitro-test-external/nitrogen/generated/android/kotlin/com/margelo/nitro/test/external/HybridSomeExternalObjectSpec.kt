@@ -24,11 +24,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridSomeExternalObjectSpec: HybridObject() {
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject SomeExternalObject]"
-  }
-
   // Properties
   
 
@@ -46,24 +41,20 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
     return __result
   }
 
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject SomeExternalObject]"
   }
 
+  // C++ backing class
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
+    // C++ JHybridSomeExternalObjectSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
   }
 
   companion object {

@@ -25,11 +25,6 @@ import com.margelo.nitro.views.HybridView
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestViewSpec: HybridView() {
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject TestView]"
-  }
-
   // Properties
   @get:DoNotStrip
   @get:Keep
@@ -68,24 +63,20 @@ abstract class HybridTestViewSpec: HybridView() {
   @Keep
   abstract fun someMethod(): Unit
 
-  protected override fun createCxxPart(): CxxPart {
-    return CxxPart(this)
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject TestView]"
   }
 
+  // C++ backing class
   @DoNotStrip
   @Keep
   protected open class CxxPart(javaPart: HybridTestViewSpec): HybridObject.CxxPart(javaPart) {
-    @DoNotStrip
-    @Keep
-    private var mHybridData: HybridData = initHybrid()
-    init {
-      super.updateNative(mHybridData)
-    }
-    override fun updateNative(hybridData: HybridData) {
-      mHybridData = hybridData
-      super.updateNative(hybridData)
-    }
-    private external fun initHybrid(): HybridData
+    // C++ JHybridTestViewSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
   }
 
   companion object {
