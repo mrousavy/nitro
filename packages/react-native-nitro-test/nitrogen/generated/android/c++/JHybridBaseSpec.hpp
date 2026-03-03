@@ -27,8 +27,6 @@ namespace margelo::nitro::test {
     };
     struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
       static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec$CxxPart;";
-      friend HybridBase;
-      using HybridBase::HybridBase;
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       explicit CxxPart(jni::alias_ref<jhybridobject> jThis);

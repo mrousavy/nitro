@@ -109,8 +109,6 @@ namespace ${cxxNamespace} {
     };
     struct CxxPart: public jni::HybridClass<CxxPart, ${cxxPartBaseClass}> {
       static auto constexpr kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
-      friend HybridBase;
-      using HybridBase::HybridBase;
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       explicit CxxPart(jni::alias_ref<jhybridobject> jThis);
