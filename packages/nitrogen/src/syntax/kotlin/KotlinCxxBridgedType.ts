@@ -21,6 +21,7 @@ import { createKotlinFunction } from './KotlinFunction.js'
 import { createKotlinStruct } from './KotlinStruct.js'
 import { createKotlinVariant } from './KotlinVariant.js'
 
+
 export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
   readonly type: Type
 
@@ -66,7 +67,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return false
   }
 
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(
+    language: Language,
+    visited = new Set<Type>()
+  ): SourceImport[] {
+    if (visited.has(this.type)) return []
+    visited.add(this.type)
+
     const imports = this.type.getRequiredImports(language)
 
     if (language === 'c++') {
@@ -185,13 +192,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         return
       }
       const bridged = new KotlinCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports(language))
+      imports.push(...bridged.getRequiredImports(language, visited))
     })
 
     return imports
   }
 
-  getExtraFiles(): SourceFile[] {
+  getExtraFiles(visited = new Set<Type>()): SourceFile[] {
+    if (visited.has(this.type)) return []
+    visited.add(this.type)
+
     const files: SourceFile[] = []
 
     switch (this.type.kind) {
@@ -225,7 +235,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
         return
       }
       const bridged = new KotlinCxxBridgedType(t)
-      files.push(...bridged.getExtraFiles())
+      files.push(...bridged.getExtraFiles(visited))
     })
 
     return files

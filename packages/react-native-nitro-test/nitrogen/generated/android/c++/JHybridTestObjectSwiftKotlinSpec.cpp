@@ -29,6 +29,22 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `Gallery` to properly resolve imports.
+namespace margelo::nitro::test { struct Gallery; }
+// Forward declaration of `AlbumItem` to properly resolve imports.
+namespace margelo::nitro::test { struct AlbumItem; }
+// Forward declaration of `MediaInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct MediaInfo; }
+// Forward declaration of `GalleryItem` to properly resolve imports.
+namespace margelo::nitro::test { struct GalleryItem; }
+// Forward declaration of `TagInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct TagInfo; }
+// Forward declaration of `EntityInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct EntityInfo; }
+// Forward declaration of `UserInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct UserInfo; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -92,6 +108,23 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
+#include "Gallery.hpp"
+#include "JGallery.hpp"
+#include "AlbumItem.hpp"
+#include "JAlbumItem.hpp"
+#include "MediaInfo.hpp"
+#include "JMediaInfo.hpp"
+#include "GalleryItem.hpp"
+#include "JGalleryItem.hpp"
+#include "TagInfo.hpp"
+#include "JTagInfo.hpp"
+#include "EntityInfo.hpp"
+#include "JEntityInfo.hpp"
+#include "UserInfo.hpp"
+#include "JUserInfo.hpp"
+#include "TreeNode.hpp"
+#include "JTreeNode.hpp"
+#include "JFunc_void_TreeNode.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -1154,6 +1187,16 @@ namespace margelo::nitro::test {
   OptionalCallback JHybridTestObjectSwiftKotlinSpec::bounceOptionalCallback(const OptionalCallback& value) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
+    return __result->toCpp();
+  }
+  Gallery JHybridTestObjectSwiftKotlinSpec::bounceGallery(const Gallery& gallery) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JGallery>(jni::alias_ref<JGallery> /* gallery */)>("bounceGallery");
+    auto __result = method(_javaPart, JGallery::fromCpp(gallery));
+    return __result->toCpp();
+  }
+  TreeNode JHybridTestObjectSwiftKotlinSpec::bounceTreeNode(const TreeNode& node) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JTreeNode>(jni::alias_ref<JTreeNode> /* node */)>("bounceTreeNode");
+    auto __result = method(_javaPart, JTreeNode::fromCpp(node));
     return __result->toCpp();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {

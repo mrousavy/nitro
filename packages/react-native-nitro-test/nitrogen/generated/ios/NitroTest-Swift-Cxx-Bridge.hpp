@@ -8,12 +8,20 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AlbumItem` to properly resolve imports.
+namespace margelo::nitro::test { struct AlbumItem; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `EntityInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct EntityInfo; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
+// Forward declaration of `GalleryItem` to properly resolve imports.
+namespace margelo::nitro::test { struct GalleryItem; }
+// Forward declaration of `Gallery` to properly resolve imports.
+namespace margelo::nitro::test { struct Gallery; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -30,6 +38,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `MediaInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct MediaInfo; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -42,6 +52,12 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `TagInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct TagInfo; }
+// Forward declaration of `TreeNode` to properly resolve imports.
+namespace margelo::nitro::test { struct TreeNode; }
+// Forward declaration of `UserInfo` to properly resolve imports.
+namespace margelo::nitro::test { struct UserInfo; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -64,8 +80,12 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
+#include "AlbumItem.hpp"
 #include "Car.hpp"
+#include "EntityInfo.hpp"
 #include "ExternalObjectStruct.hpp"
+#include "Gallery.hpp"
+#include "GalleryItem.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
@@ -73,12 +93,16 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
+#include "MediaInfo.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "TagInfo.hpp"
+#include "TreeNode.hpp"
+#include "UserInfo.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -184,6 +208,21 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::optional<std::variant<std::string, double>>
+  /**
+   * Specialized version of `std::optional<std::variant<std::string, double>>`.
+   */
+  using std__optional_std__variant_std__string__double__ = std::optional<std::variant<std::string, double>>;
+  inline std::optional<std::variant<std::string, double>> create_std__optional_std__variant_std__string__double__(const std::variant<std::string, double>& value) noexcept {
+    return std::optional<std::variant<std::string, double>>(value);
+  }
+  inline bool has_value_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::variant<std::string, double> get_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::variant<std::string, double>
   /**
    * Wrapper struct for `std::variant<std::string, double>`.
@@ -211,21 +250,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std__variant_std__string__double_ create_std__variant_std__string__double_(double value) noexcept {
     return std__variant_std__string__double_(value);
-  }
-  
-  // pragma MARK: std::optional<std::variant<std::string, double>>
-  /**
-   * Specialized version of `std::optional<std::variant<std::string, double>>`.
-   */
-  using std__optional_std__variant_std__string__double__ = std::optional<std::variant<std::string, double>>;
-  inline std::optional<std::variant<std::string, double>> create_std__optional_std__variant_std__string__double__(const std::variant<std::string, double>& value) noexcept {
-    return std::optional<std::variant<std::string, double>>(value);
-  }
-  inline bool has_value_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline std::variant<std::string, double> get_std__optional_std__variant_std__string__double__(const std::optional<std::variant<std::string, double>>& optional) noexcept {
-    return optional.value();
   }
   
   // pragma MARK: std::variant<std::string, Car>
@@ -1206,6 +1230,21 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<std::variant<std::function<void()>, double>>
+  /**
+   * Specialized version of `std::optional<std::variant<std::function<void()>, double>>`.
+   */
+  using std__optional_std__variant_std__function_void_____double__ = std::optional<std::variant<std::function<void()>, double>>;
+  inline std::optional<std::variant<std::function<void()>, double>> create_std__optional_std__variant_std__function_void_____double__(const std::variant<std::function<void()>, double>& value) noexcept {
+    return std::optional<std::variant<std::function<void()>, double>>(value);
+  }
+  inline bool has_value_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::variant<std::function<void()>, double> get_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::variant<std::function<void()>, double>
   /**
    * Wrapper struct for `std::variant<std::function<void()>, double>`.
@@ -1235,19 +1274,175 @@ namespace margelo::nitro::test::bridge::swift {
     return std__variant_std__function_void_____double_(value);
   }
   
-  // pragma MARK: std::optional<std::variant<std::function<void()>, double>>
+  // pragma MARK: std::vector<AlbumItem>
   /**
-   * Specialized version of `std::optional<std::variant<std::function<void()>, double>>`.
+   * Specialized version of `std::vector<AlbumItem>`.
    */
-  using std__optional_std__variant_std__function_void_____double__ = std::optional<std::variant<std::function<void()>, double>>;
-  inline std::optional<std::variant<std::function<void()>, double>> create_std__optional_std__variant_std__function_void_____double__(const std::variant<std::function<void()>, double>& value) noexcept {
-    return std::optional<std::variant<std::function<void()>, double>>(value);
+  using std__vector_AlbumItem_ = std::vector<AlbumItem>;
+  inline std::vector<AlbumItem> create_std__vector_AlbumItem_(size_t size) noexcept {
+    std::vector<AlbumItem> vector;
+    vector.reserve(size);
+    return vector;
   }
-  inline bool has_value_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+  
+  // pragma MARK: std::optional<MediaInfo>
+  /**
+   * Specialized version of `std::optional<MediaInfo>`.
+   */
+  using std__optional_MediaInfo_ = std::optional<MediaInfo>;
+  inline std::optional<MediaInfo> create_std__optional_MediaInfo_(const MediaInfo& value) noexcept {
+    return std::optional<MediaInfo>(value);
+  }
+  inline bool has_value_std__optional_MediaInfo_(const std::optional<MediaInfo>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::variant<std::function<void()>, double> get_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
+  inline MediaInfo get_std__optional_MediaInfo_(const std::optional<MediaInfo>& optional) noexcept {
     return optional.value();
+  }
+  
+  // pragma MARK: std::optional<std::vector<GalleryItem>>
+  /**
+   * Specialized version of `std::optional<std::vector<GalleryItem>>`.
+   */
+  using std__optional_std__vector_GalleryItem__ = std::optional<std::vector<GalleryItem>>;
+  inline std::optional<std::vector<GalleryItem>> create_std__optional_std__vector_GalleryItem__(const std::vector<GalleryItem>& value) noexcept {
+    return std::optional<std::vector<GalleryItem>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_GalleryItem__(const std::optional<std::vector<GalleryItem>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<GalleryItem> get_std__optional_std__vector_GalleryItem__(const std::optional<std::vector<GalleryItem>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<GalleryItem>
+  /**
+   * Specialized version of `std::vector<GalleryItem>`.
+   */
+  using std__vector_GalleryItem_ = std::vector<GalleryItem>;
+  inline std::vector<GalleryItem> create_std__vector_GalleryItem_(size_t size) noexcept {
+    std::vector<GalleryItem> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::vector<TagInfo>>
+  /**
+   * Specialized version of `std::optional<std::vector<TagInfo>>`.
+   */
+  using std__optional_std__vector_TagInfo__ = std::optional<std::vector<TagInfo>>;
+  inline std::optional<std::vector<TagInfo>> create_std__optional_std__vector_TagInfo__(const std::vector<TagInfo>& value) noexcept {
+    return std::optional<std::vector<TagInfo>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_TagInfo__(const std::optional<std::vector<TagInfo>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<TagInfo> get_std__optional_std__vector_TagInfo__(const std::optional<std::vector<TagInfo>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<TagInfo>
+  /**
+   * Specialized version of `std::vector<TagInfo>`.
+   */
+  using std__vector_TagInfo_ = std::vector<TagInfo>;
+  inline std::vector<TagInfo> create_std__vector_TagInfo_(size_t size) noexcept {
+    std::vector<TagInfo> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<EntityInfo>
+  /**
+   * Specialized version of `std::optional<EntityInfo>`.
+   */
+  using std__optional_EntityInfo_ = std::optional<EntityInfo>;
+  inline std::optional<EntityInfo> create_std__optional_EntityInfo_(const EntityInfo& value) noexcept {
+    return std::optional<EntityInfo>(value);
+  }
+  inline bool has_value_std__optional_EntityInfo_(const std::optional<EntityInfo>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline EntityInfo get_std__optional_EntityInfo_(const std::optional<EntityInfo>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<UserInfo>
+  /**
+   * Specialized version of `std::optional<UserInfo>`.
+   */
+  using std__optional_UserInfo_ = std::optional<UserInfo>;
+  inline std::optional<UserInfo> create_std__optional_UserInfo_(const UserInfo& value) noexcept {
+    return std::optional<UserInfo>(value);
+  }
+  inline bool has_value_std__optional_UserInfo_(const std::optional<UserInfo>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline UserInfo get_std__optional_UserInfo_(const std::optional<UserInfo>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<GalleryItem>
+  /**
+   * Specialized version of `std::optional<GalleryItem>`.
+   */
+  using std__optional_GalleryItem_ = std::optional<GalleryItem>;
+  inline std::optional<GalleryItem> create_std__optional_GalleryItem_(const GalleryItem& value) noexcept {
+    return std::optional<GalleryItem>(value);
+  }
+  inline bool has_value_std__optional_GalleryItem_(const std::optional<GalleryItem>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline GalleryItem get_std__optional_GalleryItem_(const std::optional<GalleryItem>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<TreeNode>
+  /**
+   * Specialized version of `std::vector<TreeNode>`.
+   */
+  using std__vector_TreeNode_ = std::vector<TreeNode>;
+  inline std::vector<TreeNode> create_std__vector_TreeNode_(size_t size) noexcept {
+    std::vector<TreeNode> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::function<void(const TreeNode& /* node */)>>
+  /**
+   * Specialized version of `std::optional<std::function<void(const TreeNode& / * node * /)>>`.
+   */
+  using std__optional_std__function_void_const_TreeNode_____node______ = std::optional<std::function<void(const TreeNode& /* node */)>>;
+  inline std::optional<std::function<void(const TreeNode& /* node */)>> create_std__optional_std__function_void_const_TreeNode_____node______(const std::function<void(const TreeNode& /* node */)>& value) noexcept {
+    return std::optional<std::function<void(const TreeNode& /* node */)>>(value);
+  }
+  inline bool has_value_std__optional_std__function_void_const_TreeNode_____node______(const std::optional<std::function<void(const TreeNode& /* node */)>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::function<void(const TreeNode& /* node */)> get_std__optional_std__function_void_const_TreeNode_____node______(const std::optional<std::function<void(const TreeNode& /* node */)>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::function<void(const TreeNode& /* node */)>
+  /**
+   * Specialized version of `std::function<void(const TreeNode&)>`.
+   */
+  using Func_void_TreeNode = std::function<void(const TreeNode& /* node */)>;
+  /**
+   * Wrapper class for a `std::function<void(const TreeNode& / * node * /)>`, this can be used from Swift.
+   */
+  class Func_void_TreeNode_Wrapper final {
+  public:
+    explicit Func_void_TreeNode_Wrapper(std::function<void(const TreeNode& /* node */)>&& func): _function(std::make_unique<std::function<void(const TreeNode& /* node */)>>(std::move(func))) {}
+    inline void call(TreeNode node) const noexcept {
+      _function->operator()(node);
+    }
+  private:
+    std::unique_ptr<std::function<void(const TreeNode& /* node */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_TreeNode create_Func_void_TreeNode(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_TreeNode_Wrapper wrap_Func_void_TreeNode(Func_void_TreeNode value) noexcept {
+    return Func_void_TreeNode_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>
@@ -1887,6 +2082,24 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
+  }
+  
+  // pragma MARK: Result<Gallery>
+  using Result_Gallery_ = Result<Gallery>;
+  inline Result_Gallery_ create_Result_Gallery_(const Gallery& value) noexcept {
+    return Result<Gallery>::withValue(value);
+  }
+  inline Result_Gallery_ create_Result_Gallery_(const std::exception_ptr& error) noexcept {
+    return Result<Gallery>::withError(error);
+  }
+  
+  // pragma MARK: Result<TreeNode>
+  using Result_TreeNode_ = Result<TreeNode>;
+  inline Result_TreeNode_ create_Result_TreeNode_(const TreeNode& value) noexcept {
+    return Result<TreeNode>::withValue(value);
+  }
+  inline Result_TreeNode_ create_Result_TreeNode_(const std::exception_ptr& error) noexcept {
+    return Result<TreeNode>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
