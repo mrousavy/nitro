@@ -1190,12 +1190,12 @@ namespace margelo::nitro::test {
     return __result->toCpp();
   }
   Gallery JHybridTestObjectSwiftKotlinSpec::bounceGallery(const Gallery& gallery) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JGallery>(jni::alias_ref<JGallery> /* gallery */)>("bounceGallery");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JGallery>(jni::alias_ref<JGallery> /* gallery */)>("bounceGallery");
     auto __result = method(_javaPart, JGallery::fromCpp(gallery));
     return __result->toCpp();
   }
   TreeNode JHybridTestObjectSwiftKotlinSpec::bounceTreeNode(const TreeNode& node) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JTreeNode>(jni::alias_ref<JTreeNode> /* node */)>("bounceTreeNode");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JTreeNode>(jni::alias_ref<JTreeNode> /* node */)>("bounceTreeNode");
     auto __result = method(_javaPart, JTreeNode::fromCpp(node));
     return __result->toCpp();
   }
