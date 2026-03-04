@@ -98,4 +98,8 @@ abstract class HybridObject {
 
     protected open external fun initHybrid(): HybridData
   }
+
+  // Compatibility for pre-0.35.x
+  @Deprecated("Upgrade your specs with nitrogen! This will break in the next release of Nitro.")
+  protected open fun updateNative(nothing: HybridData) = Unit
 }

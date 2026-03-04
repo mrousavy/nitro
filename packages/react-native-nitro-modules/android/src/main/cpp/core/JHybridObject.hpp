@@ -19,7 +19,9 @@ using namespace facebook;
  * - JavaPart: The actual Java Class (HybridObject) - this will be held by `JHybridObject`
  * - CxxPart: The nested Java CxxPart (HybridObject.CxxPart) - this builds the proper inheritance chain and caches C++ state
  */
-class JHybridObject : public virtual HybridObject {
+class JHybridObject : public virtual HybridObject,
+                      // Compatibility for pre-0.35.x
+                      public virtual jni::HybridClass<JHybridObject> {
 public:
   struct JavaPart : jni::JavaClass<JavaPart> {
     static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
@@ -47,6 +49,12 @@ public:
 public:
   explicit JHybridObject(const jni::local_ref<JavaPart>& javaPart);
   ~JHybridObject() override;
+
+public:
+  // Compatibility for pre-0.35.x
+  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+  [[deprecated("Upgrade your specs with nitrogen!")]]
+  explicit JHybridObject(jni::alias_ref<jni::JObject::javaobject>) {}
 
 public:
   void dispose() noexcept override;
