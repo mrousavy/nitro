@@ -13,10 +13,6 @@ namespace margelo::nitro {
 
 using SharedAnyMap = std::shared_ptr<AnyMap>;
 
-// TODO: Remove TSharedMap.
-/// @deprecated
-using TSharedMap = SharedAnyMap;
-
 namespace AnyMapUtils {
 
   inline AnyValue create_AnyValue(NullType null) {
