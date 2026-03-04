@@ -465,6 +465,3 @@ extension AnyMap {
     return dictionary
   }
 }
-
-@available(*, deprecated, renamed: "AnyMap")
-public typealias AnyMapHolder = AnyMap
