@@ -1,5 +1,5 @@
 import { Platform, type HostComponent, type ViewProps } from 'react-native'
-// TODO: Migrate to the official export of `NativeComponentRegistry` from `react-native` once react-native 0.83.0 becomes more established
+// TODO: Migrate to the official export of `NativeComponentRegistry` from `react-native` once react-native 0.83.0 becomes more established as this is deprecated
 // eslint-disable-next-line @react-native/no-deep-imports
 import * as NativeComponentRegistry from 'react-native/Libraries/NativeComponent/NativeComponentRegistry'
 import type {
