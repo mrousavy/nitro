@@ -105,6 +105,8 @@ namespace margelo::nitro::test {
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
+    std::shared_ptr<Promise<std::vector<NitroRequest>>> bounceNitroRequests(const std::vector<NitroRequest>& array) override;
+    std::shared_ptr<Promise<std::vector<NitroResponse>>> bounceNitroResponses(const std::vector<NitroResponse>& array) override;
     std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
     std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;
     std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override;

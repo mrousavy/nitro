@@ -26,6 +26,12 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `NitroRequest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRequest; }
+// Forward declaration of `NitroHeader` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroHeader; }
+// Forward declaration of `NitroResponse` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroResponse; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -65,8 +71,11 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
-#include <NitroModules/AnyMap.hpp>
+#include "NitroRequest.hpp"
 #include <NitroModules/Promise.hpp>
+#include "NitroHeader.hpp"
+#include "NitroResponse.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <unordered_map>
@@ -364,6 +373,22 @@ namespace margelo::nitro::test {
     }
     inline std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override {
       auto __result = _swiftPart.bounceHybridObjects(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::vector<NitroRequest>>> bounceNitroRequests(const std::vector<NitroRequest>& array) override {
+      auto __result = _swiftPart.bounceNitroRequests(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::vector<NitroResponse>>> bounceNitroResponses(const std::vector<NitroResponse>& array) override {
+      auto __result = _swiftPart.bounceNitroResponses(array);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -252,6 +252,24 @@ HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<Hybri
   return array;
 }
 
+std::shared_ptr<Promise<std::vector<NitroRequest>>>
+HybridTestObjectCpp::bounceNitroRequests(const std::vector<NitroRequest>& array) {
+    return Promise<std::vector<NitroRequest>>::async([array](){
+        return array;
+    }
+                                             
+                                               );
+}
+
+std::shared_ptr<Promise<std::vector<NitroResponse>>>
+HybridTestObjectCpp::bounceNitroResponses(const std::vector<NitroResponse>& array) {
+    return Promise<std::vector<NitroResponse>>::async([array](){
+        return array;
+    }
+                                             
+                                               );
+}
+
 std::vector<std::function<void()>> HybridTestObjectCpp::bounceFunctions(const std::vector<std::function<void()>>& functions) {
   return functions;
 }

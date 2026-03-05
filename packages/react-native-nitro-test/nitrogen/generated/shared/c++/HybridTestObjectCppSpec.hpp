@@ -29,6 +29,10 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `NitroRequest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRequest; }
+// Forward declaration of `NitroResponse` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroResponse; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
@@ -67,8 +71,10 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
-#include <NitroModules/AnyMap.hpp>
+#include "NitroRequest.hpp"
 #include <NitroModules/Promise.hpp>
+#include "NitroResponse.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -173,6 +179,8 @@ namespace margelo::nitro::test {
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;
       virtual void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) = 0;
       virtual std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) = 0;
+      virtual std::shared_ptr<Promise<std::vector<NitroRequest>>> bounceNitroRequests(const std::vector<NitroRequest>& array) = 0;
+      virtual std::shared_ptr<Promise<std::vector<NitroResponse>>> bounceNitroResponses(const std::vector<NitroResponse>& array) = 0;
       virtual std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) = 0;
       virtual std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) = 0;
       virtual std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) = 0;

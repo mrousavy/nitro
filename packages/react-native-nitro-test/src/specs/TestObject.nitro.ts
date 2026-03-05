@@ -107,6 +107,17 @@ type CoreTypesVariant =
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
+interface NitroHeader {
+  key: string
+  value: string
+}
+
+interface NitroRequest {
+  headers?: NitroHeader[]
+}
+interface NitroResponse {
+  headers: NitroHeader[]
+}
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -153,6 +164,8 @@ interface SharedTestObjectProps {
 
   // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]
+  bounceNitroRequests(array: NitroRequest[]): Promise<NitroRequest[]>
+  bounceNitroResponses(array: NitroResponse[]): Promise<NitroResponse[]>
   bounceFunctions(functions: (() => void)[]): (() => void)[]
   bounceMaps(maps: AnyMap[]): AnyMap[]
   bouncePromises(promises: Promise<number>[]): Promise<number>[]

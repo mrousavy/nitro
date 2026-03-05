@@ -66,6 +66,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectSwiftKotlinSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectSwiftKotlinSpec::complexEnumCallback);
       prototype.registerHybridMethod("bounceHybridObjects", &HybridTestObjectSwiftKotlinSpec::bounceHybridObjects);
+      prototype.registerHybridMethod("bounceNitroRequests", &HybridTestObjectSwiftKotlinSpec::bounceNitroRequests);
+      prototype.registerHybridMethod("bounceNitroResponses", &HybridTestObjectSwiftKotlinSpec::bounceNitroResponses);
       prototype.registerHybridMethod("bounceFunctions", &HybridTestObjectSwiftKotlinSpec::bounceFunctions);
       prototype.registerHybridMethod("bounceMaps", &HybridTestObjectSwiftKotlinSpec::bounceMaps);
       prototype.registerHybridMethod("bouncePromises", &HybridTestObjectSwiftKotlinSpec::bouncePromises);

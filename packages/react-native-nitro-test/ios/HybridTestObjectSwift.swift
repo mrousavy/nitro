@@ -205,6 +205,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceNitroRequests(array: [NitroRequest]) throws -> Promise<[NitroRequest]> {
+    return Promise.resolved(withResult: array)
+  }
+
+  func bounceNitroResponses(array: [NitroResponse]) throws -> Promise<[NitroResponse]> {
+    return Promise.resolved(withResult: array)
+  }
+
   func bounceFunctions(functions: [() -> Void]) throws -> [() -> Void] {
     return functions
   }

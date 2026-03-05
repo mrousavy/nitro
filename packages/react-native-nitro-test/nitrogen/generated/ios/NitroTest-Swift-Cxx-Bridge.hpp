@@ -30,6 +30,12 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `NitroHeader` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroHeader; }
+// Forward declaration of `NitroRequest` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroRequest; }
+// Forward declaration of `NitroResponse` to properly resolve imports.
+namespace margelo::nitro::test { struct NitroResponse; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -73,6 +79,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
+#include "NitroHeader.hpp"
+#include "NitroRequest.hpp"
+#include "NitroResponse.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
@@ -562,6 +571,144 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::vector<NitroHeader>
+  /**
+   * Specialized version of `std::vector<NitroHeader>`.
+   */
+  using std__vector_NitroHeader_ = std::vector<NitroHeader>;
+  inline std::vector<NitroHeader> create_std__vector_NitroHeader_(size_t size) noexcept {
+    std::vector<NitroHeader> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::vector<NitroHeader>>
+  /**
+   * Specialized version of `std::optional<std::vector<NitroHeader>>`.
+   */
+  using std__optional_std__vector_NitroHeader__ = std::optional<std::vector<NitroHeader>>;
+  inline std::optional<std::vector<NitroHeader>> create_std__optional_std__vector_NitroHeader__(const std::vector<NitroHeader>& value) noexcept {
+    return std::optional<std::vector<NitroHeader>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_NitroHeader__(const std::optional<std::vector<NitroHeader>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<NitroHeader> get_std__optional_std__vector_NitroHeader__(const std::optional<std::vector<NitroHeader>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<NitroRequest>
+  /**
+   * Specialized version of `std::vector<NitroRequest>`.
+   */
+  using std__vector_NitroRequest_ = std::vector<NitroRequest>;
+  inline std::vector<NitroRequest> create_std__vector_NitroRequest_(size_t size) noexcept {
+    std::vector<NitroRequest> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::vector<NitroRequest>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::vector<NitroRequest>>>`.
+   */
+  using std__shared_ptr_Promise_std__vector_NitroRequest___ = std::shared_ptr<Promise<std::vector<NitroRequest>>>;
+  inline std::shared_ptr<Promise<std::vector<NitroRequest>>> create_std__shared_ptr_Promise_std__vector_NitroRequest___() noexcept {
+    return Promise<std::vector<NitroRequest>>::create();
+  }
+  inline PromiseHolder<std::vector<NitroRequest>> wrap_std__shared_ptr_Promise_std__vector_NitroRequest___(std::shared_ptr<Promise<std::vector<NitroRequest>>> promise) noexcept {
+    return PromiseHolder<std::vector<NitroRequest>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<NitroRequest>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::vector<NitroRequest>&)>`.
+   */
+  using Func_void_std__vector_NitroRequest_ = std::function<void(const std::vector<NitroRequest>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::vector<NitroRequest>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__vector_NitroRequest__Wrapper final {
+  public:
+    explicit Func_void_std__vector_NitroRequest__Wrapper(std::function<void(const std::vector<NitroRequest>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<NitroRequest>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<NitroRequest> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::vector<NitroRequest>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__vector_NitroRequest_ create_Func_void_std__vector_NitroRequest_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_NitroRequest__Wrapper wrap_Func_void_std__vector_NitroRequest_(Func_void_std__vector_NitroRequest_ value) noexcept {
+    return Func_void_std__vector_NitroRequest__Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  /**
+   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
+   */
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__exception_ptr_Wrapper final {
+  public:
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    inline void call(std::exception_ptr error) const noexcept {
+      _function->operator()(error);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
+    return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::vector<NitroResponse>
+  /**
+   * Specialized version of `std::vector<NitroResponse>`.
+   */
+  using std__vector_NitroResponse_ = std::vector<NitroResponse>;
+  inline std::vector<NitroResponse> create_std__vector_NitroResponse_(size_t size) noexcept {
+    std::vector<NitroResponse> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::vector<NitroResponse>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::vector<NitroResponse>>>`.
+   */
+  using std__shared_ptr_Promise_std__vector_NitroResponse___ = std::shared_ptr<Promise<std::vector<NitroResponse>>>;
+  inline std::shared_ptr<Promise<std::vector<NitroResponse>>> create_std__shared_ptr_Promise_std__vector_NitroResponse___() noexcept {
+    return Promise<std::vector<NitroResponse>>::create();
+  }
+  inline PromiseHolder<std::vector<NitroResponse>> wrap_std__shared_ptr_Promise_std__vector_NitroResponse___(std::shared_ptr<Promise<std::vector<NitroResponse>>> promise) noexcept {
+    return PromiseHolder<std::vector<NitroResponse>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<NitroResponse>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::vector<NitroResponse>&)>`.
+   */
+  using Func_void_std__vector_NitroResponse_ = std::function<void(const std::vector<NitroResponse>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::vector<NitroResponse>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__vector_NitroResponse__Wrapper final {
+  public:
+    explicit Func_void_std__vector_NitroResponse__Wrapper(std::function<void(const std::vector<NitroResponse>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<NitroResponse>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<NitroResponse> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::vector<NitroResponse>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__vector_NitroResponse_ create_Func_void_std__vector_NitroResponse_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_NitroResponse__Wrapper wrap_Func_void_std__vector_NitroResponse_(Func_void_std__vector_NitroResponse_ value) noexcept {
+    return Func_void_std__vector_NitroResponse__Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::function<void()>
   /**
    * Specialized version of `std::function<void()>`.
@@ -616,28 +763,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) noexcept {
     return PromiseHolder<double>(std::move(promise));
-  }
-  
-  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  /**
-   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
-   */
-  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__exception_ptr_Wrapper final {
-  public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
-    inline void call(std::exception_ptr error) const noexcept {
-      _function->operator()(error);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
-    return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<std::shared_ptr<Promise<double>>>
@@ -1662,6 +1787,24 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>
+  using Result_std__shared_ptr_Promise_std__vector_NitroRequest____ = Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_NitroRequest____ create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(const std::shared_ptr<Promise<std::vector<NitroRequest>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__vector_NitroRequest____ create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>
+  using Result_std__shared_ptr_Promise_std__vector_NitroResponse____ = Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_NitroResponse____ create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(const std::shared_ptr<Promise<std::vector<NitroResponse>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__vector_NitroResponse____ create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::function<void()>>>
