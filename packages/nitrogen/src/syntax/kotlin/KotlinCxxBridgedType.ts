@@ -66,7 +66,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
     return false
   }
 
-  getRequiredImports(language: Language): SourceImport[] {
+  getRequiredImports(
+    language: Language,
+    visited: Set<Type> = new Set()
+  ): SourceImport[] {
+    if (visited.has(this.type)) return []
+    visited.add(this.type)
+
     const imports = this.type.getRequiredImports(language)
 
     if (language === 'c++') {
@@ -179,19 +185,17 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
     const referencedTypes = getReferencedTypes(this.type)
-    referencedTypes.forEach((t) => {
-      if (t === this.type) {
-        // break a recursion - we already know this type
-        return
-      }
+    for (const t of referencedTypes) {
       const bridged = new KotlinCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports(language))
-    })
+      imports.push(...bridged.getRequiredImports(language, visited))
+    }
 
     return imports
   }
 
-  getExtraFiles(): SourceFile[] {
+  getExtraFiles(visited: Set<Type> = new Set()): SourceFile[] {
+    if (visited.has(this.type)) return []
+    visited.add(this.type)
     const files: SourceFile[] = []
 
     switch (this.type.kind) {
@@ -219,14 +223,10 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
     const referencedTypes = getReferencedTypes(this.type)
-    referencedTypes.forEach((t) => {
-      if (t === this.type) {
-        // break a recursion - we already know this type
-        return
-      }
+    for (const t of referencedTypes) {
       const bridged = new KotlinCxxBridgedType(t)
-      files.push(...bridged.getExtraFiles())
-    })
+      files.push(...bridged.getExtraFiles(visited))
+    }
 
     return files
   }
