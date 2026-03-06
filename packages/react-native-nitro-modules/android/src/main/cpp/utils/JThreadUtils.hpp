@@ -19,19 +19,19 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/utils/ThreadUtils;";
 
   static jni::local_ref<jni::JString> getCurrentThreadName() {
-    static auto method = javaClassStatic()->getStaticMethod<jni::local_ref<jni::JString>()>("getCurrentThreadName");
+    static const auto method = javaClassStatic()->getStaticMethod<jni::local_ref<jni::JString>()>("getCurrentThreadName");
     return method(javaClassStatic());
   }
   static void setCurrentThreadName(jni::alias_ref<jni::JString> name) {
-    static auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<jni::JString>)>("setCurrentThreadName");
+    static const auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<jni::JString>)>("setCurrentThreadName");
     method(javaClassStatic(), name);
   }
   static jboolean isOnUIThread() {
-    static auto method = javaClassStatic()->getStaticMethod<jboolean()>("isOnUIThread");
+    static const auto method = javaClassStatic()->getStaticMethod<jboolean()>("isOnUIThread");
     return method(javaClassStatic());
   }
   static void runOnUIThread(jni::alias_ref<JNativeRunnable::javaobject> runnable) {
-    static auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<JNativeRunnable::javaobject>)>("runOnUIThread");
+    static const auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<JNativeRunnable::javaobject>)>("runOnUIThread");
     method(javaClassStatic(), runnable);
   }
 };

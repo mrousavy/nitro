@@ -29,7 +29,7 @@ int initialize(JavaVM* vm) {
 struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExternalObjectSpecImpl, JHybridSomeExternalObjectSpec::JavaPart> {
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObject;";
   static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
-    static auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
     jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
     return javaPart->getJHybridSomeExternalObjectSpec();
   }
