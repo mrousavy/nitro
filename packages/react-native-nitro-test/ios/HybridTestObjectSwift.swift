@@ -205,11 +205,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func bounceNitroRequests(array: [NitroRequest]) throws -> Promise<[NitroRequest]> {
+  func bounceCarConfigs(array: [CarConfig]) throws -> Promise<[CarConfig]> {
     return Promise.async { array }
   }
 
-  func bounceNitroResponses(array: [NitroResponse]) throws -> Promise<[NitroResponse]> {
+  func bounceCarSpecifications(array: [CarSpecification]) throws -> Promise<[CarSpecification]> {
     return Promise.async { array }
   }
 

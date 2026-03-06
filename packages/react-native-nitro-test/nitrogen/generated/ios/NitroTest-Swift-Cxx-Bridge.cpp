@@ -116,10 +116,10 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::vector<NitroRequest>& /* result */)>
-  Func_void_std__vector_NitroRequest_ create_Func_void_std__vector_NitroRequest_(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__vector_NitroRequest_::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::vector<NitroRequest>& result) mutable -> void {
+  // pragma MARK: std::function<void(const std::vector<CarConfig>& /* result */)>
+  Func_void_std__vector_CarConfig_ create_Func_void_std__vector_CarConfig_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__vector_CarConfig_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::vector<CarConfig>& result) mutable -> void {
       swiftClosure.call(result);
     };
   }
@@ -132,10 +132,10 @@ namespace margelo::nitro::test::bridge::swift {
     };
   }
   
-  // pragma MARK: std::function<void(const std::vector<NitroResponse>& /* result */)>
-  Func_void_std__vector_NitroResponse_ create_Func_void_std__vector_NitroResponse_(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = NitroTest::Func_void_std__vector_NitroResponse_::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const std::vector<NitroResponse>& result) mutable -> void {
+  // pragma MARK: std::function<void(const std::vector<CarSpecification>& /* result */)>
+  Func_void_std__vector_CarSpecification_ create_Func_void_std__vector_CarSpecification_(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = NitroTest::Func_void_std__vector_CarSpecification_::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const std::vector<CarSpecification>& result) mutable -> void {
       swiftClosure.call(result);
     };
   }

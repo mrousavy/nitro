@@ -107,16 +107,16 @@ type CoreTypesVariant =
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
-interface NitroHeader {
+interface CarAttribute {
   key: string
   value: string
 }
 
-interface NitroRequest {
-  headers?: NitroHeader[]
+interface CarConfig {
+  attributes?: CarAttribute[]
 }
-interface NitroResponse {
-  headers: NitroHeader[]
+interface CarSpecification {
+  attributes: CarAttribute[]
 }
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -164,8 +164,8 @@ interface SharedTestObjectProps {
 
   // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]
-  bounceNitroRequests(array: NitroRequest[]): Promise<NitroRequest[]>
-  bounceNitroResponses(array: NitroResponse[]): Promise<NitroResponse[]>
+  bounceCarConfigs(array: CarConfig[]): Promise<CarConfig[]>
+  bounceCarSpecifications(array: CarSpecification[]): Promise<CarSpecification[]>
   bounceFunctions(functions: (() => void)[]): (() => void)[]
   bounceMaps(maps: AnyMap[]): AnyMap[]
   bouncePromises(promises: Promise<number>[]): Promise<number>[]

@@ -26,12 +26,12 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
-// Forward declaration of `NitroRequest` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRequest; }
-// Forward declaration of `NitroHeader` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroHeader; }
-// Forward declaration of `NitroResponse` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroResponse; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
@@ -71,10 +71,10 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
-#include "NitroRequest.hpp"
+#include "CarConfig.hpp"
 #include <NitroModules/Promise.hpp>
-#include "NitroHeader.hpp"
-#include "NitroResponse.hpp"
+#include "CarAttribute.hpp"
+#include "CarSpecification.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
@@ -379,16 +379,16 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::vector<NitroRequest>>> bounceNitroRequests(const std::vector<NitroRequest>& array) override {
-      auto __result = _swiftPart.bounceNitroRequests(array);
+    inline std::shared_ptr<Promise<std::vector<CarConfig>>> bounceCarConfigs(const std::vector<CarConfig>& array) override {
+      auto __result = _swiftPart.bounceCarConfigs(array);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<std::vector<NitroResponse>>> bounceNitroResponses(const std::vector<NitroResponse>& array) override {
-      auto __result = _swiftPart.bounceNitroResponses(array);
+    inline std::shared_ptr<Promise<std::vector<CarSpecification>>> bounceCarSpecifications(const std::vector<CarSpecification>& array) override {
+      auto __result = _swiftPart.bounceCarSpecifications(array);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

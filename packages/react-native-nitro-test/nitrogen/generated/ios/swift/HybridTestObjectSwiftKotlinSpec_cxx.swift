@@ -725,15 +725,15 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceNitroRequests(array: bridge.std__vector_NitroRequest_) -> bridge.Result_std__shared_ptr_Promise_std__vector_NitroRequest____ {
+  public final func bounceCarConfigs(array: bridge.std__vector_CarConfig_) -> bridge.Result_std__shared_ptr_Promise_std__vector_CarConfig____ {
     do {
-      let __result = try self.__implementation.bounceNitroRequests(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_NitroRequest___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_NitroRequest___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_NitroRequest___(__promise)
+      let __result = try self.__implementation.bounceCarConfigs(array: array.map({ __item in __item }))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_CarConfig___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_CarConfig___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_CarConfig___(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_NitroRequest_ in
-              var __vector = bridge.create_std__vector_NitroRequest_(__result.count)
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_CarConfig_ in
+              var __vector = bridge.create_std__vector_CarConfig_(__result.count)
               for __item in __result {
                 __vector.push_back(__item)
               }
@@ -742,23 +742,23 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(__exceptionPtr)
     }
   }
   
   @inline(__always)
-  public final func bounceNitroResponses(array: bridge.std__vector_NitroResponse_) -> bridge.Result_std__shared_ptr_Promise_std__vector_NitroResponse____ {
+  public final func bounceCarSpecifications(array: bridge.std__vector_CarSpecification_) -> bridge.Result_std__shared_ptr_Promise_std__vector_CarSpecification____ {
     do {
-      let __result = try self.__implementation.bounceNitroResponses(array: array.map({ __item in __item }))
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_NitroResponse___ in
-        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_NitroResponse___()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_NitroResponse___(__promise)
+      let __result = try self.__implementation.bounceCarSpecifications(array: array.map({ __item in __item }))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_CarSpecification___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_CarSpecification___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_CarSpecification___(__promise)
         __result
-          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_NitroResponse_ in
-              var __vector = bridge.create_std__vector_NitroResponse_(__result.count)
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_CarSpecification_ in
+              var __vector = bridge.create_std__vector_CarSpecification_(__result.count)
               for __item in __result {
                 __vector.push_back(__item)
               }
@@ -767,10 +767,10 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(__exceptionPtr)
     }
   }
   

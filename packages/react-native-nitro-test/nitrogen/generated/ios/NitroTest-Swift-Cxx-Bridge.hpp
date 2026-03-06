@@ -10,6 +10,12 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
@@ -30,12 +36,6 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
-// Forward declaration of `NitroHeader` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroHeader; }
-// Forward declaration of `NitroRequest` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRequest; }
-// Forward declaration of `NitroResponse` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroResponse; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -71,6 +71,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "CarAttribute.hpp"
+#include "CarConfig.hpp"
+#include "CarSpecification.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -79,9 +82,6 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
-#include "NitroHeader.hpp"
-#include "NitroRequest.hpp"
-#include "NitroResponse.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
@@ -571,75 +571,75 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
-  // pragma MARK: std::vector<NitroHeader>
+  // pragma MARK: std::vector<CarAttribute>
   /**
-   * Specialized version of `std::vector<NitroHeader>`.
+   * Specialized version of `std::vector<CarAttribute>`.
    */
-  using std__vector_NitroHeader_ = std::vector<NitroHeader>;
-  inline std::vector<NitroHeader> create_std__vector_NitroHeader_(size_t size) noexcept {
-    std::vector<NitroHeader> vector;
+  using std__vector_CarAttribute_ = std::vector<CarAttribute>;
+  inline std::vector<CarAttribute> create_std__vector_CarAttribute_(size_t size) noexcept {
+    std::vector<CarAttribute> vector;
     vector.reserve(size);
     return vector;
   }
   
-  // pragma MARK: std::optional<std::vector<NitroHeader>>
+  // pragma MARK: std::optional<std::vector<CarAttribute>>
   /**
-   * Specialized version of `std::optional<std::vector<NitroHeader>>`.
+   * Specialized version of `std::optional<std::vector<CarAttribute>>`.
    */
-  using std__optional_std__vector_NitroHeader__ = std::optional<std::vector<NitroHeader>>;
-  inline std::optional<std::vector<NitroHeader>> create_std__optional_std__vector_NitroHeader__(const std::vector<NitroHeader>& value) noexcept {
-    return std::optional<std::vector<NitroHeader>>(value);
+  using std__optional_std__vector_CarAttribute__ = std::optional<std::vector<CarAttribute>>;
+  inline std::optional<std::vector<CarAttribute>> create_std__optional_std__vector_CarAttribute__(const std::vector<CarAttribute>& value) noexcept {
+    return std::optional<std::vector<CarAttribute>>(value);
   }
-  inline bool has_value_std__optional_std__vector_NitroHeader__(const std::optional<std::vector<NitroHeader>>& optional) noexcept {
+  inline bool has_value_std__optional_std__vector_CarAttribute__(const std::optional<std::vector<CarAttribute>>& optional) noexcept {
     return optional.has_value();
   }
-  inline std::vector<NitroHeader> get_std__optional_std__vector_NitroHeader__(const std::optional<std::vector<NitroHeader>>& optional) noexcept {
+  inline std::vector<CarAttribute> get_std__optional_std__vector_CarAttribute__(const std::optional<std::vector<CarAttribute>>& optional) noexcept {
     return optional.value();
   }
   
-  // pragma MARK: std::vector<NitroRequest>
+  // pragma MARK: std::vector<CarConfig>
   /**
-   * Specialized version of `std::vector<NitroRequest>`.
+   * Specialized version of `std::vector<CarConfig>`.
    */
-  using std__vector_NitroRequest_ = std::vector<NitroRequest>;
-  inline std::vector<NitroRequest> create_std__vector_NitroRequest_(size_t size) noexcept {
-    std::vector<NitroRequest> vector;
+  using std__vector_CarConfig_ = std::vector<CarConfig>;
+  inline std::vector<CarConfig> create_std__vector_CarConfig_(size_t size) noexcept {
+    std::vector<CarConfig> vector;
     vector.reserve(size);
     return vector;
   }
   
-  // pragma MARK: std::shared_ptr<Promise<std::vector<NitroRequest>>>
+  // pragma MARK: std::shared_ptr<Promise<std::vector<CarConfig>>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<std::vector<NitroRequest>>>`.
+   * Specialized version of `std::shared_ptr<Promise<std::vector<CarConfig>>>`.
    */
-  using std__shared_ptr_Promise_std__vector_NitroRequest___ = std::shared_ptr<Promise<std::vector<NitroRequest>>>;
-  inline std::shared_ptr<Promise<std::vector<NitroRequest>>> create_std__shared_ptr_Promise_std__vector_NitroRequest___() noexcept {
-    return Promise<std::vector<NitroRequest>>::create();
+  using std__shared_ptr_Promise_std__vector_CarConfig___ = std::shared_ptr<Promise<std::vector<CarConfig>>>;
+  inline std::shared_ptr<Promise<std::vector<CarConfig>>> create_std__shared_ptr_Promise_std__vector_CarConfig___() noexcept {
+    return Promise<std::vector<CarConfig>>::create();
   }
-  inline PromiseHolder<std::vector<NitroRequest>> wrap_std__shared_ptr_Promise_std__vector_NitroRequest___(std::shared_ptr<Promise<std::vector<NitroRequest>>> promise) noexcept {
-    return PromiseHolder<std::vector<NitroRequest>>(std::move(promise));
+  inline PromiseHolder<std::vector<CarConfig>> wrap_std__shared_ptr_Promise_std__vector_CarConfig___(std::shared_ptr<Promise<std::vector<CarConfig>>> promise) noexcept {
+    return PromiseHolder<std::vector<CarConfig>>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const std::vector<NitroRequest>& /* result */)>
+  // pragma MARK: std::function<void(const std::vector<CarConfig>& /* result */)>
   /**
-   * Specialized version of `std::function<void(const std::vector<NitroRequest>&)>`.
+   * Specialized version of `std::function<void(const std::vector<CarConfig>&)>`.
    */
-  using Func_void_std__vector_NitroRequest_ = std::function<void(const std::vector<NitroRequest>& /* result */)>;
+  using Func_void_std__vector_CarConfig_ = std::function<void(const std::vector<CarConfig>& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const std::vector<NitroRequest>& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const std::vector<CarConfig>& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_std__vector_NitroRequest__Wrapper final {
+  class Func_void_std__vector_CarConfig__Wrapper final {
   public:
-    explicit Func_void_std__vector_NitroRequest__Wrapper(std::function<void(const std::vector<NitroRequest>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<NitroRequest>& /* result */)>>(std::move(func))) {}
-    inline void call(std::vector<NitroRequest> result) const noexcept {
+    explicit Func_void_std__vector_CarConfig__Wrapper(std::function<void(const std::vector<CarConfig>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<CarConfig>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<CarConfig> result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const std::vector<NitroRequest>& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const std::vector<CarConfig>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__vector_NitroRequest_ create_Func_void_std__vector_NitroRequest_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__vector_NitroRequest__Wrapper wrap_Func_void_std__vector_NitroRequest_(Func_void_std__vector_NitroRequest_ value) noexcept {
-    return Func_void_std__vector_NitroRequest__Wrapper(std::move(value));
+  Func_void_std__vector_CarConfig_ create_Func_void_std__vector_CarConfig_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_CarConfig__Wrapper wrap_Func_void_std__vector_CarConfig_(Func_void_std__vector_CarConfig_ value) noexcept {
+    return Func_void_std__vector_CarConfig__Wrapper(std::move(value));
   }
   
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
@@ -664,49 +664,49 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::vector<NitroResponse>
+  // pragma MARK: std::vector<CarSpecification>
   /**
-   * Specialized version of `std::vector<NitroResponse>`.
+   * Specialized version of `std::vector<CarSpecification>`.
    */
-  using std__vector_NitroResponse_ = std::vector<NitroResponse>;
-  inline std::vector<NitroResponse> create_std__vector_NitroResponse_(size_t size) noexcept {
-    std::vector<NitroResponse> vector;
+  using std__vector_CarSpecification_ = std::vector<CarSpecification>;
+  inline std::vector<CarSpecification> create_std__vector_CarSpecification_(size_t size) noexcept {
+    std::vector<CarSpecification> vector;
     vector.reserve(size);
     return vector;
   }
   
-  // pragma MARK: std::shared_ptr<Promise<std::vector<NitroResponse>>>
+  // pragma MARK: std::shared_ptr<Promise<std::vector<CarSpecification>>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<std::vector<NitroResponse>>>`.
+   * Specialized version of `std::shared_ptr<Promise<std::vector<CarSpecification>>>`.
    */
-  using std__shared_ptr_Promise_std__vector_NitroResponse___ = std::shared_ptr<Promise<std::vector<NitroResponse>>>;
-  inline std::shared_ptr<Promise<std::vector<NitroResponse>>> create_std__shared_ptr_Promise_std__vector_NitroResponse___() noexcept {
-    return Promise<std::vector<NitroResponse>>::create();
+  using std__shared_ptr_Promise_std__vector_CarSpecification___ = std::shared_ptr<Promise<std::vector<CarSpecification>>>;
+  inline std::shared_ptr<Promise<std::vector<CarSpecification>>> create_std__shared_ptr_Promise_std__vector_CarSpecification___() noexcept {
+    return Promise<std::vector<CarSpecification>>::create();
   }
-  inline PromiseHolder<std::vector<NitroResponse>> wrap_std__shared_ptr_Promise_std__vector_NitroResponse___(std::shared_ptr<Promise<std::vector<NitroResponse>>> promise) noexcept {
-    return PromiseHolder<std::vector<NitroResponse>>(std::move(promise));
+  inline PromiseHolder<std::vector<CarSpecification>> wrap_std__shared_ptr_Promise_std__vector_CarSpecification___(std::shared_ptr<Promise<std::vector<CarSpecification>>> promise) noexcept {
+    return PromiseHolder<std::vector<CarSpecification>>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const std::vector<NitroResponse>& /* result */)>
+  // pragma MARK: std::function<void(const std::vector<CarSpecification>& /* result */)>
   /**
-   * Specialized version of `std::function<void(const std::vector<NitroResponse>&)>`.
+   * Specialized version of `std::function<void(const std::vector<CarSpecification>&)>`.
    */
-  using Func_void_std__vector_NitroResponse_ = std::function<void(const std::vector<NitroResponse>& /* result */)>;
+  using Func_void_std__vector_CarSpecification_ = std::function<void(const std::vector<CarSpecification>& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const std::vector<NitroResponse>& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const std::vector<CarSpecification>& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_std__vector_NitroResponse__Wrapper final {
+  class Func_void_std__vector_CarSpecification__Wrapper final {
   public:
-    explicit Func_void_std__vector_NitroResponse__Wrapper(std::function<void(const std::vector<NitroResponse>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<NitroResponse>& /* result */)>>(std::move(func))) {}
-    inline void call(std::vector<NitroResponse> result) const noexcept {
+    explicit Func_void_std__vector_CarSpecification__Wrapper(std::function<void(const std::vector<CarSpecification>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<CarSpecification>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<CarSpecification> result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const std::vector<NitroResponse>& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const std::vector<CarSpecification>& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_std__vector_NitroResponse_ create_Func_void_std__vector_NitroResponse_(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__vector_NitroResponse__Wrapper wrap_Func_void_std__vector_NitroResponse_(Func_void_std__vector_NitroResponse_ value) noexcept {
-    return Func_void_std__vector_NitroResponse__Wrapper(std::move(value));
+  Func_void_std__vector_CarSpecification_ create_Func_void_std__vector_CarSpecification_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_CarSpecification__Wrapper wrap_Func_void_std__vector_CarSpecification_(Func_void_std__vector_CarSpecification_ value) noexcept {
+    return Func_void_std__vector_CarSpecification__Wrapper(std::move(value));
   }
   
   // pragma MARK: std::function<void()>
@@ -1789,22 +1789,22 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>
-  using Result_std__shared_ptr_Promise_std__vector_NitroRequest____ = Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>;
-  inline Result_std__shared_ptr_Promise_std__vector_NitroRequest____ create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(const std::shared_ptr<Promise<std::vector<NitroRequest>>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>
+  using Result_std__shared_ptr_Promise_std__vector_CarConfig____ = Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_CarConfig____ create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(const std::shared_ptr<Promise<std::vector<CarConfig>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_std__vector_NitroRequest____ create_Result_std__shared_ptr_Promise_std__vector_NitroRequest____(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<NitroRequest>>>>::withError(error);
+  inline Result_std__shared_ptr_Promise_std__vector_CarConfig____ create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>::withError(error);
   }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>
-  using Result_std__shared_ptr_Promise_std__vector_NitroResponse____ = Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>;
-  inline Result_std__shared_ptr_Promise_std__vector_NitroResponse____ create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(const std::shared_ptr<Promise<std::vector<NitroResponse>>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>::withValue(value);
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>
+  using Result_std__shared_ptr_Promise_std__vector_CarSpecification____ = Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_CarSpecification____ create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(const std::shared_ptr<Promise<std::vector<CarSpecification>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>::withValue(value);
   }
-  inline Result_std__shared_ptr_Promise_std__vector_NitroResponse____ create_Result_std__shared_ptr_Promise_std__vector_NitroResponse____(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<std::vector<NitroResponse>>>>::withError(error);
+  inline Result_std__shared_ptr_Promise_std__vector_CarSpecification____ create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::function<void()>>>

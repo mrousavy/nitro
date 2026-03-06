@@ -228,11 +228,11 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceNitroRequests(array: Array<NitroRequest>): Promise<Array<NitroRequest>>
+  abstract fun bounceCarConfigs(array: Array<CarConfig>): Promise<Array<CarConfig>>
   
   @DoNotStrip
   @Keep
-  abstract fun bounceNitroResponses(array: Array<NitroResponse>): Promise<Array<NitroResponse>>
+  abstract fun bounceCarSpecifications(array: Array<CarSpecification>): Promise<Array<CarSpecification>>
   
   abstract fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit>
   

@@ -73,8 +73,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectCppSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectCppSpec::complexEnumCallback);
       prototype.registerHybridMethod("bounceHybridObjects", &HybridTestObjectCppSpec::bounceHybridObjects);
-      prototype.registerHybridMethod("bounceNitroRequests", &HybridTestObjectCppSpec::bounceNitroRequests);
-      prototype.registerHybridMethod("bounceNitroResponses", &HybridTestObjectCppSpec::bounceNitroResponses);
+      prototype.registerHybridMethod("bounceCarConfigs", &HybridTestObjectCppSpec::bounceCarConfigs);
+      prototype.registerHybridMethod("bounceCarSpecifications", &HybridTestObjectCppSpec::bounceCarSpecifications);
       prototype.registerHybridMethod("bounceFunctions", &HybridTestObjectCppSpec::bounceFunctions);
       prototype.registerHybridMethod("bounceMaps", &HybridTestObjectCppSpec::bounceMaps);
       prototype.registerHybridMethod("bouncePromises", &HybridTestObjectCppSpec::bouncePromises);

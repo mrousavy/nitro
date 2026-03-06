@@ -113,11 +113,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
-  override fun bounceNitroRequests(array: Array<NitroRequest>): Promise<Array<NitroRequest>> {
+  override fun bounceCarConfigs(array: Array<CarConfig>): Promise<Array<CarConfig>> {
     return Promise.async { array }
   }
 
-  override fun bounceNitroResponses(array: Array<NitroResponse>): Promise<Array<NitroResponse>> {
+  override fun bounceCarSpecifications(array: Array<CarSpecification>): Promise<Array<CarSpecification>> {
     return Promise.async { array }
   }
 

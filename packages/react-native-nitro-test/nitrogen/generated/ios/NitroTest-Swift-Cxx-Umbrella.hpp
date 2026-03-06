@@ -8,6 +8,12 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
@@ -32,12 +38,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
-// Forward declaration of `NitroHeader` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroHeader; }
-// Forward declaration of `NitroRequest` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRequest; }
-// Forward declaration of `NitroResponse` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroResponse; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -59,6 +59,9 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "CarAttribute.hpp"
+#include "CarConfig.hpp"
+#include "CarSpecification.hpp"
 #include "ColorScheme.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
@@ -69,9 +72,6 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
-#include "NitroHeader.hpp"
-#include "NitroRequest.hpp"
-#include "NitroResponse.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
