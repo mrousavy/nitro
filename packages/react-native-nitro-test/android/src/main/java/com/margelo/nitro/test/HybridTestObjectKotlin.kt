@@ -113,6 +113,14 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
+  override fun bounceCarConfigs(array: Array<CarConfig>): Promise<Array<CarConfig>> {
+    return Promise.async { array }
+  }
+
+  override fun bounceCarSpecifications(array: Array<CarSpecification>): Promise<Array<CarSpecification>> {
+    return Promise.async { array }
+  }
+
   override fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit> {
     return functions
   }

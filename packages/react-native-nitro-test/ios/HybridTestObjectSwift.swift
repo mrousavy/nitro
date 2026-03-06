@@ -205,6 +205,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceCarConfigs(array: [CarConfig]) throws -> Promise<[CarConfig]> {
+    return Promise.async { array }
+  }
+
+  func bounceCarSpecifications(array: [CarSpecification]) throws -> Promise<[CarSpecification]> {
+    return Promise.async { array }
+  }
+
   func bounceFunctions(functions: [() -> Void]) throws -> [() -> Void] {
     return functions
   }

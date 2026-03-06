@@ -133,6 +133,8 @@ public:
   void complexEnumCallback(const std::vector<Powertrain>& array,
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
   std::vector<std::shared_ptr<HybridChildSpec>> bounceHybridObjects(const std::vector<std::shared_ptr<HybridChildSpec>>& array) override;
+  std::shared_ptr<Promise<std::vector<CarConfig>>> bounceCarConfigs(const std::vector<CarConfig>& array) override;
+  std::shared_ptr<Promise<std::vector<CarSpecification>>> bounceCarSpecifications(const std::vector<CarSpecification>& array) override;
   std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
   std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;
   std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;

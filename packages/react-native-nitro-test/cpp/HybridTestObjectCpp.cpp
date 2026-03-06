@@ -252,6 +252,16 @@ HybridTestObjectCpp::bounceHybridObjects(const std::vector<std::shared_ptr<Hybri
   return array;
 }
 
+std::shared_ptr<Promise<std::vector<CarConfig>>>
+HybridTestObjectCpp::bounceCarConfigs(const std::vector<CarConfig>& array) {
+  return Promise<std::vector<CarConfig>>::async([array]() { return array; });
+}
+
+std::shared_ptr<Promise<std::vector<CarSpecification>>>
+HybridTestObjectCpp::bounceCarSpecifications(const std::vector<CarSpecification>& array) {
+  return Promise<std::vector<CarSpecification>>::async([array]() { return array; });
+}
+
 std::vector<std::function<void()>> HybridTestObjectCpp::bounceFunctions(const std::vector<std::function<void()>>& functions) {
   return functions;
 }

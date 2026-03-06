@@ -107,6 +107,17 @@ type CoreTypesVariant =
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
+interface CarAttribute {
+  key: string
+  value: string
+}
+
+interface CarConfig {
+  attributes?: CarAttribute[]
+}
+interface CarSpecification {
+  attributes: CarAttribute[]
+}
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -153,6 +164,8 @@ interface SharedTestObjectProps {
 
   // Arrays (complex)
   bounceHybridObjects(array: Child[]): Child[]
+  bounceCarConfigs(array: CarConfig[]): Promise<CarConfig[]>
+  bounceCarSpecifications(array: CarSpecification[]): Promise<CarSpecification[]>
   bounceFunctions(functions: (() => void)[]): (() => void)[]
   bounceMaps(maps: AnyMap[]): AnyMap[]
   bouncePromises(promises: Promise<number>[]): Promise<number>[]

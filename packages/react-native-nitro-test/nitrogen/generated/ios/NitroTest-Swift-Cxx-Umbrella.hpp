@@ -8,6 +8,12 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
@@ -53,6 +59,9 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "CarAttribute.hpp"
+#include "CarConfig.hpp"
+#include "CarSpecification.hpp"
 #include "ColorScheme.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"

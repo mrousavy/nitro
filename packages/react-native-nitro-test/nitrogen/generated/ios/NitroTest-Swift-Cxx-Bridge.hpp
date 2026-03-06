@@ -10,6 +10,12 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
@@ -65,6 +71,9 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "CarAttribute.hpp"
+#include "CarConfig.hpp"
+#include "CarSpecification.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -562,6 +571,144 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::vector<CarAttribute>
+  /**
+   * Specialized version of `std::vector<CarAttribute>`.
+   */
+  using std__vector_CarAttribute_ = std::vector<CarAttribute>;
+  inline std::vector<CarAttribute> create_std__vector_CarAttribute_(size_t size) noexcept {
+    std::vector<CarAttribute> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::vector<CarAttribute>>
+  /**
+   * Specialized version of `std::optional<std::vector<CarAttribute>>`.
+   */
+  using std__optional_std__vector_CarAttribute__ = std::optional<std::vector<CarAttribute>>;
+  inline std::optional<std::vector<CarAttribute>> create_std__optional_std__vector_CarAttribute__(const std::vector<CarAttribute>& value) noexcept {
+    return std::optional<std::vector<CarAttribute>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_CarAttribute__(const std::optional<std::vector<CarAttribute>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<CarAttribute> get_std__optional_std__vector_CarAttribute__(const std::optional<std::vector<CarAttribute>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<CarConfig>
+  /**
+   * Specialized version of `std::vector<CarConfig>`.
+   */
+  using std__vector_CarConfig_ = std::vector<CarConfig>;
+  inline std::vector<CarConfig> create_std__vector_CarConfig_(size_t size) noexcept {
+    std::vector<CarConfig> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::vector<CarConfig>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::vector<CarConfig>>>`.
+   */
+  using std__shared_ptr_Promise_std__vector_CarConfig___ = std::shared_ptr<Promise<std::vector<CarConfig>>>;
+  inline std::shared_ptr<Promise<std::vector<CarConfig>>> create_std__shared_ptr_Promise_std__vector_CarConfig___() noexcept {
+    return Promise<std::vector<CarConfig>>::create();
+  }
+  inline PromiseHolder<std::vector<CarConfig>> wrap_std__shared_ptr_Promise_std__vector_CarConfig___(std::shared_ptr<Promise<std::vector<CarConfig>>> promise) noexcept {
+    return PromiseHolder<std::vector<CarConfig>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<CarConfig>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::vector<CarConfig>&)>`.
+   */
+  using Func_void_std__vector_CarConfig_ = std::function<void(const std::vector<CarConfig>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::vector<CarConfig>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__vector_CarConfig__Wrapper final {
+  public:
+    explicit Func_void_std__vector_CarConfig__Wrapper(std::function<void(const std::vector<CarConfig>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<CarConfig>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<CarConfig> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::vector<CarConfig>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__vector_CarConfig_ create_Func_void_std__vector_CarConfig_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_CarConfig__Wrapper wrap_Func_void_std__vector_CarConfig_(Func_void_std__vector_CarConfig_ value) noexcept {
+    return Func_void_std__vector_CarConfig__Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  /**
+   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
+   */
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__exception_ptr_Wrapper final {
+  public:
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    inline void call(std::exception_ptr error) const noexcept {
+      _function->operator()(error);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
+    return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::vector<CarSpecification>
+  /**
+   * Specialized version of `std::vector<CarSpecification>`.
+   */
+  using std__vector_CarSpecification_ = std::vector<CarSpecification>;
+  inline std::vector<CarSpecification> create_std__vector_CarSpecification_(size_t size) noexcept {
+    std::vector<CarSpecification> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::vector<CarSpecification>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::vector<CarSpecification>>>`.
+   */
+  using std__shared_ptr_Promise_std__vector_CarSpecification___ = std::shared_ptr<Promise<std::vector<CarSpecification>>>;
+  inline std::shared_ptr<Promise<std::vector<CarSpecification>>> create_std__shared_ptr_Promise_std__vector_CarSpecification___() noexcept {
+    return Promise<std::vector<CarSpecification>>::create();
+  }
+  inline PromiseHolder<std::vector<CarSpecification>> wrap_std__shared_ptr_Promise_std__vector_CarSpecification___(std::shared_ptr<Promise<std::vector<CarSpecification>>> promise) noexcept {
+    return PromiseHolder<std::vector<CarSpecification>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::vector<CarSpecification>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::vector<CarSpecification>&)>`.
+   */
+  using Func_void_std__vector_CarSpecification_ = std::function<void(const std::vector<CarSpecification>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::vector<CarSpecification>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__vector_CarSpecification__Wrapper final {
+  public:
+    explicit Func_void_std__vector_CarSpecification__Wrapper(std::function<void(const std::vector<CarSpecification>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::vector<CarSpecification>& /* result */)>>(std::move(func))) {}
+    inline void call(std::vector<CarSpecification> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::vector<CarSpecification>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__vector_CarSpecification_ create_Func_void_std__vector_CarSpecification_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__vector_CarSpecification__Wrapper wrap_Func_void_std__vector_CarSpecification_(Func_void_std__vector_CarSpecification_ value) noexcept {
+    return Func_void_std__vector_CarSpecification__Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::function<void()>
   /**
    * Specialized version of `std::function<void()>`.
@@ -616,28 +763,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) noexcept {
     return PromiseHolder<double>(std::move(promise));
-  }
-  
-  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  /**
-   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
-   */
-  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__exception_ptr_Wrapper final {
-  public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
-    inline void call(std::exception_ptr error) const noexcept {
-      _function->operator()(error);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
-    return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<std::shared_ptr<Promise<double>>>
@@ -1662,6 +1787,24 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>
+  using Result_std__shared_ptr_Promise_std__vector_CarConfig____ = Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_CarConfig____ create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(const std::shared_ptr<Promise<std::vector<CarConfig>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__vector_CarConfig____ create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarConfig>>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>
+  using Result_std__shared_ptr_Promise_std__vector_CarSpecification____ = Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>;
+  inline Result_std__shared_ptr_Promise_std__vector_CarSpecification____ create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(const std::shared_ptr<Promise<std::vector<CarSpecification>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__vector_CarSpecification____ create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::vector<CarSpecification>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::vector<std::function<void()>>>

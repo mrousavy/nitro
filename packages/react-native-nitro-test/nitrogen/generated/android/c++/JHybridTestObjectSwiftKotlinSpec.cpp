@@ -19,6 +19,12 @@ namespace margelo::nitro::test { struct Person; }
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `CarConfig` to properly resolve imports.
+namespace margelo::nitro::test { struct CarConfig; }
+// Forward declaration of `CarAttribute` to properly resolve imports.
+namespace margelo::nitro::test { struct CarAttribute; }
+// Forward declaration of `CarSpecification` to properly resolve imports.
+namespace margelo::nitro::test { struct CarSpecification; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -69,11 +75,17 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "CarConfig.hpp"
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/JPromise.hpp>
+#include "JCarConfig.hpp"
+#include "CarAttribute.hpp"
+#include "JCarAttribute.hpp"
+#include "CarSpecification.hpp"
+#include "JCarSpecification.hpp"
 #include "JFunc_void.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <NitroModules/Promise.hpp>
-#include <NitroModules/JPromise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <unordered_map>
@@ -523,6 +535,74 @@ namespace margelo::nitro::test {
         __vector.push_back(__element->getJHybridChildSpec());
       }
       return __vector;
+    }();
+  }
+  std::shared_ptr<Promise<std::vector<CarConfig>>> JHybridTestObjectSwiftKotlinSpec::bounceCarConfigs(const std::vector<CarConfig>& array) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JArrayClass<JCarConfig>> /* array */)>("bounceCarConfigs");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JCarConfig>> __array = jni::JArrayClass<JCarConfig>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        auto __elementJni = JCarConfig::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }());
+    return [&]() {
+      auto __promise = Promise<std::vector<CarConfig>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JArrayClass<JCarConfig>>(__boxedResult);
+        __promise->resolve([&]() {
+          size_t __size = __result->size();
+          std::vector<CarConfig> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = __result->getElement(__i);
+            __vector.push_back(__element->toCpp());
+          }
+          return __vector;
+        }());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<std::vector<CarSpecification>>> JHybridTestObjectSwiftKotlinSpec::bounceCarSpecifications(const std::vector<CarSpecification>& array) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<jni::JArrayClass<JCarSpecification>> /* array */)>("bounceCarSpecifications");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<JCarSpecification>> __array = jni::JArrayClass<JCarSpecification>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        auto __elementJni = JCarSpecification::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }());
+    return [&]() {
+      auto __promise = Promise<std::vector<CarSpecification>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JArrayClass<JCarSpecification>>(__boxedResult);
+        __promise->resolve([&]() {
+          size_t __size = __result->size();
+          std::vector<CarSpecification> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = __result->getElement(__i);
+            __vector.push_back(__element->toCpp());
+          }
+          return __vector;
+        }());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
     }();
   }
   std::vector<std::function<void()>> JHybridTestObjectSwiftKotlinSpec::bounceFunctions(const std::vector<std::function<void()>>& functions) {

@@ -725,6 +725,56 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceCarConfigs(array: bridge.std__vector_CarConfig_) -> bridge.Result_std__shared_ptr_Promise_std__vector_CarConfig____ {
+    do {
+      let __result = try self.__implementation.bounceCarConfigs(array: array.map({ __item in __item }))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_CarConfig___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_CarConfig___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_CarConfig___(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_CarConfig_ in
+              var __vector = bridge.create_std__vector_CarConfig_(__result.count)
+              for __item in __result {
+                __vector.push_back(__item)
+              }
+              return __vector
+            }()) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarConfig____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceCarSpecifications(array: bridge.std__vector_CarSpecification_) -> bridge.Result_std__shared_ptr_Promise_std__vector_CarSpecification____ {
+    do {
+      let __result = try self.__implementation.bounceCarSpecifications(array: array.map({ __item in __item }))
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__vector_CarSpecification___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__vector_CarSpecification___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__vector_CarSpecification___(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__vector_CarSpecification_ in
+              var __vector = bridge.create_std__vector_CarSpecification_(__result.count)
+              for __item in __result {
+                __vector.push_back(__item)
+              }
+              return __vector
+            }()) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_std__vector_CarSpecification____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bounceFunctions(functions: bridge.std__vector_std__function_void____) -> bridge.Result_std__vector_std__function_void_____ {
     do {
       let __result = try self.__implementation.bounceFunctions(functions: functions.map({ __item in { () -> () -> Void in

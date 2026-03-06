@@ -11,8 +11,8 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.NullType
-import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import com.margelo.nitro.core.HybridObject
@@ -225,6 +225,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun bounceHybridObjects(array: Array<HybridChildSpec>): Array<HybridChildSpec>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceCarConfigs(array: Array<CarConfig>): Promise<Array<CarConfig>>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceCarSpecifications(array: Array<CarSpecification>): Promise<Array<CarSpecification>>
   
   abstract fun bounceFunctions(functions: Array<() -> Unit>): Array<() -> Unit>
   
