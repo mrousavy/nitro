@@ -201,7 +201,7 @@ namespace ${cxxNamespace} {
    */
   struct J${name}: public jni::JavaClass<J${name}> {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniInterfaceDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniInterfaceDescriptor};";
 
   public:
     /**
@@ -236,7 +236,7 @@ namespace ${cxxNamespace} {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", J${name}_cxx::invoke_cxx)});
     }

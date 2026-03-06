@@ -19,7 +19,7 @@ using namespace facebook;
  */
 class JAnyValue final : public jni::HybridClass<JAnyValue> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/AnyValue;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/AnyValue;";
 
   /**
    * Represents an `Array<AnyValue>`

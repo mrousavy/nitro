@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_Boolean_OldEnum: public jni::JavaClass<JVariant_Boolean_OldEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum;";
 
     static jni::local_ref<JVariant_Boolean_OldEnum> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Boolean_OldEnum(jboolean)>("create");
@@ -48,7 +48,7 @@ namespace margelo::nitro::test {
   namespace JVariant_Boolean_OldEnum_impl {
     class First final: public jni::JavaClass<First, JVariant_Boolean_OldEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$First;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -58,7 +58,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_Boolean_OldEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_OldEnum$Second;";
     
       [[nodiscard]] jni::local_ref<JOldEnum> getValue() const {
         static const auto field = javaClassStatic()->getField<JOldEnum>("value");

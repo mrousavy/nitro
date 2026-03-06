@@ -15,7 +15,7 @@ using namespace facebook;
 
 class JNitroModules final : public jni::HybridClass<JNitroModules> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/NitroModules;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/NitroModules;";
 
 private:
   explicit JNitroModules() = default;
@@ -26,7 +26,7 @@ private:
   void install(jlong runtimePointer, jni::alias_ref<react::CallInvokerHolder::javaobject> callInvokerHolder);
 
 private:
-  static auto constexpr TAG = "NitroModules";
+  static constexpr auto TAG = "NitroModules";
   using HybridBase::HybridBase;
   friend HybridBase;
 

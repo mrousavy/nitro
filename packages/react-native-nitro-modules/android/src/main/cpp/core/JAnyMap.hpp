@@ -20,7 +20,7 @@ using namespace facebook;
  */
 class JAnyMap final : public jni::HybridClass<JAnyMap> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/AnyMap;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/AnyMap;";
 
 public:
   /**

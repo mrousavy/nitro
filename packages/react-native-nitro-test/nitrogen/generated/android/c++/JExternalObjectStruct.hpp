@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   struct JExternalObjectStruct final: public jni::JavaClass<JExternalObjectStruct> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/ExternalObjectStruct;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/ExternalObjectStruct;";
 
   public:
     /**

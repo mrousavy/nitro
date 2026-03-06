@@ -16,7 +16,7 @@ using namespace facebook;
 // Bridged to Java
 class JThreadUtils : public jni::JavaClass<JThreadUtils> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/utils/ThreadUtils;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/utils/ThreadUtils;";
 
   static jni::local_ref<jni::JString> getCurrentThreadName() {
     static const auto method = javaClassStatic()->getStaticMethod<jni::local_ref<jni::JString>()>("getCurrentThreadName");

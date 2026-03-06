@@ -21,11 +21,11 @@ namespace margelo::nitro::test {
   class JHybridBaseSpec: public virtual HybridBaseSpec, public virtual JHybridObject {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
       std::shared_ptr<JHybridBaseSpec> getJHybridBaseSpec();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec$CxxPart;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec$CxxPart;";
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       using HybridBase::HybridBase;

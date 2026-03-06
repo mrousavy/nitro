@@ -48,7 +48,7 @@ int initialize(JavaVM* vm) {
 }
 
 struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpecImpl, JHybridTestObjectSwiftKotlinSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectKotlin;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectKotlin;";
   static std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridTestObjectSwiftKotlinSpecImpl::javaobject()>();
     jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
@@ -56,7 +56,7 @@ struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestOb
   }
 };
 struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBase;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBase;";
   static std::shared_ptr<JHybridBaseSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl::javaobject()>();
     jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
@@ -64,7 +64,7 @@ struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBa
   }
 };
 struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybridChildSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChild;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChild;";
   static std::shared_ptr<JHybridChildSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridChildSpecImpl::javaobject()>();
     jni::local_ref<JHybridChildSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
@@ -72,7 +72,7 @@ struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybrid
   }
 };
 struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjectSpecImpl, JHybridPlatformObjectSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObject;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObject;";
   static std::shared_ptr<JHybridPlatformObjectSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridPlatformObjectSpecImpl::javaobject()>();
     jni::local_ref<JHybridPlatformObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
@@ -80,7 +80,7 @@ struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjec
   }
 };
 struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestView;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestView;";
   static std::shared_ptr<JHybridTestViewSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridTestViewSpecImpl::javaobject()>();
     jni::local_ref<JHybridTestViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
@@ -88,7 +88,7 @@ struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, J
   }
 };
 struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclableTestViewSpecImpl, JHybridRecyclableTestViewSpec::JavaPart> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestView;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestView;";
   static std::shared_ptr<JHybridRecyclableTestViewSpec> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<JHybridRecyclableTestViewSpecImpl::javaobject()>();
     jni::local_ref<JHybridRecyclableTestViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);

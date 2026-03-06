@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_HybridBaseSpec_OptionalWrapper: public jni::JavaClass<JVariant_HybridBaseSpec_OptionalWrapper> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper;";
 
     static jni::local_ref<JVariant_HybridBaseSpec_OptionalWrapper> create_0(jni::alias_ref<JHybridBaseSpec::JavaPart> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_HybridBaseSpec_OptionalWrapper(jni::alias_ref<JHybridBaseSpec::JavaPart>)>("create");
@@ -55,7 +55,7 @@ namespace margelo::nitro::test {
   namespace JVariant_HybridBaseSpec_OptionalWrapper_impl {
     class First final: public jni::JavaClass<First, JVariant_HybridBaseSpec_OptionalWrapper> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$First;";
     
       [[nodiscard]] jni::local_ref<JHybridBaseSpec::JavaPart> getValue() const {
         static const auto field = javaClassStatic()->getField<JHybridBaseSpec::JavaPart>("value");
@@ -65,7 +65,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_HybridBaseSpec_OptionalWrapper> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridBaseSpec_OptionalWrapper$Second;";
     
       [[nodiscard]] jni::local_ref<JOptionalWrapper> getValue() const {
         static const auto field = javaClassStatic()->getField<JOptionalWrapper>("value");

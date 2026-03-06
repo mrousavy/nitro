@@ -24,7 +24,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_______Unit_Double: public jni::JavaClass<JVariant_______Unit_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double;";
 
     static jni::local_ref<JVariant_______Unit_Double> create_0(jni::alias_ref<JFunc_void::javaobject> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_______Unit_Double(jni::alias_ref<JFunc_void::javaobject>)>("create");
@@ -49,7 +49,7 @@ namespace margelo::nitro::test {
   namespace JVariant_______Unit_Double_impl {
     class First final: public jni::JavaClass<First, JVariant_______Unit_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$First;";
     
       [[nodiscard]] jni::local_ref<JFunc_void::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JFunc_void::javaobject>("value");
@@ -59,7 +59,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_______Unit_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_______Unit_Double$Second;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");

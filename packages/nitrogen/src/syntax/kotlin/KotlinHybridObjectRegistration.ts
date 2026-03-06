@@ -40,7 +40,7 @@ export function createJNIHybridObjectRegistration({
     ],
     cppDefinition: `
 struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybridTSpec}::JavaPart> {
-  static auto constexpr kJavaDescriptor = "L${jniNamespace};";
+  static constexpr auto kJavaDescriptor = "L${jniNamespace};";
   static std::shared_ptr<${JHybridTSpec}> create() {
     static const auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl::javaobject()>();
     jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);

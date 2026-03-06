@@ -27,7 +27,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_HybridTestObjectSwiftKotlinSpec_Person: public jni::JavaClass<JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person;";
 
     static jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> create_0(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_HybridTestObjectSwiftKotlinSpec_Person(jni::alias_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>)>("create");
@@ -52,7 +52,7 @@ namespace margelo::nitro::test {
   namespace JVariant_HybridTestObjectSwiftKotlinSpec_Person_impl {
     class First final: public jni::JavaClass<First, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$First;";
     
       [[nodiscard]] jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> getValue() const {
         static const auto field = javaClassStatic()->getField<JHybridTestObjectSwiftKotlinSpec::JavaPart>("value");
@@ -62,7 +62,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_HybridTestObjectSwiftKotlinSpec_Person> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_HybridTestObjectSwiftKotlinSpec_Person$Second;";
     
       [[nodiscard]] jni::local_ref<JPerson> getValue() const {
         static const auto field = javaClassStatic()->getField<JPerson>("value");

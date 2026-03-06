@@ -29,7 +29,7 @@ namespace margelo::nitro::test {
    */
   struct JCar final: public jni::JavaClass<JCar> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Car;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Car;";
 
   public:
     /**

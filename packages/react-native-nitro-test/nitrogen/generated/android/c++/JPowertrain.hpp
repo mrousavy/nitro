@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JPowertrain final: public jni::JavaClass<JPowertrain> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Powertrain;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Powertrain;";
 
   public:
     /**
