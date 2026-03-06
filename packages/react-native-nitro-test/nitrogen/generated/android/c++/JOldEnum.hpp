@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JOldEnum final: public jni::JavaClass<JOldEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OldEnum;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/OldEnum;";
 
   public:
     /**

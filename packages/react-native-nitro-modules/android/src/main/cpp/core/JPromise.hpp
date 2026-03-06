@@ -17,7 +17,7 @@ namespace margelo::nitro {
 using namespace facebook;
 
 struct JOnResolvedCallback : public jni::JavaClass<JOnResolvedCallback> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnResolvedCallback;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnResolvedCallback;";
   void onResolved(const jni::alias_ref<jni::JObject>& result) const {
     static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JObject>)>("onResolved");
     method(self(), result);
@@ -25,7 +25,7 @@ struct JOnResolvedCallback : public jni::JavaClass<JOnResolvedCallback> {
 };
 
 struct JOnRejectedCallback : public jni::JavaClass<JOnRejectedCallback> {
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnRejectedCallback;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/Promise$OnRejectedCallback;";
   void onRejected(const jni::alias_ref<jni::JThrowable>& error) const {
     static const auto method = javaClassLocal()->getMethod<void(jni::alias_ref<jni::JThrowable>)>("onRejected");
     method(self(), error);
@@ -37,7 +37,7 @@ struct JOnRejectedCallback : public jni::JavaClass<JOnRejectedCallback> {
  */
 class JPromise final : public jni::HybridClass<JPromise> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/Promise;";
   using ResultType = jni::global_ref<jni::JObject>;
   using ErrorType = jni::global_ref<jni::JThrowable>;
   using OnResolvedFunc = std::function<void(jni::alias_ref<jni::JObject>)>;

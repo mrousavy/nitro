@@ -21,7 +21,7 @@ namespace margelo::nitro::test::external {
    */
   struct JOptionalPrimitivesHolder final: public jni::JavaClass<JOptionalPrimitivesHolder> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/external/OptionalPrimitivesHolder;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/external/OptionalPrimitivesHolder;";
 
   public:
     /**

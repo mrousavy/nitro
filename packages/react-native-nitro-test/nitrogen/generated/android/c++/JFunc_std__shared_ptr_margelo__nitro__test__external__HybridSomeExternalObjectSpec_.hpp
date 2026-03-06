@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_: public jni::JavaClass<JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_;";
 
   public:
     /**
@@ -64,7 +64,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::invoke_cxx)});
     }

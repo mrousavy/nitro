@@ -103,11 +103,11 @@ namespace ${cxxNamespace} {
   class ${name.JHybridTSpec}: public virtual ${name.HybridTSpec}, public virtual ${cppBaseClass} {
   public:
     struct JavaPart: public jni::JavaClass<JavaPart, ${javaPartBaseClass}> {
-      static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+      static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
       std::shared_ptr<${name.JHybridTSpec}> get${name.JHybridTSpec}();
     };
     struct CxxPart: public jni::HybridClass<CxxPart, ${cxxPartBaseClass}> {
-      static auto constexpr kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
+      static constexpr auto kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
       static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
       static void registerNatives();
       using HybridBase::HybridBase;

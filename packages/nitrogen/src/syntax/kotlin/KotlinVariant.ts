@@ -145,7 +145,7 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
     return `
 class ${innerName} final: public jni::JavaClass<${innerName}, J${kotlinName}> {
 public:
-  static auto constexpr kJavaDescriptor = "L${descriptor};";
+  static constexpr auto kJavaDescriptor = "L${descriptor};";
 
   [[nodiscard]] ${bridge.asJniReferenceType('local')} getValue() const {
     static const auto field = javaClassStatic()->getField<${bridge.getTypeCode('c++')}>("value");
@@ -180,7 +180,7 @@ namespace ${cxxNamespace} {
    */
   class J${kotlinName}: public jni::JavaClass<J${kotlinName}> {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
 
     ${indent(cppCreateFuncs.join('\n'), '    ')}
 

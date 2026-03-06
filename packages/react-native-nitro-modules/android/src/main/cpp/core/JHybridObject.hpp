@@ -22,11 +22,11 @@ using namespace facebook;
 class JHybridObject : public virtual HybridObject {
 public:
   struct JavaPart : jni::JavaClass<JavaPart> {
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
     std::shared_ptr<JHybridObject> getJHybridObject();
   };
   struct CxxPart : jni::HybridClass<CxxPart> {
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject$CxxPart;";
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
     static void registerNatives();
     explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart);

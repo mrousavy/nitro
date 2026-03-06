@@ -24,7 +24,7 @@ namespace margelo::nitro::test {
    */
   struct JOptionalWrapper final: public jni::JavaClass<JOptionalWrapper> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OptionalWrapper;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/OptionalWrapper;";
 
   public:
     /**
