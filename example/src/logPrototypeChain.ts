@@ -1,10 +1,15 @@
-import type { HybridObject } from 'react-native-nitro-modules'
+import type {
+  HybridObject,
+  type PlatformSpec,
+} from 'react-native-nitro-modules'
 
 function dim(string: string): string {
   return `\x1b[2m${string}\x1b[0m`
 }
 
-export function logPrototypeChain(type: HybridObject): void {
+export function logPrototypeChain<Platforms extends PlatformSpec>(
+  type: HybridObject<Platforms>
+): void {
   console.log(`Prototype chain of ${type.name}:`)
   let object = type
   let indentation = '  '
