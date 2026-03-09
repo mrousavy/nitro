@@ -28,11 +28,10 @@ export function createSwiftHybridViewManager(
   )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
-  const autolinking = spec.config.getAutolinkedHybridObjects()
-  const viewImplementation = autolinking[spec.name]?.swift
-  if (viewImplementation == null) {
+  const implementation = spec.config.getIosAutolinkedImplementation(spec.name)
+  if (implementation?.language !== 'swift') {
     throw new Error(
-      `Cannot create Swift HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+      `Cannot create Swift HybridView ViewManager for ${spec.name} - it must be autolinked with a Swift iOS implementation in nitro.json!`
     )
   }
 

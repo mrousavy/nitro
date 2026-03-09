@@ -10,8 +10,14 @@
   },
   "autolinking": {
     "SomeExternalObject": {
-      "kotlin": "HybridSomeExternalObject",
-      "swift": "HybridSomeExternalObject"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridSomeExternalObject"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridSomeExternalObject"
+      }
     }
   },
   "ignorePaths": [

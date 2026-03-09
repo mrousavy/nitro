@@ -1,6 +1,11 @@
 import chalk from 'chalk'
 import { readUserConfig } from './getConfig.js'
-import type { NitroUserConfig } from './NitroUserConfig.js'
+import type {
+  AutolinkingAndroidImplementation,
+  AutolinkingIOSImplementation,
+  AutolinkingPlatformImplementation,
+  NitroUserConfig,
+} from './NitroUserConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
@@ -107,6 +112,49 @@ export class NitroConfig {
    */
   getAutolinkedHybridObjects(): NitroUserConfig['autolinking'] {
     return this.config.autolinking
+  }
+
+  getPlatformAutolinkedImplementation(
+    hybridObjectName: string,
+    platform: string
+  ): AutolinkingPlatformImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+
+    // "all" applies to every platform and should automatically include
+    // future platforms without having to expand explicit key lists here.
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig[platform]
+  }
+
+  getIosAutolinkedImplementation(
+    hybridObjectName: string
+  ): AutolinkingIOSImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig.ios
+  }
+
+  getAndroidAutolinkedImplementation(
+    hybridObjectName: string
+  ): AutolinkingAndroidImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig.android
   }
 
   /**

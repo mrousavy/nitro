@@ -28,27 +28,39 @@ export function createHybridObjectIntializer(): SourceFile[] {
   const cppRegistrations: string[] = []
   const cppDefinitions: string[] = []
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
-
-    if (config?.cpp != null) {
-      // Autolink a C++ HybridObject!
-      const { cppCode, requiredImports } = createCppHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        cppClassName: config.cpp,
-      })
-      cppHybridObjectImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+    const implementation =
+      NitroConfig.current.getAndroidAutolinkedImplementation(hybridObjectName)
+    if (implementation == null) {
+      continue
     }
-    if (config?.kotlin != null) {
-      // Autolink a Kotlin HybridObject through JNI/C++!
-      const { cppCode, cppDefinition, requiredImports } =
-        createJNIHybridObjectRegistration({
+
+    switch (implementation.language) {
+      case 'cpp': {
+        // Autolink a C++ HybridObject!
+        const { cppCode, requiredImports } = createCppHybridObjectRegistration({
           hybridObjectName: hybridObjectName,
-          jniClassName: config.kotlin,
+          cppClassName: implementation.implementationClassName,
         })
-      cppHybridObjectImports.push(...requiredImports)
-      cppDefinitions.push(cppDefinition)
-      cppRegistrations.push(cppCode)
+        cppHybridObjectImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      case 'kotlin': {
+        // Autolink a Kotlin HybridObject through JNI/C++!
+        const { cppCode, cppDefinition, requiredImports } =
+          createJNIHybridObjectRegistration({
+            hybridObjectName: hybridObjectName,
+            jniClassName: implementation.implementationClassName,
+          })
+        cppHybridObjectImports.push(...requiredImports)
+        cppDefinitions.push(cppDefinition)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      default:
+        throw new Error(
+          `The HybridObject "${hybridObjectName}" cannot be autolinked on Android - Language "${implementation.language}" is not supported on Android!`
+        )
     }
   }
 

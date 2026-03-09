@@ -9,6 +9,72 @@ const isReservedKeywordError = {
   message: `This value is reserved and cannot be used!`,
 }
 
+const autolinkingLanguageSchema = z.enum(['cpp', 'swift', 'kotlin'])
+
+const autolinkingAllImplementationSchema = z.object({
+  language: z.literal('cpp'),
+  implementationClassName: z.string(),
+})
+
+const autolinkingIOSImplementationSchema = z.object({
+  language: z.enum(['cpp', 'swift']),
+  implementationClassName: z.string(),
+})
+
+const autolinkingAndroidImplementationSchema = z.object({
+  language: z.enum(['cpp', 'kotlin']),
+  implementationClassName: z.string(),
+})
+
+const autolinkingPlatformImplementationSchema = z.object({
+  language: autolinkingLanguageSchema,
+  implementationClassName: z.string(),
+})
+
+const autolinkingHybridObjectSchema = z
+  .object({
+    all: autolinkingAllImplementationSchema.optional(),
+    ios: autolinkingIOSImplementationSchema.optional(),
+    android: autolinkingAndroidImplementationSchema.optional(),
+  })
+  .catchall(autolinkingPlatformImplementationSchema)
+  .superRefine((value, ctx) => {
+    const hasAll = value.all != null
+    const platformCount = Object.keys(value).filter((key) => key !== 'all')
+      .length
+
+    if (hasAll && platformCount > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: '"all" cannot be combined with platform-specific entries.',
+      })
+    }
+
+    if (!hasAll && platformCount === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Each autolinking entry must declare either "all" or at least one platform.',
+      })
+    }
+  })
+
+export type AutolinkingAllImplementation = z.infer<
+  typeof autolinkingAllImplementationSchema
+>
+export type AutolinkingIOSImplementation = z.infer<
+  typeof autolinkingIOSImplementationSchema
+>
+export type AutolinkingAndroidImplementation = z.infer<
+  typeof autolinkingAndroidImplementationSchema
+>
+export type AutolinkingPlatformImplementation = z.infer<
+  typeof autolinkingPlatformImplementationSchema
+>
+export type AutolinkingHybridObject = z.infer<
+  typeof autolinkingHybridObjectSchema
+>
+
 export const NitroUserConfigSchema = z.object({
   /**
    * Represents the C++ namespace of the module that will be generated.
@@ -74,17 +140,10 @@ export const NitroUserConfigSchema = z.object({
    * Configures the code that gets generated for autolinking (registering)
    * Hybrid Object constructors.
    *
-   * Each class listed here needs to have a default constructor/initializer that takes
-   * zero arguments.
+   * Each class listed here needs to have a default constructor/initializer
+   * that takes zero arguments.
    */
-  autolinking: z.record(
-    z.string(),
-    z.object({
-      cpp: z.string().optional(),
-      swift: z.string().optional(),
-      kotlin: z.string().optional(),
-    })
-  ),
+  autolinking: z.record(z.string(), autolinkingHybridObjectSchema),
   /**
    * A list of paths relative to the project directory that should be ignored by nitrogen.
    * Nitrogen will not look for `.nitro.ts` files in these directories.
