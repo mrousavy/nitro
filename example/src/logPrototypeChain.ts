@@ -1,7 +1,4 @@
-import type {
-  HybridObject,
-  type PlatformSpec,
-} from 'react-native-nitro-modules'
+import type { HybridObject, PlatformSpec } from 'react-native-nitro-modules'
 
 function dim(string: string): string {
   return `\x1b[2m${string}\x1b[0m`
