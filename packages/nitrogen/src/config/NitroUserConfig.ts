@@ -31,7 +31,7 @@ const autolinkingPlatformImplementationSchema = z.object({
   implementationClassName: z.string(),
 })
 
-const autolinkingHybridObjectSchema = z
+const autolinkingModernHybridObjectSchema = z
   .object({
     all: autolinkingAllImplementationSchema.optional(),
     ios: autolinkingIOSImplementationSchema.optional(),
@@ -40,8 +40,9 @@ const autolinkingHybridObjectSchema = z
   .catchall(autolinkingPlatformImplementationSchema)
   .superRefine((value, ctx) => {
     const hasAll = value.all != null
-    const platformCount = Object.keys(value).filter((key) => key !== 'all')
-      .length
+    const platformCount = Object.keys(value).filter(
+      (key) => key !== 'all'
+    ).length
 
     if (hasAll && platformCount > 0) {
       ctx.addIssue({
@@ -58,6 +59,70 @@ const autolinkingHybridObjectSchema = z
       })
     }
   })
+
+const autolinkingLegacyHybridObjectSchema = z
+  .object({
+    cpp: z.string().optional(),
+    swift: z.string().optional(),
+    kotlin: z.string().optional(),
+  })
+  .strict()
+  .superRefine((value, ctx) => {
+    const hasCpp = value.cpp != null
+    const hasSwift = value.swift != null
+    const hasKotlin = value.kotlin != null
+
+    if (!hasCpp && !hasSwift && !hasKotlin) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Each autolinking entry must declare at least one implementation.',
+      })
+    }
+
+    if (hasCpp && (hasSwift || hasKotlin)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Legacy autolinking entries cannot mix "cpp" with "swift"/"kotlin".',
+      })
+    }
+  })
+
+function normalizeLegacyAutolinkingHybridObject(
+  value: z.infer<typeof autolinkingLegacyHybridObjectSchema>
+): z.infer<typeof autolinkingModernHybridObjectSchema> {
+  if (value.cpp != null) {
+    return {
+      all: {
+        language: 'cpp',
+        implementationClassName: value.cpp,
+      },
+    }
+  }
+
+  const normalized: z.infer<typeof autolinkingModernHybridObjectSchema> = {}
+  if (value.swift != null) {
+    normalized.ios = {
+      language: 'swift',
+      implementationClassName: value.swift,
+    }
+  }
+  if (value.kotlin != null) {
+    normalized.android = {
+      language: 'kotlin',
+      implementationClassName: value.kotlin,
+    }
+  }
+  return normalized
+}
+
+const autolinkingHybridObjectSchema = z.union([
+  autolinkingModernHybridObjectSchema,
+  autolinkingLegacyHybridObjectSchema.transform(
+    normalizeLegacyAutolinkingHybridObject
+  ),
+])
 
 export type AutolinkingAllImplementation = z.infer<
   typeof autolinkingAllImplementationSchema
