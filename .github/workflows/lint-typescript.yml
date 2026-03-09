@@ -1,9 +1,7 @@
 name: Lint TypeScript
 
 permissions:
-  checks: write
   contents: read
-  pull-requests: read
 
 on:
   push:
@@ -38,17 +36,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
-      - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
         run: bun install
 
       - name: Run TypeScript (tsc)
-        run: |
-          set -o pipefail
-          bun typecheck | reviewdog -name="tsc" -efm="%f(%l,%c): error TS%n: %m" -reporter="github-pr-review" -filter-mode="nofilter" -fail-level=error -tee
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun typecheck
 
   lint:
     name: Lint TypeScript (eslint, prettier)
@@ -56,7 +49,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
-      - uses: reviewdog/action-setup@v1
 
       - name: Install npm dependencies (bun)
         run: bun install
