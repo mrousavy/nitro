@@ -20,13 +20,27 @@ try {
   throw new ModuleNotFoundError(e)
 }
 
-// 2. Install Dispatcher and install `NitroModulesProxy` into the Runtime's `global`
+const jsVersion = require('react-native-nitro-modules/package.json').version
+
+// 2. Prevent duplicate installs from multiple JS package instances
+// @ts-expect-error
+const alreadyInstalledNitro = global.NitroModulesProxy as
+  | NitroModulesProxy
+  | undefined
+if (alreadyInstalledNitro != null) {
+  throw new Error(
+    `Nitro was installed twice: once with native version ${alreadyInstalledNitro.version} and once with JS version ${jsVersion}. ` +
+      'This usually means react-native-nitro-modules exists multiple times in node_modules (e.g. in monorepos or double-linked setups).'
+  )
+}
+
+// 3. Install Dispatcher and install `NitroModulesProxy` into the Runtime's `global`
 const errorMessage = turboModule.install()
 if (errorMessage != null) {
   throw new Error(`Failed to install Nitro: ${errorMessage}`)
 }
 
-// 3. Find `NitroModulesProxy` in `global`
+// 4. Find `NitroModulesProxy` in `global`
 // @ts-expect-error
 export const NitroModules = global.NitroModulesProxy as NitroModulesProxy
 if (NitroModules == null) {
@@ -38,7 +52,6 @@ if (NitroModules == null) {
 
 // Double-check native version
 if (__DEV__) {
-  const jsVersion = require('react-native-nitro-modules/package.json').version
   if (jsVersion !== NitroModules.version) {
     console.warn(
       `The native Nitro Modules core runtime version is ${NitroModules.version}, but the JS code is using version ${jsVersion}. ` +
