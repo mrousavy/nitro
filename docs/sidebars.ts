@@ -39,6 +39,7 @@ const sidebars: SidebarsConfig = {
         'guides/errors',
         'guides/performance-tips',
         'guides/worklets',
+        'guides/android-context',
         'guides/entry-point',
         'guides/sync-vs-async',
         'guides/view-components',

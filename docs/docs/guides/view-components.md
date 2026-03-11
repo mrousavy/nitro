@@ -218,9 +218,9 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin title="HybridCameraView.kt"
-    class HybridCameraView: HybridCameraViewSpec() {
+    class HybridCameraView(context: ThemedReactContext): HybridCameraViewSpec() {
       // View
-      override val view: View = View(NitroModules.applicationContext)
+      override val view: View = View(context)
 
       override fun beforeUpdate() { }
       override fun afterUpdate() { }
