@@ -35,7 +35,7 @@ export function createHybridObjectIntializer(): SourceFile[] {
     }
 
     switch (implementation.language) {
-      case 'cpp': {
+      case 'c++': {
         // Autolink a C++ HybridObject!
         const { cppCode, requiredImports } = createCppHybridObjectRegistration({
           hybridObjectName: hybridObjectName,
