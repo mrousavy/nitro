@@ -76,7 +76,7 @@
                     "language": {
                       "type": "string",
                       "enum": [
-                        "cpp"
+                        "c++"
                       ]
                     },
                     "implementationClassName": {
@@ -107,7 +107,7 @@
                     "language": {
                       "type": "string",
                       "enum": [
-                        "cpp",
+                        "c++",
                         "swift"
                       ]
                     },
@@ -127,7 +127,7 @@
                     "language": {
                       "type": "string",
                       "enum": [
-                        "cpp",
+                        "c++",
                         "kotlin"
                       ]
                     },
@@ -149,7 +149,7 @@
                     "language": {
                       "type": "string",
                       "enum": [
-                        "cpp",
+                        "c++",
                         "swift",
                         "kotlin"
                       ]
