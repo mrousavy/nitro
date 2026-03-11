@@ -30,7 +30,7 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
     }
 
     switch (implementation.language) {
-      case 'cpp': {
+      case 'c++': {
         // Autolink a C++ HybridObject!
         const { cppCode, requiredImports } = createCppHybridObjectRegistration({
           hybridObjectName: hybridObjectName,

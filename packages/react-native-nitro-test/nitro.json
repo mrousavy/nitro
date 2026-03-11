@@ -11,7 +11,7 @@
   "autolinking": {
     "TestObjectCpp": {
       "all": {
-        "language": "cpp",
+        "language": "c++",
         "implementationClassName": "HybridTestObjectCpp"
       }
     },

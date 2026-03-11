@@ -9,20 +9,28 @@ const isReservedKeywordError = {
   message: `This value is reserved and cannot be used!`,
 }
 
-const autolinkingLanguageSchema = z.enum(['cpp', 'swift', 'kotlin'])
+const autolinkingCppLanguageSchema = z
+  .union([z.literal('c++'), z.literal('cpp')])
+  .transform(() => 'c++' as const)
+
+const autolinkingLanguageSchema = z.union([
+  autolinkingCppLanguageSchema,
+  z.literal('swift'),
+  z.literal('kotlin'),
+])
 
 const autolinkingAllImplementationSchema = z.object({
-  language: z.literal('cpp'),
+  language: autolinkingCppLanguageSchema,
   implementationClassName: z.string(),
 })
 
 const autolinkingIOSImplementationSchema = z.object({
-  language: z.enum(['cpp', 'swift']),
+  language: z.union([autolinkingCppLanguageSchema, z.literal('swift')]),
   implementationClassName: z.string(),
 })
 
 const autolinkingAndroidImplementationSchema = z.object({
-  language: z.enum(['cpp', 'kotlin']),
+  language: z.union([autolinkingCppLanguageSchema, z.literal('kotlin')]),
   implementationClassName: z.string(),
 })
 
@@ -95,7 +103,7 @@ function normalizeLegacyAutolinkingHybridObject(
   if (value.cpp != null) {
     return {
       all: {
-        language: 'cpp',
+        language: 'c++',
         implementationClassName: value.cpp,
       },
     }
