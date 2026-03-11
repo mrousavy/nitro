@@ -3,7 +3,7 @@
 
 # Configuration (`nitro.json`)
 
-[Nitrogen](nitrogen) requires a `nitro.json` file to be configured at the root of each [Nitro Module](nitro-modules).
+[Nitrogen](../concepts/nitrogen) requires a `nitro.json` file to be configured at the root of each [Nitro Module](../concepts/nitro-modules).
 
 ```json
 {
@@ -133,7 +133,7 @@ Nitro will load this library at runtime using `System.loadLibrary`.
 
 ## `autolinking`
 
-Contains configuration for all [Hybrid Objects](hybrid-objects) that should be autolinked by Nitrogen.
+Contains configuration for all [Hybrid Objects](../concepts/hybrid-objects) that should be autolinked by Nitrogen.
 
 All Hybrid Objects specified here must follow these requirements:
 

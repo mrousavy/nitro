@@ -54,7 +54,7 @@ interface DefaultHybridViewProps<RefType> {
    * }
    * ```
    * @note If you're wondering about the `callback(...)` syntax, see
-   * ["Callbacks have to be wrapped"](https://nitro.margelo.com/docs/view-components#callbacks-have-to-be-wrapped).
+   * ["Callbacks have to be wrapped"](https://nitro.margelo.com/docs/guides/view-components#callbacks-have-to-be-wrapped).
    */
   hybridRef?: (ref: RefType) => void
 }
@@ -66,7 +66,7 @@ interface DefaultHybridViewProps<RefType> {
  * because RN converts them to booleans (`true`). As a workaround,
  * Nitro requires you to wrap each function using `callback(...)`,
  * which bypasses React Native's conversion.
- * Please see the [Callbacks have to be wrapped](https://nitro.margelo.com/docs/view-components#callbacks-have-to-be-wrapped) section for more information.
+ * Please see the [Callbacks have to be wrapped](https://nitro.margelo.com/docs/guides/view-components#callbacks-have-to-be-wrapped) section for more information.
  *
  * @type {Object} NitroViewWrappedCallback
  * @property {T} f - The wrapped callback function

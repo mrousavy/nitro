@@ -127,7 +127,7 @@ Then, simply clone (potentially also fork?) the Nitro repository and install its
 
 ### Reproducing bugs
 
-In addition to `packages/nitrogen` ([nitrogen](nitrogen) CLI) and `packages/react-native-nitro-modules` ([Nitro Modules](nitro-modules) core), the nitro repository also contains two testing libraries;
+In addition to `packages/nitrogen` ([nitrogen](../concepts/nitrogen) CLI) and `packages/react-native-nitro-modules` ([Nitro Modules](../concepts/nitro-modules) core), the nitro repository also contains two testing libraries;
 
 - `packages/react-native-nitro-test`: Contains a lot of tests for C++/Swift/Kotlin Hybrid Objects, functions and types.
 - `packages/react-native-nitro-test-external`: Contains a Hybrid Object that is used in `react-native-nitro-test` to test cross-library-imports.
@@ -142,7 +142,7 @@ Every time you change a Nitro spec in one of those two test libraries, you can s
 bun specs
 ```
 
-This runs [nitrogen](nitrogen) for both test libraries. You might need to reinstall pods if any iOS files changed;
+This runs [nitrogen](../concepts/nitrogen) for both test libraries. You might need to reinstall pods if any iOS files changed;
 
 ```sh
 bun example pods

@@ -1,3 +1,25 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/docs/:slug(hybrid-objects|hybrid-views|nitro-modules|nitrogen)",
+      "destination": "/docs/concepts/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:slug(configuration-nitro-json|how-to-build-a-nitro-module|minimum-requirements|what-is-nitro)",
+      "destination": "/docs/getting-started/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:slug(entry-point|errors|performance-tips|running-example-app|sync-vs-async|troubleshooting|view-components|worklets)",
+      "destination": "/docs/guides/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:slug(awesome-nitro-modules|comparison|contributing|for-library-users)",
+      "destination": "/docs/resources/:slug",
+      "permanent": true
+    }
+  ]
 }

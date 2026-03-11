@@ -40,7 +40,7 @@ On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - 
 
 ## Nitrogen
 
-[Nitrogen](../nitrogen) ensures that TypeScript definitions are always in sync with native type definitions.
+[Nitrogen](../concepts/nitrogen) ensures that TypeScript definitions are always in sync with native type definitions.
 You can also use Nitro without nitrogen, in this case TypeScript definitions have to be written manually.
 
 ## Supported Types

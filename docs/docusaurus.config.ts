@@ -55,20 +55,27 @@ const config: Config = {
   plugins: [
     [
       'vercel-analytics',
-      { },
+      {},
     ],
     [
       'docusaurus-plugin-llms',
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        generateMarkdownFiles: true,
+        preserveDirectoryStructure: true,
+        excludeImports: true,
         includeOrder: [
-          'what-is-nitro.md',
-          'nitro-modules.md',
-          'hybrid-objects.md',
-          'hybrid-views.md',
-          'nitrogen.md',
-          'how-to-build-a-nitro-module.md',
+          'getting-started/what-is-nitro.md',
+          'concepts/nitro-modules.md',
+          'concepts/hybrid-objects.md',
+          'concepts/hybrid-views.md',
+          'concepts/nitrogen.md',
+          'types/typing-system.md',
+          'getting-started/minimum-requirements.md',
+          'getting-started/how-to-build-a-nitro-module.md',
+          'getting-started/configuration-nitro-json.md',
+          // ... then the remaining pages in whatever order
         ]
       },
     ],
@@ -131,7 +138,7 @@ const config: Config = {
         },
         {
           type: 'doc',
-          docId: 'for-library-users',
+          docId: 'resources/for-library-users',
           position: 'right',
           label: 'Installation',
         },

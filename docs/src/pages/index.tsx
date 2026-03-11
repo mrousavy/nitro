@@ -28,7 +28,7 @@ function HomepageHeader() {
           />
           <p className="hero__subtitle">{siteConfig.tagline}</p>
 
-          <Link to="/docs/what-is-nitro" className={styles.heroButton}>
+          <Link to="/docs/getting-started/what-is-nitro" className={styles.heroButton}>
             Get Started
           </Link>
         </div>
