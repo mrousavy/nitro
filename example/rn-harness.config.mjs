@@ -27,7 +27,7 @@ const config = {
   bridgeTimeout: 120000,
 
   resetEnvironmentBetweenTestFiles: true,
-  unstable__skipAlreadyIncludedModules: false,
+  unstable__skipAlreadyIncludedModules: true,
 };
 
 export default config;
