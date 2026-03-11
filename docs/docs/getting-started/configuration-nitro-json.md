@@ -152,7 +152,10 @@ Nitrogen will then generate the following code:
   {
     "autolinking": {
       "Math": {
-        "cpp": "HybridMath"
+        "all": {
+          "language": "c++",
+          "implementationClassName": "HybridMath"
+        }
       }
     }
   }

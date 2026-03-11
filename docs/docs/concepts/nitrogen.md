@@ -257,9 +257,15 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
       ...
       "autolinking": {
         "Math": {
-          "swift": "HybridMath",
-          "kotlin": "HybridMath"
-        }
+            "ios":{
+              "language":"swift",
+              "implementationClassName":"HybridMath"
+            },
+            "android":{
+                "language":"kotlin",
+                "implementationClassName":"HybridMath"
+              }
+          }
       }
     }
     ```
@@ -270,7 +276,10 @@ In your `nitro.json`, register `HybridMath` in the `"autolinking"` section:
       ...
       "autolinking": {
         "Math": {
-          "cpp": "HybridMath"
+          "all": {
+            "language": "c++",
+            "implementationClassName": "HybridMath"
+          }
         }
       }
     }
