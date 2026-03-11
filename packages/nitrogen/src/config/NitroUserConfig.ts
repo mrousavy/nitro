@@ -92,10 +92,6 @@ const autolinkingLegacyHybridObjectSchema = z
 function normalizeLegacyAutolinkingHybridObject(
   value: z.infer<typeof autolinkingLegacyHybridObjectSchema>
 ): z.infer<typeof autolinkingModernHybridObjectSchema> {
-  console.log(
-    'Deprecated nitro.json autolinking syntax detected. Please migrate to the new `all`/`ios`/`android` format.'
-  )
-
   if (value.cpp != null) {
     return {
       all: {
