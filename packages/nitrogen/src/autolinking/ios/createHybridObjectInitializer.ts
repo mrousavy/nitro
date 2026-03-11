@@ -23,28 +23,40 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const cppImports: SourceImport[] = []
   let containsSwiftObjects = false
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
-
-    if (config?.cpp != null) {
-      // Autolink a C++ HybridObject!
-      const { cppCode, requiredImports } = createCppHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        cppClassName: config.cpp,
-      })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+    const implementation =
+      NitroConfig.current.getIosAutolinkedImplementation(hybridObjectName)
+    if (implementation == null) {
+      continue
     }
-    if (config?.swift != null) {
-      // Autolink a Swift HybridObject!
-      containsSwiftObjects = true
-      const { cppCode, requiredImports, swiftRegistrationMethods } =
-        createSwiftHybridObjectRegistration({
+
+    switch (implementation.language) {
+      case 'cpp': {
+        // Autolink a C++ HybridObject!
+        const { cppCode, requiredImports } = createCppHybridObjectRegistration({
           hybridObjectName: hybridObjectName,
-          swiftClassName: config.swift,
+          cppClassName: implementation.implementationClassName,
         })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
-      swiftRegistrations.push(swiftRegistrationMethods)
+        cppImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      case 'swift': {
+        // Autolink a Swift HybridObject!
+        containsSwiftObjects = true
+        const { cppCode, requiredImports, swiftRegistrationMethods } =
+          createSwiftHybridObjectRegistration({
+            hybridObjectName: hybridObjectName,
+            swiftClassName: implementation.implementationClassName,
+          })
+        cppImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        swiftRegistrations.push(swiftRegistrationMethods)
+        break
+      }
+      default:
+        throw new Error(
+          `The HybridObject "${hybridObjectName}" cannot be autolinked on iOS - Language "${implementation.language}" is not supported on iOS!`
+        )
     }
   }
 

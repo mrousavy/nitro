@@ -28,13 +28,15 @@ export function createKotlinHybridViewManager(
     descriptorClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
-  const autolinking = spec.config.getAutolinkedHybridObjects()
-  const viewImplementation = autolinking[spec.name]?.kotlin
-  if (viewImplementation == null) {
+  const implementation = spec.config.getAndroidAutolinkedImplementation(
+    spec.name
+  )
+  if (implementation?.language !== 'kotlin') {
     throw new Error(
-      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it must be autolinked with a Kotlin Android implementation in nitro.json!`
     )
   }
+  const viewImplementation = implementation.implementationClassName
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
