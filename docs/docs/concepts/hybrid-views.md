@@ -1,9 +1,6 @@
 ---
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Hybrid Views
 
 A **Hybrid View** is just a [**Hybrid Object**](hybrid-objects) that can also be rendered.

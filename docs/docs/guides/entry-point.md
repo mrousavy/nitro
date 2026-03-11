@@ -1,9 +1,6 @@
 ---
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Entry Point
 
 Nitro is built on top of JSI - while the primary target is React Native, Nitro even works on any other target that provides JSI.
