@@ -62,13 +62,17 @@ const config: Config = {
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        excludeImports: true,
         includeOrder: [
-          'what-is-nitro.md',
-          'nitro-modules.md',
-          'hybrid-objects.md',
-          'hybrid-views.md',
-          'nitrogen.md',
-          'how-to-build-a-nitro-module.md',
+          'getting-started/what-is-nitro.md',
+          'concepts/nitro-modules.md',
+          'concepts/hybrid-objects.md',
+          'concepts/hybrid-views.md',
+          'concepts/nitrogen.md',
+          'getting-started/minimum-requirements.md',
+          'getting-started/how-to-build-a-nitro-module.md',
+          'getting-started/configuration-nitro-json.md',
+          // ... then the remaining pages in whatever order
         ]
       },
     ],
