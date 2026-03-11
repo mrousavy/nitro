@@ -46,14 +46,14 @@ const autolinkingModernHybridObjectSchema = z
 
     if (hasAll && platformCount > 0) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: '"all" cannot be combined with platform-specific entries.',
       })
     }
 
     if (!hasAll && platformCount === 0) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message:
           'Each autolinking entry must declare either "all" or at least one platform.',
       })
