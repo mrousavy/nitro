@@ -38,7 +38,7 @@ function logLegacyAutolinkingDeprecation(config: unknown): void {
   console.warn(
     chalk.yellow(
       `Warning: nitro.json uses deprecated autolinking syntax ("cpp"/"swift"/"kotlin") for [${legacyEntries.join(', ')}]. ` +
-      `Use "all"/"ios"/"android" entries with { language, implementationClassName } instead.`
+        `Use "all"/"ios"/"android" entries with { language, implementationClassName } instead.`
     )
   )
 }
