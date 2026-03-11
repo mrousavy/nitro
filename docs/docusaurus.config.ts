@@ -55,7 +55,7 @@ const config: Config = {
   plugins: [
     [
       'vercel-analytics',
-      { },
+      {},
     ],
     [
       'docusaurus-plugin-llms',
@@ -131,7 +131,7 @@ const config: Config = {
         },
         {
           type: 'doc',
-          docId: 'for-library-users',
+          docId: 'resources/for-library-users',
           position: 'right',
           label: 'Installation',
         },
