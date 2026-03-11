@@ -304,23 +304,23 @@ You can either use [Nitrogen](../concepts/nitrogen) to automatically generate bi
           "autolinking": {
             // diff-add
             "Math": {
-            // diff-add  
-              "ios":{
-                // diff-add  
-                  "language":"swift",
-                   // diff-add  
-                  "implementationClassName":"HybridMath"
-              // diff-add  
+              // diff-add
+              "ios": {
+                // diff-add
+                "language": "swift",
+                // diff-add
+                "implementationClassName": "HybridMath"
+                // diff-add
               },
-              // diff-add  
-              "android":{
-                 // diff-add  
-                  "language":"kotlin",
-                   // diff-add  
-                  "implementationClassName":"HybridMath"
-              // diff-add  
+              // diff-add
+              "android": {
+                // diff-add
+                "language": "kotlin",
+                // diff-add
+                "implementationClassName": "HybridMath"
+                // diff-add
               }
-            // diff-add  
+            // diff-add
             }
           }
         }
