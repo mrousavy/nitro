@@ -69,6 +69,7 @@ const config: Config = {
           'concepts/hybrid-objects.md',
           'concepts/hybrid-views.md',
           'concepts/nitrogen.md',
+          'types/typing-system.md',
           'getting-started/minimum-requirements.md',
           'getting-started/how-to-build-a-nitro-module.md',
           'getting-started/configuration-nitro-json.md',
