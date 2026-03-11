@@ -8,14 +8,14 @@ import TabItem from '@theme/TabItem';
 
 # How to build a Nitro Module
 
-A [Nitro Module](nitro-modules) is essentially just a react-native library that depends on react-native-nitro-modules and exposes one or more [Hybrid Objects](hybrid-objects).
-It can either just use react-native-nitro-modules directly from C++, or use [Nitrogen](nitrogen) to generate bindings from TypeScript to native - in this case you can even use Swift and Kotlin.
+A [Nitro Module](../concepts/nitro-modules) is essentially just a react-native library that depends on react-native-nitro-modules and exposes one or more [Hybrid Objects](../concepts/hybrid-objects).
+It can either just use react-native-nitro-modules directly from C++, or use [Nitrogen](../concepts/nitrogen) to generate bindings from TypeScript to native - in this case you can even use Swift and Kotlin.
 
 This is a quick guide to build a Nitro Module from start to finish:
 
 ## 1. Create a Nitro Module
 
-First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapping a template using [nitrogen](nitrogen), [react-native-builder-bob](https://github.com/callstack/react-native-builder-bob) or [create-nitro-module](https://github.com/patrickkabwe/create-nitro-module) - or by manually adding Nitro to your existing library/app.
+First, you need to create a [Nitro Module](../concepts/nitro-modules) - either by bootstrapping a template using [nitrogen](../concepts/nitrogen), [react-native-builder-bob](https://github.com/callstack/react-native-builder-bob) or [create-nitro-module](https://github.com/patrickkabwe/create-nitro-module) - or by manually adding Nitro to your existing library/app.
 
 <Tabs groupId="template-bootstrap-cli">
   <TabItem value="nitrogen" label="nitrogen" default>
@@ -43,7 +43,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
     npm install nitrogen --save-dev
     ```
 
-    Then, you need to decide if you want to use Nitro's C++ library directly, or use [nitrogen](nitrogen) to generate specs:
+    Then, you need to decide if you want to use Nitro's C++ library directly, or use [nitrogen](../concepts/nitrogen) to generate specs:
 
     <Tabs>
       <TabItem value="with-nitrogen" label="I will use Nitrogen later on" default>
@@ -115,7 +115,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
       </TabItem>
       <TabItem value="without-nitrogen-at-all" label="I will not use Nitrogen">
 
-        If you don't plan on using Nitrogen at all - and instead write your [Hybrid Objects](hybrid-objects) manually using C++, you do not need to set up any autolinking files since you will be responsible for exposing your Hybrid Objects to JS.
+        If you don't plan on using Nitrogen at all - and instead write your [Hybrid Objects](../concepts/hybrid-objects) manually using C++, you do not need to set up any autolinking files since you will be responsible for exposing your Hybrid Objects to JS.
 
       </TabItem>
     </Tabs>
@@ -124,7 +124,7 @@ First, you need to create a [Nitro Module](nitro-modules) - either by bootstrapp
 
 ## 2. Create Hybrid Object specs
 
-To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - either by using Nitro's code-generator CLI “[Nitrogen](nitrogen)”, or by just manually extending the `HybridObject` base class in C++.
+To actually use Nitro, you need to create [Hybrid Objects](../concepts/hybrid-objects) - either by using Nitro's code-generator CLI “[Nitrogen](../concepts/nitrogen)”, or by just manually extending the `HybridObject` base class in C++.
 
 <Tabs groupId="nitrogen-or-not">
   <TabItem value="nitrogen" label="With Nitrogen ✨" default>
@@ -162,7 +162,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 
     ### 2.2. Run nitrogen
 
-    After writing specs, re-generate the generated code by running [nitrogen](nitrogen):
+    After writing specs, re-generate the generated code by running [nitrogen](../concepts/nitrogen):
 
     ```sh
     npx nitrogen
@@ -244,7 +244,7 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
   </TabItem>
   <TabItem value="manually" label="Manually">
 
-    To create new [Hybrid Objects](hybrid-objects) manually, you simply create a new C++ class that meets the following requirements:
+    To create new [Hybrid Objects](../concepts/hybrid-objects) manually, you simply create a new C++ class that meets the following requirements:
 
     1. It **public**-inherits from `HybridObject`
     2. It calls the `HybridObject` constructor with its name
@@ -289,12 +289,12 @@ To actually use Nitro, you need to create [Hybrid Objects](hybrid-objects) - eit
 Each Hybrid Object you want to be able to construct from JS has to be registered in Nitro's [`HybridObjectRegistry`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/registry/HybridObjectRegistry.hpp).
 If you don't want to register this Hybrid Object, you can skip this part - you will still be able to create it from another Hybrid Object's function (e.g. using the Factory-pattern).
 
-You can either use [Nitrogen](nitrogen) to automatically generate bindings for your [Hybrid Object](hybrid-objects)'s constructor, or manually register them using the C++ API for `HybridObjectRegistry`:
+You can either use [Nitrogen](../concepts/nitrogen) to automatically generate bindings for your [Hybrid Object](../concepts/hybrid-objects)'s constructor, or manually register them using the C++ API for `HybridObjectRegistry`:
 
 <Tabs groupId="nitrogen-or-not">
   <TabItem value="nitrogen" label="With Nitrogen ✨" default>
 
-  In your [`nitro.json` config](configuration-nitro-json), you can connect the name of the [Hybrid Object](hybrid-objects) (`"Math"`) with the name of the native C++/Swift/Kotlin class that you used to implement the spec (`HybridMath`) using the `autolinking` section:
+  In your [`nitro.json` config](configuration-nitro-json), you can connect the name of the [Hybrid Object](../concepts/hybrid-objects) (`"Math"`) with the name of the native C++/Swift/Kotlin class that you used to implement the spec (`HybridMath`) using the `autolinking` section:
 
     <Tabs groupId="native-language">
       <TabItem value="swift-kotlin" label="Swift/Kotlin" default>
@@ -331,7 +331,7 @@ You can either use [Nitrogen](nitrogen) to automatically generate bindings for y
       </TabItem>
     </Tabs>
 
-    Now, just run [Nitrogen](nitrogen) again to generate the native bindings:
+    Now, just run [Nitrogen](../concepts/nitrogen) again to generate the native bindings:
 
     ```sh
     npx nitrogen

@@ -25,4 +25,4 @@ npx nitrogen
 
 ## Usage
 
-See the [Nitrogen documentation](https://nitro.margelo.com/docs/nitrogen) for more information.
+See the [Nitrogen documentation](https://nitro.margelo.com/docs/concepts/nitrogen) for more information.

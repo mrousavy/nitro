@@ -6,10 +6,10 @@ import TabItem from '@theme/TabItem';
 
 # Worklets/Threading
 
-Nitro itself is fully runtime-agnostic, which means every [Hybrid Object](hybrid-objects) can be used from any JS Runtime or Worklet Context.
+Nitro itself is fully runtime-agnostic, which means every [Hybrid Object](../concepts/hybrid-objects) can be used from any JS Runtime or Worklet Context.
 
 This allows the caller to call into native Nitro Modules from libraries like [react-native-worklets-core](https://github.com/margelo/react-native-worklets-core), or [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated).
-You can use a Nitro [Hybrid Object](hybrid-objects) on the default React JS context, on the UI context, or on any other background worklet context.
+You can use a Nitro [Hybrid Object](../concepts/hybrid-objects) on the default React JS context, on the UI context, or on any other background worklet context.
 
 <Tabs groupId="worklet-library">
   <TabItem value="rnw" label="react-native-worklets (Reanimated)" default>
@@ -69,7 +69,7 @@ Your `runSync` and `runAsync` implementations must run the given `function` on t
 
 ## Boxing
 
-A [Hybrid Object](hybrid-objects) is a JS object with `jsi::NativeState` and a prototype chain.
+A [Hybrid Object](../concepts/hybrid-objects) is a JS object with `jsi::NativeState` and a prototype chain.
 If you need to interop with legacy APIs or APIs that can't deal with `jsi::NativeState` yet, you can _box_ the Hybrid Object into a `jsi::HostObject`:
 
 ```ts

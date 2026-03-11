@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Errors
 
-Every method in a [Hybrid Object](hybrid-objects) can throw an error using the language-default error throwing feature:
+Every method in a [Hybrid Object](../concepts/hybrid-objects) can throw an error using the language-default error throwing feature:
 
 <Tabs groupId="native-language">
   <TabItem value="swift" label="Swift" default>
