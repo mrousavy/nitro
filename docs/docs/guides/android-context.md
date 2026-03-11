@@ -1,9 +1,6 @@
 ---
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Android `Context`
 
 Many Android APIs require a [`Context`](https://developer.android.com/reference/android/content/Context) object, which allows access to application-specific resources and classes, as well as calls to hardware APIs.
