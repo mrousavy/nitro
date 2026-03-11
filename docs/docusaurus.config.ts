@@ -62,6 +62,7 @@ const config: Config = {
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        generateMarkdownFiles: true,
         excludeImports: true,
         includeOrder: [
           'getting-started/what-is-nitro.md',
