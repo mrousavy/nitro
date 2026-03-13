@@ -299,6 +299,10 @@ interface SharedTestObjectProps {
   ): SomeExternalObject
 }
 
+export type Column = boolean | number | string | ArrayBuffer | null | undefined
+
+export type Rows = Column[]
+
 // This is a C++-based `HybridObject`.
 // Since it inherited from the `SharedTestObjectProps` interface,
 // it will be flattened out and every property/method will be added here.
@@ -324,6 +328,10 @@ export interface TestObjectCpp
 
   // Custom C++ JSI Converters
   bounceCustomType(value: CustomString): CustomString
+
+  writeRows(rows?: Rows): void
+
+  writeColumn(column: Column): void
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
