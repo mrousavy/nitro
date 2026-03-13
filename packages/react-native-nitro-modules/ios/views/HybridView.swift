@@ -29,7 +29,7 @@
      * React props are updated in a single batch/transaction.
      */
     func afterUpdate()
-    
+
     /**
      * Called when the `HybridView` is about
      * to be dropped and unmounted.
@@ -42,7 +42,7 @@
   extension HybridView {
     public func beforeUpdate() { /* noop */  }
     public func afterUpdate() { /* noop */  }
-    public func onDropView() { /* noop */ }
+    public func onDropView() { /* noop */  }
   }
 
   extension HybridView {
