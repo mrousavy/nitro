@@ -150,6 +150,12 @@ using namespace ${namespace}::views;
   swiftPart.maybePrepareForRecycle();
 }
 
+- (void)invalidate {
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  [super invalidate];
+}
+
 @end
   `
 

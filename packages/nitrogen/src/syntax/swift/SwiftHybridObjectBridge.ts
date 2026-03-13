@@ -69,6 +69,11 @@ public final func maybePrepareForRecycle() {
   guard let recyclable = __implementation as? any RecyclableView else { return }
   recyclable.prepareForRecycle()
 }
+`.trim(),
+      `
+public final func onDropView() {
+  __implementation.onDropView()
+}
 `.trim()
     )
   }
