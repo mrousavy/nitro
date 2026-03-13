@@ -39,7 +39,7 @@ public class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? HybridTestView
+    val hybridView = getHybridView(view)
       ?: throw Error("Couldn't find view $view in local views table!")
 
     // 1. Update each prop individually
@@ -51,9 +51,17 @@ public class HybridTestViewManager: SimpleViewManager<View>() {
     return super.updateState(view, props, stateWrapper)
   }
 
+  override fun onDropViewInstance(view: View) {
+    super.onDropViewInstance(view)
+
+    val hybridView = getHybridView(view)
+      ?: return
+    hybridView.onDropView()
+  }
+
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
     super.prepareToRecycleView(reactContext, view)
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? HybridTestView
+    val hybridView = getHybridView(view)
       ?: return null
 
     @Suppress("USELESS_IS_CHECK")
@@ -66,5 +74,10 @@ public class HybridTestViewManager: SimpleViewManager<View>() {
     } else {
       return null
     }
+  }
+
+  private fun getHybridView(view: View): HybridTestView {
+    return view.getTag(associated_hybrid_view_tag) as? HybridTestView
+      ?: null
   }
 }
