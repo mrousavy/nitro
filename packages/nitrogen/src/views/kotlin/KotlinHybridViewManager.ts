@@ -114,7 +114,6 @@ public class ${manager}: SimpleViewManager<View>() {
 
   private fun getHybridView(view: View): ${viewImplementation}? {
     return view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
-      ?: null
   }
 }
   `.trim()
