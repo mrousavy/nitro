@@ -1,6 +1,7 @@
 package com.margelo.nitro.test
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
@@ -26,6 +27,10 @@ class HybridRecyclableTestView(
         view.setBackgroundColor(color)
       }
     }
+
+  override fun onDropView() {
+    Log.i(TAG, "View dropped!")
+  }
 
   // Recycling conformance
   override fun prepareForRecycle() {

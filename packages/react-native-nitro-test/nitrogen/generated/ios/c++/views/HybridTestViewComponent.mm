@@ -119,4 +119,10 @@ using namespace margelo::nitro::test::views;
   swiftPart.maybePrepareForRecycle();
 }
 
+- (void)invalidate {
+  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  [super invalidate];
+}
+
 @end
