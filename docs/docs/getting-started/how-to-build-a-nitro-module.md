@@ -305,14 +305,27 @@ You can either use [Nitrogen](../concepts/nitrogen) to automatically generate bi
             // diff-add
             "Math": {
               // diff-add
-              "swift": "HybridMath"
+              "ios": {
+                // diff-add
+                "language": "swift",
+                // diff-add
+                "implementationClassName": "HybridMath"
+                // diff-add
+              },
               // diff-add
-              "kotlin": "HybridMath"
+              "android": {
+                // diff-add
+                "language": "kotlin",
+                // diff-add
+                "implementationClassName": "HybridMath"
+                // diff-add
+              }
             // diff-add
             }
           }
         }
         ```
+
       </TabItem>
       <TabItem value="cpp" label="C++">
         ```json title="nitro.json"
@@ -322,8 +335,14 @@ You can either use [Nitrogen](../concepts/nitrogen) to automatically generate bi
             // diff-add
             "Math": {
               // diff-add
-              "cpp": "HybridMath"
-            // diff-add
+              "all": {
+                // diff-add
+                "language": "c++",
+                // diff-add
+                "implementationClassName": "HybridMath"
+                // diff-add
+              }
+              // diff-add
             }
           }
         }
