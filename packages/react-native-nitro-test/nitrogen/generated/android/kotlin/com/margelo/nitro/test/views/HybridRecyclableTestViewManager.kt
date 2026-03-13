@@ -76,7 +76,7 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
     }
   }
 
-  private fun getHybridView(view: View): HybridRecyclableTestView {
+  private fun getHybridView(view: View): HybridRecyclableTestView? {
     return view.getTag(associated_hybrid_view_tag) as? HybridRecyclableTestView
       ?: null
   }

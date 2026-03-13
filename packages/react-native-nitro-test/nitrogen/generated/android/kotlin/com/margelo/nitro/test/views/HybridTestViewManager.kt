@@ -76,7 +76,7 @@ public class HybridTestViewManager: SimpleViewManager<View>() {
     }
   }
 
-  private fun getHybridView(view: View): HybridTestView {
+  private fun getHybridView(view: View): HybridTestView? {
     return view.getTag(associated_hybrid_view_tag) as? HybridTestView
       ?: null
   }
