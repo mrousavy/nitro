@@ -88,11 +88,9 @@ public class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun onDropViewInstance(view: View) {
-    super.onDropViewInstance(view)
-
     val hybridView = getHybridView(view)
-      ?: return
-    hybridView.onDropView()
+    hybridView?.onDropView()
+    return super.onDropViewInstance(view)
   }
 
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {

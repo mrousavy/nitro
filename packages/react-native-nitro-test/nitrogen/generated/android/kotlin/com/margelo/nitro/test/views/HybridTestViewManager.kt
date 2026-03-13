@@ -19,7 +19,7 @@ import com.margelo.nitro.test.*
 /**
  * Represents the React Native `ViewManager` for the "TestView" Nitro HybridView.
  */
-class HybridTestViewManager: SimpleViewManager<View>() {
+public class HybridTestViewManager: SimpleViewManager<View>() {
   init {
     if (RecyclableView::class.java.isAssignableFrom(HybridTestView::class.java)) {
       // Enable view recycling
@@ -52,11 +52,9 @@ class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun onDropViewInstance(view: View) {
-    super.onDropViewInstance(view)
-
     val hybridView = getHybridView(view)
-      ?: return
-    hybridView.onDropView()
+    hybridView?.onDropView()
+    return super.onDropViewInstance(view)
   }
 
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
