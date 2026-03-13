@@ -57,6 +57,10 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_______Unit_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_OldEnum.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_WeirdNumbersEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_Boolean_SomeEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_SomeEnum_SomeOtherEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_Boolean_SomeEnum_SomeOtherEnum.cpp
+  ../nitrogen/generated/android/c++/JVariant_SomeEnum_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_Car_Person.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridBaseSpec_OptionalWrapper.cpp
   ../nitrogen/generated/android/c++/JCoreTypesVariant.cpp

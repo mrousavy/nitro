@@ -20,6 +20,7 @@ import chalk from 'chalk'
 import { groupByPlatform, type SourceFile } from './syntax/SourceFile.js'
 import { Logger } from './Logger.js'
 import { NitroConfig } from './config/NitroConfig.js'
+import { initializeTypeCreation } from './syntax/createType.js'
 import { createIOSAutolinking } from './autolinking/createIOSAutolinking.js'
 import { createAndroidAutolinking } from './autolinking/createAndroidAutolinking.js'
 import type { Autolinking } from './autolinking/Autolinking.js'
@@ -60,6 +61,9 @@ export async function runNitrogen({
     globPattern.push('!' + path.join(baseDirectory, ignorePath))
   })
   project.addSourceFilesAtPaths(globPattern)
+
+  // Initialize type creation context (needed for enum reconstruction from flattened unions)
+  initializeTypeCreation(project)
 
   // Loop through all source files to log them
   Logger.info(
