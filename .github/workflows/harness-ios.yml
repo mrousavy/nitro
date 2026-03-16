@@ -146,6 +146,9 @@ jobs:
         run: |
           echo -e "127.0.0.1     $(hostname -f) $(hostname -s)" | sudo tee -a /etc/hosts
           echo -e "" | sudo tee -a /etc/hosts
+        
+      - name: Install Watchman
+        run: brew install watchman
 
       - name: Setup iOS Simulator
         uses: futureware-tech/simulator-action@v4
