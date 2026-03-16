@@ -42,12 +42,12 @@
     "@react-native/eslint-config": "0.83.0",
     "@react-native/metro-config": "0.83.0",
     "@react-native/typescript-config": "0.83.0",
-    "@react-native-harness/platform-android": "1.0.0",
-    "@react-native-harness/platform-apple": "1.0.0",
+    "@react-native-harness/platform-android": "1.1.0-rc.1",
+    "@react-native-harness/platform-apple": "1.1.0-rc.1",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
     "nitrogen": "*",
-    "react-native-harness": "1.0.0"
+    "react-native-harness": "1.1.0-rc.1"
   },
   "engines": {
     "node": ">=18"
