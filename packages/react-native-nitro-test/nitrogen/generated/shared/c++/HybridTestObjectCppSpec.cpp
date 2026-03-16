@@ -136,6 +136,11 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
       prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
       prototype.registerHybridMethod("getVariantWeirdNumbersEnum", &HybridTestObjectCppSpec::getVariantWeirdNumbersEnum);
+      prototype.registerHybridMethod("getVariantSomeEnum", &HybridTestObjectCppSpec::getVariantSomeEnum);
+      prototype.registerHybridMethod("getVariantMultipleEnums", &HybridTestObjectCppSpec::getVariantMultipleEnums);
+      prototype.registerHybridMethod("getVariantStringAndEnum", &HybridTestObjectCppSpec::getVariantStringAndEnum);
+      prototype.registerHybridMethod("getVariantThreeTypes", &HybridTestObjectCppSpec::getVariantThreeTypes);
+      prototype.registerHybridMethod("getVariantNumberAndEnum", &HybridTestObjectCppSpec::getVariantNumberAndEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);
       prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectCppSpec::passAllEmptyObjectVariant);
