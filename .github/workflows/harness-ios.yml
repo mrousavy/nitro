@@ -142,6 +142,11 @@ jobs:
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 
+      - name: 'Update /etc/hosts'
+        run: |
+          echo -e "127.0.0.1     $(hostname -f) $(hostname -s)" | sudo tee -a /etc/hosts
+          echo -e "" | sudo tee -a /etc/hosts
+
       - name: Setup iOS Simulator
         uses: futureware-tech/simulator-action@v4
         with:
