@@ -19,6 +19,13 @@ public enum RuntimeError: Error, CustomStringConvertible {
   }
 
   /**
+   * Creates a new `RuntimeError` with the given `message`.
+   */
+  public convenience init(_ message: String) {
+    return .error(withMessage: message)
+  }
+
+  /**
    * Creates a new `RuntimeError` from the given C++ `std::exception`.
    */
   public static func from(cppError: std.exception_ptr) -> RuntimeError {
