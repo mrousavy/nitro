@@ -25,6 +25,7 @@ const config = {
   ],
   defaultRunner: "android",
   bridgeTimeout: 120000,
+  unstable__enableMetroCache: true,
 };
 
 export default config;
