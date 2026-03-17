@@ -62,6 +62,7 @@ on:
       - "example/rn-harness.config.mjs"
 
 env:
+  DEBUG: Metro:*
   # Device configuration - can be overridden by workflow_dispatch inputs
   DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
   IOS_VERSION: ${{ github.event.inputs.ios_version || '26.2' }}
