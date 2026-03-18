@@ -22,7 +22,7 @@ public enum RuntimeError: Error, CustomStringConvertible {
    * Creates a new `RuntimeError` with the given `message`.
    */
   public init(_ message: String) {
-    return .error(withMessage: message)
+    self = .error(withMessage: message)
   }
 
   /**
