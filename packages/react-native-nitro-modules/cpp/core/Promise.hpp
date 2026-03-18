@@ -206,7 +206,7 @@ public:
    * Get the result of the Promise if it has been resolved.
    * If the Promise is not resolved, this will throw.
    */
-  inline const TResult& getResult() {
+  inline const TResult& getResult() const {
     if (!isResolved()) {
       std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
       throw std::runtime_error("Cannot get result when Promise<" + typeName + "> is not yet resolved!");
@@ -217,7 +217,7 @@ public:
    * Get the error of the Promise if it has been rejected.
    * If the Promise is not rejected, this will throw.
    */
-  inline const std::exception_ptr& getError() {
+  inline const std::exception_ptr& getError() const {
     if (!isRejected()) {
       std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
       throw std::runtime_error("Cannot get error when Promise<" + typeName + "> is not yet rejected!");
@@ -297,7 +297,7 @@ public:
   std::future<void> await();
 
 public:
-  const std::exception_ptr& getError();
+  const std::exception_ptr& getError() const;
 
 public:
   inline bool isResolved() const noexcept {
