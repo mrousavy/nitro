@@ -21,7 +21,7 @@ public enum RuntimeError: Error, CustomStringConvertible {
   /**
    * Creates a new `RuntimeError` with the given `message`.
    */
-  public convenience init(_ message: String) {
+  public init(_ message: String) {
     return .error(withMessage: message)
   }
 
