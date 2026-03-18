@@ -2,14 +2,17 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+const title = 'Nitro Modules';
+const tagline = 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.';
+const url = 'https://nitro.margelo.com';
+
 const config: Config = {
-  title: 'Nitro Modules',
-  tagline:
-    'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+  title: title,
+  tagline: tagline,
   favicon: '/img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://nitro.margelo.com',
+  url: url,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -252,8 +255,7 @@ const config: Config = {
       },
       {
         property: 'og:description',
-        content:
-          'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+        content: tagline,
       },
       {
         property: 'og:image',
