@@ -44,6 +44,23 @@ public:
     ref._state = nullptr;
   }
 
+  WeakReference& operator=(WeakReference&& ref) noexcept {
+    if (this == &ref)
+      return *this;
+
+    if (_state != nullptr) {
+      _state->weakRefCount--;
+      maybeDestroy();
+    }
+
+    _value = ref._value;
+    _state = ref._state;
+    ref._value = nullptr;
+    ref._state = nullptr;
+
+    return *this;
+  }
+
   WeakReference& operator=(const WeakReference& ref) {
     if (this == &ref)
       return *this;
