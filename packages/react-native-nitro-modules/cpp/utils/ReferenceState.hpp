@@ -23,7 +23,7 @@ namespace margelo::nitro {
 struct ReferenceState {
   std::atomic_size_t strongRefCount;
   std::atomic_size_t weakRefCount;
-  bool isDeleted;
+  std::atomic<bool> isDeleted;
   std::mutex mutex;
 
   /**
