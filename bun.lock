@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "react-native-nitro",
@@ -58,6 +57,7 @@
       "name": "react-native-nitro-example",
       "version": "0.35.2",
       "dependencies": {
+        "@gmessier/rfgtgyh-test-temp-nitro": "^0.0.1",
         "@react-native-segmented-control/segmented-control": "^2.5.7",
         "@react-navigation/bottom-tabs": "^7.4.5",
         "@react-navigation/native": "^7.1.26",
@@ -65,6 +65,7 @@
         "react": "19.2.0",
         "react-native": "0.83.0",
         "react-native-nitro-modules": "*",
+        "react-native-nitro-player": "^0.7.0",
         "react-native-nitro-test": "*",
         "react-native-nitro-test-external": "*",
         "react-native-safe-area-context": "^5.6.2",
@@ -718,6 +719,8 @@
     "@eslint/js": ["@eslint/js@9.37.0", "", {}, "sha512-jaS+NJ+hximswBG6pjNX0uEJZkrT0zwpVi3BA3vX22aFGjJjmgSTSmPpZCRKmoBL5VY/M6p0xsSJx7rk7sy5gg=="],
 
     "@fastify/busboy": ["@fastify/busboy@2.1.1", "", {}, "sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA=="],
+
+    "@gmessier/rfgtgyh-test-temp-nitro": ["@gmessier/rfgtgyh-test-temp-nitro@0.0.1", "", { "peerDependencies": { "react": "*", "react-native": "*", "react-native-nitro-modules": "*" } }, "sha512-wirAkuyWMbkBF+l4NsfFwRQ+wBjiCWJ0xUn5If8sserKuBPq+oVzSGr6tmfsh8mgu8x+g835UiumIO4T+2yvhw=="],
 
     "@hapi/hoek": ["@hapi/hoek@9.3.0", "", {}, "sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ=="],
 
@@ -3428,6 +3431,8 @@
     "react-native-nitro-example": ["react-native-nitro-example@workspace:example"],
 
     "react-native-nitro-modules": ["react-native-nitro-modules@workspace:packages/react-native-nitro-modules"],
+
+    "react-native-nitro-player": ["react-native-nitro-player@0.7.0", "", { "peerDependencies": { "react": "*", "react-native": "*", "react-native-nitro-modules": "*" } }, "sha512-ksEYD+l578oXNZG86MJBtUwWYE7f9JuY7I7V/zVJMc3pbrc8tz0LY961GU1oh3GB1uECD8TdmT6sKLningXXZg=="],
 
     "react-native-nitro-test": ["react-native-nitro-test@workspace:packages/react-native-nitro-test"],
 

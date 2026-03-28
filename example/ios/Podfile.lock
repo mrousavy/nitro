@@ -26,6 +26,54 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
+  - NitroPlayer (0.7.0):
+    - hermes-engine
+    - NitroModules
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
+  - NitroSpeech (0.0.1):
+    - hermes-engine
+    - NitroModules
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core-prebuilt
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - ReactNativeDependencies
+    - Yoga
   - NitroTest (0.35.2):
     - hermes-engine
     - NitroModules
@@ -1976,6 +2024,8 @@ DEPENDENCIES:
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - NitroModules (from `../../node_modules/react-native-nitro-modules`)
+  - NitroPlayer (from `../../node_modules/react-native-nitro-player`)
+  - "NitroSpeech (from `../../node_modules/@gmessier/rfgtgyh-test-temp-nitro`)"
   - NitroTest (from `../../node_modules/react-native-nitro-test`)
   - NitroTestExternal (from `../../node_modules/react-native-nitro-test-external`)
   - RCTDeprecation (from `../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -2062,6 +2112,10 @@ EXTERNAL SOURCES:
     :tag: hermes-v0.14.0
   NitroModules:
     :path: "../../node_modules/react-native-nitro-modules"
+  NitroPlayer:
+    :path: "../../node_modules/react-native-nitro-player"
+  NitroSpeech:
+    :path: "../../node_modules/@gmessier/rfgtgyh-test-temp-nitro"
   NitroTest:
     :path: "../../node_modules/react-native-nitro-test"
   NitroTestExternal:
@@ -2217,8 +2271,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBLazyVector: 7c1d69992204c5ec452eeefa4a24b0ff311709c8
-  hermes-engine: 16e781d7fca74c8bb3ca59b99527d9633ee9ee36
+  hermes-engine: 4df240db09b8f56297ca8e63c2a793d538964397
   NitroModules: 113b4a704e0d6a436d2c5600d5af41f847b0fdd1
+  NitroPlayer: 274fe1f4cae54e6e013fc98f3ffe76d567c3dc63
+  NitroSpeech: 44fed7a2a3b46a0a1a180d381056516f9327c013
   NitroTest: 69754d44fa98075944565e5df6b321c09f2ee4be
   NitroTestExternal: 63f62beac90ad88b7c04f02928859441451fb42c
   RCTDeprecation: dbbb85eae640e3b43cc16462d0476b00ca5959ae
@@ -2229,7 +2285,7 @@ SPEC CHECKSUMS:
   React: f6f8fc5c01e77349cdfaf49102bcb928ac31d8ed
   React-callinvoker: 3e62a849bda1522c6422309c02f5dc3210bc5359
   React-Core: 0b765bc7c2b83dff178c2b03ed8a0390df26f18c
-  React-Core-prebuilt: 88810feb58457484bff17e9e91a15453407d745a
+  React-Core-prebuilt: 37f17c7949e91eea47a1b8878c231d9c898f46d5
   React-CoreModules: 55b932564ba696301cb683a86385be6a6f137e57
   React-cxxreact: 5bfb95256fde56cc0f9ce425f38cfaa085e71ad2
   React-debug: f9dda2791d3ebe2078bc6102641edab77917efb7
@@ -2292,9 +2348,9 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 23e2bca1661f8781e55fcc05a151fc1df97bc1fb
   ReactCodegen: c049d7e966ed24be56d8e21cb1b8880316975e76
   ReactCommon: 89ccc6cb100ca5a0303b46483037ef8f3e06e2e0
-  ReactNativeDependencies: 1a7e3c3ffa57533d8118dd9bc01790ffa9e02a3b
+  ReactNativeDependencies: a482285e53605a6a6f4d3c4221906a65051d584b
   RNScreens: dd61bc3a3e6f6901ad833efa411917d44827cf51
-  Yoga: 21f482cbc18b56cdc477cd3a0c5b8c2c83ac27ce
+  Yoga: 90687fcd1ebd927341caed917696d692813c0b24
 
 PODFILE CHECKSUM: cc2ab22c5169410d8739c73db2747f1617e7eaf0
 
