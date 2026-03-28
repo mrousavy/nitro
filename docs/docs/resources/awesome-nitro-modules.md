@@ -72,6 +72,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-unistyles** | Universal styling system | [GitHub](https://github.com/jpudysz/react-native-unistyles) |
+| **react-native-nitro-gradients** | Native linear, radial & sweep gradients with blur and first-class Reanimated support | [GitHub](https://github.com/Swami-Laxmikant/react-native-nitro-gradients) |
 
 ### Utilities
 
