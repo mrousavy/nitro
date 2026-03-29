@@ -64,40 +64,40 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
-#include "Car.hpp"
-#include "ExternalObjectStruct.hpp"
-#include "HybridBaseSpec.hpp"
-#include "HybridChildSpec.hpp"
-#include "HybridPlatformObjectSpec.hpp"
-#include "HybridRecyclableTestViewSpec.hpp"
-#include "HybridTestObjectSwiftKotlinSpec.hpp"
-#include "HybridTestViewSpec.hpp"
-#include "JsStyleStruct.hpp"
-#include "OldEnum.hpp"
-#include "OptionalCallback.hpp"
-#include "OptionalWrapper.hpp"
-#include "PartialPerson.hpp"
-#include "Person.hpp"
-#include "Powertrain.hpp"
-#include "WeirdNumbersEnum.hpp"
-#include "WrappedJsStruct.hpp"
-#include <NitroModules/AnyMap.hpp>
-#include <NitroModules/ArrayBuffer.hpp>
-#include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/Null.hpp>
-#include <NitroModules/Promise.hpp>
-#include <NitroModules/PromiseHolder.hpp>
-#include <NitroModules/Result.hpp>
+#include <NitroTest/ExternalObjectStruct.hpp>
+#include <NitroTest/OptionalCallback.hpp>
+#include <NitroTest/PartialPerson.hpp>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <NitroTest/HybridTestViewSpec.hpp>
 #include <chrono>
-#include <exception>
-#include <functional>
-#include <memory>
-#include <optional>
-#include <string>
+#include <NitroTest/WrappedJsStruct.hpp>
+#include <NitroTest/OptionalWrapper.hpp>
+#include <NitroTest/WeirdNumbersEnum.hpp>
+#include <NitroTest/JsStyleStruct.hpp>
 #include <unordered_map>
+#include <functional>
+#include <NitroTest/OldEnum.hpp>
+#include <NitroTest/HybridTestObjectSwiftKotlinSpec.hpp>
+#include <NitroTest/HybridRecyclableTestViewSpec.hpp>
+#include <NitroTest/HybridPlatformObjectSpec.hpp>
+#include <exception>
+#include <NitroTest/HybridChildSpec.hpp>
+#include <NitroTest/Powertrain.hpp>
+#include <NitroTest/Car.hpp>
 #include <variant>
 #include <vector>
+#include <string>
+#include <NitroTest/Person.hpp>
+#include <optional>
+#include <NitroTest/HybridBaseSpec.hpp>
+#include <memory>
+#include <NitroModules/Result.hpp>
+#include <NitroModules/Null.hpp>
+#include <NitroModules/AnyMap.hpp>
+#include <NitroModules/PromiseHolder.hpp>
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/ArrayBuffer.hpp>
+#include <NitroModules/ArrayBufferHolder.hpp>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,

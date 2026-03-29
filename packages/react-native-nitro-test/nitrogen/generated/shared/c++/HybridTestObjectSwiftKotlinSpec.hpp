@@ -49,35 +49,35 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
 
 #include <memory>
-#include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include <NitroTest/HybridTestObjectSwiftKotlinSpec.hpp>
 #include <optional>
 #include <string>
 #include <NitroModules/Null.hpp>
 #include <variant>
 #include <vector>
-#include "Powertrain.hpp"
-#include "OldEnum.hpp"
+#include <NitroTest/Powertrain.hpp>
+#include <NitroTest/OldEnum.hpp>
 #include <functional>
-#include "Person.hpp"
-#include "PartialPerson.hpp"
-#include "Car.hpp"
-#include "HybridChildSpec.hpp"
+#include <NitroTest/Person.hpp>
+#include <NitroTest/PartialPerson.hpp>
+#include <NitroTest/Car.hpp>
+#include <NitroTest/HybridChildSpec.hpp>
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <unordered_map>
-#include "MapWrapper.hpp"
+#include <NitroTest/MapWrapper.hpp>
 #include <exception>
 #include <chrono>
-#include "JsStyleStruct.hpp"
-#include "WrappedJsStruct.hpp"
-#include "OptionalWrapper.hpp"
-#include "OptionalCallback.hpp"
-#include "WeirdNumbersEnum.hpp"
-#include "HybridBaseSpec.hpp"
-#include "HybridTestViewSpec.hpp"
+#include <NitroTest/JsStyleStruct.hpp>
+#include <NitroTest/WrappedJsStruct.hpp>
+#include <NitroTest/OptionalWrapper.hpp>
+#include <NitroTest/OptionalCallback.hpp>
+#include <NitroTest/WeirdNumbersEnum.hpp>
+#include <NitroTest/HybridBaseSpec.hpp>
+#include <NitroTest/HybridTestViewSpec.hpp>
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
-#include "ExternalObjectStruct.hpp"
+#include <NitroTest/ExternalObjectStruct.hpp>
 
 namespace margelo::nitro::test {
 

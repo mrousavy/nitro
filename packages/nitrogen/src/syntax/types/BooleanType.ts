@@ -32,7 +32,7 @@ export class BooleanType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
+  getRequiredImports(_language: Language): SourceImport[] {
     return []
   }
 }

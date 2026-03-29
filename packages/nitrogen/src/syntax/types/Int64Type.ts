@@ -32,7 +32,7 @@ export class Int64Type implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
+  getRequiredImports(_language: Language): SourceImport[] {
     return []
   }
 }

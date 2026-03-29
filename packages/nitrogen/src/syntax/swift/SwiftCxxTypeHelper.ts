@@ -6,6 +6,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
+import { cppModuleScopedImportName } from '../types/CppIncludeConsumer.js'
 import type { NamedType, Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
 import { escapeComments, indent } from '../../utils.js'
@@ -90,8 +91,8 @@ function createCxxHybridObjectSwiftHelper(
     includes.push({
       language: 'c++',
       // Hybrid Object Swift C++ class wrapper
-      name: `${HybridTSpecSwift}.hpp`,
-      space: 'user',
+      name: cppModuleScopedImportName(`${HybridTSpecSwift}.hpp`),
+      space: 'system',
     })
   } else {
     // it's an external type - we need to include the external module's bridge as the *Swift.hpp header is private.

@@ -34,8 +34,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { struct Person; }
 
 #include <string>
-#include "Powertrain.hpp"
-#include "Person.hpp"
+#include <NitroTest/Powertrain.hpp>
+#include <NitroTest/Person.hpp>
 #include <optional>
 #include <vector>
 #include <variant>

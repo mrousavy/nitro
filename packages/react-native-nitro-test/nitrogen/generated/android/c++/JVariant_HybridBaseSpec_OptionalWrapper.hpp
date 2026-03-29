@@ -11,8 +11,8 @@
 #include <variant>
 
 #include <memory>
-#include "HybridBaseSpec.hpp"
-#include "OptionalWrapper.hpp"
+#include <NitroTest/HybridBaseSpec.hpp>
+#include <NitroTest/OptionalWrapper.hpp>
 #include <variant>
 #include "JHybridBaseSpec.hpp"
 #include "JOptionalWrapper.hpp"

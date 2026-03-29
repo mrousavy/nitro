@@ -8,23 +8,28 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::test::external { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
 // Include C++ defined types
-#include "HybridSomeExternalObjectSpec.hpp"
-#include "OptionalPrimitivesHolder.hpp"
-#include <NitroModules/Result.hpp>
+#include <NitroTestExternal/HybridBaseSpec.hpp>
+#include <NitroTestExternal/OptionalPrimitivesHolder.hpp>
 #include <exception>
+#include <string>
+#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <memory>
 #include <optional>
-#include <string>
+#include <NitroModules/Result.hpp>
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
@@ -121,5 +126,17 @@ namespace margelo::nitro::test::external::bridge::swift {
   inline Result_OptionalPrimitivesHolder_ create_Result_OptionalPrimitivesHolder_(const std::exception_ptr& error) noexcept {
     return Result<OptionalPrimitivesHolder>::withError(error);
   }
+  
+  // pragma MARK: std::shared_ptr<HybridBaseSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridBaseSpec>`.
+   */
+  using std__shared_ptr_HybridBaseSpec_ = std::shared_ptr<HybridBaseSpec>;
+  std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridBaseSpec>
+  using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
+  inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
 
 } // namespace margelo::nitro::test::external::bridge::swift

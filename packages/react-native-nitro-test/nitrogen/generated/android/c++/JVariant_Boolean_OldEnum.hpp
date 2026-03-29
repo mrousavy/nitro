@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "OldEnum.hpp"
+#include <NitroTest/OldEnum.hpp>
 #include <variant>
 #include "JOldEnum.hpp"
 

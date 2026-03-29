@@ -31,7 +31,7 @@
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 
-#include "JsStyleStruct.hpp"
+#include <NitroTest/JsStyleStruct.hpp>
 #include <vector>
 
 namespace margelo::nitro::test {

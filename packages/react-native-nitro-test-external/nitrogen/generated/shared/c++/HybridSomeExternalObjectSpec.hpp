@@ -17,7 +17,7 @@
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 #include <string>
-#include "OptionalPrimitivesHolder.hpp"
+#include <NitroTestExternal/OptionalPrimitivesHolder.hpp>
 #include <optional>
 
 namespace margelo::nitro::test::external {

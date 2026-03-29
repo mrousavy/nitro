@@ -10,7 +10,7 @@
 #import "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
-#include "HybridSomeExternalObjectSpecSwift.hpp"
+#include <NitroTestExternal/HybridSomeExternalObjectSpecSwift.hpp>
 
 @interface NitroTestExternalAutolinking : NSObject
 @end

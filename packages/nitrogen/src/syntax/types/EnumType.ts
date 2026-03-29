@@ -1,6 +1,7 @@
 import { EnumDeclaration } from 'ts-morph'
 import { Type as TSMorphType, type ts } from 'ts-morph'
 import type { Language } from '../../getPlatformSpecs.js'
+import { cppModuleScopedImportName } from './CppIncludeConsumer.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
@@ -117,15 +118,19 @@ export class EnumType implements Type {
     const imports: SourceImport[] = []
     if (language === 'c++') {
       const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+      const relativePath = [
+        ...this.declarationFile.subdirectory,
+        this.declarationFile.name,
+      ].join('/')
       imports.push({
-        name: this.declarationFile.name,
+        name: cppModuleScopedImportName(relativePath),
         language: this.declarationFile.language,
         forwardDeclaration: getForwardDeclaration(
           'enum class',
           this.enumName,
           cxxNamespace
         ),
-        space: 'user',
+        space: 'system',
       })
     }
     return imports

@@ -4,6 +4,7 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
+import { cppModuleScopedImportName } from './CppIncludeConsumer.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 interface GetHybridObjectCodeOptions extends GetCodeOptions {
@@ -159,14 +160,14 @@ export class HybridObjectType implements Type {
           })
         } else {
           imports.push({
-            name: `${name.HybridTSpec}.hpp`,
+            name: cppModuleScopedImportName(`${name.HybridTSpec}.hpp`),
             forwardDeclaration: getForwardDeclaration(
               'class',
               name.HybridTSpec,
               cxxNamespace
             ),
             language: 'c++',
-            space: 'user',
+            space: 'system',
           })
         }
         break

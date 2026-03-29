@@ -5,7 +5,7 @@
 /// Copyright © Marc Rousavy @ Margelo
 ///
 
-#import "HybridTestViewComponent.hpp"
+#import <NitroTest/HybridTestViewComponent.hpp>
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
@@ -14,7 +14,7 @@
 #import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
-#import "HybridTestViewSpecSwift.hpp"
+#import <NitroTest/HybridTestViewSpecSwift.hpp>
 #import "NitroTest-Swift-Cxx-Umbrella.hpp"
 
 #if __has_include(<cxxreact/ReactNativeVersion.h>)

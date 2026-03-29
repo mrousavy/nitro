@@ -18,13 +18,15 @@ export function createSwiftCxxBridge(): SourceFile[] {
   const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
   const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('c++')
 
-  const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
+  const types = getAllKnownTypes('swift').map(
+    (t) => new SwiftCxxBridgedType(t, false)
+  )
 
   const bridges = types
     .flatMap((t) => {
       const referenced = getReferencedTypes(t.type)
       return referenced.map((r) => {
-        const bridge = new SwiftCxxBridgedType(r)
+        const bridge = new SwiftCxxBridgedType(r, false)
         return bridge.getRequiredBridge()
       })
     })
@@ -49,7 +51,10 @@ export function createSwiftCxxBridge(): SourceFile[] {
   )
   const includesHeader = requiredImportsHeader
     .map((i) => includeHeader(i, true))
-    .filter(isNotDuplicate)
+    .filter((header, i, arr) => isNotDuplicate(header, i, arr))
+  // Order matters, Nitro Modules should come last
+  const sortedIncludeHeaders = includesHeader
+    .sort((a) => (a.includes('<NitroModules/') ? 1 : -1))
   const forwardDeclarationsHeader = requiredImportsHeader
     .map((i) => i.forwardDeclaration)
     .filter((f) => f != null)
@@ -90,7 +95,7 @@ ${forwardDeclarationsHeader.sort().join('\n')}
 ${forwardDeclaredSwiftTypes.sort().join('\n')}
 
 // Include C++ defined types
-${includesHeader.sort().join('\n')}
+${sortedIncludeHeaders.join('\n')}
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,

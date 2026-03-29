@@ -33,7 +33,7 @@ namespace margelo::nitro::test { struct SecondMapWrapper; }
 
 #include <string>
 #include <unordered_map>
-#include "SecondMapWrapper.hpp"
+#include <NitroTest/SecondMapWrapper.hpp>
 
 namespace margelo::nitro::test {
 

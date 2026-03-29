@@ -10,12 +10,12 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "Car.hpp"
-#include "Person.hpp"
+#include <NitroTest/Car.hpp>
+#include <NitroTest/Person.hpp>
 #include <variant>
 #include "JCar.hpp"
 #include <string>
-#include "Powertrain.hpp"
+#include <NitroTest/Powertrain.hpp>
 #include "JPowertrain.hpp"
 #include <optional>
 #include "JPerson.hpp"

@@ -10,6 +10,27 @@ import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
 type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
+/**
+ * Autolinking `.mm` lives under `nitrogen/generated/ios/`. User C++ implementation
+ * headers (e.g. `cpp/HybridFoo.hpp`) are included through the pod module.
+ * Generated shared specs use `<ModuleName/...>` system includes from `getRequiredImports`.
+ */
+function mapCppImportForIosAutolinkingMm(i: SourceImport): SourceImport {
+  if (
+    i.language === 'c++' &&
+    i.space === 'user' &&
+    !i.name.includes('/') &&
+    i.name.endsWith('.hpp')
+  ) {
+    return {
+      ...i,
+      name: `${NitroConfig.current.getIosModuleName()}/${i.name}`,
+      space: 'system',
+    }
+  }
+  return i
+}
+
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = getUmbrellaHeaderName()
@@ -36,7 +57,8 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
           hybridObjectName: hybridObjectName,
           cppClassName: implementation.implementationClassName,
         })
-        cppImports.push(...requiredImports)
+        const importsWithPath = requiredImports.map(mapCppImportForIosAutolinkingMm)
+        cppImports.push(...importsWithPath)
         cppRegistrations.push(cppCode)
         break
       }
@@ -48,7 +70,8 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
             hybridObjectName: hybridObjectName,
             swiftClassName: implementation.implementationClassName,
           })
-        cppImports.push(...requiredImports)
+        const importsWithPath = requiredImports.map(mapCppImportForIosAutolinkingMm)
+        cppImports.push(...importsWithPath)
         cppRegistrations.push(cppCode)
         swiftRegistrations.push(swiftRegistrationMethods)
         break

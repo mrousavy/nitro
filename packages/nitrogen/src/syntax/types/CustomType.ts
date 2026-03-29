@@ -1,6 +1,7 @@
 import type { CustomTypeConfig } from 'react-native-nitro-modules'
 import type { Language } from '../../getPlatformSpecs.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
+import { cppModuleScopedImportName } from './CppIncludeConsumer.js'
 import type { Type, TypeKind } from './Type.js'
 
 export class CustomType implements Type {
@@ -40,9 +41,9 @@ export class CustomType implements Type {
     const imports: SourceImport[] = []
     if (language === 'c++') {
       imports.push({
-        name: this.typeConfig.include,
+        name: cppModuleScopedImportName(this.typeConfig.include),
         language: 'c++',
-        space: 'user',
+        space: 'system',
       })
     }
     return imports

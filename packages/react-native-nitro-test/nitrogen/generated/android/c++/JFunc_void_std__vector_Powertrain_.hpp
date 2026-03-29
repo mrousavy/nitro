@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <functional>
 
-#include "Powertrain.hpp"
+#include <NitroTest/Powertrain.hpp>
 #include <vector>
 #include <functional>
 #include <NitroModules/JNICallable.hpp>

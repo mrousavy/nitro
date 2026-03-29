@@ -26,54 +26,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - NitroPlayer (0.7.0):
-    - hermes-engine
-    - NitroModules
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - Yoga
-  - NitroSpeech (0.0.1):
-    - hermes-engine
-    - NitroModules
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
-    - React-Core
-    - React-Core-prebuilt
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - ReactNativeDependencies
-    - Yoga
   - NitroTest (0.35.2):
     - hermes-engine
     - NitroModules
@@ -2024,8 +1976,6 @@ DEPENDENCIES:
   - FBLazyVector (from `../../node_modules/react-native/Libraries/FBLazyVector`)
   - hermes-engine (from `../../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - NitroModules (from `../../node_modules/react-native-nitro-modules`)
-  - NitroPlayer (from `../../node_modules/react-native-nitro-player`)
-  - "NitroSpeech (from `../../node_modules/@gmessier/rfgtgyh-test-temp-nitro`)"
   - NitroTest (from `../../node_modules/react-native-nitro-test`)
   - NitroTestExternal (from `../../node_modules/react-native-nitro-test-external`)
   - RCTDeprecation (from `../../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -2112,10 +2062,6 @@ EXTERNAL SOURCES:
     :tag: hermes-v0.14.0
   NitroModules:
     :path: "../../node_modules/react-native-nitro-modules"
-  NitroPlayer:
-    :path: "../../node_modules/react-native-nitro-player"
-  NitroSpeech:
-    :path: "../../node_modules/@gmessier/rfgtgyh-test-temp-nitro"
   NitroTest:
     :path: "../../node_modules/react-native-nitro-test"
   NitroTestExternal:
@@ -2273,8 +2219,6 @@ SPEC CHECKSUMS:
   FBLazyVector: 7c1d69992204c5ec452eeefa4a24b0ff311709c8
   hermes-engine: 4df240db09b8f56297ca8e63c2a793d538964397
   NitroModules: 113b4a704e0d6a436d2c5600d5af41f847b0fdd1
-  NitroPlayer: 274fe1f4cae54e6e013fc98f3ffe76d567c3dc63
-  NitroSpeech: 44fed7a2a3b46a0a1a180d381056516f9327c013
   NitroTest: 69754d44fa98075944565e5df6b321c09f2ee4be
   NitroTestExternal: 63f62beac90ad88b7c04f02928859441451fb42c
   RCTDeprecation: dbbb85eae640e3b43cc16462d0476b00ca5959ae

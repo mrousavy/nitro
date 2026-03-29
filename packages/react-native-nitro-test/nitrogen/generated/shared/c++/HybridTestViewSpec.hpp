@@ -16,7 +16,7 @@
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
 
-#include "ColorScheme.hpp"
+#include <NitroTest/ColorScheme.hpp>
 #include <functional>
 
 namespace margelo::nitro::test {

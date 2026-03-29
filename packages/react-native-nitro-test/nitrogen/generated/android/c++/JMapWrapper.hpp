@@ -11,7 +11,7 @@
 #include "MapWrapper.hpp"
 
 #include "JSecondMapWrapper.hpp"
-#include "SecondMapWrapper.hpp"
+#include <NitroTest/SecondMapWrapper.hpp>
 #include <string>
 #include <unordered_map>
 

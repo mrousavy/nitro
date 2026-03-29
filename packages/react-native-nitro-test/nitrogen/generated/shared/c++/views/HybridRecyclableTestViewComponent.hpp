@@ -17,7 +17,7 @@
 #include <react/renderer/components/view/ViewProps.h>
 
 #include <memory>
-#include "HybridRecyclableTestViewSpec.hpp"
+#include <NitroTest/HybridRecyclableTestViewSpec.hpp>
 #include <functional>
 #include <optional>
 

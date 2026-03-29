@@ -7,18 +7,18 @@
 
 #pragma once
 
-#include <NitroTest/HybridBaseSpec.hpp>
+#include <NitroTestExternal/HybridBaseSpec.hpp>
 
 // Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
-namespace NitroTest { class HybridBaseSpec_cxx; }
+namespace NitroTestExternal { class HybridBaseSpec_cxx; }
 
 
 
 
 
-#include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 
-namespace margelo::nitro::test {
+namespace margelo::nitro::test::external {
 
   /**
    * The C++ part of HybridBaseSpec_cxx.swift.
@@ -33,13 +33,13 @@ namespace margelo::nitro::test {
   class HybridBaseSpecSwift: public virtual HybridBaseSpec {
   public:
     // Constructor from a Swift instance
-    explicit HybridBaseSpecSwift(const NitroTest::HybridBaseSpec_cxx& swiftPart):
+    explicit HybridBaseSpecSwift(const NitroTestExternal::HybridBaseSpec_cxx& swiftPart):
       HybridObject(HybridBaseSpec::TAG),
       _swiftPart(swiftPart) { }
 
   public:
     // Get the Swift part
-    inline NitroTest::HybridBaseSpec_cxx& getSwiftPart() noexcept {
+    inline NitroTestExternal::HybridBaseSpec_cxx& getSwiftPart() noexcept {
       return _swiftPart;
     }
 
@@ -62,8 +62,8 @@ namespace margelo::nitro::test {
 
   public:
     // Properties
-    inline double getBaseValue() noexcept override {
-      return _swiftPart.getBaseValue();
+    inline double getAbc() noexcept override {
+      return _swiftPart.getAbc();
     }
 
   public:
@@ -71,7 +71,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    NitroTest::HybridBaseSpec_cxx _swiftPart;
+    NitroTestExternal::HybridBaseSpec_cxx _swiftPart;
   };
 
-} // namespace margelo::nitro::test
+} // namespace margelo::nitro::test::external

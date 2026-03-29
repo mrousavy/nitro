@@ -378,7 +378,7 @@ ${createFileMetadataString(`${name.HybridTSpecSwift}.hpp`)}
 
 #pragma once
 
-#include "${name.HybridTSpec}.hpp"
+#include <${moduleName}/${name.HybridTSpec}.hpp>
 
 ${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 

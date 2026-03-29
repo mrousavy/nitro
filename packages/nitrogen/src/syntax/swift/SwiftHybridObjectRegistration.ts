@@ -1,3 +1,4 @@
+import { cppModuleScopedImportName } from '../types/CppIncludeConsumer.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
@@ -66,7 +67,11 @@ public static func is${hybridObjectName}Recyclable() -> Bool {
 }
     `.trim(),
     requiredImports: [
-      { name: `${HybridTSpecSwift}.hpp`, language: 'c++', space: 'user' },
+      {
+        name: cppModuleScopedImportName(`${HybridTSpecSwift}.hpp`),
+        language: 'c++',
+        space: 'system',
+      },
     ],
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(

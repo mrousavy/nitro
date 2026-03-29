@@ -11,12 +11,12 @@
 #include <variant>
 
 #include <string>
-#include "Car.hpp"
+#include <NitroTest/Car.hpp>
 #include <variant>
 #include "JCar.hpp"
-#include "Powertrain.hpp"
+#include <NitroTest/Powertrain.hpp>
 #include "JPowertrain.hpp"
-#include "Person.hpp"
+#include <NitroTest/Person.hpp>
 #include <optional>
 #include "JPerson.hpp"
 #include <vector>

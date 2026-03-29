@@ -55,7 +55,7 @@ if (newViewProps.${name}.isDirty) {
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
 
-#import "${component}.hpp"
+#import <${swiftNamespace}/${component}.hpp>
 #import <memory>
 #import <react/renderer/componentregistry/ComponentDescriptorProvider.h>
 #import <React/RCTViewComponentView.h>
@@ -64,7 +64,7 @@ ${createFileMetadataString(`${component}.mm`)}
 #import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
-#import "${HybridTSpecSwift}.hpp"
+#import <${swiftNamespace}/${HybridTSpecSwift}.hpp>
 #import "${getUmbrellaHeaderName()}"
 
 #if __has_include(<cxxreact/ReactNativeVersion.h>)

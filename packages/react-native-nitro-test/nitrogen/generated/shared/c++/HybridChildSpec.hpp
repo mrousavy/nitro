@@ -19,10 +19,10 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 
 #include <string>
-#include "Car.hpp"
+#include <NitroTest/Car.hpp>
 #include <variant>
 #include <memory>
-#include "HybridBaseSpec.hpp"
+#include <NitroTest/HybridBaseSpec.hpp>
 
 namespace margelo::nitro::test {
 

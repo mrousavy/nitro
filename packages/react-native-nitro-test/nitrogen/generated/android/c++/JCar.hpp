@@ -13,8 +13,8 @@
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
 #include "JVariant_String_Double.hpp"
-#include "Person.hpp"
-#include "Powertrain.hpp"
+#include <NitroTest/Person.hpp>
+#include <NitroTest/Powertrain.hpp>
 #include <optional>
 #include <string>
 #include <variant>
