@@ -18,15 +18,13 @@ export function createSwiftCxxBridge(): SourceFile[] {
   const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
   const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('c++')
 
-  const types = getAllKnownTypes('swift').map(
-    (t) => new SwiftCxxBridgedType(t, false)
-  )
+  const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 
   const bridges = types
     .flatMap((t) => {
       const referenced = getReferencedTypes(t.type)
       return referenced.map((r) => {
-        const bridge = new SwiftCxxBridgedType(r, false)
+        const bridge = new SwiftCxxBridgedType(r)
         return bridge.getRequiredBridge()
       })
     })
@@ -51,10 +49,9 @@ export function createSwiftCxxBridge(): SourceFile[] {
   )
   const includesHeader = requiredImportsHeader
     .map((i) => includeHeader(i, true))
-    .filter((header, i, arr) => isNotDuplicate(header, i, arr))
+    .filter(isNotDuplicate)
   // Order matters, Nitro Modules should come last
-  const sortedIncludeHeaders = includesHeader
-    .sort((a) => (a.includes('<NitroModules/') ? 1 : -1))
+  const sortedIncludeHeaders = includesHeader.sort((a) => a.includes('<NitroModules/') ? 1 : -1)
   const forwardDeclarationsHeader = requiredImportsHeader
     .map((i) => i.forwardDeclaration)
     .filter((f) => f != null)

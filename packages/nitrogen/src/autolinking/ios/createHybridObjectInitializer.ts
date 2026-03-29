@@ -57,8 +57,7 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
           hybridObjectName: hybridObjectName,
           cppClassName: implementation.implementationClassName,
         })
-        const importsWithPath = requiredImports.map(mapCppImportForIosAutolinkingMm)
-        cppImports.push(...importsWithPath)
+        cppImports.push(...requiredImports)
         cppRegistrations.push(cppCode)
         break
       }
@@ -70,8 +69,7 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
             hybridObjectName: hybridObjectName,
             swiftClassName: implementation.implementationClassName,
           })
-        const importsWithPath = requiredImports.map(mapCppImportForIosAutolinkingMm)
-        cppImports.push(...importsWithPath)
+        cppImports.push(...requiredImports)
         cppRegistrations.push(cppCode)
         swiftRegistrations.push(swiftRegistrationMethods)
         break
@@ -91,7 +89,10 @@ export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
   const umbrellaImport = containsSwiftObjects
     ? `#import "${umbrellaHeaderName}"`
     : ''
-  const imports = cppImports.map((i) => includeHeader(i, true)).join('\n')
+  const imports = cppImports
+    .map(mapCppImportForIosAutolinkingMm)
+    .map((i) => includeHeader(i, true))
+    .join('\n')
 
   const objcCode = `
 ${createFileMetadataString(`${autolinkingClassName}.mm`)}
