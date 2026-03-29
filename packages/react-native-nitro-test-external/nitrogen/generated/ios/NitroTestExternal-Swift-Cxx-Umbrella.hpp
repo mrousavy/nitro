@@ -8,12 +8,15 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::test::external { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Include C++ defined types
+#include "HybridBaseSpec.hpp"
 #include "HybridSomeExternalObjectSpec.hpp"
 #include "OptionalPrimitivesHolder.hpp"
 #include <NitroModules/Result.hpp>
@@ -32,6 +35,8 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 #include <NitroModules/DateToChronoDate.hpp>
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
