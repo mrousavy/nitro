@@ -115,8 +115,10 @@ namespace margelo::nitro::test {
       virtual void setBoolValue(bool boolValue) = 0;
       virtual std::string getStringValue() = 0;
       virtual void setStringValue(const std::string& stringValue) = 0;
-      virtual int64_t getBigintValue() = 0;
-      virtual void setBigintValue(int64_t bigintValue) = 0;
+      virtual int64_t getInt64Value() = 0;
+      virtual void setInt64Value(int64_t int64Value) = 0;
+      virtual uint64_t getUint64Value() = 0;
+      virtual void setUint64Value(uint64_t uint64Value) = 0;
       virtual nitro::NullType getNullValue() = 0;
       virtual void setNullValue(nitro::NullType nullValue) = 0;
       virtual std::optional<std::string> getOptionalString() = 0;
@@ -133,6 +135,12 @@ namespace margelo::nitro::test {
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
       virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
       virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
+      virtual bool getHasBoolean() = 0;
+      virtual bool getIsBoolean() = 0;
+      virtual bool getHasBooleanWritable() = 0;
+      virtual void setHasBooleanWritable(bool hasBooleanWritable) = 0;
+      virtual bool getIsBooleanWritable() = 0;
+      virtual void setIsBooleanWritable(bool isBooleanWritable) = 0;
       virtual std::variant<std::string, double> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
 

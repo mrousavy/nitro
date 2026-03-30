@@ -24,7 +24,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_NullType_String: public jni::JavaClass<JVariant_NullType_String> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String;";
 
     static jni::local_ref<JVariant_NullType_String> create_0(jni::alias_ref<JNull> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_NullType_String(jni::alias_ref<JNull>)>("create");
@@ -49,7 +49,7 @@ namespace margelo::nitro::test {
   namespace JVariant_NullType_String_impl {
     class First final: public jni::JavaClass<First, JVariant_NullType_String> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$First;";
     
       [[nodiscard]] jni::local_ref<JNull> getValue() const {
         static const auto field = javaClassStatic()->getField<JNull>("value");
@@ -59,7 +59,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_NullType_String> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_NullType_String$Second;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");

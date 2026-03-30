@@ -10,31 +10,70 @@
   },
   "autolinking": {
     "TestObjectCpp": {
-      "cpp": "HybridTestObjectCpp"
+      "all": {
+        "language": "c++",
+        "implementationClassName": "HybridTestObjectCpp"
+      }
     },
     "TestObjectSwiftKotlin": {
-      "swift": "HybridTestObjectSwift",
-      "kotlin": "HybridTestObjectKotlin"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridTestObjectSwift"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridTestObjectKotlin"
+      }
     },
     "Base": {
-      "swift": "HybridBase",
-      "kotlin": "HybridBase"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridBase"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridBase"
+      }
     },
     "Child": {
-      "swift": "HybridChild",
-      "kotlin": "HybridChild"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridChild"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridChild"
+      }
     },
     "PlatformObject": {
-      "swift": "HybridPlatformObject",
-      "kotlin": "HybridPlatformObject"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridPlatformObject"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridPlatformObject"
+      }
     },
     "TestView": {
-      "swift": "HybridTestView",
-      "kotlin": "HybridTestView"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridTestView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridTestView"
+      }
     },
     "RecyclableTestView": {
-      "swift": "HybridRecyclableTestView",
-      "kotlin": "HybridRecyclableTestView"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridRecyclableTestView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridRecyclableTestView"
+      }
     }
   },
   "ignorePaths": [

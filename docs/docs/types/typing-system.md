@@ -1,9 +1,6 @@
 ---
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Nitro's Typing System
 
 Nitro uses an extensible typing system to efficiently convert between JS and C++ types - **statically defined** and fully **type-safe** and **null-safe at compile-time**.
@@ -40,7 +37,7 @@ On the JS side (TypeScript), type- and null-safety is enforced via TypeScript - 
 
 ## Nitrogen
 
-[Nitrogen](../nitrogen) ensures that TypeScript definitions are always in sync with native type definitions.
+[Nitrogen](../concepts/nitrogen) ensures that TypeScript definitions are always in sync with native type definitions.
 You can also use Nitro without nitrogen, in this case TypeScript definitions have to be written manually.
 
 ## Supported Types
@@ -74,10 +71,16 @@ These are all the types Nitro supports out of the box:
     <td><code>String</code></td>
   </tr>
   <tr>
-    <td><code>bigint</code></td>
-    <td><code>int64_t</code> / <code>uint64_t</code></td>
+    <td><code>Int64</code> (<code>bigint</code>)</td>
+    <td><code>int64_t</code></td>
     <td><code>Int64</code></td>
     <td><code>Long</code></td>
+  </tr>
+  <tr>
+    <td><code>UInt64</code> (<code>bigint</code>)</td>
+    <td><code>uint64_t</code></td>
+    <td><code>UInt64</code></td>
+    <td><code>ULong</code></td>
   </tr>
   <tr>
     <td><code>T[]</code></td>

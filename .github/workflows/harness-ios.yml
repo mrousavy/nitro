@@ -36,6 +36,7 @@ on:
       - "packages/react-native-nitro-test-external/ios/**"
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/ios/**"
+      - "packages/react-native-nitro-modules/src/**"
       - "**/Podfile.lock"
       - "**/*.podspec"
       - "**/react-native.config.js"
@@ -54,6 +55,7 @@ on:
       - "packages/react-native-nitro-test-external/ios/**"
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/ios/**"
+      - "packages/react-native-nitro-modules/src/**"
       - "**/Podfile.lock"
       - "**/*.podspec"
       - "**/react-native.config.js"
@@ -88,7 +90,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 1.5G
-          key: ${{ runner.os }}-ccache-example-ios
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-ccache-example-ios
           create-symlink: true
       - name: Setup ccache behavior
         run: |
@@ -111,9 +113,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-${{ runner.arch }}-pods-
       - name: Install Pods
         working-directory: example
         run: bun pods
@@ -122,9 +124,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
 
       - name: Build iOS app
         working-directory: example/ios
@@ -147,7 +149,7 @@ jobs:
         run: brew install watchman
 
       - name: Setup iOS Simulator
-        uses: futureware-tech/simulator-action@v4
+        uses: futureware-tech/simulator-action@v5
         with:
           model: ${{ env.DEVICE_MODEL }}
           os: iOS

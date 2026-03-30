@@ -54,7 +54,6 @@ Pod::Spec.new do |s|
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/PromiseHolder.hpp",
     "ios/utils/AnyMapUtils.hpp",
-    "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
     "ios/utils/Result.hpp",
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",

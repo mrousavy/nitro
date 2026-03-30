@@ -26,16 +26,16 @@ namespace margelo::nitro::test {
    */
   struct JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_: public jni::JavaClass<JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_;";
 
   public:
     /**
      * Invokes the function this `JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_` instance holds through JNI.
      */
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> invoke() const {
-      static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>()>("invoke");
+      static const auto method = javaClassStatic()->getMethod<jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>()>("invoke");
       auto __result = method(self());
-      return __result->cthis()->shared_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>();
+      return __result->getJHybridSomeExternalObjectSpec();
     }
   };
 
@@ -52,7 +52,7 @@ namespace margelo::nitro::test {
     /**
      * Invokes the C++ `std::function<...>` this `JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx` instance holds.
      */
-    jni::global_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> invoke_cxx() {
+    jni::global_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> invoke_cxx() {
       std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> __result = _func();
       return std::dynamic_pointer_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(__result)->getJavaPart();
     }
@@ -64,7 +64,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::invoke_cxx)});
     }

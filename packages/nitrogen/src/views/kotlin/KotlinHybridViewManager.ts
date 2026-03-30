@@ -28,13 +28,15 @@ export function createKotlinHybridViewManager(
     descriptorClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
-  const autolinking = spec.config.getAutolinkedHybridObjects()
-  const viewImplementation = autolinking[spec.name]?.kotlin
-  if (viewImplementation == null) {
+  const implementation = spec.config.getAndroidAutolinkedImplementation(
+    spec.name
+  )
+  if (implementation?.language !== 'kotlin') {
     throw new Error(
-      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it must be autolinked with a Kotlin Android implementation in nitro.json!`
     )
   }
+  const viewImplementation = implementation.implementationClassName
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -73,7 +75,7 @@ public class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+    val hybridView = getHybridView(view)
       ?: throw Error("Couldn't find view $view in local views table!")
 
     // 1. Update each prop individually
@@ -85,9 +87,15 @@ public class ${manager}: SimpleViewManager<View>() {
     return super.updateState(view, props, stateWrapper)
   }
 
+  override fun onDropViewInstance(view: View) {
+    val hybridView = getHybridView(view)
+    hybridView?.onDropView()
+    return super.onDropViewInstance(view)
+  }
+
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
     super.prepareToRecycleView(reactContext, view)
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+    val hybridView = getHybridView(view)
       ?: return null
 
     @Suppress("USELESS_IS_CHECK")
@@ -100,6 +108,10 @@ public class ${manager}: SimpleViewManager<View>() {
     } else {
       return null
     }
+  }
+
+  private fun getHybridView(view: View): ${viewImplementation}? {
+    return view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
   }
 }
   `.trim()
@@ -158,7 +170,7 @@ public:
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<${JHybridTSpec}::javaobject> view,
+                              jni::alias_ref<${JHybridTSpec}::JavaPart> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
@@ -182,7 +194,7 @@ public:
     const setter = p.getSetterName('other')
     return `
 if (props->${name}.isDirty) {
-  view->${setter}(props->${name}.value);
+  hybridView->${setter}(props->${name}.value);
   props->${name}.isDirty = false;
 }
     `.trim()
@@ -201,9 +213,9 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
+                                           jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  ${JHybridTSpec}* view = javaView->cthis();
+  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->get${JHybridTSpec}();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
@@ -229,8 +241,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
     props->hybridRef.isDirty = false;
   }

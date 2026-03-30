@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JFunc_void_std__vector_Powertrain_: public jni::JavaClass<JFunc_void_std__vector_Powertrain_> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain_;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain_;";
 
   public:
     /**
@@ -80,7 +80,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain__cxx;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_void_std__vector_Powertrain__cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_void_std__vector_Powertrain__cxx::invoke_cxx)});
     }

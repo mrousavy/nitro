@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_Boolean_WeirdNumbersEnum: public jni::JavaClass<JVariant_Boolean_WeirdNumbersEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum;";
 
     static jni::local_ref<JVariant_Boolean_WeirdNumbersEnum> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Boolean_WeirdNumbersEnum(jboolean)>("create");
@@ -48,7 +48,7 @@ namespace margelo::nitro::test {
   namespace JVariant_Boolean_WeirdNumbersEnum_impl {
     class First final: public jni::JavaClass<First, JVariant_Boolean_WeirdNumbersEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum$First;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -58,7 +58,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_Boolean_WeirdNumbersEnum> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_WeirdNumbersEnum$Second;";
     
       [[nodiscard]] jni::local_ref<JWeirdNumbersEnum> getValue() const {
         static const auto field = javaClassStatic()->getField<JWeirdNumbersEnum>("value");

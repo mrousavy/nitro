@@ -34,6 +34,10 @@ on:
       - '**/react-native.config.js'
       - '**/nitro.json'
 
+env:
+  # Build a single ABI in CI to reduce native compile time.
+  TARGET_ANDROID_ARCH: x86_64
+
 jobs:
   build:
     name: Build Android Example App
@@ -60,20 +64,21 @@ jobs:
           java-version: 17
           java-package: jdk
 
-      - name: Restore Gradle cache
+      - name: Restore Gradle/CMake cache
         uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            example/android/.gradle
             example/android/app/.cxx
-            example/android/app/build
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.TARGET_ANDROID_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
+            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.TARGET_ANDROID_ARCH }}-
             ${{ runner.os }}-gradle-
       - name: Run Gradle Build for example/android/
         working-directory: example/android
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.TARGET_ANDROID_ARCH }}
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon

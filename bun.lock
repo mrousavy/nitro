@@ -43,20 +43,20 @@
         "prism-react-renderer": "^2.3.0",
         "react": "19.1.0",
         "react-dom": "19.1.0",
-        "satori": "^0.19.1",
+        "satori": "^0.25.0",
         "sharp": "^0.34.5",
       },
       "devDependencies": {
         "@docusaurus/module-type-aliases": "3.8.1",
         "@docusaurus/tsconfig": "3.8.1",
         "@docusaurus/types": "3.8.1",
-        "docusaurus-plugin-llms": "^0.2.2",
+        "docusaurus-plugin-llms": "^0.3.0",
         "typescript": "~5.8.3",
       },
     },
     "example": {
       "name": "react-native-nitro-example",
-      "version": "0.33.7",
+      "version": "0.35.2",
       "dependencies": {
         "@react-native-segmented-control/segmented-control": "^2.5.7",
         "@react-navigation/bottom-tabs": "^7.4.5",
@@ -91,11 +91,11 @@
     },
     "packages/nitrogen": {
       "name": "nitrogen",
-      "version": "0.33.7",
+      "version": "0.35.2",
       "bin": "./lib/index.js",
       "dependencies": {
         "chalk": "^5.3.0",
-        "react-native-nitro-modules": "^0.33.7",
+        "react-native-nitro-modules": "^0.35.2",
         "ts-morph": "^27.0.0",
         "yargs": "^18.0.0",
         "zod": "^4.0.5",
@@ -106,7 +106,7 @@
     },
     "packages/react-native-nitro-modules": {
       "name": "react-native-nitro-modules",
-      "version": "0.33.7",
+      "version": "0.35.2",
       "devDependencies": {
         "@types/jest": "*",
         "@types/react": "*",
@@ -123,7 +123,7 @@
     },
     "packages/react-native-nitro-test": {
       "name": "react-native-nitro-test",
-      "version": "0.33.7",
+      "version": "0.35.2",
       "devDependencies": {
         "@types/jest": "*",
         "@types/react": "*",
@@ -143,7 +143,7 @@
     },
     "packages/react-native-nitro-test-external": {
       "name": "react-native-nitro-test-external",
-      "version": "0.33.7",
+      "version": "0.35.2",
       "devDependencies": {
         "@react-native/eslint-config": "0.83.0",
         "@types/jest": "^29.5.12",
@@ -2004,7 +2004,7 @@
 
     "doctrine": ["doctrine@3.0.0", "", { "dependencies": { "esutils": "^2.0.2" } }, "sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w=="],
 
-    "docusaurus-plugin-llms": ["docusaurus-plugin-llms@0.2.2", "", { "dependencies": { "gray-matter": "^4.0.3", "minimatch": "^9.0.3", "yaml": "^2.8.1" }, "peerDependencies": { "@docusaurus/core": "^3.0.0" } }, "sha512-DZlZ6cv9p5poFE00Qg78aurBNWhLa4o0VhH4kI33DUT0y4ydlFEJJbf8Bks9BuuGPFbY/Guebn+hRc2QymMImg=="],
+    "docusaurus-plugin-llms": ["docusaurus-plugin-llms@0.3.0", "", { "dependencies": { "gray-matter": "^4.0.3", "minimatch": "^9.0.3", "yaml": "^2.8.1" }, "peerDependencies": { "@docusaurus/core": "^3.0.0" } }, "sha512-JuADAJA2fjTv1U4XQUoIu1LyjISDzxFhRK5HbCZiHum4HlmdPwyx8NBXsi+LfdUyjK9acbZgazGsHPhdwEZs0g=="],
 
     "dom-converter": ["dom-converter@0.2.0", "", { "dependencies": { "utila": "~0.4" } }, "sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA=="],
 
@@ -3580,7 +3580,7 @@
 
     "safer-buffer": ["safer-buffer@2.1.2", "", {}, "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="],
 
-    "satori": ["satori@0.19.1", "", { "dependencies": { "@shuding/opentype.js": "1.4.0-beta.0", "css-background-parser": "^0.1.0", "css-box-shadow": "1.0.0-3", "css-gradient-parser": "^0.0.17", "css-to-react-native": "^3.0.0", "emoji-regex-xs": "^2.0.1", "escape-html": "^1.0.3", "linebreak": "^1.1.0", "parse-css-color": "^0.2.1", "postcss-value-parser": "^4.2.0", "yoga-layout": "^3.2.1" } }, "sha512-/XaT/JiWLfNlgjlQdde4wXB1/6F+FEze9c3OW2QIH0ywsfOrY57YOetgESWyOFHW3JfEQ6dJAo2U9Xwb7+DDAw=="],
+    "satori": ["satori@0.25.0", "", { "dependencies": { "@shuding/opentype.js": "1.4.0-beta.0", "css-background-parser": "^0.1.0", "css-box-shadow": "1.0.0-3", "css-gradient-parser": "^0.0.17", "css-to-react-native": "^3.0.0", "emoji-regex-xs": "^2.0.1", "escape-html": "^1.0.3", "linebreak": "^1.1.0", "parse-css-color": "^0.2.1", "postcss-value-parser": "^4.2.0", "yoga-layout": "^3.2.1" } }, "sha512-utINfLxrYrmSnLvxFT4ZwgwWa8KOjrz7ans32V5wItgHVmzESl/9i33nE38uG0miycab8hUqQtDlOpqrIpB/iw=="],
 
     "sax": ["sax@1.4.1", "", {}, "sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg=="],
 

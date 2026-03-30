@@ -8,7 +8,8 @@ import type { VariantType } from '../types/VariantType.js'
 
 function isPrimitive(type: Type): boolean {
   switch (type.kind) {
-    case 'bigint':
+    case 'int64':
+    case 'uint64':
     case 'boolean':
     case 'number':
     case 'string':

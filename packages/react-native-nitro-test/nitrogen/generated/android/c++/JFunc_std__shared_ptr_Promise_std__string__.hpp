@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JFunc_std__shared_ptr_Promise_std__string__: public jni::JavaClass<JFunc_std__shared_ptr_Promise_std__string__> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__string__;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__string__;";
 
   public:
     /**
@@ -86,7 +86,7 @@ namespace margelo::nitro::test {
     }
 
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__string___cxx;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Func_std__shared_ptr_Promise_std__string___cxx;";
     static void registerNatives() {
       registerHybrid({makeNativeMethod("invoke_cxx", JFunc_std__shared_ptr_Promise_std__string___cxx::invoke_cxx)});
     }

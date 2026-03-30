@@ -193,7 +193,7 @@ export function getTests(
 ): TestRunner[] {
   const backend = options.backend ?? throwingBackend
   const { it } = createTestRunner(backend)
-  const createTest = createCreateTest(it)
+  const createTest = createCreateTest()
 
   return [
     // Basic prototype tests
@@ -288,16 +288,41 @@ export function getTests(
         .didNotThrow()
         .equals('hello!')
     ),
-    createTest('set bigintValue to 7362572367826385n', () =>
-      it(() => (testObject.bigintValue = 7362572367826385n)).didNotThrow()
+    createTest('set int64Value to 7362572367826385n', () =>
+      it(() => (testObject.int64Value = 7362572367826385n)).didNotThrow()
     ),
-    createTest('get bigintValue (== 7362572367826385n)', () =>
+    createTest('get int64Value (== 7362572367826385n)', () =>
       it(() => {
-        testObject.bigintValue = 7362572367826385n
-        return testObject.bigintValue
+        testObject.int64Value = 7362572367826385n
+        return testObject.int64Value
       })
         .didNotThrow()
         .equals(7362572367826385n)
+    ),
+    createTest('set uint64Value to 7362572367826385n', () =>
+      it(() => (testObject.uint64Value = 7362572367826385n)).didNotThrow()
+    ),
+    createTest('get uint64Value (== 7362572367826385n)', () =>
+      it(() => {
+        testObject.uint64Value = 7362572367826385n
+        return testObject.uint64Value
+      })
+        .didNotThrow()
+        .equals(7362572367826385n)
+    ),
+    createTest('set int64Value to -7362572367826385n', () =>
+      it(() => (testObject.int64Value = -7362572367826385n)).didNotThrow()
+    ),
+    createTest('get int64Value (== -7362572367826385n)', () =>
+      it(() => {
+        testObject.int64Value = -7362572367826385n
+        return testObject.int64Value
+      })
+        .didNotThrow()
+        .equals(-7362572367826385n)
+    ),
+    createTest('set uint64Value to -7362572367826385n throws', () =>
+      it(() => (testObject.uint64Value = -7362572367826385n)).didThrow()
     ),
     createTest('set stringOrUndefined to string, then undefined', () =>
       it(() => {
@@ -442,6 +467,36 @@ export function getTests(
         .didReturn(typeof OldEnum.SECOND)
         .equals(OldEnum.SECOND)
     ),
+    createTest('get hasBoolean', () =>
+      it(() => {
+        return testObject.hasBoolean
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('set + get hasBooleanWritable', () =>
+      it(() => {
+        testObject.hasBooleanWritable = true
+        return testObject.hasBooleanWritable
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('get isBoolean', () =>
+      it(() => {
+        return testObject.isBoolean
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('set + get isBooleanWritable', () =>
+      it(() => {
+        testObject.isBooleanWritable = true
+        return testObject.isBooleanWritable
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
     createTest('set optionalCallback, then undefined', () =>
       it(() => {
         testObject.optionalCallback = () => {}
@@ -585,6 +640,55 @@ export function getTests(
         .didNotThrow()
         .didReturn('undefined')
     ),
+    createTest('createOptionalPrimitivesHolder(5, ...)', async () =>
+      it(() => HybridSomeExternalObject.createOptionalPrimitivesHolder(5))
+        .didNotThrow()
+        .equals({
+          optionalNumber: 5,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(..., true, ...)', async () =>
+      it(() =>
+        HybridSomeExternalObject.createOptionalPrimitivesHolder(undefined, true)
+      )
+        .didNotThrow()
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: true,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(...)', async () =>
+      it(() => HybridSomeExternalObject.createOptionalPrimitivesHolder())
+        .didNotThrow()
+        .equals({
+          optionalNumber: undefined,
+          optionalBoolean: undefined,
+          optionalUInt64: undefined,
+          optionalInt64: undefined,
+        })
+    ),
+    createTest('createOptionalPrimitivesHolder(ALL)', async () =>
+      it(() =>
+        HybridSomeExternalObject.createOptionalPrimitivesHolder(
+          5,
+          true,
+          7n,
+          13n
+        )
+      )
+        .didNotThrow()
+        .equals({
+          optionalNumber: 5,
+          optionalBoolean: true,
+          optionalUInt64: 7n,
+          optionalInt64: 13n,
+        })
+    ),
 
     createTest('complexEnumCallback(...)', async () =>
       (
@@ -678,7 +782,7 @@ export function getTests(
         .toContain('object')
         .toContain('array')
         .toContain('null')
-        .toContain('bigint')
+        .toContain('int64')
         .toContain('string')
         .toContain('bool')
         .toContain('number')
@@ -691,7 +795,7 @@ export function getTests(
           testObject.numberValue,
           testObject.boolValue,
           testObject.stringValue,
-          testObject.bigintValue,
+          testObject.int64Value,
         ])
     ),
     createTest('createMap().object', () =>
@@ -703,15 +807,15 @@ export function getTests(
             testObject.numberValue,
             testObject.boolValue,
             testObject.stringValue,
-            testObject.bigintValue,
+            testObject.int64Value,
             [
               testObject.numberValue,
               testObject.boolValue,
               testObject.stringValue,
-              testObject.bigintValue,
+              testObject.int64Value,
             ],
           ],
-          bigint: testObject.bigintValue,
+          int64: testObject.int64Value,
           bool: testObject.boolValue,
           string: testObject.stringValue,
           number: testObject.numberValue,
@@ -1374,6 +1478,55 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
+    createTest('HybridObjects dont leak memory', () =>
+      it(() => {
+        const baselineAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
+
+        const BATCH_SIZE = 1000
+        const LOOP_COUNT = 10
+        const TOTAL_ALLOCATIONS = BATCH_SIZE * LOOP_COUNT
+
+        const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
+        for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+          const object = testObject.newTestObject()
+          object.numberValue = i
+          objects.push(object)
+
+          if (objects.length >= BATCH_SIZE) {
+            objects.length = 0
+            gc()
+          }
+        }
+
+        objects.length = 0
+        gc()
+        gc()
+        gc()
+
+        const currentAllocations =
+          NitroModules.debug_getTotalAllocatedHybridObjects()
+        const remainingAllocations = currentAllocations - baselineAllocations
+        // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
+        const didDeleteMostObjects =
+          remainingAllocations < TOTAL_ALLOCATIONS * 0.1
+        const result: {
+          baselineAllocations: number
+          currentAllocations: number
+          isEqual?: boolean
+        } = {
+          baselineAllocations: baselineAllocations,
+          currentAllocations: currentAllocations,
+          isEqual: didDeleteMostObjects,
+        }
+        if (!didDeleteMostObjects) {
+          delete result.isEqual
+        }
+        return result
+      })
+        .didNotThrow()
+        .toContain('isEqual')
+    ),
     createTest('callWithOptional(undefined)', async () =>
       (
         await it<number | undefined>(() => {
@@ -1633,7 +1786,8 @@ export function getTests(
       it(() => testObject.thisObject)
         .didNotThrow()
         .didReturn('object')
-        .toContain('bigintValue')
+        .toContain('int64Value')
+        .toContain('uint64Value')
         .toContain('boolValue')
         .toContain('stringValue')
     ),
@@ -1641,7 +1795,8 @@ export function getTests(
       it(() => testObject.newTestObject())
         .didNotThrow()
         .didReturn('object')
-        .toContain('bigintValue')
+        .toContain('int64Value')
+        .toContain('uint64Value')
         .toContain('boolValue')
         .toContain('stringValue')
     ),
@@ -2068,6 +2223,17 @@ export function getTests(
       it(() => {
         NitroModules.updateMemorySize(testObject)
       }).didNotThrow()
+    ),
+    createTest('NitroModules.createNativeArrayBuffer(...) works', () =>
+      it(() => {
+        const buffer = NitroModules.createNativeArrayBuffer(1024)
+        const array = new Uint8Array(buffer)
+        array[0] = 13
+        return array[0]
+      })
+        .didNotThrow()
+        .didReturn('number')
+        .equals(13)
     ),
     createTest('NitroModules.buildType holds a string', () =>
       it(() => {

@@ -13,42 +13,36 @@
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridBaseSpec::jhybriddata> JHybridBaseSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<JHybridBaseSpec> JHybridBaseSpec::JavaPart::getJHybridBaseSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridBaseSpec>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to JHybridBaseSpec!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<JHybridBaseSpec::CxxPart::jhybriddata> JHybridBaseSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridBaseSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridBaseSpec::initHybrid),
-    });
-  }
-
-  size_t JHybridBaseSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridBaseSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridBaseSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
+  std::shared_ptr<JHybridObject> JHybridBaseSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridBaseSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridBaseSpec::JavaPart!");
     }
-    return false;
+    return std::make_shared<JHybridBaseSpec>(castJavaPart);
   }
 
-  void JHybridBaseSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridBaseSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
+  void JHybridBaseSpec::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridBaseSpec::CxxPart::initHybrid),
+    });
   }
 
   // Properties
   double JHybridBaseSpec::getBaseValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }

@@ -43,12 +43,20 @@ void HybridTestObjectCpp::setStringValue(const std::string& stringValue) {
   _string = stringValue;
 }
 
-int64_t HybridTestObjectCpp::getBigintValue() {
-  return _bigint;
+int64_t HybridTestObjectCpp::getInt64Value() {
+  return _int64Value;
 }
 
-void HybridTestObjectCpp::setBigintValue(int64_t bigintValue) {
-  _bigint = bigintValue;
+void HybridTestObjectCpp::setInt64Value(int64_t int64Value) {
+  _int64Value = int64Value;
+}
+
+uint64_t HybridTestObjectCpp::getUint64Value() {
+  return _uint64Value;
+}
+
+void HybridTestObjectCpp::setUint64Value(uint64_t uint64Value) {
+  _uint64Value = uint64Value;
 }
 
 NullType HybridTestObjectCpp::getNullValue() {
@@ -137,6 +145,30 @@ void HybridTestObjectCpp::setOptionalOldEnum(std::optional<OldEnum> optionalOldE
 
 std::optional<std::function<void(double)>> HybridTestObjectCpp::getOptionalCallback() {
   return _optionalCallback;
+}
+
+bool HybridTestObjectCpp::getHasBoolean() {
+  return false;
+}
+
+bool HybridTestObjectCpp::getIsBoolean() {
+  return false;
+}
+
+bool HybridTestObjectCpp::getIsBooleanWritable() {
+  return _isBooleanWritable;
+}
+
+void HybridTestObjectCpp::setIsBooleanWritable(bool isBooleanWritable) {
+  _isBooleanWritable = isBooleanWritable;
+}
+
+bool HybridTestObjectCpp::getHasBooleanWritable() {
+  return _hasBooleanWritable;
+}
+
+void HybridTestObjectCpp::setHasBooleanWritable(bool hasBooleanWritable) {
+  _hasBooleanWritable = hasBooleanWritable;
 }
 
 void HybridTestObjectCpp::setOptionalCallback(const std::optional<std::function<void(double)>>& callback) {
@@ -243,15 +275,15 @@ std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   map->setDouble("number", getNumberValue());
   map->setBoolean("bool", getBoolValue());
   map->setString("string", getStringValue());
-  map->setBigInt("bigint", getBigintValue());
+  map->setInt64("int64", getInt64Value());
   map->setNull("null");
-  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getBigintValue()};
+  std::vector<AnyValue> array{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value()};
   map->setArray("array", array);
-  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getBigintValue(), array};
+  std::vector<AnyValue> nestedArray{getNumberValue(), getBoolValue(), getStringValue(), getInt64Value(), array};
   map->setObject("object", {{"number", getNumberValue()},
                             {"bool", getBoolValue()},
                             {"string", getStringValue()},
-                            {"bigint", getBigintValue()},
+                            {"int64", getInt64Value()},
                             {"null", nitro::null},
                             {"array", nestedArray}});
   return map;

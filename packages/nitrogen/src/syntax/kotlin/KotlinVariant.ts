@@ -30,10 +30,6 @@ data class ${innerName}(@DoNotStrip val value: ${bridge.getTypeCode('kotlin')}):
   })
 
   const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
-  const getterCases = variant.cases.map(([label]) => {
-    const innerName = capitalizeName(label)
-    return `is ${innerName} -> value as? T`
-  })
   const isFunctions = variant.cases.map(([label]) => {
     const innerName = capitalizeName(label)
     return `
@@ -94,11 +90,6 @@ ${extraImports.join('\n')}
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}
 
-  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
-  inline fun <reified T> getAs(): T? = when (this) {
-    ${indent(getterCases.join('\n'), '    ')}
-  }
-
   ${indent(isFunctions.join('\n'), '  ')}
 
   ${indent(asFunctions.join('\n'), '  ')}
@@ -154,7 +145,7 @@ if (isInstanceOf(${namespace}::${innerName}::javaClassStatic())) {
     return `
 class ${innerName} final: public jni::JavaClass<${innerName}, J${kotlinName}> {
 public:
-  static auto constexpr kJavaDescriptor = "L${descriptor};";
+  static constexpr auto kJavaDescriptor = "L${descriptor};";
 
   [[nodiscard]] ${bridge.asJniReferenceType('local')} getValue() const {
     static const auto field = javaClassStatic()->getField<${bridge.getTypeCode('c++')}>("value");
@@ -189,7 +180,7 @@ namespace ${cxxNamespace} {
    */
   class J${kotlinName}: public jni::JavaClass<J${kotlinName}> {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
 
     ${indent(cppCreateFuncs.join('\n'), '    ')}
 

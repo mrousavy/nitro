@@ -16,7 +16,7 @@ using namespace facebook;
 
 class JHardwareBufferUtils final : public jni::JavaClass<JHardwareBufferUtils> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/utils/HardwareBufferUtils;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/utils/HardwareBufferUtils;";
 
 public:
   static size_t getHardwareBufferSize(AHardwareBuffer* hardwareBuffer);

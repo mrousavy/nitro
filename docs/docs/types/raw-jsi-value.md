@@ -1,9 +1,6 @@
 ---
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Raw `jsi::Value` / `jsi::Runtime`
 
 Even though Nitro supports virually any type in JS, there are certain use-cases where you might want to use a `jsi::Value` or `jsi::Runtime` directly - and Nitro provides an escape hatch for this.

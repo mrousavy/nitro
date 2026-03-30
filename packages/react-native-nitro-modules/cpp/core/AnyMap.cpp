@@ -47,7 +47,7 @@ bool AnyMap::isBoolean(const std::string& key) const {
   }
   return std::holds_alternative<bool>(found->second);
 }
-bool AnyMap::isBigInt(const std::string& key) const {
+bool AnyMap::isInt64(const std::string& key) const {
   auto found = _map.find(key);
   if (found == _map.end()) {
     return false;
@@ -110,7 +110,7 @@ bool AnyMap::getBoolean(const std::string& key) const {
     throw std::runtime_error("The value at key \"" + key + "\" is not a bool!");
   }
 }
-int64_t AnyMap::getBigInt(const std::string& key) const {
+int64_t AnyMap::getInt64(const std::string& key) const {
   auto found = _map.find(key);
   if (found == _map.end()) {
     throw std::runtime_error("The key \"" + key + "\" does not exist in this Map!");
@@ -118,7 +118,7 @@ int64_t AnyMap::getBigInt(const std::string& key) const {
   if (auto result = std::get_if<int64_t>(&found->second)) {
     return *result;
   } else {
-    throw std::runtime_error("The value at key \"" + key + "\" is not a bigint!");
+    throw std::runtime_error("The value at key \"" + key + "\" is not a int64!");
   }
 }
 std::string AnyMap::getString(const std::string& key) const {
@@ -172,7 +172,7 @@ void AnyMap::setDouble(const std::string& key, double value) {
 void AnyMap::setBoolean(const std::string& key, bool value) {
   _map.insert_or_assign(key, value);
 }
-void AnyMap::setBigInt(const std::string& key, int64_t value) {
+void AnyMap::setInt64(const std::string& key, int64_t value) {
   _map.insert_or_assign(key, value);
 }
 void AnyMap::setString(const std::string& key, const std::string& value) {

@@ -19,7 +19,7 @@ public:
   }
 
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/utils/NativeRunnable;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/utils/NativeRunnable;";
   static void registerNatives() {
     registerHybrid({makeNativeMethod("run", JNativeRunnable::run)});
   }

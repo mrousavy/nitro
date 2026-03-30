@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JOptionalCallback final: public jni::JavaClass<JOptionalCallback> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OptionalCallback;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/OptionalCallback;";
 
   public:
     /**

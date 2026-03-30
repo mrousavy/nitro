@@ -29,23 +29,6 @@ import com.margelo.nitro.core.HybridObject
   "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
 )
 abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    super.updateNative(mHybridData)
-  }
-
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-    super.updateNative(hybridData)
-  }
-
-  // Default implementation of `HybridObject.toString()`
-  override fun toString(): String {
-    return "[HybridObject TestObjectSwiftKotlin]"
-  }
-
   // Properties
   @get:DoNotStrip
   @get:Keep
@@ -79,7 +62,21 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var bigintValue: Long
+  abstract var int64Value: Long
+  
+  abstract var uint64Value: ULong
+  
+  private var uint64Value_cxx: Long
+    @Keep
+    @DoNotStrip
+    get() {
+      return uint64Value.toLong()
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      uint64Value = value.toULong()
+    }
   
   @get:DoNotStrip
   @get:Keep
@@ -136,6 +133,26 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     set(value) {
       optionalCallback = value?.let { it }
     }
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val hasBoolean: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  abstract val isBoolean: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var hasBooleanWritable: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var isBooleanWritable: Boolean
   
   @get:DoNotStrip
   @get:Keep
@@ -613,7 +630,21 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
 
-  private external fun initHybrid(): HybridData
+  // Default implementation of `HybridObject.toString()`
+  override fun toString(): String {
+    return "[HybridObject TestObjectSwiftKotlin]"
+  }
+
+  // C++ backing class
+  @DoNotStrip
+  @Keep
+  protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
+    // C++ JHybridTestObjectSwiftKotlinSpec::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
 
   companion object {
     protected const val TAG = "HybridTestObjectSwiftKotlinSpec"

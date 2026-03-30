@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
    */
   class JNamedVariant: public jni::JavaClass<JNamedVariant> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant;";
 
     static jni::local_ref<JNamedVariant> create_0(jni::alias_ref<jni::JString> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JNamedVariant(jni::alias_ref<jni::JString>)>("create");
@@ -56,7 +56,7 @@ namespace margelo::nitro::test {
   namespace JNamedVariant_impl {
     class First final: public jni::JavaClass<First, JNamedVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant$First;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -66,7 +66,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JNamedVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NamedVariant$Second;";
     
       [[nodiscard]] jni::local_ref<JCar> getValue() const {
         static const auto field = javaClassStatic()->getField<JCar>("value");

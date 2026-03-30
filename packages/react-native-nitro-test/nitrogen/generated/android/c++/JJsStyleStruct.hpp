@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   struct JJsStyleStruct final: public jni::JavaClass<JJsStyleStruct> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/JsStyleStruct;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/JsStyleStruct;";
 
   public:
     /**

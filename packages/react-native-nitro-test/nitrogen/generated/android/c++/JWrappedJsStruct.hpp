@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JWrappedJsStruct final: public jni::JavaClass<JWrappedJsStruct> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/WrappedJsStruct;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/WrappedJsStruct;";
 
   public:
     /**

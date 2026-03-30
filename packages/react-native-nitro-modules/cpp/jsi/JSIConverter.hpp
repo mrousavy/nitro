@@ -104,7 +104,7 @@ struct JSIConverter<float> final {
 // int64_t <> BigInt
 template <>
 struct JSIConverter<int64_t> final {
-  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline int64_t fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asInt64(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
@@ -122,7 +122,7 @@ struct JSIConverter<int64_t> final {
 // uint64_t <> BigInt
 template <>
 struct JSIConverter<uint64_t> final {
-  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline uint64_t fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asUint64(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {

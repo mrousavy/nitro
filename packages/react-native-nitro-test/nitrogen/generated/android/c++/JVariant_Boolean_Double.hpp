@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_Boolean_Double: public jni::JavaClass<JVariant_Boolean_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double;";
 
     static jni::local_ref<JVariant_Boolean_Double> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Boolean_Double(jboolean)>("create");
@@ -46,7 +46,7 @@ namespace margelo::nitro::test {
   namespace JVariant_Boolean_Double_impl {
     class First final: public jni::JavaClass<First, JVariant_Boolean_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double$First;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -56,7 +56,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_Boolean_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_Double$Second;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");

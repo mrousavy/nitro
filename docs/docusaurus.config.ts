@@ -2,14 +2,17 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+const title = 'Nitro Modules';
+const tagline = 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.';
+const url = 'https://nitro.margelo.com';
+
 const config: Config = {
-  title: 'Nitro Modules',
-  tagline:
-    'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+  title: title,
+  tagline: tagline,
   favicon: '/img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://nitro.margelo.com',
+  url: url,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -55,20 +58,27 @@ const config: Config = {
   plugins: [
     [
       'vercel-analytics',
-      { },
+      {},
     ],
     [
       'docusaurus-plugin-llms',
       {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
+        generateMarkdownFiles: true,
+        preserveDirectoryStructure: true,
+        excludeImports: true,
         includeOrder: [
-          'what-is-nitro.md',
-          'nitro-modules.md',
-          'hybrid-objects.md',
-          'hybrid-views.md',
-          'nitrogen.md',
-          'how-to-build-a-nitro-module.md',
+          'getting-started/what-is-nitro.md',
+          'concepts/nitro-modules.md',
+          'concepts/hybrid-objects.md',
+          'concepts/hybrid-views.md',
+          'concepts/nitrogen.md',
+          'types/typing-system.md',
+          'getting-started/minimum-requirements.md',
+          'getting-started/how-to-build-a-nitro-module.md',
+          'getting-started/configuration-nitro-json.md',
+          // ... then the remaining pages in whatever order
         ]
       },
     ],
@@ -131,7 +141,7 @@ const config: Config = {
         },
         {
           type: 'doc',
-          docId: 'for-library-users',
+          docId: 'resources/for-library-users',
           position: 'right',
           label: 'Installation',
         },
@@ -164,7 +174,7 @@ const config: Config = {
     algolia: {
       appId: 'Y788VW5KZO',
       apiKey: 'c077f6bb95a5a11a69a7e65315a795c5',
-      indexName: 'mrousavyio',
+      indexName: 'nitro-docs',
       contextualSearch: true,
       searchPagePath: false,
       insights: false,
@@ -245,8 +255,7 @@ const config: Config = {
       },
       {
         property: 'og:description',
-        content:
-          'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
+        content: tagline,
       },
       {
         property: 'og:image',

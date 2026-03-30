@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
    */
   struct JSecondMapWrapper final: public jni::JavaClass<JSecondMapWrapper> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/SecondMapWrapper;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/SecondMapWrapper;";
 
   public:
     /**

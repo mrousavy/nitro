@@ -30,7 +30,7 @@ public:
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<JHybridRecyclableTestViewSpec::javaobject> view,
+                              jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:

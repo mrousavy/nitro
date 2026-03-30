@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import java.lang.ref.WeakReference
 
 /**
  * A base class for all Kotlin-based HybridObjects.
@@ -57,21 +58,44 @@ abstract class HybridObject {
   }
 
   /**
-   * Holds the native C++ instance.
-   * In `HybridObject`, the C++ instance is a sub-class of `JHybridObject`, such as one of its specs.
-   * This is `null`, until `updateNative(..)` is called.
+   * Override this method for each class in the inheritance
+   * chain to connect it to a different C++ class.
    */
-  private var mHybridData: HybridData? = null
+  protected open fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
 
-  /**
-   * If `HybridObject` is subclassed, the sub-class needs to create its own `HybridData`
-   * with a C++ `jni::HybridClass` representing the subclass directly.
-   * Then, that `HybridData` must be passed upwards to `HybridObject` using `updateNative(..)`.
-   *
-   * This must happen for each sub/base class in the whole inheritance chain to ensure
-   * overrides and type-erasure works as expected.
-   */
-  protected open fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
+  private var cxxPartCache: WeakReference<CxxPart>? = null
+
+  @Suppress("unused")
+  @DoNotStrip
+  @Keep
+  private fun getCxxPart(): CxxPart {
+    cxxPartCache?.get()?.let {
+      // It's still in strong cache!
+      return it
+    }
+    val cxxPart = createCxxPart()
+    cxxPartCache = WeakReference(cxxPart)
+    return cxxPart
+  }
+
+  @Keep
+  @DoNotStrip
+  @Suppress("KotlinJniMissingFunction")
+  protected open class CxxPart(
+    @Keep
+    @DoNotStrip
+    val javaPart: HybridObject,
+  ) {
+    @DoNotStrip
+    @Keep
+    private var mHybridData: HybridData
+
+    init {
+      mHybridData = initHybrid()
+    }
+
+    protected open external fun initHybrid(): HybridData
   }
 }
