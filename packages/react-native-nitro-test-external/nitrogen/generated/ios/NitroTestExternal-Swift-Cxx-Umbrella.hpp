@@ -8,16 +8,29 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `ColorScheme` to properly resolve imports.
+namespace margelo::nitro::test::external { enum class ColorScheme; }
+// Forward declaration of `HybridBaseSpec` to properly resolve imports.
+namespace margelo::nitro::test::external { class HybridBaseSpec; }
+// Forward declaration of `HybridBlaBlaSpec` to properly resolve imports.
+namespace margelo::nitro::test::external { class HybridBlaBlaSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `HybridTestViewSpec` to properly resolve imports.
+namespace margelo::nitro::test::external { class HybridTestViewSpec; }
 // Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Include C++ defined types
+#include "ColorScheme.hpp"
+#include "HybridBaseSpec.hpp"
+#include "HybridBlaBlaSpec.hpp"
 #include "HybridSomeExternalObjectSpec.hpp"
+#include "HybridTestViewSpec.hpp"
 #include "OptionalPrimitivesHolder.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
+#include <functional>
 #include <memory>
 #include <optional>
 #include <string>
@@ -32,8 +45,14 @@ namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 #include <NitroModules/DateToChronoDate.hpp>
 
 // Forward declarations of Swift defined types
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridBaseSpec_cxx; }
+// Forward declaration of `HybridBlaBlaSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridBlaBlaSpec_cxx; }
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
+// Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
+namespace NitroTestExternal { class HybridTestViewSpec_cxx; }
 
 // Include Swift defined types
 #if __has_include("NitroTestExternal-Swift.h")

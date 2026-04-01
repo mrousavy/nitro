@@ -11,6 +11,7 @@
 #import <type_traits>
 
 #include "HybridSomeExternalObjectSpecSwift.hpp"
+#include "HybridTestViewSpecSwift.hpp"
 
 @interface NitroTestExternalAutolinking : NSObject
 @end
@@ -25,6 +26,13 @@
     "SomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridSomeExternalObjectSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createSomeExternalObject();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestView",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridTestViewSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createTestView();
       return hybridObject;
     }
   );

@@ -34,8 +34,16 @@ target_sources(
   ../nitrogen/generated/android/NitroTestExternalOnLoad.cpp
   # Shared Nitrogen C++ sources
   ../nitrogen/generated/shared/c++/HybridSomeExternalObjectSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridBlaBlaSpec.cpp
+  ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
+  ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridSomeExternalObjectSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridBlaBlaSpec.cpp
+  ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
+  ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
 )
 
 # From node_modules/react-native/ReactAndroid/cmake-utils/folly-flags.cmake
