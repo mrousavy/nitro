@@ -19,7 +19,6 @@
     "test:harness": "react-native-harness"
   },
   "dependencies": {
-    "@react-native-segmented-control/segmented-control": "^2.5.7",
     "@react-navigation/bottom-tabs": "^7.4.5",
     "@react-navigation/native": "^7.1.26",
     "deep-equal": "^2.2.3",

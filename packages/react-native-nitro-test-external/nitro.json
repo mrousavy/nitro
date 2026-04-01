@@ -18,6 +18,16 @@
         "language": "kotlin",
         "implementationClassName": "HybridSomeExternalObject"
       }
+    },
+    "TestView": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridTestView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridTestView"
+      }
     }
   },
   "ignorePaths": [

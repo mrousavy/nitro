@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "react-native-nitro",
@@ -58,7 +57,6 @@
       "name": "react-native-nitro-example",
       "version": "0.35.2",
       "dependencies": {
-        "@react-native-segmented-control/segmented-control": "^2.5.7",
         "@react-navigation/bottom-tabs": "^7.4.5",
         "@react-navigation/native": "^7.1.26",
         "deep-equal": "^2.2.3",
@@ -990,8 +988,6 @@
     "@react-native-harness/runtime": ["@react-native-harness/runtime@1.0.0-alpha.21", "", { "dependencies": { "@react-native-harness/bridge": "1.0.0-alpha.21", "@vitest/expect": "4.0.16", "@vitest/spy": "4.0.16", "chai": "^6.2.2", "event-target-shim": "^6.0.2", "use-sync-external-store": "^1.6.0", "zustand": "^5.0.5" }, "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-QbMRUkdQiDsHGmmLKd67I9sHrkgLxMtKMt743OMH66LruIJSkyloZlasiyTJTj82SzlKEANiBylvFemQ4GU68w=="],
 
     "@react-native-harness/tools": ["@react-native-harness/tools@1.0.0-alpha.21", "", { "dependencies": { "@clack/prompts": "1.0.0-alpha.5", "is-unicode-supported": "^0.1.0", "nano-spawn": "^1.0.2", "picocolors": "^1.1.1", "tslib": "^2.3.0" }, "peerDependencies": { "react-native": "*" } }, "sha512-xfcKc2QytpLXqu71ZvSKYNIjh2T/799UWFPopzUEYB9H+I9ZC//vJF36EmqlSXnRX73ym+Z8b6llGBcEzqrwEQ=="],
-
-    "@react-native-segmented-control/segmented-control": ["@react-native-segmented-control/segmented-control@2.5.7", "", { "peerDependencies": { "react": ">=16.0", "react-native": ">=0.62" } }, "sha512-l84YeVX8xAU3lvOJSvV4nK/NbGhIm2gBfveYolwaoCbRp+/SLXtc6mYrQmM9ScXNwU14mnzjQTpTHWl5YPnkzQ=="],
 
     "@react-native/assets-registry": ["@react-native/assets-registry@0.83.0", "", {}, "sha512-EmGSKDvmnEnBrTK75T+0Syt6gy/HACOTfziw5+392Kr1Bb28Rv26GyOIkvptnT+bb2VDHU0hx9G0vSy5/S3rmQ=="],
 
