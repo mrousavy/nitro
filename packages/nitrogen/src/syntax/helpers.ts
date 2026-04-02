@@ -22,6 +22,13 @@ ${comment}
 `.trim()
 }
 
+export function getWithModuleName<T extends string>(
+  sourceConfig: NitroConfig,
+  originalName: T
+): `${string}${T}` {
+  return `${sourceConfig.getIosModuleName()}${originalName}`
+}
+
 export function isFunction(type: Type): boolean {
   switch (type.kind) {
     case 'function':

@@ -3,7 +3,11 @@ import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  getWithModuleName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
@@ -81,6 +85,8 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
     })
   }
 
+  const hybridTSpecName = getWithModuleName(spec.config, name.HybridTSpec)
+
   const cppHeaderCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
@@ -88,7 +94,7 @@ ${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
 
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
-#include "${name.HybridTSpec}.hpp"
+#include "${hybridTSpecName}.hpp"
 
 ${cppImports
   .map((i) => i.forwardDeclaration)

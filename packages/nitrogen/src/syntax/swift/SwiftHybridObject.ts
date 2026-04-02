@@ -1,7 +1,11 @@
 import { indent } from '../../utils.js'
 import { createSwiftHybridViewManager } from '../../views/swift/SwiftHybridViewManager.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  getWithModuleName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
@@ -67,6 +71,8 @@ public ${hasBaseClass ? 'override func' : 'func'} getCxxWrapper() -> ${name.Hybr
   requiredImports.push('import NitroModules')
   const imports = requiredImports.filter(isNotDuplicate)
 
+  const registeredName = getWithModuleName(spec.config, name.T)
+
   const protocolCode = `
 ${createFileMetadataString(`${protocolName}.swift`)}
 
@@ -84,7 +90,7 @@ public protocol ${protocolName}_protocol: ${protocolBaseClasses.join(', ')} {
 public extension ${protocolName}_protocol {
   /// Default implementation of \`\`HybridObject.toString\`\`
   func toString() -> String {
-    return "[HybridObject ${name.T}]"
+    return "[HybridObject ${registeredName}]"
   }
 }
 

@@ -7,6 +7,7 @@ import {
 import {
   createFileMetadataString,
   escapeCppName,
+  getWithModuleName,
 } from '../../syntax/helpers.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
@@ -52,6 +53,8 @@ if (newViewProps.${name}.isDirty) {
 `.trim()
   })
 
+  const hybridTSpecSwiftName = getWithModuleName(spec.config, HybridTSpecSwift)
+
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
 
@@ -64,7 +67,7 @@ ${createFileMetadataString(`${component}.mm`)}
 #import <NitroModules/NitroDefines.hpp>
 #import <UIKit/UIKit.h>
 
-#import "${HybridTSpecSwift}.hpp"
+#import "${hybridTSpecSwiftName}.hpp"
 #import "${getUmbrellaHeaderName()}"
 
 #if __has_include(<cxxreact/ReactNativeVersion.h>)

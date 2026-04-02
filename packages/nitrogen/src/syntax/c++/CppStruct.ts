@@ -1,6 +1,10 @@
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { indent } from '../../utils.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  getWithModuleName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
@@ -74,8 +78,10 @@ export function createCppStruct(
     .filter(isNotDuplicate)
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
+  const fileName = getWithModuleName(NitroConfig.current, typename)
+
   const cppCode = `
-${createFileMetadataString(`${typename}.hpp`)}
+${createFileMetadataString(`${fileName}.hpp`)}
 
 #pragma once
 
@@ -140,7 +146,7 @@ namespace margelo::nitro {
   `
   return {
     content: cppCode,
-    name: `${typename}.hpp`,
+    name: `${fileName}.hpp`,
     subdirectory: [],
     language: 'c++',
     referencedTypes: properties,
