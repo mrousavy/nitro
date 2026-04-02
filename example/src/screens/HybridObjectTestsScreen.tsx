@@ -17,7 +17,7 @@ import {
 } from 'react-native-nitro-test'
 import { getTests, type TestRunner } from '../getTests'
 import { logPrototypeChain } from '../logPrototypeChain'
-// import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
@@ -207,7 +207,14 @@ export function HybridObjectTestsScreen() {
         HybridObject Tests
       </Text>
       <View style={styles.topControls}>
-        
+        <SegmentedControl
+          style={styles.segmentedControl}
+          values={['C++', PLATFORM_LANGUAGE]}
+          selectedIndex={selectedIndex}
+          onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+            setSelectedIndex(selectedSegmentIndex)
+          }}
+        />
         <View style={styles.flex} />
         <Text style={[styles.buildTypeText, { color: colors.text }]}>
           {NitroModules.buildType}
@@ -239,7 +246,14 @@ export function HybridObjectTestsScreen() {
       </View>
 
       <View style={styles.filterContainer}>
-
+        <SegmentedControl
+          style={styles.filterSegmentedControl}
+          values={filterLabels}
+          selectedIndex={selectedFilterIndex}
+          onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+            setStatusFilter(FILTER_OPTIONS[selectedSegmentIndex]!)
+          }}
+        />
       </View>
 
       <FlatList
