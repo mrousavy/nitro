@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
     :ios => min_ios_version_supported,
     :visionos => 1.0,
     :macos => 10.13,
+    :osx => 10.13,
     :tvos => 13.4,
   }
 
