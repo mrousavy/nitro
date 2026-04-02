@@ -23,11 +23,12 @@ function createTestRunner(
   }
 }
 
-const testObjectCpp =
-  NitroModules.createHybridObject<TestObjectCpp>('TestObjectCpp')
+const testObjectCpp = NitroModules.createHybridObject<TestObjectCpp>(
+  'NitroTestTestObjectCpp'
+)
 const testObjectSwiftKotlin =
   NitroModules.createHybridObject<TestObjectSwiftKotlin>(
-    'TestObjectSwiftKotlin'
+    'NitroTestTestObjectSwiftKotlin'
   )
 
 describe('TestObject (C++)', createTestRunner(testObjectCpp))
