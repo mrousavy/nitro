@@ -20,20 +20,20 @@
 
 namespace margelo::nitro::test::external::views {
 
-  extern const char HybridTestViewComponentName[] = "TestView";
+  extern const char HybridTestViewComponentName[] = "NitroTestExternalTestView";
 
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue([&]() -> CachedProp<bool> {
+    isCyan([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.isBlue;
+        const react::RawValue* rawValue = rawProps.at("isCyan", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.isCyan;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
+        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isCyan);
       } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
+        throw std::runtime_error(std::string("TestView.isCyan: ") + exc.what());
       }
     }()),
     hasBeenCalled([&]() -> CachedProp<bool> {
@@ -46,24 +46,14 @@ namespace margelo::nitro::test::external::views {
         throw std::runtime_error(std::string("TestView.hasBeenCalled: ") + exc.what());
       }
     }()),
-    colorScheme([&]() -> CachedProp<ColorScheme> {
+    testCallback([&]() -> CachedProp<std::function<void()>> {
       try {
-        const react::RawValue* rawValue = rawProps.at("colorScheme", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.colorScheme;
+        const react::RawValue* rawValue = rawProps.at("testCallback", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.testCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<ColorScheme>::fromRawValue(*runtime, value, sourceProps.colorScheme);
+        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.testCallback);
       } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.colorScheme: ") + exc.what());
-      }
-    }()),
-    someCallback([&]() -> CachedProp<std::function<void()>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someCallback;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+        throw std::runtime_error(std::string("TestView.testCallback: ") + exc.what());
       }
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> {
@@ -79,10 +69,9 @@ namespace margelo::nitro::test::external::views {
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      case hashString("isBlue"): return true;
+      case hashString("isCyan"): return true;
       case hashString("hasBeenCalled"): return true;
-      case hashString("colorScheme"): return true;
-      case hashString("someCallback"): return true;
+      case hashString("testCallback"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

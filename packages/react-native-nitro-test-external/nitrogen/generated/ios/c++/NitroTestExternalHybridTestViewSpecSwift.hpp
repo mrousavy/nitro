@@ -12,10 +12,8 @@
 // Forward declaration of `HybridTestViewSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridTestViewSpec_cxx; }
 
-// Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::test::external { enum class ColorScheme; }
 
-#include "NitroTestExternalColorScheme.hpp"
+
 #include <functional>
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
@@ -64,11 +62,11 @@ namespace margelo::nitro::test::external {
 
   public:
     // Properties
-    inline bool getIsBlue() noexcept override {
-      return _swiftPart.isBlue();
+    inline bool getIsCyan() noexcept override {
+      return _swiftPart.isCyan();
     }
-    inline void setIsBlue(bool isBlue) noexcept override {
-      _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
+    inline void setIsCyan(bool isCyan) noexcept override {
+      _swiftPart.setIsCyan(std::forward<decltype(isCyan)>(isCyan));
     }
     inline bool getHasBeenCalled() noexcept override {
       return _swiftPart.hasBeenCalled();
@@ -76,25 +74,18 @@ namespace margelo::nitro::test::external {
     inline void setHasBeenCalled(bool hasBeenCalled) noexcept override {
       _swiftPart.setHasBeenCalled(std::forward<decltype(hasBeenCalled)>(hasBeenCalled));
     }
-    inline ColorScheme getColorScheme() noexcept override {
-      auto __result = _swiftPart.getColorScheme();
-      return static_cast<ColorScheme>(__result);
-    }
-    inline void setColorScheme(ColorScheme colorScheme) noexcept override {
-      _swiftPart.setColorScheme(static_cast<int>(colorScheme));
-    }
-    inline std::function<void()> getSomeCallback() noexcept override {
-      auto __result = _swiftPart.getSomeCallback();
+    inline std::function<void()> getTestCallback() noexcept override {
+      auto __result = _swiftPart.getTestCallback();
       return __result;
     }
-    inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
-      _swiftPart.setSomeCallback(someCallback);
+    inline void setTestCallback(const std::function<void()>& testCallback) noexcept override {
+      _swiftPart.setTestCallback(testCallback);
     }
 
   public:
     // Methods
-    inline void someMethod() override {
-      auto __result = _swiftPart.someMethod();
+    inline void testMethod() override {
+      auto __result = _swiftPart.testMethod();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

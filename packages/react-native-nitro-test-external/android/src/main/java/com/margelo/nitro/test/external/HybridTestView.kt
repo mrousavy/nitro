@@ -15,19 +15,18 @@ class HybridTestView(
   override val view: View = View(context)
 
   // Props
-  override var isBlue: Boolean = false
+  override var isCyan: Boolean = false
     set(value) {
       field = value
-      val color = if (value) Color.BLUE else Color.RED
+      val color = if (value) Color.CYAN else Color.BLUE
       view.setBackgroundColor(color)
     }
   override var hasBeenCalled: Boolean = false
-  override var colorScheme: ColorScheme = ColorScheme.LIGHT
-  override var someCallback: () -> Unit = {}
+  override var testCallback: () -> Unit = {}
 
   // Methods
-  override fun someMethod() {
+  override fun testMethod() {
     hasBeenCalled = true
-    someCallback()
+    testCallback()
   }
 }

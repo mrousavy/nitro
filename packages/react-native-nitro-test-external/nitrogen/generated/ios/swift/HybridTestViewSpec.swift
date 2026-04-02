@@ -10,19 +10,18 @@ import NitroModules
 /// See ``HybridTestViewSpec``
 public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
-  var isBlue: Bool { get set }
+  var isCyan: Bool { get set }
   var hasBeenCalled: Bool { get set }
-  var colorScheme: ColorScheme { get set }
-  var someCallback: () -> Void { get set }
+  var testCallback: () -> Void { get set }
 
   // Methods
-  func someMethod() throws -> Void
+  func testMethod() throws -> Void
 }
 
 public extension HybridTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject TestView]"
+    return "[HybridObject NitroTestExternalTestView]"
   }
 }
 

@@ -37,7 +37,7 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject RecyclableTestView]"
+    return "[HybridObject NitroTestRecyclableTestView]"
   }
 
   // C++ backing class

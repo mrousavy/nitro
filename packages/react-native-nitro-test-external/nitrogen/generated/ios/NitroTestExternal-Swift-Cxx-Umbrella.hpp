@@ -8,8 +8,6 @@
 #pragma once
 
 // Forward declarations of C++ defined types
-// Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::test::external { enum class ColorScheme; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridBaseSpec; }
 // Forward declaration of `HybridBlaBlaSpec` to properly resolve imports.
@@ -22,7 +20,6 @@ namespace margelo::nitro::test::external { class HybridTestViewSpec; }
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Include C++ defined types
-#include "NitroTestExternalColorScheme.hpp"
 #include "NitroTestExternalHybridBaseSpec.hpp"
 #include "NitroTestExternalHybridBlaBlaSpec.hpp"
 #include "NitroTestExternalHybridSomeExternalObjectSpec.hpp"

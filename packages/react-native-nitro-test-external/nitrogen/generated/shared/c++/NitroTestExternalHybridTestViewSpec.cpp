@@ -14,15 +14,13 @@ namespace margelo::nitro::test::external {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
-      prototype.registerHybridGetter("isBlue", &HybridTestViewSpec::getIsBlue);
-      prototype.registerHybridSetter("isBlue", &HybridTestViewSpec::setIsBlue);
+      prototype.registerHybridGetter("isCyan", &HybridTestViewSpec::getIsCyan);
+      prototype.registerHybridSetter("isCyan", &HybridTestViewSpec::setIsCyan);
       prototype.registerHybridGetter("hasBeenCalled", &HybridTestViewSpec::getHasBeenCalled);
       prototype.registerHybridSetter("hasBeenCalled", &HybridTestViewSpec::setHasBeenCalled);
-      prototype.registerHybridGetter("colorScheme", &HybridTestViewSpec::getColorScheme);
-      prototype.registerHybridSetter("colorScheme", &HybridTestViewSpec::setColorScheme);
-      prototype.registerHybridGetter("someCallback", &HybridTestViewSpec::getSomeCallback);
-      prototype.registerHybridSetter("someCallback", &HybridTestViewSpec::setSomeCallback);
-      prototype.registerHybridMethod("someMethod", &HybridTestViewSpec::someMethod);
+      prototype.registerHybridGetter("testCallback", &HybridTestViewSpec::getTestCallback);
+      prototype.registerHybridSetter("testCallback", &HybridTestViewSpec::setTestCallback);
+      prototype.registerHybridMethod("testMethod", &HybridTestViewSpec::testMethod);
     });
   }
 

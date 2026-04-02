@@ -121,14 +121,14 @@ open class HybridTestViewSpec_cxx {
   }
 
   // Properties
-  public final var isBlue: Bool {
+  public final var isCyan: Bool {
     @inline(__always)
     get {
-      return self.__implementation.isBlue
+      return self.__implementation.isCyan
     }
     @inline(__always)
     set {
-      self.__implementation.isBlue = newValue
+      self.__implementation.isCyan = newValue
     }
   }
   
@@ -143,28 +143,17 @@ open class HybridTestViewSpec_cxx {
     }
   }
   
-  public final var colorScheme: Int32 {
-    @inline(__always)
-    get {
-      return self.__implementation.colorScheme.rawValue
-    }
-    @inline(__always)
-    set {
-      self.__implementation.colorScheme = margelo.nitro.test.external.ColorScheme(rawValue: newValue)!
-    }
-  }
-  
-  public final var someCallback: bridge.Func_void {
+  public final var testCallback: bridge.Func_void {
     @inline(__always)
     get {
       return { () -> bridge.Func_void in
-        let __closureWrapper = Func_void(self.__implementation.someCallback)
+        let __closureWrapper = Func_void(self.__implementation.testCallback)
         return bridge.create_Func_void(__closureWrapper.toUnsafe())
       }()
     }
     @inline(__always)
     set {
-      self.__implementation.someCallback = { () -> () -> Void in
+      self.__implementation.testCallback = { () -> () -> Void in
         let __wrappedFunction = bridge.wrap_Func_void(newValue)
         return { () -> Void in
           __wrappedFunction.call()
@@ -175,9 +164,9 @@ open class HybridTestViewSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func someMethod() -> bridge.Result_void_ {
+  public final func testMethod() -> bridge.Result_void_ {
     do {
-      try self.__implementation.someMethod()
+      try self.__implementation.testMethod()
       return bridge.create_Result_void_()
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()

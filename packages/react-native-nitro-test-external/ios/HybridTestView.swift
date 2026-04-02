@@ -13,18 +13,17 @@ class HybridTestView: HybridTestViewSpec {
   var view: UIView = UIView()
 
   // Props
-  var isBlue: Bool = false {
+  var isCyan: Bool = false {
     didSet {
-      view.backgroundColor = isBlue ? .systemBlue : .systemRed
+      view.backgroundColor = isCyan ? .systemCyan : .systemBlue
     }
   }
   var hasBeenCalled: Bool = false
-  var colorScheme: ColorScheme = .light
-  var someCallback: () -> Void = {}
+  var testCallback: () -> Void = {}
 
   // Methods
-  func someMethod() throws {
+  func testMethod() throws {
     hasBeenCalled = true
-    someCallback()
+    testCallback()
   }
 }

@@ -79,25 +79,20 @@ using namespace margelo::nitro::test::external::views;
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
-  // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
-    newViewProps.isBlue.isDirty = false;
+  // isCyan: boolean
+  if (newViewProps.isCyan.isDirty) {
+    swiftPart.setIsCyan(newViewProps.isCyan.value);
+    newViewProps.isCyan.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
     swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
     newViewProps.hasBeenCalled.isDirty = false;
   }
-  // colorScheme: enum
-  if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
-    newViewProps.colorScheme.isDirty = false;
-  }
-  // someCallback: function
-  if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
-    newViewProps.someCallback.isDirty = false;
+  // testCallback: function
+  if (newViewProps.testCallback.isDirty) {
+    swiftPart.setTestCallback(newViewProps.testCallback.value);
+    newViewProps.testCallback.isDirty = false;
   }
 
   swiftPart.afterUpdate();

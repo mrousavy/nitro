@@ -7,11 +7,8 @@
 
 #include "JHybridTestViewSpec.hpp"
 
-// Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::test::external { enum class ColorScheme; }
 
-#include "NitroTestExternalColorScheme.hpp"
-#include "JColorScheme.hpp"
+
 #include <functional>
 #include "JFunc_void.hpp"
 #include <NitroModules/JNICallable.hpp>
@@ -46,14 +43,14 @@ namespace margelo::nitro::test::external {
   }
 
   // Properties
-  bool JHybridTestViewSpec::getIsBlue() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("isBlue");
+  bool JHybridTestViewSpec::getIsCyan() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("isCyan");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
-  void JHybridTestViewSpec::setIsBlue(bool isBlue) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
-    method(_javaPart, isBlue);
+  void JHybridTestViewSpec::setIsCyan(bool isCyan) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isCyan */)>("setCyan");
+    method(_javaPart, isCyan);
   }
   bool JHybridTestViewSpec::getHasBeenCalled() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("getHasBeenCalled");
@@ -64,17 +61,8 @@ namespace margelo::nitro::test::external {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* hasBeenCalled */)>("setHasBeenCalled");
     method(_javaPart, hasBeenCalled);
   }
-  ColorScheme JHybridTestViewSpec::getColorScheme() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JColorScheme>()>("getColorScheme");
-    auto __result = method(_javaPart);
-    return __result->toCpp();
-  }
-  void JHybridTestViewSpec::setColorScheme(ColorScheme colorScheme) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JColorScheme> /* colorScheme */)>("setColorScheme");
-    method(_javaPart, JColorScheme::fromCpp(colorScheme));
-  }
-  std::function<void()> JHybridTestViewSpec::getSomeCallback() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getSomeCallback_cxx");
+  std::function<void()> JHybridTestViewSpec::getTestCallback() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getTestCallback_cxx");
     auto __result = method(_javaPart);
     return [&]() -> std::function<void()> {
       if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
@@ -86,14 +74,14 @@ namespace margelo::nitro::test::external {
       }
     }();
   }
-  void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
-    method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
+  void JHybridTestViewSpec::setTestCallback(const std::function<void()>& testCallback) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* testCallback */)>("setTestCallback_cxx");
+    method(_javaPart, JFunc_void_cxx::fromCpp(testCallback));
   }
 
   // Methods
-  void JHybridTestViewSpec::someMethod() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("someMethod");
+  void JHybridTestViewSpec::testMethod() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("testMethod");
     method(_javaPart);
   }
 

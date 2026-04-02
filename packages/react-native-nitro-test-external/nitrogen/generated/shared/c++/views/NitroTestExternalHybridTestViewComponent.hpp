@@ -16,7 +16,6 @@
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 
-#include "NitroTestExternalColorScheme.hpp"
 #include <functional>
 #include <memory>
 #include "NitroTestExternalHybridTestViewSpec.hpp"
@@ -42,10 +41,9 @@ namespace margelo::nitro::test::external::views {
                         const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> isBlue;
+    CachedProp<bool> isCyan;
     CachedProp<bool> hasBeenCalled;
-    CachedProp<ColorScheme> colorScheme;
-    CachedProp<std::function<void()>> someCallback;
+    CachedProp<std::function<void()>> testCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:

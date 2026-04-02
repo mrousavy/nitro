@@ -28,7 +28,7 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun getName(): String {
-    return "RecyclableTestView"
+    return "NitroTestRecyclableTestView"
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {

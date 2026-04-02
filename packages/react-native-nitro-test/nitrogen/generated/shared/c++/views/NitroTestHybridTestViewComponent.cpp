@@ -20,7 +20,7 @@
 
 namespace margelo::nitro::test::views {
 
-  extern const char HybridTestViewComponentName[] = "TestView";
+  extern const char HybridTestViewComponentName[] = "NitroTestTestView";
 
   HybridTestViewProps::HybridTestViewProps(const react::PropsParserContext& context,
                                            const HybridTestViewProps& sourceProps,

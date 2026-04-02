@@ -50,18 +50,16 @@ namespace margelo::nitro::test::external {
 
   public:
     // Properties
-    bool getIsBlue() override;
-    void setIsBlue(bool isBlue) override;
+    bool getIsCyan() override;
+    void setIsCyan(bool isCyan) override;
     bool getHasBeenCalled() override;
     void setHasBeenCalled(bool hasBeenCalled) override;
-    ColorScheme getColorScheme() override;
-    void setColorScheme(ColorScheme colorScheme) override;
-    std::function<void()> getSomeCallback() override;
-    void setSomeCallback(const std::function<void()>& someCallback) override;
+    std::function<void()> getTestCallback() override;
+    void setTestCallback(const std::function<void()>& testCallback) override;
 
   public:
     // Methods
-    void someMethod() override;
+    void testMethod() override;
 
   private:
     jni::global_ref<JHybridTestViewSpec::JavaPart> _javaPart;

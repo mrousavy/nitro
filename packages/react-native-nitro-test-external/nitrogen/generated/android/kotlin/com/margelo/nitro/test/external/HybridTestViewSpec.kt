@@ -30,7 +30,7 @@ abstract class HybridTestViewSpec: HybridView() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var isBlue: Boolean
+  abstract var isCyan: Boolean
   
   @get:DoNotStrip
   @get:Keep
@@ -38,34 +38,28 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:Keep
   abstract var hasBeenCalled: Boolean
   
-  @get:DoNotStrip
-  @get:Keep
-  @set:DoNotStrip
-  @set:Keep
-  abstract var colorScheme: ColorScheme
+  abstract var testCallback: () -> Unit
   
-  abstract var someCallback: () -> Unit
-  
-  private var someCallback_cxx: Func_void
+  private var testCallback_cxx: Func_void
     @Keep
     @DoNotStrip
     get() {
-      return Func_void_java(someCallback)
+      return Func_void_java(testCallback)
     }
     @Keep
     @DoNotStrip
     set(value) {
-      someCallback = value
+      testCallback = value
     }
 
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun someMethod(): Unit
+  abstract fun testMethod(): Unit
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject TestView]"
+    return "[HybridObject NitroTestExternalTestView]"
   }
 
   // C++ backing class

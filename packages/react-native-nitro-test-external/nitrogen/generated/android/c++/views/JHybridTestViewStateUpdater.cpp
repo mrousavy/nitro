@@ -37,21 +37,17 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   }
 
   // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
-    hybridView->setIsBlue(props->isBlue.value);
-    props->isBlue.isDirty = false;
+  if (props->isCyan.isDirty) {
+    hybridView->setIsCyan(props->isCyan.value);
+    props->isCyan.isDirty = false;
   }
   if (props->hasBeenCalled.isDirty) {
     hybridView->setHasBeenCalled(props->hasBeenCalled.value);
     props->hasBeenCalled.isDirty = false;
   }
-  if (props->colorScheme.isDirty) {
-    hybridView->setColorScheme(props->colorScheme.value);
-    props->colorScheme.isDirty = false;
-  }
-  if (props->someCallback.isDirty) {
-    hybridView->setSomeCallback(props->someCallback.value);
-    props->someCallback.isDirty = false;
+  if (props->testCallback.isDirty) {
+    hybridView->setTestCallback(props->testCallback.value);
+    props->testCallback.isDirty = false;
   }
 
   // Update hybridRef if it changed

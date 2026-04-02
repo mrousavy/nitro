@@ -19,7 +19,7 @@ public protocol HybridBlaBlaSpec_protocol: HybridObject {
 public extension HybridBlaBlaSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject BlaBla]"
+    return "[HybridObject NitroTestExternalBlaBla]"
   }
 }
 

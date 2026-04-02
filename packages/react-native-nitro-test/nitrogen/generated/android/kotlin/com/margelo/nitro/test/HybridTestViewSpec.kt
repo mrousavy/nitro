@@ -65,7 +65,7 @@ abstract class HybridTestViewSpec: HybridView() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject TestView]"
+    return "[HybridObject NitroTestTestView]"
   }
 
   // C++ backing class

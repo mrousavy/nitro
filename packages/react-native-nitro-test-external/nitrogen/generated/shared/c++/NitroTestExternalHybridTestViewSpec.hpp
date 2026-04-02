@@ -13,10 +13,8 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `ColorScheme` to properly resolve imports.
-namespace margelo::nitro::test::external { enum class ColorScheme; }
 
-#include "NitroTestExternalColorScheme.hpp"
+
 #include <functional>
 
 namespace margelo::nitro::test::external {
@@ -46,18 +44,16 @@ namespace margelo::nitro::test::external {
 
     public:
       // Properties
-      virtual bool getIsBlue() = 0;
-      virtual void setIsBlue(bool isBlue) = 0;
+      virtual bool getIsCyan() = 0;
+      virtual void setIsCyan(bool isCyan) = 0;
       virtual bool getHasBeenCalled() = 0;
       virtual void setHasBeenCalled(bool hasBeenCalled) = 0;
-      virtual ColorScheme getColorScheme() = 0;
-      virtual void setColorScheme(ColorScheme colorScheme) = 0;
-      virtual std::function<void()> getSomeCallback() = 0;
-      virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual std::function<void()> getTestCallback() = 0;
+      virtual void setTestCallback(const std::function<void()>& testCallback) = 0;
 
     public:
       // Methods
-      virtual void someMethod() = 0;
+      virtual void testMethod() = 0;
 
     protected:
       // Hybrid Setup
