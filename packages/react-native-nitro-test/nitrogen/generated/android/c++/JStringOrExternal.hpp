@@ -11,7 +11,7 @@
 #include <variant>
 
 #include <memory>
-#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <NitroTestExternal/NitroTestExternalHybridSomeExternalObjectSpec.hpp>
 #include <string>
 #include <variant>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>

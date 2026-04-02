@@ -8,13 +8,13 @@
 #include "NitroTest-Swift-Cxx-Bridge.hpp"
 
 // Include C++ implementation defined types
-#include "HybridBaseSpecSwift.hpp"
-#include "HybridChildSpecSwift.hpp"
-#include "HybridPlatformObjectSpecSwift.hpp"
-#include "HybridRecyclableTestViewSpecSwift.hpp"
-#include "HybridTestObjectSwiftKotlinSpecSwift.hpp"
-#include "HybridTestViewSpecSwift.hpp"
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
+#include "NitroTestHybridBaseSpecSwift.hpp"
+#include "NitroTestHybridChildSpecSwift.hpp"
+#include "NitroTestHybridPlatformObjectSpecSwift.hpp"
+#include "NitroTestHybridRecyclableTestViewSpecSwift.hpp"
+#include "NitroTestHybridTestObjectSwiftKotlinSpecSwift.hpp"
+#include "NitroTestHybridTestViewSpecSwift.hpp"
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroTestExternal/NitroTestExternal-Swift-Cxx-Bridge.hpp>
 

@@ -10,7 +10,7 @@
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test::external { enum class ColorScheme; }
 
-#include "ColorScheme.hpp"
+#include "NitroTestExternalColorScheme.hpp"
 #include "JColorScheme.hpp"
 #include <functional>
 #include "JFunc_void.hpp"

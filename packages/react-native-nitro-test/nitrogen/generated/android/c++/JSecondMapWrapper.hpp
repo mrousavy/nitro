@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "SecondMapWrapper.hpp"
+#include "NitroTestSecondMapWrapper.hpp"
 
 #include <string>
 #include <unordered_map>

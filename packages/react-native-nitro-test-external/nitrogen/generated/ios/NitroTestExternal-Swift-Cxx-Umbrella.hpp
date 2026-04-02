@@ -22,12 +22,12 @@ namespace margelo::nitro::test::external { class HybridTestViewSpec; }
 namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Include C++ defined types
-#include "ColorScheme.hpp"
-#include "HybridBaseSpec.hpp"
-#include "HybridBlaBlaSpec.hpp"
-#include "HybridSomeExternalObjectSpec.hpp"
-#include "HybridTestViewSpec.hpp"
-#include "OptionalPrimitivesHolder.hpp"
+#include "NitroTestExternalColorScheme.hpp"
+#include "NitroTestExternalHybridBaseSpec.hpp"
+#include "NitroTestExternalHybridBlaBlaSpec.hpp"
+#include "NitroTestExternalHybridSomeExternalObjectSpec.hpp"
+#include "NitroTestExternalHybridTestViewSpec.hpp"
+#include "NitroTestExternalOptionalPrimitivesHolder.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <functional>

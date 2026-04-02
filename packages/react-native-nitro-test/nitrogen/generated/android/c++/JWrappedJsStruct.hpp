@@ -8,11 +8,11 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "WrappedJsStruct.hpp"
+#include "NitroTestWrappedJsStruct.hpp"
 
 #include "JFunc_void_double.hpp"
 #include "JJsStyleStruct.hpp"
-#include "JsStyleStruct.hpp"
+#include "NitroTestJsStyleStruct.hpp"
 #include <NitroModules/JNICallable.hpp>
 #include <functional>
 #include <vector>

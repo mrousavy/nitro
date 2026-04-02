@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "OldEnum.hpp"
+#include "NitroTestOldEnum.hpp"
 
 namespace margelo::nitro::test {
 

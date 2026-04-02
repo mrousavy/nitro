@@ -19,6 +19,26 @@
         "implementationClassName": "HybridSomeExternalObject"
       }
     },
+    "BlaBla": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridBlaBla"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridBlaBla"
+      }
+    },
+    "Base": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridBase"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridBase"
+      }
+    },
     "TestView": {
       "ios": {
         "language": "swift",

@@ -33,11 +33,11 @@ target_sources(
   # Autolinking Setup
   ../nitrogen/generated/android/NitroTestExternalOnLoad.cpp
   # Shared Nitrogen C++ sources
-  ../nitrogen/generated/shared/c++/HybridSomeExternalObjectSpec.cpp
-  ../nitrogen/generated/shared/c++/HybridBaseSpec.cpp
-  ../nitrogen/generated/shared/c++/HybridBlaBlaSpec.cpp
-  ../nitrogen/generated/shared/c++/HybridTestViewSpec.cpp
-  ../nitrogen/generated/shared/c++/views/HybridTestViewComponent.cpp
+  ../nitrogen/generated/shared/c++/NitroTestExternalHybridSomeExternalObjectSpec.cpp
+  ../nitrogen/generated/shared/c++/NitroTestExternalHybridBaseSpec.cpp
+  ../nitrogen/generated/shared/c++/NitroTestExternalHybridBlaBlaSpec.cpp
+  ../nitrogen/generated/shared/c++/NitroTestExternalHybridTestViewSpec.cpp
+  ../nitrogen/generated/shared/c++/views/NitroTestExternalHybridTestViewComponent.cpp
   # Android-specific Nitrogen C++ sources
   ../nitrogen/generated/android/c++/JHybridSomeExternalObjectSpec.cpp
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp

@@ -6,7 +6,7 @@
 ///
 
 #include "JHybridRecyclableTestViewStateUpdater.hpp"
-#include "views/HybridRecyclableTestViewComponent.hpp"
+#include "views/NitroTestHybridRecyclableTestViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
 #include <react/fabric/StateWrapperImpl.h>
 

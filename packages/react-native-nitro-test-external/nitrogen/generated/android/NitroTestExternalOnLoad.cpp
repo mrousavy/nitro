@@ -39,6 +39,22 @@ struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExter
     return javaPart->getJHybridSomeExternalObjectSpec();
   }
 };
+struct JHybridBlaBlaSpecImpl: public jni::JavaClass<JHybridBlaBlaSpecImpl, JHybridBlaBlaSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridBlaBla;";
+  static std::shared_ptr<JHybridBlaBlaSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridBlaBlaSpecImpl::javaobject()>();
+    jni::local_ref<JHybridBlaBlaSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridBlaBlaSpec();
+  }
+};
+struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridBase;";
+  static std::shared_ptr<JHybridBaseSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl::javaobject()>();
+    jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridBaseSpec();
+  }
+};
 struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridTestView;";
   static std::shared_ptr<JHybridTestViewSpec> create() {
@@ -62,13 +78,25 @@ void registerAllNatives() {
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "SomeExternalObject",
+    "NitroTestExternalSomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridSomeExternalObjectSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "TestView",
+    "NitroTestExternalBlaBla",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridBlaBlaSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "NitroTestExternalBase",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridBaseSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "NitroTestExternalTestView",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridTestViewSpecImpl::create();
     }

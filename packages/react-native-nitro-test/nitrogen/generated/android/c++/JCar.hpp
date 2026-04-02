@@ -8,13 +8,13 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "Car.hpp"
+#include "NitroTestCar.hpp"
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
 #include "JVariant_String_Double.hpp"
-#include "Person.hpp"
-#include "Powertrain.hpp"
+#include "NitroTestPerson.hpp"
+#include "NitroTestPowertrain.hpp"
 #include <optional>
 #include <string>
 #include <variant>

@@ -11,7 +11,7 @@
 namespace margelo::nitro::test::external { class HybridBaseSpec; }
 
 #include <memory>
-#include "HybridBaseSpec.hpp"
+#include "NitroTestExternalHybridBaseSpec.hpp"
 #include <optional>
 #include "JHybridBaseSpec.hpp"
 

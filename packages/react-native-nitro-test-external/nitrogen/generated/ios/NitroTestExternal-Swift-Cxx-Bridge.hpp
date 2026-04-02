@@ -30,11 +30,11 @@ namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 namespace NitroTestExternal { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
-#include "HybridBaseSpec.hpp"
-#include "HybridBlaBlaSpec.hpp"
-#include "HybridSomeExternalObjectSpec.hpp"
-#include "HybridTestViewSpec.hpp"
-#include "OptionalPrimitivesHolder.hpp"
+#include "NitroTestExternalHybridBaseSpec.hpp"
+#include "NitroTestExternalHybridBlaBlaSpec.hpp"
+#include "NitroTestExternalHybridSomeExternalObjectSpec.hpp"
+#include "NitroTestExternalHybridTestViewSpec.hpp"
+#include "NitroTestExternalOptionalPrimitivesHolder.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <functional>

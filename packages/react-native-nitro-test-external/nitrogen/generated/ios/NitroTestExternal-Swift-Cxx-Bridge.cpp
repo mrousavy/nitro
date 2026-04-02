@@ -8,11 +8,11 @@
 #include "NitroTestExternal-Swift-Cxx-Bridge.hpp"
 
 // Include C++ implementation defined types
-#include "HybridBaseSpecSwift.hpp"
-#include "HybridBlaBlaSpecSwift.hpp"
-#include "HybridSomeExternalObjectSpecSwift.hpp"
-#include "HybridTestViewSpecSwift.hpp"
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
+#include "NitroTestExternalHybridBaseSpecSwift.hpp"
+#include "NitroTestExternalHybridBlaBlaSpecSwift.hpp"
+#include "NitroTestExternalHybridSomeExternalObjectSpecSwift.hpp"
+#include "NitroTestExternalHybridTestViewSpecSwift.hpp"
 #include <NitroModules/NitroDefines.hpp>
 
 namespace margelo::nitro::test::external::bridge::swift {

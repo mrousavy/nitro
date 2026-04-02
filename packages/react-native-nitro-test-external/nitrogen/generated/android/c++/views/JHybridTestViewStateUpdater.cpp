@@ -6,7 +6,7 @@
 ///
 
 #include "JHybridTestViewStateUpdater.hpp"
-#include "views/HybridTestViewComponent.hpp"
+#include "views/NitroTestExternalHybridTestViewComponent.hpp"
 #include <NitroModules/NitroDefines.hpp>
 #include <react/fabric/StateWrapperImpl.h>
 

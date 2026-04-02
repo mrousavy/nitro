@@ -3,10 +3,14 @@
     "@tsconfig/react-native/tsconfig.json",
     "../../config/tsconfig.json"
   ],
-  "include": ["src"],
+  "include": [
+    "src", 
+    "nitrogen/generated/shared/ts",
+    "nitrogen/generated/shared/json/*.json"
+  ],
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "lib",
-    "jsx": "react"
+    "jsx": "react",
   }
 }

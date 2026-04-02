@@ -18,7 +18,7 @@
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
 #include "JHybridTestViewSpec.hpp"
-#include "views/HybridTestViewComponent.hpp"
+#include "views/NitroTestExternalHybridTestViewComponent.hpp"
 
 namespace margelo::nitro::test::external::views {
 

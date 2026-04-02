@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <NitroTestExternal/NitroTestExternalHybridSomeExternalObjectSpec.hpp>
 
 namespace margelo::nitro::test {
 
