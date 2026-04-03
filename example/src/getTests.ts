@@ -9,7 +9,8 @@ import {
   type OptionalWrapper,
   WeirdNumbersEnum,
   CustomString,
-  Base,
+  // HybridBase,
+  type Base,
   HybridPlatformObject,
   HybridChild,
 } from 'react-native-nitro-test'
@@ -24,7 +25,12 @@ import {
   getHybridObjectConstructor,
   NitroModules,
 } from 'react-native-nitro-modules'
-import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
+import {
+  HybridSomeExternalObject,
+  type Base as ExternalBase,
+  HybridBlaBla,
+  HybridBase as ExternalHybridBase,
+} from 'react-native-nitro-test-external'
 
 type TestResult =
   | {
@@ -50,6 +56,9 @@ export interface GetTestsOptions {
    */
   backend?: AssertionBackend
 }
+
+const TEST_MODULE_NAME = 'NitroTest'
+const TEST_EXTERNAL_MODULE_NAME = 'NitroTestExternal'
 
 const TEST_PERSON: Person = {
   age: 24,
@@ -139,7 +148,7 @@ const DATE_PLUS_1H = (() => {
   return new Date(current + oneHourInMilliseconds)
 })()
 
-const BASE = NitroModules.createHybridObject<Base>('Base')
+const BASE = NitroModules.createHybridObject<Base>(`${TEST_MODULE_NAME}Base`)
 
 let lotsOfCallbacks: ((num: number) => void)[] = []
 
@@ -1993,15 +2002,19 @@ export function getTests(
         .toContain('childValue')
         .toContain('baseValue')
     ),
-    createTest('createBase() has name "Base"', () =>
-      it(() => testObject.createBase().name)
-        .didNotThrow()
-        .equals('Base')
+    createTest(
+      `${TEST_MODULE_NAME} createBase() has name "${TEST_MODULE_NAME}Base"`,
+      () =>
+        it(() => testObject.createBase().name)
+          .didNotThrow()
+          .equals(`${TEST_MODULE_NAME}Base`)
     ),
-    createTest('createChild() has name "Child"', () =>
-      it(() => testObject.createChild().name)
-        .didNotThrow()
-        .equals('Child')
+    createTest(
+      `${TEST_MODULE_NAME} createChild() has name "${TEST_MODULE_NAME}Child"`,
+      () =>
+        it(() => testObject.createChild().name)
+          .didNotThrow()
+          .equals(`${TEST_MODULE_NAME}Child`)
     ),
     createTest('createChild() has overridden toString()', () =>
       it(() => testObject.createChild().toString())
@@ -2013,10 +2026,12 @@ export function getTests(
         .didNotThrow()
         .equals('HybridChild custom toString() :)')
     ),
-    createTest('createBaseActualChild() has name "Child"', () =>
-      it(() => testObject.createBaseActualChild().name)
-        .didNotThrow()
-        .equals('Child')
+    createTest(
+      `${TEST_MODULE_NAME} createBaseActualChild() has name "${TEST_MODULE_NAME}Child"`,
+      () =>
+        it(() => testObject.createBaseActualChild().name)
+          .didNotThrow()
+          .equals(`${TEST_MODULE_NAME}Child`)
     ),
     createTest('createBaseActualChild() works', () =>
       it(() => testObject.createBaseActualChild())
@@ -2149,8 +2164,9 @@ export function getTests(
     ),
     createTest('new T() works', () =>
       it(() => {
-        const HybridTestObjectCpp =
-          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const HybridTestObjectCpp = getHybridObjectConstructor<TestObjectCpp>(
+          `${TEST_MODULE_NAME}TestObjectCpp`
+        )
         const instance = new HybridTestObjectCpp()
         return instance
       })
@@ -2159,8 +2175,9 @@ export function getTests(
     ),
     createTest('new T() instanceof works', () =>
       it(() => {
-        const HybridTestObjectCpp =
-          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const HybridTestObjectCpp = getHybridObjectConstructor<TestObjectCpp>(
+          `${TEST_MODULE_NAME}TestObjectCpp`
+        )
         const instance = new HybridTestObjectCpp()
         return instance instanceof HybridTestObjectCpp
       })
@@ -2169,8 +2186,9 @@ export function getTests(
     ),
     createTest('{} instanceof works', () =>
       it(() => {
-        const HybridTestObjectCpp =
-          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const HybridTestObjectCpp = getHybridObjectConstructor<TestObjectCpp>(
+          `${TEST_MODULE_NAME}TestObjectCpp`
+        )
         return {} instanceof HybridTestObjectCpp
       })
         .didNotThrow()
@@ -2178,8 +2196,9 @@ export function getTests(
     ),
     createTest('new T() =/= new T()', () =>
       it(() => {
-        const HybridTestObjectCpp =
-          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const HybridTestObjectCpp = getHybridObjectConstructor<TestObjectCpp>(
+          `${TEST_MODULE_NAME}TestObjectCpp`
+        )
         const a = new HybridTestObjectCpp()
         const b = new HybridTestObjectCpp()
         return a === b
@@ -2189,8 +2208,9 @@ export function getTests(
     ),
     createTest('new T() a == a', () =>
       it(() => {
-        const HybridTestObjectCpp =
-          getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
+        const HybridTestObjectCpp = getHybridObjectConstructor<TestObjectCpp>(
+          `${TEST_MODULE_NAME}TestObjectCpp`
+        )
         const a = new HybridTestObjectCpp()
         // eslint-disable-next-line no-self-compare
         return a === a
@@ -2294,6 +2314,53 @@ export function getTests(
       })
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('Create ExternalBase while Base exists', () =>
+      it(() => {
+        return NitroModules.createHybridObject<ExternalBase>(
+          `${TEST_EXTERNAL_MODULE_NAME}Base`
+        )
+      })
+        .didNotThrow()
+        .didReturn('object')
+        .toContain('abc')
+    ),
+    createTest('ExternalBase is not an instance of Base', () =>
+      it(() => {
+        const BaseConstructor = getHybridObjectConstructor<Base>(
+          `${TEST_MODULE_NAME}Base`
+        )
+        const ExternalBaseConstructor =
+          getHybridObjectConstructor<ExternalBase>(
+            `${TEST_EXTERNAL_MODULE_NAME}Base`
+          )
+        const externalInstance = new ExternalBaseConstructor()
+        return externalInstance instanceof BaseConstructor
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('ExternalBase =/= Base name', () =>
+      it(() => {
+        return ExternalHybridBase.name === BASE.name
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('ExternalBlaBla.base =/= BASE .toString()', () =>
+      it(() => {
+        return HybridBlaBla.base?.toString() === BASE.toString()
+      })
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('External Base HybridObject name contains library prefix', () =>
+      it(() => {
+        return ExternalHybridBase.name
+      })
+        .didNotThrow()
+        .didReturn('string')
+        .toStringContain(TEST_EXTERNAL_MODULE_NAME)
     ),
   ]
 }

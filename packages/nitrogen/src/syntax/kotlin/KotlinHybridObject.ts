@@ -2,7 +2,11 @@ import { indent } from '../../utils.js'
 import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  getWithModuleName,
+  isNotDuplicate,
+} from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
@@ -60,6 +64,8 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
+  const registeredName = getWithModuleName(spec.config, name.T)
+
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
 ${createFileMetadataString(`${name.HybridTSpec}.kt`)}
@@ -91,7 +97,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
 
   // Default implementation of \`HybridObject.toString()\`
   override fun toString(): String {
-    return "[HybridObject ${name.T}]"
+    return "[HybridObject ${registeredName}]"
   }
 
   // C++ backing class

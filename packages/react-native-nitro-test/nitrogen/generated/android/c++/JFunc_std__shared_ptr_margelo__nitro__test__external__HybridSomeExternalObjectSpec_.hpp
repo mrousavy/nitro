@@ -11,7 +11,7 @@
 #include <functional>
 
 #include <memory>
-#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
+#include <NitroTestExternal/NitroTestExternalHybridSomeExternalObjectSpec.hpp>
 #include <functional>
 #include <NitroModules/JNICallable.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>

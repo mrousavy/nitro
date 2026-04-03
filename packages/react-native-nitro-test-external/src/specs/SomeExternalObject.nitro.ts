@@ -28,3 +28,15 @@ export interface SomeExternalObject
     optionalInt64?: Int64
   ): OptionalPrimitivesHolder
 }
+
+// This is a simple `HybridObject` with just one value.
+export interface Base
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+  readonly abc: number
+}
+
+// This is a simple `HybridObject` with just one value.
+export interface BlaBla
+  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+  base?: Base
+}

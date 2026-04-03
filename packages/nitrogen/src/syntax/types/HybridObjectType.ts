@@ -2,6 +2,7 @@ import { type NitroConfig } from '../../config/NitroConfig.js'
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { getWithModuleName } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { GetCodeOptions, Type, TypeKind } from './Type.js'
@@ -138,6 +139,11 @@ export class HybridObjectType implements Type {
     const cxxNamespace = this.sourceConfig.getCxxNamespace('c++')
     const imports: SourceImport[] = []
 
+    const hybridTSpecName = getWithModuleName(
+      this.sourceConfig,
+      name.HybridTSpec
+    )
+
     switch (language) {
       case 'c++': {
         imports.push({
@@ -148,7 +154,7 @@ export class HybridObjectType implements Type {
         if (this.sourceConfig.isExternalConfig) {
           const cxxImport = this.getExternalCxxImportName()
           imports.push({
-            name: `${cxxImport}/${name.HybridTSpec}.hpp`,
+            name: `${cxxImport}/${hybridTSpecName}.hpp`,
             forwardDeclaration: getForwardDeclaration(
               'class',
               name.HybridTSpec,
@@ -159,7 +165,7 @@ export class HybridObjectType implements Type {
           })
         } else {
           imports.push({
-            name: `${name.HybridTSpec}.hpp`,
+            name: `${hybridTSpecName}.hpp`,
             forwardDeclaration: getForwardDeclaration(
               'class',
               name.HybridTSpec,

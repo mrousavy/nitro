@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "ColorScheme.hpp"
+#include "NitroTestColorScheme.hpp"
 
 namespace margelo::nitro::test {
 

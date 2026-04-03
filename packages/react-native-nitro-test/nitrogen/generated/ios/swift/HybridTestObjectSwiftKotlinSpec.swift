@@ -134,7 +134,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
 public extension HybridTestObjectSwiftKotlinSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject TestObjectSwiftKotlin]"
+    return "[HybridObject NitroTestTestObjectSwiftKotlin]"
   }
 }
 

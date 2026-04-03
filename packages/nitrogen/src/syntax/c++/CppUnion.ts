@@ -1,5 +1,5 @@
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString } from './../helpers.js'
+import { createFileMetadataString, getWithModuleName } from './../helpers.js'
 import { indent, toLowerCamelCase } from '../../utils.js'
 import type { EnumMember } from '../types/EnumType.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
@@ -38,8 +38,10 @@ export function createCppUnion(
     .join('\n')
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
 
+  const fileName = getWithModuleName(NitroConfig.current, typename)
+
   const cppCode = `
-${createFileMetadataString(`${typename}.hpp`)}
+${createFileMetadataString(`${fileName}.hpp`)}
 
 #pragma once
 
@@ -97,7 +99,7 @@ namespace margelo::nitro {
           `
   return {
     content: cppCode,
-    name: `${typename}.hpp`,
+    name: `${fileName}.hpp`,
     subdirectory: [],
     language: 'c++',
     platform: 'shared',

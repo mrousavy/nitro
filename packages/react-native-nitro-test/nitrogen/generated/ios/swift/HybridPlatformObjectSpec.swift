@@ -19,7 +19,7 @@ public protocol HybridPlatformObjectSpec_protocol: HybridObject {
 public extension HybridPlatformObjectSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject PlatformObject]"
+    return "[HybridObject NitroTestPlatformObject]"
   }
 }
 

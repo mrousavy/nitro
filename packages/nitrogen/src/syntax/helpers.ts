@@ -4,6 +4,7 @@ import type { Type } from './types/Type.js'
 import { getTypeAs } from './types/getTypeAs.js'
 import { OptionalType } from './types/OptionalType.js'
 import { ArrayType } from './types/ArrayType.js'
+import { NitroConfig } from '../config/NitroConfig.js'
 
 type Comment = '///' | '#'
 
@@ -19,6 +20,13 @@ ${comment} https://github.com/mrousavy/nitro
 ${comment} Copyright © Marc Rousavy @ Margelo
 ${comment}
 `.trim()
+}
+
+export function getWithModuleName<T extends string>(
+  sourceConfig: NitroConfig,
+  originalName: T
+): `${string}${T}` {
+  return `${sourceConfig.getIosModuleName()}${originalName}`
 }
 
 export function isFunction(type: Type): boolean {
@@ -172,4 +180,25 @@ export function getRelativeDirectory(file: SourceFile): string {
 
 export function getRelativeDirectoryGenerated(...subpath: string[]): string {
   return path.join('..', 'nitrogen', 'generated', ...subpath)
+}
+
+/**
+ * Some headers like `NitroModules/Result.hpp` cause an error when included before own module headers.
+ */
+export function sortIosIncludesWithOwnFirst(includes: string[]): string[] {
+  const moduleName = NitroConfig.current.getIosModuleName()
+  const ownIncludes: string[] = []
+  const otherIncludes: string[] = []
+
+  for (const include of includes) {
+    if (include.startsWith(`#include <${moduleName}/`)) {
+      ownIncludes.push(include)
+    } else {
+      otherIncludes.push(include)
+    }
+  }
+
+  ownIncludes.sort()
+  otherIncludes.sort()
+  return [...ownIncludes, ...otherIncludes]
 }

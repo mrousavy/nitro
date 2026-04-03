@@ -1,6 +1,7 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { getWithModuleName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
@@ -45,6 +46,14 @@ export function createSwiftHybridObjectRegistration({
   swiftClassName,
 }: Props): SwiftHybridObjectRegistration {
   const { HybridTSpecSwift } = getHybridObjectName(hybridObjectName)
+  const hybridTSpecSwiftName = getWithModuleName(
+    NitroConfig.current,
+    HybridTSpecSwift
+  )
+  const registeredName = getWithModuleName(
+    NitroConfig.current,
+    hybridObjectName
+  )
 
   const type = new HybridObjectType(
     hybridObjectName,
@@ -66,11 +75,11 @@ public static func is${hybridObjectName}Recyclable() -> Bool {
 }
     `.trim(),
     requiredImports: [
-      { name: `${HybridTSpecSwift}.hpp`, language: 'c++', space: 'user' },
+      { name: `${hybridTSpecSwiftName}.hpp`, language: 'c++', space: 'user' },
     ],
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
-  "${hybridObjectName}",
+  "${registeredName}",
   []() -> std::shared_ptr<HybridObject> {
     ${type.getCode('c++')} hybridObject = ${getHybridObjectConstructorCall(hybridObjectName)}
     return hybridObject;

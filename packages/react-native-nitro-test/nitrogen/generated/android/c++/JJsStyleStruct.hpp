@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "JsStyleStruct.hpp"
+#include "NitroTestJsStyleStruct.hpp"
 
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>

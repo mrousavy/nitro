@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "OptionalCallback.hpp"
+#include "NitroTestOptionalCallback.hpp"
 
 #include "JFunc_void.hpp"
 #include "JVariant_______Unit_Double.hpp"

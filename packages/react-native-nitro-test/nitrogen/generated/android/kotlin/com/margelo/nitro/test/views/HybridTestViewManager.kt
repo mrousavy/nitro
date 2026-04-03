@@ -28,7 +28,7 @@ public class HybridTestViewManager: SimpleViewManager<View>() {
   }
 
   override fun getName(): String {
-    return "TestView"
+    return "NitroTestTestView"
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {

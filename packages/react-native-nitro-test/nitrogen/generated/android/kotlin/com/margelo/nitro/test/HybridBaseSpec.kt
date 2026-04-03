@@ -34,7 +34,7 @@ abstract class HybridBaseSpec: HybridObject() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject Base]"
+    return "[HybridObject NitroTestBase]"
   }
 
   // C++ backing class

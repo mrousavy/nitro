@@ -4,6 +4,7 @@ import { createIndentation, indent } from '../utils.js'
 import {
   createFileMetadataString,
   escapeCppName,
+  getWithModuleName,
   isFunction,
   isNotDuplicate,
 } from '../syntax/helpers.js'
@@ -23,6 +24,7 @@ interface ViewComponentNames {
   nameVariable: `${string}ComponentName`
   shadowNodeClassName: `${string}ShadowNode`
   descriptorClassName: `${string}ComponentDescriptor`
+  uiClassName: string
   component: `${string}Component`
   manager: `${string}Manager`
 }
@@ -37,7 +39,9 @@ export function getViewComponentNames(
     nameVariable: `${name.HybridT}ComponentName`,
     shadowNodeClassName: `${name.HybridT}ShadowNode`,
     descriptorClassName: `${name.HybridT}ComponentDescriptor`,
-    component: `${name.HybridT}Component`,
+    uiClassName: getWithModuleName(spec.config, name.T),
+    // Component name must be unique to avoid conflicts with other modules
+    component: getWithModuleName(spec.config, `${name.HybridT}Component`),
     manager: `${name.HybridT}Manager`,
   }
 }
@@ -59,13 +63,14 @@ export function createViewComponentShadowNodeFiles(
     )
   }
 
-  const { T, HybridT } = getHybridObjectName(spec.name)
+  const { HybridT } = getHybridObjectName(spec.name)
   const {
     propsClassName,
     stateClassName,
     nameVariable,
     shadowNodeClassName,
     descriptorClassName,
+    uiClassName,
     component,
   } = getViewComponentNames(spec)
 
@@ -223,6 +228,7 @@ ${name}([&]() -> CachedProp<${type}> {
 
   const ctorIndent = createIndentation(propsClassName.length * 2)
   const descriptorIndent = createIndentation(descriptorClassName.length)
+
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
@@ -241,7 +247,7 @@ ${createFileMetadataString(`${component}.cpp`)}
 
 namespace ${namespace} {
 
-  extern const char ${nameVariable}[] = "${T}";
+  extern const char ${nameVariable}[] = "${uiClassName}";
 
   ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
   ${ctorIndent}   const ${propsClassName}& sourceProps,
