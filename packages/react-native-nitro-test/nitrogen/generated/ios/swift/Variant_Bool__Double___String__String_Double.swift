@@ -20,7 +20,7 @@ public indirect enum Variant_Bool__Double___String__String_Double {
   case fifth(Double)
 }
 
-public extension indirect enum {
+public extension Variant_Bool__Double___String__String_Double {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

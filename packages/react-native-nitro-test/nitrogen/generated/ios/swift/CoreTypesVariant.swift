@@ -21,7 +21,7 @@ public indirect enum CoreTypesVariant {
   case sixth(AnyMap)
 }
 
-public extension indirect enum {
+public extension CoreTypesVariant {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

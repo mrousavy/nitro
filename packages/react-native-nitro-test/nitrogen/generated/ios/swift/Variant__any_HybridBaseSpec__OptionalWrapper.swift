@@ -17,7 +17,7 @@ public indirect enum Variant__any_HybridBaseSpec__OptionalWrapper {
   case second(OptionalWrapper)
 }
 
-public extension indirect enum {
+public extension Variant__any_HybridBaseSpec__OptionalWrapper {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

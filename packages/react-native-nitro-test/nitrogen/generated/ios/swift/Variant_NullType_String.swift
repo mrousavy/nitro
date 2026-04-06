@@ -17,7 +17,7 @@ public enum Variant_NullType_String {
   case second(String)
 }
 
-public extension enum {
+public extension Variant_NullType_String {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

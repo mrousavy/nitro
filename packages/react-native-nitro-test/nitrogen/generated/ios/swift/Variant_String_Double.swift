@@ -17,7 +17,7 @@ public enum Variant_String_Double {
   case second(Double)
 }
 
-public extension enum {
+public extension Variant_String_Double {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

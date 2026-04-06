@@ -17,7 +17,7 @@ public indirect enum StringOrExternal {
   case second(String)
 }
 
-public extension indirect enum {
+public extension StringOrExternal {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

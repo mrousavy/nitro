@@ -17,7 +17,7 @@ public indirect enum Variant_Car_Person {
   case second(Person)
 }
 
-public extension indirect enum {
+public extension Variant_Car_Person {
   func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T

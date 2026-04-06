@@ -64,7 +64,7 @@ public ${enumDeclaration} ${typename} {
   ${indent(cases, '  ')}
 }
 
-public extension ${enumDeclaration} {
+public extension ${typename} {
   func \`as\`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       ${indent(asCases, '      ')}
