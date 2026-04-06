@@ -16,3 +16,16 @@ public indirect enum Variant_Bool_WeirdNumbersEnum {
   case first(Bool)
   case second(WeirdNumbersEnum)
 }
+
+public extension indirect enum {
+  func as<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+    }
+  }
+
+  func is<T>(_ type: T.Type = T.self) -> Bool {
+    value(as: type) != nil
+  }
+}

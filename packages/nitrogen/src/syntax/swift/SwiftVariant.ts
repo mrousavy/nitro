@@ -34,6 +34,12 @@ export function createSwiftVariant(variant: VariantType): SourceFile {
       return `case ${label}(${type})`
     })
     .join('\n')
+  const asCases = variant.cases
+    .map(([label]) => {
+      return `case .${label}(let value): return value as? T`
+    })
+    .join('\n')
+
   const jsSignature = variant.variants.map((t) => t.kind).join(' | ')
 
   const allPrimitives = variant.variants.every((v) => isPrimitive(v))
@@ -56,6 +62,18 @@ ${extraImports.join('\n')}
 @frozen
 public ${enumDeclaration} ${typename} {
   ${indent(cases, '  ')}
+}
+
+public extension ${enumDeclaration} {
+  func as<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      ${indent(asCases, '      ')}
+    }
+  }
+
+  func is<T>(_ type: T.Type = T.self) -> Bool {
+    value(as: type) != nil
+  }
 }
   `.trim()
 
