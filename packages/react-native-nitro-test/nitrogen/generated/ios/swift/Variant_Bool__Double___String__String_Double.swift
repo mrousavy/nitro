@@ -21,7 +21,7 @@ public indirect enum Variant_Bool__Double___String__String_Double {
 }
 
 public extension indirect enum {
-  func as<T>(_ type: T.Type = T.self) -> T? {
+  func `as`<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T
       case .second(let value): return value as? T
@@ -31,7 +31,7 @@ public extension indirect enum {
     }
   }
 
-  func is<T>(_ type: T.Type = T.self) -> Bool {
+  func `is`<T>(_ type: T.Type = T.self) -> Bool {
     value(as: type) != nil
   }
 }
