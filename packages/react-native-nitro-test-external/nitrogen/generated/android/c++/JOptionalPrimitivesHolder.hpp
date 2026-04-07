@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "OptionalPrimitivesHolder.hpp"
+#include "NitroTestExternalOptionalPrimitivesHolder.hpp"
 
 #include <optional>
 

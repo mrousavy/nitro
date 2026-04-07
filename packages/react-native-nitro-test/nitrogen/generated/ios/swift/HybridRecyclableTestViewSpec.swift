@@ -19,7 +19,7 @@ public protocol HybridRecyclableTestViewSpec_protocol: HybridObject, HybridView 
 public extension HybridRecyclableTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject RecyclableTestView]"
+    return "[HybridObject NitroTestRecyclableTestView]"
   }
 }
 

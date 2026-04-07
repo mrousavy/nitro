@@ -125,7 +125,7 @@ void registerAllNatives() {
 
   // Register Nitro Hybrid Objects
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "TestObjectCpp",
+    "NitroTestTestObjectCpp",
     []() -> std::shared_ptr<HybridObject> {
       static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
                     "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
@@ -134,37 +134,37 @@ void registerAllNatives() {
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "TestObjectSwiftKotlin",
+    "NitroTestTestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridTestObjectSwiftKotlinSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "Base",
+    "NitroTestBase",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridBaseSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "Child",
+    "NitroTestChild",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridChildSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "PlatformObject",
+    "NitroTestPlatformObject",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridPlatformObjectSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "TestView",
+    "NitroTestTestView",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridTestViewSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "RecyclableTestView",
+    "NitroTestRecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridRecyclableTestViewSpecImpl::create();
     }

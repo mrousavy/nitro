@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "PartialPerson.hpp"
+#include "NitroTestPartialPerson.hpp"
 
 #include <optional>
 #include <string>

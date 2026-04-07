@@ -8,10 +8,10 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "MapWrapper.hpp"
+#include "NitroTestMapWrapper.hpp"
 
 #include "JSecondMapWrapper.hpp"
-#include "SecondMapWrapper.hpp"
+#include "NitroTestSecondMapWrapper.hpp"
 #include <string>
 #include <unordered_map>
 

@@ -18,7 +18,7 @@
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
 #include "JHybridRecyclableTestViewSpec.hpp"
-#include "views/HybridRecyclableTestViewComponent.hpp"
+#include "views/NitroTestHybridRecyclableTestViewComponent.hpp"
 
 namespace margelo::nitro::test::views {
 

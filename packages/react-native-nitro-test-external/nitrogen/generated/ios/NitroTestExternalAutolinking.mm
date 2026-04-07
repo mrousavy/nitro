@@ -10,7 +10,10 @@
 #import "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 #import <type_traits>
 
-#include "HybridSomeExternalObjectSpecSwift.hpp"
+#include "NitroTestExternalHybridSomeExternalObjectSpecSwift.hpp"
+#include "NitroTestExternalHybridBlaBlaSpecSwift.hpp"
+#include "NitroTestExternalHybridBaseSpecSwift.hpp"
+#include "NitroTestExternalHybridTestViewSpecSwift.hpp"
 
 @interface NitroTestExternalAutolinking : NSObject
 @end
@@ -22,9 +25,30 @@
   using namespace margelo::nitro::test::external;
 
   HybridObjectRegistry::registerHybridObjectConstructor(
-    "SomeExternalObject",
+    "NitroTestExternalSomeExternalObject",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridSomeExternalObjectSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createSomeExternalObject();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "NitroTestExternalBlaBla",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridBlaBlaSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createBlaBla();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "NitroTestExternalBase",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridBaseSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createBase();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "NitroTestExternalTestView",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridTestViewSpec> hybridObject = NitroTestExternal::NitroTestExternalAutolinking::createTestView();
       return hybridObject;
     }
   );

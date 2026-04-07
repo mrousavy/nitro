@@ -43,7 +43,7 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject SomeExternalObject]"
+    return "[HybridObject NitroTestExternalSomeExternalObject]"
   }
 
   // C++ backing class

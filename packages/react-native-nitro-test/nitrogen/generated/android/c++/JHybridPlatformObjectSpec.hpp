@@ -9,7 +9,7 @@
 
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
-#include "HybridPlatformObjectSpec.hpp"
+#include "NitroTestHybridPlatformObjectSpec.hpp"
 
 
 

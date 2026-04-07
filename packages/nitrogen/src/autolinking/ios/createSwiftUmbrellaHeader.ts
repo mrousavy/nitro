@@ -6,6 +6,7 @@ import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import {
   createFileMetadataString,
   isNotDuplicate,
+  sortIosIncludesWithOwnFirst,
 } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
 import { getTypeAs } from '../../syntax/types/getTypeAs.js'
@@ -53,7 +54,7 @@ ${createFileMetadataString(filename, '///')}
 ${forwardDeclarations.sort().join('\n')}
 
 // Include C++ defined types
-${includes.sort().join('\n')}
+${sortIosIncludesWithOwnFirst(includes).join('\n')}
 
 // C++ helpers for Swift
 #include "${moduleName}-Swift-Cxx-Bridge.hpp"

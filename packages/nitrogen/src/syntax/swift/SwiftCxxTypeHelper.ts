@@ -1,4 +1,8 @@
-import { escapeCppName, toReferenceType } from '../helpers.js'
+import {
+  escapeCppName,
+  getWithModuleName,
+  toReferenceType,
+} from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 import { VariantType } from '../types/VariantType.js'
 import { ArrayType } from '../types/ArrayType.js'
@@ -87,10 +91,14 @@ function createCxxHybridObjectSwiftHelper(
   const includes: SourceImport[] = []
   if (!type.sourceConfig.isExternalConfig) {
     // we are including our Swift helper internally. this is a private header so we can include just fine.
+    const hybridTSpecSwiftName = getWithModuleName(
+      type.sourceConfig,
+      HybridTSpecSwift
+    )
     includes.push({
       language: 'c++',
       // Hybrid Object Swift C++ class wrapper
-      name: `${HybridTSpecSwift}.hpp`,
+      name: `${hybridTSpecSwiftName}.hpp`,
       space: 'user',
     })
   } else {

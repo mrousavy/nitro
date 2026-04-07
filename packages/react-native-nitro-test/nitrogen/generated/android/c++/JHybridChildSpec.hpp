@@ -9,7 +9,7 @@
 
 #include <NitroModules/JHybridObject.hpp>
 #include <fbjni/fbjni.h>
-#include "HybridChildSpec.hpp"
+#include "NitroTestHybridChildSpec.hpp"
 
 // Forward declaration of `JHybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class JHybridBaseSpec; }

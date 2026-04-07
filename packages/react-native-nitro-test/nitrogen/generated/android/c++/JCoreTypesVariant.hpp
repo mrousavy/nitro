@@ -12,7 +12,7 @@
 
 #include <NitroModules/ArrayBuffer.hpp>
 #include <functional>
-#include "WrappedJsStruct.hpp"
+#include "NitroTestWrappedJsStruct.hpp"
 #include <NitroModules/Promise.hpp>
 #include <chrono>
 #include <NitroModules/AnyMap.hpp>
@@ -21,7 +21,7 @@
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>
 #include "JWrappedJsStruct.hpp"
-#include "JsStyleStruct.hpp"
+#include "NitroTestJsStyleStruct.hpp"
 #include "JJsStyleStruct.hpp"
 #include <vector>
 #include <NitroModules/JPromise.hpp>

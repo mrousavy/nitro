@@ -26,6 +26,10 @@ import type { Autolinking } from './autolinking/Autolinking.js'
 import { createGitAttributes } from './createGitAttributes.js'
 import type { PlatformSpec } from 'react-native-nitro-modules'
 import { NITROGEN_VERSION } from './config/nitrogenVersion.js'
+import {
+  generateHybridObjectCreator,
+  generateViewHostComponentGetter,
+} from './createTsHelpers.js'
 
 interface NitrogenOptions {
   baseDirectory: string
@@ -91,6 +95,8 @@ export async function runNitrogen({
   const usedPlatforms: Platform[] = []
   const filesAfter: string[] = []
   const writtenFiles: SourceFile[] = []
+  const hybridViewNames: string[] = []
+  const hybridObjectNames: string[] = []
 
   for (const sourceFile of project.getSourceFiles()) {
     Logger.info(`⏳  Parsing ${sourceFile.getBaseName()}...`)
@@ -107,12 +113,15 @@ export async function runNitrogen({
       try {
         let platformSpec: PlatformSpec
         if (isHybridView(declaration.getType())) {
-          // Hybrid View Props
+          // Hybrid View
+          hybridViewNames.push(typeName)
           platformSpec = getHybridViewPlatforms(declaration)
         } else if (extendsHybridObject(declaration.getType(), true)) {
-          // Hybrid View
+          // Hybrid Object
+          hybridObjectNames.push(typeName)
           platformSpec = getHybridObjectPlatforms(declaration)
         } else {
+          // Just a regular interface or type alias
           continue
         }
 
@@ -216,6 +225,32 @@ export async function runNitrogen({
       )
       filesAfter.push(actualPath)
     }
+  }
+
+  // TypeScript utils
+  if (hybridViewNames.length > 0) {
+    Logger.info(`📘  Generating TypeScript helper for hybrid views...`)
+    const viewHelperFile = generateViewHostComponentGetter(hybridViewNames)
+    const basePath = path.join(
+      outputDirectory,
+      viewHelperFile.platform,
+      viewHelperFile.language
+    )
+    const actualPath = await writeFile(basePath, viewHelperFile)
+    filesAfter.push(actualPath)
+  }
+
+  if (hybridObjectNames.length > 0) {
+    Logger.info(`📘  Generating TypeScript helper for hybrid objects...`)
+    const hybridObjectHelperFile =
+      generateHybridObjectCreator(hybridObjectNames)
+    const basePath = path.join(
+      outputDirectory,
+      hybridObjectHelperFile.platform,
+      hybridObjectHelperFile.language
+    )
+    const actualPath = await writeFile(basePath, hybridObjectHelperFile)
+    filesAfter.push(actualPath)
   }
 
   try {

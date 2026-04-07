@@ -1,5 +1,9 @@
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
+import {
+  createFileMetadataString,
+  getWithModuleName,
+  isNotDuplicate,
+} from '../helpers.js'
 import { indent } from '../../utils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
@@ -43,9 +47,12 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     bases.push(`public virtual ${fullName}`)
   }
 
+  const hybridTSpecName = getWithModuleName(spec.config, name.HybridTSpec)
+  const registeredName = getWithModuleName(spec.config, name.T)
+
   // Generate the full header / code
   const cppHeaderCode = `
-${createFileMetadataString(`${name.HybridTSpec}.hpp`)}
+${createFileMetadataString(`${hybridTSpecName}.hpp`)}
 
 #pragma once
 
@@ -94,7 +101,7 @@ namespace ${cxxNamespace} {
 
     protected:
       // Tag for logging
-      static constexpr auto TAG = "${spec.name}";
+      static constexpr auto TAG = "${registeredName}";
   };
 
 } // namespace ${cxxNamespace}
@@ -132,9 +139,9 @@ namespace ${cxxNamespace} {
   }
 
   const cppBodyCode = `
-${createFileMetadataString(`${name.HybridTSpec}.cpp`)}
+${createFileMetadataString(`${hybridTSpecName}.cpp`)}
 
-#include "${name.HybridTSpec}.hpp"
+#include "${hybridTSpecName}.hpp"
 
 namespace ${cxxNamespace} {
 
@@ -153,14 +160,14 @@ namespace ${cxxNamespace} {
   const files: SourceFile[] = []
   files.push({
     content: cppHeaderCode,
-    name: `${name.HybridTSpec}.hpp`,
+    name: `${hybridTSpecName}.hpp`,
     subdirectory: [],
     language: 'c++',
     platform: 'shared',
   })
   files.push({
     content: cppBodyCode,
-    name: `${name.HybridTSpec}.cpp`,
+    name: `${hybridTSpecName}.cpp`,
     subdirectory: [],
     language: 'c++',
     platform: 'shared',

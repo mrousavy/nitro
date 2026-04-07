@@ -8,10 +8,10 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "ExternalObjectStruct.hpp"
+#include "NitroTestExternalObjectStruct.hpp"
 
-#include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
 #include <NitroTestExternal/JHybridSomeExternalObjectSpec.hpp>
+#include <NitroTestExternal/NitroTestExternalHybridSomeExternalObjectSpec.hpp>
 #include <memory>
 
 namespace margelo::nitro::test {

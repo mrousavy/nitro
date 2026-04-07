@@ -15,13 +15,13 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { struct Person; }
 
 #include <string>
-#include "Car.hpp"
+#include "NitroTestCar.hpp"
 #include <variant>
 #include "JNamedVariant.hpp"
 #include "JCar.hpp"
-#include "Powertrain.hpp"
+#include "NitroTestPowertrain.hpp"
 #include "JPowertrain.hpp"
-#include "Person.hpp"
+#include "NitroTestPerson.hpp"
 #include <optional>
 #include "JPerson.hpp"
 #include <vector>
