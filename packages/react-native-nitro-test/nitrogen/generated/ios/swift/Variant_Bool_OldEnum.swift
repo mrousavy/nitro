@@ -26,6 +26,6 @@ public extension Variant_Bool_OldEnum {
   }
 
   func `is`<T>(_ type: T.Type = T.self) -> Bool {
-    return self.`as`<T>(type) != nil
+    return self.`as`(type) != nil
   }
 }
