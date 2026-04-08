@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JWeirdNumbersEnum final: public jni::JavaClass<JWeirdNumbersEnum> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/WeirdNumbersEnum;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/WeirdNumbersEnum;";
 
   public:
     /**

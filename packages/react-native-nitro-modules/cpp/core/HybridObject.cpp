@@ -4,12 +4,23 @@
 
 #include "HybridObject.hpp"
 #include "CommonGlobals.hpp"
+#include "HybridNitroModulesProxy.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
-HybridObject::HybridObject(const char* NON_NULL name) : HybridObjectPrototype(), _name(name) {}
+HybridObject::HybridObject(const char* NON_NULL name) : HybridObjectPrototype(), _name(name) {
+#ifdef NITRO_DEBUG
+  HybridNitroModulesProxy::debug_notifyHybridObjectAllocated();
+#endif
+}
+
+HybridObject::~HybridObject() {
+#ifdef NITRO_DEBUG
+  HybridNitroModulesProxy::debug_notifyHybridObjectDeallocated();
+#endif
+}
 
 std::string HybridObject::toString() {
   return "[HybridObject " + std::string(_name) + "]";
@@ -97,8 +108,10 @@ jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
 #endif
 
   // 7. Throw a jsi::WeakObject pointing to our object into cache so subsequent calls can use it from cache
-  JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-  _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
+  {
+    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+    _objectCache[&runtime] = cache.makeShared(jsi::WeakObject(runtime, object));
+  }
 
   // 8. Return it!
   return object;

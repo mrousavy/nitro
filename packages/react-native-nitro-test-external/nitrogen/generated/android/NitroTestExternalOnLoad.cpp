@@ -21,24 +21,34 @@
 namespace margelo::nitro::test::external {
 
 int initialize(JavaVM* vm) {
+  return facebook::jni::initialize(vm, []() {
+    ::margelo::nitro::test::external::registerAllNatives();
+  });
+}
+
+struct JHybridSomeExternalObjectSpecImpl: public jni::JavaClass<JHybridSomeExternalObjectSpecImpl, JHybridSomeExternalObjectSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/external/HybridSomeExternalObject;";
+  static std::shared_ptr<JHybridSomeExternalObjectSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridSomeExternalObjectSpecImpl::javaobject()>();
+    jni::local_ref<JHybridSomeExternalObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridSomeExternalObjectSpec();
+  }
+};
+
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test::external;
-  using namespace facebook;
 
-  return facebook::jni::initialize(vm, [] {
-    // Register native JNI methods
-    margelo::nitro::test::external::JHybridSomeExternalObjectSpec::registerNatives();
+  // Register native JNI methods
+  margelo::nitro::test::external::JHybridSomeExternalObjectSpec::CxxPart::registerNatives();
 
-    // Register Nitro Hybrid Objects
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "SomeExternalObject",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridSomeExternalObjectSpec::javaobject> object("com/margelo/nitro/test/external/HybridSomeExternalObject");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-  });
+  // Register Nitro Hybrid Objects
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "SomeExternalObject",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridSomeExternalObjectSpecImpl::create();
+    }
+  );
 }
 
 } // namespace margelo::nitro::test::external

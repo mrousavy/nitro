@@ -10,7 +10,7 @@ This guide helps you troubleshoot issues in Nitro and should give you enough con
 
 ## Minimum requirements
 
-First, make sure you meet the [minimum requirements](minimum-requirements) for Nitro.
+First, make sure you meet the [minimum requirements](../getting-started/minimum-requirements) for Nitro.
 
 ## Ask for help
 

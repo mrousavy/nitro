@@ -101,7 +101,7 @@ class AnyValue {
    * Gets whether this [AnyValue] instance is holding a [Long] value.
    */
   @FastNative
-  external fun isBigInt(): Boolean
+  external fun isInt64(): Boolean
 
   /**
    * Gets whether this [AnyValue] instance is holding a [String] value.
@@ -137,10 +137,10 @@ class AnyValue {
 
   /**
    * Get the [Long] value this [AnyValue] is holding.
-   * @throws Error if this [AnyValue] is not holding a [Long] (see [isLong]`()`)
+   * @throws Error if this [AnyValue] is not holding a [Long] (see [isInt64]`()`)
    */
   @FastNative
-  external fun asBigInt(): Long
+  external fun asInt64(): Long
 
   /**
    * Get the [String] value this [AnyValue] is holding.
@@ -179,8 +179,8 @@ class AnyValue {
       return null
     } else if (isDouble()) {
       return asDouble()
-    } else if (isBigInt()) {
-      return asBigInt()
+    } else if (isInt64()) {
+      return asInt64()
     } else if (isBoolean()) {
       return asBoolean()
     } else if (isString()) {

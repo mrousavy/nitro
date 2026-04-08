@@ -48,6 +48,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-file-system** | Node.js-compatible `fs` with zero-copy binary data | [GitHub](https://github.com/iwater/react-native-nitro-file-system) |
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
 | **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
+| **react-native-superconfig** | Superfast typesafe config library | [GitHub](https://github.com/riteshshukla04/react-native-superconfig) |
 
 ### Networking
 
@@ -59,6 +60,12 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-http-server** | High-performance HTTP Server | [GitHub](https://github.com/iwater/react-native-nitro-http-server) |
 | **react-native-nitro-net** | Node.js-compatible `net`, `tls`, `http(s)` | [GitHub](https://github.com/iwater/react-native-nitro-net) |
 | **react-native-nitro-dgram** | High-performance Node.js `dgram` (UDP) | [GitHub](https://github.com/iwater/react-native-nitro-dgram) |
+
+### Maps
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **react-native-google-maps-plus** | Google Maps SDK wrapper for Android & iOS | [GitHub](https://github.com/pinpong/react-native-google-maps-plus) |
 
 ### UI & Styling
 
@@ -76,6 +83,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-clusterer** | Marker clustering for maps | [GitHub](https://github.com/JiriHoffmann/react-native-clusterer) |
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
 | **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
+| **react-native-nitro-version-check** | High-performance Version checking utilities | [GitHub](https://github.com/AlshehriAli0/react-native-nitro-version-check) |
 ---
 
 ## Work In Progress

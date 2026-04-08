@@ -13,37 +13,31 @@
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridPlatformObjectSpec::jhybriddata> JHybridPlatformObjectSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<JHybridPlatformObjectSpec> JHybridPlatformObjectSpec::JavaPart::getJHybridPlatformObjectSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to JHybridPlatformObjectSpec!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<JHybridPlatformObjectSpec::CxxPart::jhybriddata> JHybridPlatformObjectSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridPlatformObjectSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridPlatformObjectSpec::initHybrid),
-    });
-  }
-
-  size_t JHybridPlatformObjectSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridPlatformObjectSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridPlatformObjectSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
+  std::shared_ptr<JHybridObject> JHybridPlatformObjectSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridPlatformObjectSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridPlatformObjectSpec::JavaPart!");
     }
-    return false;
+    return std::make_shared<JHybridPlatformObjectSpec>(castJavaPart);
   }
 
-  void JHybridPlatformObjectSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridPlatformObjectSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
+  void JHybridPlatformObjectSpec::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridPlatformObjectSpec::CxxPart::initHybrid),
+    });
   }
 
   // Properties
@@ -51,7 +45,7 @@ namespace margelo::nitro::test {
 
   // Methods
   std::string JHybridPlatformObjectSpec::getOSVersion() {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOSVersion");
     auto __result = method(_javaPart);
     return __result->toStdString();
   }

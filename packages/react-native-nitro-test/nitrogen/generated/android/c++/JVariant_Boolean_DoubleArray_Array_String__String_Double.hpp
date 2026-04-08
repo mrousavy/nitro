@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_Boolean_DoubleArray_Array_String__String_Double: public jni::JavaClass<JVariant_Boolean_DoubleArray_Array_String__String_Double> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double;";
 
     static jni::local_ref<JVariant_Boolean_DoubleArray_Array_String__String_Double> create_0(jboolean value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_Boolean_DoubleArray_Array_String__String_Double(jboolean)>("create");
@@ -77,7 +77,7 @@ namespace margelo::nitro::test {
   namespace JVariant_Boolean_DoubleArray_Array_String__String_Double_impl {
     class First final: public jni::JavaClass<First, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$First;";
     
       [[nodiscard]] jboolean getValue() const {
         static const auto field = javaClassStatic()->getField<jboolean>("value");
@@ -87,7 +87,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Second;";
     
       [[nodiscard]] jni::local_ref<jni::JArrayDouble> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JArrayDouble>("value");
@@ -97,7 +97,7 @@ namespace margelo::nitro::test {
     
     class Third final: public jni::JavaClass<Third, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Third;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Third;";
     
       [[nodiscard]] jni::local_ref<jni::JArrayClass<jni::JString>> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JArrayClass<jni::JString>>("value");
@@ -107,7 +107,7 @@ namespace margelo::nitro::test {
     
     class Fourth final: public jni::JavaClass<Fourth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fourth;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fourth;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");
@@ -117,7 +117,7 @@ namespace margelo::nitro::test {
     
     class Fifth final: public jni::JavaClass<Fifth, JVariant_Boolean_DoubleArray_Array_String__String_Double> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fifth;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_Boolean_DoubleArray_Array_String__String_Double$Fifth;";
     
       [[nodiscard]] double getValue() const {
         static const auto field = javaClassStatic()->getField<double>("value");

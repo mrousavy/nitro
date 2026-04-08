@@ -37,7 +37,7 @@ namespace margelo::nitro::test {
    */
   class JCoreTypesVariant: public jni::JavaClass<JCoreTypesVariant> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant;";
 
     static jni::local_ref<JCoreTypesVariant> create_0(jni::alias_ref<JArrayBuffer::javaobject> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JCoreTypesVariant(jni::alias_ref<JArrayBuffer::javaobject>)>("create");
@@ -93,7 +93,7 @@ namespace margelo::nitro::test {
   namespace JCoreTypesVariant_impl {
     class First final: public jni::JavaClass<First, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$First;";
     
       [[nodiscard]] jni::local_ref<JArrayBuffer::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JArrayBuffer::javaobject>("value");
@@ -103,7 +103,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Second;";
     
       [[nodiscard]] jni::local_ref<JFunc_void_double::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JFunc_void_double::javaobject>("value");
@@ -113,7 +113,7 @@ namespace margelo::nitro::test {
     
     class Third final: public jni::JavaClass<Third, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Third;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Third;";
     
       [[nodiscard]] jni::local_ref<JWrappedJsStruct> getValue() const {
         static const auto field = javaClassStatic()->getField<JWrappedJsStruct>("value");
@@ -123,7 +123,7 @@ namespace margelo::nitro::test {
     
     class Fourth final: public jni::JavaClass<Fourth, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fourth;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fourth;";
     
       [[nodiscard]] jni::local_ref<JPromise::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JPromise::javaobject>("value");
@@ -133,7 +133,7 @@ namespace margelo::nitro::test {
     
     class Fifth final: public jni::JavaClass<Fifth, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fifth;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Fifth;";
     
       [[nodiscard]] jni::local_ref<JInstant> getValue() const {
         static const auto field = javaClassStatic()->getField<JInstant>("value");
@@ -143,7 +143,7 @@ namespace margelo::nitro::test {
     
     class Sixth final: public jni::JavaClass<Sixth, JCoreTypesVariant> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Sixth;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/CoreTypesVariant$Sixth;";
     
       [[nodiscard]] jni::local_ref<JAnyMap::javaobject> getValue() const {
         static const auto field = javaClassStatic()->getField<JAnyMap::javaobject>("value");

@@ -22,6 +22,10 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
     }
   }
 
+  func onDropView() {
+    print("View dropped!")
+  }
+
   // Recycling conformance
   func prepareForRecycle() {
     view.backgroundColor = .yellow

@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
    */
   struct JPartialPerson final: public jni::JavaClass<JPartialPerson> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/PartialPerson;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/PartialPerson;";
 
   public:
     /**

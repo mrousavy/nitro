@@ -23,7 +23,7 @@ public:
   }
 
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObjectInitializer;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObjectInitializer;";
 };
 
 } // namespace margelo::nitro

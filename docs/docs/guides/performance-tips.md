@@ -15,7 +15,7 @@ Any dynamic types require runtime type checking, and cannot be optimized as good
 
 ### Untyped Maps
 
-An [untyped map](types/untyped-maps) (`AnyMap`) is not only untyped, but also in-efficient. If you can, avoid untyped maps:
+An [untyped map](../types/untyped-maps) (`AnyMap`) is not only untyped, but also in-efficient. If you can, avoid untyped maps:
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -49,7 +49,7 @@ In this case, it might make sense to use `ArrayBuffer` or `string`, and parse th
 
 ### Variants
 
-[Variants](types/variants) (`A | B`) are dynamic types. Each time you pass a variant to native, Nitro has to check its type at runtime - is it `A` or `B`?
+[Variants](../types/variants) (`A | B`) are dynamic types. Each time you pass a variant to native, Nitro has to check its type at runtime - is it `A` or `B`?
 Those type-checks are very efficient so this is considered a micro-optimization, but if you can, avoid variants like so:
 
 <div className="side-by-side-container">
@@ -119,7 +119,7 @@ interface GoodDatabase
 By default, every function in Nitro is fully synchronous.
 If your function takes long to execute, the JS Thread can not do any other work in the meantime.
 
-In such cases, mark your function asynchronous by returning a [`Promise`](types/promises), which you can then use to run the heavy processing code on a different thread:
+In such cases, mark your function asynchronous by returning a [`Promise`](../types/promises), which you can then use to run the heavy processing code on a different thread:
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -148,10 +148,10 @@ Keep in mind that switching to a different Thread on the native side introduces 
 
 ## Use `ArrayBuffer` for large data
 
-For large data sets, conventional [arrays](types/arrays) are in-efficient as each value has to be copied individually.
-In contrast to conventional arrays, [Array Buffers](types/array-buffers) are zero-copy, meaning native memory can be directly shared to JS without copying the data.
+For large data sets, conventional [arrays](../types/arrays) are in-efficient as each value has to be copied individually.
+In contrast to conventional arrays, [Array Buffers](../types/array-buffers) are zero-copy, meaning native memory can be directly shared to JS without copying the data.
 
-For example, to return a large list of numbers we could use [array buffers](types/array-buffers) (`Float64Array`) instead of [arrays](types/arrays):
+For example, to return a large list of numbers we could use [array buffers](../types/array-buffers) (`Float64Array`) instead of [arrays](../types/arrays):
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -178,7 +178,7 @@ interface GoodDatabase
 
 ## Use Hybrid Objects to implement proxy-results
 
-If a function returns a large amount of data to JS, but only a sub-set of that data is used, we can implement it as a [Hybrid Object](types/hybrid-objects) instead of a [struct](types/custom-structs).
+If a function returns a large amount of data to JS, but only a sub-set of that data is used, we can implement it as a [Hybrid Object](../types/hybrid-objects) instead of a [struct](../types/custom-structs).
 
 This way data will be accessed lazily, and all the data that the user does not access will never be converted to JS, which means Nitro has to do less work:
 
@@ -226,7 +226,7 @@ const row = data.findRowWithName("Marc")
 
 The **Bad** example is significantly slower than **Good**, because Nitro has to convert **all rows** to JS, and there could be thousands of rows - even if we only use the row with the `name` "Marc".
 
-The **Good** example is significantly faster than **Bad** because the result of `getAllData()` is a [Hybrid Object](types/hybrid-objects), and all the thousands of rows do not have to be converted to JS at all, instead they are simply held in native memory. The function `findRowWithName(...)` iterates through the list on the native side and finds the matching row - only this single row will then have to be converted to JS.
+The **Good** example is significantly faster than **Bad** because the result of `getAllData()` is a [Hybrid Object](../types/hybrid-objects), and all the thousands of rows do not have to be converted to JS at all, instead they are simply held in native memory. The function `findRowWithName(...)` iterates through the list on the native side and finds the matching row - only this single row will then have to be converted to JS.
 
 ## Properly use `memorySize`
 

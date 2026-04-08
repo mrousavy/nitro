@@ -25,7 +25,9 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var stringValue: String = ""
 
-  var bigintValue: Int64 = 0
+  var int64Value: Int64 = 0
+
+  var uint64Value: UInt64 = 0
 
   var nullValue: NullType = .null
 
@@ -42,6 +44,11 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   var optionalOldEnum: OldEnum? = nil
 
   var optionalCallback: ((Double) -> Void)? = nil
+
+  let hasBoolean = false
+  let isBoolean = false
+  var hasBooleanWritable = false
+  var isBooleanWritable = false
 
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self
@@ -225,10 +232,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     map.setDouble(key: "number", value: numberValue)
     map.setBoolean(key: "bool", value: boolValue)
     map.setString(key: "string", value: stringValue)
-    map.setBigInt(key: "bigint", value: bigintValue)
+    map.setInt64(key: "int64", value: int64Value)
     map.setNull(key: "null")
     let array: [AnyValue] = [
-      .number(numberValue), .bool(boolValue), .string(stringValue), .bigint(bigintValue),
+      .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value),
     ]
     map.setArray(key: "array", value: array)
     map.setObject(
@@ -237,10 +244,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
         "number": .number(numberValue),
         "bool": .bool(boolValue),
         "string": .string(stringValue),
-        "bigint": .bigint(bigintValue),
+        "int64": .int64(int64Value),
         "null": .null,
         "array": .array([
-          .number(numberValue), .bool(boolValue), .string(stringValue), .bigint(bigintValue),
+          .number(numberValue), .bool(boolValue), .string(stringValue), .int64(int64Value),
           .array(array),
         ]),
       ])

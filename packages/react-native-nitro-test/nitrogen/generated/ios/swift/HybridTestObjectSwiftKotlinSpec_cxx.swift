@@ -196,14 +196,25 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var bigintValue: Int64 {
+  public final var int64Value: Int64 {
     @inline(__always)
     get {
-      return self.__implementation.bigintValue
+      return self.__implementation.int64Value
     }
     @inline(__always)
     set {
-      self.__implementation.bigintValue = newValue
+      self.__implementation.int64Value = newValue
+    }
+  }
+  
+  public final var uint64Value: UInt64 {
+    @inline(__always)
+    get {
+      return self.__implementation.uint64Value
+    }
+    @inline(__always)
+    set {
+      self.__implementation.uint64Value = newValue
     }
   }
   
@@ -389,6 +400,42 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
           return nil
         }
       }()
+    }
+  }
+  
+  public final var hasBoolean: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.hasBoolean
+    }
+  }
+  
+  public final var isBoolean: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.isBoolean
+    }
+  }
+  
+  public final var hasBooleanWritable: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.hasBooleanWritable
+    }
+    @inline(__always)
+    set {
+      self.__implementation.hasBooleanWritable = newValue
+    }
+  }
+  
+  public final var isBooleanWritable: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.isBooleanWritable
+    }
+    @inline(__always)
+    set {
+      self.__implementation.isBooleanWritable = newValue
     }
   }
   
@@ -1458,7 +1505,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   @inline(__always)
   public final func callWithOptional(value: bridge.std__optional_double_, callback: bridge.Func_void_std__optional_double_) -> bridge.Result_void_ {
     do {
-      try self.__implementation.callWithOptional(value: value.value, callback: { () -> (Double?) -> Void in
+      try self.__implementation.callWithOptional(value: { () -> Double? in
+        if bridge.has_value_std__optional_double_(value) {
+          let __unwrapped = bridge.get_std__optional_double_(value)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }(), callback: { () -> (Double?) -> Void in
         let __wrappedFunction = bridge.wrap_Func_void_std__optional_double_(callback)
         return { (__maybe: Double?) -> Void in
           __wrappedFunction.call({ () -> bridge.std__optional_double_ in

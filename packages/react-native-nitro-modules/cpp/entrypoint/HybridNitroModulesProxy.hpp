@@ -40,10 +40,16 @@ public:
   std::shared_ptr<HybridObject> updateMemorySize(const std::shared_ptr<HybridObject>& hybridObject);
   jsi::Value hasNativeState(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
   jsi::Value isHybridObject(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
+  std::shared_ptr<ArrayBuffer> createNativeArrayBuffer(double size);
 
   // Build Info
   std::string getBuildType();
   std::string getVersion();
+
+  // Allocation tests
+  double debug_getTotalAllocatedHybridObjects();
+  static void debug_notifyHybridObjectAllocated();
+  static void debug_notifyHybridObjectDeallocated();
 
 private:
   static constexpr auto TAG = "NitroModulesProxy";

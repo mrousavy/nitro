@@ -21,7 +21,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var numberValue: Double = 0.0
   override var boolValue: Boolean = false
   override var stringValue: String = ""
-  override var bigintValue: Long = 0L
+  override var int64Value: Long = 0L
+  override var uint64Value: ULong = 0u
   override var optionalString: String? = null
   override var stringOrUndefined: String? = null
   override var nullValue: NullType = NullType.NULL
@@ -34,6 +35,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var optionalEnum: Powertrain? = null
   override var optionalOldEnum: OldEnum? = null
   override var optionalCallback: ((value: Double) -> Unit)? = null
+
+  override val hasBoolean = false
+  override val isBoolean = false
+  override var hasBooleanWritable = false
+  override var isBooleanWritable = false
 
   override fun simpleFunc() {
     // do nothing
@@ -137,9 +143,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     map.setDouble("number", numberValue)
     map.setBoolean("bool", boolValue)
     map.setString("string", stringValue)
-    map.setBigInt("bigint", bigintValue)
+    map.setInt64("int64", int64Value)
     map.setNull("null")
-    val array = arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue))
+    val array = arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(int64Value))
     map.setAnyArray("array", array)
     map.setAnyObject(
       "object",
@@ -147,10 +153,18 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
         "number" to AnyValue(numberValue),
         "bool" to AnyValue(boolValue),
         "string" to AnyValue(stringValue),
-        "bigint" to AnyValue(bigintValue),
+        "int64" to AnyValue(int64Value),
         "null" to AnyValue(),
         "array" to
-          AnyValue(arrayOf(AnyValue(numberValue), AnyValue(boolValue), AnyValue(stringValue), AnyValue(bigintValue), AnyValue(array))),
+          AnyValue(
+            arrayOf(
+              AnyValue(numberValue),
+              AnyValue(boolValue),
+              AnyValue(stringValue),
+              AnyValue(int64Value),
+              AnyValue(array),
+            ),
+          ),
       ),
     )
     return map

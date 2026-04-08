@@ -62,26 +62,105 @@
           "type": "object",
           "oneOf": [
             {
+              "required": [
+                "all"
+              ],
               "properties": {
-                "cpp": {
-                  "type": "string"
+                "all": {
+                  "type": "object",
+                  "required": [
+                    "language",
+                    "implementationClassName"
+                  ],
+                  "properties": {
+                    "language": {
+                      "type": "string",
+                      "enum": [
+                        "c++"
+                      ]
+                    },
+                    "implementationClassName": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
                 }
               },
-              "additionalProperties": false,
-              "required": [
-                "cpp"
-              ]
+              "additionalProperties": false
             },
             {
-              "properties": {
-                "swift": {
-                  "type": "string"
-                },
-                "kotlin": {
-                  "type": "string"
-                }
+              "type": "object",
+              "not": {
+                "required": [
+                  "all"
+                ]
               },
               "minProperties": 1,
+              "properties": {
+                "ios": {
+                  "type": "object",
+                  "required": [
+                    "language",
+                    "implementationClassName"
+                  ],
+                  "properties": {
+                    "language": {
+                      "type": "string",
+                      "enum": [
+                        "c++",
+                        "swift"
+                      ]
+                    },
+                    "implementationClassName": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "android": {
+                  "type": "object",
+                  "required": [
+                    "language",
+                    "implementationClassName"
+                  ],
+                  "properties": {
+                    "language": {
+                      "type": "string",
+                      "enum": [
+                        "c++",
+                        "kotlin"
+                      ]
+                    },
+                    "implementationClassName": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "patternProperties": {
+                "^(?!all$|ios$|android$).+$": {
+                  "type": "object",
+                  "required": [
+                    "language",
+                    "implementationClassName"
+                  ],
+                  "properties": {
+                    "language": {
+                      "type": "string",
+                      "enum": [
+                        "c++",
+                        "swift",
+                        "kotlin"
+                      ]
+                    },
+                    "implementationClassName": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
               "additionalProperties": false
             }
           ]

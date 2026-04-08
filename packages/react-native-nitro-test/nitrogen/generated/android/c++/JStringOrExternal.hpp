@@ -25,10 +25,10 @@ namespace margelo::nitro::test {
    */
   class JStringOrExternal: public jni::JavaClass<JStringOrExternal> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal;";
 
-    static jni::local_ref<JStringOrExternal> create_0(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> value) {
-      static const auto method = javaClassStatic()->getStaticMethod<JStringOrExternal(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>)>("create");
+    static jni::local_ref<JStringOrExternal> create_0(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> value) {
+      static const auto method = javaClassStatic()->getStaticMethod<JStringOrExternal(jni::alias_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>)>("create");
       return method(javaClassStatic(), value);
     }
     static jni::local_ref<JStringOrExternal> create_1(jni::alias_ref<jni::JString> value) {
@@ -50,17 +50,17 @@ namespace margelo::nitro::test {
   namespace JStringOrExternal_impl {
     class First final: public jni::JavaClass<First, JStringOrExternal> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$First;";
     
-      [[nodiscard]] jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject> getValue() const {
-        static const auto field = javaClassStatic()->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::javaobject>("value");
+      [[nodiscard]] jni::local_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> getValue() const {
+        static const auto field = javaClassStatic()->getField<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart>("value");
         return getFieldValue(field);
       }
     };
     
     class Second final: public jni::JavaClass<Second, JStringOrExternal> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/StringOrExternal$Second;";
     
       [[nodiscard]] jni::local_ref<jni::JString> getValue() const {
         static const auto field = javaClassStatic()->getField<jni::JString>("value");

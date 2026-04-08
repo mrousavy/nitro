@@ -38,14 +38,27 @@ on:
 
 env:
   USE_CCACHE: 1
+  XCODE_VERSION: '26.2'
+  IOS_SIMULATOR_DESTINATION: 'platform=iOS Simulator,name=iPhone 17 Pro'
 
 jobs:
   build:
     name: Build iOS Example App
     runs-on: macOS-26
+    strategy:
+      matrix:
+        include:
+          - name: static_frameworks
+            use_frameworks: static
+          - name: no_frameworks
+            use_frameworks: ""   # intentionally unset
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
+
+      - name: Set USE_FRAMEWORKS
+        if: matrix.use_frameworks != ''
+        run: echo "USE_FRAMEWORKS=${{ matrix.use_frameworks }}" >> $GITHUB_ENV
 
       - name: Install npm dependencies (bun)
         run: bun install
@@ -54,7 +67,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 1.5G
-          key: ${{ runner.os }}-ccache-example-ios
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.use_frameworks }}-ccache-example-ios
           create-symlink: true
       - name: Setup ccache behavior
         run: |
@@ -70,16 +83,16 @@ jobs:
           bundler-cache: true
           working-directory: example
 
-      - name: Select Xcode 26.2
-        run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
+      - name: Select Xcode ${{ env.XCODE_VERSION }}
+        run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
 
       - name: Restore Pods cache
         uses: actions/cache@v5
         with:
           path: example/ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-pods-
       - name: Install Pods
         working-directory: example
         run: bun pods
@@ -88,9 +101,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-dd-${{ hashFiles('**/Podfile.lock', '**/Gemfile.lock', '**/package.json', '**/bun.lockb') }}-xcode26.2
+          key: ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-xcode${{ env.XCODE_VERSION }}-dd-
 
       - name: Build App
         working-directory: example/ios
@@ -103,7 +116,7 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -destination '${{ env.IOS_SIMULATOR_DESTINATION }}' \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \

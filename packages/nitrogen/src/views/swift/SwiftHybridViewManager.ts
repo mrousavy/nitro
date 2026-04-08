@@ -28,11 +28,10 @@ export function createSwiftHybridViewManager(
   )
   const { component, descriptorClassName, propsClassName } =
     getViewComponentNames(spec)
-  const autolinking = spec.config.getAutolinkedHybridObjects()
-  const viewImplementation = autolinking[spec.name]?.swift
-  if (viewImplementation == null) {
+  const implementation = spec.config.getIosAutolinkedImplementation(spec.name)
+  if (implementation?.language !== 'swift') {
     throw new Error(
-      `Cannot create Swift HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+      `Cannot create Swift HybridView ViewManager for ${spec.name} - it must be autolinked with a Swift iOS implementation in nitro.json!`
     )
   }
 
@@ -67,6 +66,13 @@ ${createFileMetadataString(`${component}.mm`)}
 
 #import "${HybridTSpecSwift}.hpp"
 #import "${getUmbrellaHeaderName()}"
+
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#if REACT_NATIVE_VERSION_MINOR >= 82
+#define ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
+#endif
+#endif
 
 using namespace facebook;
 using namespace ${namespace};
@@ -150,6 +156,14 @@ using namespace ${namespace}::views;
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }
+
+#ifdef ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
+- (void)invalidate {
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  [super invalidate];
+}
+#endif
 
 @end
   `

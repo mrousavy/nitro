@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
     :ios => min_ios_version_supported,
     :visionos => 1.0,
     :macos => 10.13,
+    :osx => 10.13,
     :tvos => 13.4,
   }
 
@@ -54,7 +55,6 @@ Pod::Spec.new do |s|
     "ios/core/ArrayBufferHolder.hpp",
     "ios/core/PromiseHolder.hpp",
     "ios/utils/AnyMapUtils.hpp",
-    "ios/utils/AnyMapHolder.hpp", # <-- deprecated, removed soon
     "ios/utils/Result.hpp",
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",

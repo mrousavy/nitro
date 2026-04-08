@@ -33,9 +33,13 @@ struct JSIConverter<std::function<R(Args...)>> final {
 
   static inline std::function<R(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
-    auto cache = JSICache::getOrCreateCache(runtime);
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
-    BorrowingReference<jsi::Function> sharedFunction = cache.makeShared(std::move(function));
+    BorrowingReference<jsi::Function> sharedFunction;
+    {
+      // JSICache RAII should live as short as possible
+      JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+      sharedFunction = cache.makeShared(std::move(function));
+    }
     SyncJSCallback<ActualR(Args...)> callback(runtime, std::move(sharedFunction));
 
     if constexpr (isAsync) {

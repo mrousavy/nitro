@@ -226,11 +226,17 @@ namespace margelo::nitro::test {
     inline void setStringValue(const std::string& stringValue) noexcept override {
       _swiftPart.setStringValue(stringValue);
     }
-    inline int64_t getBigintValue() noexcept override {
-      return _swiftPart.getBigintValue();
+    inline int64_t getInt64Value() noexcept override {
+      return _swiftPart.getInt64Value();
     }
-    inline void setBigintValue(int64_t bigintValue) noexcept override {
-      _swiftPart.setBigintValue(std::forward<decltype(bigintValue)>(bigintValue));
+    inline void setInt64Value(int64_t int64Value) noexcept override {
+      _swiftPart.setInt64Value(std::forward<decltype(int64Value)>(int64Value));
+    }
+    inline uint64_t getUint64Value() noexcept override {
+      return _swiftPart.getUint64Value();
+    }
+    inline void setUint64Value(uint64_t uint64Value) noexcept override {
+      _swiftPart.setUint64Value(std::forward<decltype(uint64Value)>(uint64Value));
     }
     inline nitro::NullType getNullValue() noexcept override {
       auto __result = _swiftPart.getNullValue();
@@ -287,6 +293,24 @@ namespace margelo::nitro::test {
     }
     inline void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) noexcept override {
       _swiftPart.setOptionalCallback(optionalCallback);
+    }
+    inline bool getHasBoolean() noexcept override {
+      return _swiftPart.hasBoolean();
+    }
+    inline bool getIsBoolean() noexcept override {
+      return _swiftPart.isBoolean();
+    }
+    inline bool getHasBooleanWritable() noexcept override {
+      return _swiftPart.hasBooleanWritable();
+    }
+    inline void setHasBooleanWritable(bool hasBooleanWritable) noexcept override {
+      _swiftPart.setHasBooleanWritable(std::forward<decltype(hasBooleanWritable)>(hasBooleanWritable));
+    }
+    inline bool getIsBooleanWritable() noexcept override {
+      return _swiftPart.isBooleanWritable();
+    }
+    inline void setIsBooleanWritable(bool isBooleanWritable) noexcept override {
+      _swiftPart.setIsBooleanWritable(std::forward<decltype(isBooleanWritable)>(isBooleanWritable));
     }
     inline std::variant<std::string, double> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();

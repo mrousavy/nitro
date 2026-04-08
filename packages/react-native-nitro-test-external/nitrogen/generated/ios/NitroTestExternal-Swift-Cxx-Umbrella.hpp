@@ -10,12 +10,16 @@
 // Forward declarations of C++ defined types
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 // Include C++ defined types
 #include "HybridSomeExternalObjectSpec.hpp"
+#include "OptionalPrimitivesHolder.hpp"
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
+#include <optional>
 #include <string>
 
 // C++ helpers for Swift

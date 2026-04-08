@@ -29,54 +29,48 @@ namespace margelo::nitro::test { struct Person; }
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridChildSpec::jhybriddata> JHybridChildSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<JHybridChildSpec> JHybridChildSpec::JavaPart::getJHybridChildSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridChildSpec>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to JHybridChildSpec!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<JHybridChildSpec::CxxPart::jhybriddata> JHybridChildSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridChildSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridChildSpec::initHybrid),
-    });
-  }
-
-  size_t JHybridChildSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridChildSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridChildSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
+  std::shared_ptr<JHybridObject> JHybridChildSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridChildSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridChildSpec::JavaPart!");
     }
-    return false;
+    return std::make_shared<JHybridChildSpec>(castJavaPart);
   }
 
-  void JHybridChildSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridChildSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
+  void JHybridChildSpec::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridChildSpec::CxxPart::initHybrid),
+    });
   }
 
   // Properties
   double JHybridChildSpec::getChildValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getChildValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getChildValue");
     auto __result = method(_javaPart);
     return __result;
   }
   double JHybridChildSpec::getBaseValue() {
-    static const auto method = javaClassStatic()->getMethod<double()>("getBaseValue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getBaseValue");
     auto __result = method(_javaPart);
     return __result;
   }
 
   // Methods
   std::variant<std::string, Car> JHybridChildSpec::bounceVariant(const std::variant<std::string, Car>& variant) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("bounceVariant");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JNamedVariant>(jni::alias_ref<JNamedVariant> /* variant */)>("bounceVariant");
     auto __result = method(_javaPart, JNamedVariant::fromCpp(variant));
     return __result->toCpp();
   }

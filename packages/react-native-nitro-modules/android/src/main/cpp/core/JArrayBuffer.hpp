@@ -27,7 +27,7 @@ using namespace facebook;
  */
 class JArrayBuffer final : public jni::HybridClass<JArrayBuffer> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/ArrayBuffer;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/ArrayBuffer;";
 
 public:
   /**

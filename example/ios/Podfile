@@ -2,7 +2,7 @@ ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 ENV['RCT_USE_RN_DEP'] = '1'
 ENV['RCT_USE_PREBUILT_RNCORE'] = '1'
 
-Pod::UI.puts "Building with RCT_NEW_ARCH_ENABLED = #{ENV['RCT_NEW_ARCH_ENABLED']}..."
+Pod::UI.puts "Building with USE_FRAMEWORKS = #{ENV['USE_FRAMEWORKS']}..."
 
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',

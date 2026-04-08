@@ -599,7 +599,13 @@ Note: It is also possible for Nitro specs to go out of sync, but only if you for
     <td>✅</td>
   </tr>
   <tr>
-    <td><code>bigint</code></td>
+    <td><code>Int64</code></td>
+    <td>✅</td>
+    <td>❌</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td><code>UInt64</code></td>
     <td>✅</td>
     <td>❌</td>
     <td>✅</td>

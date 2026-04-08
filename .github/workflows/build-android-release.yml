@@ -17,9 +17,6 @@ jobs:
 
       - name: Install npm dependencies (bun)
         run: bun install
-      - name: Install npm dependencies in example/ (bun)
-        working-directory: example
-        run: bun install
 
       - name: Setup JDK 17
         uses: actions/setup-java@v5
@@ -32,8 +29,9 @@ jobs:
         run: sed -i "s/minSdkVersion = 24/minSdkVersion = 26/g" example/android/build.gradle
 
       - name: Run Gradle Build for example/android/
-        working-directory: example
-        run: bun run build:android-release
+        working-directory: example/android
+        run: |
+          ./gradlew clean :app:assembleRelease --no-daemon --no-build-cache
 
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1

@@ -47,7 +47,7 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
     jsi::Object object = arg.asObject(runtime);
     jsi::Array propNames = object.getPropertyNames(runtime);
     size_t size = propNames.size(runtime);
-    std::shared_ptr<AnyMap> map = AnyMap::make();
+    std::shared_ptr<AnyMap> map = AnyMap::make(size);
     for (size_t i = 0; i < size; i++) {
       std::string jsKey = propNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
       jsi::Value jsValue = object.getProperty(runtime, PropNameIDCache::get(runtime, jsKey));
@@ -72,11 +72,13 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
     if (!isPlainObject(runtime, object)) {
       return false;
     }
-    jsi::Array properties = object.getPropertyNames(runtime);
-    size_t size = properties.size(runtime);
+
+    jsi::Array propNames = object.getPropertyNames(runtime);
+    size_t size = propNames.size(runtime);
     for (size_t i = 0; i < size; i++) {
-      bool canConvertProp = JSIConverter<AnyValue>::canConvert(runtime, properties.getValueAtIndex(runtime, i));
-      if (!canConvertProp) {
+      std::string key = propNames.getValueAtIndex(runtime, i).getString(runtime).utf8(runtime);
+      jsi::Value propValue = object.getProperty(runtime, PropNameIDCache::get(runtime, key));
+      if (!JSIConverter<AnyValue>::canConvert(runtime, propValue)) {
         return false;
       }
     }

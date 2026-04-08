@@ -18,34 +18,33 @@ namespace margelo::nitro::test {
 
   using namespace facebook;
 
-  class JHybridBaseSpec: public jni::HybridClass<JHybridBaseSpec, JHybridObject>,
-                         public virtual HybridBaseSpec {
+  class JHybridBaseSpec: public virtual HybridBaseSpec, public virtual JHybridObject {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
+    struct JavaPart: public jni::JavaClass<JavaPart, JHybridObject::JavaPart> {
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec;";
+      std::shared_ptr<JHybridBaseSpec> getJHybridBaseSpec();
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, JHybridObject::CxxPart> {
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBaseSpec$CxxPart;";
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      using HybridBase::HybridBase;
+    protected:
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override;
+    };
 
-  protected:
-    // C++ constructor (called from Java via `initHybrid()`)
-    explicit JHybridBaseSpec(jni::alias_ref<jhybridobject> jThis) :
+  public:
+    explicit JHybridBaseSpec(const jni::local_ref<JHybridBaseSpec::JavaPart>& javaPart):
       HybridObject(HybridBaseSpec::TAG),
-      HybridBase(jThis),
-      _javaPart(jni::make_global(jThis)) {}
-
-  public:
+      JHybridObject(javaPart),
+      _javaPart(jni::make_global(javaPart)) {}
     ~JHybridBaseSpec() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-    bool equals(const std::shared_ptr<HybridObject>& other) override;
-    void dispose() noexcept override;
-    std::string toString() override;
-
-  public:
-    inline const jni::global_ref<JHybridBaseSpec::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<JHybridBaseSpec::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -58,9 +57,7 @@ namespace margelo::nitro::test {
     
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<JHybridBaseSpec::javaobject> _javaPart;
+    jni::global_ref<JHybridBaseSpec::JavaPart> _javaPart;
   };
 
 } // namespace margelo::nitro::test

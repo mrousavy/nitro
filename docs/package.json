@@ -28,14 +28,14 @@
     "prism-react-renderer": "^2.3.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "satori": "^0.19.1",
+    "satori": "^0.25.0",
     "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.8.1",
     "@docusaurus/tsconfig": "3.8.1",
     "@docusaurus/types": "3.8.1",
-    "docusaurus-plugin-llms": "^0.2.2",
+    "docusaurus-plugin-llms": "^0.3.0",
     "typescript": "~5.8.3"
   },
   "browserslist": {

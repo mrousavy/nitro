@@ -8,9 +8,9 @@ Simply put, a JS object can be implemented in C++, Swift or Kotlin instead of JS
 
 While Nitro's primary environment is React Native, it also works in any other environment that uses JSI.
 
-- A [**Nitro Module**](nitro-modules) is a library built with Nitro. It contains one or more **Hybrid Objects**.
-- A [**Hybrid Object**](hybrid-objects) is a native object in Nitro, implemented in either C++, Swift or Kotlin.
-- [**Nitrogen**](nitrogen) is an optional code-generator library authors can use to generate native bindings from a TypeScript interface.
+- A [**Nitro Module**](../concepts/nitro-modules) is a library built with Nitro. It contains one or more **Hybrid Objects**.
+- A [**Hybrid Object**](../concepts/hybrid-objects) is a native object in Nitro, implemented in either C++, Swift or Kotlin.
+- [**Nitrogen**](../concepts/nitrogen) is an optional code-generator library authors can use to generate native bindings from a TypeScript interface.
 
 <div className="side-by-side-container">
 <div className="side-by-side-block">
@@ -92,7 +92,7 @@ Hybrid Objects in Nitro are built on top of `jsi::NativeState`, which is more ef
 
 ## Type Safety
 
-Nitro Modules are **type-safe** and **null-safe**. By using Nitro's code-generator, [nitrogen](nitrogen), TypeScript specs are the single source of truth as generated native interfaces have to exactly represent the declared types.
+Nitro Modules are **type-safe** and **null-safe**. By using Nitro's code-generator, [nitrogen](../concepts/nitrogen), TypeScript specs are the single source of truth as generated native interfaces have to exactly represent the declared types.
 If a function declares a `number`, you can only implement it on the native side as a `Double`, otherwise the app will not compile.
 
 <div className="side-by-side-container">

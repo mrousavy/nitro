@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Sync vs Async
 
-By default, every method on a [Hybrid Object](hybrid-objects) is synchronous and runs on the JS Thread.
+By default, every method on a [Hybrid Object](../concepts/hybrid-objects) is synchronous and runs on the JS Thread.
 This means, as long as your native method is executing, the JS Thread is blocked and can not do any other work (like state updates or view changes).
 
 ## Light Methods

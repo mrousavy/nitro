@@ -121,7 +121,7 @@ std::future<void> Promise<void>::await() {
   return promise->get_future();
 }
 
-const std::exception_ptr& Promise<void>::getError() {
+const std::exception_ptr& Promise<void>::getError() const {
   if (!isRejected()) {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }

@@ -42,93 +42,133 @@
 namespace margelo::nitro::test {
 
 int initialize(JavaVM* vm) {
+  return facebook::jni::initialize(vm, []() {
+    ::margelo::nitro::test::registerAllNatives();
+  });
+}
+
+struct JHybridTestObjectSwiftKotlinSpecImpl: public jni::JavaClass<JHybridTestObjectSwiftKotlinSpecImpl, JHybridTestObjectSwiftKotlinSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestObjectKotlin;";
+  static std::shared_ptr<JHybridTestObjectSwiftKotlinSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridTestObjectSwiftKotlinSpecImpl::javaobject()>();
+    jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridTestObjectSwiftKotlinSpec();
+  }
+};
+struct JHybridBaseSpecImpl: public jni::JavaClass<JHybridBaseSpecImpl, JHybridBaseSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridBase;";
+  static std::shared_ptr<JHybridBaseSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridBaseSpecImpl::javaobject()>();
+    jni::local_ref<JHybridBaseSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridBaseSpec();
+  }
+};
+struct JHybridChildSpecImpl: public jni::JavaClass<JHybridChildSpecImpl, JHybridChildSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridChild;";
+  static std::shared_ptr<JHybridChildSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridChildSpecImpl::javaobject()>();
+    jni::local_ref<JHybridChildSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridChildSpec();
+  }
+};
+struct JHybridPlatformObjectSpecImpl: public jni::JavaClass<JHybridPlatformObjectSpecImpl, JHybridPlatformObjectSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridPlatformObject;";
+  static std::shared_ptr<JHybridPlatformObjectSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridPlatformObjectSpecImpl::javaobject()>();
+    jni::local_ref<JHybridPlatformObjectSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridPlatformObjectSpec();
+  }
+};
+struct JHybridTestViewSpecImpl: public jni::JavaClass<JHybridTestViewSpecImpl, JHybridTestViewSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridTestView;";
+  static std::shared_ptr<JHybridTestViewSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridTestViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridTestViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridTestViewSpec();
+  }
+};
+struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclableTestViewSpecImpl, JHybridRecyclableTestViewSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridRecyclableTestView;";
+  static std::shared_ptr<JHybridRecyclableTestViewSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridRecyclableTestViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridRecyclableTestViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridRecyclableTestViewSpec();
+  }
+};
+
+void registerAllNatives() {
   using namespace margelo::nitro;
   using namespace margelo::nitro::test;
-  using namespace facebook;
 
-  return facebook::jni::initialize(vm, [] {
-    // Register native JNI methods
-    margelo::nitro::test::JHybridBaseSpec::registerNatives();
-    margelo::nitro::test::JHybridChildSpec::registerNatives();
-    margelo::nitro::test::JHybridPlatformObjectSpec::registerNatives();
-    margelo::nitro::test::JHybridRecyclableTestViewSpec::registerNatives();
-    margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
-    margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::registerNatives();
-    margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_std__optional_double__cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_std__string_cxx::registerNatives();
-    margelo::nitro::test::JFunc_void_std__exception_ptr_cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
-    margelo::nitro::test::JFunc_double_cxx::registerNatives();
-    margelo::nitro::test::JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::registerNatives();
-    margelo::nitro::test::JHybridTestViewSpec::registerNatives();
-    margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
+  // Register native JNI methods
+  margelo::nitro::test::JHybridBaseSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridChildSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridPlatformObjectSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridRecyclableTestViewSpec::CxxPart::registerNatives();
+  margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
+  margelo::nitro::test::JHybridTestObjectSwiftKotlinSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JFunc_void_double_cxx::registerNatives();
+  margelo::nitro::test::JFunc_void_cxx::registerNatives();
+  margelo::nitro::test::JFunc_void_std__vector_Powertrain__cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____cxx::registerNatives();
+  margelo::nitro::test::JFunc_void_std__optional_double__cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_double___cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______cxx::registerNatives();
+  margelo::nitro::test::JFunc_void_std__string_cxx::registerNatives();
+  margelo::nitro::test::JFunc_void_std__exception_ptr_cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__string___cxx::registerNatives();
+  margelo::nitro::test::JFunc_double_cxx::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__cxx::registerNatives();
+  margelo::nitro::test::JHybridTestViewSpec::CxxPart::registerNatives();
+  margelo::nitro::test::views::JHybridTestViewStateUpdater::registerNatives();
 
-    // Register Nitro Hybrid Objects
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObjectCpp",
-      []() -> std::shared_ptr<HybridObject> {
-        static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
-                      "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
-                      "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
-        return std::make_shared<HybridTestObjectCpp>();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestObjectSwiftKotlin",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridTestObjectSwiftKotlinSpec::javaobject> object("com/margelo/nitro/test/HybridTestObjectKotlin");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "Base",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridBaseSpec::javaobject> object("com/margelo/nitro/test/HybridBase");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "Child",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridChildSpec::javaobject> object("com/margelo/nitro/test/HybridChild");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "PlatformObject",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridPlatformObjectSpec::javaobject> object("com/margelo/nitro/test/HybridPlatformObject");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "TestView",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridTestView");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-    HybridObjectRegistry::registerHybridObjectConstructor(
-      "RecyclableTestView",
-      []() -> std::shared_ptr<HybridObject> {
-        static DefaultConstructableObject<JHybridRecyclableTestViewSpec::javaobject> object("com/margelo/nitro/test/HybridRecyclableTestView");
-        auto instance = object.create();
-        return instance->cthis()->shared();
-      }
-    );
-  });
+  // Register Nitro Hybrid Objects
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestObjectCpp",
+    []() -> std::shared_ptr<HybridObject> {
+      static_assert(std::is_default_constructible_v<HybridTestObjectCpp>,
+                    "The HybridObject \"HybridTestObjectCpp\" is not default-constructible! "
+                    "Create a public constructor that takes zero arguments to be able to autolink this HybridObject.");
+      return std::make_shared<HybridTestObjectCpp>();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestObjectSwiftKotlin",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridTestObjectSwiftKotlinSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "Base",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridBaseSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "Child",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridChildSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "PlatformObject",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridPlatformObjectSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "TestView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridTestViewSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "RecyclableTestView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridRecyclableTestViewSpecImpl::create();
+    }
+  );
 }
 
 } // namespace margelo::nitro::test

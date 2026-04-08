@@ -12,9 +12,12 @@
 // Forward declaration of `HybridSomeExternalObjectSpec_cxx` to properly resolve imports.
 namespace NitroTestExternal { class HybridSomeExternalObjectSpec_cxx; }
 
-
+// Forward declaration of `OptionalPrimitivesHolder` to properly resolve imports.
+namespace margelo::nitro::test::external { struct OptionalPrimitivesHolder; }
 
 #include <string>
+#include "OptionalPrimitivesHolder.hpp"
+#include <optional>
 
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 
@@ -68,6 +71,14 @@ namespace margelo::nitro::test::external {
     // Methods
     inline std::string getValue() override {
       auto __result = _swiftPart.getValue();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline OptionalPrimitivesHolder createOptionalPrimitivesHolder(std::optional<double> optionalNumber, std::optional<bool> optionalBoolean, std::optional<uint64_t> optionalUInt64, std::optional<int64_t> optionalInt64) override {
+      auto __result = _swiftPart.createOptionalPrimitivesHolder(optionalNumber, optionalBoolean, optionalUInt64, optionalInt64);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

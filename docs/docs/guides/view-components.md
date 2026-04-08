@@ -35,7 +35,7 @@ export type CameraView = HybridView<CameraProps, CameraMethods>
 
 ### 2. Code Generation
 
-Then, run [nitrogen](nitrogen):
+Then, run [nitrogen](../concepts/nitrogen):
 
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
@@ -60,7 +60,7 @@ Then, run [nitrogen](nitrogen):
   </TabItem>
 </Tabs>
 
-This will create a C++ ShadowNode, with an iOS (Swift) and Android (Kotlin) interface, just like any other [Hybrid Object](hybrid-objects).
+This will create a C++ ShadowNode, with an iOS (Swift) and Android (Kotlin) interface, just like any other [Hybrid Object](../concepts/hybrid-objects).
 Additionally, a view config (`CameraViewConfig.json`) will be generated - this is required by Fabric.
 
 ### 3. Implementation
@@ -218,9 +218,9 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     ```kotlin title="HybridCameraView.kt"
-    class HybridCameraView: HybridCameraViewSpec() {
+    class HybridCameraView(context: ThemedReactContext): HybridCameraViewSpec() {
       // View
-      override val view: View = View(NitroModules.applicationContext)
+      override val view: View = View(context)
 
       override fun beforeUpdate() { }
       override fun afterUpdate() { }

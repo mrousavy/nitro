@@ -45,6 +45,12 @@ std::shared_ptr<Dispatcher> Dispatcher::getRuntimeGlobalDispatcher(jsi::Runtime&
     }
   }
 
+  // If it's the main/UI Thread, we can inject the Dispatcher now
+  if (ThreadUtils::isUIThread()) {
+    auto uiDispatcher = ThreadUtils::createUIThreadDispatcher();
+    Dispatcher::installRuntimeGlobalDispatcher(runtime, uiDispatcher);
+  }
+
   Logger::log(LogLevel::Warning, TAG, "Unknown Runtime (%s), looking for Dispatcher through JSI global lookup...",
               getRuntimeId(runtime).c_str());
   // 1. Get global.__nitroDispatcher

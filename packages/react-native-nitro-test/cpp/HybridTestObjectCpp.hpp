@@ -27,7 +27,8 @@ private:
   double _number;
   bool _bool;
   std::string _string;
-  int64_t _bigint;
+  int64_t _int64Value;
+  uint64_t _uint64Value;
   NullType _null = nitro::null;
   std::optional<std::string> _optionalString;
   std::variant<nitro::NullType, std::string> _nullableString;
@@ -38,6 +39,8 @@ private:
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
   std::optional<std::function<void(double)>> _optionalCallback;
+  bool _hasBooleanWritable;
+  bool _isBooleanWritable;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -57,8 +60,10 @@ public:
   void setBoolValue(bool boolValue) override;
   std::string getStringValue() override;
   void setStringValue(const std::string& stringValue) override;
-  int64_t getBigintValue() override;
-  void setBigintValue(int64_t bigintValue) override;
+  int64_t getInt64Value() override;
+  void setInt64Value(int64_t int64Value) override;
+  uint64_t getUint64Value() override;
+  void setUint64Value(uint64_t uint64Value) override;
   NullType getNullValue() override;
   void setNullValue(NullType value) override;
   std::optional<std::string> getOptionalString() override;
@@ -86,6 +91,12 @@ public:
   void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
   std::optional<std::function<void(double)>> getOptionalCallback() override;
   void setOptionalCallback(const std::optional<std::function<void(double)>>& callback) override;
+  bool getHasBoolean() override;
+  bool getIsBoolean() override;
+  bool getIsBooleanWritable() override;
+  void setIsBooleanWritable(bool isBooleanWritable) override;
+  bool getHasBooleanWritable() override;
+  void setHasBooleanWritable(bool hasBooleanWritable) override;
 
 public:
   // Methods

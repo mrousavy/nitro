@@ -44,6 +44,7 @@ on:
       - "packages/react-native-nitro-test-external/android/**"
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/android/**"
+      - "packages/react-native-nitro-modules/src/**"
       - "**/bun.lock"
       - "**/react-native.config.js"
       - "**/nitro.json"
@@ -61,6 +62,7 @@ on:
       - "packages/react-native-nitro-test-external/android/**"
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/android/**"
+      - "packages/react-native-nitro-modules/src/**"
       - "**/bun.lock"
       - "**/react-native.config.js"
       - "**/nitro.json"
@@ -110,20 +112,21 @@ jobs:
           java-version: 17
           java-package: jdk
 
-      - name: Restore Gradle cache
+      - name: Restore Gradle/CMake cache
         uses: actions/cache@v5
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            example/android/.gradle
             example/android/app/.cxx
-            example/android/app/build
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
+            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
             ${{ runner.os }}-gradle-
       - name: Build Android app
         working-directory: example/android
-        run: ./gradlew assembleDebug --no-daemon --build-cache
+        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
 
       - name: Enable KVM group perms
         run: |

@@ -13,9 +13,6 @@ import Foundation
 /// See `data`, `size` and `isOwner`.
 public typealias ArrayBuffer = margelo.nitro.ArrayBufferHolder
 
-@available(*, deprecated, renamed: "ArrayBuffer")
-public typealias ArrayBufferHolder = ArrayBuffer
-
 // pragma MARK: Wrap
 
 extension ArrayBuffer {

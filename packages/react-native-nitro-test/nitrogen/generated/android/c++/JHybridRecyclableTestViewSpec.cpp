@@ -13,47 +13,41 @@
 
 namespace margelo::nitro::test {
 
-  jni::local_ref<JHybridRecyclableTestViewSpec::jhybriddata> JHybridRecyclableTestViewSpec::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<JHybridRecyclableTestViewSpec> JHybridRecyclableTestViewSpec::JavaPart::getJHybridRecyclableTestViewSpec() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<JHybridRecyclableTestViewSpec>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to JHybridRecyclableTestViewSpec!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<JHybridRecyclableTestViewSpec::CxxPart::jhybriddata> JHybridRecyclableTestViewSpec::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void JHybridRecyclableTestViewSpec::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", JHybridRecyclableTestViewSpec::initHybrid),
-    });
-  }
-
-  size_t JHybridRecyclableTestViewSpec::getExternalMemorySize() noexcept {
-    static const auto method = javaClassStatic()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
-  }
-
-  bool JHybridRecyclableTestViewSpec::equals(const std::shared_ptr<HybridObject>& other) {
-    if (auto otherCast = std::dynamic_pointer_cast<JHybridRecyclableTestViewSpec>(other)) {
-      return _javaPart == otherCast->_javaPart;
+  std::shared_ptr<JHybridObject> JHybridRecyclableTestViewSpec::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<JHybridRecyclableTestViewSpec::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to JHybridRecyclableTestViewSpec::JavaPart!");
     }
-    return false;
+    return std::make_shared<JHybridRecyclableTestViewSpec>(castJavaPart);
   }
 
-  void JHybridRecyclableTestViewSpec::dispose() noexcept {
-    static const auto method = javaClassStatic()->getMethod<void()>("dispose");
-    method(_javaPart);
-  }
-
-  std::string JHybridRecyclableTestViewSpec::toString() {
-    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
-    auto javaString = method(_javaPart);
-    return javaString->toStdString();
+  void JHybridRecyclableTestViewSpec::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", JHybridRecyclableTestViewSpec::CxxPart::initHybrid),
+    });
   }
 
   // Properties
   bool JHybridRecyclableTestViewSpec::getIsBlue() {
-    static const auto method = javaClassStatic()->getMethod<jboolean()>("isBlue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("isBlue");
     auto __result = method(_javaPart);
     return static_cast<bool>(__result);
   }
   void JHybridRecyclableTestViewSpec::setIsBlue(bool isBlue) {
-    static const auto method = javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
 

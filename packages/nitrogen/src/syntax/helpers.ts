@@ -69,7 +69,8 @@ function getTypeLooselyness(type: Type): number {
     case 'array-buffer':
       // We have `.isArrayBuffer()`
       return 0
-    case 'bigint':
+    case 'int64':
+    case 'uint64':
       // We have `.isBigInt()`
       return 0
     case 'boolean':
@@ -147,10 +148,6 @@ function getTypeLooselyness(type: Type): number {
  */
 export function compareLooselyness(a: Type, b: Type): number {
   return getTypeLooselyness(a) - getTypeLooselyness(b)
-}
-
-export function isBooleanPropertyPrefix(name: string): boolean {
-  return name.startsWith('is') || name.startsWith('has')
 }
 
 export function isNotDuplicate<T>(item: T, index: number, array: T[]): boolean {

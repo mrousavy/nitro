@@ -28,13 +28,15 @@ export function createKotlinHybridViewManager(
     descriptorClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
-  const autolinking = spec.config.getAutolinkedHybridObjects()
-  const viewImplementation = autolinking[spec.name]?.kotlin
-  if (viewImplementation == null) {
+  const implementation = spec.config.getAndroidAutolinkedImplementation(
+    spec.name
+  )
+  if (implementation?.language !== 'kotlin') {
     throw new Error(
-      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it is not autolinked in nitro.json!`
+      `Cannot create Kotlin HybridView ViewManager for ${spec.name} - it must be autolinked with a Kotlin Android implementation in nitro.json!`
     )
   }
+  const viewImplementation = implementation.implementationClassName
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -73,7 +75,7 @@ public class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+    val hybridView = getHybridView(view)
       ?: throw Error("Couldn't find view $view in local views table!")
 
     // 1. Update each prop individually
@@ -85,9 +87,15 @@ public class ${manager}: SimpleViewManager<View>() {
     return super.updateState(view, props, stateWrapper)
   }
 
+  override fun onDropViewInstance(view: View) {
+    val hybridView = getHybridView(view)
+    hybridView?.onDropView()
+    return super.onDropViewInstance(view)
+  }
+
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
     super.prepareToRecycleView(reactContext, view)
-    val hybridView = view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
+    val hybridView = getHybridView(view)
       ?: return null
 
     @Suppress("USELESS_IS_CHECK")
@@ -100,6 +108,10 @@ public class ${manager}: SimpleViewManager<View>() {
     } else {
       return null
     }
+  }
+
+  private fun getHybridView(view: View): ${viewImplementation}? {
+    return view.getTag(associated_hybrid_view_tag) as? ${viewImplementation}
   }
 }
   `.trim()
@@ -140,8 +152,8 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 #endif
 
 #include <fbjni/fbjni.h>
-#include <react/fabric/StateWrapperImpl.h>
 #include <react/fabric/CoreComponentsRegistry.h>
+#include <react/fabric/StateWrapperImpl.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
@@ -158,7 +170,7 @@ public:
 
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                              jni::alias_ref<${JHybridTSpec}::javaobject> view,
+                              jni::alias_ref<${JHybridTSpec}::JavaPart> view,
                               jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
 
 public:
@@ -181,9 +193,9 @@ public:
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (props.${name}.isDirty) {
-  view->${setter}(props.${name}.value);
-  // TODO: Set isDirty = false
+if (props->${name}.isDirty) {
+  hybridView->${setter}(props->${name}.value);
+  props->${name}.isDirty = false;
 }
     `.trim()
   })
@@ -193,6 +205,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <react/fabric/StateWrapperImpl.h>
 
 namespace ${cxxNamespace} {
 
@@ -200,38 +213,37 @@ using namespace facebook;
 using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<${JHybridTSpec}::javaobject> javaView,
+                                           jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
                                            jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  ${JHybridTSpec}* view = javaView->cthis();
+  std::shared_ptr<${JHybridTSpec}> hybridView = javaView->get${JHybridTSpec}();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
-  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) {
+  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
   auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
-
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const ${stateClassName}& data = concreteState->getData();
-  const std::optional<${propsClassName}>& maybeProps = data.getProps();
-  if (!maybeProps.has_value()) {
+  const std::shared_ptr<${propsClassName}>& props = data.getProps();
+  if (props == nullptr) [[unlikely]] {
     // Props aren't set yet!
     throw std::runtime_error("${stateClassName}'s data doesn't contain any props!");
   }
-  const ${propsClassName}& props = maybeProps.value();
+
+  // Update all props if they are dirty
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props.hybridRef.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props.hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
-      std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
-      maybeFunc.value()(shared);
+      maybeFunc.value()(hybridView);
     }
-    // TODO: Set isDirty = false
+    props->hybridRef.isDirty = false;
   }
 }
 
