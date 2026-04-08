@@ -58,6 +58,13 @@ fun as${innerName}OrNull(): ${optional.getCode('kotlin')} {
 is ${innerName} -> ${label}(${bridge.parseFromCppToKotlin('value', 'kotlin')})
     `.trim()
   })
+  const asCases = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
+    const bridge = new KotlinCxxBridgedType(v)
+    return `
+is ${innerName} -> (${bridge.parseFromCppToKotlin('value', 'kotlin')}) as? T
+    `.trim()
+  })
 
   const createFunctions = variant.cases.map(([label, v]) => {
     const bridge = new KotlinCxxBridgedType(v)
@@ -90,15 +97,23 @@ ${extraImports.join('\n')}
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}
 
-  ${indent(isFunctions.join('\n'), '  ')}
-
-  ${indent(asFunctions.join('\n'), '  ')}
-
+  inline fun <reified T> \`as\`(): T? {
+    return when (this) {
+      ${indent(asCases.join('\n'), '      ')}
+    }
+  }
+  inline fun <reified T> \`is\`(): Boolean {
+    return \`as\`<T>() != null
+  }
   inline fun <R> match(${matchParameters.join(', ')}): R {
     return when (this) {
       ${indent(matchCases.join('\n'), '      ')}
     }
   }
+
+  ${indent(isFunctions.join('\n'), '  ')}
+
+  ${indent(asFunctions.join('\n'), '  ')}
 
   companion object {
     ${indent(createFunctions.join('\n'), '    ')}

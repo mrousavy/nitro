@@ -21,6 +21,22 @@ sealed class Variant_______Unit_Double {
   @DoNotStrip
   data class Second(@DoNotStrip val value: Double): Variant_______Unit_Double()
 
+  inline fun <reified T> `as`(): T? {
+    return when (this) {
+      is First -> (value) as? T
+      is Second -> (value) as? T
+    }
+  }
+  inline fun <reified T> `is`(): Boolean {
+    return `as`<T>() != null
+  }
+  inline fun <R> match(first: (() -> Unit) -> R, second: (Double) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
+
   val isFirst: Boolean
     get() = this is First
   val isSecond: Boolean
@@ -33,13 +49,6 @@ sealed class Variant_______Unit_Double {
   fun asSecondOrNull(): Double? {
     val value = (this as? Second)?.value ?: return null
     return value
-  }
-
-  inline fun <R> match(first: (() -> Unit) -> R, second: (Double) -> R): R {
-    return when (this) {
-      is First -> first(value)
-      is Second -> second(value)
-    }
   }
 
   companion object {

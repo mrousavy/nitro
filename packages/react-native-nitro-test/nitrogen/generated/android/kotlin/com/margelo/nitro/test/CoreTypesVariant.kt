@@ -31,6 +31,30 @@ sealed class CoreTypesVariant {
   @DoNotStrip
   data class Sixth(@DoNotStrip val value: AnyMap): CoreTypesVariant()
 
+  inline fun <reified T> `as`(): T? {
+    return when (this) {
+      is First -> (value) as? T
+      is Second -> (value) as? T
+      is Third -> (value) as? T
+      is Fourth -> (value) as? T
+      is Fifth -> (value) as? T
+      is Sixth -> (value) as? T
+    }
+  }
+  inline fun <reified T> `is`(): Boolean {
+    return `as`<T>() != null
+  }
+  inline fun <R> match(first: (ArrayBuffer) -> R, second: ((value: Double) -> Unit) -> R, third: (WrappedJsStruct) -> R, fourth: (Promise<Double>) -> R, fifth: (java.time.Instant) -> R, sixth: (AnyMap) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+      is Third -> third(value)
+      is Fourth -> fourth(value)
+      is Fifth -> fifth(value)
+      is Sixth -> sixth(value)
+    }
+  }
+
   val isFirst: Boolean
     get() = this is First
   val isSecond: Boolean
@@ -67,17 +91,6 @@ sealed class CoreTypesVariant {
   fun asSixthOrNull(): AnyMap? {
     val value = (this as? Sixth)?.value ?: return null
     return value
-  }
-
-  inline fun <R> match(first: (ArrayBuffer) -> R, second: ((value: Double) -> Unit) -> R, third: (WrappedJsStruct) -> R, fourth: (Promise<Double>) -> R, fifth: (java.time.Instant) -> R, sixth: (AnyMap) -> R): R {
-    return when (this) {
-      is First -> first(value)
-      is Second -> second(value)
-      is Third -> third(value)
-      is Fourth -> fourth(value)
-      is Fifth -> fifth(value)
-      is Sixth -> sixth(value)
-    }
   }
 
   companion object {
