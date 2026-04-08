@@ -136,7 +136,7 @@ type TravelEstimates = {
   /**
    * This makes TravelEstimates.hpp not equatable and solves an "map" not available on vector build issue.
    */
-  _doNotUse?: () => void;
+  // _doNotUse?: () => void;
 };
 
 type TripPoint = {

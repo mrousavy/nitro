@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JForkType final: public jni::JavaClass<JForkType> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/ForkType;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/ForkType;";
 
   public:
     /**

@@ -29,7 +29,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_AssetImage_GlyphImage: public jni::JavaClass<JVariant_AssetImage_GlyphImage> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage;";
 
     static jni::local_ref<JVariant_AssetImage_GlyphImage> create_0(jni::alias_ref<JAssetImage> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_AssetImage_GlyphImage(jni::alias_ref<JAssetImage>)>("create");
@@ -54,7 +54,7 @@ namespace margelo::nitro::test {
   namespace JVariant_AssetImage_GlyphImage_impl {
     class First final: public jni::JavaClass<First, JVariant_AssetImage_GlyphImage> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage$First;";
     
       [[nodiscard]] jni::local_ref<JAssetImage> getValue() const {
         static const auto field = javaClassStatic()->getField<JAssetImage>("value");
@@ -64,7 +64,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_AssetImage_GlyphImage> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_AssetImage_GlyphImage$Second;";
     
       [[nodiscard]] jni::local_ref<JGlyphImage> getValue() const {
         static const auto field = javaClassStatic()->getField<JGlyphImage>("value");

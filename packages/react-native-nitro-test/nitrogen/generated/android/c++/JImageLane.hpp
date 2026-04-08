@@ -31,7 +31,7 @@ namespace margelo::nitro::test {
    */
   struct JImageLane final: public jni::JavaClass<JImageLane> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/ImageLane;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/ImageLane;";
 
   public:
     /**

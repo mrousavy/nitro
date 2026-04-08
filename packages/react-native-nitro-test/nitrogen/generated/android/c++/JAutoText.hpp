@@ -26,7 +26,7 @@ namespace margelo::nitro::test {
    */
   struct JAutoText final: public jni::JavaClass<JAutoText> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/AutoText;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/AutoText;";
 
   public:
     /**

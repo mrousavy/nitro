@@ -24,7 +24,7 @@ namespace margelo::nitro::test {
    */
   struct JAssetImage final: public jni::JavaClass<JAssetImage> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/AssetImage;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/AssetImage;";
 
   public:
     /**

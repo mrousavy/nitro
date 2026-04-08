@@ -28,7 +28,7 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  auto concreteState = std::dynamic_pointer_cast<const ConcreteStateData>(state);
+  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRecyclableTestViewState& data = concreteState->getData();
   const std::shared_ptr<HybridRecyclableTestViewProps>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {

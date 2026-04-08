@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JKeepType final: public jni::JavaClass<JKeepType> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/KeepType;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/KeepType;";
 
   public:
     /**

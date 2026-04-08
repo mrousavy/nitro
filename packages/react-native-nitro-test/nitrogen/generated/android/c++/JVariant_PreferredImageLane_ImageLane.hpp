@@ -35,7 +35,7 @@ namespace margelo::nitro::test {
    */
   class JVariant_PreferredImageLane_ImageLane: public jni::JavaClass<JVariant_PreferredImageLane_ImageLane> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane;";
 
     static jni::local_ref<JVariant_PreferredImageLane_ImageLane> create_0(jni::alias_ref<JPreferredImageLane> value) {
       static const auto method = javaClassStatic()->getStaticMethod<JVariant_PreferredImageLane_ImageLane(jni::alias_ref<JPreferredImageLane>)>("create");
@@ -60,7 +60,7 @@ namespace margelo::nitro::test {
   namespace JVariant_PreferredImageLane_ImageLane_impl {
     class First final: public jni::JavaClass<First, JVariant_PreferredImageLane_ImageLane> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane$First;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane$First;";
     
       [[nodiscard]] jni::local_ref<JPreferredImageLane> getValue() const {
         static const auto field = javaClassStatic()->getField<JPreferredImageLane>("value");
@@ -70,7 +70,7 @@ namespace margelo::nitro::test {
     
     class Second final: public jni::JavaClass<Second, JVariant_PreferredImageLane_ImageLane> {
     public:
-      static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane$Second;";
+      static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/Variant_PreferredImageLane_ImageLane$Second;";
     
       [[nodiscard]] jni::local_ref<JImageLane> getValue() const {
         static const auto field = javaClassStatic()->getField<JImageLane>("value");

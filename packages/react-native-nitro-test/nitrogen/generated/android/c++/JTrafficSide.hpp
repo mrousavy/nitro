@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JTrafficSide final: public jni::JavaClass<JTrafficSide> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/TrafficSide;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/TrafficSide;";
 
   public:
     /**

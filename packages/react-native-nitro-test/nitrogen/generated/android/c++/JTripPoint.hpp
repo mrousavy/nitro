@@ -18,11 +18,8 @@
 #include "JDistance.hpp"
 #include "JDistanceUnits.hpp"
 #include "JDurationWithTimeZone.hpp"
-#include "JFunc_void.hpp"
 #include "JTravelEstimates.hpp"
 #include "TravelEstimates.hpp"
-#include <NitroModules/JNICallable.hpp>
-#include <functional>
 #include <optional>
 #include <string>
 
@@ -35,7 +32,7 @@ namespace margelo::nitro::test {
    */
   struct JTripPoint final: public jni::JavaClass<JTripPoint> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/TripPoint;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/TripPoint;";
 
   public:
     /**

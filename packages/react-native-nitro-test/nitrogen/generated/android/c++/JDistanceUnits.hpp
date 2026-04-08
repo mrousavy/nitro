@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JDistanceUnits final: public jni::JavaClass<JDistanceUnits> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/DistanceUnits;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/DistanceUnits;";
 
   public:
     /**

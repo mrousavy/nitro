@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
    */
   struct JNitroColor final: public jni::JavaClass<JNitroColor> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NitroColor;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NitroColor;";
 
   public:
     /**

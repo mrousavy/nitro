@@ -45,6 +45,13 @@ public extension GlyphImage {
   
   @inline(__always)
   var fontScale: Double? {
-    return self.__fontScale.value
+    return { () -> Double? in
+      if bridge.has_value_std__optional_double_(self.__fontScale) {
+        let __unwrapped = bridge.get_std__optional_double_(self.__fontScale)
+        return __unwrapped
+      } else {
+        return nil
+      }
+    }()
   }
 }

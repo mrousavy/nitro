@@ -455,7 +455,7 @@ namespace margelo::nitro::test {
     return __result->toCpp();
   }
   void JHybridTestObjectSwiftKotlinSpec::updateTravelEstimates(const std::string& templateId, const std::vector<TripPoint>& steps) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JTripPoint>> /* steps */)>("updateTravelEstimates");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JTripPoint>> /* steps */)>("updateTravelEstimates");
     method(_javaPart, jni::make_jstring(templateId), [&]() {
       size_t __size = steps.size();
       jni::local_ref<jni::JArrayClass<JTripPoint>> __array = jni::JArrayClass<JTripPoint>::newArray(__size);
@@ -468,7 +468,7 @@ namespace margelo::nitro::test {
     }());
   }
   void JHybridTestObjectSwiftKotlinSpec::updateManeuvers(const std::string& templateId, const std::vector<NitroRoutingManeuver>& maneuvers) {
-    static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JNitroRoutingManeuver>> /* maneuvers */)>("updateManeuvers");
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* templateId */, jni::alias_ref<jni::JArrayClass<JNitroRoutingManeuver>> /* maneuvers */)>("updateManeuvers");
     method(_javaPart, jni::make_jstring(templateId), [&]() {
       size_t __size = maneuvers.size();
       jni::local_ref<jni::JArrayClass<JNitroRoutingManeuver>> __array = jni::JArrayClass<JNitroRoutingManeuver>::newArray(__size);

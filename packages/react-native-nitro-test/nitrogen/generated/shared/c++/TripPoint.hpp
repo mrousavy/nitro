@@ -51,7 +51,7 @@ namespace margelo::nitro::test {
     explicit TripPoint(double latitude, double longitude, std::string name, TravelEstimates travelEstimates): latitude(latitude), longitude(longitude), name(name), travelEstimates(travelEstimates) {}
 
   public:
-    // TripPoint is not equatable because these properties are not equatable: travelEstimates
+    friend bool operator==(const TripPoint& lhs, const TripPoint& rhs) = default;
   };
 
 } // namespace margelo::nitro::test

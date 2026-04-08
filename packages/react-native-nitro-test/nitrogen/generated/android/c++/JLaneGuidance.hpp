@@ -36,7 +36,7 @@ namespace margelo::nitro::test {
    */
   struct JLaneGuidance final: public jni::JavaClass<JLaneGuidance> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/LaneGuidance;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/LaneGuidance;";
 
   public:
     /**

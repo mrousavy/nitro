@@ -23,7 +23,7 @@ namespace margelo::nitro::test {
    */
   struct JGlyphImage final: public jni::JavaClass<JGlyphImage> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/GlyphImage;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/GlyphImage;";
 
   public:
     /**

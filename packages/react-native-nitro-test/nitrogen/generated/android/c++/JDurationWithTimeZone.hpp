@@ -21,7 +21,7 @@ namespace margelo::nitro::test {
    */
   struct JDurationWithTimeZone final: public jni::JavaClass<JDurationWithTimeZone> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/DurationWithTimeZone;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/DurationWithTimeZone;";
 
   public:
     /**

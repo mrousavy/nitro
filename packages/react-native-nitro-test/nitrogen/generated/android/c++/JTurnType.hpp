@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JTurnType final: public jni::JavaClass<JTurnType> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/TurnType;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/TurnType;";
 
   public:
     /**

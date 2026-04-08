@@ -448,7 +448,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline Distance get_std__optional_Distance_(const std::optional<Distance>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<double>
@@ -463,7 +463,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<AutoText>
@@ -478,44 +478,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline AutoText get_std__optional_AutoText_(const std::optional<AutoText>& optional) noexcept {
-    return *optional;
-  }
-  
-  // pragma MARK: std::function<void()>
-  /**
-   * Specialized version of `std::function<void()>`.
-   */
-  using Func_void = std::function<void()>;
-  /**
-   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
-   */
-  class Func_void_Wrapper final {
-  public:
-    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
-    inline void call() const noexcept {
-      _function->operator()();
-    }
-  private:
-    std::unique_ptr<std::function<void()>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
-    return Func_void_Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::optional<std::function<void()>>
-  /**
-   * Specialized version of `std::optional<std::function<void()>>`.
-   */
-  using std__optional_std__function_void____ = std::optional<std::function<void()>>;
-  inline std::optional<std::function<void()>> create_std__optional_std__function_void____(const std::function<void()>& value) noexcept {
-    return std::optional<std::function<void()>>(value);
-  }
-  inline bool has_value_std__optional_std__function_void____(const std::optional<std::function<void()>>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline std::function<void()> get_std__optional_std__function_void____(const std::optional<std::function<void()>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::vector<TripPoint>
@@ -541,7 +504,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline NitroColor get_std__optional_NitroColor_(const std::optional<NitroColor>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::variant<AssetImage, GlyphImage>
@@ -596,7 +559,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline std::vector<NitroAttributedStringImage> get_std__optional_std__vector_NitroAttributedStringImage__(const std::optional<std::vector<NitroAttributedStringImage>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::vector<NitroAttributedString>
@@ -622,7 +585,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline std::variant<AssetImage, GlyphImage> get_std__optional_std__variant_AssetImage__GlyphImage__(const std::optional<std::variant<AssetImage, GlyphImage>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<TurnType>
@@ -637,7 +600,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline TurnType get_std__optional_TurnType_(const std::optional<TurnType>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<std::vector<double>>
@@ -652,7 +615,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline std::vector<double> get_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<OffRampType>
@@ -667,7 +630,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline OffRampType get_std__optional_OffRampType_(const std::optional<OffRampType>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<OnRampType>
@@ -682,7 +645,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline OnRampType get_std__optional_OnRampType_(const std::optional<OnRampType>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<ForkType>
@@ -697,7 +660,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline ForkType get_std__optional_ForkType_(const std::optional<ForkType>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<KeepType>
@@ -712,7 +675,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline KeepType get_std__optional_KeepType_(const std::optional<KeepType>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::vector<std::string>
@@ -778,7 +741,7 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline LaneGuidance get_std__optional_LaneGuidance_(const std::optional<LaneGuidance>& optional) noexcept {
-    return *optional;
+    return optional.value();
   }
   
   // pragma MARK: std::optional<std::vector<std::string>>
@@ -794,6 +757,46 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std::vector<std::string> get_std__optional_std__vector_std__string__(const std::optional<std::vector<std::string>>& optional) noexcept {
     return optional.value();
+  }
+  
+  // pragma MARK: std::vector<NitroRoutingManeuver>
+  /**
+   * Specialized version of `std::vector<NitroRoutingManeuver>`.
+   */
+  using std__vector_NitroRoutingManeuver_ = std::vector<NitroRoutingManeuver>;
+  inline std::vector<NitroRoutingManeuver> create_std__vector_NitroRoutingManeuver_(size_t size) noexcept {
+    std::vector<NitroRoutingManeuver> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::variant<nitro::NullType, std::string>
+  /**
+   * Wrapper struct for `std::variant<nitro::NullType, std::string>`.
+   * std::variant cannot be used in Swift because of a Swift bug.
+   * Not even specializing it works. So we create a wrapper struct.
+   */
+  struct std__variant_nitro__NullType__std__string_ final {
+    std::variant<nitro::NullType, std::string> variant;
+    std__variant_nitro__NullType__std__string_(std::variant<nitro::NullType, std::string> variant): variant(variant) { }
+    operator std::variant<nitro::NullType, std::string>() const noexcept {
+      return variant;
+    }
+    inline size_t index() const noexcept {
+      return variant.index();
+    }
+    inline nitro::NullType get_0() const noexcept {
+      return std::get<0>(variant);
+    }
+    inline std::string get_1() const noexcept {
+      return std::get<1>(variant);
+    }
+  };
+  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(nitro::NullType value) noexcept {
+    return std__variant_nitro__NullType__std__string_(value);
+  }
+  inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
+    return std__variant_nitro__NullType__std__string_(value);
   }
   
   // pragma MARK: std::optional<Powertrain>
@@ -863,21 +866,6 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::optional<double>
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
-    return std::optional<double>(value);
-  }
-  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.value();
-  }
-  
   // pragma MARK: std::vector<Car>
   /**
    * Specialized version of `std::vector<Car>`.
@@ -931,6 +919,28 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<std::shared_ptr<HybridChildSpec>> vector;
     vector.reserve(size);
     return vector;
+  }
+  
+  // pragma MARK: std::function<void()>
+  /**
+   * Specialized version of `std::function<void()>`.
+   */
+  using Func_void = std::function<void()>;
+  /**
+   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
+   */
+  class Func_void_Wrapper final {
+  public:
+    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::make_unique<std::function<void()>>(std::move(func))) {}
+    inline void call() const noexcept {
+      _function->operator()();
+    }
+  private:
+    std::unique_ptr<std::function<void()>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void create_Func_void(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
+    return Func_void_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<std::function<void()>>

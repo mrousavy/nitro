@@ -24,7 +24,6 @@
 #include "JDistanceUnits.hpp"
 #include "JDurationWithTimeZone.hpp"
 #include "JForkType.hpp"
-#include "JFunc_void.hpp"
 #include "JGlyphImage.hpp"
 #include "JImageLane.hpp"
 #include "JKeepType.hpp"
@@ -54,8 +53,6 @@
 #include "TrafficSide.hpp"
 #include "TravelEstimates.hpp"
 #include "TurnType.hpp"
-#include <NitroModules/JNICallable.hpp>
-#include <functional>
 #include <optional>
 #include <string>
 #include <variant>
@@ -70,7 +67,7 @@ namespace margelo::nitro::test {
    */
   struct JNitroRoutingManeuver final: public jni::JavaClass<JNitroRoutingManeuver> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NitroRoutingManeuver;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NitroRoutingManeuver;";
 
   public:
     /**

@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JOnRampType final: public jni::JavaClass<JOnRampType> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/OnRampType;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/OnRampType;";
 
   public:
     /**

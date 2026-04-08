@@ -30,7 +30,7 @@ namespace margelo::nitro::test {
    */
   struct JNitroAttributedStringImage final: public jni::JavaClass<JNitroAttributedStringImage> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/NitroAttributedStringImage;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/NitroAttributedStringImage;";
 
   public:
     /**

@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
    */
   struct JManeuverType final: public jni::JavaClass<JManeuverType> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/ManeuverType;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/ManeuverType;";
 
   public:
     /**
