@@ -24,7 +24,7 @@ public extension Variant_Bool_WeirdNumbersEnum {
       case .second(let value): return value as? T
     }
   }
-  func is<T>(_ type: T.Type = T.self) -> Bool {
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
     return self.asType(type) != nil
   }
 }
