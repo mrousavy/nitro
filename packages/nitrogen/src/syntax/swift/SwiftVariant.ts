@@ -72,7 +72,7 @@ public extension ${typename} {
   }
 
   func \`is\`<T>(_ type: T.Type = T.self) -> Bool {
-    value(as: type) != nil
+    return self.\`as\`<T>(type) != nil
   }
 }
   `.trim()
