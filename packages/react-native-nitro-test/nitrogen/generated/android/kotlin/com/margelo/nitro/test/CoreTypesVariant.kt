@@ -31,7 +31,7 @@ sealed class CoreTypesVariant {
   @DoNotStrip
   data class Sixth(@DoNotStrip val value: AnyMap): CoreTypesVariant()
 
-  inline fun <reified T> `as`(): T? {
+  inline fun <reified T> asType(): T? {
     return when (this) {
       is First -> (value) as? T
       is Second -> (value) as? T
@@ -41,8 +41,8 @@ sealed class CoreTypesVariant {
       is Sixth -> (value) as? T
     }
   }
-  inline fun <reified T> `is`(): Boolean {
-    return `as`<T>() != null
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
   }
   inline fun <R> match(first: (ArrayBuffer) -> R, second: ((value: Double) -> Unit) -> R, third: (WrappedJsStruct) -> R, fourth: (Promise<Double>) -> R, fifth: (java.time.Instant) -> R, sixth: (AnyMap) -> R): R {
     return when (this) {

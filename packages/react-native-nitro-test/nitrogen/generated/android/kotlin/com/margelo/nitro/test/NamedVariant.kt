@@ -21,14 +21,14 @@ sealed class NamedVariant {
   @DoNotStrip
   data class Second(@DoNotStrip val value: Car): NamedVariant()
 
-  inline fun <reified T> `as`(): T? {
+  inline fun <reified T> asType(): T? {
     return when (this) {
       is First -> (value) as? T
       is Second -> (value) as? T
     }
   }
-  inline fun <reified T> `is`(): Boolean {
-    return `as`<T>() != null
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
   }
   inline fun <R> match(first: (String) -> R, second: (Car) -> R): R {
     return when (this) {

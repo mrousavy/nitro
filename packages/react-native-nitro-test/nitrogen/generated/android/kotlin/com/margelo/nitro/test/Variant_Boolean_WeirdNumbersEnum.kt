@@ -21,14 +21,14 @@ sealed class Variant_Boolean_WeirdNumbersEnum {
   @DoNotStrip
   data class Second(@DoNotStrip val value: WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum()
 
-  inline fun <reified T> `as`(): T? {
+  inline fun <reified T> asType(): T? {
     return when (this) {
       is First -> (value) as? T
       is Second -> (value) as? T
     }
   }
-  inline fun <reified T> `is`(): Boolean {
-    return `as`<T>() != null
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
   }
   inline fun <R> match(first: (Boolean) -> R, second: (WeirdNumbersEnum) -> R): R {
     return when (this) {

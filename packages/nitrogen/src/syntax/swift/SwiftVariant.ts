@@ -65,14 +65,13 @@ public ${enumDeclaration} ${typename} {
 }
 
 public extension ${typename} {
-  func \`as\`<T>(_ type: T.Type = T.self) -> T? {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       ${indent(asCases, '      ')}
     }
   }
-
-  func \`is\`<T>(_ type: T.Type = T.self) -> Bool {
-    return self.\`as\`(type) != nil
+  func is<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
   }
 }
   `.trim()

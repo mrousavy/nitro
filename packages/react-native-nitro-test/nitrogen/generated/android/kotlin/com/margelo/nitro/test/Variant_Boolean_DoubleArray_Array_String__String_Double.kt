@@ -27,7 +27,7 @@ sealed class Variant_Boolean_DoubleArray_Array_String__String_Double {
   @DoNotStrip
   data class Fifth(@DoNotStrip val value: Double): Variant_Boolean_DoubleArray_Array_String__String_Double()
 
-  inline fun <reified T> `as`(): T? {
+  inline fun <reified T> asType(): T? {
     return when (this) {
       is First -> (value) as? T
       is Second -> (value) as? T
@@ -36,8 +36,8 @@ sealed class Variant_Boolean_DoubleArray_Array_String__String_Double {
       is Fifth -> (value) as? T
     }
   }
-  inline fun <reified T> `is`(): Boolean {
-    return `as`<T>() != null
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
   }
   inline fun <R> match(first: (Boolean) -> R, second: (DoubleArray) -> R, third: (Array<String>) -> R, fourth: (String) -> R, fifth: (Double) -> R): R {
     return when (this) {

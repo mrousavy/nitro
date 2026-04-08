@@ -21,7 +21,7 @@ public indirect enum Variant_Bool__Double___String__String_Double {
 }
 
 public extension Variant_Bool__Double___String__String_Double {
-  func `as`<T>(_ type: T.Type = T.self) -> T? {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
     switch self {
       case .first(let value): return value as? T
       case .second(let value): return value as? T
@@ -30,8 +30,7 @@ public extension Variant_Bool__Double___String__String_Double {
       case .fifth(let value): return value as? T
     }
   }
-
-  func `is`<T>(_ type: T.Type = T.self) -> Bool {
-    return self.`as`(type) != nil
+  func is<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
   }
 }
