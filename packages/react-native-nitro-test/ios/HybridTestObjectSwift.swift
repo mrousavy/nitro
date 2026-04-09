@@ -9,7 +9,6 @@ import NitroModules
 import NitroTestExternal
 
 class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
-    
   var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .second(55)
