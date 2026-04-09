@@ -248,7 +248,7 @@ That way the JS garbage collector knows how big an `Image` is exactly in memory,
 ## Implement view recycling (`RecyclableView`)
 
 If a view is rendered multiple times throughout an app's lifetime, Fabric can recycle old views and re-use them to display new views.
-This requires you to reset your internal state to it's default values, otherwise stale views may show up, so recycling is disabled by default.
+This requires you to reset your internal state to its default values, otherwise stale views may show up, so recycling is disabled by default.
 To enable recycling, implement the `RecyclableView` interface/protocol, and override the `prepareForRecycle()` method:
 
 <Tabs groupId="native-view-language">
