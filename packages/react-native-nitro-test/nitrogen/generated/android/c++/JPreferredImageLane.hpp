@@ -10,16 +10,6 @@
 #include <fbjni/fbjni.h>
 #include "PreferredImageLane.hpp"
 
-#include "AssetImage.hpp"
-#include "GlyphImage.hpp"
-#include "JAssetImage.hpp"
-#include "JGlyphImage.hpp"
-#include "JNitroColor.hpp"
-#include "JNitroImage.hpp"
-#include "NitroColor.hpp"
-#include <optional>
-#include <string>
-#include <variant>
 #include <vector>
 
 namespace margelo::nitro::test {
@@ -41,18 +31,9 @@ namespace margelo::nitro::test {
     [[nodiscard]]
     PreferredImageLane toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldImage = clazz->getField<JNitroImage>("image");
-      jni::local_ref<JNitroImage> image = this->getFieldValue(fieldImage);
-      static const auto fieldHighlightedAngle = clazz->getField<double>("highlightedAngle");
-      double highlightedAngle = this->getFieldValue(fieldHighlightedAngle);
-      static const auto fieldIsPreferred = clazz->getField<jboolean>("isPreferred");
-      jboolean isPreferred = this->getFieldValue(fieldIsPreferred);
       static const auto fieldAngles = clazz->getField<jni::JArrayDouble>("angles");
       jni::local_ref<jni::JArrayDouble> angles = this->getFieldValue(fieldAngles);
       return PreferredImageLane(
-        image->toCpp(),
-        highlightedAngle,
-        static_cast<bool>(isPreferred),
         [&]() {
           size_t __size = angles->size();
           std::vector<double> __vector(__size);
@@ -68,14 +49,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JPreferredImageLane::javaobject> fromCpp(const PreferredImageLane& value) {
-      using JSignature = JPreferredImageLane(jni::alias_ref<JNitroImage>, double, jboolean, jni::alias_ref<jni::JArrayDouble>);
+      using JSignature = JPreferredImageLane(jni::alias_ref<jni::JArrayDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
-        JNitroImage::fromCpp(value.image),
-        value.highlightedAngle,
-        value.isPreferred,
         [&]() {
           size_t __size = value.angles.size();
           jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);

@@ -30,14 +30,9 @@
 
 // Forward declaration of `PreferredImageLane` to properly resolve imports.
 namespace margelo::nitro::test { struct PreferredImageLane; }
-// Forward declaration of `ImageLane` to properly resolve imports.
-namespace margelo::nitro::test { struct ImageLane; }
 
-#include <string>
-#include <vector>
 #include "PreferredImageLane.hpp"
-#include "ImageLane.hpp"
-#include <variant>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -46,12 +41,11 @@ namespace margelo::nitro::test {
    */
   struct LaneGuidance final {
   public:
-    std::vector<std::string> instructionVariants     SWIFT_PRIVATE;
-    std::vector<std::variant<PreferredImageLane, ImageLane>> lanes     SWIFT_PRIVATE;
+    std::vector<PreferredImageLane> lanes     SWIFT_PRIVATE;
 
   public:
     LaneGuidance() = default;
-    explicit LaneGuidance(std::vector<std::string> instructionVariants, std::vector<std::variant<PreferredImageLane, ImageLane>> lanes): instructionVariants(instructionVariants), lanes(lanes) {}
+    explicit LaneGuidance(std::vector<PreferredImageLane> lanes): lanes(lanes) {}
 
   public:
     friend bool operator==(const LaneGuidance& lhs, const LaneGuidance& rhs) = default;
@@ -67,14 +61,12 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::LaneGuidance fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::LaneGuidance(
-        JSIConverter<std::vector<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "instructionVariants"))),
-        JSIConverter<std::vector<std::variant<margelo::nitro::test::PreferredImageLane, margelo::nitro::test::ImageLane>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lanes")))
+        JSIConverter<std::vector<margelo::nitro::test::PreferredImageLane>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lanes")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::LaneGuidance& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "instructionVariants"), JSIConverter<std::vector<std::string>>::toJSI(runtime, arg.instructionVariants));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "lanes"), JSIConverter<std::vector<std::variant<margelo::nitro::test::PreferredImageLane, margelo::nitro::test::ImageLane>>>::toJSI(runtime, arg.lanes));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "lanes"), JSIConverter<std::vector<margelo::nitro::test::PreferredImageLane>>::toJSI(runtime, arg.lanes));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -85,8 +77,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::vector<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "instructionVariants")))) return false;
-      if (!JSIConverter<std::vector<std::variant<margelo::nitro::test::PreferredImageLane, margelo::nitro::test::ImageLane>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lanes")))) return false;
+      if (!JSIConverter<std::vector<margelo::nitro::test::PreferredImageLane>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lanes")))) return false;
       return true;
     }
   };

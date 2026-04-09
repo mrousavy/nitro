@@ -18,48 +18,18 @@ public extension LaneGuidance {
   /**
    * Create a new instance of `LaneGuidance`.
    */
-  init(instructionVariants: [String], lanes: [Variant_PreferredImageLane_ImageLane]) {
-    self.init({ () -> bridge.std__vector_std__string_ in
-      var __vector = bridge.create_std__vector_std__string_(instructionVariants.count)
-      for __item in instructionVariants {
-        __vector.push_back(std.string(__item))
-      }
-      return __vector
-    }(), { () -> bridge.std__vector_std__variant_PreferredImageLane__ImageLane__ in
-      var __vector = bridge.create_std__vector_std__variant_PreferredImageLane__ImageLane__(lanes.count)
+  init(lanes: [PreferredImageLane]) {
+    self.init({ () -> bridge.std__vector_PreferredImageLane_ in
+      var __vector = bridge.create_std__vector_PreferredImageLane_(lanes.count)
       for __item in lanes {
-        __vector.push_back({ () -> bridge.std__variant_PreferredImageLane__ImageLane_ in
-          switch __item {
-            case .first(let __value):
-              return bridge.create_std__variant_PreferredImageLane__ImageLane_(__value)
-            case .second(let __value):
-              return bridge.create_std__variant_PreferredImageLane__ImageLane_(__value)
-          }
-        }().variant)
+        __vector.push_back(__item)
       }
       return __vector
     }())
   }
 
   @inline(__always)
-  var instructionVariants: [String] {
-    return self.__instructionVariants.map({ __item in String(__item) })
-  }
-  
-  @inline(__always)
-  var lanes: [Variant_PreferredImageLane_ImageLane] {
-    return self.__lanes.map({ __item in { () -> Variant_PreferredImageLane_ImageLane in
-      let __variant = bridge.std__variant_PreferredImageLane__ImageLane_(__item)
-      switch __variant.index() {
-        case 0:
-          let __actual = __variant.get_0()
-          return .first(__actual)
-        case 1:
-          let __actual = __variant.get_1()
-          return .second(__actual)
-        default:
-          fatalError("Variant can never have index \(__variant.index())!")
-      }
-    }() })
+  var lanes: [PreferredImageLane] {
+    return self.__lanes.map({ __item in __item })
   }
 }

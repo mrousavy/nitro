@@ -19,61 +19,10 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class NitroRoutingManeuver(
   @DoNotStrip
   @Keep
-  val attributedInstructionVariants: Array<NitroAttributedString>,
-  @DoNotStrip
-  @Keep
-  val symbolImage: NitroImage,
-  @DoNotStrip
-  @Keep
-  val junctionImage: Variant_AssetImage_GlyphImage?,
-  @DoNotStrip
-  @Keep
-  val turnType: TurnType?,
-  @DoNotStrip
-  @Keep
-  val angle: Double?,
-  @DoNotStrip
-  @Keep
   val elementAngles: DoubleArray?,
   @DoNotStrip
   @Keep
-  val exitNumber: Double?,
-  @DoNotStrip
-  @Keep
-  val offRampType: OffRampType?,
-  @DoNotStrip
-  @Keep
-  val onRampType: OnRampType?,
-  @DoNotStrip
-  @Keep
-  val forkType: ForkType?,
-  @DoNotStrip
-  @Keep
-  val keepType: KeepType?,
-  @DoNotStrip
-  @Keep
-  val linkedLaneGuidance: LaneGuidance?,
-  @DoNotStrip
-  @Keep
-  val cardBackgroundColor: NitroColor,
-  @DoNotStrip
-  @Keep
-  val id: String,
-  @DoNotStrip
-  @Keep
-  val travelEstimates: TravelEstimates,
-  @DoNotStrip
-  @Keep
-  val trafficSide: TrafficSide,
-  @DoNotStrip
-  @Keep
-  val maneuverType: ManeuverType,
-  @DoNotStrip
-  @Keep
-  val roadName: Array<String>?,
-  @DoNotStrip
-  @Keep
-  val highwayExitLabel: String?
+  val linkedLaneGuidance: LaneGuidance?
 ) {
   /* primary constructor */
 
@@ -85,8 +34,8 @@ data class NitroRoutingManeuver(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(attributedInstructionVariants: Array<NitroAttributedString>, symbolImage: NitroImage, junctionImage: Variant_AssetImage_GlyphImage?, turnType: TurnType?, angle: Double?, elementAngles: DoubleArray?, exitNumber: Double?, offRampType: OffRampType?, onRampType: OnRampType?, forkType: ForkType?, keepType: KeepType?, linkedLaneGuidance: LaneGuidance?, cardBackgroundColor: NitroColor, id: String, travelEstimates: TravelEstimates, trafficSide: TrafficSide, maneuverType: ManeuverType, roadName: Array<String>?, highwayExitLabel: String?): NitroRoutingManeuver {
-      return NitroRoutingManeuver(attributedInstructionVariants, symbolImage, junctionImage, turnType, angle, elementAngles, exitNumber, offRampType, onRampType, forkType, keepType, linkedLaneGuidance, cardBackgroundColor, id, travelEstimates, trafficSide, maneuverType, roadName, highwayExitLabel)
+    private fun fromCpp(elementAngles: DoubleArray?, linkedLaneGuidance: LaneGuidance?): NitroRoutingManeuver {
+      return NitroRoutingManeuver(elementAngles, linkedLaneGuidance)
     }
   }
 }

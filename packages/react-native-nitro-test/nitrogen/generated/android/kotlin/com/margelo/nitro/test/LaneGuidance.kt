@@ -19,10 +19,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class LaneGuidance(
   @DoNotStrip
   @Keep
-  val instructionVariants: Array<String>,
-  @DoNotStrip
-  @Keep
-  val lanes: Array<Variant_PreferredImageLane_ImageLane>
+  val lanes: Array<PreferredImageLane>
 ) {
   /* primary constructor */
 
@@ -34,8 +31,8 @@ data class LaneGuidance(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(instructionVariants: Array<String>, lanes: Array<Variant_PreferredImageLane_ImageLane>): LaneGuidance {
-      return LaneGuidance(instructionVariants, lanes)
+    private fun fromCpp(lanes: Array<PreferredImageLane>): LaneGuidance {
+      return LaneGuidance(lanes)
     }
   }
 }

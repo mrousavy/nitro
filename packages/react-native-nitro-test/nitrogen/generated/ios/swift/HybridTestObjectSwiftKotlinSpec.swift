@@ -35,8 +35,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
   func getVariantHybrid(variant: Variant__any_HybridTestObjectSwiftKotlinSpec__Person) throws -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person
-  func updateTravelEstimates(templateId: String, steps: [TripPoint]) throws -> Void
-  func updateManeuvers(templateId: String, maneuvers: [NitroRoutingManeuver]) throws -> Void
+  func updateManeuvers(maneuvers: [NitroRoutingManeuver]) throws -> Void
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
   func addStrings(a: String, b: String) throws -> String

@@ -28,14 +28,8 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `AssetImage` to properly resolve imports.
-namespace margelo::nitro::test { struct AssetImage; }
-// Forward declaration of `GlyphImage` to properly resolve imports.
-namespace margelo::nitro::test { struct GlyphImage; }
 
-#include "AssetImage.hpp"
-#include "GlyphImage.hpp"
-#include <variant>
+
 #include <vector>
 
 namespace margelo::nitro::test {
@@ -45,14 +39,11 @@ namespace margelo::nitro::test {
    */
   struct PreferredImageLane final {
   public:
-    std::variant<AssetImage, GlyphImage> image     SWIFT_PRIVATE;
-    double highlightedAngle     SWIFT_PRIVATE;
-    bool isPreferred     SWIFT_PRIVATE;
     std::vector<double> angles     SWIFT_PRIVATE;
 
   public:
     PreferredImageLane() = default;
-    explicit PreferredImageLane(std::variant<AssetImage, GlyphImage> image, double highlightedAngle, bool isPreferred, std::vector<double> angles): image(image), highlightedAngle(highlightedAngle), isPreferred(isPreferred), angles(angles) {}
+    explicit PreferredImageLane(std::vector<double> angles): angles(angles) {}
 
   public:
     friend bool operator==(const PreferredImageLane& lhs, const PreferredImageLane& rhs) = default;
@@ -68,17 +59,11 @@ namespace margelo::nitro {
     static inline margelo::nitro::test::PreferredImageLane fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::PreferredImageLane(
-        JSIConverter<std::variant<margelo::nitro::test::AssetImage, margelo::nitro::test::GlyphImage>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "image"))),
-        JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "highlightedAngle"))),
-        JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isPreferred"))),
         JSIConverter<std::vector<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "angles")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::PreferredImageLane& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "image"), JSIConverter<std::variant<margelo::nitro::test::AssetImage, margelo::nitro::test::GlyphImage>>::toJSI(runtime, arg.image));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "highlightedAngle"), JSIConverter<double>::toJSI(runtime, arg.highlightedAngle));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "isPreferred"), JSIConverter<bool>::toJSI(runtime, arg.isPreferred));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "angles"), JSIConverter<std::vector<double>>::toJSI(runtime, arg.angles));
       return obj;
     }
@@ -90,9 +75,6 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
-      if (!JSIConverter<std::variant<margelo::nitro::test::AssetImage, margelo::nitro::test::GlyphImage>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "image")))) return false;
-      if (!JSIConverter<double>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "highlightedAngle")))) return false;
-      if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isPreferred")))) return false;
       if (!JSIConverter<std::vector<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "angles")))) return false;
       return true;
     }

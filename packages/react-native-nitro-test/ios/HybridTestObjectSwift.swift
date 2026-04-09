@@ -9,10 +9,7 @@ import NitroModules
 import NitroTestExternal
 
 class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
-  func updateTravelEstimates(templateId: String, steps: [TripPoint]) throws -> Void {
-  }
-    
-  func updateManeuvers(templateId: String, maneuvers: [NitroRoutingManeuver]) throws -> Void {
+  func updateManeuvers(maneuvers: [NitroRoutingManeuver]) throws -> Void {
   }
     
   var optionalArray: [String]? = []
