@@ -17,6 +17,9 @@
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"
 #include <string>
+#include "Scores.hpp"
+#include "JScores.hpp"
+#include <vector>
 
 namespace margelo::nitro::test {
 

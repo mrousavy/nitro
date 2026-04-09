@@ -9,8 +9,6 @@ import NitroModules
 import NitroTestExternal
 
 class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
-  func updateManeuvers(maneuvers: [NitroRoutingManeuver]) throws -> Void {
-  }
     
   var optionalArray: [String]? = []
 

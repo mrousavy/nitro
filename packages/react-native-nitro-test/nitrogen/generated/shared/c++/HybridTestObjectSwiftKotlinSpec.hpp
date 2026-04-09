@@ -21,8 +21,6 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRoutingManeuver; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -61,7 +59,6 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OldEnum.hpp"
 #include <functional>
 #include "Person.hpp"
-#include "NitroRoutingManeuver.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -151,7 +148,6 @@ namespace margelo::nitro::test {
       // Methods
       virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) = 0;
-      virtual void updateManeuvers(const std::vector<NitroRoutingManeuver>& maneuvers) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;

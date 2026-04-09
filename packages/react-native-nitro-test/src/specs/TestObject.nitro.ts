@@ -56,10 +56,16 @@ export interface Car {
   someVariant?: number | string
 }
 
+export interface Scores {
+  scores: number[]
+}
+
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
 export type Person = {
   name: string
   age: number
+  scores: Scores
+  siblings: number[]
 }
 
 interface JsStyleStruct {
@@ -106,18 +112,6 @@ type CoreTypesVariant =
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
-
-interface PreferredImageLane {
-  angles: Array<number>;
-}
-interface LaneGuidance {
-  lanes: Array<PreferredImageLane>;
-}
-
-interface NitroRoutingManeuver {
-  elementAngles?: Array<number>;
-  linkedLaneGuidance?: LaneGuidance;
-}
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -351,5 +345,4 @@ export interface TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
-  updateManeuvers(maneuvers: Array<NitroRoutingManeuver>): void
 }

@@ -18,6 +18,8 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `HybridBaseSpecSwift` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 
@@ -27,6 +29,7 @@ namespace margelo::nitro::test { class HybridBaseSpecSwift; }
 #include "Powertrain.hpp"
 #include "Person.hpp"
 #include <optional>
+#include "Scores.hpp"
 #include <vector>
 #include "HybridBaseSpecSwift.hpp"
 

@@ -22,7 +22,13 @@ data class PartialPerson(
   val name: String?,
   @DoNotStrip
   @Keep
-  val age: Double?
+  val age: Double?,
+  @DoNotStrip
+  @Keep
+  val scores: Scores?,
+  @DoNotStrip
+  @Keep
+  val siblings: DoubleArray?
 ) {
   /* primary constructor */
 
@@ -34,8 +40,8 @@ data class PartialPerson(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(name: String?, age: Double?): PartialPerson {
-      return PartialPerson(name, age)
+    private fun fromCpp(name: String?, age: Double?, scores: Scores?, siblings: DoubleArray?): PartialPerson {
+      return PartialPerson(name, age, scores, siblings)
     }
   }
 }

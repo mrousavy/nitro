@@ -20,12 +20,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
-// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRoutingManeuver; }
-// Forward declaration of `LaneGuidance` to properly resolve imports.
-namespace margelo::nitro::test { struct LaneGuidance; }
-// Forward declaration of `PreferredImageLane` to properly resolve imports.
-namespace margelo::nitro::test { struct PreferredImageLane; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -68,9 +64,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OldEnum.hpp"
 #include <functional>
 #include "Person.hpp"
-#include "NitroRoutingManeuver.hpp"
-#include "LaneGuidance.hpp"
-#include "PreferredImageLane.hpp"
+#include "Scores.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -280,12 +274,6 @@ namespace margelo::nitro::test {
       }
       auto __value = std::move(__result.value());
       return __value;
-    }
-    inline void updateManeuvers(const std::vector<NitroRoutingManeuver>& maneuvers) override {
-      auto __result = _swiftPart.updateManeuvers(maneuvers);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
     }
     inline void simpleFunc() override {
       auto __result = _swiftPart.simpleFunc();

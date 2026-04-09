@@ -524,17 +524,6 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func updateManeuvers(maneuvers: bridge.std__vector_NitroRoutingManeuver_) -> bridge.Result_void_ {
-    do {
-      try self.__implementation.updateManeuvers(maneuvers: maneuvers.map({ __item in __item }))
-      return bridge.create_Result_void_()
-    } catch (let __error) {
-      let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_void_(__exceptionPtr)
-    }
-  }
-  
-  @inline(__always)
   public final func simpleFunc() -> bridge.Result_void_ {
     do {
       try self.__implementation.simpleFunc()

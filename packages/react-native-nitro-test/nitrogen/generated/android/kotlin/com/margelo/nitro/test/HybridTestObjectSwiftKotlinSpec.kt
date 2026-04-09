@@ -171,10 +171,6 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun updateManeuvers(maneuvers: Array<NitroRoutingManeuver>): Unit
-  
-  @DoNotStrip
-  @Keep
   abstract fun simpleFunc(): Unit
   
   @DoNotStrip

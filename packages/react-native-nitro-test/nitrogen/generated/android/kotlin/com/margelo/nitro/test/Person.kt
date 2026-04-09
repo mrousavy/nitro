@@ -22,7 +22,13 @@ data class Person(
   val name: String,
   @DoNotStrip
   @Keep
-  val age: Double
+  val age: Double,
+  @DoNotStrip
+  @Keep
+  val scores: Scores,
+  @DoNotStrip
+  @Keep
+  val siblings: DoubleArray
 ) {
   /* primary constructor */
 
@@ -34,8 +40,8 @@ data class Person(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(name: String, age: Double): Person {
-      return Person(name, age)
+    private fun fromCpp(name: String, age: Double, scores: Scores, siblings: DoubleArray): Person {
+      return Person(name, age, scores, siblings)
     }
   }
 }

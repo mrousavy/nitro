@@ -30,12 +30,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
-// Forward declaration of `LaneGuidance` to properly resolve imports.
-namespace margelo::nitro::test { struct LaneGuidance; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
-// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRoutingManeuver; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -48,8 +44,8 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
-// Forward declaration of `PreferredImageLane` to properly resolve imports.
-namespace margelo::nitro::test { struct PreferredImageLane; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
@@ -68,16 +64,14 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
-#include "LaneGuidance.hpp"
 #include "MapWrapper.hpp"
-#include "NitroRoutingManeuver.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
-#include "PreferredImageLane.hpp"
+#include "Scores.hpp"
 #include "SecondMapWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"

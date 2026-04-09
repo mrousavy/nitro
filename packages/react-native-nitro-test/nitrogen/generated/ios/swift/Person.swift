@@ -18,8 +18,14 @@ public extension Person {
   /**
    * Create a new instance of `Person`.
    */
-  init(name: String, age: Double) {
-    self.init(std.string(name), age)
+  init(name: String, age: Double, scores: Scores, siblings: [Double]) {
+    self.init(std.string(name), age, scores, { () -> bridge.std__vector_double_ in
+      var __vector = bridge.create_std__vector_double_(siblings.count)
+      for __item in siblings {
+        __vector.push_back(__item)
+      }
+      return __vector
+    }())
   }
 
   @inline(__always)
@@ -30,5 +36,15 @@ public extension Person {
   @inline(__always)
   var age: Double {
     return self.__age
+  }
+  
+  @inline(__always)
+  var scores: Scores {
+    return self.__scores
+  }
+  
+  @inline(__always)
+  var siblings: [Double] {
+    return self.__siblings.map({ __item in __item })
   }
 }

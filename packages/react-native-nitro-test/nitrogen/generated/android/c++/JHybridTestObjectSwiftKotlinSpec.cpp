@@ -15,6 +15,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -37,12 +39,6 @@ namespace margelo::nitro::test { class HybridBaseSpec; }
 namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
-// Forward declaration of `NitroRoutingManeuver` to properly resolve imports.
-namespace margelo::nitro::test { struct NitroRoutingManeuver; }
-// Forward declaration of `LaneGuidance` to properly resolve imports.
-namespace margelo::nitro::test { struct LaneGuidance; }
-// Forward declaration of `PreferredImageLane` to properly resolve imports.
-namespace margelo::nitro::test { struct PreferredImageLane; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
@@ -71,6 +67,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
+#include "Scores.hpp"
+#include "JScores.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
@@ -113,12 +111,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "ExternalObjectStruct.hpp"
 #include "JExternalObjectStruct.hpp"
 #include "JStringOrExternal.hpp"
-#include "NitroRoutingManeuver.hpp"
-#include "JNitroRoutingManeuver.hpp"
-#include "LaneGuidance.hpp"
-#include "JLaneGuidance.hpp"
-#include "PreferredImageLane.hpp"
-#include "JPreferredImageLane.hpp"
 #include "JFunc_void_std__vector_Powertrain_.hpp"
 #include "MapWrapper.hpp"
 #include "JMapWrapper.hpp"
@@ -374,19 +366,6 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person>(jni::alias_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> /* variant */)>("getVariantHybrid");
     auto __result = method(_javaPart, JVariant_HybridTestObjectSwiftKotlinSpec_Person::fromCpp(variant));
     return __result->toCpp();
-  }
-  void JHybridTestObjectSwiftKotlinSpec::updateManeuvers(const std::vector<NitroRoutingManeuver>& maneuvers) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JNitroRoutingManeuver>> /* maneuvers */)>("updateManeuvers");
-    method(_javaPart, [&]() {
-      size_t __size = maneuvers.size();
-      jni::local_ref<jni::JArrayClass<JNitroRoutingManeuver>> __array = jni::JArrayClass<JNitroRoutingManeuver>::newArray(__size);
-      for (size_t __i = 0; __i < __size; __i++) {
-        const auto& __element = maneuvers[__i];
-        auto __elementJni = JNitroRoutingManeuver::fromCpp(__element);
-        __array->setElement(__i, *__elementJni);
-      }
-      return __array;
-    }());
   }
   void JHybridTestObjectSwiftKotlinSpec::simpleFunc() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("simpleFunc");
