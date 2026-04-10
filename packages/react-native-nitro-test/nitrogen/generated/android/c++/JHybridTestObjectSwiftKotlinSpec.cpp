@@ -15,6 +15,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -65,6 +67,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
+#include "Scores.hpp"
+#include "JScores.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"

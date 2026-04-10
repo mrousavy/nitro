@@ -42,6 +42,8 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -79,6 +81,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "Scores.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -116,6 +119,17 @@ namespace margelo::nitro::test::bridge::swift {
   // pragma MARK: std::weak_ptr<HybridBaseSpec>
   using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
   inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: std::vector<double>
+  /**
+   * Specialized version of `std::vector<double>`.
+   */
+  using std__vector_double_ = std::vector<double>;
+  inline std::vector<double> create_std__vector_double_(size_t size) noexcept {
+    std::vector<double> vector;
+    vector.reserve(size);
+    return vector;
+  }
   
   // pragma MARK: std::optional<Person>
   /**
@@ -171,17 +185,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
     return optional.value();
-  }
-  
-  // pragma MARK: std::vector<double>
-  /**
-   * Specialized version of `std::vector<double>`.
-   */
-  using std__vector_double_ = std::vector<double>;
-  inline std::vector<double> create_std__vector_double_(size_t size) noexcept {
-    std::vector<double> vector;
-    vector.reserve(size);
-    return vector;
   }
   
   // pragma MARK: std::variant<std::string, double>
@@ -504,6 +507,36 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Scores>
+  /**
+   * Specialized version of `std::optional<Scores>`.
+   */
+  using std__optional_Scores_ = std::optional<Scores>;
+  inline std::optional<Scores> create_std__optional_Scores_(const Scores& value) noexcept {
+    return std::optional<Scores>(value);
+  }
+  inline bool has_value_std__optional_Scores_(const std::optional<Scores>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Scores get_std__optional_Scores_(const std::optional<Scores>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<std::vector<double>>
+  /**
+   * Specialized version of `std::optional<std::vector<double>>`.
+   */
+  using std__optional_std__vector_double__ = std::optional<std::vector<double>>;
+  inline std::optional<std::vector<double>> create_std__optional_std__vector_double__(const std::vector<double>& value) noexcept {
+    return std::optional<std::vector<double>>(value);
+  }
+  inline bool has_value_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::vector<double> get_std__optional_std__vector_double__(const std::optional<std::vector<double>>& optional) noexcept {
     return optional.value();
   }
   
