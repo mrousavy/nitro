@@ -17,6 +17,7 @@
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/LayoutContext.h>
 
 namespace margelo::nitro::test::views {
 
@@ -90,7 +91,9 @@ namespace margelo::nitro::test::views {
 
   HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser(/* enableJsiParser */ true)) {
+      
+    }
 
   std::shared_ptr<const react::Props> HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
                                                                                     const std::shared_ptr<const react::Props>& props,
@@ -112,5 +115,32 @@ namespace margelo::nitro::test::views {
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif
+
+react::ShadowNodeTraits HybridTestViewShadowNode::BaseTraits() {
+  Logger::log(LogLevel::Info, "HybridTestViewShadowNode", "BaseTraits()");
+  auto traits2 = ConcreteViewShadowNode::BaseTraits();
+  traits2.set(react::ShadowNodeTraits::LeafYogaNode);
+  traits2.set(react::ShadowNodeTraits::MeasurableYogaNode);
+  return traits2;
+}
+
+
+react::Size HybridTestViewShadowNode::measureContent(const react::LayoutContext &layoutContext, const react::LayoutConstraints &layoutConstraints) const {
+  return ConcreteViewShadowNode::measureContent(layoutContext, layoutConstraints);
+}
+
+
+react::Size HybridTestViewShadowNode::measure(const react::LayoutContext &layoutContext, const react::LayoutConstraints &layoutConstraints) const {
+  return ConcreteViewShadowNode::measure(layoutContext, layoutConstraints);
+}
+
+
+void HybridTestViewShadowNode::layout(react::LayoutContext layoutContext) {
+  ConcreteViewShadowNode::layout(layoutContext);
+}
+
+react::Float HybridTestViewShadowNode::baseline(const react::LayoutContext &layoutContext, react::Size size) const {
+  return ConcreteViewShadowNode::baseline(layoutContext, size);
+}
 
 } // namespace margelo::nitro::test::views
