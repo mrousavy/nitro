@@ -2119,6 +2119,147 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func getVariantSomeEnum(variant: bridge.std__variant_bool__SomeEnum_) -> bridge.Result_std__variant_bool__SomeEnum__ {
+    do {
+      let __result = try self.__implementation.getVariantSomeEnum(variant: { () -> Variant_Bool_SomeEnum in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_bool__SomeEnum_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_bool__SomeEnum_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_bool__SomeEnum_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_bool__SomeEnum__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_bool__SomeEnum__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantMultipleEnums(variant: bridge.std__variant_SomeEnum__SomeOtherEnum_) -> bridge.Result_std__variant_SomeEnum__SomeOtherEnum__ {
+    do {
+      let __result = try self.__implementation.getVariantMultipleEnums(variant: { () -> Variant_SomeEnum_SomeOtherEnum in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_SomeEnum__SomeOtherEnum_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_SomeEnum__SomeOtherEnum_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_SomeEnum__SomeOtherEnum_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_SomeEnum__SomeOtherEnum__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_SomeEnum__SomeOtherEnum__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantStringAndEnum(variant: std.string) -> bridge.Result_std__string_ {
+    do {
+      let __result = try self.__implementation.getVariantStringAndEnum(variant: String(variant))
+      let __resultCpp = std.string(__result)
+      return bridge.create_Result_std__string_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__string_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantThreeTypes(variant: bridge.std__variant_bool__SomeEnum__SomeOtherEnum_) -> bridge.Result_std__variant_bool__SomeEnum__SomeOtherEnum__ {
+    do {
+      let __result = try self.__implementation.getVariantThreeTypes(variant: { () -> Variant_Bool_SomeEnum_SomeOtherEnum in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          case 2:
+            let __actual = __variant.get_2()
+            return .third(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_bool__SomeEnum__SomeOtherEnum_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_bool__SomeEnum__SomeOtherEnum_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_bool__SomeEnum__SomeOtherEnum_(__value)
+          case .third(let __value):
+            return bridge.create_std__variant_bool__SomeEnum__SomeOtherEnum_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_bool__SomeEnum__SomeOtherEnum__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_bool__SomeEnum__SomeOtherEnum__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getVariantNumberAndEnum(variant: bridge.std__variant_SomeEnum__double_) -> bridge.Result_std__variant_SomeEnum__double__ {
+    do {
+      let __result = try self.__implementation.getVariantNumberAndEnum(variant: { () -> Variant_SomeEnum_Double in
+        let __variant = variant
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(__actual)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(__actual)
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }())
+      let __resultCpp = { () -> bridge.std__variant_SomeEnum__double_ in
+        switch __result {
+          case .first(let __value):
+            return bridge.create_std__variant_SomeEnum__double_(__value)
+          case .second(let __value):
+            return bridge.create_std__variant_SomeEnum__double_(__value)
+        }
+      }().variant
+      return bridge.create_Result_std__variant_SomeEnum__double__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__variant_SomeEnum__double__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getVariantObjects(variant: bridge.std__variant_Car__Person_) -> bridge.Result_std__variant_Car__Person__ {
     do {
       let __result = try self.__implementation.getVariantObjects(variant: { () -> Variant_Car_Person in

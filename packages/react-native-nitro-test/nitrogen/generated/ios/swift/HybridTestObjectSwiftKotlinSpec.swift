@@ -111,6 +111,11 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func passVariant(either: Variant_Bool__Double___String__String_Double) throws -> Variant_String_Double
   func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum
+  func getVariantSomeEnum(variant: Variant_Bool_SomeEnum) throws -> Variant_Bool_SomeEnum
+  func getVariantMultipleEnums(variant: Variant_SomeEnum_SomeOtherEnum) throws -> Variant_SomeEnum_SomeOtherEnum
+  func getVariantStringAndEnum(variant: String) throws -> String
+  func getVariantThreeTypes(variant: Variant_Bool_SomeEnum_SomeOtherEnum) throws -> Variant_Bool_SomeEnum_SomeOtherEnum
+  func getVariantNumberAndEnum(variant: Variant_SomeEnum_Double) throws -> Variant_SomeEnum_Double
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
   func passAllEmptyObjectVariant(variant: Variant__any_HybridBaseSpec__OptionalWrapper) throws -> Variant__any_HybridBaseSpec__OptionalWrapper
