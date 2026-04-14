@@ -424,6 +424,13 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return car.powertrain == Powertrain.ELECTRIC
   }
 
+  override fun areCarsEqual(
+    a: Car,
+    b: Car,
+  ): Boolean {
+    return a == b
+  }
+
   override fun getDriver(car: Car): Person? {
     return car.driver
   }
