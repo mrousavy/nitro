@@ -428,7 +428,17 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     a: Car,
     b: Car,
   ): Boolean {
-    return a == b
+    return a.year == b.year &&
+      a.make == b.make &&
+      a.model == b.model &&
+      a.power == b.power &&
+      a.powertrain == b.powertrain &&
+      a.driver == b.driver &&
+      a.passengers.contentEquals(b.passengers) &&
+      a.isFast == b.isFast &&
+      a.favouriteTrack == b.favouriteTrack &&
+      a.performanceScores.contentEquals(b.performanceScores) &&
+      a.someVariant == b.someVariant
   }
 
   override fun getDriver(car: Car): Person? {

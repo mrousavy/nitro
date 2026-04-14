@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -52,6 +53,38 @@ data class Car(
   val someVariant: Variant_String_Double?
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return Objects.deepEquals(this.year, other.year)
+      && Objects.deepEquals(this.make, other.make)
+      && Objects.deepEquals(this.model, other.model)
+      && Objects.deepEquals(this.power, other.power)
+      && Objects.deepEquals(this.powertrain, other.powertrain)
+      && Objects.deepEquals(this.driver, other.driver)
+      && Objects.deepEquals(this.passengers, other.passengers)
+      && Objects.deepEquals(this.isFast, other.isFast)
+      && Objects.deepEquals(this.favouriteTrack, other.favouriteTrack)
+      && Objects.deepEquals(this.performanceScores, other.performanceScores)
+      && Objects.deepEquals(this.someVariant, other.someVariant)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      year,
+      make,
+      model,
+      power,
+      powertrain,
+      driver,
+      passengers,
+      isFast,
+      favouriteTrack,
+      performanceScores,
+      someVariant
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

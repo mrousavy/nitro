@@ -9,6 +9,7 @@ package com.margelo.nitro.test.external
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -35,6 +36,24 @@ data class OptionalPrimitivesHolder(
    */
   constructor(optionalNumber: Double?, optionalBoolean: Boolean?, optionalUInt64: ULong?, optionalInt64: Long?):
          this(optionalNumber, optionalBoolean, optionalUInt64?.let { it.toLong() }, optionalInt64)
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return Objects.deepEquals(this.optionalNumber, other.optionalNumber)
+      && Objects.deepEquals(this.optionalBoolean, other.optionalBoolean)
+      && Objects.deepEquals(this.optionalUInt64, other.optionalUInt64)
+      && Objects.deepEquals(this.optionalInt64, other.optionalInt64)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      optionalNumber,
+      optionalBoolean,
+      optionalUInt64,
+      optionalInt64
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -29,6 +30,20 @@ data class JsStyleStruct(
    */
   constructor(value: Double, onChanged: (num: Double) -> Unit):
          this(value, Func_void_double_java(onChanged))
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return Objects.deepEquals(this.value, other.value)
+      && Objects.deepEquals(this.onChanged, other.onChanged)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      value,
+      onChanged
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

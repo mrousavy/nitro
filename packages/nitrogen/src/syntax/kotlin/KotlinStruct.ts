@@ -45,6 +45,13 @@ val ${name}: ${type.getTypeCode('kotlin', false)}
 
   const secondaryConstructor = createKotlinConstructor(structType)
 
+  const equalityComparators = structType.properties.map(
+    (p) => `Objects.deepEquals(this.${p.escapedName}, other.${p.escapedName})`
+  )
+  const propertiesList = structType.properties
+    .map((p) => p.escapedName)
+    .join(',\n')
+
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
 
@@ -52,6 +59,7 @@ package ${packageName}
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 ${extraImports.join('\n')}
 
 /**
@@ -63,6 +71,18 @@ data class ${structType.structName}(
   ${indent(properties, '  ')}
 ) {
   ${indent(secondaryConstructor, '  ')}
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return ${equalityComparators.join(`\n      && `)}
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      ${indent(propertiesList, '      ')}
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

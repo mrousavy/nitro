@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
 /**
@@ -22,6 +23,18 @@ data class ExternalObjectStruct(
   val someExternal: com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return Objects.deepEquals(this.someExternal, other.someExternal)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      someExternal
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

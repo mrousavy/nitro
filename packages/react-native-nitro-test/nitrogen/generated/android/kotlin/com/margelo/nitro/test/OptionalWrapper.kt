@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 import com.margelo.nitro.core.ArrayBuffer
 
 /**
@@ -25,6 +26,20 @@ data class OptionalWrapper(
   val optionalString: String?
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Car) return false
+    return Objects.deepEquals(this.optionalArrayBuffer, other.optionalArrayBuffer)
+      && Objects.deepEquals(this.optionalString, other.optionalString)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      optionalArrayBuffer,
+      optionalString
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**
