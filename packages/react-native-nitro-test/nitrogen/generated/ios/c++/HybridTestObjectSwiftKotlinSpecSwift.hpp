@@ -32,6 +32,8 @@ namespace NitroModules { class ArrayBufferHolder; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `StructOfEnums` to properly resolve imports.
+namespace margelo::nitro::test { struct StructOfEnums; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -74,6 +76,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "SecondMapWrapper.hpp"
 #include <exception>
 #include <chrono>
+#include "StructOfEnums.hpp"
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
@@ -736,6 +739,14 @@ namespace margelo::nitro::test {
     }
     inline bool areCarsEqual(const Car& a, const Car& b) override {
       auto __result = _swiftPart.areCarsEqual(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline bool areStructOfEnumsEqual(const StructOfEnums& left, const StructOfEnums& right) override {
+      auto __result = _swiftPart.areStructOfEnumsEqual(std::forward<decltype(left)>(left), std::forward<decltype(right)>(right));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
