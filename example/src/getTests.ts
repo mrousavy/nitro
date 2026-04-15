@@ -5,7 +5,6 @@ import {
   type Car,
   type Person,
   type Powertrain,
-  type StructOfEnums,
   type WrappedJsStruct,
   type OptionalWrapper,
   WeirdNumbersEnum,
