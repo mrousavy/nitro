@@ -594,6 +594,10 @@ bool HybridTestObjectCpp::areCarsEqual(const Car& a, const Car& b) {
   return a == b;
 }
 
+bool HybridTestObjectCpp::areStructOfEnumsEqual(const StructOfEnums& left, const StructOfEnums& right) {
+  return left == right;
+}
+
 std::optional<Person> HybridTestObjectCpp::getDriver(const Car& car) {
   if (car.driver.has_value()) {
     return car.driver.value();

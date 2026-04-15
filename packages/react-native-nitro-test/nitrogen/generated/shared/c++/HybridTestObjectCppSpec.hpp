@@ -31,6 +31,8 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { class HybridChildSpec; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `StructOfEnums` to properly resolve imports.
+namespace margelo::nitro::test { struct StructOfEnums; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -74,6 +76,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "MapWrapper.hpp"
 #include <exception>
 #include <chrono>
+#include "StructOfEnums.hpp"
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
@@ -221,6 +224,7 @@ namespace margelo::nitro::test {
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
       virtual bool areCarsEqual(const Car& a, const Car& b) = 0;
+      virtual bool areStructOfEnumsEqual(const StructOfEnums& left, const StructOfEnums& right) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual Car bounceCar(const Car& car) = 0;
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;

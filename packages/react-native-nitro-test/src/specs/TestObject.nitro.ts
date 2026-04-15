@@ -40,6 +40,13 @@ export enum WeirdNumbersEnum {
   C = 64,
 }
 
+// A struct that contains enums, which are often tricky to bridge.
+// This explicitly tests if this struct of enums is equatable in Swift.
+export interface StructOfEnums {
+  powertrain: Powertrain
+  oldEnum: OldEnum
+}
+
 // A plain interface that does not inherit from `HybridObject` becomes a `struct` in C++.
 // They can only have properties (get + set). No methods or native state.
 export interface Car {
@@ -105,7 +112,7 @@ type CoreTypesVariant =
   | AnyMap
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
-interface PartialPerson extends Partial<Person> {}
+interface PartialPerson extends Partial<Person> { }
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -126,7 +133,7 @@ interface SharedTestObjectProps {
   optionalOldEnum?: OldEnum
   optionalCallback?: (value: number) => void
 
-  // Kotlin/Swift simplify boolean names (has*/is*)
+  // Test Kotlin/Swift simplify boolean names (has*/is*)
   readonly hasBoolean: boolean
   readonly isBoolean: boolean
   hasBooleanWritable: boolean
@@ -242,6 +249,7 @@ interface SharedTestObjectProps {
   getCar(): Car
   isCarElectric(car: Car): boolean
   areCarsEqual(a: Car, b: Car): boolean
+  areStructOfEnumsEqual(left: StructOfEnums, right: StructOfEnums): boolean
   getDriver(car: Car): Person | undefined
   bounceCar(car: Car): Car
   jsStyleObjectAsParameters(params: JsStyleStruct): void
@@ -305,7 +313,7 @@ interface SharedTestObjectProps {
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
   extends HybridObject<{ ios: 'c++'; android: 'c++' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
@@ -332,7 +340,7 @@ export interface TestObjectCpp
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
-    SharedTestObjectProps {
+  SharedTestObjectProps {
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin

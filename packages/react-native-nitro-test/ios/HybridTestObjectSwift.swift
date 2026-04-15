@@ -464,6 +464,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return a == b
   }
 
+  func areStructOfEnumsEqual(left: StructOfEnums, right: StructOfEnums) throws -> Bool {
+    return left == right
+  }
+
   func getDriver(car: Car) throws -> Person? {
     return car.driver
   }

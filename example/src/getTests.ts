@@ -5,6 +5,7 @@ import {
   type Car,
   type Person,
   type Powertrain,
+  type StructOfEnums,
   type WrappedJsStruct,
   type OptionalWrapper,
   WeirdNumbersEnum,
@@ -1729,6 +1730,26 @@ export function getTests(
     ),
     createTest('areCarsEqual(...) different cars', () =>
       it(() => testObject.areCarsEqual(TEST_CAR, TEST_CAR_2))
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('areStructOfEnumsEqual(...) same struct', () =>
+      it(() =>
+        testObject.areStructOfEnumsEqual(
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST },
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST }
+        )
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('areStructOfEnumsEqual(...) different structs', () =>
+      it(() =>
+        testObject.areStructOfEnumsEqual(
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST },
+          { powertrain: 'gas', oldEnum: OldEnum.SECOND }
+        )
+      )
         .didNotThrow()
         .equals(false)
     ),

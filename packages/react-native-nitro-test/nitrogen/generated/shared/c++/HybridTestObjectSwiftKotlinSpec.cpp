@@ -114,6 +114,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectSwiftKotlinSpec::isCarElectric);
       prototype.registerHybridMethod("areCarsEqual", &HybridTestObjectSwiftKotlinSpec::areCarsEqual);
+      prototype.registerHybridMethod("areStructOfEnumsEqual", &HybridTestObjectSwiftKotlinSpec::areStructOfEnumsEqual);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);
       prototype.registerHybridMethod("bounceCar", &HybridTestObjectSwiftKotlinSpec::bounceCar);
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters);
