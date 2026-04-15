@@ -590,6 +590,10 @@ bool HybridTestObjectCpp::isCarElectric(const Car& car) {
   return car.powertrain == Powertrain::ELECTRIC;
 }
 
+bool HybridTestObjectCpp::areCarsEqual(const Car& a, const Car& b) {
+  return a == b;
+}
+
 std::optional<Person> HybridTestObjectCpp::getDriver(const Car& car) {
   if (car.driver.has_value()) {
     return car.driver.value();

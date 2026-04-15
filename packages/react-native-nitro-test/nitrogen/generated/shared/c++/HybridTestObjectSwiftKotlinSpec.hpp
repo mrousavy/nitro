@@ -208,6 +208,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) = 0;
       virtual Car getCar() = 0;
       virtual bool isCarElectric(const Car& car) = 0;
+      virtual bool areCarsEqual(const Car& a, const Car& b) = 0;
       virtual std::optional<Person> getDriver(const Car& car) = 0;
       virtual Car bounceCar(const Car& car) = 0;
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;

@@ -1722,6 +1722,16 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
+    createTest('areCarsEqual(...) same car', () =>
+      it(() => testObject.areCarsEqual(TEST_CAR, TEST_CAR))
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('areCarsEqual(...) different cars', () =>
+      it(() => testObject.areCarsEqual(TEST_CAR, TEST_CAR_2))
+        .didNotThrow()
+        .equals(false)
+    ),
     createTest('getDriver(...) with no driver', () =>
       it(() =>
         testObject.getDriver({

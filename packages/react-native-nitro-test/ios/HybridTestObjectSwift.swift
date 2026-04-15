@@ -460,6 +460,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return car.powertrain == .electric
   }
 
+  func areCarsEqual(a: Car, b: Car) throws -> Bool {
+    return a == b
+  }
+
   func getDriver(car: Car) throws -> Person? {
     return car.driver
   }

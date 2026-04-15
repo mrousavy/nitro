@@ -152,6 +152,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;
     bool isCarElectric(const Car& car) override;
+    bool areCarsEqual(const Car& a, const Car& b) override;
     std::optional<Person> getDriver(const Car& car) override;
     Car bounceCar(const Car& car) override;
     void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
