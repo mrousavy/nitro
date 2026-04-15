@@ -26,7 +26,7 @@ data class ExternalObjectStruct(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is ExternalObjectStruct) return false
     return Objects.deepEquals(this.someExternal, other.someExternal)
   }
 

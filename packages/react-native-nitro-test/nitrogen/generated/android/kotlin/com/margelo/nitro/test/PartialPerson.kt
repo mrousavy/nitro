@@ -29,7 +29,7 @@ data class PartialPerson(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is PartialPerson) return false
     return Objects.deepEquals(this.name, other.name)
       && Objects.deepEquals(this.age, other.age)
   }

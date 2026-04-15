@@ -29,7 +29,7 @@ data class MapWrapper(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is MapWrapper) return false
     return Objects.deepEquals(this.map, other.map)
       && Objects.deepEquals(this.secondMap, other.secondMap)
   }

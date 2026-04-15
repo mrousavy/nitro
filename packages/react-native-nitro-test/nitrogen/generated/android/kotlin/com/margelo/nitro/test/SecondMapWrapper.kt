@@ -26,7 +26,7 @@ data class SecondMapWrapper(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is SecondMapWrapper) return false
     return Objects.deepEquals(this.second, other.second)
   }
 

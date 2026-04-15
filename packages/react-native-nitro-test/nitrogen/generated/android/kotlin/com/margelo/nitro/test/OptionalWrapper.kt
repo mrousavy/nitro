@@ -29,7 +29,7 @@ data class OptionalWrapper(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is OptionalWrapper) return false
     return Objects.deepEquals(this.optionalArrayBuffer, other.optionalArrayBuffer)
       && Objects.deepEquals(this.optionalString, other.optionalString)
   }

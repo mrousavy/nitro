@@ -29,7 +29,7 @@ data class WrappedJsStruct(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is WrappedJsStruct) return false
     return Objects.deepEquals(this.value, other.value)
       && Objects.deepEquals(this.items, other.items)
   }

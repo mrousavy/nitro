@@ -26,7 +26,7 @@ data class OptionalCallback(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is OptionalCallback) return false
     return Objects.deepEquals(this.callback, other.callback)
   }
 

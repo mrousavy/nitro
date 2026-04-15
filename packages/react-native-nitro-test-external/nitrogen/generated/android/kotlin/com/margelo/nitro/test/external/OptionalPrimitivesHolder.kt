@@ -39,7 +39,7 @@ data class OptionalPrimitivesHolder(
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is Car) return false
+    if (other !is OptionalPrimitivesHolder) return false
     return Objects.deepEquals(this.optionalNumber, other.optionalNumber)
       && Objects.deepEquals(this.optionalBoolean, other.optionalBoolean)
       && Objects.deepEquals(this.optionalUInt64, other.optionalUInt64)
