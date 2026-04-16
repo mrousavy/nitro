@@ -118,6 +118,13 @@ const config: Config = {
           href: 'https://api.fontshare.com/css?f[]=satoshi@500,600,700&display=swap',
         },
       },
+      {
+        tagName: 'link',
+        attributes: {
+          rel: 'me',
+          href: 'https://linkedin.com/company/margelo',
+        },
+      },
     ],
     colorMode: {
       defaultMode: 'light',
@@ -264,6 +271,10 @@ const config: Config = {
       {
         property: 'twitter:creator',
         content: '@mrousavy',
+      },
+      {
+        property: 'article:publisher',
+        content: 'https://linkedin.com/company/margelo',
       },
     ],
     prism: {
