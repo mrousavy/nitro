@@ -101,8 +101,14 @@ Just like any other Hybrid Object, add the Hybrid View to your `nitro.json`'s au
   // ...
   "autolinking": {
     "CameraView": {
-      "swift": "HybridCameraView",
-      "kotlin": "HybridCameraView"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridCameraView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridCameraView"
+      }
     }
   }
 }
