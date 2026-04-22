@@ -16,3 +16,15 @@ public enum Variant_String_Double {
   case first(String)
   case second(Double)
 }
+
+public extension Variant_String_Double {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+    }
+  }
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
+  }
+}

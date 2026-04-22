@@ -95,6 +95,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
+  func areCarsEqual(a: Car, b: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
   func bounceCar(car: Car) throws -> Car
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void

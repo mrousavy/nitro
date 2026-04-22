@@ -27,6 +27,28 @@ sealed class Variant_Boolean_DoubleArray_Array_String__String_Double {
   @DoNotStrip
   data class Fifth(@DoNotStrip val value: Double): Variant_Boolean_DoubleArray_Array_String__String_Double()
 
+  inline fun <reified T> asType(): T? {
+    return when (this) {
+      is First -> (value) as? T
+      is Second -> (value) as? T
+      is Third -> (value) as? T
+      is Fourth -> (value) as? T
+      is Fifth -> (value) as? T
+    }
+  }
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
+  }
+  inline fun <R> match(first: (Boolean) -> R, second: (DoubleArray) -> R, third: (Array<String>) -> R, fourth: (String) -> R, fifth: (Double) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+      is Third -> third(value)
+      is Fourth -> fourth(value)
+      is Fifth -> fifth(value)
+    }
+  }
+
   val isFirst: Boolean
     get() = this is First
   val isSecond: Boolean
@@ -57,16 +79,6 @@ sealed class Variant_Boolean_DoubleArray_Array_String__String_Double {
   fun asFifthOrNull(): Double? {
     val value = (this as? Fifth)?.value ?: return null
     return value
-  }
-
-  inline fun <R> match(first: (Boolean) -> R, second: (DoubleArray) -> R, third: (Array<String>) -> R, fourth: (String) -> R, fifth: (Double) -> R): R {
-    return when (this) {
-      is First -> first(value)
-      is Second -> second(value)
-      is Third -> third(value)
-      is Fourth -> fourth(value)
-      is Fifth -> fifth(value)
-    }
   }
 
   companion object {

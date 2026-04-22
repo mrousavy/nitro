@@ -101,8 +101,14 @@ Just like any other Hybrid Object, add the Hybrid View to your `nitro.json`'s au
   // ...
   "autolinking": {
     "CameraView": {
-      "swift": "HybridCameraView",
-      "kotlin": "HybridCameraView"
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridCameraView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridCameraView"
+      }
     }
   }
 }
@@ -283,9 +289,9 @@ To allow your view to be recycled, implement the `RecyclableView` interface/prot
 </Tabs>
 
 When Fabric decides to re-use a previously created view, the `prepareForRecycle()` method will be called.
-Inside that method you should reset any internal state to it's default values.
+Inside that method you should reset any internal state to its default values.
 
-For example, an asynchronous Image component should reset it's displayed image when it is being recycled, otherwise it would display an old image while the new one is still loading:
+For example, an asynchronous Image component should reset its displayed image when it is being recycled, otherwise it would display an old image while the new one is still loading:
 
 ```swift
 class HybridImageView: HybridImageViewSpec, RecyclableView {

@@ -21,6 +21,22 @@ sealed class NamedVariant {
   @DoNotStrip
   data class Second(@DoNotStrip val value: Car): NamedVariant()
 
+  inline fun <reified T> asType(): T? {
+    return when (this) {
+      is First -> (value) as? T
+      is Second -> (value) as? T
+    }
+  }
+  inline fun <reified T> isType(): Boolean {
+    return asType<T>() != null
+  }
+  inline fun <R> match(first: (String) -> R, second: (Car) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
+
   val isFirst: Boolean
     get() = this is First
   val isSecond: Boolean
@@ -33,13 +49,6 @@ sealed class NamedVariant {
   fun asSecondOrNull(): Car? {
     val value = (this as? Second)?.value ?: return null
     return value
-  }
-
-  inline fun <R> match(first: (String) -> R, second: (Car) -> R): R {
-    return when (this) {
-      is First -> first(value)
-      is Second -> second(value)
-    }
   }
 
   companion object {

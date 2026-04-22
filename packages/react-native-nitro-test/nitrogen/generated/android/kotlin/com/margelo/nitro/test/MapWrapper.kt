@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -25,6 +26,20 @@ data class MapWrapper(
   val secondMap: SecondMapWrapper
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is MapWrapper) return false
+    return Objects.deepEquals(this.map, other.map)
+      && Objects.deepEquals(this.secondMap, other.secondMap)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf(
+      map,
+      secondMap
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

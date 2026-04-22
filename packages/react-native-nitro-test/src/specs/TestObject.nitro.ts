@@ -241,6 +241,7 @@ interface SharedTestObjectProps {
   // Objects
   getCar(): Car
   isCarElectric(car: Car): boolean
+  areCarsEqual(a: Car, b: Car): boolean
   getDriver(car: Car): Person | undefined
   bounceCar(car: Car): Car
   jsStyleObjectAsParameters(params: JsStyleStruct): void

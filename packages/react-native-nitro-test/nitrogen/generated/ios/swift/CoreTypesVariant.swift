@@ -20,3 +20,19 @@ public indirect enum CoreTypesVariant {
   case fifth(Date)
   case sixth(AnyMap)
 }
+
+public extension CoreTypesVariant {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+      case .third(let value): return value as? T
+      case .fourth(let value): return value as? T
+      case .fifth(let value): return value as? T
+      case .sixth(let value): return value as? T
+    }
+  }
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
+  }
+}

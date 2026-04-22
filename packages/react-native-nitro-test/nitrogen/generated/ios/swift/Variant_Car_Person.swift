@@ -16,3 +16,15 @@ public indirect enum Variant_Car_Person {
   case first(Car)
   case second(Person)
 }
+
+public extension Variant_Car_Person {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+    }
+  }
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
+  }
+}

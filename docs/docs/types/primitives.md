@@ -46,7 +46,7 @@ Primitives are very efficient and can be passed with little to no overhead, espe
 
 While a `bigint` is technically a primitive in JS, it is not fully representable by any standard library type in C++, Kotlin or Swift.
 
-In Nitro, you can use `bigint` as either a signed, or unsigned 64-bit integer, which makes it a primitive, but limits it's range to those within 64-bit signed/unsigned values.
+In Nitro, you can use `bigint` as either a signed, or unsigned 64-bit integer, which makes it a primitive, but limits its range to those within 64-bit signed/unsigned values.
 
 ### `Int64`
 

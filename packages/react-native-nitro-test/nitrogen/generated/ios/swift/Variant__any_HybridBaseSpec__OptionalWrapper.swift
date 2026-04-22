@@ -16,3 +16,15 @@ public indirect enum Variant__any_HybridBaseSpec__OptionalWrapper {
   case first((any HybridBaseSpec))
   case second(OptionalWrapper)
 }
+
+public extension Variant__any_HybridBaseSpec__OptionalWrapper {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+    }
+  }
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
+  }
+}

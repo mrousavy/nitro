@@ -86,3 +86,6 @@ lib/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Claude Code local settings
+.claude/settings.local.json

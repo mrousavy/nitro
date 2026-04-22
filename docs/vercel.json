@@ -1,5 +1,16 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/nitro.schema.json",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ],
   "redirects": [
     {
       "source": "/docs/:slug(hybrid-objects|hybrid-views|nitro-modules|nitrogen)",

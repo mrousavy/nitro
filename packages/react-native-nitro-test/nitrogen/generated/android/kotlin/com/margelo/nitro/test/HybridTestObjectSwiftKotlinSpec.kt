@@ -486,6 +486,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun areCarsEqual(a: Car, b: Car): Boolean
+  
+  @DoNotStrip
+  @Keep
   abstract fun getDriver(car: Car): Person?
   
   @DoNotStrip

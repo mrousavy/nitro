@@ -1127,6 +1127,11 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JCar::fromCpp(car));
     return static_cast<bool>(__result);
   }
+  bool JHybridTestObjectSwiftKotlinSpec::areCarsEqual(const Car& a, const Car& b) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean(jni::alias_ref<JCar> /* a */, jni::alias_ref<JCar> /* b */)>("areCarsEqual");
+    auto __result = method(_javaPart, JCar::fromCpp(a), JCar::fromCpp(b));
+    return static_cast<bool>(__result);
+  }
   std::optional<Person> JHybridTestObjectSwiftKotlinSpec::getDriver(const Car& car) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPerson>(jni::alias_ref<JCar> /* car */)>("getDriver");
     auto __result = method(_javaPart, JCar::fromCpp(car));

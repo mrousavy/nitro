@@ -734,6 +734,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline bool areCarsEqual(const Car& a, const Car& b) override {
+      auto __result = _swiftPart.areCarsEqual(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::optional<Person> getDriver(const Car& car) override {
       auto __result = _swiftPart.getDriver(std::forward<decltype(car)>(car));
       if (__result.hasError()) [[unlikely]] {

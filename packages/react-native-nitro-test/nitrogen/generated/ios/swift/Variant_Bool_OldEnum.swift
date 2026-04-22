@@ -16,3 +16,15 @@ public indirect enum Variant_Bool_OldEnum {
   case first(Bool)
   case second(OldEnum)
 }
+
+public extension Variant_Bool_OldEnum {
+  func asType<T>(_ type: T.Type = T.self) -> T? {
+    switch self {
+      case .first(let value): return value as? T
+      case .second(let value): return value as? T
+    }
+  }
+  func isType<T>(_ type: T.Type = T.self) -> Bool {
+    return self.asType(type) != nil
+  }
+}
