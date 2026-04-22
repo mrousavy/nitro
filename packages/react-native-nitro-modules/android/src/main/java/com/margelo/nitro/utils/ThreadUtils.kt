@@ -39,5 +39,18 @@ class ThreadUtils {
     fun runOnUIThread(runnable: Runnable) {
       handler.post(runnable)
     }
+
+    // Overload taking NativeRunnable so the JNI method lookup in
+    // JThreadUtils.hpp (which requests signature
+    // `(Lcom/margelo/nitro/utils/NativeRunnable;)V`) resolves. Without this,
+    // Promise rejections routed through UIThreadDispatcher crash with
+    // NoSuchMethodError on Android at runtime (e.g. async work that rejects
+    // a Promise from a background thread).
+    @JvmStatic
+    @Keep
+    @DoNotStrip
+    fun runOnUIThread(runnable: NativeRunnable) {
+      handler.post(runnable)
+    }
   }
 }
