@@ -6,6 +6,74 @@ const title = 'Nitro Modules';
 const tagline = 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.';
 const url = 'https://nitro.margelo.com';
 
+const marcId = 'https://mrousavy.com/#person';
+const margeloId = 'https://margelo.com/#organization';
+const nitroWebsiteId = `${url}/#website`;
+const nitroSoftwareId = `${url}/#software`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': marcId,
+      name: 'Marc Rousavy',
+      url: 'https://mrousavy.com',
+      jobTitle: 'Founder & CEO',
+      sameAs: [
+        'https://github.com/mrousavy',
+        'https://twitter.com/mrousavy',
+        'https://www.youtube.com/@mrousavy',
+      ],
+      worksFor: { '@id': margeloId },
+    },
+    {
+      '@type': 'Organization',
+      '@id': margeloId,
+      name: 'Margelo',
+      url: 'https://margelo.com',
+      founder: { '@id': marcId },
+      sameAs: [
+        'https://github.com/margelo',
+        'https://twitter.com/margelo_io',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': nitroWebsiteId,
+      url: url,
+      name: title,
+      description: tagline,
+      inLanguage: 'en',
+      publisher: { '@id': margeloId },
+      author: { '@id': marcId },
+      about: { '@id': nitroSoftwareId },
+    },
+    {
+      '@type': ['SoftwareApplication', 'SoftwareSourceCode'],
+      '@id': nitroSoftwareId,
+      name: title,
+      alternateName: 'Nitro',
+      description: tagline,
+      url: url,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'iOS, Android',
+      codeRepository: 'https://github.com/mrousavy/nitro',
+      programmingLanguage: ['C++', 'Swift', 'Kotlin', 'TypeScript'],
+      license: 'https://opensource.org/licenses/MIT',
+      author: { '@id': marcId },
+      creator: { '@id': marcId },
+      publisher: { '@id': margeloId },
+      sourceOrganization: { '@id': margeloId },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+      },
+    },
+  ],
+};
+
 const config: Config = {
   title: title,
   tagline: tagline,
@@ -117,6 +185,13 @@ const config: Config = {
           rel: 'stylesheet',
           href: 'https://api.fontshare.com/css?f[]=satoshi@500,600,700&display=swap',
         },
+      },
+      {
+        tagName: 'script',
+        attributes: {
+          type: 'application/ld+json',
+        },
+        innerHTML: JSON.stringify(jsonLd),
       },
     ],
     colorMode: {
