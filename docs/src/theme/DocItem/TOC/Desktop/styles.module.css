@@ -1,0 +1,74 @@
+.ctaCard {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 2px solid #232a3f;
+  border-radius: 12px;
+  background-color: #e0f2ff;
+}
+
+[data-theme='dark'] .ctaCard {
+  border-color: #4e5b79;
+  background-color: #212941;
+}
+
+.ctaTitle {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 0 0 0.5rem 0;
+  color: var(--ifm-heading-color);
+  line-height: 1.25;
+}
+
+.ctaBody {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0 0 1rem 0;
+  color: var(--ifm-font-color-base);
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background-color: #232a3f;
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.ctaButton:hover,
+.ctaButton:focus-visible {
+  background-color: #1c7ab3;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+[data-theme='dark'] .ctaButton {
+  background-color: #59b3ef;
+  color: #111625;
+}
+
+[data-theme='dark'] .ctaButton:hover,
+[data-theme='dark'] .ctaButton:focus-visible {
+  background-color: #8abcfb;
+  color: #111625;
+}
+
+.ctaArrow {
+  display: inline-block;
+  transition: transform 150ms ease;
+}
+
+.ctaButton:hover .ctaArrow,
+.ctaButton:focus-visible .ctaArrow {
+  transform: translateX(3px);
+}
