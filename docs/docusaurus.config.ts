@@ -35,7 +35,7 @@ const jsonLd = {
       founder: { '@id': marcId },
       sameAs: [
         'https://github.com/margelo',
-        'https://twitter.com/margelo_io',
+        'https://twitter.com/margelo_com',
       ],
     },
     {
