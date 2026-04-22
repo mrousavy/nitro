@@ -1,8 +1,26 @@
+.stickyColumn {
+  position: sticky;
+  top: calc(var(--ifm-navbar-height) + 1rem);
+  max-height: calc(100vh - (var(--ifm-navbar-height) + 2rem));
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.toc {
+  position: static !important;
+  top: auto !important;
+  max-height: none !important;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
 .ctaCard {
-  margin-top: 1.5rem;
-  padding: 1.25rem;
+  flex: 0 0 auto;
+  padding: 1.125rem;
   border: 2px solid #232a3f;
-  border-radius: 12px;
+  border-radius: 11px;
   background-color: #e0f2ff;
 }
 
@@ -14,16 +32,16 @@
 .ctaTitle {
   font-family: 'Clash Display', sans-serif;
   font-weight: 600;
-  font-size: 1.05rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  margin: 0 0 0.45rem 0;
   color: var(--ifm-heading-color);
   line-height: 1.25;
 }
 
 .ctaBody {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 500;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.9rem 0;
   color: var(--ifm-font-color-base);
   opacity: 0.85;
   line-height: 1.4;
@@ -33,34 +51,37 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   width: 100%;
-  padding: 0.65rem 1rem;
-  background-color: #232a3f;
-  color: #ffffff;
+  padding: 0.55rem 0.9rem;
+  border: 2px solid #232a3f;
   border-radius: 8px;
+  background: #d32e5e;
+  background: color(display-p3 0.7608 0.2431 0.3725);
+  color: #ffffff;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   text-decoration: none;
-  transition: background-color 150ms ease, transform 150ms ease;
+  transition: transform 150ms ease, background-color 150ms ease;
 }
 
 .ctaButton:hover,
 .ctaButton:focus-visible {
-  background-color: #1c7ab3;
   color: #ffffff;
   text-decoration: none;
+  transform: translateY(-1px);
 }
 
 [data-theme='dark'] .ctaButton {
-  background-color: #59b3ef;
-  color: #111625;
+  border-color: #0000005e;
+  background: #ff4c7c;
+  background: color(display-p3 0.8431 0.3294 0.4863);
+  color: #e0e0e0;
 }
 
 [data-theme='dark'] .ctaButton:hover,
 [data-theme='dark'] .ctaButton:focus-visible {
-  background-color: #8abcfb;
-  color: #111625;
+  color: #e0e0e0;
 }
 
 .ctaArrow {
