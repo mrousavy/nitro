@@ -141,6 +141,11 @@ public:
 
   std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
   std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
+  std::variant<bool, SomeEnum> getVariantSomeEnum(const std::variant<bool, SomeEnum>& variant) override;
+  std::variant<SomeEnum, SomeOtherEnum> getVariantMultipleEnums(const std::variant<SomeEnum, SomeOtherEnum>& variant) override;
+  std::string getVariantStringAndEnum(const std::string& variant) override;
+  std::variant<bool, SomeEnum, SomeOtherEnum> getVariantThreeTypes(const std::variant<bool, SomeEnum, SomeOtherEnum>& variant) override;
+  std::variant<SomeEnum, double> getVariantNumberAndEnum(const std::variant<SomeEnum, double>& variant) override;
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
   std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
   getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) override;
