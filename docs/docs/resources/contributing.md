@@ -8,13 +8,18 @@ import TabItem from '@theme/TabItem';
 
 If you encounter issues with Nitro, want to fix a bug, or reproduce a bug in the example app, you'd need to clone the repo and get it running first.
 
+:::info Contribution flow and PR rules
+This page covers **environment setup and reproduction** — how to run Nitro locally. For the contribution flow itself (what PRs we accept, the required test-per-fix rule, the nitrogen workflow, and the PR checklist), see [**CONTRIBUTING.md**](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md) in the repo root. Read it before opening a PR.
+:::
+
 The nitro repo is a Bun monorepo, and is set up like this:
 
 - `example/`: A react-native app that uses `react-native-nitro-modules` and `react-native-nitro-test`.
 - `packages/`
   - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitrogen`.
   - `/react-native-nitro-modules/`: The core Nitro Modules library which contains mostly C++ code.
-  - `/react-native-nitro-test/`: An example Nitro Module library that contains a lot of test code.
+  - `/react-native-nitro-test/`: An example Nitro Module library full of specs used as compile-time and runtime tests.
+  - `/react-native-nitro-test-external/`: A second test module used to cover cross-module behavior between Nitro Modules.
   - `/template/`: A template for a Nitro Module library.
 
 ## Run Nitro Example
@@ -24,8 +29,9 @@ The nitro repo is a Bun monorepo, and is set up like this:
 You need:
 
 - [Bun](https://bun.sh)
-- [CocoaPods](https://cocoapods.org)
-- Xcode 16.4 or higher
+- [CocoaPods](https://cocoapods.org) (installed via Bundler — see below)
+- Ruby 2.7.2 (matches CI)
+- Xcode 26.2 or higher
 - Android Studio
 
 ### 2. Clone the repo
@@ -85,15 +91,17 @@ For example, if you have a different setting in your `Podfile`, try changing it 
 
 ### Reproduce a nitrogen bug
 
-The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-test/`) which acts as an example contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen:
+The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-test/`) which acts as an example and contains a lot of test code, like `src/specs/TestObject.nitro.ts` ([link](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)). If you change something in `TestObject.nitro.ts`, make sure to run nitrogen from the repo root:
 
 ```sh
-bun nitro-test specs
+bun specs
 ```
+
+When adding a reproduction, follow the rules in [CONTRIBUTING.md](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md): reuse existing types where possible, don't remove existing test cases, and keep the addition small. Dumping a full user spec into the test module is not the right approach — distill the bug to the minimal type or call that reproduces it.
 
 ### Reproduce a runtime error
 
-Submit a PR to the nitro repository that demonstrates this runtime error or crash in the Nitro `example/` app.
+Submit a PR to the nitro repository that demonstrates this runtime error or crash in the Nitro `example/` app, ideally with a new assertion in [`example/src/getTests.ts`](https://github.com/mrousavy/nitro/blob/main/example/src/getTests.ts) so the regression is covered by the Harness CI workflows going forward.
 
 ## Run Nitro Docs
 
