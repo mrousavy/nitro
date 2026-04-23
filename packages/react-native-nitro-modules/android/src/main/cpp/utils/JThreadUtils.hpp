@@ -5,7 +5,7 @@
 //  Created by Marc Rousavy on 14.07.24.
 //
 
-#include "JNativeRunnable.hpp"
+#include "JRunnable.hpp"
 #include <fbjni/fbjni.h>
 #include <string>
 
@@ -30,8 +30,8 @@ public:
     static const auto method = javaClassStatic()->getStaticMethod<jboolean()>("isOnUIThread");
     return method(javaClassStatic());
   }
-  static void runOnUIThread(jni::alias_ref<JNativeRunnable::javaobject> runnable) {
-    static const auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<JNativeRunnable::javaobject>)>("runOnUIThread");
+  static void runOnUIThread(jni::alias_ref<JRunnable> runnable) {
+    static const auto method = javaClassStatic()->getStaticMethod<void(jni::alias_ref<JRunnable>)>("runOnUIThread");
     method(javaClassStatic(), runnable);
   }
 };

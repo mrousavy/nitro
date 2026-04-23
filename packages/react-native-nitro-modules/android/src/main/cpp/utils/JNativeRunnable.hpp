@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include "JRunnable.hpp"
 #include <fbjni/fbjni.h>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
-class JNativeRunnable : public jni::HybridClass<JNativeRunnable> {
+class JNativeRunnable : public jni::HybridClass<JNativeRunnable, JRunnable> {
 public:
   explicit JNativeRunnable(std::function<void()>&& func) : _func(std::move(func)) {}
 
