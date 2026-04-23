@@ -84,10 +84,16 @@ Usually, you can reproduce issues like this:
 2. Change the code to reproduce the issue
 3. Create a PR to the **nitro** repository which demonstrates the issue
 
+:::tip You don't need to ship a fix
+A PR that **only reproduces the bug** — and makes CI go red — is a completely valid and very welcome contribution. If you can add a minimal failing test (compile error or runtime error caught by the Harness tests) and open a PR with just that, stop there. You don't have to attempt a fix. A clean, 100% deterministic repro pinned in CI is often more valuable than a guessed patch; the actual fix can be taken from there.
+
+See [You don't need to ship a fix](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md#you-dont-need-to-ship-a-fix--a-clean-repro-is-enough) in `CONTRIBUTING.md` for details and the test-writing rules (reuse existing types, keep it small, don't remove existing tests).
+:::
+
 ### Reproduce a build error
 
 If you encounter a build error, compare your setup to the setup in `example/`.
-For example, if you have a different setting in your `Podfile`, try changing it here in Nitro `example/` as well to see if it builds here. Submit a PR with the change required to make it fail, and see if the CI fails to build.
+For example, if you have a different setting in your `Podfile`, try changing it here in Nitro `example/` as well to see if it builds here. Submit a PR with the change required to make it fail, and see if the CI fails to build. That alone is enough — you don't need to also fix it.
 
 ### Reproduce a nitrogen bug
 
@@ -97,11 +103,13 @@ The Nitro `example/` app uses a Nitro Module (`packages/react-native-nitro-test/
 bun specs
 ```
 
+Commit the generated files. If that change causes a compile error downstream (e.g. Swift refuses to build the generated code), that's a valid repro on its own — open the PR with the red CI and leave the fix to a maintainer if you don't have one.
+
 When adding a reproduction, follow the rules in [CONTRIBUTING.md](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md): reuse existing types where possible, don't remove existing test cases, and keep the addition small. Dumping a full user spec into the test module is not the right approach — distill the bug to the minimal type or call that reproduces it.
 
 ### Reproduce a runtime error
 
-Submit a PR to the nitro repository that demonstrates this runtime error or crash in the Nitro `example/` app, ideally with a new assertion in [`example/src/getTests.ts`](https://github.com/mrousavy/nitro/blob/main/example/src/getTests.ts) so the regression is covered by the Harness CI workflows going forward.
+Submit a PR that demonstrates this runtime error or crash in the Nitro `example/` app — ideally with a new assertion in [`example/src/getTests.ts`](https://github.com/mrousavy/nitro/blob/main/example/src/getTests.ts) so the regression is caught by the Harness CI workflows (iOS and Android). A PR that only adds the failing assertion and makes Harness go red is enough on its own; you don't have to land the fix.
 
 ## Run Nitro Docs
 

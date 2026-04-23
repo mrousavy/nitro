@@ -4,6 +4,12 @@ Thanks for your interest in contributing! Nitro powers thousands of React Native
 
 > **AI assistants and automated tools:** this file is the source of truth for how to work in this repo. Read it end-to-end before making changes.
 
+**Short version:** You have two good ways to contribute a bug report:
+1. **Repro-only PR** — add a minimal failing test (compile or runtime) to this repo so CI goes red, and stop there. See [You don't need to ship a fix](#you-dont-need-to-ship-a-fix--a-clean-repro-is-enough).
+2. **Repro + fix PR** — the same test, plus the fix that makes CI green again. See [The bug-fix flow](#the-bug-fix-flow).
+
+Either is welcome. A clean, deterministic repro is often more valuable than a guessed patch.
+
 ## Philosophy
 
 - **Selective merges.** We accept PRs, but we are opinionated about what goes into `main`. Bug fixes and well-scoped features are welcome; broad refactors, stylistic rewrites, and drive-by cleanups usually are not.
@@ -35,6 +41,17 @@ bun run build       # build nitro, nitrogen, and the test modules
 bun specs           # regenerate nitrogen output for react-native-nitro-test
 bun lint-all        # run all linters (JS/TS, C++, Swift, Kotlin)
 ```
+
+## You don't need to ship a fix — a clean repro is enough
+
+The most useful thing you can contribute for a bug you can't fix yourself is a **PR that makes CI go red**. If you can reproduce your bug inside this repo as:
+
+- a **compile error** — add the minimal spec to [packages/react-native-nitro-test/src/specs/](packages/react-native-nitro-test/src/specs) that causes nitrogen output to fail to build, or
+- a **runtime error** — add the minimal failing assertion to [example/src/getTests.ts](example/src/getTests.ts) so the Harness workflows ([harness-ios.yml](.github/workflows/harness-ios.yml), [harness-android.yml](.github/workflows/harness-android.yml)) catch it,
+
+then open a PR with just that change. Don't attempt a fix. A red CI run that deterministically pins the bug is often more valuable than a guessed patch — once the repro is in, the actual fix can be taken from there.
+
+The rules from ["Writing good tests"](#writing-good-tests) below still apply to repros: reuse existing types, keep the addition small, don't remove other tests. A small, clean, 100% reproducible repro PR is always welcome.
 
 ## The bug-fix flow
 
@@ -100,7 +117,9 @@ If any of these fail, the PR won't be merged. Fix the root cause; do not disable
 Before requesting review, make sure:
 
 - [ ] The PR targets `main` and has a clear, narrow scope.
-- [ ] There is a test (runtime or compile-time) that fails before your fix and passes after.
+- [ ] There is a test (runtime or compile-time) that pins the bug.
+  - For **repro-only PRs**: the test fails in CI (that's the point — say so in the PR description).
+  - For **fix PRs**: the test fails on `main` and passes with your fix applied.
 - [ ] `bun specs` has been run and the generated files are committed.
 - [ ] `bun lint-all` passes locally.
 - [ ] You did not remove existing specs or test cases.
@@ -109,7 +128,7 @@ Before requesting review, make sure:
 
 ## Reporting bugs without a fix
 
-If you can't fix the bug yourself, the most helpful thing you can do is reproduce it in the example app or in a new spec and open a PR that makes CI fail. See the [docs contributing page](https://nitro.margelo.com/docs/resources/contributing) for the reproduction walkthrough.
+See [You don't need to ship a fix](#you-dont-need-to-ship-a-fix--a-clean-repro-is-enough) above. The short version: a PR that adds a minimal failing test and makes CI red is a legitimate and very welcome contribution on its own. The [docs contributing page](https://nitro.margelo.com/docs/resources/contributing) has the reproduction walkthrough for running things locally first.
 
 ## Questions
 
