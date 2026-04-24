@@ -39,5 +39,12 @@ class ThreadUtils {
     fun runOnUIThread(runnable: Runnable) {
       handler.post(runnable)
     }
+
+    @JvmStatic
+    @Keep
+    @DoNotStrip
+    fun runOnUIThread(runnable: NativeRunnable) {
+      handler.post(runnable)
+    }
   }
 }
