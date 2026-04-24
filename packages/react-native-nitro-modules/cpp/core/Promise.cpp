@@ -53,9 +53,9 @@ std::shared_ptr<Promise<void>> Promise<void>::rejected(const std::exception_ptr&
 
 void Promise<void>::resolve() {
   std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-  assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
+  if (!isPending()) [[unlikely]] {
+    return;
+  }
   _isResolved = true;
   for (const auto& onResolved : _onResolvedListeners) {
     onResolved();
@@ -69,9 +69,9 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
   }
 
   std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-  assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
+  if (!isPending()) [[unlikely]] {
+    return;
+  }
   _error = exception;
   for (const auto& onRejected : _onRejectedListeners) {
     onRejected(exception);

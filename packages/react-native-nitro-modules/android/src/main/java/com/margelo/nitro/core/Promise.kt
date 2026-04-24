@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -145,6 +146,10 @@ class Promise<T> {
         try {
           val result = run()
           promise.resolve(result)
+        } catch (e: CancellationException) {
+          // Rethrow to preserve structured concurrency.
+          // See: https://kotlinlang.org/docs/cancellation-and-timeouts.html
+          throw e
         } catch (e: Throwable) {
           promise.reject(e)
         }

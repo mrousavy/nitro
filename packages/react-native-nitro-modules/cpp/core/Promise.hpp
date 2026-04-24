@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "AssertPromiseState.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
 #include "ThreadPool.hpp"
@@ -99,9 +98,9 @@ public:
    */
   void resolve(TResult&& result) {
     std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
+    if (!isPending()) [[unlikely]] {
+      return;
+    }
     _state = std::move(result);
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_state));
@@ -110,9 +109,9 @@ public:
   }
   void resolve(const TResult& result) {
     std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
+    if (!isPending()) [[unlikely]] {
+      return;
+    }
     _state = result;
     for (const auto& onResolved : _onResolvedListeners) {
       onResolved(std::get<TResult>(_state));
@@ -129,9 +128,9 @@ public:
     }
 
     std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
+    if (!isPending()) [[unlikely]] {
+      return;
+    }
     _state = exception;
     for (const auto& onRejected : _onRejectedListeners) {
       onRejected(exception);
