@@ -38,7 +38,7 @@ on:
 
 env:
   USE_CCACHE: 1
-  XCODE_VERSION: '26.2'
+  XCODE_VERSION: '26.4'
   IOS_SIMULATOR_DESTINATION: 'platform=iOS Simulator,name=iPhone 17 Pro'
 
 jobs:
