@@ -43,7 +43,7 @@
         "prism-react-renderer": "^2.3.0",
         "react": "19.1.0",
         "react-dom": "19.1.0",
-        "satori": "^0.25.0",
+        "satori": "^0.26.0",
         "sharp": "^0.34.5",
       },
       "devDependencies": {
@@ -56,7 +56,7 @@
     },
     "example": {
       "name": "react-native-nitro-example",
-      "version": "0.35.5",
+      "version": "0.35.6",
       "dependencies": {
         "@react-native-segmented-control/segmented-control": "^2.5.7",
         "@react-navigation/bottom-tabs": "^7.4.5",
@@ -91,11 +91,11 @@
     },
     "packages/nitrogen": {
       "name": "nitrogen",
-      "version": "0.35.5",
+      "version": "0.35.6",
       "bin": "./lib/index.js",
       "dependencies": {
         "chalk": "^5.3.0",
-        "react-native-nitro-modules": "^0.35.5",
+        "react-native-nitro-modules": "^0.35.6",
         "ts-morph": "^27.0.0",
         "yargs": "^18.0.0",
         "zod": "^4.0.5",
@@ -106,7 +106,7 @@
     },
     "packages/react-native-nitro-modules": {
       "name": "react-native-nitro-modules",
-      "version": "0.35.5",
+      "version": "0.35.6",
       "devDependencies": {
         "@types/jest": "*",
         "@types/react": "*",
@@ -123,7 +123,7 @@
     },
     "packages/react-native-nitro-test": {
       "name": "react-native-nitro-test",
-      "version": "0.35.5",
+      "version": "0.35.6",
       "devDependencies": {
         "@types/jest": "*",
         "@types/react": "*",
@@ -143,7 +143,7 @@
     },
     "packages/react-native-nitro-test-external": {
       "name": "react-native-nitro-test-external",
-      "version": "0.35.5",
+      "version": "0.35.6",
       "devDependencies": {
         "@react-native/eslint-config": "0.83.0",
         "@types/jest": "^29.5.12",
@@ -3580,7 +3580,7 @@
 
     "safer-buffer": ["safer-buffer@2.1.2", "", {}, "sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg=="],
 
-    "satori": ["satori@0.25.0", "", { "dependencies": { "@shuding/opentype.js": "1.4.0-beta.0", "css-background-parser": "^0.1.0", "css-box-shadow": "1.0.0-3", "css-gradient-parser": "^0.0.17", "css-to-react-native": "^3.0.0", "emoji-regex-xs": "^2.0.1", "escape-html": "^1.0.3", "linebreak": "^1.1.0", "parse-css-color": "^0.2.1", "postcss-value-parser": "^4.2.0", "yoga-layout": "^3.2.1" } }, "sha512-utINfLxrYrmSnLvxFT4ZwgwWa8KOjrz7ans32V5wItgHVmzESl/9i33nE38uG0miycab8hUqQtDlOpqrIpB/iw=="],
+    "satori": ["satori@0.26.0", "", { "dependencies": { "@shuding/opentype.js": "1.4.0-beta.0", "css-background-parser": "^0.1.0", "css-box-shadow": "1.0.0-3", "css-gradient-parser": "^0.0.17", "css-to-react-native": "^3.0.0", "emoji-regex-xs": "^2.0.1", "escape-html": "^1.0.3", "linebreak": "^1.1.0", "parse-css-color": "^0.2.1", "postcss-value-parser": "^4.2.0", "yoga-layout": "^3.2.1" } }, "sha512-tkMFrfIs3l2mQ2JEcyW0ADTy3zGggFRFzi6Ef8YozQSFsFKEqaSO1Y8F9wJg4//PJGQauMalHGTUEkPrFwhVPA=="],
 
     "sax": ["sax@1.4.1", "", {}, "sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg=="],
 
