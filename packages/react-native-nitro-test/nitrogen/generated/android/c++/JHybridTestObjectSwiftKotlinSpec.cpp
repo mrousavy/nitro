@@ -447,6 +447,47 @@ namespace margelo::nitro::test {
       return __vector;
     }();
   }
+  std::vector<std::vector<Person>> JHybridTestObjectSwiftKotlinSpec::bounceNestedArray(const std::vector<std::vector<Person>>& array) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JArrayClass<JPerson>>>(jni::alias_ref<jni::JArrayClass<jni::JArrayClass<JPerson>>> /* array */)>("bounceNestedArray");
+    auto __result = method(_javaPart, [&]() {
+      size_t __size = array.size();
+      jni::local_ref<jni::JArrayClass<jni::JArrayClass<JPerson>>> __array = jni::JArrayClass<jni::JArrayClass<JPerson>>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = array[__i];
+        auto __elementJni = [&]() {
+          size_t __size = __element.size();
+          jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            const auto& __element = __element[__i];
+            auto __elementJni = JPerson::fromCpp(__element);
+            __array->setElement(__i, *__elementJni);
+          }
+          return __array;
+        }();
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }());
+    return [&]() {
+      size_t __size = __result->size();
+      std::vector<std::vector<Person>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __result->getElement(__i);
+        __vector.push_back([&]() {
+      size_t __size = __element->size();
+      std::vector<Person> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __element->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }());
+      }
+      return __vector;
+    }();
+  }
   PartialPerson JHybridTestObjectSwiftKotlinSpec::bouncePartialStruct(const PartialPerson& person) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPartialPerson>(jni::alias_ref<JPartialPerson> /* person */)>("bouncePartialStruct");
     auto __result = method(_javaPart, JPartialPerson::fromCpp(person));

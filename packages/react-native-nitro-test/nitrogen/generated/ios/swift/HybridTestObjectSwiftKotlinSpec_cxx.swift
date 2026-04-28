@@ -636,6 +636,30 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceNestedArray(array: bridge.std__vector_std__vector_Person__) -> bridge.Result_std__vector_std__vector_Person___ {
+    do {
+      let __result = try self.__implementation.bounceNestedArray(array: array.map({ __item in __item.map({ __item in __item }) }))
+      let __resultCpp = { () -> bridge.std__vector_std__vector_Person__ in
+        var __vector = bridge.create_std__vector_std__vector_Person__(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.std__vector_Person_ in
+            var __vector = bridge.create_std__vector_Person_(__item.count)
+            for __item in __item {
+              __vector.push_back(__item)
+            }
+            return __vector
+          }())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__vector_Person___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__vector_Person___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func bouncePartialStruct(person: PartialPerson) -> bridge.Result_PartialPerson_ {
     do {
       let __result = try self.__implementation.bouncePartialStruct(person: person)
