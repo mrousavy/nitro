@@ -12,6 +12,8 @@
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
+// Forward declaration of `EnumStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct EnumStruct; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -65,6 +67,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
 #include "Car.hpp"
+#include "EnumStruct.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -1655,6 +1658,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__vector_Person___ create_Result_std__vector_std__vector_Person___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::vector<Person>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<EnumStruct>
+  using Result_EnumStruct_ = Result<EnumStruct>;
+  inline Result_EnumStruct_ create_Result_EnumStruct_(const EnumStruct& value) noexcept {
+    return Result<EnumStruct>::withValue(value);
+  }
+  inline Result_EnumStruct_ create_Result_EnumStruct_(const std::exception_ptr& error) noexcept {
+    return Result<EnumStruct>::withError(error);
   }
   
   // pragma MARK: Result<PartialPerson>

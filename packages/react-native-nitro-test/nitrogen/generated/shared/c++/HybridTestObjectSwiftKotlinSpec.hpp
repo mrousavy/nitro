@@ -21,6 +21,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `EnumStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct EnumStruct; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -59,6 +61,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OldEnum.hpp"
 #include <functional>
 #include "Person.hpp"
+#include "EnumStruct.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -157,6 +160,7 @@ namespace margelo::nitro::test {
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
       virtual std::vector<std::vector<Person>> bounceNestedArray(const std::vector<std::vector<Person>>& array) = 0;
+      virtual EnumStruct bounceEnumStruct(const EnumStruct& value) = 0;
       virtual PartialPerson bouncePartialStruct(const PartialPerson& person) = 0;
       virtual std::string sumUpAllPassengers(const std::vector<Car>& cars) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;

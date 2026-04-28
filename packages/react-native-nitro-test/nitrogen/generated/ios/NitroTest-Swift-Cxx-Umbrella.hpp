@@ -12,6 +12,8 @@
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
 namespace margelo::nitro::test { enum class ColorScheme; }
+// Forward declaration of `EnumStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct EnumStruct; }
 // Forward declaration of `ExternalObjectStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct ExternalObjectStruct; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -54,6 +56,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Include C++ defined types
 #include "Car.hpp"
 #include "ColorScheme.hpp"
+#include "EnumStruct.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"

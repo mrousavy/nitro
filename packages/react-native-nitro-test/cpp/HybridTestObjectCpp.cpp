@@ -220,6 +220,10 @@ std::vector<std::vector<Person>> HybridTestObjectCpp::bounceNestedArray(const st
   return array;
 }
 
+EnumStruct HybridTestObjectCpp::bounceEnumStruct(const EnumStruct& value) {
+  return value;
+}
+
 PartialPerson HybridTestObjectCpp::bouncePartialStruct(const PartialPerson& person) {
   return person;
 }

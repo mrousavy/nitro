@@ -182,6 +182,15 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func bounceEnumStruct(value: EnumStruct) throws -> EnumStruct {
+    // Repro for the Vision Camera DynamicRange bug: forcing Swift's synthesized
+    // `Equatable` on a struct of multiple Cxx-interop enum fields used to fail
+    // to build because `operator==` couldn't be resolved per-field.
+    let copy = value
+    precondition(value == copy)
+    return value
+  }
+
   func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson {
     return person
   }

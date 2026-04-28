@@ -15,6 +15,10 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `EnumStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct EnumStruct; }
+// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -29,8 +33,6 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
-// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
-namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -65,6 +67,10 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
+#include "EnumStruct.hpp"
+#include "JEnumStruct.hpp"
+#include "WeirdNumbersEnum.hpp"
+#include "JWeirdNumbersEnum.hpp"
 #include "PartialPerson.hpp"
 #include "JPartialPerson.hpp"
 #include "HybridChildSpec.hpp"
@@ -93,9 +99,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
-#include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
-#include "JWeirdNumbersEnum.hpp"
 #include "JVariant_Car_Person.hpp"
 #include "JNamedVariant.hpp"
 #include "HybridBaseSpec.hpp"
@@ -487,6 +491,11 @@ namespace margelo::nitro::test {
       }
       return __vector;
     }(__result);
+  }
+  EnumStruct JHybridTestObjectSwiftKotlinSpec::bounceEnumStruct(const EnumStruct& value) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JEnumStruct>(jni::alias_ref<JEnumStruct> /* value */)>("bounceEnumStruct");
+    auto __result = method(_javaPart, JEnumStruct::fromCpp(value));
+    return __result->toCpp();
   }
   PartialPerson JHybridTestObjectSwiftKotlinSpec::bouncePartialStruct(const PartialPerson& person) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPartialPerson>(jni::alias_ref<JPartialPerson> /* person */)>("bouncePartialStruct");
