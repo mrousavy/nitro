@@ -606,6 +606,46 @@ export function getTests(
           [],
         ])
     ),
+    createTest('areEnumStructsEqual(...) returns true for equal structs', () =>
+      it(() =>
+        testObject.areEnumStructsEqual(
+          {
+            powertrain: 'gas',
+            oldEnum: OldEnum.FIRST,
+            weirdEnum: WeirdNumbersEnum.B,
+          },
+          {
+            powertrain: 'gas',
+            oldEnum: OldEnum.FIRST,
+            weirdEnum: WeirdNumbersEnum.B,
+          }
+        )
+      )
+        .didNotThrow()
+        .didReturn('boolean')
+        .equals(true)
+    ),
+    createTest(
+      'areEnumStructsEqual(...) returns false for different structs',
+      () =>
+        it(() =>
+          testObject.areEnumStructsEqual(
+            {
+              powertrain: 'gas',
+              oldEnum: OldEnum.FIRST,
+              weirdEnum: WeirdNumbersEnum.B,
+            },
+            {
+              powertrain: 'electric',
+              oldEnum: OldEnum.FIRST,
+              weirdEnum: WeirdNumbersEnum.B,
+            }
+          )
+        )
+          .didNotThrow()
+          .didReturn('boolean')
+          .equals(false)
+    ),
     createTest('bouncePartialStruct(...) empty equals', () =>
       it(() =>
         testObject.bouncePartialStruct({ name: undefined, age: undefined })

@@ -107,6 +107,16 @@ type CoreTypesVariant =
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
+// Repro for https://github.com/mrousavy/react-native-vision-camera/blob/7586e98f53bea81db67035d7534da0249b4f7511/packages/react-native-vision-camera/ios/Hybrid%20Objects/Inputs/HybridCameraDevice.swift#L58-L68
+// A struct made up of multiple enum fields previously failed to build on Swift
+// Cxx interop when its synthesized `Equatable` conformance had to resolve
+// `operator==` for each enum field.
+export interface EnumStruct {
+  powertrain: Powertrain
+  oldEnum: OldEnum
+  weirdEnum: WeirdNumbersEnum
+}
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -144,6 +154,7 @@ interface SharedTestObjectProps {
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
   bounceNestedArray(array: Person[][]): Person[][]
+  areEnumStructsEqual(a: EnumStruct, b: EnumStruct): boolean
   bouncePartialStruct(person: PartialPerson): PartialPerson
   sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]

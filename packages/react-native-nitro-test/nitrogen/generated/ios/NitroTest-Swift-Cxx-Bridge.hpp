@@ -1657,6 +1657,15 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::vector<std::vector<Person>>>::withError(error);
   }
   
+  // pragma MARK: Result<bool>
+  using Result_bool_ = Result<bool>;
+  inline Result_bool_ create_Result_bool_(bool value) noexcept {
+    return Result<bool>::withValue(std::move(value));
+  }
+  inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) noexcept {
+    return Result<bool>::withError(error);
+  }
+  
   // pragma MARK: Result<PartialPerson>
   using Result_PartialPerson_ = Result<PartialPerson>;
   inline Result_PartialPerson_ create_Result_PartialPerson_(const PartialPerson& value) noexcept {
@@ -1772,15 +1781,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) noexcept {
     return Result<std::optional<Powertrain>>::withError(error);
-  }
-  
-  // pragma MARK: Result<bool>
-  using Result_bool_ = Result<bool>;
-  inline Result_bool_ create_Result_bool_(bool value) noexcept {
-    return Result<bool>::withValue(std::move(value));
-  }
-  inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) noexcept {
-    return Result<bool>::withError(error);
   }
   
   // pragma MARK: Result<std::chrono::system_clock::time_point>

@@ -182,6 +182,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
+  func areEnumStructsEqual(a: EnumStruct, b: EnumStruct) throws -> Bool {
+    // This explicitly tests `operator==` (`Equatable`) being emitted from
+    // the C++/Swift compiler. If C++ doesn't reference `operator==`, it is
+    // not being produced in the `.o` file, meaning the below code will fail
+    // to build without a proper workaround.
+    // When C++ uses `operator==` (e.g. also via `a == b`) then it will build
+    // the Swift part too, but this is obviously a bug.
+    return a == b
+  }
+
   func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson {
     return person
   }

@@ -20,6 +20,10 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `EnumStruct` to properly resolve imports.
+namespace margelo::nitro::test { struct EnumStruct; }
+// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -40,8 +44,6 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
-// Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
-namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
@@ -62,6 +64,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OldEnum.hpp"
 #include <functional>
 #include "Person.hpp"
+#include "EnumStruct.hpp"
+#include "WeirdNumbersEnum.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
@@ -78,7 +82,6 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
-#include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include <NitroTestExternal/HybridSomeExternalObjectSpec.hpp>
@@ -334,6 +337,14 @@ namespace margelo::nitro::test {
     }
     inline std::vector<std::vector<Person>> bounceNestedArray(const std::vector<std::vector<Person>>& array) override {
       auto __result = _swiftPart.bounceNestedArray(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline bool areEnumStructsEqual(const EnumStruct& a, const EnumStruct& b) override {
+      auto __result = _swiftPart.areEnumStructsEqual(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
