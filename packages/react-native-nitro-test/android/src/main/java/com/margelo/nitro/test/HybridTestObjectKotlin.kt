@@ -83,6 +83,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
+  override fun bounceNestedArray(array: Array<Array<Person>>): Array<Array<Person>> {
+    return array
+  }
+
   override fun bouncePartialStruct(person: PartialPerson): PartialPerson {
     return person
   }
