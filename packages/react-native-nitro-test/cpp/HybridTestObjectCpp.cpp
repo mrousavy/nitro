@@ -216,8 +216,7 @@ std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>
   return array;
 }
 
-std::vector<std::vector<Person>>
-HybridTestObjectCpp::bounceNestedArray(const std::vector<std::vector<Person>>& array) {
+std::vector<std::vector<Person>> HybridTestObjectCpp::bounceNestedArray(const std::vector<std::vector<Person>>& array) {
   return array;
 }
 
