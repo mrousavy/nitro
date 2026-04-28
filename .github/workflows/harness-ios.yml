@@ -139,7 +139,7 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,name=${{ env.DEVICE_MODEL }}' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \
