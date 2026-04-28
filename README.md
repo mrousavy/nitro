@@ -87,7 +87,7 @@ We build fast and beautiful apps. Contact us at [margelo.com](https://margelo.co
 
 ## Contributing
 
-See the [contributing guide](https://nitro.margelo.com/docs/resources/contributing) to learn how to contribute to the repository and the development workflow.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for the contribution flow (PR expectations, the required test-per-fix rule, and the nitrogen workflow). For environment setup and reproduction walkthroughs, see the [contributing guide](https://nitro.margelo.com/docs/resources/contributing) on the docs site.
 
 ## License
 
