@@ -34,16 +34,16 @@ namespace margelo::nitro::test {
      */
     void invoke(const std::vector<Powertrain>& array) const {
       static const auto method = javaClassStatic()->getMethod<void(jni::alias_ref<jni::JArrayClass<JPowertrain>> /* array */)>("invoke");
-      method(self(), [&]() {
-        size_t __size = array.size();
+      method(self(), [&](auto&& __input) {
+        size_t __size = __input.size();
         jni::local_ref<jni::JArrayClass<JPowertrain>> __array = jni::JArrayClass<JPowertrain>::newArray(__size);
         for (size_t __i = 0; __i < __size; __i++) {
-          const auto& __element = array[__i];
+          const auto& __element = __input[__i];
           auto __elementJni = JPowertrain::fromCpp(__element);
           __array->setElement(__i, *__elementJni);
         }
         return __array;
-      }());
+      }(array));
     }
   };
 
@@ -61,16 +61,16 @@ namespace margelo::nitro::test {
      * Invokes the C++ `std::function<...>` this `JFunc_void_std__vector_Powertrain__cxx` instance holds.
      */
     void invoke_cxx(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
-      _func([&]() {
-              size_t __size = array->size();
+      _func([&](auto&& __input) {
+              size_t __size = __input->size();
               std::vector<Powertrain> __vector;
               __vector.reserve(__size);
               for (size_t __i = 0; __i < __size; __i++) {
-                auto __element = array->getElement(__i);
+                auto __element = __input->getElement(__i);
                 __vector.push_back(__element->toCpp());
               }
               return __vector;
-            }());
+            }(array));
     }
 
   public:

@@ -68,16 +68,16 @@ namespace margelo::nitro::test {
         power,
         powertrain->toCpp(),
         driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
-        [&]() {
-          size_t __size = passengers->size();
+        [&](auto&& __input) {
+          size_t __size = __input->size();
           std::vector<Person> __vector;
           __vector.reserve(__size);
           for (size_t __i = 0; __i < __size; __i++) {
-            auto __element = passengers->getElement(__i);
+            auto __element = __input->getElement(__i);
             __vector.push_back(__element->toCpp());
           }
           return __vector;
-        }(),
+        }(passengers),
         isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt,
         favouriteTrack != nullptr ? std::make_optional(favouriteTrack->toStdString()) : std::nullopt,
         [&]() {
@@ -107,16 +107,16 @@ namespace margelo::nitro::test {
         value.power,
         JPowertrain::fromCpp(value.powertrain),
         value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr,
-        [&]() {
-          size_t __size = value.passengers.size();
+        [&](auto&& __input) {
+          size_t __size = __input.size();
           jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
           for (size_t __i = 0; __i < __size; __i++) {
-            const auto& __element = value.passengers[__i];
+            const auto& __element = __input[__i];
             auto __elementJni = JPerson::fromCpp(__element);
             __array->setElement(__i, *__elementJni);
           }
           return __array;
-        }(),
+        }(value.passengers),
         value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr,
         value.favouriteTrack.has_value() ? jni::make_jstring(value.favouriteTrack.value()) : nullptr,
         [&]() {
