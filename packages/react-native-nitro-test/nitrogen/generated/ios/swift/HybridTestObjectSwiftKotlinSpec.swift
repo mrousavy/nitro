@@ -44,7 +44,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
   func bounceNestedArray(array: [[Person]]) throws -> [[Person]]
-  func bounceEnumStruct(value: EnumStruct) throws -> EnumStruct
+  func areEnumStructsEqual(a: EnumStruct, b: EnumStruct) throws -> Bool
   func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson
   func sumUpAllPassengers(cars: [Car]) throws -> String
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]

@@ -182,13 +182,14 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return array
   }
 
-  func bounceEnumStruct(value: EnumStruct) throws -> EnumStruct {
-    // Repro for the Vision Camera DynamicRange bug: forcing Swift's synthesized
-    // `Equatable` on a struct of multiple Cxx-interop enum fields used to fail
-    // to build because `operator==` couldn't be resolved per-field.
-    let copy = value
-    precondition(value == copy)
-    return value
+  func areEnumStructsEqual(a: EnumStruct, b: EnumStruct) throws -> Bool {
+    // This explicitly tests `operator==` (`Equatable`) being emitted from
+    // the C++/Swift compiler. If C++ doesn't reference `operator==`, it is
+    // not being produced in the `.o` file, meaning the below code will fail
+    // to build without a proper workaround.
+    // When C++ uses `operator==` (e.g. also via `a == b`) then it will build
+    // the Swift part too, but this is obviously a bug.
+    return a == b
   }
 
   func bouncePartialStruct(person: PartialPerson) throws -> PartialPerson {

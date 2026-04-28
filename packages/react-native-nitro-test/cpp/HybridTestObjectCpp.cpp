@@ -220,8 +220,13 @@ std::vector<std::vector<Person>> HybridTestObjectCpp::bounceNestedArray(const st
   return array;
 }
 
-EnumStruct HybridTestObjectCpp::bounceEnumStruct(const EnumStruct& value) {
-  return value;
+bool HybridTestObjectCpp::areEnumStructsEqual(const EnumStruct& a, const EnumStruct& b) {
+  // Compare field-by-field rather than `a == b`.
+  // This causes the `operator==` to not be emitted in the `.o` file,
+  // and Swift later uses `==` causing it to need the `operator==` symbol,
+  // which previously failed to build.
+  // See `HybridTestObject.swift::areEnumStructsEqual(...)`
+  return a.powertrain == b.powertrain && a.oldEnum == b.oldEnum && a.weirdEnum == b.weirdEnum;
 }
 
 PartialPerson HybridTestObjectCpp::bouncePartialStruct(const PartialPerson& person) {

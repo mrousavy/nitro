@@ -660,14 +660,14 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceEnumStruct(value: EnumStruct) -> bridge.Result_EnumStruct_ {
+  public final func areEnumStructsEqual(a: EnumStruct, b: EnumStruct) -> bridge.Result_bool_ {
     do {
-      let __result = try self.__implementation.bounceEnumStruct(value: value)
+      let __result = try self.__implementation.areEnumStructsEqual(a: a, b: b)
       let __resultCpp = __result
-      return bridge.create_Result_EnumStruct_(__resultCpp)
+      return bridge.create_Result_bool_(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_EnumStruct_(__exceptionPtr)
+      return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
   

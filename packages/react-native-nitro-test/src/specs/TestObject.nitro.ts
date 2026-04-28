@@ -154,7 +154,7 @@ interface SharedTestObjectProps {
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
   bounceNestedArray(array: Person[][]): Person[][]
-  bounceEnumStruct(value: EnumStruct): EnumStruct
+  areEnumStructsEqual(a: EnumStruct, b: EnumStruct): boolean
   bouncePartialStruct(person: PartialPerson): PartialPerson
   sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]

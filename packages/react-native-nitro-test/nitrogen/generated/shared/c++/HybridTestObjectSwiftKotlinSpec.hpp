@@ -160,7 +160,7 @@ namespace margelo::nitro::test {
       virtual std::vector<double> bounceNumbers(const std::vector<double>& array) = 0;
       virtual std::vector<Person> bounceStructs(const std::vector<Person>& array) = 0;
       virtual std::vector<std::vector<Person>> bounceNestedArray(const std::vector<std::vector<Person>>& array) = 0;
-      virtual EnumStruct bounceEnumStruct(const EnumStruct& value) = 0;
+      virtual bool areEnumStructsEqual(const EnumStruct& a, const EnumStruct& b) = 0;
       virtual PartialPerson bouncePartialStruct(const PartialPerson& person) = 0;
       virtual std::string sumUpAllPassengers(const std::vector<Car>& cars) = 0;
       virtual std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) = 0;

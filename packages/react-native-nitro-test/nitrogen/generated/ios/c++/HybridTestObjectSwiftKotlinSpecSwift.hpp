@@ -343,8 +343,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline EnumStruct bounceEnumStruct(const EnumStruct& value) override {
-      auto __result = _swiftPart.bounceEnumStruct(std::forward<decltype(value)>(value));
+    inline bool areEnumStructsEqual(const EnumStruct& a, const EnumStruct& b) override {
+      auto __result = _swiftPart.areEnumStructsEqual(std::forward<decltype(a)>(a), std::forward<decltype(b)>(b));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

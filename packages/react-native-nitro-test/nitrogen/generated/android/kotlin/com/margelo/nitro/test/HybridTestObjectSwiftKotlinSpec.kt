@@ -207,7 +207,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceEnumStruct(value: EnumStruct): EnumStruct
+  abstract fun areEnumStructsEqual(a: EnumStruct, b: EnumStruct): Boolean
   
   @DoNotStrip
   @Keep

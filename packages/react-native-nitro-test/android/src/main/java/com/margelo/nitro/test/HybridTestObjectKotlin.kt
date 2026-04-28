@@ -87,8 +87,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return array
   }
 
-  override fun bounceEnumStruct(value: EnumStruct): EnumStruct {
-    return value
+  override fun areEnumStructsEqual(
+    a: EnumStruct,
+    b: EnumStruct,
+  ): Boolean {
+    return a == b
   }
 
   override fun bouncePartialStruct(person: PartialPerson): PartialPerson {
