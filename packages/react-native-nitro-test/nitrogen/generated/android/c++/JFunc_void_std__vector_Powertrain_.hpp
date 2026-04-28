@@ -62,15 +62,15 @@ namespace margelo::nitro::test {
      */
     void invoke_cxx(jni::alias_ref<jni::JArrayClass<JPowertrain>> array) {
       _func([&](auto&& __input) {
-              size_t __size = __input->size();
-              std::vector<Powertrain> __vector;
-              __vector.reserve(__size);
-              for (size_t __i = 0; __i < __size; __i++) {
-                auto __element = __input->getElement(__i);
-                __vector.push_back(__element->toCpp());
-              }
-              return __vector;
-            }(array));
+        size_t __size = __input->size();
+        std::vector<Powertrain> __vector;
+        __vector.reserve(__size);
+        for (size_t __i = 0; __i < __size; __i++) {
+          auto __element = __input->getElement(__i);
+          __vector.push_back(__element->toCpp());
+        }
+        return __vector;
+      }(array));
     }
 
   public:

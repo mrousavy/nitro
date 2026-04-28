@@ -152,7 +152,7 @@ class ${name}_java(private val function: ${lambdaSignature}): ${name} {
   let jniCallBody: string
   if (functionType.returnType.kind === 'void') {
     // It returns void
-    cppCallBody = `_func(${indent(paramsForward.join(', '), '      ')});`
+    cppCallBody = `_func(${paramsForward.join(', ')});`
     jniCallBody = `
 static const auto method = javaClassStatic()->getMethod<${jniSignature}>("invoke");
 method(${jniParamsForward.join(', ')});
@@ -160,7 +160,7 @@ method(${jniParamsForward.join(', ')});
   } else {
     // It returns a type!
     cppCallBody = `
-${functionType.returnType.getCode('c++')} __result = _func(${indent(paramsForward.join(', '), '      ')});
+${functionType.returnType.getCode('c++')} __result = _func(${paramsForward.join(', ')});
 return ${bridgedReturn.parseFromCppToKotlin('__result', 'c++')};
 `.trim()
     jniCallBody = `
