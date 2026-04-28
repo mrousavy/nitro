@@ -28,16 +28,16 @@ namespace margelo::nitro::test {
     } else if (isInstanceOf(JVariant_Boolean_DoubleArray_Array_String__String_Double_impl::Third::javaClassStatic())) {
       // It's a `std::vector<std::string>`
       auto jniValue = static_cast<const JVariant_Boolean_DoubleArray_Array_String__String_Double_impl::Third*>(this)->getValue();
-      return [&]() {
-        size_t __size = jniValue->size();
+      return [&](auto&& __input) {
+        size_t __size = __input->size();
         std::vector<std::string> __vector;
         __vector.reserve(__size);
         for (size_t __i = 0; __i < __size; __i++) {
-          auto __element = jniValue->getElement(__i);
+          auto __element = __input->getElement(__i);
           __vector.push_back(__element->toStdString());
         }
         return __vector;
-      }();
+      }(jniValue);
     } else if (isInstanceOf(JVariant_Boolean_DoubleArray_Array_String__String_Double_impl::Fourth::javaClassStatic())) {
       // It's a `std::string`
       auto jniValue = static_cast<const JVariant_Boolean_DoubleArray_Array_String__String_Double_impl::Fourth*>(this)->getValue();

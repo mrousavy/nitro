@@ -332,6 +332,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::vector<std::vector<Person>> bounceNestedArray(const std::vector<std::vector<Person>>& array) override {
+      auto __result = _swiftPart.bounceNestedArray(array);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline PartialPerson bouncePartialStruct(const PartialPerson& person) override {
       auto __result = _swiftPart.bouncePartialStruct(std::forward<decltype(person)>(person));
       if (__result.hasError()) [[unlikely]] {
