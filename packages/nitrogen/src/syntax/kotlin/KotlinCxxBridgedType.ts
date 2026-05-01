@@ -672,18 +672,24 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 `.trim()
               }
               default: {
-                // other arrays need to loop through
+                // other arrays need to loop through.
+                // we wrap the lambda with a parameter (`__input`) so that nested arrays
+                // don't end up shadowing `__element` in their own initializers
+                // (which would be `const auto& __element = __element[__i]`,
+                //  an invalid self-referential `auto`-type deduction).
+                // `auto&&` is a forwarding reference so it binds to both const and
+                // non-const inputs across nesting levels.
                 return `
-[&]() {
-  size_t __size = ${parameterName}.size();
+[&](auto&& __input) {
+  size_t __size = __input.size();
   jni::local_ref<${arrayType}> __array = ${arrayType}::newArray(__size);
   for (size_t __i = 0; __i < __size; __i++) {
-    const auto& __element = ${parameterName}[__i];
+    const auto& __element = __input[__i];
     auto __elementJni = ${indent(bridge.parseFromCppToKotlin('__element', 'c++'), '    ')};
     __array->setElement(__i, ${bridge.dereferenceToJObject('__elementJni')});
   }
   return __array;
-}()
+}(${parameterName})
             `.trim()
               }
             }
@@ -976,18 +982,25 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 `.trim()
               }
               default: {
-                // other arrays need to loop through
+                // other arrays need to loop through.
+                // we wrap the lambda with a parameter (`__input`) so that nested arrays
+                // don't end up shadowing `__element` in their own initializers
+                // (which would be `auto __element = __element->getElement(__i)`,
+                //  an invalid self-referential `auto`-type deduction).
+                // `auto&&` is a forwarding reference so it binds to both const and
+                // non-const inputs across nesting levels (and to JNI `local_ref`s,
+                // which expose non-const `getElement(...)`).
                 return `
-[&]() {
-  size_t __size = ${parameterName}->size();
+[&](auto&& __input) {
+  size_t __size = __input->size();
   std::vector<${itemType}> __vector;
   __vector.reserve(__size);
   for (size_t __i = 0; __i < __size; __i++) {
-    auto __element = ${parameterName}->getElement(__i);
-    __vector.push_back(${bridge.parseFromKotlinToCpp('__element', 'c++')});
+    auto __element = __input->getElement(__i);
+    __vector.push_back(${indent(bridge.parseFromKotlinToCpp('__element', 'c++'), '    ')});
   }
   return __vector;
-}()
+}(${parameterName})
             `.trim()
               }
             }

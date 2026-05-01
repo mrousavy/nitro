@@ -68,6 +68,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceStrings", &HybridTestObjectCppSpec::bounceStrings);
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectCppSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectCppSpec::bounceStructs);
+      prototype.registerHybridMethod("bounceNestedArray", &HybridTestObjectCppSpec::bounceNestedArray);
       prototype.registerHybridMethod("bouncePartialStruct", &HybridTestObjectCppSpec::bouncePartialStruct);
       prototype.registerHybridMethod("sumUpAllPassengers", &HybridTestObjectCppSpec::sumUpAllPassengers);
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectCppSpec::bounceEnums);

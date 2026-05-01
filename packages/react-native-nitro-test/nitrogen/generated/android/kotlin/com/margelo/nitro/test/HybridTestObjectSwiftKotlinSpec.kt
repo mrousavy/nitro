@@ -203,6 +203,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceNestedArray(array: Array<Array<Person>>): Array<Array<Person>>
+  
+  @DoNotStrip
+  @Keep
   abstract fun bouncePartialStruct(person: PartialPerson): PartialPerson
   
   @DoNotStrip

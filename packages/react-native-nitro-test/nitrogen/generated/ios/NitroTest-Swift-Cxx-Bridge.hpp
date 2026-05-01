@@ -492,6 +492,17 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::vector<std::vector<Person>>
+  /**
+   * Specialized version of `std::vector<std::vector<Person>>`.
+   */
+  using std__vector_std__vector_Person__ = std::vector<std::vector<Person>>;
+  inline std::vector<std::vector<Person>> create_std__vector_std__vector_Person__(size_t size) noexcept {
+    std::vector<std::vector<Person>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -1635,6 +1646,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::vector<Person>>>
+  using Result_std__vector_std__vector_Person___ = Result<std::vector<std::vector<Person>>>;
+  inline Result_std__vector_std__vector_Person___ create_Result_std__vector_std__vector_Person___(const std::vector<std::vector<Person>>& value) noexcept {
+    return Result<std::vector<std::vector<Person>>>::withValue(value);
+  }
+  inline Result_std__vector_std__vector_Person___ create_Result_std__vector_std__vector_Person___(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::vector<Person>>>::withError(error);
   }
   
   // pragma MARK: Result<PartialPerson>

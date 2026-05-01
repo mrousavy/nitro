@@ -593,6 +593,28 @@ export function getTests(
           { age: 5, name: 'Ben' },
         ])
     ),
+    createTest('bounceNestedArray(...) equals', () =>
+      it(() =>
+        testObject.bounceNestedArray([
+          [
+            { age: 24, name: 'Marc' },
+            { age: 5, name: 'Ben' },
+          ],
+          [{ age: 30, name: 'Anna' }],
+          [],
+        ])
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .equals([
+          [
+            { age: 24, name: 'Marc' },
+            { age: 5, name: 'Ben' },
+          ],
+          [{ age: 30, name: 'Anna' }],
+          [],
+        ])
+    ),
     createTest('bouncePartialStruct(...) empty equals', () =>
       it(() =>
         testObject.bouncePartialStruct({ name: undefined, age: undefined })
