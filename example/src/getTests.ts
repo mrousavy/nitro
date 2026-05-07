@@ -1754,6 +1754,26 @@ export function getTests(
         .didNotThrow()
         .equals(false)
     ),
+    createTest('areStructOfEnumsEqual(...) same struct', () =>
+      it(() =>
+        testObject.areStructOfEnumsEqual(
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST },
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST }
+        )
+      )
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('areStructOfEnumsEqual(...) different structs', () =>
+      it(() =>
+        testObject.areStructOfEnumsEqual(
+          { powertrain: 'electric', oldEnum: OldEnum.FIRST },
+          { powertrain: 'gas', oldEnum: OldEnum.SECOND }
+        )
+      )
+        .didNotThrow()
+        .equals(false)
+    ),
     createTest('getDriver(...) with no driver', () =>
       it(() =>
         testObject.getDriver({

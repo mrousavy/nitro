@@ -445,6 +445,13 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
       a.someVariant == b.someVariant
   }
 
+  override fun areStructOfEnumsEqual(
+    left: StructOfEnums,
+    right: StructOfEnums,
+  ): Boolean {
+    return left == right
+  }
+
   override fun getDriver(car: Car): Person? {
     return car.driver
   }

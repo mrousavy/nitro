@@ -494,6 +494,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun areStructOfEnumsEqual(left: StructOfEnums, right: StructOfEnums): Boolean
+  
+  @DoNotStrip
+  @Keep
   abstract fun getDriver(car: Car): Person?
   
   @DoNotStrip

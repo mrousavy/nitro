@@ -41,6 +41,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `StructOfEnums` to properly resolve imports.
+namespace margelo::nitro::test { struct StructOfEnums; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
@@ -121,6 +123,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "StructOfEnums.hpp"
+#include "JStructOfEnums.hpp"
 #include "JVariant_Boolean_DoubleArray_Array_String__String_Double.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -1171,6 +1175,11 @@ namespace margelo::nitro::test {
   bool JHybridTestObjectSwiftKotlinSpec::areCarsEqual(const Car& a, const Car& b) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean(jni::alias_ref<JCar> /* a */, jni::alias_ref<JCar> /* b */)>("areCarsEqual");
     auto __result = method(_javaPart, JCar::fromCpp(a), JCar::fromCpp(b));
+    return static_cast<bool>(__result);
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::areStructOfEnumsEqual(const StructOfEnums& left, const StructOfEnums& right) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean(jni::alias_ref<JStructOfEnums> /* left */, jni::alias_ref<JStructOfEnums> /* right */)>("areStructOfEnumsEqual");
+    auto __result = method(_javaPart, JStructOfEnums::fromCpp(left), JStructOfEnums::fromCpp(right));
     return static_cast<bool>(__result);
   }
   std::optional<Person> JHybridTestObjectSwiftKotlinSpec::getDriver(const Car& car) {
