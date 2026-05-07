@@ -467,9 +467,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             }
             // TODO: Remove this check for booleans/doubles once https://github.com/swiftlang/swift/issues/84848 is fixed.
             //       Right now, optionals of doubles or booleans (and who knows what else?) fail to compile when `.value` is used.
+            // Structs are also affected: Swift C++ interop's
+            // `std::optional<Struct>::value` accessor silently loses the payload at
+            // runtime — the JS-passed object arrives in Swift as `nil` (single-field
+            // struct) or as a struct shell with all fields empty (multi-field
+            // struct). Forcing the explicit `has_value`/`get` bridge helpers fixes
+            // it. Reproduces in any Nitro spec method that takes
+            // `options?: SomeStruct` — see e.g. `react-native-nitro-geolocation`
+            // v1.2.3 where `watchHeading(s, e, { headingFilter: 5 })` arrives as
+            // `options=nil` and `watchPosition`'s `LocationRequestOptions` arrives
+            // with every field as an empty optional.
             const swiftBug84848Workaround =
               optional.wrappingType.kind === 'boolean' ||
-              optional.wrappingType.kind === 'number'
+              optional.wrappingType.kind === 'number' ||
+              optional.wrappingType.kind === 'struct'
             if (!swiftBug84848Workaround) {
               if (!wrapping.needsSpecialHandling) {
                 return `${cppParameterName}.value`
