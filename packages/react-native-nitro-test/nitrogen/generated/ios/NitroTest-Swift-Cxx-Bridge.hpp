@@ -142,6 +142,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline Person get_std__vector_Person_(const std::vector<Person>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::optional<bool>
   /**
@@ -182,6 +185,9 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<double> vector;
     vector.reserve(size);
     return vector;
+  }
+  inline double get_std__vector_double_(const std::vector<double>& vector, size_t index) noexcept {
+    return vector[index];
   }
   
   // pragma MARK: std::variant<std::string, double>
@@ -409,6 +415,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline std::string get_std__vector_std__string_(const std::vector<std::string>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::optional<std::vector<std::string>>
   /**
@@ -528,6 +537,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline Car get_std__vector_Car_(const std::vector<Car>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::vector<Powertrain>
   /**
@@ -538,6 +550,9 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<Powertrain> vector;
     vector.reserve(size);
     return vector;
+  }
+  inline Powertrain get_std__vector_Powertrain_(const std::vector<Powertrain>& vector, size_t index) noexcept {
+    return vector[index];
   }
   
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
@@ -572,6 +587,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline std::shared_ptr<HybridChildSpec> get_std__vector_std__shared_ptr_HybridChildSpec__(const std::vector<std::shared_ptr<HybridChildSpec>>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::function<void()>
   /**
@@ -605,6 +623,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline std::function<void()> get_std__vector_std__function_void____(const std::vector<std::function<void()>>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::vector<std::shared_ptr<AnyMap>>
   /**
@@ -615,6 +636,9 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<std::shared_ptr<AnyMap>> vector;
     vector.reserve(size);
     return vector;
+  }
+  inline std::shared_ptr<AnyMap> get_std__vector_std__shared_ptr_AnyMap__(const std::vector<std::shared_ptr<AnyMap>>& vector, size_t index) noexcept {
+    return vector[index];
   }
   
   // pragma MARK: std::shared_ptr<Promise<double>>
@@ -661,6 +685,9 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
+  inline std::shared_ptr<Promise<double>> get_std__vector_std__shared_ptr_Promise_double___(const std::vector<std::shared_ptr<Promise<double>>>& vector, size_t index) noexcept {
+    return vector[index];
+  }
   
   // pragma MARK: std::vector<std::shared_ptr<ArrayBuffer>>
   /**
@@ -671,6 +698,9 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<std::shared_ptr<ArrayBuffer>> vector;
     vector.reserve(size);
     return vector;
+  }
+  inline std::shared_ptr<ArrayBuffer> get_std__vector_std__shared_ptr_ArrayBuffer__(const std::vector<std::shared_ptr<ArrayBuffer>>& vector, size_t index) noexcept {
+    return vector[index];
   }
   
   // pragma MARK: std::variant<bool, double>
@@ -1200,6 +1230,9 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<JsStyleStruct> vector;
     vector.reserve(size);
     return vector;
+  }
+  inline JsStyleStruct get_std__vector_JsStyleStruct_(const std::vector<JsStyleStruct>& vector, size_t index) noexcept {
+    return vector[index];
   }
   
   // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
