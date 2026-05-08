@@ -28,17 +28,11 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `Tier` to properly resolve imports.
-namespace margelo::nitro::test { enum class Tier; }
-// Forward declaration of `Region` to properly resolve imports.
-namespace margelo::nitro::test { enum class Region; }
-// Forward declaration of `OptionalEnumInner` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalEnumInner; }
+// Forward declaration of `Powertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class Powertrain; }
 
 #include <optional>
-#include "Tier.hpp"
-#include "Region.hpp"
-#include "OptionalEnumInner.hpp"
+#include "Powertrain.hpp"
 
 namespace margelo::nitro::test {
 
@@ -61,13 +55,14 @@ namespace margelo::nitro::test {
     std::optional<bool> shouldBuffer     SWIFT_PRIVATE;
     std::optional<bool> shouldRetry     SWIFT_PRIVATE;
     std::optional<bool> verbose     SWIFT_PRIVATE;
-    std::optional<Tier> tier     SWIFT_PRIVATE;
-    std::optional<Region> region     SWIFT_PRIVATE;
-    std::optional<OptionalEnumInner> inner     SWIFT_PRIVATE;
+    std::optional<Powertrain> tier     SWIFT_PRIVATE;
+    std::optional<Powertrain> region     SWIFT_PRIVATE;
+    std::optional<Powertrain> stage     SWIFT_PRIVATE;
+    std::optional<Powertrain> tone     SWIFT_PRIVATE;
 
   public:
     OptionalEnumWrapper() = default;
-    explicit OptionalEnumWrapper(std::optional<double> count, std::optional<double> weight, std::optional<double> ttl, std::optional<double> jitter, std::optional<double> retries, std::optional<double> delayMs, std::optional<double> timeoutMs, std::optional<double> ratio, std::optional<double> threshold, std::optional<bool> enabled, std::optional<bool> active, std::optional<bool> shouldBuffer, std::optional<bool> shouldRetry, std::optional<bool> verbose, std::optional<Tier> tier, std::optional<Region> region, std::optional<OptionalEnumInner> inner): count(count), weight(weight), ttl(ttl), jitter(jitter), retries(retries), delayMs(delayMs), timeoutMs(timeoutMs), ratio(ratio), threshold(threshold), enabled(enabled), active(active), shouldBuffer(shouldBuffer), shouldRetry(shouldRetry), verbose(verbose), tier(tier), region(region), inner(inner) {}
+    explicit OptionalEnumWrapper(std::optional<double> count, std::optional<double> weight, std::optional<double> ttl, std::optional<double> jitter, std::optional<double> retries, std::optional<double> delayMs, std::optional<double> timeoutMs, std::optional<double> ratio, std::optional<double> threshold, std::optional<bool> enabled, std::optional<bool> active, std::optional<bool> shouldBuffer, std::optional<bool> shouldRetry, std::optional<bool> verbose, std::optional<Powertrain> tier, std::optional<Powertrain> region, std::optional<Powertrain> stage, std::optional<Powertrain> tone): count(count), weight(weight), ttl(ttl), jitter(jitter), retries(retries), delayMs(delayMs), timeoutMs(timeoutMs), ratio(ratio), threshold(threshold), enabled(enabled), active(active), shouldBuffer(shouldBuffer), shouldRetry(shouldRetry), verbose(verbose), tier(tier), region(region), stage(stage), tone(tone) {}
 
   public:
     friend bool operator==(const OptionalEnumWrapper& lhs, const OptionalEnumWrapper& rhs) = default;
@@ -97,9 +92,10 @@ namespace margelo::nitro {
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "shouldBuffer"))),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "shouldRetry"))),
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "verbose"))),
-        JSIConverter<std::optional<margelo::nitro::test::Tier>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tier"))),
-        JSIConverter<std::optional<margelo::nitro::test::Region>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "region"))),
-        JSIConverter<std::optional<margelo::nitro::test::OptionalEnumInner>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "inner")))
+        JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tier"))),
+        JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "region"))),
+        JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stage"))),
+        JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tone")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::OptionalEnumWrapper& arg) {
@@ -118,9 +114,10 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "shouldBuffer"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.shouldBuffer));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "shouldRetry"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.shouldRetry));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "verbose"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.verbose));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "tier"), JSIConverter<std::optional<margelo::nitro::test::Tier>>::toJSI(runtime, arg.tier));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "region"), JSIConverter<std::optional<margelo::nitro::test::Region>>::toJSI(runtime, arg.region));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "inner"), JSIConverter<std::optional<margelo::nitro::test::OptionalEnumInner>>::toJSI(runtime, arg.inner));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "tier"), JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::toJSI(runtime, arg.tier));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "region"), JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::toJSI(runtime, arg.region));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "stage"), JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::toJSI(runtime, arg.stage));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "tone"), JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::toJSI(runtime, arg.tone));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -145,9 +142,10 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "shouldBuffer")))) return false;
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "shouldRetry")))) return false;
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "verbose")))) return false;
-      if (!JSIConverter<std::optional<margelo::nitro::test::Tier>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tier")))) return false;
-      if (!JSIConverter<std::optional<margelo::nitro::test::Region>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "region")))) return false;
-      if (!JSIConverter<std::optional<margelo::nitro::test::OptionalEnumInner>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "inner")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tier")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "region")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "stage")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Powertrain>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "tone")))) return false;
       return true;
     }
   };

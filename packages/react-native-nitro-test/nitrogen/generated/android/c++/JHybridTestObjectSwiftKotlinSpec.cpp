@@ -29,24 +29,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
-// Forward declaration of `OptionalNestedWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalNestedWrapper; }
-// Forward declaration of `OptionalNestedInner` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalNestedInner; }
-// Forward declaration of `Side` to properly resolve imports.
-namespace margelo::nitro::test { enum class Side; }
 // Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalEnumWrapper; }
-// Forward declaration of `Tier` to properly resolve imports.
-namespace margelo::nitro::test { enum class Tier; }
-// Forward declaration of `Region` to properly resolve imports.
-namespace margelo::nitro::test { enum class Region; }
-// Forward declaration of `OptionalEnumInner` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalEnumInner; }
-// Forward declaration of `Stage` to properly resolve imports.
-namespace margelo::nitro::test { enum class Stage; }
-// Forward declaration of `Tone` to properly resolve imports.
-namespace margelo::nitro::test { enum class Tone; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -110,24 +94,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
-#include "OptionalNestedWrapper.hpp"
-#include "JOptionalNestedWrapper.hpp"
-#include "OptionalNestedInner.hpp"
-#include "JOptionalNestedInner.hpp"
-#include "Side.hpp"
-#include "JSide.hpp"
 #include "OptionalEnumWrapper.hpp"
 #include "JOptionalEnumWrapper.hpp"
-#include "Tier.hpp"
-#include "JTier.hpp"
-#include "Region.hpp"
-#include "JRegion.hpp"
-#include "OptionalEnumInner.hpp"
-#include "JOptionalEnumInner.hpp"
-#include "Stage.hpp"
-#include "JStage.hpp"
-#include "Tone.hpp"
-#include "JTone.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -1237,16 +1205,6 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
     return __result->toCpp();
-  }
-  std::optional<OptionalWrapper> JHybridTestObjectSwiftKotlinSpec::tryOptionalStruct(const std::optional<OptionalWrapper>& value) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalWrapper>(jni::alias_ref<JOptionalWrapper> /* value */)>("tryOptionalStruct");
-    auto __result = method(_javaPart, value.has_value() ? JOptionalWrapper::fromCpp(value.value()) : nullptr);
-    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
-  }
-  std::optional<OptionalNestedWrapper> JHybridTestObjectSwiftKotlinSpec::tryOptionalNestedStruct(const std::optional<OptionalNestedWrapper>& value) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalNestedWrapper>(jni::alias_ref<JOptionalNestedWrapper> /* value */)>("tryOptionalNestedStruct");
-    auto __result = method(_javaPart, value.has_value() ? JOptionalNestedWrapper::fromCpp(value.value()) : nullptr);
-    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   std::optional<OptionalEnumWrapper> JHybridTestObjectSwiftKotlinSpec::tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalEnumWrapper>(jni::alias_ref<JOptionalEnumWrapper> /* value */)>("tryOptionalEnumStruct");

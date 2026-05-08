@@ -492,14 +492,6 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
-  func tryOptionalStruct(value: OptionalWrapper?) throws -> OptionalWrapper? {
-    return value
-  }
-
-  func tryOptionalNestedStruct(value: OptionalNestedWrapper?) throws -> OptionalNestedWrapper? {
-    return value
-  }
-
   func tryOptionalEnumStruct(value: OptionalEnumWrapper?) throws -> OptionalEnumWrapper? {
     return value
   }

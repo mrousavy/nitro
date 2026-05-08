@@ -18,7 +18,7 @@ public extension OptionalEnumWrapper {
   /**
    * Create a new instance of `OptionalEnumWrapper`.
    */
-  init(count: Double?, weight: Double?, ttl: Double?, jitter: Double?, retries: Double?, delayMs: Double?, timeoutMs: Double?, ratio: Double?, threshold: Double?, enabled: Bool?, active: Bool?, shouldBuffer: Bool?, shouldRetry: Bool?, verbose: Bool?, tier: Tier?, region: Region?, inner: OptionalEnumInner?) {
+  init(count: Double?, weight: Double?, ttl: Double?, jitter: Double?, retries: Double?, delayMs: Double?, timeoutMs: Double?, ratio: Double?, threshold: Double?, enabled: Bool?, active: Bool?, shouldBuffer: Bool?, shouldRetry: Bool?, verbose: Bool?, tier: Powertrain?, region: Powertrain?, stage: Powertrain?, tone: Powertrain?) {
     self.init({ () -> bridge.std__optional_double_ in
       if let __unwrappedValue = count {
         return bridge.create_std__optional_double_(__unwrappedValue)
@@ -103,21 +103,27 @@ public extension OptionalEnumWrapper {
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_Tier_ in
+    }(), { () -> bridge.std__optional_Powertrain_ in
       if let __unwrappedValue = tier {
-        return bridge.create_std__optional_Tier_(__unwrappedValue)
+        return bridge.create_std__optional_Powertrain_(__unwrappedValue)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_Region_ in
+    }(), { () -> bridge.std__optional_Powertrain_ in
       if let __unwrappedValue = region {
-        return bridge.create_std__optional_Region_(__unwrappedValue)
+        return bridge.create_std__optional_Powertrain_(__unwrappedValue)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_OptionalEnumInner_ in
-      if let __unwrappedValue = inner {
-        return bridge.create_std__optional_OptionalEnumInner_(__unwrappedValue)
+    }(), { () -> bridge.std__optional_Powertrain_ in
+      if let __unwrappedValue = stage {
+        return bridge.create_std__optional_Powertrain_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_Powertrain_ in
+      if let __unwrappedValue = tone {
+        return bridge.create_std__optional_Powertrain_(__unwrappedValue)
       } else {
         return .init()
       }
@@ -293,17 +299,22 @@ public extension OptionalEnumWrapper {
   }
   
   @inline(__always)
-  var tier: Tier? {
+  var tier: Powertrain? {
     return self.__tier.value
   }
   
   @inline(__always)
-  var region: Region? {
+  var region: Powertrain? {
     return self.__region.value
   }
   
   @inline(__always)
-  var inner: OptionalEnumInner? {
-    return self.__inner.value
+  var stage: Powertrain? {
+    return self.__stage.value
+  }
+  
+  @inline(__always)
+  var tone: Powertrain? {
+    return self.__tone.value
   }
 }

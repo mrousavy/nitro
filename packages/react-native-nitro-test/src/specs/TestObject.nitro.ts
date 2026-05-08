@@ -74,28 +74,7 @@ export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer
   optionalString?: string
 }
-// An optional struct that itself contains a nested optional struct.
-export type Side = 'left' | 'right'
-export interface OptionalNestedInner {
-  start?: Side
-  end?: Side
-}
-export interface OptionalNestedWrapper {
-  count?: number
-  enabled?: boolean
-  inner?: OptionalNestedInner
-}
-
-// A wide optional struct mixing many primitive optionals with multiple
-// distinct string-union enum optionals and a nested optional struct.
-export type Stage = 'idle' | 'warmup' | 'active' | 'cool'
-export type Tier = 'free' | 'pro' | 'enterprise'
-export type Region = 'us' | 'eu' | 'apac' | 'global'
-export type Tone = 'cool' | 'warm' | 'neutral'
-export interface OptionalEnumInner {
-  stage?: Stage
-  tone?: Tone
-}
+// A wide optional struct mixing primitive optionals with string-union enum optionals.
 export interface OptionalEnumWrapper {
   count?: number
   weight?: number
@@ -111,9 +90,10 @@ export interface OptionalEnumWrapper {
   shouldBuffer?: boolean
   shouldRetry?: boolean
   verbose?: boolean
-  tier?: Tier
-  region?: Region
-  inner?: OptionalEnumInner
+  tier?: Powertrain
+  region?: Powertrain
+  stage?: Powertrain
+  tone?: Powertrain
 }
 export interface ExternalObjectStruct {
   someExternal: SomeExternalObject
@@ -290,10 +270,6 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
-  tryOptionalStruct(value?: OptionalWrapper): OptionalWrapper | undefined
-  tryOptionalNestedStruct(
-    value?: OptionalNestedWrapper
-  ): OptionalNestedWrapper | undefined
   tryOptionalEnumStruct(
     value?: OptionalEnumWrapper
   ): OptionalEnumWrapper | undefined

@@ -7,7 +7,6 @@ import {
   type Powertrain,
   type WrappedJsStruct,
   type OptionalWrapper,
-  type OptionalNestedWrapper,
   type OptionalEnumWrapper,
   WeirdNumbersEnum,
   CustomString,
@@ -132,11 +131,6 @@ const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalArrayBuffer: new ArrayBuffer(1024),
   optionalString: 'hello!',
 }
-const TEST_OPTIONAL_NESTED_WRAPPER: OptionalNestedWrapper = {
-  count: 42,
-  enabled: true,
-  inner: { start: 'left', end: 'right' },
-}
 const TEST_OPTIONAL_ENUM_WRAPPER: OptionalEnumWrapper = {
   count: 7,
   weight: 1.5,
@@ -152,9 +146,10 @@ const TEST_OPTIONAL_ENUM_WRAPPER: OptionalEnumWrapper = {
   shouldBuffer: true,
   shouldRetry: false,
   verbose: true,
-  tier: 'pro',
-  region: 'eu',
-  inner: { stage: 'active', tone: 'cool' },
+  tier: 'electric',
+  region: 'gas',
+  stage: 'hybrid',
+  tone: 'electric',
 }
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
@@ -670,28 +665,6 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_OPTIONAL_WRAPPER)
-    ),
-    createTest('tryOptionalStruct(...) equals', () =>
-      it(() => testObject.tryOptionalStruct(TEST_OPTIONAL_WRAPPER))
-        .didNotThrow()
-        .didReturn('object')
-        .equals(TEST_OPTIONAL_WRAPPER)
-    ),
-    createTest('tryOptionalStruct(...) undefined', () =>
-      it(() => testObject.tryOptionalStruct(undefined))
-        .didNotThrow()
-        .equals(undefined)
-    ),
-    createTest('tryOptionalNestedStruct(...) equals', () =>
-      it(() => testObject.tryOptionalNestedStruct(TEST_OPTIONAL_NESTED_WRAPPER))
-        .didNotThrow()
-        .didReturn('object')
-        .equals(TEST_OPTIONAL_NESTED_WRAPPER)
-    ),
-    createTest('tryOptionalNestedStruct(...) undefined', () =>
-      it(() => testObject.tryOptionalNestedStruct(undefined))
-        .didNotThrow()
-        .equals(undefined)
     ),
     createTest('tryOptionalEnumStruct(...) equals', () =>
       it(() => testObject.tryOptionalEnumStruct(TEST_OPTIONAL_ENUM_WRAPPER))

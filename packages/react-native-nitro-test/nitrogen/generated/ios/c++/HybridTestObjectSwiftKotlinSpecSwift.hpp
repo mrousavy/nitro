@@ -40,24 +40,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
-// Forward declaration of `OptionalNestedWrapper` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalNestedWrapper; }
-// Forward declaration of `OptionalNestedInner` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalNestedInner; }
-// Forward declaration of `Side` to properly resolve imports.
-namespace margelo::nitro::test { enum class Side; }
 // Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalEnumWrapper; }
-// Forward declaration of `Tier` to properly resolve imports.
-namespace margelo::nitro::test { enum class Tier; }
-// Forward declaration of `Region` to properly resolve imports.
-namespace margelo::nitro::test { enum class Region; }
-// Forward declaration of `OptionalEnumInner` to properly resolve imports.
-namespace margelo::nitro::test { struct OptionalEnumInner; }
-// Forward declaration of `Stage` to properly resolve imports.
-namespace margelo::nitro::test { enum class Stage; }
-// Forward declaration of `Tone` to properly resolve imports.
-namespace margelo::nitro::test { enum class Tone; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -96,15 +80,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
-#include "OptionalNestedWrapper.hpp"
-#include "OptionalNestedInner.hpp"
-#include "Side.hpp"
 #include "OptionalEnumWrapper.hpp"
-#include "Tier.hpp"
-#include "Region.hpp"
-#include "OptionalEnumInner.hpp"
-#include "Stage.hpp"
-#include "Tone.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -817,22 +793,6 @@ namespace margelo::nitro::test {
     }
     inline OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override {
       auto __result = _swiftPart.bounceOptionalCallback(std::forward<decltype(value)>(value));
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
-    inline std::optional<OptionalWrapper> tryOptionalStruct(const std::optional<OptionalWrapper>& value) override {
-      auto __result = _swiftPart.tryOptionalStruct(value);
-      if (__result.hasError()) [[unlikely]] {
-        std::rethrow_exception(__result.error());
-      }
-      auto __value = std::move(__result.value());
-      return __value;
-    }
-    inline std::optional<OptionalNestedWrapper> tryOptionalNestedStruct(const std::optional<OptionalNestedWrapper>& value) override {
-      auto __result = _swiftPart.tryOptionalNestedStruct(value);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

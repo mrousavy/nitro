@@ -62,13 +62,16 @@ data class OptionalEnumWrapper(
   val verbose: Boolean?,
   @DoNotStrip
   @Keep
-  val tier: Tier?,
+  val tier: Powertrain?,
   @DoNotStrip
   @Keep
-  val region: Region?,
+  val region: Powertrain?,
   @DoNotStrip
   @Keep
-  val inner: OptionalEnumInner?
+  val stage: Powertrain?,
+  @DoNotStrip
+  @Keep
+  val tone: Powertrain?
 ) {
   /* primary constructor */
 
@@ -91,7 +94,8 @@ data class OptionalEnumWrapper(
       && Objects.deepEquals(this.verbose, other.verbose)
       && Objects.deepEquals(this.tier, other.tier)
       && Objects.deepEquals(this.region, other.region)
-      && Objects.deepEquals(this.inner, other.inner)
+      && Objects.deepEquals(this.stage, other.stage)
+      && Objects.deepEquals(this.tone, other.tone)
   }
 
   override fun hashCode(): Int {
@@ -112,7 +116,8 @@ data class OptionalEnumWrapper(
       verbose,
       tier,
       region,
-      inner
+      stage,
+      tone
     ).contentDeepHashCode()
   }
 
@@ -124,8 +129,8 @@ data class OptionalEnumWrapper(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(count: Double?, weight: Double?, ttl: Double?, jitter: Double?, retries: Double?, delayMs: Double?, timeoutMs: Double?, ratio: Double?, threshold: Double?, enabled: Boolean?, active: Boolean?, shouldBuffer: Boolean?, shouldRetry: Boolean?, verbose: Boolean?, tier: Tier?, region: Region?, inner: OptionalEnumInner?): OptionalEnumWrapper {
-      return OptionalEnumWrapper(count, weight, ttl, jitter, retries, delayMs, timeoutMs, ratio, threshold, enabled, active, shouldBuffer, shouldRetry, verbose, tier, region, inner)
+    private fun fromCpp(count: Double?, weight: Double?, ttl: Double?, jitter: Double?, retries: Double?, delayMs: Double?, timeoutMs: Double?, ratio: Double?, threshold: Double?, enabled: Boolean?, active: Boolean?, shouldBuffer: Boolean?, shouldRetry: Boolean?, verbose: Boolean?, tier: Powertrain?, region: Powertrain?, stage: Powertrain?, tone: Powertrain?): OptionalEnumWrapper {
+      return OptionalEnumWrapper(count, weight, ttl, jitter, retries, delayMs, timeoutMs, ratio, threshold, enabled, active, shouldBuffer, shouldRetry, verbose, tier, region, stage, tone)
     }
   }
 }

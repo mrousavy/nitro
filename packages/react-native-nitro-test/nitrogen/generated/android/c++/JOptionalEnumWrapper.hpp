@@ -10,16 +10,8 @@
 #include <fbjni/fbjni.h>
 #include "OptionalEnumWrapper.hpp"
 
-#include "JOptionalEnumInner.hpp"
-#include "JRegion.hpp"
-#include "JStage.hpp"
-#include "JTier.hpp"
-#include "JTone.hpp"
-#include "OptionalEnumInner.hpp"
-#include "Region.hpp"
-#include "Stage.hpp"
-#include "Tier.hpp"
-#include "Tone.hpp"
+#include "JPowertrain.hpp"
+#include "Powertrain.hpp"
 #include <optional>
 
 namespace margelo::nitro::test {
@@ -69,12 +61,14 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JBoolean> shouldRetry = this->getFieldValue(fieldShouldRetry);
       static const auto fieldVerbose = clazz->getField<jni::JBoolean>("verbose");
       jni::local_ref<jni::JBoolean> verbose = this->getFieldValue(fieldVerbose);
-      static const auto fieldTier = clazz->getField<JTier>("tier");
-      jni::local_ref<JTier> tier = this->getFieldValue(fieldTier);
-      static const auto fieldRegion = clazz->getField<JRegion>("region");
-      jni::local_ref<JRegion> region = this->getFieldValue(fieldRegion);
-      static const auto fieldInner = clazz->getField<JOptionalEnumInner>("inner");
-      jni::local_ref<JOptionalEnumInner> inner = this->getFieldValue(fieldInner);
+      static const auto fieldTier = clazz->getField<JPowertrain>("tier");
+      jni::local_ref<JPowertrain> tier = this->getFieldValue(fieldTier);
+      static const auto fieldRegion = clazz->getField<JPowertrain>("region");
+      jni::local_ref<JPowertrain> region = this->getFieldValue(fieldRegion);
+      static const auto fieldStage = clazz->getField<JPowertrain>("stage");
+      jni::local_ref<JPowertrain> stage = this->getFieldValue(fieldStage);
+      static const auto fieldTone = clazz->getField<JPowertrain>("tone");
+      jni::local_ref<JPowertrain> tone = this->getFieldValue(fieldTone);
       return OptionalEnumWrapper(
         count != nullptr ? std::make_optional(count->value()) : std::nullopt,
         weight != nullptr ? std::make_optional(weight->value()) : std::nullopt,
@@ -92,7 +86,8 @@ namespace margelo::nitro::test {
         verbose != nullptr ? std::make_optional(static_cast<bool>(verbose->value())) : std::nullopt,
         tier != nullptr ? std::make_optional(tier->toCpp()) : std::nullopt,
         region != nullptr ? std::make_optional(region->toCpp()) : std::nullopt,
-        inner != nullptr ? std::make_optional(inner->toCpp()) : std::nullopt
+        stage != nullptr ? std::make_optional(stage->toCpp()) : std::nullopt,
+        tone != nullptr ? std::make_optional(tone->toCpp()) : std::nullopt
       );
     }
 
@@ -102,7 +97,7 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JOptionalEnumWrapper::javaobject> fromCpp(const OptionalEnumWrapper& value) {
-      using JSignature = JOptionalEnumWrapper(jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<JTier>, jni::alias_ref<JRegion>, jni::alias_ref<JOptionalEnumInner>);
+      using JSignature = JOptionalEnumWrapper(jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<JPowertrain>, jni::alias_ref<JPowertrain>, jni::alias_ref<JPowertrain>, jni::alias_ref<JPowertrain>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -121,9 +116,10 @@ namespace margelo::nitro::test {
         value.shouldBuffer.has_value() ? jni::JBoolean::valueOf(value.shouldBuffer.value()) : nullptr,
         value.shouldRetry.has_value() ? jni::JBoolean::valueOf(value.shouldRetry.value()) : nullptr,
         value.verbose.has_value() ? jni::JBoolean::valueOf(value.verbose.value()) : nullptr,
-        value.tier.has_value() ? JTier::fromCpp(value.tier.value()) : nullptr,
-        value.region.has_value() ? JRegion::fromCpp(value.region.value()) : nullptr,
-        value.inner.has_value() ? JOptionalEnumInner::fromCpp(value.inner.value()) : nullptr
+        value.tier.has_value() ? JPowertrain::fromCpp(value.tier.value()) : nullptr,
+        value.region.has_value() ? JPowertrain::fromCpp(value.region.value()) : nullptr,
+        value.stage.has_value() ? JPowertrain::fromCpp(value.stage.value()) : nullptr,
+        value.tone.has_value() ? JPowertrain::fromCpp(value.tone.value()) : nullptr
       );
     }
   };
