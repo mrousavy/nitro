@@ -74,9 +74,7 @@ export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer
   optionalString?: string
 }
-// Shared with the `tryOptional*` test family below. Used to repro
-// `Optional<Struct>` round-trip behavior on the Swift Cxx-interop bridge
-// across struct shapes of increasing complexity.
+// An optional struct that itself contains a nested optional struct.
 export type Side = 'left' | 'right'
 export interface OptionalNestedInner {
   start?: Side
@@ -88,12 +86,8 @@ export interface OptionalNestedWrapper {
   inner?: OptionalNestedInner
 }
 
-// Generic settings-bag mirroring the field-count and enum-density shape
-// of `OptionalNestedWrapper` × ~5. Reproduces the Swift Cxx-interop garbage
-// read on string-union enum tags ("Cannot convert <Tier> to JS - invalid
-// value: 2003789939"). The smaller `OptionalNestedWrapper` repro above
-// passes; the bug only manifests on wider structs with multiple distinct
-// string-union enum types (verified empirically — slimmed shapes pass).
+// A wide optional struct mixing many primitive optionals with multiple
+// distinct string-union enum optionals and a nested optional struct.
 export type Stage = 'idle' | 'warmup' | 'active' | 'cool'
 export type Tier = 'free' | 'pro' | 'enterprise'
 export type Region = 'us' | 'eu' | 'apac' | 'global'
