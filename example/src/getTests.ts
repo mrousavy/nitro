@@ -7,6 +7,8 @@ import {
   type Powertrain,
   type WrappedJsStruct,
   type OptionalWrapper,
+  type OptionalNestedWrapper,
+  type OptionalEnumWrapper,
   WeirdNumbersEnum,
   CustomString,
   Base,
@@ -129,6 +131,30 @@ const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
 const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
   optionalArrayBuffer: new ArrayBuffer(1024),
   optionalString: 'hello!',
+}
+const TEST_OPTIONAL_NESTED_WRAPPER: OptionalNestedWrapper = {
+  count: 42,
+  enabled: true,
+  inner: { start: 'left', end: 'right' },
+}
+const TEST_OPTIONAL_ENUM_WRAPPER: OptionalEnumWrapper = {
+  count: 7,
+  weight: 1.5,
+  ttl: 30000,
+  jitter: 50,
+  retries: 3,
+  delayMs: 250,
+  timeoutMs: 60000,
+  ratio: 0.75,
+  threshold: 100,
+  enabled: true,
+  active: false,
+  shouldBuffer: true,
+  shouldRetry: false,
+  verbose: true,
+  tier: 'pro',
+  region: 'eu',
+  inner: { stage: 'active', tone: 'cool' },
 }
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
@@ -644,6 +670,39 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_OPTIONAL_WRAPPER)
+    ),
+    createTest('tryOptionalStruct(...) equals', () =>
+      it(() => testObject.tryOptionalStruct(TEST_OPTIONAL_WRAPPER))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_OPTIONAL_WRAPPER)
+    ),
+    createTest('tryOptionalStruct(...) undefined', () =>
+      it(() => testObject.tryOptionalStruct(undefined))
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('tryOptionalNestedStruct(...) equals', () =>
+      it(() => testObject.tryOptionalNestedStruct(TEST_OPTIONAL_NESTED_WRAPPER))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_OPTIONAL_NESTED_WRAPPER)
+    ),
+    createTest('tryOptionalNestedStruct(...) undefined', () =>
+      it(() => testObject.tryOptionalNestedStruct(undefined))
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('tryOptionalEnumStruct(...) equals', () =>
+      it(() => testObject.tryOptionalEnumStruct(TEST_OPTIONAL_ENUM_WRAPPER))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_OPTIONAL_ENUM_WRAPPER)
+    ),
+    createTest('tryOptionalEnumStruct(...) undefined', () =>
+      it(() => testObject.tryOptionalEnumStruct(undefined))
+        .didNotThrow()
+        .equals(undefined)
     ),
     createTest('bounceOptionalCallback(...) works for function', () =>
       it(

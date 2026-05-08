@@ -518,6 +518,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun tryOptionalStruct(value: OptionalWrapper?): OptionalWrapper?
+  
+  @DoNotStrip
+  @Keep
+  abstract fun tryOptionalNestedStruct(value: OptionalNestedWrapper?): OptionalNestedWrapper?
+  
+  @DoNotStrip
+  @Keep
+  abstract fun tryOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper?
+  
+  @DoNotStrip
+  @Keep
   abstract fun createArrayBuffer(): ArrayBuffer
   
   @DoNotStrip

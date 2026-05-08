@@ -34,6 +34,14 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalEnumInner` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumInner; }
+// Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumWrapper; }
+// Forward declaration of `OptionalNestedInner` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalNestedInner; }
+// Forward declaration of `OptionalNestedWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalNestedWrapper; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -42,6 +50,16 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `Region` to properly resolve imports.
+namespace margelo::nitro::test { enum class Region; }
+// Forward declaration of `Side` to properly resolve imports.
+namespace margelo::nitro::test { enum class Side; }
+// Forward declaration of `Stage` to properly resolve imports.
+namespace margelo::nitro::test { enum class Stage; }
+// Forward declaration of `Tier` to properly resolve imports.
+namespace margelo::nitro::test { enum class Tier; }
+// Forward declaration of `Tone` to properly resolve imports.
+namespace margelo::nitro::test { enum class Tone; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -75,10 +93,19 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalEnumInner.hpp"
+#include "OptionalEnumWrapper.hpp"
+#include "OptionalNestedInner.hpp"
+#include "OptionalNestedWrapper.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "Region.hpp"
+#include "Side.hpp"
+#include "Stage.hpp"
+#include "Tier.hpp"
+#include "Tone.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -1261,6 +1288,156 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<OptionalWrapper>
+  /**
+   * Specialized version of `std::optional<OptionalWrapper>`.
+   */
+  using std__optional_OptionalWrapper_ = std::optional<OptionalWrapper>;
+  inline std::optional<OptionalWrapper> create_std__optional_OptionalWrapper_(const OptionalWrapper& value) noexcept {
+    return std::optional<OptionalWrapper>(value);
+  }
+  inline bool has_value_std__optional_OptionalWrapper_(const std::optional<OptionalWrapper>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalWrapper get_std__optional_OptionalWrapper_(const std::optional<OptionalWrapper>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Side>
+  /**
+   * Specialized version of `std::optional<Side>`.
+   */
+  using std__optional_Side_ = std::optional<Side>;
+  inline std::optional<Side> create_std__optional_Side_(const Side& value) noexcept {
+    return std::optional<Side>(value);
+  }
+  inline bool has_value_std__optional_Side_(const std::optional<Side>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Side get_std__optional_Side_(const std::optional<Side>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<OptionalNestedInner>
+  /**
+   * Specialized version of `std::optional<OptionalNestedInner>`.
+   */
+  using std__optional_OptionalNestedInner_ = std::optional<OptionalNestedInner>;
+  inline std::optional<OptionalNestedInner> create_std__optional_OptionalNestedInner_(const OptionalNestedInner& value) noexcept {
+    return std::optional<OptionalNestedInner>(value);
+  }
+  inline bool has_value_std__optional_OptionalNestedInner_(const std::optional<OptionalNestedInner>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalNestedInner get_std__optional_OptionalNestedInner_(const std::optional<OptionalNestedInner>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<OptionalNestedWrapper>
+  /**
+   * Specialized version of `std::optional<OptionalNestedWrapper>`.
+   */
+  using std__optional_OptionalNestedWrapper_ = std::optional<OptionalNestedWrapper>;
+  inline std::optional<OptionalNestedWrapper> create_std__optional_OptionalNestedWrapper_(const OptionalNestedWrapper& value) noexcept {
+    return std::optional<OptionalNestedWrapper>(value);
+  }
+  inline bool has_value_std__optional_OptionalNestedWrapper_(const std::optional<OptionalNestedWrapper>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalNestedWrapper get_std__optional_OptionalNestedWrapper_(const std::optional<OptionalNestedWrapper>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Tier>
+  /**
+   * Specialized version of `std::optional<Tier>`.
+   */
+  using std__optional_Tier_ = std::optional<Tier>;
+  inline std::optional<Tier> create_std__optional_Tier_(const Tier& value) noexcept {
+    return std::optional<Tier>(value);
+  }
+  inline bool has_value_std__optional_Tier_(const std::optional<Tier>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Tier get_std__optional_Tier_(const std::optional<Tier>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Region>
+  /**
+   * Specialized version of `std::optional<Region>`.
+   */
+  using std__optional_Region_ = std::optional<Region>;
+  inline std::optional<Region> create_std__optional_Region_(const Region& value) noexcept {
+    return std::optional<Region>(value);
+  }
+  inline bool has_value_std__optional_Region_(const std::optional<Region>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Region get_std__optional_Region_(const std::optional<Region>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Stage>
+  /**
+   * Specialized version of `std::optional<Stage>`.
+   */
+  using std__optional_Stage_ = std::optional<Stage>;
+  inline std::optional<Stage> create_std__optional_Stage_(const Stage& value) noexcept {
+    return std::optional<Stage>(value);
+  }
+  inline bool has_value_std__optional_Stage_(const std::optional<Stage>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Stage get_std__optional_Stage_(const std::optional<Stage>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<Tone>
+  /**
+   * Specialized version of `std::optional<Tone>`.
+   */
+  using std__optional_Tone_ = std::optional<Tone>;
+  inline std::optional<Tone> create_std__optional_Tone_(const Tone& value) noexcept {
+    return std::optional<Tone>(value);
+  }
+  inline bool has_value_std__optional_Tone_(const std::optional<Tone>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline Tone get_std__optional_Tone_(const std::optional<Tone>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<OptionalEnumInner>
+  /**
+   * Specialized version of `std::optional<OptionalEnumInner>`.
+   */
+  using std__optional_OptionalEnumInner_ = std::optional<OptionalEnumInner>;
+  inline std::optional<OptionalEnumInner> create_std__optional_OptionalEnumInner_(const OptionalEnumInner& value) noexcept {
+    return std::optional<OptionalEnumInner>(value);
+  }
+  inline bool has_value_std__optional_OptionalEnumInner_(const std::optional<OptionalEnumInner>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalEnumInner get_std__optional_OptionalEnumInner_(const std::optional<OptionalEnumInner>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<OptionalEnumWrapper>
+  /**
+   * Specialized version of `std::optional<OptionalEnumWrapper>`.
+   */
+  using std__optional_OptionalEnumWrapper_ = std::optional<OptionalEnumWrapper>;
+  inline std::optional<OptionalEnumWrapper> create_std__optional_OptionalEnumWrapper_(const OptionalEnumWrapper& value) noexcept {
+    return std::optional<OptionalEnumWrapper>(value);
+  }
+  inline bool has_value_std__optional_OptionalEnumWrapper_(const std::optional<OptionalEnumWrapper>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalEnumWrapper get_std__optional_OptionalEnumWrapper_(const std::optional<OptionalEnumWrapper>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>
   /**
    * Wrapper struct for `std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>`.
@@ -1907,6 +2084,33 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<OptionalWrapper>>
+  using Result_std__optional_OptionalWrapper__ = Result<std::optional<OptionalWrapper>>;
+  inline Result_std__optional_OptionalWrapper__ create_Result_std__optional_OptionalWrapper__(const std::optional<OptionalWrapper>& value) noexcept {
+    return Result<std::optional<OptionalWrapper>>::withValue(value);
+  }
+  inline Result_std__optional_OptionalWrapper__ create_Result_std__optional_OptionalWrapper__(const std::exception_ptr& error) noexcept {
+    return Result<std::optional<OptionalWrapper>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<OptionalNestedWrapper>>
+  using Result_std__optional_OptionalNestedWrapper__ = Result<std::optional<OptionalNestedWrapper>>;
+  inline Result_std__optional_OptionalNestedWrapper__ create_Result_std__optional_OptionalNestedWrapper__(const std::optional<OptionalNestedWrapper>& value) noexcept {
+    return Result<std::optional<OptionalNestedWrapper>>::withValue(value);
+  }
+  inline Result_std__optional_OptionalNestedWrapper__ create_Result_std__optional_OptionalNestedWrapper__(const std::exception_ptr& error) noexcept {
+    return Result<std::optional<OptionalNestedWrapper>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<OptionalEnumWrapper>>
+  using Result_std__optional_OptionalEnumWrapper__ = Result<std::optional<OptionalEnumWrapper>>;
+  inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::optional<OptionalEnumWrapper>& value) noexcept {
+    return Result<std::optional<OptionalEnumWrapper>>::withValue(value);
+  }
+  inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::exception_ptr& error) noexcept {
+    return Result<std::optional<OptionalEnumWrapper>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

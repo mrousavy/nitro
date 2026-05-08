@@ -36,6 +36,14 @@ namespace margelo::nitro::test { struct MapWrapper; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalEnumInner` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumInner; }
+// Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumWrapper; }
+// Forward declaration of `OptionalNestedInner` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalNestedInner; }
+// Forward declaration of `OptionalNestedWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalNestedWrapper; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -44,8 +52,18 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `Region` to properly resolve imports.
+namespace margelo::nitro::test { enum class Region; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `Side` to properly resolve imports.
+namespace margelo::nitro::test { enum class Side; }
+// Forward declaration of `Stage` to properly resolve imports.
+namespace margelo::nitro::test { enum class Stage; }
+// Forward declaration of `Tier` to properly resolve imports.
+namespace margelo::nitro::test { enum class Tier; }
+// Forward declaration of `Tone` to properly resolve imports.
+namespace margelo::nitro::test { enum class Tone; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -65,11 +83,20 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalEnumInner.hpp"
+#include "OptionalEnumWrapper.hpp"
+#include "OptionalNestedInner.hpp"
+#include "OptionalNestedWrapper.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "Region.hpp"
 #include "SecondMapWrapper.hpp"
+#include "Side.hpp"
+#include "Stage.hpp"
+#include "Tier.hpp"
+#include "Tone.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>

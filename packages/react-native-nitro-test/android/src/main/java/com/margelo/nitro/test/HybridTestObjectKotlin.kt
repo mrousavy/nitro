@@ -469,6 +469,18 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
+  override fun tryOptionalStruct(value: OptionalWrapper?): OptionalWrapper? {
+    return value
+  }
+
+  override fun tryOptionalNestedStruct(value: OptionalNestedWrapper?): OptionalNestedWrapper? {
+    return value
+  }
+
+  override fun tryOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper? {
+    return value
+  }
+
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(

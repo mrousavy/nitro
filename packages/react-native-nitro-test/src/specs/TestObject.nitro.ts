@@ -74,6 +74,53 @@ export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer
   optionalString?: string
 }
+// Shared with the `tryOptional*` test family below. Used to repro
+// `Optional<Struct>` round-trip behavior on the Swift Cxx-interop bridge
+// across struct shapes of increasing complexity.
+export type Side = 'left' | 'right'
+export interface OptionalNestedInner {
+  start?: Side
+  end?: Side
+}
+export interface OptionalNestedWrapper {
+  count?: number
+  enabled?: boolean
+  inner?: OptionalNestedInner
+}
+
+// Generic settings-bag mirroring the field-count and enum-density shape
+// of `OptionalNestedWrapper` × ~5. Reproduces the Swift Cxx-interop garbage
+// read on string-union enum tags ("Cannot convert <Tier> to JS - invalid
+// value: 2003789939"). The smaller `OptionalNestedWrapper` repro above
+// passes; the bug only manifests on wider structs with multiple distinct
+// string-union enum types (verified empirically — slimmed shapes pass).
+export type Stage = 'idle' | 'warmup' | 'active' | 'cool'
+export type Tier = 'free' | 'pro' | 'enterprise'
+export type Region = 'us' | 'eu' | 'apac' | 'global'
+export type Tone = 'cool' | 'warm' | 'neutral'
+export interface OptionalEnumInner {
+  stage?: Stage
+  tone?: Tone
+}
+export interface OptionalEnumWrapper {
+  count?: number
+  weight?: number
+  ttl?: number
+  jitter?: number
+  retries?: number
+  delayMs?: number
+  timeoutMs?: number
+  ratio?: number
+  threshold?: number
+  enabled?: boolean
+  active?: boolean
+  shouldBuffer?: boolean
+  shouldRetry?: boolean
+  verbose?: boolean
+  tier?: Tier
+  region?: Region
+  inner?: OptionalEnumInner
+}
 export interface ExternalObjectStruct {
   someExternal: SomeExternalObject
 }
@@ -249,6 +296,13 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  tryOptionalStruct(value?: OptionalWrapper): OptionalWrapper | undefined
+  tryOptionalNestedStruct(
+    value?: OptionalNestedWrapper
+  ): OptionalNestedWrapper | undefined
+  tryOptionalEnumStruct(
+    value?: OptionalEnumWrapper
+  ): OptionalEnumWrapper | undefined
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

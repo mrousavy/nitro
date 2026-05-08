@@ -160,6 +160,9 @@ namespace margelo::nitro::test {
     WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
     OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
     OptionalCallback bounceOptionalCallback(const OptionalCallback& value) override;
+    std::optional<OptionalWrapper> tryOptionalStruct(const std::optional<OptionalWrapper>& value) override;
+    std::optional<OptionalNestedWrapper> tryOptionalNestedStruct(const std::optional<OptionalNestedWrapper>& value) override;
+    std::optional<OptionalEnumWrapper> tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) override;
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override;
     std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;

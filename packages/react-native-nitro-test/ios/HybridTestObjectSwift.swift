@@ -492,6 +492,18 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return value
   }
 
+  func tryOptionalStruct(value: OptionalWrapper?) throws -> OptionalWrapper? {
+    return value
+  }
+
+  func tryOptionalNestedStruct(value: OptionalNestedWrapper?) throws -> OptionalNestedWrapper? {
+    return value
+  }
+
+  func tryOptionalEnumStruct(value: OptionalEnumWrapper?) throws -> OptionalEnumWrapper? {
+    return value
+  }
+
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
     let data = Data(count: 1024 * 1024 * 10)  // 10 MB
     if copy {
