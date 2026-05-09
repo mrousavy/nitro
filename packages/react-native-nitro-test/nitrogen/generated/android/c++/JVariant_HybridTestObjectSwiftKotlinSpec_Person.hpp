@@ -11,8 +11,8 @@
 #include <variant>
 
 #include <memory>
-#include "HybridTestObjectSwiftKotlinSpec.hpp"
-#include "Person.hpp"
+#include "NitroTestHybridTestObjectSwiftKotlinSpec.hpp"
+#include "NitroTestPerson.hpp"
 #include <variant>
 #include "JHybridTestObjectSwiftKotlinSpec.hpp"
 #include "JPerson.hpp"

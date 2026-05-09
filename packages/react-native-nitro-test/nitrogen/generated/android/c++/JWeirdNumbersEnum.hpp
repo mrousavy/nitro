@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "WeirdNumbersEnum.hpp"
+#include "NitroTestWeirdNumbersEnum.hpp"
 
 namespace margelo::nitro::test {
 

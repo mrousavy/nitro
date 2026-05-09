@@ -1,3 +1,5 @@
+import { NitroConfig } from '../../config/NitroConfig.js'
+import { getWithModuleName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 
 interface Props {
@@ -20,13 +22,17 @@ export function createCppHybridObjectRegistration({
   hybridObjectName,
   cppClassName,
 }: Props): CppHybridObjectRegistration {
+  const registeredName = getWithModuleName(
+    NitroConfig.current,
+    hybridObjectName
+  )
   return {
     requiredImports: [
       { name: `${cppClassName}.hpp`, language: 'c++', space: 'user' },
     ],
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
-  "${hybridObjectName}",
+  "${registeredName}",
   []() -> std::shared_ptr<HybridObject> {
     static_assert(std::is_default_constructible_v<${cppClassName}>,
                   "The HybridObject \\"${cppClassName}\\" is not default-constructible! "

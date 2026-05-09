@@ -22,7 +22,7 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
 public extension HybridTestViewSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject TestView]"
+    return "[HybridObject NitroTestTestView]"
   }
 }
 

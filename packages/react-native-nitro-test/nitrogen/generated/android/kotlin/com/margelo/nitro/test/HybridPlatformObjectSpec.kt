@@ -34,7 +34,7 @@ abstract class HybridPlatformObjectSpec: HybridObject() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject PlatformObject]"
+    return "[HybridObject NitroTestPlatformObject]"
   }
 
   // C++ backing class

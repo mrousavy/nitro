@@ -23,4 +23,40 @@ public final class NitroTestExternalAutolinking {
   public static func isSomeExternalObjectRecyclable() -> Bool {
     return HybridSomeExternalObject.self is any RecyclableView.Type
   }
+  
+  public static func createBlaBla() -> bridge.std__shared_ptr_HybridBlaBlaSpec_ {
+    let hybridObject = HybridBlaBla()
+    return { () -> bridge.std__shared_ptr_HybridBlaBlaSpec_ in
+      let __cxxWrapped = hybridObject.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
+  }
+  
+  public static func isBlaBlaRecyclable() -> Bool {
+    return HybridBlaBla.self is any RecyclableView.Type
+  }
+  
+  public static func createBase() -> bridge.std__shared_ptr_HybridBaseSpec_ {
+    let hybridObject = HybridBase()
+    return { () -> bridge.std__shared_ptr_HybridBaseSpec_ in
+      let __cxxWrapped = hybridObject.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
+  }
+  
+  public static func isBaseRecyclable() -> Bool {
+    return HybridBase.self is any RecyclableView.Type
+  }
+  
+  public static func createTestView() -> bridge.std__shared_ptr_HybridTestViewSpec_ {
+    let hybridObject = HybridTestView()
+    return { () -> bridge.std__shared_ptr_HybridTestViewSpec_ in
+      let __cxxWrapped = hybridObject.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
+  }
+  
+  public static func isTestViewRecyclable() -> Bool {
+    return HybridTestView.self is any RecyclableView.Type
+  }
 }

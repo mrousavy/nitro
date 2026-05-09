@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "OptionalWrapper.hpp"
+#include "NitroTestOptionalWrapper.hpp"
 
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>

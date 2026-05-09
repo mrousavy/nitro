@@ -1,7 +1,7 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent, toLowerCamelCase } from '../../utils.js'
 import type { SourceFile } from '../SourceFile.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, getWithModuleName } from '../helpers.js'
 import type { EnumMember } from '../types/EnumType.js'
 import { includeNitroHeader } from './includeNitroHeader.js'
 
@@ -67,9 +67,11 @@ switch (integer) {
     `.trim()
   }
 
+  const fileName = getWithModuleName(NitroConfig.current, typename)
+
   // Create entire C++ file
   const cppCode = `
-${createFileMetadataString(`${typename}.hpp`)}
+${createFileMetadataString(`${fileName}.hpp`)}
 
 #pragma once
 
@@ -121,7 +123,7 @@ namespace margelo::nitro {
   return {
     content: cppCode,
     subdirectory: [],
-    name: `${typename}.hpp`,
+    name: `${fileName}.hpp`,
     language: 'c++',
     platform: 'shared',
   }

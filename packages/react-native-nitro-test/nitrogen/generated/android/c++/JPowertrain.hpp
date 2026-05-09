@@ -8,7 +8,7 @@
 #pragma once
 
 #include <fbjni/fbjni.h>
-#include "Powertrain.hpp"
+#include "NitroTestPowertrain.hpp"
 
 namespace margelo::nitro::test {
 

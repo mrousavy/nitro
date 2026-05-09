@@ -19,7 +19,7 @@ public protocol HybridChildSpec_protocol: HybridObject, HybridBaseSpec_protocol 
 public extension HybridChildSpec_protocol {
   /// Default implementation of ``HybridObject.toString``
   func toString() -> String {
-    return "[HybridObject Child]"
+    return "[HybridObject NitroTestChild]"
   }
 }
 

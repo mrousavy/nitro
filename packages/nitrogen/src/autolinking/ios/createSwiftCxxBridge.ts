@@ -4,6 +4,7 @@ import { getAllKnownTypes } from '../../syntax/createType.js'
 import {
   createFileMetadataString,
   isNotDuplicate,
+  sortIosIncludesWithOwnFirst,
 } from '../../syntax/helpers.js'
 import type { SourceFile } from '../../syntax/SourceFile.js'
 import { getReferencedTypes } from '../../syntax/getReferencedTypes.js'
@@ -90,7 +91,7 @@ ${forwardDeclarationsHeader.sort().join('\n')}
 ${forwardDeclaredSwiftTypes.sort().join('\n')}
 
 // Include C++ defined types
-${includesHeader.sort().join('\n')}
+${sortIosIncludesWithOwnFirst(includesHeader).join('\n')}
 
 /**
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,

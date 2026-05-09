@@ -1,5 +1,5 @@
 {
-  "uiViewClassName": "RecyclableTestView",
+  "uiViewClassName": "NitroTestRecyclableTestView",
   "supportsRawText": false,
   "bubblingEventTypes": {},
   "directEventTypes": {},

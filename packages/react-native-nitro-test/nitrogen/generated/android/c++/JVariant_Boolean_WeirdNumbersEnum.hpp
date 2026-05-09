@@ -10,7 +10,7 @@
 #include <fbjni/fbjni.h>
 #include <variant>
 
-#include "WeirdNumbersEnum.hpp"
+#include "NitroTestWeirdNumbersEnum.hpp"
 #include <variant>
 #include "JWeirdNumbersEnum.hpp"
 

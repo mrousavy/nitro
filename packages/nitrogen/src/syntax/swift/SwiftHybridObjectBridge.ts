@@ -6,6 +6,7 @@ import type { Method } from '../Method.js'
 import {
   createFileMetadataString,
   escapeCppName,
+  getWithModuleName,
   isNotDuplicate,
 } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
@@ -354,7 +355,7 @@ if (__result.hasError()) [[unlikely]] {
     cppBaseCtorCalls.push(`${baseName.HybridTSpecSwift}(swiftPart)`)
     extraImports.push({
       language: 'c++',
-      name: `${baseName.HybridTSpecSwift}.hpp`,
+      name: `${getWithModuleName(spec.config, baseName.HybridTSpecSwift)}.hpp`,
       space: 'user',
       forwardDeclaration: getForwardDeclaration(
         'class',
@@ -372,13 +373,19 @@ if (__result.hasError()) [[unlikely]] {
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
 
+  const hybridTSpecSwiftName = getWithModuleName(
+    spec.config,
+    name.HybridTSpecSwift
+  )
+  const hybridTSpecName = getWithModuleName(spec.config, name.HybridTSpec)
+
   // TODO: Remove forward declaration once Swift fixes the wrong order in generated -Swift.h headers!
   const cppHybridObjectCode = `
-${createFileMetadataString(`${name.HybridTSpecSwift}.hpp`)}
+${createFileMetadataString(`${hybridTSpecSwiftName}.hpp`)}
 
 #pragma once
 
-#include "${name.HybridTSpec}.hpp"
+#include "${hybridTSpecName}.hpp"
 
 ${getForwardDeclaration('class', name.HybridTSpecCxx, iosModuleName)}
 
@@ -445,9 +452,9 @@ namespace ${cxxNamespace} {
 } // namespace ${cxxNamespace}
   `
   const cppHybridObjectCodeCpp = `
-${createFileMetadataString(`${name.HybridTSpecSwift}.cpp`)}
+${createFileMetadataString(`${hybridTSpecSwiftName}.cpp`)}
 
-#include "${name.HybridTSpecSwift}.hpp"
+#include "${hybridTSpecSwiftName}.hpp"
 
 namespace ${cxxNamespace} {
 } // namespace ${cxxNamespace}
@@ -465,14 +472,14 @@ namespace ${cxxNamespace} {
   files.push({
     content: cppHybridObjectCode,
     language: 'c++',
-    name: `${name.HybridTSpecSwift}.hpp`,
+    name: `${hybridTSpecSwiftName}.hpp`,
     subdirectory: [],
     platform: 'ios',
   })
   files.push({
     content: cppHybridObjectCodeCpp,
     language: 'c++',
-    name: `${name.HybridTSpecSwift}.cpp`,
+    name: `${hybridTSpecSwiftName}.cpp`,
     subdirectory: [],
     platform: 'ios',
   })

@@ -2,9 +2,9 @@
   "name": "react-native-nitro-test",
   "version": "0.35.6",
   "description": "A testing playground library for Nitro Modules.",
-  "main": "lib/index",
-  "module": "lib/index",
-  "types": "lib/index.d.ts",
+  "main": "lib/src/index",
+  "module": "lib/src/index",
+  "types": "lib/src/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
   "files": [

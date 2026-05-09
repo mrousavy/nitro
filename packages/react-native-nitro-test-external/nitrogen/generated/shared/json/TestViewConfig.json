@@ -1,0 +1,12 @@
+{
+  "uiViewClassName": "NitroTestExternalTestView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "isCyan": true,
+    "hasBeenCalled": true,
+    "testCallback": true,
+    "hybridRef": true
+  }
+}

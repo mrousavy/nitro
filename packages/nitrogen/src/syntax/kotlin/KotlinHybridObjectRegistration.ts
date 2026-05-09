@@ -1,5 +1,6 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
+import { getWithModuleName } from '../helpers.js'
 import type { SourceImport } from '../SourceFile.js'
 
 interface Props {
@@ -28,6 +29,10 @@ export function createJNIHybridObjectRegistration({
     'c++/jni',
     jniClassName
   )
+  const registeredName = getWithModuleName(
+    NitroConfig.current,
+    hybridObjectName
+  )
 
   return {
     requiredImports: [
@@ -50,7 +55,7 @@ struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybrid
     `.trim(),
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
-  "${hybridObjectName}",
+  "${registeredName}",
   []() -> std::shared_ptr<HybridObject> {
     return ${JHybridTSpec}Impl::create();
   }

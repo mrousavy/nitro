@@ -3,16 +3,18 @@ import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
 import type { SourceFile } from '../syntax/SourceFile.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { indent } from '../utils.js'
+import { getViewComponentNames } from './CppHybridViewComponent.js'
 
 export function createHostComponentJs(spec: HybridObjectSpec): SourceFile[] {
   const { T } = getHybridObjectName(spec.name)
+  const { uiClassName } = getViewComponentNames(spec)
 
   const props = spec.properties.map((p) => `"${p.name}": true`)
   props.push(`"hybridRef": true`)
 
   const code = `
 {
-  "uiViewClassName": "${T}",
+  "uiViewClassName": "${uiClassName}",
   "supportsRawText": false,
   "bubblingEventTypes": {},
   "directEventTypes": {},

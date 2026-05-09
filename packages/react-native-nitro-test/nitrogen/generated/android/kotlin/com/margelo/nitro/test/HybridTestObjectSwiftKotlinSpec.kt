@@ -640,7 +640,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
-    return "[HybridObject TestObjectSwiftKotlin]"
+    return "[HybridObject NitroTestTestObjectSwiftKotlin]"
   }
 
   // C++ backing class

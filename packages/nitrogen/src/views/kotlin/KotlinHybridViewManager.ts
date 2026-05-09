@@ -26,6 +26,7 @@ export function createKotlinHybridViewManager(
     component,
     propsClassName,
     descriptorClassName,
+    uiClassName,
   } = getViewComponentNames(spec)
   const stateUpdaterName = `${stateClassName}Updater`
   const implementation = spec.config.getAndroidAutolinkedImplementation(
@@ -64,7 +65,7 @@ public class ${manager}: SimpleViewManager<View>() {
   }
 
   override fun getName(): String {
-    return "${spec.name}"
+    return "${uiClassName}"
   }
 
   override fun createViewInstance(reactContext: ThemedReactContext): View {

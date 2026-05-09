@@ -9,6 +9,7 @@ import {
   RecyclableTestView,
   TestView,
 } from 'react-native-nitro-test'
+import { TestView as ExternalTestView } from 'react-native-nitro-test-external'
 import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
@@ -37,6 +38,23 @@ export function ViewScreenImpl() {
               isBlue={i % 2 === 0}
               someCallback={callback(() => console.log(`Callback called!`))}
               colorScheme="dark"
+              hasBeenCalled={false}
+              onTouchEnd={() => {
+                console.log(`Touched View #${i}!`)
+              }}
+            />
+          )
+        } else if (i % 3 === 1) {
+          return (
+            <ExternalTestView
+              key={i}
+              hybridRef={callback((ref) => {
+                console.log(`Ref initialized!`)
+                ref.testMethod()
+              })}
+              style={styles.view}
+              isCyan={i % 2 === 0}
+              testCallback={callback(() => console.log(`Callback called!`))}
               hasBeenCalled={false}
               onTouchEnd={() => {
                 console.log(`Touched View #${i}!`)
