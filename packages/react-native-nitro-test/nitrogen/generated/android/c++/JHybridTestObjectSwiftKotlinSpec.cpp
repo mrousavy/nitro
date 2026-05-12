@@ -1206,8 +1206,8 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
     return __result->toCpp();
   }
-  std::optional<OptionalEnumWrapper> JHybridTestObjectSwiftKotlinSpec::tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalEnumWrapper>(jni::alias_ref<JOptionalEnumWrapper> /* value */)>("tryOptionalEnumStruct");
+  std::optional<OptionalEnumWrapper> JHybridTestObjectSwiftKotlinSpec::bounceOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalEnumWrapper>(jni::alias_ref<JOptionalEnumWrapper> /* value */)>("bounceOptionalEnumStruct");
     auto __result = method(_javaPart, value.has_value() ? JOptionalEnumWrapper::fromCpp(value.value()) : nullptr);
     return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }

@@ -1963,9 +1963,9 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func tryOptionalEnumStruct(value: bridge.std__optional_OptionalEnumWrapper_) -> bridge.Result_std__optional_OptionalEnumWrapper__ {
+  public final func bounceOptionalEnumStruct(value: bridge.std__optional_OptionalEnumWrapper_) -> bridge.Result_std__optional_OptionalEnumWrapper__ {
     do {
-      let __result = try self.__implementation.tryOptionalEnumStruct(value: value.value)
+      let __result = try self.__implementation.bounceOptionalEnumStruct(value: value.value)
       let __resultCpp = { () -> bridge.std__optional_OptionalEnumWrapper_ in
         if let __unwrappedValue = __result {
           return bridge.create_std__optional_OptionalEnumWrapper_(__unwrappedValue)

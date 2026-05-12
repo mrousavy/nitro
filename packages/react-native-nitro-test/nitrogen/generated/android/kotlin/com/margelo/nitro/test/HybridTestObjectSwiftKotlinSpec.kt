@@ -518,7 +518,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun tryOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper?
+  abstract fun bounceOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper?
   
   @DoNotStrip
   @Keep

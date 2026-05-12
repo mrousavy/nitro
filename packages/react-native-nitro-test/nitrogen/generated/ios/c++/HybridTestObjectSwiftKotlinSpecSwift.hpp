@@ -799,8 +799,8 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::optional<OptionalEnumWrapper> tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) override {
-      auto __result = _swiftPart.tryOptionalEnumStruct(value);
+    inline std::optional<OptionalEnumWrapper> bounceOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) override {
+      auto __result = _swiftPart.bounceOptionalEnumStruct(value);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

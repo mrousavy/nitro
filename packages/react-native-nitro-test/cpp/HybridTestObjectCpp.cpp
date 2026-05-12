@@ -626,7 +626,7 @@ OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallb
   return value;
 }
 
-std::optional<OptionalEnumWrapper> HybridTestObjectCpp::tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
+std::optional<OptionalEnumWrapper> HybridTestObjectCpp::bounceOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
   return value;
 }
 

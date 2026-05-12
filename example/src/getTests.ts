@@ -666,14 +666,14 @@ export function getTests(
         .didReturn('object')
         .equals(TEST_OPTIONAL_WRAPPER)
     ),
-    createTest('tryOptionalEnumStruct(...) equals', () =>
-      it(() => testObject.tryOptionalEnumStruct(TEST_OPTIONAL_ENUM_WRAPPER))
+    createTest('bounceOptionalEnumStruct(...) equals', () =>
+      it(() => testObject.bounceOptionalEnumStruct(TEST_OPTIONAL_ENUM_WRAPPER))
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_OPTIONAL_ENUM_WRAPPER)
     ),
-    createTest('tryOptionalEnumStruct(...) undefined', () =>
-      it(() => testObject.tryOptionalEnumStruct(undefined))
+    createTest('bounceOptionalEnumStruct(...) undefined', () =>
+      it(() => testObject.bounceOptionalEnumStruct(undefined))
         .didNotThrow()
         .equals(undefined)
     ),

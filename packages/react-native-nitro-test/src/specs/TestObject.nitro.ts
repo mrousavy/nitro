@@ -270,7 +270,7 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
-  tryOptionalEnumStruct(
+  bounceOptionalEnumStruct(
     value?: OptionalEnumWrapper
   ): OptionalEnumWrapper | undefined
 

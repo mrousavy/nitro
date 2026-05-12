@@ -469,7 +469,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
-  override fun tryOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper? {
+  override fun bounceOptionalEnumStruct(value: OptionalEnumWrapper?): OptionalEnumWrapper? {
     return value
   }
 
