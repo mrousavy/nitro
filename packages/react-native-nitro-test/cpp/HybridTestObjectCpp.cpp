@@ -626,6 +626,10 @@ OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallb
   return value;
 }
 
+std::optional<OptionalEnumWrapper> HybridTestObjectCpp::tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
+  return value;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
   // Let's just use the move method here for native buffer to test this too.
   std::vector<uint8_t> data;

@@ -74,6 +74,27 @@ export interface OptionalWrapper {
   optionalArrayBuffer?: ArrayBuffer
   optionalString?: string
 }
+// A wide optional struct mixing primitive optionals with string-union enum optionals.
+export interface OptionalEnumWrapper {
+  count?: number
+  weight?: number
+  ttl?: number
+  jitter?: number
+  retries?: number
+  delayMs?: number
+  timeoutMs?: number
+  ratio?: number
+  threshold?: number
+  enabled?: boolean
+  active?: boolean
+  shouldBuffer?: boolean
+  shouldRetry?: boolean
+  verbose?: boolean
+  tier?: Powertrain
+  region?: Powertrain
+  stage?: Powertrain
+  tone?: Powertrain
+}
 export interface ExternalObjectStruct {
   someExternal: SomeExternalObject
 }
@@ -249,6 +270,9 @@ interface SharedTestObjectProps {
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   bounceOptionalCallback(value: OptionalCallback): OptionalCallback
+  tryOptionalEnumStruct(
+    value?: OptionalEnumWrapper
+  ): OptionalEnumWrapper | undefined
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer

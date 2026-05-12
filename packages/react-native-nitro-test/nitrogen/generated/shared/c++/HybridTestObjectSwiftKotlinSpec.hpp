@@ -37,6 +37,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -73,6 +75,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalEnumWrapper.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -216,6 +219,7 @@ namespace margelo::nitro::test {
       virtual WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) = 0;
       virtual OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) = 0;
       virtual OptionalCallback bounceOptionalCallback(const OptionalCallback& value) = 0;
+      virtual std::optional<OptionalEnumWrapper> tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
       virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;

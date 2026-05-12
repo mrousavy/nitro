@@ -34,6 +34,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumWrapper; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -75,6 +77,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
+#include "OptionalEnumWrapper.hpp"
 #include "OptionalWrapper.hpp"
 #include "PartialPerson.hpp"
 #include "Person.hpp"
@@ -1261,6 +1264,21 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
+  // pragma MARK: std::optional<OptionalEnumWrapper>
+  /**
+   * Specialized version of `std::optional<OptionalEnumWrapper>`.
+   */
+  using std__optional_OptionalEnumWrapper_ = std::optional<OptionalEnumWrapper>;
+  inline std::optional<OptionalEnumWrapper> create_std__optional_OptionalEnumWrapper_(const OptionalEnumWrapper& value) noexcept {
+    return std::optional<OptionalEnumWrapper>(value);
+  }
+  inline bool has_value_std__optional_OptionalEnumWrapper_(const std::optional<OptionalEnumWrapper>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline OptionalEnumWrapper get_std__optional_OptionalEnumWrapper_(const std::optional<OptionalEnumWrapper>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>
   /**
    * Wrapper struct for `std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>`.
@@ -1907,6 +1925,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<OptionalEnumWrapper>>
+  using Result_std__optional_OptionalEnumWrapper__ = Result<std::optional<OptionalEnumWrapper>>;
+  inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::optional<OptionalEnumWrapper>& value) noexcept {
+    return Result<std::optional<OptionalEnumWrapper>>::withValue(value);
+  }
+  inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::exception_ptr& error) noexcept {
+    return Result<std::optional<OptionalEnumWrapper>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>

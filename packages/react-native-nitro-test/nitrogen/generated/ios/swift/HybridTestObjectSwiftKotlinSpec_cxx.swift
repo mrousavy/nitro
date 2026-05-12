@@ -1963,6 +1963,24 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func tryOptionalEnumStruct(value: bridge.std__optional_OptionalEnumWrapper_) -> bridge.Result_std__optional_OptionalEnumWrapper__ {
+    do {
+      let __result = try self.__implementation.tryOptionalEnumStruct(value: value.value)
+      let __resultCpp = { () -> bridge.std__optional_OptionalEnumWrapper_ in
+        if let __unwrappedValue = __result {
+          return bridge.create_std__optional_OptionalEnumWrapper_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+      return bridge.create_Result_std__optional_OptionalEnumWrapper__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__optional_OptionalEnumWrapper__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createArrayBuffer() -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.createArrayBuffer()

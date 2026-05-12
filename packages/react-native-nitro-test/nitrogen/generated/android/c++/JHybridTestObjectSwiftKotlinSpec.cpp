@@ -29,6 +29,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalCallback; }
+// Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalEnumWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -92,6 +94,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "OptionalCallback.hpp"
 #include "JOptionalCallback.hpp"
 #include "JVariant_______Unit_Double.hpp"
+#include "OptionalEnumWrapper.hpp"
+#include "JOptionalEnumWrapper.hpp"
 #include "JVariant_Boolean_OldEnum.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
@@ -1201,6 +1205,11 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalCallback>(jni::alias_ref<JOptionalCallback> /* value */)>("bounceOptionalCallback");
     auto __result = method(_javaPart, JOptionalCallback::fromCpp(value));
     return __result->toCpp();
+  }
+  std::optional<OptionalEnumWrapper> JHybridTestObjectSwiftKotlinSpec::tryOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JOptionalEnumWrapper>(jni::alias_ref<JOptionalEnumWrapper> /* value */)>("tryOptionalEnumStruct");
+    auto __result = method(_javaPart, value.has_value() ? JOptionalEnumWrapper::fromCpp(value.value()) : nullptr);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBuffer() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>()>("createArrayBuffer");
