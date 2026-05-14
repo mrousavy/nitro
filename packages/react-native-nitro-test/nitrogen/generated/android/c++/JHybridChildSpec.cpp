@@ -13,6 +13,8 @@ namespace margelo::nitro::test { struct Car; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 
 #include <string>
 #include "Car.hpp"
@@ -24,6 +26,8 @@ namespace margelo::nitro::test { struct Person; }
 #include "Person.hpp"
 #include <optional>
 #include "JPerson.hpp"
+#include "Scores.hpp"
+#include "JScores.hpp"
 #include <vector>
 #include "JVariant_String_Double.hpp"
 

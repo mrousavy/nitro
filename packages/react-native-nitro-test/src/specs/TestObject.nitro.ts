@@ -56,10 +56,16 @@ export interface Car {
   someVariant?: number | string
 }
 
+export interface Scores {
+  scores: number[]
+}
+
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
 export type Person = {
   name: string
   age: number
+  scores: Scores
+  siblings: number[]
 }
 
 interface JsStyleStruct {
