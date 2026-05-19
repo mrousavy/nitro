@@ -1537,9 +1537,11 @@ export function getTests(
         const baselineAllocations =
           NitroModules.debug_getTotalAllocatedHybridObjects()
 
+        // We test 51_201, because JNI's max global_ref allocations is 51200,
+        // so if this test goes green, it properly deletes jni::global_refs.
+        // If there would be a memory leak, this test will likely crash in C++.
+        const TOTAL_ALLOCATIONS = 51_201
         const BATCH_SIZE = 1000
-        const LOOP_COUNT = 10
-        const TOTAL_ALLOCATIONS = BATCH_SIZE * LOOP_COUNT
 
         const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
         for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
