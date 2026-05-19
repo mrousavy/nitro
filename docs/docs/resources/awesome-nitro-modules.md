@@ -20,6 +20,13 @@ A curated collection of community-built Nitro Modules.
 | **@corasan/image-compressor** | Image compression using OpenCV | [GitHub](https://github.com/corasan/image-compressor) |
 | **react-native-nitro-player** | A powerful audio player library for React Native | [GitHub](https://github.com/riteshshukla04/react-native-nitro-player) |
 
+### Camera & Vision
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/mrousavy/react-native-vision-camera) |
+| **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
+
 ### Cryptography & Security
 
 | Module | Description | Links |
