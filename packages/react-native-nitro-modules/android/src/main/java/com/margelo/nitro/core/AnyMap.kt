@@ -43,9 +43,8 @@ class AnyMap {
      * Converts the given [map] to a new [AnyMap].
      * @param map The map of keys/value types. Only a number of value types
      * are supported in [AnyMap] - see Nitro docs for more information.
-     * @param ignoreIncompatible Whether to throw when an incompatible
-     * type is found, or not. If this is `false`, all incompatible key/value
-     * pairs will just be ignored.
+     * @param ignoreIncompatible Whether incompatible key/value pairs should be ignored.
+     * If this is `false`, an incompatible key/value pair will throw.
      */
     @JvmStatic
     external fun fromMap(
