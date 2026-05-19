@@ -111,7 +111,9 @@ function wrapValidAttributes<TProps>(
   attributes: ValidAttributes<TProps>
 ): ValidAttributes<TProps> {
   const wrappedAttributes = { ...attributes }
-  const keys = Object.keys(wrappedAttributes) as (keyof ValidAttributes<TProps>)[]
+  const keys = Object.keys(
+    wrappedAttributes
+  ) as (keyof ValidAttributes<TProps>)[]
   for (const key of keys) {
     wrappedAttributes[key] = {
       diff: (a, b) => a !== b,
