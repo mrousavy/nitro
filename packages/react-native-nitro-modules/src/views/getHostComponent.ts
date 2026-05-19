@@ -110,14 +110,15 @@ type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
 function wrapValidAttributes<TProps>(
   attributes: ValidAttributes<TProps>
 ): ValidAttributes<TProps> {
-  const keys = Object.keys(attributes) as (keyof ValidAttributes<TProps>)[]
+  const wrappedAttributes = { ...attributes }
+  const keys = Object.keys(wrappedAttributes) as (keyof ValidAttributes<TProps>)[]
   for (const key of keys) {
-    attributes[key] = {
+    wrappedAttributes[key] = {
       diff: (a, b) => a !== b,
       process: (i) => i,
     }
   }
-  return attributes
+  return wrappedAttributes
 }
 
 /**
@@ -139,8 +140,11 @@ export function getHostComponent<
   }
   return NativeComponentRegistry.get(name, () => {
     const config = getViewConfig()
-    config.validAttributes = wrapValidAttributes(config.validAttributes)
-    return typesafe(config)
+    const wrappedConfig = {
+      ...config,
+      validAttributes: wrapValidAttributes(config.validAttributes),
+    }
+    return typesafe(wrappedConfig)
   })
 }
 
