@@ -252,8 +252,7 @@ class ArrayBuffer {
     fun copy(byteArray: ByteArray): ArrayBuffer {
       val byteBuffer = ByteBuffer.allocateDirect(byteArray.size)
       byteBuffer.put(byteArray)
-      byteBuffer.flip()
-      return ArrayBuffer(byteBuffer)
+      return ArrayBuffer.wrap(byteBuffer)
     }
 
     /**
