@@ -17,10 +17,10 @@ A curated collection of community-built Nitro Modules.
 | **react-native-video** | Video playback component | [GitHub](https://github.com/TheWidlarzGroup/react-native-video) |
 | **react-native-nitro-screen-recorder** | Screen recording capabilities | [GitHub](https://github.com/ChristopherGabba/react-native-nitro-screen-recorder) |
 | **react-native-nitro-image** | Superfast in-memory Image type | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
+| **react-native-nitro-web-image** | Web support for Nitro Image | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
 | **@corasan/image-compressor** | Image compression using OpenCV | [GitHub](https://github.com/corasan/image-compressor) |
 | **react-native-nitro-player** | A powerful audio player library for React Native | [GitHub](https://github.com/riteshshukla04/react-native-nitro-player) |
 | **react-native-nitro-sound** | Audio playback and recording | [GitHub](https://github.com/hyochan/react-native-nitro-sound) |
-| **react-native-nitro-web-image** | Web support for Nitro Image | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
 
 ### Camera & Vision
 
@@ -57,7 +57,6 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-geolocation** | High-performance geolocation | [GitHub](https://github.com/jingjing2222/react-native-nitro-geolocation) |
 | **react-native-torch-nitro** | Flashlight/torch control | [GitHub](https://github.com/irekrog/react-native-torch-nitro) |
 | **react-native-ble-nitro** | Bluetooth Low Energy | [GitHub](https://github.com/zykeco/react-native-ble-nitro) |
-| **react-native-bluetooth-state-manager** | Bluetooth state management | [GitHub](https://github.com/patlux/react-native-bluetooth-state-manager) |
 | **react-native-nitro-haptics** | Low-latency haptic feedback | [GitHub](https://github.com/oblador/react-native-nitro-haptics) |
 | **@renegades/react-native-tickle** | Haptic pattern editor and player | [GitHub](https://github.com/Renegades-Studio/react-native-tickle) |
 
