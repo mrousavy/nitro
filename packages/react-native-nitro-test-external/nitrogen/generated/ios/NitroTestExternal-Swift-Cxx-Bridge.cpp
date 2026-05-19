@@ -11,6 +11,7 @@
 #include "HybridSomeExternalObjectSpecSwift.hpp"
 #include "NitroTestExternal-Swift-Cxx-Umbrella.hpp"
 #include <NitroModules/NitroDefines.hpp>
+#include <stdexcept>
 
 namespace margelo::nitro::test::external::bridge::swift {
 
@@ -21,11 +22,9 @@ namespace margelo::nitro::test::external::bridge::swift {
   }
   void* NON_NULL get_std__shared_ptr_HybridSomeExternalObjectSpec_(std__shared_ptr_HybridSomeExternalObjectSpec_ cppType) {
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::test::external::HybridSomeExternalObjectSpecSwift>(cppType);
-    #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {
       throw std::runtime_error("Class \"HybridSomeExternalObjectSpec\" is not implemented in Swift!");
     }
-    #endif
     NitroTestExternal::HybridSomeExternalObjectSpec_cxx& swiftPart = swiftWrapper->getSwiftPart();
     return swiftPart.toUnsafe();
   }

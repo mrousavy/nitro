@@ -51,7 +51,7 @@ namespace margelo::nitro::test {
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
-        std::dynamic_pointer_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(value.someExternal)->getJavaPart()
+        margelo::nitro::JHybridObject::getJavaPart<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(value.someExternal)
       );
     }
   };

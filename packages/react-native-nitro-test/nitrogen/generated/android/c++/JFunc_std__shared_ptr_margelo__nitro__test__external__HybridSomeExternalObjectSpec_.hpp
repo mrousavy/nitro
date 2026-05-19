@@ -54,7 +54,7 @@ namespace margelo::nitro::test {
      */
     jni::global_ref<margelo::nitro::test::external::JHybridSomeExternalObjectSpec::JavaPart> invoke_cxx() {
       std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> __result = _func();
-      return std::dynamic_pointer_cast<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(__result)->getJavaPart();
+      return margelo::nitro::JHybridObject::getJavaPart<margelo::nitro::test::external::JHybridSomeExternalObjectSpec>(__result);
     }
 
   public:

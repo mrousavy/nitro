@@ -40,7 +40,7 @@ namespace margelo::nitro::test {
 
     static jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> fromCpp(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) {
       switch (variant.index()) {
-        case 0: return create_0(std::dynamic_pointer_cast<JHybridTestObjectSwiftKotlinSpec>(std::get<0>(variant))->getJavaPart());
+        case 0: return create_0(margelo::nitro::JHybridObject::getJavaPart<JHybridTestObjectSwiftKotlinSpec>(std::get<0>(variant)));
         case 1: return create_1(JPerson::fromCpp(std::get<1>(variant)));
         default: throw std::invalid_argument("Variant holds unknown index! (" + std::to_string(variant.index()) + ")");
       }

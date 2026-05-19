@@ -114,11 +114,9 @@ return std::make_shared<${swiftWrappingType}>(swiftPart);
     `.trim()
     getImplementation = `
 std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
-#ifdef NITRO_DEBUG
 if (swiftWrapper == nullptr) [[unlikely]] {
   throw std::runtime_error("Class \\"${HybridTSpec}\\" is not implemented in Swift!");
 }
-#endif
 ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
 return swiftPart.toUnsafe();
 `.trim()
@@ -166,6 +164,11 @@ void* NON_NULL get_${name}(${name} cppType) {
         {
           language: 'c++',
           name: 'NitroModules/NitroDefines.hpp',
+          space: 'system',
+        },
+        {
+          language: 'c++',
+          name: 'stdexcept',
           space: 'system',
         },
         {

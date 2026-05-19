@@ -579,7 +579,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const fullName = this.getFullJHybridObjectName(hybrid)
-            return `std::dynamic_pointer_cast<${fullName}>(${parameterName})->getJavaPart()`
+            return `margelo::nitro::JHybridObject::getJavaPart<${fullName}>(${parameterName})`
           default:
             return parameterName
         }
