@@ -102,7 +102,7 @@ abstract class HybridObject {
     }
 
     fun destroy() {
-      mHybridData.resetNative()
+      // noop for testing
     }
 
     protected open external fun initHybrid(): HybridData
