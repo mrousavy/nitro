@@ -31,7 +31,7 @@ data class SecondMapWrapper(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       second
     ).contentDeepHashCode()
   }

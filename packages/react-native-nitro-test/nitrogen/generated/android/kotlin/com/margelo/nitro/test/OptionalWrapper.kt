@@ -35,7 +35,7 @@ data class OptionalWrapper(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       optionalArrayBuffer,
       optionalString
     ).contentDeepHashCode()

@@ -71,7 +71,7 @@ data class Car(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       year,
       make,
       model,

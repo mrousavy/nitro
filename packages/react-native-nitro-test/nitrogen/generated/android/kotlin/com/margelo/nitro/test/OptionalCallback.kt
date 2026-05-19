@@ -31,7 +31,7 @@ data class OptionalCallback(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       callback
     ).contentDeepHashCode()
   }

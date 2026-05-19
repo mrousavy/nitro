@@ -35,7 +35,7 @@ data class PartialPerson(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       name,
       age
     ).contentDeepHashCode()

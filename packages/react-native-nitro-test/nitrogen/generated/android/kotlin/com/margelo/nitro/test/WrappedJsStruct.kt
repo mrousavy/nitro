@@ -35,7 +35,7 @@ data class WrappedJsStruct(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       value,
       items
     ).contentDeepHashCode()
