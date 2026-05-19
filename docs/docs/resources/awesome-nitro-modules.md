@@ -17,8 +17,10 @@ A curated collection of community-built Nitro Modules.
 | **react-native-video** | Video playback component | [GitHub](https://github.com/TheWidlarzGroup/react-native-video) |
 | **react-native-nitro-screen-recorder** | Screen recording capabilities | [GitHub](https://github.com/ChristopherGabba/react-native-nitro-screen-recorder) |
 | **react-native-nitro-image** | Superfast in-memory Image type | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
+| **react-native-nitro-web-image** | Web support for Nitro Image | [GitHub](https://github.com/mrousavy/react-native-nitro-image) |
 | **@corasan/image-compressor** | Image compression using OpenCV | [GitHub](https://github.com/corasan/image-compressor) |
 | **react-native-nitro-player** | A powerful audio player library for React Native | [GitHub](https://github.com/riteshshukla04/react-native-nitro-player) |
+| **react-native-nitro-sound** | Audio playback and recording | [GitHub](https://github.com/hyochan/react-native-nitro-sound) |
 
 ### Camera & Vision
 
@@ -27,12 +29,20 @@ A curated collection of community-built Nitro Modules.
 | **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/mrousavy/react-native-vision-camera) |
 | **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
 
+### Animation & Graphics
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **@rive-app/react-native** | Rive animations built with Nitro | [GitHub](https://github.com/rive-app/rive-nitro-react-native) |
+| **react-native-nitro-palette** | Dominant color palette extraction | [GitHub](https://github.com/Ucekay/nitro-palette) |
+
 ### Cryptography & Security
 
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-quick-crypto** | Fast crypto (Node.js compatible) | [GitHub](https://github.com/margelo/react-native-quick-crypto) |
 | **react-native-nitro-crypto** | Node.js `crypto` implementation using Rust | [GitHub](https://github.com/iwater/react-native-nitro-crypto) |
+| **react-native-sensitive-info** | Secure storage with biometrics | [GitHub](https://github.com/mCodex/react-native-sensitive-info) |
 | **react-native-nitro-bip39** | BIP39 mnemonic implementation | [GitHub](https://github.com/ronickg/react-native-nitro-bip39) |
 | **react-native-nitro-totp** | TOTP/HOTP generation | [GitHub](https://github.com/4cc3ssX/react-native-nitro-totp) |
 | **react-native-nitro-tor** | Tor daemon and onion routing | [GitHub](https://github.com/niteshbalusu11/react-native-nitro-tor) |
@@ -43,9 +53,12 @@ A curated collection of community-built Nitro Modules.
 |--------|-------------|-------|
 | **react-native-nitro-device-info** | Device information and identifiers | [GitHub](https://github.com/l2hyunwoo/react-native-nitro-device-info) |
 | **react-native-nitro-event-kit** | iOS EventKit (Calendar & Reminders) | [GitHub](https://github.com/VladyslavMartynov10/react-native-nitro-event-kit) |
+| **@kingstinct/react-native-healthkit** | iOS HealthKit bindings | [GitHub](https://github.com/kingstinct/react-native-healthkit) |
 | **react-native-nitro-geolocation** | High-performance geolocation | [GitHub](https://github.com/jingjing2222/react-native-nitro-geolocation) |
 | **react-native-torch-nitro** | Flashlight/torch control | [GitHub](https://github.com/irekrog/react-native-torch-nitro) |
 | **react-native-ble-nitro** | Bluetooth Low Energy | [GitHub](https://github.com/zykeco/react-native-ble-nitro) |
+| **react-native-nitro-haptics** | Low-latency haptic feedback | [GitHub](https://github.com/oblador/react-native-nitro-haptics) |
+| **@renegades/react-native-tickle** | Haptic pattern editor and player | [GitHub](https://github.com/Renegades-Studio/react-native-tickle) |
 
 ### File System & Storage
 
@@ -68,6 +81,12 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-net** | Node.js-compatible `net`, `tls`, `http(s)` | [GitHub](https://github.com/iwater/react-native-nitro-net) |
 | **react-native-nitro-dgram** | High-performance Node.js `dgram` (UDP) | [GitHub](https://github.com/iwater/react-native-nitro-dgram) |
 
+### Payments & Commerce
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **react-native-iap** | In-app purchases for iOS and Android | [GitHub](https://github.com/hyodotdev/openiap) |
+
 ### Maps
 
 | Module | Description | Links |
@@ -80,6 +99,12 @@ A curated collection of community-built Nitro Modules.
 |--------|-------------|-------|
 | **react-native-unistyles** | Universal styling system | [GitHub](https://github.com/jpudysz/react-native-unistyles) |
 
+### Text & Content
+
+| Module | Description | Links |
+|--------|-------------|-------|
+| **react-native-nitro-markdown** | High-performance Markdown parser | [GitHub](https://github.com/JoaoPauloCMarra/react-native-nitro-markdown) |
+
 ### Utilities
 
 | Module | Description | Links |
@@ -91,6 +116,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
 | **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
 | **react-native-nitro-version-check** | High-performance Version checking utilities | [GitHub](https://github.com/AlshehriAli0/react-native-nitro-version-check) |
+| **react-native-play-age-range-declaration** | Google Play and Apple age signals APIs | [GitHub](https://github.com/Gautham495/react-native-play-age-range-declaration) |
 ---
 
 ## Work In Progress
