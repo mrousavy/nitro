@@ -1532,54 +1532,76 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
-    createTest('HybridObjects dont leak memory', () =>
+    createTest(
+      'HybridObjects dont leak memory with automatic YoungGen GC',
+      () =>
+        it(() => {
+          const baselineAllocations =
+            NitroModules.debug_getTotalAllocatedHybridObjects()
+          const TOTAL_ALLOCATIONS = 10_000
+          const BATCH_SIZE = 1000
+
+          const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
+          for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+            const object = testObject.newTestObject()
+            object.numberValue = i
+            objects.push(object)
+
+            if (objects.length >= BATCH_SIZE) {
+              objects.length = 0
+              gc()
+            }
+          }
+
+          objects.length = 0
+          gc()
+          gc()
+          gc()
+
+          const currentAllocations =
+            NitroModules.debug_getTotalAllocatedHybridObjects()
+          const remainingAllocations = currentAllocations - baselineAllocations
+          // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
+          const didDeleteMostObjects =
+            remainingAllocations < TOTAL_ALLOCATIONS * 0.1
+          const result: {
+            baselineAllocations: number
+            currentAllocations: number
+            isEqual?: boolean
+          } = {
+            baselineAllocations: baselineAllocations,
+            currentAllocations: currentAllocations,
+            isEqual: didDeleteMostObjects,
+          }
+          if (!didDeleteMostObjects) {
+            delete result.isEqual
+          }
+          return result
+        })
+          .didNotThrow()
+          .toContain('isEqual')
+    ),
+    createTest('HybridObjects dont leak memory with manual dispose()', () =>
       it(() => {
-        const baselineAllocations =
-          NitroModules.debug_getTotalAllocatedHybridObjects()
-
+        // We test 55_000 allocations, because JNI's max global_ref count
+        // is 51200, so if this test goes green, it properly deletes
+        // jni::global_refs. If there would be a memory leak, this test
+        // will likely crash in C++.
+        const TOTAL_ALLOCATIONS = 55_000
         const BATCH_SIZE = 1000
-        const LOOP_COUNT = 10
-        const TOTAL_ALLOCATIONS = BATCH_SIZE * LOOP_COUNT
 
-        const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
         for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
           const object = testObject.newTestObject()
-          object.numberValue = i
-          objects.push(object)
+          object.dispose()
 
-          if (objects.length >= BATCH_SIZE) {
-            objects.length = 0
+          if ((i + 1) % BATCH_SIZE === 0) {
             gc()
           }
         }
 
-        objects.length = 0
         gc()
-        gc()
-        gc()
-
-        const currentAllocations =
-          NitroModules.debug_getTotalAllocatedHybridObjects()
-        const remainingAllocations = currentAllocations - baselineAllocations
-        // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
-        const didDeleteMostObjects =
-          remainingAllocations < TOTAL_ALLOCATIONS * 0.1
-        const result: {
-          baselineAllocations: number
-          currentAllocations: number
-          isEqual?: boolean
-        } = {
-          baselineAllocations: baselineAllocations,
-          currentAllocations: currentAllocations,
-          isEqual: didDeleteMostObjects,
-        }
-        if (!didDeleteMostObjects) {
-          delete result.isEqual
-        }
-        return result
-      })
-        .didNotThrow()
-        .toContain('isEqual')
+        return TOTAL_ALLOCATIONS
+      }).didNotThrow()
     ),
     createTest('callWithOptional(undefined)', async () =>
       (

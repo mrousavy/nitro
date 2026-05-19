@@ -1,5 +1,6 @@
 package com.margelo.nitro.core
 
+import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -39,13 +40,17 @@ abstract class HybridObject {
    * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
-   * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
-   * if required.
+   * By default, this method only destroys the connected C++ part.
+   * It can be overridden to perform actual disposing/cleanup if required.
    * This method must not throw.
    */
   @DoNotStrip
   @Keep
-  open fun dispose() { }
+  @CallSuper
+  open fun dispose() {
+    cxxPartCache?.get()?.destroy()
+    cxxPartCache = null
+  }
 
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
@@ -94,6 +99,10 @@ abstract class HybridObject {
 
     init {
       mHybridData = initHybrid()
+    }
+
+    fun destroy() {
+      mHybridData.resetNative()
     }
 
     protected open external fun initHybrid(): HybridData
