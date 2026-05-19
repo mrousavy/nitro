@@ -10,6 +10,15 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.utils.HardwareBufferUtils
 import dalvik.annotation.optimization.FastNative
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
+private fun ByteBuffer.arrayBufferView(): ByteBuffer {
+  val view = duplicate()
+  view.order(ByteOrder.nativeOrder())
+  // This only resets the view's cursor; it does not clear or overwrite bytes.
+  view.clear()
+  return view
+}
 
 // AHardwareBuffer* needs to be boxed in jobject*
 typealias BoxedHardwareBuffer = Any
@@ -76,9 +85,13 @@ class ArrayBuffer {
    * @param copyIfNeeded If this `ArrayBuffer` is not holding a `ByteBuffer` (`isByteBuffer == false`),
    * the foreign data needs to be either _wrapped_, or _copied_ to be represented as a `ByteBuffer`.
    * This flag controls that behaviour.
+   *
+   * The returned `ByteBuffer` shares the underlying bytes, uses native byte order, but has its own
+   * cursor state. Reading from or writing to the returned buffer can change the bytes, but changing
+   * its `position`, `limit`, or `mark` will not affect the `ArrayBuffer`'s internal `ByteBuffer`.
    */
   fun getBuffer(copyIfNeeded: Boolean): ByteBuffer {
-    return getByteBuffer(copyIfNeeded)
+    return getByteBuffer(copyIfNeeded).arrayBufferView()
   }
 
   /**
@@ -95,13 +108,14 @@ class ArrayBuffer {
    * Copies the underlying data into a `ByteArray`.
    * If this `ArrayBuffer` is backed by a GPU-HardwareBuffer,
    * this performs a GPU-download.
+   * This does not mutate the underlying `ByteBuffer`'s cursor state.
    */
   fun toByteArray(): ByteArray {
     val buffer = this.getBuffer(false)
     if (buffer.hasArray()) {
       // It's a CPU-backed array - we can return this directly if the size matches
       val array = buffer.array()
-      if (array.size == this.size) {
+      if (array.size == this.size && buffer.arrayOffset() == 0) {
         // The ByteBuffer is 1:1 mapped to a byte array - return as is!
         return array
       }
@@ -109,10 +123,10 @@ class ArrayBuffer {
       // This might be because the ArrayBuffer has a smaller view of the data, so we need
       // to resort back to a good ol' copy.
     }
-    // It's not a 1:1 mapped array (e.g. HardwareBuffer) - we need to copy to the CPU
-    val copy = ByteBuffer.allocate(buffer.capacity())
-    copy.put(buffer)
-    return copy.array()
+    // It's not a 1:1 mapped array (e.g. HardwareBuffer) - we need to copy to the CPU.
+    val copy = ByteArray(this.size)
+    buffer.get(copy)
+    return copy
   }
 
   /**
@@ -214,18 +228,20 @@ class ArrayBuffer {
 
     /**
      * Copy the given `ByteBuffer` into a new **owning** `ArrayBuffer`.
+     * This copies from the start of the buffer up to its current `limit`, and does not mutate the
+     * given `ByteBuffer`'s cursor state.
      */
     fun copy(byteBuffer: ByteBuffer): ArrayBuffer {
       // 1. Find out size
-      byteBuffer.rewind()
-      val size = byteBuffer.remaining()
+      val source = byteBuffer.duplicate()
+      source.rewind()
+      val size = source.remaining()
       // 2. Create a new buffer with the same size as the other
       val newBuffer = ByteBuffer.allocateDirect(size)
       // 3. Copy over the source buffer into the new buffer
-      newBuffer.put(byteBuffer)
-      // 4. Rewind both buffers again to index 0
-      newBuffer.rewind()
-      byteBuffer.rewind()
+      newBuffer.put(source)
+      // 4. Flip the new buffer for reads
+      newBuffer.flip()
       // 5. Create a new `ArrayBuffer`
       return ArrayBuffer(newBuffer)
     }
@@ -250,10 +266,11 @@ class ArrayBuffer {
 
     /**
      * Wrap the given `ByteBuffer` in a new **owning** `ArrayBuffer`.
+     * This wraps the whole direct buffer capacity, and does not mutate the given `ByteBuffer`'s
+     * cursor state.
      */
     fun wrap(byteBuffer: ByteBuffer): ArrayBuffer {
-      byteBuffer.rewind()
-      return ArrayBuffer(byteBuffer)
+      return ArrayBuffer(byteBuffer.arrayBufferView())
     }
 
     /**
