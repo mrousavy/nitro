@@ -35,7 +35,7 @@ data class MapWrapper(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       map,
       secondMap
     ).contentDeepHashCode()

@@ -47,7 +47,7 @@ data class OptionalPrimitivesHolder(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       optionalNumber,
       optionalBoolean,
       optionalUInt64,

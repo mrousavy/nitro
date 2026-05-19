@@ -79,7 +79,7 @@ data class ${structType.structName}(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       ${indent(propertiesList, '      ')}
     ).contentDeepHashCode()
   }
