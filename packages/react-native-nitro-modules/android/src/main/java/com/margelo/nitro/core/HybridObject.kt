@@ -1,5 +1,6 @@
 package com.margelo.nitro.core
 
+import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -45,8 +46,10 @@ abstract class HybridObject {
    */
   @DoNotStrip
   @Keep
+  @CallSuper
   open fun dispose() {
     cxxPartCache?.get()?.destroy()
+    cxxPartCache = null
   }
 
   /**
@@ -98,7 +101,7 @@ abstract class HybridObject {
       mHybridData = initHybrid()
     }
 
-    open fun destroy() {
+    fun destroy() {
       mHybridData.resetNative()
     }
 

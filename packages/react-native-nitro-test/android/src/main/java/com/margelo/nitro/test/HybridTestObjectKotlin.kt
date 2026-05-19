@@ -628,6 +628,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun dispose() {
+    super.dispose()
     this.optionalCallback?.let { callback ->
       callback(13.0)
     }
