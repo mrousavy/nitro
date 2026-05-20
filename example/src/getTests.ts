@@ -56,10 +56,10 @@ export interface GetTestsOptions {
    */
   propagateFailures?: boolean
   /**
-   * Timeout for async test actions. Set to false to delegate timeout handling
-   * to the outer runner.
+   * Timeout for async test actions. Leave undefined to let the outer runner
+   * handle timeouts.
    */
-  asyncTimeoutMs?: number | false
+  asyncTimeoutMs?: number
 }
 
 const TEST_PERSON: Person = {

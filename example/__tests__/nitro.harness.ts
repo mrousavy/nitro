@@ -14,7 +14,6 @@ function createTestRunner(
     const tests = getTests(testObject, {
       backend: harnessBackend,
       propagateFailures: true,
-      asyncTimeoutMs: false,
     })
     for (const test of tests) {
       it(test.name, async () => {

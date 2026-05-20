@@ -12,6 +12,14 @@ on:
         required: false
         default: "35"
         type: string
+      device_arch:
+        description: "Device architecture (x86_64, arm64-v8a)"
+        required: false
+        default: "x86_64"
+        type: choice
+        options:
+          - x86_64
+          - arm64-v8a
       device_profile:
         description: "Device profile"
         required: false
@@ -43,7 +51,6 @@ on:
       - "example/__tests__/**"
       - "example/src/getTests.ts"
       - "example/src/testing/**"
-      - "example/jest.config.js"
       - "example/jest.harness.config.mjs"
       - "example/package.json"
       - "example/rn-harness.config.mjs"
@@ -66,7 +73,6 @@ on:
       - "example/__tests__/**"
       - "example/src/getTests.ts"
       - "example/src/testing/**"
-      - "example/jest.config.js"
       - "example/jest.harness.config.mjs"
       - "example/package.json"
       - "example/rn-harness.config.mjs"
@@ -74,6 +80,7 @@ on:
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
   DEVICE_API_LEVEL: ${{ github.event.inputs.device_api_level || '35' }}
+  DEVICE_ARCH: ${{ github.event.inputs.device_arch || 'x86_64' }}
   DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_8' }}
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_8_API_35' }}
 
@@ -121,13 +128,13 @@ jobs:
             ~/.gradle/wrapper
             example/android/.gradle
             example/android/app/.cxx
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-x86_64-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-x86_64-
+            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
             ${{ runner.os }}-gradle-
       - name: Build Android app
         working-directory: example/android
-        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=x86_64
+        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
 
       - name: Run Harness E2E tests
         uses: callstackincubator/react-native-harness@v1.2.0

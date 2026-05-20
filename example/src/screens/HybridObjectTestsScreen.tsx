@@ -53,7 +53,10 @@ export function HybridObjectTestsScreen() {
   ]
   console.log(`Showing Tests for HybridObject "${selectedObject?.name}"`)
   const allTests = React.useMemo(
-    () => getTests(selectedObject ?? HybridTestObjectCpp),
+    () =>
+      getTests(selectedObject ?? HybridTestObjectCpp, {
+        asyncTimeoutMs: 1500,
+      }),
     [selectedObject]
   )
   const [unfilteredTests, setTests] = React.useState<TestState[]>(() =>

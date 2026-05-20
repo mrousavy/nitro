@@ -45,7 +45,6 @@ on:
       - "example/__tests__/**"
       - "example/src/getTests.ts"
       - "example/src/testing/**"
-      - "example/jest.config.js"
       - "example/jest.harness.config.mjs"
       - "example/package.json"
       - "example/rn-harness.config.mjs"
@@ -70,7 +69,6 @@ on:
       - "example/__tests__/**"
       - "example/src/getTests.ts"
       - "example/src/testing/**"
-      - "example/jest.config.js"
       - "example/jest.harness.config.mjs"
       - "example/package.json"
       - "example/rn-harness.config.mjs"
@@ -151,7 +149,7 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \

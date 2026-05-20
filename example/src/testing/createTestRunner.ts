@@ -37,7 +37,7 @@ export interface TestRunner {
 }
 
 export interface CreateTestRunnerOptions {
-  asyncTimeoutMs?: number | false
+  asyncTimeoutMs?: number
 }
 
 /**
@@ -47,8 +47,6 @@ export function createTestRunner(
   backend: AssertionBackend,
   options: CreateTestRunnerOptions = {}
 ): TestRunner {
-  const asyncTimeoutMs = options.asyncTimeoutMs ?? 1500
-
   function it<T>(action: () => Promise<T>): Promise<State<T>>
   function it<T>(action: () => T): State<T>
   function it<T>(action: () => T | Promise<T>): State<T> | Promise<State<T>> {
@@ -56,9 +54,9 @@ export function createTestRunner(
       const syncResult = action()
       if (syncResult instanceof Promise) {
         const wrapped =
-          asyncTimeoutMs === false
+          options.asyncTimeoutMs == null
             ? syncResult
-            : timeoutedPromise<T>(syncResult, asyncTimeoutMs)
+            : timeoutedPromise<T>(syncResult, options.asyncTimeoutMs)
         return wrapped
           .then((asyncResult) => new State<T>(asyncResult, undefined, backend))
           .catch((error) => new State<T>(undefined, error, backend))
