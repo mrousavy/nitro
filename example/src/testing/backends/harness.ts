@@ -11,6 +11,8 @@ export const harnessBackend: AssertionBackend = {
   assertEqual<T>(actual: T, expected: T, message: string): void {
     // Use deep-equal for consistency with throwing backend
     if (!deepEqual(actual, expected)) {
+      // Let Harness/Vitest print its structured diff when possible.
+      expect(actual).toEqual(expected)
       expect.fail(message)
     }
   },

@@ -11,13 +11,14 @@ function createTestRunner(
   testObject: TestObjectCpp | TestObjectSwiftKotlin
 ): () => void {
   return () => {
-    const tests = getTests(testObject, { backend: harnessBackend })
+    const tests = getTests(testObject, {
+      backend: harnessBackend,
+      propagateFailures: true,
+      asyncTimeoutMs: false,
+    })
     for (const test of tests) {
       it(test.name, async () => {
-        const result = await test.run()
-        if (result.status === 'failed') {
-          throw new Error(result.message)
-        }
+        await test.run()
       })
     }
   }

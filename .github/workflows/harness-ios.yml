@@ -41,7 +41,13 @@ on:
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
+      - "**/bun.lock"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.config.js"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
   pull_request:
     paths:
@@ -60,7 +66,13 @@ on:
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
+      - "**/bun.lock"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.config.js"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
 
 env:
@@ -139,7 +151,7 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -destination 'generic/platform=iOS Simulator' \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \
@@ -148,20 +160,10 @@ jobs:
       - name: Install Watchman
         run: brew install watchman
 
-      - name: Setup iOS Simulator
-        uses: futureware-tech/simulator-action@v5
-        with:
-          model: ${{ env.DEVICE_MODEL }}
-          os: iOS
-          os_version: ${{ env.IOS_VERSION }}
-          wait_for_boot: true
-          erase_before_boot: false
-
-      - name: Install app
-        run: |
-          xcrun simctl install booted example/ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
-
       - name: Run Harness E2E tests
-        working-directory: example
-        run: |
-          bun run test:harness --harnessRunner ios
+        uses: callstackincubator/react-native-harness@v1.2.0
+        with:
+          app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
+          runner: ios
+          projectRoot: example
+          packageManager: bun

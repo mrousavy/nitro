@@ -36,17 +36,29 @@ export interface TestRunner {
   it<T>(action: () => T): State<T>
 }
 
+export interface CreateTestRunnerOptions {
+  asyncTimeoutMs?: number | false
+}
+
 /**
  * Creates a test runner with the provided assertion backend.
  */
-export function createTestRunner(backend: AssertionBackend): TestRunner {
+export function createTestRunner(
+  backend: AssertionBackend,
+  options: CreateTestRunnerOptions = {}
+): TestRunner {
+  const asyncTimeoutMs = options.asyncTimeoutMs ?? 1500
+
   function it<T>(action: () => Promise<T>): Promise<State<T>>
   function it<T>(action: () => T): State<T>
   function it<T>(action: () => T | Promise<T>): State<T> | Promise<State<T>> {
     try {
       const syncResult = action()
       if (syncResult instanceof Promise) {
-        const wrapped = timeoutedPromise<T>(syncResult)
+        const wrapped =
+          asyncTimeoutMs === false
+            ? syncResult
+            : timeoutedPromise<T>(syncResult, asyncTimeoutMs)
         return wrapped
           .then((asyncResult) => new State<T>(asyncResult, undefined, backend))
           .catch((error) => new State<T>(undefined, error, backend))

@@ -50,6 +50,16 @@ export interface GetTestsOptions {
    * The assertion backend to use. Defaults to throwingBackend for in-app testing.
    */
   backend?: AssertionBackend
+  /**
+   * Propagate assertion failures directly instead of wrapping them in TestResult.
+   * Harness uses this so Vitest can report the original assertion failure.
+   */
+  propagateFailures?: boolean
+  /**
+   * Timeout for async test actions. Set to false to delegate timeout handling
+   * to the outer runner.
+   */
+  asyncTimeoutMs?: number | false
 }
 
 const TEST_PERSON: Person = {
@@ -172,22 +182,34 @@ function sumUpAllPassengers(cars: Car[]): string {
     .join(', ')
 }
 
-function createCreateTest<T>() {
+function createCreateTest<T>({
+  propagateFailures = false,
+}: {
+  propagateFailures?: boolean
+} = {}) {
   return function createTest(
     name: string,
     run: () => State<T> | Promise<State<T>>
   ): TestRunner {
+    async function runTest(): Promise<TestResult> {
+      console.log(`⏳ Test "${name}" started...`)
+      const state = await run()
+      console.log(`✅ Test "${name}" passed!`)
+      return {
+        status: 'successful',
+        result: stringify(state.result ?? state.errorThrown ?? '(void)'),
+      }
+    }
+
     return {
       name: name,
       run: async (): Promise<TestResult> => {
+        if (propagateFailures) {
+          return await runTest()
+        }
+
         try {
-          console.log(`⏳ Test "${name}" started...`)
-          const state = await run()
-          console.log(`✅ Test "${name}" passed!`)
-          return {
-            status: 'successful',
-            result: stringify(state.result ?? state.errorThrown ?? '(void)'),
-          }
+          return await runTest()
         } catch (e) {
           console.log(`❌ Test "${name}" failed! ${e}`)
           return {
@@ -213,8 +235,12 @@ export function getTests(
   options: GetTestsOptions = {}
 ): TestRunner[] {
   const backend = options.backend ?? throwingBackend
-  const { it } = createTestRunner(backend)
-  const createTest = createCreateTest()
+  const { it } = createTestRunner(backend, {
+    asyncTimeoutMs: options.asyncTimeoutMs,
+  })
+  const createTest = createCreateTest({
+    propagateFailures: options.propagateFailures,
+  })
 
   return [
     // Basic prototype tests

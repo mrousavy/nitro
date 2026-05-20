@@ -12,18 +12,10 @@ on:
         required: false
         default: "35"
         type: string
-      device_arch:
-        description: "Device architecture (x86_64, arm64-v8a)"
-        required: false
-        default: "x86_64"
-        type: choice
-        options:
-          - x86_64
-          - arm64-v8a
       device_profile:
         description: "Device profile"
         required: false
-        default: "pixel_7"
+        default: "pixel_8"
         type: string
       avd_name:
         description: "AVD name"
@@ -49,6 +41,11 @@ on:
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.config.js"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
   pull_request:
     paths:
@@ -67,13 +64,17 @@ on:
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.config.js"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
 
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
   DEVICE_API_LEVEL: ${{ github.event.inputs.device_api_level || '35' }}
-  DEVICE_ARCH: ${{ github.event.inputs.device_arch || 'x86_64' }}
-  DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_7' }}
+  DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_8' }}
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_8_API_35' }}
 
 jobs:
@@ -120,58 +121,22 @@ jobs:
             ~/.gradle/wrapper
             example/android/.gradle
             example/android/app/.cxx
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-x86_64-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
+            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-x86_64-
             ${{ runner.os }}-gradle-
       - name: Build Android app
         working-directory: example/android
-        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
-
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
-
-      - name: AVD cache
-        uses: actions/cache@v5
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ env.DEVICE_API_LEVEL }}-${{ env.DEVICE_ARCH }}
-
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.DEVICE_API_LEVEL }}
-          arch: ${{ env.DEVICE_ARCH }}
-          profile: ${{ env.DEVICE_PROFILE }}
-          disk-size: 1G
-          heap-size: 1G
-          force-avd-creation: false
-          avd-name: ${{ env.AVD_NAME }}
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching."
+        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=x86_64
 
       - name: Run Harness E2E tests
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: callstackincubator/react-native-harness@v1.2.0
         with:
-          working-directory: example
-          api-level: ${{ env.DEVICE_API_LEVEL }}
-          arch: ${{ env.DEVICE_ARCH }}
-          force-avd-creation: false
-          avd-name: ${{ env.AVD_NAME }}
-          disable-animations: true
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: |
-            adb install -r "./android/app/build/outputs/apk/debug/app-debug.apk"
-            bun run test:harness --harnessRunner android
+          app: android/app/build/outputs/apk/debug/app-debug.apk
+          runner: android
+          projectRoot: example
+          packageManager: bun
+          cacheAvd: true
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
