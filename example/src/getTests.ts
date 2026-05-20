@@ -27,15 +27,9 @@ import {
 } from 'react-native-nitro-modules'
 import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
 
-type TestResult =
-  | {
-      status: 'successful'
-      result: string
-    }
-  | {
-      status: 'failed'
-      message: string
-    }
+type TestResult = {
+  result: string
+}
 
 export interface TestRunner {
   name: string
@@ -50,11 +44,6 @@ export interface GetTestsOptions {
    * The assertion backend to use. Defaults to throwingBackend for in-app testing.
    */
   backend?: AssertionBackend
-  /**
-   * Propagate assertion failures directly instead of wrapping them in TestResult.
-   * Harness uses this so Vitest can report the original assertion failure.
-   */
-  propagateFailures?: boolean
   /**
    * Timeout for async test actions. Leave undefined to let the outer runner
    * handle timeouts.
@@ -182,40 +171,19 @@ function sumUpAllPassengers(cars: Car[]): string {
     .join(', ')
 }
 
-function createCreateTest<T>({
-  propagateFailures = false,
-}: {
-  propagateFailures?: boolean
-} = {}) {
+function createCreateTest<T>() {
   return function createTest(
     name: string,
     run: () => State<T> | Promise<State<T>>
   ): TestRunner {
-    async function runTest(): Promise<TestResult> {
-      console.log(`⏳ Test "${name}" started...`)
-      const state = await run()
-      console.log(`✅ Test "${name}" passed!`)
-      return {
-        status: 'successful',
-        result: stringify(state.result ?? state.errorThrown ?? '(void)'),
-      }
-    }
-
     return {
       name: name,
       run: async (): Promise<TestResult> => {
-        if (propagateFailures) {
-          return await runTest()
-        }
-
-        try {
-          return await runTest()
-        } catch (e) {
-          console.log(`❌ Test "${name}" failed! ${e}`)
-          return {
-            status: 'failed',
-            message: stringify(e),
-          }
+        console.log(`⏳ Test "${name}" started...`)
+        const state = await run()
+        console.log(`✅ Test "${name}" passed!`)
+        return {
+          result: stringify(state.result ?? state.errorThrown ?? '(void)'),
         }
       },
     }
@@ -238,9 +206,7 @@ export function getTests(
   const { it } = createTestRunner(backend, {
     asyncTimeoutMs: options.asyncTimeoutMs,
   })
-  const createTest = createCreateTest({
-    propagateFailures: options.propagateFailures,
-  })
+  const createTest = createCreateTest()
 
   return [
     // Basic prototype tests

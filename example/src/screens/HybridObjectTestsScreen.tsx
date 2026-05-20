@@ -23,6 +23,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { TestCase, TestState } from '../components/TestCase'
 import { KeyboardDismissBackground } from '../components/KeyboardDismissBackground'
+import { stringify } from '../utils'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -183,14 +184,11 @@ export function HybridObjectTestsScreen() {
   const runTest = (test: TestState) => {
     updateTest(test.runner, '⏳ Running', '')
     requestAnimationFrame(async () => {
-      const result = await test.runner.run()
-      switch (result.status) {
-        case 'successful':
-          updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
-          break
-        case 'failed':
-          updateTest(test.runner, '❌ Failed', `Error: ${result.message}`)
-          break
+      try {
+        const result = await test.runner.run()
+        updateTest(test.runner, '✅ Passed', `Result: ${result.result}`)
+      } catch (error) {
+        updateTest(test.runner, '❌ Failed', `Error: ${stringify(error)}`)
       }
     })
   }

@@ -13,7 +13,6 @@ function createTestRunner(
   return () => {
     const tests = getTests(testObject, {
       backend: harnessBackend,
-      propagateFailures: true,
     })
     for (const test of tests) {
       it(test.name, async () => {

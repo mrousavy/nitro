@@ -11,7 +11,7 @@ const isCI = process.env.CI === 'true'
 
 function numberFromEnv(name, fallback) {
   const value = process.env[name]
-  if (value == null) return fallback
+  if (value == null || value.trim() === '') return fallback
 
   const number = Number(value)
   if (!Number.isInteger(number) || number < 1) {
@@ -21,6 +21,12 @@ function numberFromEnv(name, fallback) {
   return number
 }
 
+function stringFromEnv(name, fallback) {
+  const value = process.env[name]
+  if (value == null || value.trim() === '') return fallback
+  return value
+}
+
 const config = {
   entryPoint: './index.js',
   appRegistryComponentName: 'NitroExample',
@@ -28,11 +34,11 @@ const config = {
   runners: [
     androidPlatform({
       name: 'android',
-      device: androidEmulator(process.env.AVD_NAME ?? 'Pixel_8_API_35', {
+      device: androidEmulator(stringFromEnv('AVD_NAME', 'Pixel_7_API_35'), {
         apiLevel: numberFromEnv('DEVICE_API_LEVEL', 35),
-        profile: process.env.DEVICE_PROFILE ?? 'pixel_8',
-        diskSize: process.env.AVD_DISK_SIZE ?? '1G',
-        heapSize: process.env.AVD_HEAP_SIZE ?? '1G',
+        profile: stringFromEnv('DEVICE_PROFILE', 'pixel_7'),
+        diskSize: stringFromEnv('AVD_DISK_SIZE', '1G'),
+        heapSize: stringFromEnv('AVD_HEAP_SIZE', '1G'),
         snapshot: {
           enabled: isCI,
         },
@@ -42,8 +48,8 @@ const config = {
     applePlatform({
       name: 'ios',
       device: appleSimulator(
-        process.env.DEVICE_MODEL ?? 'iPhone 17 Pro',
-        process.env.IOS_VERSION ?? '26.2'
+        stringFromEnv('DEVICE_MODEL', 'iPhone 17 Pro'),
+        stringFromEnv('IOS_VERSION', '26.2')
       ),
       bundleId: 'com.mrousavy.nitro.example',
     }),

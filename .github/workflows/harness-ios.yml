@@ -10,12 +10,10 @@ on:
       device_model:
         description: "iOS Simulator device model"
         required: false
-        default: "iPhone 17 Pro"
         type: string
       ios_version:
         description: "iOS version"
         required: false
-        default: "26.2"
         type: string
       xcode_version:
         description: "Xcode version"
@@ -75,8 +73,8 @@ on:
 
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
-  DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
-  IOS_VERSION: ${{ github.event.inputs.ios_version || '26.2' }}
+  DEVICE_MODEL: ${{ github.event.inputs.device_model }}
+  IOS_VERSION: ${{ github.event.inputs.ios_version }}
   XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.4' }}
   USE_CCACHE: 1
   DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.4' }}.app/Contents/Developer
@@ -142,6 +140,17 @@ jobs:
         working-directory: example/ios
         run: |
           set -o pipefail
+          DEVICE_MODEL="$(node --input-type=module <<'NODE'
+          import { getConfig } from '@react-native-harness/config';
+
+          const { config } = await getConfig(`${process.cwd()}/..`);
+          const runner = config.runners.find((candidate) => candidate.name === 'ios');
+          if (runner == null) throw new Error('Could not find Harness iOS runner');
+
+          console.log(runner.config.device.name);
+          NODE
+          )"
+
           xcodebuild \
             CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
             -derivedDataPath build -UseModernBuildSystem=YES \
@@ -149,7 +158,7 @@ jobs:
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -destination "platform=iOS Simulator,arch=arm64,name=${DEVICE_MODEL}" \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \
