@@ -1,6 +1,7 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import type { Options as SitemapOptions } from '@docusaurus/plugin-sitemap';
 
 const title = 'Nitro Modules';
 const tagline = 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.';
@@ -10,6 +11,12 @@ const marcId = 'https://mrousavy.com/#person';
 const margeloId = 'https://margelo.com/#organization';
 const nitroWebsiteId = `${url}/#website`;
 const nitroSoftwareId = `${url}/#software`;
+
+const createSitemapItems: NonNullable<SitemapOptions['createSitemapItems']> = async (params) => {
+  const { defaultCreateSitemapItems, ...rest } = params;
+  const items = await defaultCreateSitemapItems(rest);
+  return items.filter((item) => !item.url.includes('/page/'));
+};
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -91,7 +98,6 @@ const config: Config = {
   trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
-  onBrokenMarkdownLinks: 'throw',
 
   // Runs animations on page change
   clientModules: ['./src/clientModules/pageSwitchFadeAnimation.ts'],
@@ -105,7 +111,7 @@ const config: Config = {
   },
 
   future: {
-    experimental_faster: true,
+    faster: true,
     v4: true
   },
 
@@ -162,6 +168,9 @@ const config: Config = {
   ],
 
   markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
     mermaid: true,
   },
   themes: ['@docusaurus/theme-mermaid'],
@@ -264,11 +273,7 @@ const config: Config = {
       priority: 0.5,
       ignorePatterns: ['/tags/**'],
       filename: 'sitemap.xml',
-      createSitemapItems: async (params) => {
-        const { defaultCreateSitemapItems, ...rest } = params;
-        const items = await defaultCreateSitemapItems(rest);
-        return items.filter((item) => !item.url.includes('/page/'));
-      },
+      createSitemapItems,
     },
     footer: {
       style: 'dark',

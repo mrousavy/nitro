@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 
 If you encounter issues with Nitro, want to fix a bug, or reproduce a bug in the example app, you'd need to clone the repo and get it running first.
 
-:::info Contribution flow and PR rules
+:::info[Contribution flow and PR rules]
 This page covers **environment setup and reproduction** — how to run Nitro locally. For the contribution flow itself (what PRs we accept, the required test-per-fix rule, the nitrogen workflow, and the PR checklist), see [**CONTRIBUTING.md**](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md) in the repo root. Read it before opening a PR.
 :::
 
@@ -84,7 +84,7 @@ Usually, you can reproduce issues like this:
 2. Change the code to reproduce the issue
 3. Create a PR to the **nitro** repository which demonstrates the issue
 
-:::tip You don't need to ship a fix
+:::tip[You don't need to ship a fix]
 A PR that **only reproduces the bug** — and makes CI go red — is a completely valid and very welcome contribution. If you can add a minimal failing test (compile error or runtime error caught by the Harness tests) and open a PR with just that, stop there. You don't have to attempt a fix. A clean, 100% deterministic repro pinned in CI is often more valuable than a guessed patch; the actual fix can be taken from there.
 
 See [You don't need to ship a fix](https://github.com/mrousavy/nitro/blob/main/CONTRIBUTING.md#you-dont-need-to-ship-a-fix--a-clean-repro-is-enough) in `CONTRIBUTING.md` for details and the test-writing rules (reuse existing types, keep it small, don't remove existing tests).
