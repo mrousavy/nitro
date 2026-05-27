@@ -49,6 +49,10 @@ on:
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
   pull_request:
     paths:
@@ -67,6 +71,10 @@ on:
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
 
 env:
