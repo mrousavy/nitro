@@ -1,6 +1,5 @@
-import path from 'node:path';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, Plugin } from '@docusaurus/types';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Options as SitemapOptions } from '@docusaurus/plugin-sitemap';
 
@@ -12,23 +11,6 @@ const marcId = 'https://mrousavy.com/#person';
 const margeloId = 'https://margelo.com/#organization';
 const nitroWebsiteId = `${url}/#website`;
 const nitroSoftwareId = `${url}/#software`;
-const workspaceNodeModules = path.resolve(__dirname, '..', 'node_modules');
-
-function forceWorkspaceReactPlugin(): Plugin<unknown> {
-  return {
-    name: 'force-workspace-react',
-    configureWebpack() {
-      return {
-        resolve: {
-          alias: {
-            react: path.join(workspaceNodeModules, 'react'),
-            'react-dom': path.join(workspaceNodeModules, 'react-dom'),
-          },
-        },
-      };
-    },
-  };
-}
 
 const createSitemapItems: NonNullable<SitemapOptions['createSitemapItems']> = async (params) => {
   const { defaultCreateSitemapItems, ...rest } = params;
@@ -148,7 +130,7 @@ const config: Config = {
     ],
   ],
   plugins: [
-    forceWorkspaceReactPlugin,
+    require('./src/plugins/enforce-single-react-instance'),
     [
       'vercel-analytics',
       {},
