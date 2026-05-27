@@ -5,6 +5,8 @@
 //  Created by Marc Rousavy on 15.08.24.
 //
 
+import Foundation
+
 /// Represents a Promise that can be passed to JS.
 ///
 /// Create a new Promise with the following APIs:
@@ -19,6 +21,7 @@ public final class Promise<T>: @unchecked Sendable {
     case error(Error)
   }
 
+  private let lock = NSLock()
   private var state: State?
   private var onResolvedListeners: [(T) -> Void] = []
   private var onRejectedListeners: [(Error) -> Void] = []
@@ -32,7 +35,11 @@ public final class Promise<T>: @unchecked Sendable {
   }
 
   deinit {
-    if state == nil {
+    lock.lock()
+    let isPending = state == nil
+    lock.unlock()
+
+    if isPending {
       let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
       reject(withError: RuntimeError.error(withMessage: message))
     }
@@ -42,24 +49,42 @@ public final class Promise<T>: @unchecked Sendable {
    * Resolves this `Promise<T>` with the given `T` and notifies all listeners.
    */
   public func resolve(withResult result: T) {
+    let listeners: [(T) -> Void]
+
+    lock.lock()
     guard state == nil else {
+      lock.unlock()
       fatalError(
         "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
     }
     state = .result(result)
-    onResolvedListeners.forEach { listener in listener(result) }
+    listeners = onResolvedListeners
+    onResolvedListeners.removeAll()
+    onRejectedListeners.removeAll()
+    lock.unlock()
+
+    listeners.forEach { listener in listener(result) }
   }
 
   /**
    * Rejects this `Promise<T>` with the given `Error` and notifies all listeners.
    */
   public func reject(withError error: Error) {
+    let listeners: [(Error) -> Void]
+
+    lock.lock()
     guard state == nil else {
+      lock.unlock()
       fatalError(
         "Failed to reject promise with \(error) - it has already been resolved or rejected!")
     }
     state = .error(error)
-    onRejectedListeners.forEach { listener in listener(error) }
+    listeners = onRejectedListeners
+    onResolvedListeners.removeAll()
+    onRejectedListeners.removeAll()
+    lock.unlock()
+
+    listeners.forEach { listener in listener(error) }
   }
 }
 
@@ -148,14 +173,21 @@ extension Promise {
    */
   @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
+    let callImmediately: (() -> Void)?
+
+    lock.lock()
     switch state {
     case .result(let result):
-      onResolvedListener(result)
-      break
+      callImmediately = { onResolvedListener(result) }
+    case .error:
+      callImmediately = nil
     default:
       onResolvedListeners.append(onResolvedListener)
-      break
+      callImmediately = nil
     }
+    lock.unlock()
+
+    callImmediately?()
     return self
   }
 
@@ -165,14 +197,21 @@ extension Promise {
    */
   @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
+    let callImmediately: (() -> Void)?
+
+    lock.lock()
     switch state {
     case .error(let error):
-      onRejectedListener(error)
-      break
+      callImmediately = { onRejectedListener(error) }
+    case .result:
+      callImmediately = nil
     default:
       onRejectedListeners.append(onRejectedListener)
-      break
+      callImmediately = nil
     }
+    lock.unlock()
+
+    callImmediately?()
     return self
   }
 }
