@@ -12,14 +12,6 @@ on:
         required: false
         default: "35"
         type: string
-      device_arch:
-        description: "Device architecture (x86_64, arm64-v8a)"
-        required: false
-        default: "x86_64"
-        type: choice
-        options:
-          - x86_64
-          - arm64-v8a
       device_profile:
         description: "Device profile"
         required: false
@@ -80,7 +72,7 @@ on:
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
   DEVICE_API_LEVEL: ${{ github.event.inputs.device_api_level || '35' }}
-  DEVICE_ARCH: ${{ github.event.inputs.device_arch || 'x86_64' }}
+  DEVICE_ARCH: x86_64
   DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_7' }}
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_8_API_35' }}
   AVD_DISK_SIZE: 1G
