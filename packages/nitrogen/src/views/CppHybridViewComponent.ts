@@ -257,7 +257,7 @@ namespace ${namespace} {
 
   ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
+                                  react::RawPropsParser()) {}
 
   std::shared_ptr<const react::Props> ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
                                       ${descriptorIndent}             const std::shared_ptr<const react::Props>& props,

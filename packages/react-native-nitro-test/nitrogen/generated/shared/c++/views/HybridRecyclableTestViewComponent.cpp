@@ -55,9 +55,9 @@ namespace margelo::nitro::test::views {
     }
   }
 
-  HybridRecyclableTestViewComponentDescriptor::HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-    : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser(/* enableJsiParser */ true)) {}
+HybridRecyclableTestViewComponentDescriptor::HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
+  : ConcreteComponentDescriptor(parameters,
+                                react::RawPropsParser()) {}
 
   std::shared_ptr<const react::Props> HybridRecyclableTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
                                                                                               const std::shared_ptr<const react::Props>& props,
