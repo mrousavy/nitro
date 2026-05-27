@@ -62,7 +62,7 @@
         "@react-navigation/bottom-tabs": "^7.16.2",
         "@react-navigation/native": "^7.2.5",
         "deep-equal": "^2.2.3",
-        "react": "19.2.0",
+        "react": "19.2.6",
         "react-native": "0.83.0",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test": "*",
@@ -111,7 +111,7 @@
         "@types/jest": "*",
         "@types/react": "^19.2.15",
         "jest": "*",
-        "react": "19.2.0",
+        "react": "19.2.6",
         "react-native": "0.83.0",
         "react-native-builder-bob": "^0.37.0",
         "react-native-worklets": "^0.9.1",
@@ -129,7 +129,7 @@
         "@types/react": "^19.2.15",
         "jest": "*",
         "nitrogen": "*",
-        "react": "19.2.0",
+        "react": "19.2.6",
         "react-native": "0.83.0",
         "react-native-nitro-modules": "*",
         "react-native-nitro-test-external": "*",
@@ -153,7 +153,7 @@
         "eslint-plugin-prettier": "^5.5.5",
         "nitrogen": "*",
         "prettier": "^3.8.3",
-        "react": "19.2.0",
+        "react": "19.2.6",
         "react-native": "0.83.0",
         "react-native-nitro-modules": "*",
         "typescript": "^5.8.3",
@@ -4983,6 +4983,14 @@
     "react-native-builder-bob/metro-config": ["metro-config@0.80.12", "", { "dependencies": { "connect": "^3.6.5", "cosmiconfig": "^5.0.5", "flow-enums-runtime": "^0.0.6", "jest-validate": "^29.6.3", "metro": "0.80.12", "metro-cache": "0.80.12", "metro-core": "0.80.12", "metro-runtime": "0.80.12" } }, "sha512-4rwOWwrhm62LjB12ytiuR5NgK1ZBNr24/He8mqCsC+HXZ+ATbrewLNztzbAZHtFsrxP4D4GLTGgh96pCpYLSAQ=="],
 
     "react-native-builder-bob/yargs": ["yargs@17.7.2", "", { "dependencies": { "cliui": "^8.0.1", "escalade": "^3.1.1", "get-caller-file": "^2.0.5", "require-directory": "^2.1.1", "string-width": "^4.2.3", "y18n": "^5.0.5", "yargs-parser": "^21.1.1" } }, "sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w=="],
+
+    "react-native-nitro-example/react": ["react@19.2.6", "", {}, "sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q=="],
+
+    "react-native-nitro-modules/react": ["react@19.2.6", "", {}, "sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q=="],
+
+    "react-native-nitro-test/react": ["react@19.2.6", "", {}, "sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q=="],
+
+    "react-native-nitro-test-external/react": ["react@19.2.6", "", {}, "sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q=="],
 
     "react-native-worklets/@babel/plugin-transform-class-properties": ["@babel/plugin-transform-class-properties@7.29.7", "", { "dependencies": { "@babel/helper-create-class-features-plugin": "^7.29.7", "@babel/helper-plugin-utils": "^7.29.7" }, "peerDependencies": { "@babel/core": "^7.0.0-0" } }, "sha512-GtcpjFvanPfzNQi3eTitsCqtRRmmqzpy/A+yhTR1HaZo1Ly3EA8ZXxlPyHdR8/IuRMYc3E4wdGBewB2QKQjAaA=="],
 
