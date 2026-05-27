@@ -329,8 +329,7 @@ interface SharedTestObjectProps {
 // Since it inherited from the `SharedTestObjectProps` interface,
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectCpp
-  extends HybridObject<{ ios: 'c++'; android: 'c++' }>,
-    SharedTestObjectProps {
+  extends HybridObject<{ ios: 'c++'; android: 'c++' }>, SharedTestObjectProps {
   // Complex Variants + Tuples
   getVariantTuple(variant: Float2 | Float3): Float2 | Float3
 
@@ -356,7 +355,8 @@ export interface TestObjectCpp
 // Since it inherited from the `SharedTestObjectProps` interface,
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
-  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
+  extends
+    HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
     SharedTestObjectProps {
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin

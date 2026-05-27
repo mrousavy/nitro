@@ -12,8 +12,10 @@ export interface OptionalPrimitivesHolder {
  * This hybrid object is implemented in Swift and Kotlin.
  * It can be called from Swift/Kotlin, as well as C++ directly.
  */
-export interface SomeExternalObject
-  extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
+export interface SomeExternalObject extends HybridObject<{
+  ios: 'swift'
+  android: 'kotlin'
+}> {
   getValue(): string
 
   // This tests a weird Swift bug: when a Hybrid Object imported in another
