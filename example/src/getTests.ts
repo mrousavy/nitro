@@ -1413,19 +1413,21 @@ export function getTests(
         .didNotThrow()
         .equals(55)
     ),
-    createTest('promiseReturnsInstantlyAsync() works under parallel load', async () =>
-      (
-        await it(async () => {
-          const results = await Promise.all(
-            Array.from({ length: 100 }, () =>
-              testObject.promiseReturnsInstantlyAsync()
+    createTest(
+      'promiseReturnsInstantlyAsync() works under parallel load',
+      async () =>
+        (
+          await it(async () => {
+            const results = await Promise.all(
+              Array.from({ length: 100 }, () =>
+                testObject.promiseReturnsInstantlyAsync()
+              )
             )
-          )
-          return results.every((result) => result === 55)
-        })
-      )
-        .didNotThrow()
-        .equals(true)
+            return results.every((result) => result === 55)
+          })
+        )
+          .didNotThrow()
+          .equals(true)
     ),
     createTest('promiseThatResolvesVoidInstantly() works', async () =>
       (await it(() => testObject.promiseThatResolvesVoidInstantly()))
