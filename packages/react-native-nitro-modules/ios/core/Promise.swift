@@ -26,6 +26,12 @@ public final class Promise<T>: @unchecked Sendable {
   private var onResolvedListeners: [(T) -> Void] = []
   private var onRejectedListeners: [(Error) -> Void] = []
 
+  private func withLock<Result>(_ operation: () throws -> Result) rethrows -> Result {
+    lock.lock()
+    defer { lock.unlock() }
+    return try operation()
+  }
+
   /**
    * Create a new pending Promise.
    * It can (and must) be resolved **or** rejected later.
@@ -35,9 +41,7 @@ public final class Promise<T>: @unchecked Sendable {
   }
 
   deinit {
-    lock.lock()
-    let isPending = state == nil
-    lock.unlock()
+    let isPending = withLock { state == nil }
 
     if isPending {
       let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
@@ -49,19 +53,20 @@ public final class Promise<T>: @unchecked Sendable {
    * Resolves this `Promise<T>` with the given `T` and notifies all listeners.
    */
   public func resolve(withResult result: T) {
-    let listeners: [(T) -> Void]
+    let listeners = withLock {
+      // Ensure we haven't resolved/rejected yet
+      guard state == nil else {
+        fatalError(
+          "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
+      }
 
-    lock.lock()
-    guard state == nil else {
-      lock.unlock()
-      fatalError(
-        "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
+      // Resolve + pop listeners under lock
+      state = .result(result)
+      let listeners = onResolvedListeners
+      onResolvedListeners.removeAll()
+      onRejectedListeners.removeAll()
+      return listeners
     }
-    state = .result(result)
-    listeners = onResolvedListeners
-    onResolvedListeners.removeAll()
-    onRejectedListeners.removeAll()
-    lock.unlock()
 
     listeners.forEach { listener in listener(result) }
   }
@@ -70,19 +75,20 @@ public final class Promise<T>: @unchecked Sendable {
    * Rejects this `Promise<T>` with the given `Error` and notifies all listeners.
    */
   public func reject(withError error: Error) {
-    let listeners: [(Error) -> Void]
+    let listeners = withLock {
+      // Ensure we haven't resolved/rejected yet
+      guard state == nil else {
+        fatalError(
+          "Failed to reject promise with \(error) - it has already been resolved or rejected!")
+      }
 
-    lock.lock()
-    guard state == nil else {
-      lock.unlock()
-      fatalError(
-        "Failed to reject promise with \(error) - it has already been resolved or rejected!")
+      // Reject + pop listeners under lock
+      state = .error(error)
+      let listeners = onRejectedListeners
+      onResolvedListeners.removeAll()
+      onRejectedListeners.removeAll()
+      return listeners
     }
-    state = .error(error)
-    listeners = onRejectedListeners
-    onResolvedListeners.removeAll()
-    onRejectedListeners.removeAll()
-    lock.unlock()
 
     listeners.forEach { listener in listener(error) }
   }
@@ -173,21 +179,19 @@ extension Promise {
    */
   @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
-    let callImmediately: (() -> Void)?
-
-    lock.lock()
-    switch state {
-    case .result(let result):
-      callImmediately = { onResolvedListener(result) }
-    case .error:
-      callImmediately = nil
-    default:
-      onResolvedListeners.append(onResolvedListener)
-      callImmediately = nil
+    withLock {
+      switch state {
+      case .result(let result):
+        // Already resolved! Call listener now
+        onResolvedListener(result)
+      case .error:
+        // Do nothing - it has been rejected.
+        break
+      case nil:
+        // Promise is still pending, append a listener
+        onResolvedListeners.append(onResolvedListener)
+      }
     }
-    lock.unlock()
-
-    callImmediately?()
     return self
   }
 
@@ -197,21 +201,19 @@ extension Promise {
    */
   @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
-    let callImmediately: (() -> Void)?
-
-    lock.lock()
-    switch state {
-    case .error(let error):
-      callImmediately = { onRejectedListener(error) }
-    case .result:
-      callImmediately = nil
-    default:
-      onRejectedListeners.append(onRejectedListener)
-      callImmediately = nil
+    withLock {
+      switch state {
+      case .result:
+        // Do nothing - it has been resolved.
+        break
+      case .error(let error):
+        // Already resolved! Call listener now
+        onRejectedListener(error)
+      case nil:
+        // Promise is still pending, append a listener
+        onRejectedListeners.append(onRejectedListener)
+      }
     }
-    lock.unlock()
-
-    callImmediately?()
     return self
   }
 }
