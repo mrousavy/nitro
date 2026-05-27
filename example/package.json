@@ -32,9 +32,9 @@
     "react-native-screens": "^4.25.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
-    "@babel/runtime": "^7.28.4",
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/runtime": "^7.29.7",
     "@react-native-community/cli": "20.1.3",
     "@react-native-community/cli-platform-android": "20.1.3",
     "@react-native-community/cli-platform-ios": "20.1.3",
@@ -45,7 +45,7 @@
     "@react-native-harness/platform-android": "1.3.0",
     "@react-native-harness/platform-apple": "1.3.0",
     "@types/deep-equal": "^1.0.4",
-    "babel-plugin-module-resolver": "^5.0.2",
+    "babel-plugin-module-resolver": "^5.0.3",
     "nitrogen": "*",
     "react-native-harness": "1.3.0"
   },
