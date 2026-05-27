@@ -158,20 +158,11 @@ jobs:
       - name: Install Watchman
         run: brew install watchman
 
-      - name: Setup iOS Simulator
-        uses: futureware-tech/simulator-action@v5
-        with:
-          model: ${{ env.DEVICE_MODEL }}
-          os: iOS
-          os_version: ${{ env.IOS_VERSION }}
-          wait_for_boot: true
-          erase_before_boot: false
-
-      - name: Install app
-        run: |
-          xcrun simctl install booted example/ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
-
       - name: Run Harness E2E tests
-        working-directory: example
-        run: |
-          bun run test:harness --harnessRunner ios
+        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
+        uses: callstackincubator/react-native-harness@v1.2.0
+        with:
+          runner: ios
+          projectRoot: example
+          app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
+          packageManager: bun

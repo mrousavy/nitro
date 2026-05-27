@@ -138,50 +138,14 @@ jobs:
         working-directory: example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
 
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-          ls /dev/kvm
-
-      - name: AVD cache
-        uses: actions/cache@v5
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ env.DEVICE_API_LEVEL }}-${{ env.DEVICE_ARCH }}
-
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ env.DEVICE_API_LEVEL }}
-          arch: ${{ env.DEVICE_ARCH }}
-          profile: ${{ env.DEVICE_PROFILE }}
-          disk-size: ${{ env.AVD_DISK_SIZE }}
-          heap-size: ${{ env.AVD_HEAP_SIZE }}
-          force-avd-creation: false
-          avd-name: ${{ env.AVD_NAME }}
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "Generated AVD snapshot for caching."
-
       - name: Run Harness E2E tests
-        uses: reactivecircus/android-emulator-runner@v2
+        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
+        uses: callstackincubator/react-native-harness@v1.2.0
         with:
-          working-directory: example
-          api-level: ${{ env.DEVICE_API_LEVEL }}
-          arch: ${{ env.DEVICE_ARCH }}
-          force-avd-creation: false
-          avd-name: ${{ env.AVD_NAME }}
-          disable-animations: true
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: |
-            adb install -r "./android/app/build/outputs/apk/debug/app-debug.apk"
-            bun run test:harness --harnessRunner android
+          runner: android
+          projectRoot: example
+          app: android/app/build/outputs/apk/debug/app-debug.apk
+          packageManager: bun
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
