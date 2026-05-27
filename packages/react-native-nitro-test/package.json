@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@types/jest": "*",
-    "@types/react": "*",
+    "@types/react": "^19.2.15",
     "jest": "*",
     "nitrogen": "*",
     "react": "19.2.0",
