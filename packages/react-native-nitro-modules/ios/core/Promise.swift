@@ -5,6 +5,8 @@
 //  Created by Marc Rousavy on 15.08.24.
 //
 
+import Foundation
+
 /// Represents a Promise that can be passed to JS.
 ///
 /// Create a new Promise with the following APIs:
@@ -19,9 +21,16 @@ public final class Promise<T>: @unchecked Sendable {
     case error(Error)
   }
 
+  private let lock = NSLock()
   private var state: State?
   private var onResolvedListeners: [(T) -> Void] = []
   private var onRejectedListeners: [(Error) -> Void] = []
+
+  private func withLock<Result>(_ operation: () throws -> Result) rethrows -> Result {
+    lock.lock()
+    defer { lock.unlock() }
+    return try operation()
+  }
 
   /**
    * Create a new pending Promise.
@@ -32,7 +41,9 @@ public final class Promise<T>: @unchecked Sendable {
   }
 
   deinit {
-    if state == nil {
+    let isPending = withLock { state == nil }
+
+    if isPending {
       let message = "Timeouted: Promise<\(String(describing: T.self))> was destroyed!"
       reject(withError: RuntimeError.error(withMessage: message))
     }
@@ -42,24 +53,44 @@ public final class Promise<T>: @unchecked Sendable {
    * Resolves this `Promise<T>` with the given `T` and notifies all listeners.
    */
   public func resolve(withResult result: T) {
-    guard state == nil else {
-      fatalError(
-        "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
+    let listeners = withLock {
+      // Ensure we haven't resolved/rejected yet
+      guard state == nil else {
+        fatalError(
+          "Failed to resolve promise with \(result) - it has already been resolved or rejected!")
+      }
+
+      // Resolve + pop listeners under lock
+      state = .result(result)
+      let listeners = onResolvedListeners
+      onResolvedListeners.removeAll()
+      onRejectedListeners.removeAll()
+      return listeners
     }
-    state = .result(result)
-    onResolvedListeners.forEach { listener in listener(result) }
+
+    listeners.forEach { listener in listener(result) }
   }
 
   /**
    * Rejects this `Promise<T>` with the given `Error` and notifies all listeners.
    */
   public func reject(withError error: Error) {
-    guard state == nil else {
-      fatalError(
-        "Failed to reject promise with \(error) - it has already been resolved or rejected!")
+    let listeners = withLock {
+      // Ensure we haven't resolved/rejected yet
+      guard state == nil else {
+        fatalError(
+          "Failed to reject promise with \(error) - it has already been resolved or rejected!")
+      }
+
+      // Reject + pop listeners under lock
+      state = .error(error)
+      let listeners = onRejectedListeners
+      onResolvedListeners.removeAll()
+      onRejectedListeners.removeAll()
+      return listeners
     }
-    state = .error(error)
-    onRejectedListeners.forEach { listener in listener(error) }
+
+    listeners.forEach { listener in listener(error) }
   }
 }
 
@@ -148,13 +179,21 @@ extension Promise {
    */
   @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
-    switch state {
-    case .result(let result):
-      onResolvedListener(result)
-      break
-    default:
+    let currentResult = withLock { () -> T? in
+      // Add resolved listener potentially for later
       onResolvedListeners.append(onResolvedListener)
-      break
+
+      // Return current result if it has already been resolved
+      if case .result(let result) = state {
+        return result
+      } else {
+        return nil
+      }
+    }
+
+    if let currentResult {
+      // If it already has been resolved, we call the callback now (outside of `withLock`)
+      onResolvedListener(currentResult)
     }
     return self
   }
@@ -165,13 +204,21 @@ extension Promise {
    */
   @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
-    switch state {
-    case .error(let error):
-      onRejectedListener(error)
-      break
-    default:
+    let currentError = withLock { () -> Error? in
+      // Add rejected listener potentially for later
       onRejectedListeners.append(onRejectedListener)
-      break
+
+      // Return current error if it has already been rejected
+      if case .error(let error) = state {
+        return error
+      } else {
+        return nil
+      }
+    }
+
+    if let currentError {
+      // If it already has been rejected, we call the callback now (outside of `withLock`)
+      onRejectedListener(currentError)
     }
     return self
   }
