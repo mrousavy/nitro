@@ -15,12 +15,12 @@ on:
       ios_version:
         description: "iOS version"
         required: false
-        default: "26.2"
+        default: "26.5"
         type: string
       xcode_version:
         description: "Xcode version"
         required: false
-        default: "26.4"
+        default: "26.5"
         type: string
   push:
     branches:
@@ -76,10 +76,10 @@ on:
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
   DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
-  IOS_VERSION: ${{ github.event.inputs.ios_version || '26.2' }}
-  XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.4' }}
+  IOS_VERSION: ${{ github.event.inputs.ios_version || '26.5' }}
+  XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.5' }}
   USE_CCACHE: 1
-  DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.4' }}.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.5' }}.app/Contents/Developer
   HARNESS_DEBUG: 1
 
 jobs:
