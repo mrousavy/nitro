@@ -37,11 +37,16 @@ on:
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/ios/**"
       - "packages/react-native-nitro-modules/src/**"
+      - "**/bun.lock"
       - "**/Podfile.lock"
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
   pull_request:
     paths:
@@ -56,11 +61,16 @@ on:
       - "packages/react-native-nitro-modules/cpp/**"
       - "packages/react-native-nitro-modules/ios/**"
       - "packages/react-native-nitro-modules/src/**"
+      - "**/bun.lock"
       - "**/Podfile.lock"
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
       - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
       - "example/rn-harness.config.mjs"
 
 env:
