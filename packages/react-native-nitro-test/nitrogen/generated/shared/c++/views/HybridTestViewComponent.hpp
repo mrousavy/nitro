@@ -85,16 +85,30 @@ namespace margelo::nitro::test::views {
   /**
    * The Shadow Node for the "TestView" View.
    */
-  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
+  class HybridTestViewShadowNode: public react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
                                                                  HybridTestViewProps /* custom props */,
                                                                  react::ViewEventEmitter /* default */,
-                                                                 HybridTestViewState /* custom state */>;
+                                                                  HybridTestViewState /* custom state */> {
+  public:
+    using ConcreteViewShadowNode::ConcreteViewShadowNode;
+                                                                    
+    static react::ShadowNodeTraits BaseTraits();
+                                                                    
+    react::Size measureContent(const react::LayoutContext &layoutContext, const react::LayoutConstraints &layoutConstraints) const override;
+    react::Size measure(const react::LayoutContext &layoutContext, const react::LayoutConstraints &layoutConstraints) const override;
+                            
+                                                                    
+                                                                    void layout(react::LayoutContext layoutContext) override;
+
+                                                                    react::Float baseline(const react::LayoutContext &layoutContext, react::Size size) const override;
+  };
 
   /**
    * The Component Descriptor for the "TestView" View.
    */
   class HybridTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
   public:
+    
     explicit HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
 
   public:
