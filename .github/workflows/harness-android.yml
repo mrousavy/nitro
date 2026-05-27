@@ -83,6 +83,8 @@ env:
   DEVICE_ARCH: ${{ github.event.inputs.device_arch || 'x86_64' }}
   DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_7' }}
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_8_API_35' }}
+  AVD_DISK_SIZE: 1G
+  AVD_HEAP_SIZE: 1G
 
 jobs:
   harness_android_new:
@@ -159,8 +161,8 @@ jobs:
           api-level: ${{ env.DEVICE_API_LEVEL }}
           arch: ${{ env.DEVICE_ARCH }}
           profile: ${{ env.DEVICE_PROFILE }}
-          disk-size: 1G
-          heap-size: 1G
+          disk-size: ${{ env.AVD_DISK_SIZE }}
+          heap-size: ${{ env.AVD_HEAP_SIZE }}
           force-avd-creation: false
           avd-name: ${{ env.AVD_NAME }}
           disable-animations: true
