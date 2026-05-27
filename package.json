@@ -41,7 +41,7 @@
     "@release-it-plugins/workspaces": "^5.0.3",
     "@release-it/bumper": "^7.0.5",
     "@release-it/conventional-changelog": "^10.0.6",
-    "@tsconfig/react-native": "^2.0.3",
+    "@tsconfig/react-native": "^3.0.9",
     "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.2.15",
@@ -52,8 +52,8 @@
     "react": "19.2.6",
     "react-native": "0.85.3",
     "release-it": "^19.2.4",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.36.0"
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.60.0"
   },
   "release-it": {
     "npm": {
