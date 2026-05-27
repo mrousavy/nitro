@@ -7,8 +7,10 @@ import type { BoxedHybridObject } from './BoxedHybridObject'
  * This is a `HybridObject` on the native side as well, and is expected to be
  * installed into the runtime's `global` via the NativeModule/TurboModule's `install()` function.
  */
-export interface NitroModulesProxy
-  extends HybridObject<{ ios: 'c++'; android: 'c++' }> {
+export interface NitroModulesProxy extends HybridObject<{
+  ios: 'c++'
+  android: 'c++'
+}> {
   /**
    * Create a new instance of the `HybridObject` {@linkcode T}.
    *
