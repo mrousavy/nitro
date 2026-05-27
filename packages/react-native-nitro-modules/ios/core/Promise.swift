@@ -180,13 +180,15 @@ extension Promise {
   @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
     let currentResult = withLock { () -> T? in
-      // Add resolved listener potentially for later
-      onResolvedListeners.append(onResolvedListener)
-
-      // Return current result if it has already been resolved
-      if case .result(let result) = state {
+      switch state {
+      case .result(let result):
+        // Return current result if it has already been resolved
         return result
-      } else {
+      case .error:
+        return nil
+      case nil:
+        // Add resolved listener potentially for later
+        onResolvedListeners.append(onResolvedListener)
         return nil
       }
     }
@@ -205,13 +207,15 @@ extension Promise {
   @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
     let currentError = withLock { () -> Error? in
-      // Add rejected listener potentially for later
-      onRejectedListeners.append(onRejectedListener)
-
-      // Return current error if it has already been rejected
-      if case .error(let error) = state {
+      switch state {
+      case .error(let error):
+        // Return current error if it has already been rejected
         return error
-      } else {
+      case .result:
+        return nil
+      case nil:
+        // Add rejected listener potentially for later
+        onRejectedListeners.append(onRejectedListener)
         return nil
       }
     }
