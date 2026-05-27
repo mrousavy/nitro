@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-test-external",
-  "version": "0.35.8",
+  "version": "0.35.9",
   "description": "react-native-nitro-test-external",
   "main": "lib/index",
   "module": "lib/index",
