@@ -179,18 +179,21 @@ extension Promise {
    */
   @discardableResult
   public func then(_ onResolvedListener: @escaping (T) -> Void) -> Promise {
-    withLock {
-      switch state {
-      case .result(let result):
-        // Already resolved! Call listener now
-        onResolvedListener(result)
-      case .error:
-        // Do nothing - it has been rejected.
-        break
-      case nil:
-        // Promise is still pending, append a listener
-        onResolvedListeners.append(onResolvedListener)
+    let currentResult = withLock { () -> T? in
+      // Add resolved listener potentially for later
+      onResolvedListeners.append(onResolvedListener)
+
+      // Return current result if it has already been resolved
+      if case .result(let result) = state {
+        return result
+      } else {
+        return nil
       }
+    }
+
+    if let currentResult {
+      // If it already has been resolved, we call the callback now (outside of `withLock`)
+      onResolvedListener(currentResult)
     }
     return self
   }
@@ -201,18 +204,21 @@ extension Promise {
    */
   @discardableResult
   public func `catch`(_ onRejectedListener: @escaping (Error) -> Void) -> Promise {
-    withLock {
-      switch state {
-      case .result:
-        // Do nothing - it has been resolved.
-        break
-      case .error(let error):
-        // Already resolved! Call listener now
-        onRejectedListener(error)
-      case nil:
-        // Promise is still pending, append a listener
-        onRejectedListeners.append(onRejectedListener)
+    let currentError = withLock { () -> Error? in
+      // Add rejected listener potentially for later
+      onRejectedListeners.append(onRejectedListener)
+
+      // Return current error if it has already been rejected
+      if case .error(let error) = state {
+        return error
+      } else {
+        return nil
       }
+    }
+
+    if let currentError {
+      // If it already has been rejected, we call the callback now (outside of `withLock`)
+      onRejectedListener(currentError)
     }
     return self
   }
