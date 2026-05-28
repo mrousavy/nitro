@@ -32,10 +32,10 @@ export default function App() {
           component={HybridObjectTestsScreen}
           options={{
             tabBarLabel: 'Tests',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={dna}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size * 1.2, height: size * 1.2 }}
               />
             ),
@@ -46,10 +46,10 @@ export default function App() {
           component={BenchmarksScreen}
           options={{
             tabBarLabel: 'Benchmarks',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={rocket}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
@@ -60,10 +60,10 @@ export default function App() {
           component={ViewScreen}
           options={{
             tabBarLabel: 'View',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={map}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size, height: size }}
               />
             ),
@@ -74,10 +74,10 @@ export default function App() {
           component={EvalScreen}
           options={{
             tabBarLabel: 'Eval',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={terminal}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size, height: size }}
               />
             ),
