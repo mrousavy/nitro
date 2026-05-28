@@ -162,7 +162,10 @@ function resolvePackageExport(installRoot: string, resolvedPackage: ResolvedPack
 }
 
 function createReactAliases(install: ReactInstall): Record<string, string> {
-  const aliases: Record<string, string> = {};
+  const aliases: Record<string, string> = {
+    react: install.react.root,
+    'react-dom': install.reactDom.root,
+  };
 
   for (const resolvedPackage of [install.react, install.reactDom]) {
     for (const subpath of packageExportSubpaths(resolvedPackage.packageJson)) {
@@ -216,6 +219,7 @@ export default function enforceSingleReactInstance(context: LoadContext): Plugin
       return {
         resolve: {
           alias,
+          modules: [path.join(reactInstall.installRoot, 'node_modules'), 'node_modules'],
         },
       };
     },
