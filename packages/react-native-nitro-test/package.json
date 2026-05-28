@@ -60,8 +60,9 @@
     "@types/react": "^19.2.15",
     "jest": "*",
     "nitrogen": "*",
-    "react": "19.2.0",
-    "react-native": "0.83.0",
+    "@react-native/jest-preset": "0.85.3",
+    "react": "19.2.6",
+    "react-native": "0.85.3",
     "react-native-nitro-modules": "*",
     "react-native-nitro-test-external": "*"
   },
@@ -72,7 +73,7 @@
     "react-native-nitro-test-external": "*"
   },
   "jest": {
-    "preset": "react-native",
+    "preset": "@react-native/jest-preset",
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"

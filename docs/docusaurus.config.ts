@@ -130,6 +130,7 @@ const config: Config = {
     ],
   ],
   plugins: [
+    require('./src/plugins/enforce-single-react-instance'),
     [
       'vercel-analytics',
       {},

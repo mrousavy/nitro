@@ -1,4 +1,6 @@
 {
+  "installCommand": "rm -rf node_modules && bun install --force",
+  "buildCommand": "bun run build",
   "cleanUrls": true,
   "headers": [
     {

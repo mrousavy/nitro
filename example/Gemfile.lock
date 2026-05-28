@@ -112,6 +112,7 @@ DEPENDENCIES
   cocoapods (~> 1.16, >= 1.16.2)
   logger
   mutex_m
+  nkf
   xcodeproj (>= 1.27.0, < 2.0)
 
 RUBY VERSION
