@@ -2228,7 +2228,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
   hermes-engine: ffe60ef62e2a91482e52813d93d1827f6c7297f8
-  NitroModules: 16bc17a076b12304d608f7c915b9d321f56dfc19
+  NitroModules: 41e456ee8c8ad54d22957a3e4b3ecab1acbb9e70
   NitroTest: 015ec3bddf31c0bd83c0d6d4e10b6d3a42e4e18d
   NitroTestExternal: 01bc29bd779142e98432f2178760baebb134de57
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
