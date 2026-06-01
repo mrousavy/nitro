@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "ExternalObjectStruct" and the the Kotlin data class "ExternalObjectStruct".
+   * The C++ JNI bridge between the C++ struct "ExternalObjectStruct" and the Kotlin data class "ExternalObjectStruct".
    */
   struct JExternalObjectStruct final: public jni::JavaClass<JExternalObjectStruct> {
   public:

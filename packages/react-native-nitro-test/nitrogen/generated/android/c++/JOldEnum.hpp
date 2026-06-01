@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "OldEnum" and the the Kotlin enum "OldEnum".
+   * The C++ JNI bridge between the C++ enum "OldEnum" and the Kotlin enum "OldEnum".
    */
   struct JOldEnum final: public jni::JavaClass<JOldEnum> {
   public:

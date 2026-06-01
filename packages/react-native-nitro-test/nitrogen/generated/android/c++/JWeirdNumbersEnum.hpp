@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "WeirdNumbersEnum" and the the Kotlin enum "WeirdNumbersEnum".
+   * The C++ JNI bridge between the C++ enum "WeirdNumbersEnum" and the Kotlin enum "WeirdNumbersEnum".
    */
   struct JWeirdNumbersEnum final: public jni::JavaClass<JWeirdNumbersEnum> {
   public:
