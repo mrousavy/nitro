@@ -25,7 +25,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "Car" and the the Kotlin data class "Car".
+   * The C++ JNI bridge between the C++ struct "Car" and the Kotlin data class "Car".
    */
   struct JCar final: public jni::JavaClass<JCar> {
   public:

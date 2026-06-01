@@ -133,7 +133,7 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
+   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the Kotlin data class "${structType.structName}".
    */
   struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
   public:

@@ -20,7 +20,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "MapWrapper" and the the Kotlin data class "MapWrapper".
+   * The C++ JNI bridge between the C++ struct "MapWrapper" and the Kotlin data class "MapWrapper".
    */
   struct JMapWrapper final: public jni::JavaClass<JMapWrapper> {
   public:

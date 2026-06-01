@@ -15,7 +15,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "Powertrain" and the the Kotlin enum "Powertrain".
+   * The C++ JNI bridge between the C++ enum "Powertrain" and the Kotlin enum "Powertrain".
    */
   struct JPowertrain final: public jni::JavaClass<JPowertrain> {
   public:

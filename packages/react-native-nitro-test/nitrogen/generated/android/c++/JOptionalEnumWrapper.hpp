@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "OptionalEnumWrapper" and the the Kotlin data class "OptionalEnumWrapper".
+   * The C++ JNI bridge between the C++ struct "OptionalEnumWrapper" and the Kotlin data class "OptionalEnumWrapper".
    */
   struct JOptionalEnumWrapper final: public jni::JavaClass<JOptionalEnumWrapper> {
   public:
