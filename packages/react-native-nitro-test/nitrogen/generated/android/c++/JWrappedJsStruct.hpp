@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "WrappedJsStruct" and the the Kotlin data class "WrappedJsStruct".
+   * The C++ JNI bridge between the C++ struct "WrappedJsStruct" and the Kotlin data class "WrappedJsStruct".
    */
   struct JWrappedJsStruct final: public jni::JavaClass<JWrappedJsStruct> {
   public:
