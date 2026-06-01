@@ -98,6 +98,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-unistyles** | Universal styling system | [GitHub](https://github.com/jpudysz/react-native-unistyles) |
+| **react-native-alternate-app-icon** | Dynamic alternate app icon switching (iOS & Android) | [GitHub](https://github.com/rutvik24/react-native-alternate-app-icon) |
 
 ### Text & Content
 
