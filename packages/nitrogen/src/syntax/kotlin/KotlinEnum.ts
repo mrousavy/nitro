@@ -49,7 +49,7 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the the Kotlin enum "${enumType.enumName}".
+   * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the Kotlin enum "${enumType.enumName}".
    */
   struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
   public:
