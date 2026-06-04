@@ -1,9 +1,20 @@
 ---
+title: Awesome Nitro Modules
+sidebar_label: Awesome Nitro Modules
+description: Libraries built with React Native Nitro Modules, including production React Native packages powered by Nitro, Nitrogen, and type-safe JSI bindings.
+keywords:
+  - React Native Nitro Modules
+  - libraries built with Nitro
+  - Nitro Modules ecosystem
+  - React Native native modules
+  - JSI native modules
 ---
 
 # Awesome Nitro Modules
 
-A curated collection of community-built Nitro Modules.
+Libraries built with React Native Nitro Modules.
+
+A curated collection of community-built Nitro Modules, including production React Native libraries powered by Nitro, Nitrogen, and type-safe JSI bindings.
 
 > **Want to add your module?** PRs are welcome!
 
