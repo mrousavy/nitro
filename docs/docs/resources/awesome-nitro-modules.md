@@ -114,7 +114,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-buffer** | 100% Node.js-compatible `Buffer` | [GitHub](https://github.com/iwater/react-native-nitro-buffer) |
 | **react-native-nitro-zlib** | Node.js `zlib` implementation | [GitHub](https://github.com/iwater/react-native-nitro-zlib) |
 | **react-native-clusterer** | Marker clustering for maps | [GitHub](https://github.com/JiriHoffmann/react-native-clusterer) |
-| **react-native-nitro-google-signin** | Universal (One Tap) Google Sign-In | [GitHub](https://github.com/react-native-nitro-google-signin/google-signin) |
+| **react-native-nitro-google-signin** | Universal (One Tap) Google Sign-In | [GitHub](https://github.com/react-native-nitro-google-sign-in/google-signin) |
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
 | **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
 | **react-native-nitro-version-check** | High-performance Version checking utilities | [GitHub](https://github.com/AlshehriAli0/react-native-nitro-version-check) |
