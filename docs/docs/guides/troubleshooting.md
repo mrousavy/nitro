@@ -1,4 +1,6 @@
 ---
+title: Troubleshooting
+description: Troubleshoot common Nitro Modules setup, build, codegen, iOS, Android, and native dependency issues in React Native projects.
 ---
 
 import Tabs from '@theme/Tabs';

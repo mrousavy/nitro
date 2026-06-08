@@ -1,4 +1,6 @@
 ---
+title: Hybrid Objects
+description: Learn how Nitro Hybrid Objects expose native C++, Swift, and Kotlin implementations to JavaScript with methods, properties, and type-safe bindings.
 ---
 
 import Tabs from '@theme/Tabs';

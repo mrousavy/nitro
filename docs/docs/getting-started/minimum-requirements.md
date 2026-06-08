@@ -1,4 +1,6 @@
 ---
+title: Minimum Requirements
+description: Check the React Native, iOS, Android, Swift, Kotlin, Gradle, and C++ requirements needed to use Nitro Modules.
 ---
 
 import Tabs from '@theme/Tabs';

@@ -1,4 +1,6 @@
 ---
+title: How to build a Nitro Module
+description: Build a React Native Nitro Module from scratch with TypeScript specs, Nitrogen code generation, C++, Swift or Kotlin implementations, and package setup.
 toc_min_heading_level: 2
 toc_max_heading_level: 2
 ---
