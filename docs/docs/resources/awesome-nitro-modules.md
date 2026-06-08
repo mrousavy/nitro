@@ -38,6 +38,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/mrousavy/react-native-vision-camera) |
+| **react-native-data-scanner** | One-shot QR/barcode/data scanning | [GitHub](https://github.com/mrousavy/react-native-data-scanner) |
 | **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
 
 ### Animation & Graphics
