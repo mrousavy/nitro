@@ -18,8 +18,22 @@
 }
 
 .heroLogo {
-  max-width: 25rem;
+  max-width: 20rem;
   width: 100%;
+}
+
+.heroTitle {
+  color: #232a3f;
+  font-family: 'Clash Display', sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.05;
+  margin: 0;
+}
+
+[data-theme='dark'] .heroTitle {
+  color: #e0e0e0;
 }
 
 .heroButton {
@@ -114,4 +128,10 @@
   width: 132px;
   height: 132px;
   margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+  .heroTitle {
+    font-size: 2.25rem;
+  }
 }

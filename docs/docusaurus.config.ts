@@ -2,20 +2,57 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import type { Options as SitemapOptions } from '@docusaurus/plugin-sitemap';
+import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 
 const title = 'Nitro Modules';
-const tagline = 'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.';
+const tagline = 'A framework for building fast, type-safe native modules for React Native with statically compiled JSI bindings.';
 const url = 'https://nitro.margelo.com';
+const repoRoot = path.resolve(__dirname, '..');
 
 const marcId = 'https://mrousavy.com/#person';
 const margeloId = 'https://margelo.com/#organization';
 const nitroWebsiteId = `${url}/#website`;
 const nitroSoftwareId = `${url}/#software`;
 
+function getGitLastmodDate(sourcePath: string): string | null {
+  try {
+    const timestamp = execFileSync('git', ['log', '-1', '--format=%ct', '--', sourcePath], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+    }).trim();
+    if (timestamp.length === 0) return null;
+    return new Date(Number(timestamp) * 1000).toISOString().split('T')[0]!;
+  } catch {
+    return null;
+  }
+}
+
+function getSitemapSourcePath(itemUrl: string): string | null {
+  const pathname = new URL(itemUrl).pathname;
+  if (pathname === '/') {
+    return 'docs/src/pages/index.tsx';
+  }
+  if (!pathname.startsWith('/docs/')) {
+    return null;
+  }
+
+  const docId = decodeURIComponent(pathname.slice('/docs/'.length));
+  const candidates = [`docs/docs/${docId}.md`, `docs/docs/${docId}.mdx`];
+  return candidates.find((candidate) => existsSync(path.join(repoRoot, candidate))) ?? null;
+}
+
 const createSitemapItems: NonNullable<SitemapOptions['createSitemapItems']> = async (params) => {
   const { defaultCreateSitemapItems, ...rest } = params;
   const items = await defaultCreateSitemapItems(rest);
-  return items.filter((item) => !item.url.includes('/page/'));
+  return items
+    .filter((item) => !item.url.includes('/page/'))
+    .map((item) => {
+      const sourcePath = getSitemapSourcePath(item.url);
+      const lastmod = sourcePath == null ? null : getGitLastmodDate(sourcePath);
+      return lastmod == null ? item : { ...item, lastmod };
+    });
 };
 
 const jsonLd = {
@@ -48,8 +85,9 @@ const jsonLd = {
     {
       '@type': 'WebSite',
       '@id': nitroWebsiteId,
-      url: url,
+      url: `${url}/`,
       name: title,
+      alternateName: ['Nitro', 'React Native Nitro', 'React Native Nitro Modules'],
       description: tagline,
       inLanguage: 'en',
       publisher: { '@id': margeloId },
@@ -60,9 +98,19 @@ const jsonLd = {
       '@type': ['SoftwareApplication', 'SoftwareSourceCode'],
       '@id': nitroSoftwareId,
       name: title,
-      alternateName: 'Nitro',
+      alternateName: [
+        'Nitro',
+        'React Native Nitro',
+        'React Native Nitro Modules',
+        'react-native-nitro-modules',
+      ],
       description: tagline,
-      url: url,
+      url: `${url}/`,
+      sameAs: [
+        'https://github.com/mrousavy/nitro',
+        'https://www.npmjs.com/package/react-native-nitro-modules',
+        'https://www.npmjs.com/package/nitrogen',
+      ],
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'iOS, Android',
       codeRepository: 'https://github.com/mrousavy/nitro',
@@ -102,6 +150,16 @@ const config: Config = {
   // Runs animations on page change
   clientModules: ['./src/clientModules/pageSwitchFadeAnimation.ts'],
 
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify(jsonLd),
+    },
+  ],
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -123,6 +181,14 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
         },
         blog: false,
+        sitemap: {
+          lastmod: 'date',
+          changefreq: null,
+          priority: null,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
+          createSitemapItems,
+        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -181,29 +247,6 @@ const config: Config = {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
-    headTags: [
-      {
-        tagName: 'link',
-        attributes: {
-          rel: 'stylesheet',
-          href: 'https://api.fontshare.com/css?f[]=clash-display@500&display=swap',
-        },
-      },
-      {
-        tagName: 'link',
-        attributes: {
-          rel: 'stylesheet',
-          href: 'https://api.fontshare.com/css?f[]=satoshi@500,600,700&display=swap',
-        },
-      },
-      {
-        tagName: 'script',
-        attributes: {
-          type: 'application/ld+json',
-        },
-        innerHTML: JSON.stringify(jsonLd),
-      },
-    ],
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
@@ -211,7 +254,7 @@ const config: Config = {
     },
     navbar: {
       logo: {
-        alt: 'Nitrous Logo',
+        alt: 'Nitro Modules',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
         height: 32,
@@ -268,14 +311,6 @@ const config: Config = {
         to: '/'
       }
     },
-    sitemap: {
-      lastmod: 'date',
-      changefreq: 'weekly',
-      priority: 0.5,
-      ignorePatterns: ['/tags/**'],
-      filename: 'sitemap.xml',
-      createSitemapItems,
-    },
     footer: {
       style: 'dark',
       links: [
@@ -328,11 +363,11 @@ const config: Config = {
       },
       {
         property: 'og:site_name',
-        content: 'Nitro Documentation',
+        content: 'Nitro Modules',
       },
       {
         property: 'og:type',
-        content: 'application',
+        content: 'website',
       },
       {
         property: 'og:description',
@@ -340,10 +375,10 @@ const config: Config = {
       },
       {
         property: 'og:image',
-        content: '/img/social-cards/og-card.png',
+        content: `${url}/img/social-cards/og-card.png`,
       },
       {
-        property: 'twitter:creator',
+        name: 'twitter:creator',
         content: '@mrousavy',
       },
     ],
