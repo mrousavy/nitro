@@ -1,4 +1,4 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com/docs/concepts/nitrogen">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-nitrogen-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-nitrogen-light.png" />

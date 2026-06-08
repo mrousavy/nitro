@@ -1,7 +1,7 @@
 {
   "name": "nitrogen",
   "version": "0.35.9",
-  "description": "The code-generator for react-native-nitro-modules.",
+  "description": "Code generator for React Native Nitro Modules that turns TypeScript specs into C++, Swift, and Kotlin bindings.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
   "source": "src/index",
@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com/docs/concepts/nitrogen",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

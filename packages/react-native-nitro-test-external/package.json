@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
