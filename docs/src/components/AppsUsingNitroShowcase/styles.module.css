@@ -1,7 +1,10 @@
 .showcase {
+  --showcase-shadow-gutter: 8px;
+
   max-width: 100%;
   margin: 1.5rem 0 3rem;
-  overflow-x: clip;
+  padding: 0 var(--showcase-shadow-gutter) var(--showcase-shadow-gutter) 0;
+  overflow: visible;
 }
 
 .showcase,
