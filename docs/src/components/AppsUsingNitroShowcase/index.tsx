@@ -403,12 +403,12 @@ export default function AppsUsingNitroShowcase() {
         </div>
         <div className={styles.statsGrid} aria-label="Nitro production usage stats">
           <div>
-            <strong>{apps.length}</strong>
-            <span>public apps</span>
+            <strong>18M+</strong>
+            <span>npm downloads</span>
           </div>
           <div>
             <strong>1B+</strong>
-            <span>combined public install counts</span>
+            <span>combined public app install counts</span>
           </div>
           <div>
             <strong>10+</strong>
