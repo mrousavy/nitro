@@ -18,15 +18,16 @@ function HomepageHeader() {
       <div className={styles.heroContainer}>
         <div className={styles.heroContentContainer}>
           <img className={styles.heroIcon} src={Icon} alt="" aria-hidden="true" />
-          <ThemedImage
-            className={styles.heroLogo}
-            alt="Nitro Modules"
-            sources={{
-              light: useBaseUrl('/img/logo.svg'),
-              dark: useBaseUrl('/img/logo-dark.svg'),
-            }}
-          />
-          <h1 className={styles.heroTitle}>React Native Nitro Modules</h1>
+          <h1 className={styles.heroLogoTitle}>
+            <ThemedImage
+              className={styles.heroLogo}
+              alt="Nitro Modules"
+              sources={{
+                light: useBaseUrl('/img/logo.svg'),
+                dark: useBaseUrl('/img/logo-dark.svg'),
+              }}
+            />
+          </h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
 
           <Link to="/docs/getting-started/what-is-nitro" className={styles.heroButton}>
