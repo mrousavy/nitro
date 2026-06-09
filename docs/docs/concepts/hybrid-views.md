@@ -1,5 +1,4 @@
 ---
-title: Hybrid Views
 description: Learn how Nitro Hybrid Views render native view components in React Native while keeping Hybrid Object state and type-safe native bindings.
 ---
 

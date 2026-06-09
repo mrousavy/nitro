@@ -1,5 +1,4 @@
 ---
-title: What is Nitro?
 description: Learn what React Native Nitro Modules are and how Nitro uses JSI, C++, Swift, Kotlin, and Nitrogen to build fast type-safe native modules.
 ---
 

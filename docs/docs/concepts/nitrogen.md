@@ -1,5 +1,4 @@
 ---
-title: Nitrogen
 description: Learn how Nitrogen generates C++, Swift, and Kotlin bindings from TypeScript specs for React Native Nitro Modules.
 toc_max_heading_level: 3
 ---
