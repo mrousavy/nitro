@@ -49,7 +49,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com/docs/getting-started/how-to-build-a-nitro-module",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

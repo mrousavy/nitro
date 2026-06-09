@@ -1,5 +1,7 @@
 {
   "name": "react-native-nitro",
+  "description": "Fast, type-safe native modules for React Native with statically compiled JSI bindings.",
+  "homepage": "https://nitro.margelo.com",
   "packageManager": "bun@1.3.14",
   "private": true,
   "version": "0.35.10",

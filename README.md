@@ -1,4 +1,4 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/static/img/banner-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="./docs/static/img/banner-nitro-modules-light.png" />
@@ -8,8 +8,8 @@
 
 <br />
 
-**Nitro Modules** are highly efficient native modules with a statically compiled binding layer to JSI, and typesafe JS bindings.
-It consists of two parts:
+**Nitro Modules** are fast, type-safe native modules for React Native with statically compiled bindings to JSI.
+They consist of two parts:
 
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
 - [**nitrogen**](packages/nitrogen): An optional code-generator for nitro module library authors

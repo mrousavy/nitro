@@ -1,7 +1,7 @@
 {
   "name": "react-native-nitro-modules",
   "version": "0.35.9",
-  "description": "Insanely fast native C++, Swift or Kotlin modules with a statically compiled binding layer to JSI.",
+  "description": "Fast, type-safe native modules for React Native with statically compiled JSI bindings.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -54,7 +54,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

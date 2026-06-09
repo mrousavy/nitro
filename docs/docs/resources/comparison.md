@@ -1,4 +1,7 @@
 ---
+title: Compare Nitro, Turbo Modules, Legacy Native Modules, and Expo Modules
+sidebar_label: Comparison
+description: Compare React Native Nitro Modules with Turbo Modules, Legacy Native Modules, and Expo Modules for performance, typing, and native implementation tradeoffs.
 ---
 
 # Comparison with other frameworks
