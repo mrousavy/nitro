@@ -9,12 +9,13 @@ import path from 'node:path';
 const title = 'Nitro Modules';
 const tagline = 'A framework for building fast, type-safe native modules for React Native with statically compiled JSI bindings.';
 const url = 'https://nitro.margelo.com';
+const homeUrl = new URL('/', url).href;
 const repoRoot = path.resolve(__dirname, '..');
 
 const marcId = 'https://mrousavy.com/#person';
 const margeloId = 'https://margelo.com/#organization';
-const nitroWebsiteId = `${url}/#website`;
-const nitroSoftwareId = `${url}/#software`;
+const nitroWebsiteId = `${homeUrl}#website`;
+const nitroSoftwareId = `${homeUrl}#software`;
 
 function getGitLastmodDate(sourcePath: string): string | null {
   try {
@@ -85,7 +86,7 @@ const jsonLd = {
     {
       '@type': 'WebSite',
       '@id': nitroWebsiteId,
-      url: `${url}/`,
+      url: homeUrl,
       name: title,
       alternateName: ['Nitro', 'React Native Nitro', 'React Native Nitro Modules'],
       description: tagline,
@@ -105,7 +106,7 @@ const jsonLd = {
         'react-native-nitro-modules',
       ],
       description: tagline,
-      url: `${url}/`,
+      url: homeUrl,
       sameAs: [
         'https://github.com/mrousavy/nitro',
         'https://www.npmjs.com/package/react-native-nitro-modules',
