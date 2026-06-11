@@ -23,7 +23,6 @@ Pod::Spec.new do |s|
 
   load 'nitrogen/generated/ios/NitroTest+autolinking.rb'
   add_nitrogen_files(s)
-
   s.dependency 'React-jsi'
   s.dependency 'React-callinvoker'
   s.dependency 'NitroTestExternal'
