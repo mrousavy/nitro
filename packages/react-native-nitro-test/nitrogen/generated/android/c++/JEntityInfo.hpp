@@ -21,11 +21,11 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "EntityInfo" and the the Kotlin data class "EntityInfo".
+   * The C++ JNI bridge between the C++ struct "EntityInfo" and the Kotlin data class "EntityInfo".
    */
   struct JEntityInfo final: public jni::JavaClass<JEntityInfo> {
   public:
-    static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/test/EntityInfo;";
+    static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/EntityInfo;";
 
   public:
     /**

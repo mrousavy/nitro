@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -28,6 +29,22 @@ data class Gallery(
   val owner: UserInfo
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Gallery) return false
+    return Objects.deepEquals(this.albums, other.albums)
+      && Objects.deepEquals(this.featured, other.featured)
+      && Objects.deepEquals(this.owner, other.owner)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf<Any?>(
+      albums,
+      featured,
+      owner
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

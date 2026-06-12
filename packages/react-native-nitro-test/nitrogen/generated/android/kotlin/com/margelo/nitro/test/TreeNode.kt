@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -32,6 +33,22 @@ data class TreeNode(
    */
   constructor(value: Double, children: Array<TreeNode>, onChange: ((node: TreeNode) -> Unit)?):
          this(value, children, onChange?.let { Func_void_TreeNode_java(it) })
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is TreeNode) return false
+    return Objects.deepEquals(this.value, other.value)
+      && Objects.deepEquals(this.children, other.children)
+      && Objects.deepEquals(this.onChange, other.onChange)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf<Any?>(
+      value,
+      children,
+      onChange
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**

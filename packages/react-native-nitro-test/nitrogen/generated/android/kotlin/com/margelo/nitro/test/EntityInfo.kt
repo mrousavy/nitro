@@ -9,6 +9,7 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
+import java.util.Objects
 
 
 /**
@@ -28,6 +29,22 @@ data class EntityInfo(
   val media: MediaInfo?
 ) {
   /* primary constructor */
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is EntityInfo) return false
+    return Objects.deepEquals(this.entityId, other.entityId)
+      && Objects.deepEquals(this.title, other.title)
+      && Objects.deepEquals(this.media, other.media)
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf<Any?>(
+      entityId,
+      title,
+      media
+    ).contentDeepHashCode()
+  }
 
   companion object {
     /**
