@@ -158,6 +158,87 @@ function App() {
 }
 ```
 
+## Children
+
+A Nitro `HybridView` renders React children like a regular `<View>` - they're laid out by Flexbox/Yoga and mounted as **subviews of your native view**, letting it act as a _container_ that draws behind or around React content. For example, a native `<GradientView>` that renders a gradient behind its children:
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```ts title="GradientView.nitro.ts"
+export interface GradientViewProps
+  extends HybridViewProps {
+  colors: string[]
+}
+export type GradientView =
+  HybridView<GradientViewProps>
+```
+
+</div>
+<div className="side-by-side-block">
+
+```jsx title="App.tsx"
+function App() {
+  return (
+    <GradientView
+      colors={['#FF0080', '#7928CA']}
+      style={{ flex: 1, padding: 24 }}
+    >
+      <Text>Welcome back</Text>
+      <Button title="Continue" />
+    </GradientView>
+  )
+}
+```
+
+</div>
+</div>
+
+No props or setup are required - children work out of the box. The only requirement is that your native view can hold subviews:
+
+- **iOS**: any `UIView` works.
+- **Android**: return a **`NitroViewGroup`** (or a subclass) from `view`. It keeps the Fabric-assigned child frames - a normal `ViewGroup` would re-lay-out children and fight Fabric, and a plain `View` can't hold children (Nitro throws a descriptive error).
+
+<div className="side-by-side-container">
+<div className="side-by-side-block">
+
+```swift title="HybridGradientView.swift"
+class HybridGradientView: HybridGradientViewSpec {
+  // A UIView backed by a CAGradientLayer.
+  // React children are added as subviews on top.
+  let view = GradientUIView()
+
+  func setColors(_ colors: [String]) {
+    view.gradientLayer.colors = colors.map {
+      UIColor(hex: $0).cgColor
+    }
+  }
+}
+```
+
+</div>
+<div className="side-by-side-block">
+
+```kotlin title="HybridGradientView.kt"
+// GradientFrameLayout extends NitroViewGroup so
+// children keep their Fabric-assigned layout.
+class HybridGradientView(context: ThemedReactContext):
+  HybridGradientViewSpec() {
+  override val view = GradientFrameLayout(context)
+
+  override fun setColors(colors: Array<String>) {
+    view.setGradientColors(colors.map(Color::parseColor))
+  }
+}
+```
+
+</div>
+</div>
+
+:::note Styling
+A Hybrid View bridges **layout** (Flexbox/Yoga) to its native view but does **not** apply RN **visual** style props (`backgroundColor`, `borderRadius`, `boxShadow`, …) - the native view owns its appearance. To decorate one, wrap it in a regular `<View>` (with `overflow: 'hidden'` to clip), the standard RN pattern for any native view.
+:::
+
 ## Props
 
 Since every `HybridView` is also a `HybridObject`, you can use any type that Nitro supports as a property - including custom types (`interface`), `ArrayBuffer`, and even other `HybridObject`s!

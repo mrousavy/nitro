@@ -18,6 +18,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridGradientViewSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridGradientViewSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
 // Forward declaration of `HybridRecyclableTestViewSpec` to properly resolve imports.
@@ -54,6 +56,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridGradientViewSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridGradientViewSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 // Forward declaration of `HybridRecyclableTestViewSpec_cxx` to properly resolve imports.
@@ -70,6 +74,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridGradientViewSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -284,6 +289,29 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
   
+  // pragma MARK: std::vector<std::string>
+  /**
+   * Specialized version of `std::vector<std::string>`.
+   */
+  using std__vector_std__string_ = std::vector<std::string>;
+  inline std::vector<std::string> create_std__vector_std__string_(size_t size) noexcept {
+    std::vector<std::string> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridGradientViewSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridGradientViewSpec>`.
+   */
+  using std__shared_ptr_HybridGradientViewSpec_ = std::shared_ptr<HybridGradientViewSpec>;
+  std::shared_ptr<HybridGradientViewSpec> create_std__shared_ptr_HybridGradientViewSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridGradientViewSpec_(std__shared_ptr_HybridGradientViewSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridGradientViewSpec>
+  using std__weak_ptr_HybridGradientViewSpec_ = std::weak_ptr<HybridGradientViewSpec>;
+  inline std__weak_ptr_HybridGradientViewSpec_ weakify_std__shared_ptr_HybridGradientViewSpec_(const std::shared_ptr<HybridGradientViewSpec>& strong) noexcept { return strong; }
+  
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlatformObjectSpec>`.
@@ -400,17 +428,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
     return std__variant_nitro__NullType__std__string_(value);
-  }
-  
-  // pragma MARK: std::vector<std::string>
-  /**
-   * Specialized version of `std::vector<std::string>`.
-   */
-  using std__vector_std__string_ = std::vector<std::string>;
-  inline std::vector<std::string> create_std__vector_std__string_(size_t size) noexcept {
-    std::vector<std::string> vector;
-    vector.reserve(size);
-    return vector;
   }
   
   // pragma MARK: std::optional<std::vector<std::string>>
