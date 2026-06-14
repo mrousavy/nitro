@@ -220,7 +220,7 @@ class HybridGradientView: HybridGradientViewSpec {
 ```kotlin title="HybridGradientView.kt"
 class HybridGradientView(context: ThemedReactContext):
   HybridGradientViewSpec() {
-  override val view = GradientFrameLayout(context)
+  override val view = GradientView(context)
 
   override fun setColors(colors: Array<String>) {
     view.setGradientColors(colors.map(Color::parseColor))
