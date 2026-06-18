@@ -106,6 +106,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
+  abstract var optionalOldEnum: OldEnum?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
   abstract var someVariant: Variant_String_Double
 
   // Methods
@@ -170,6 +176,14 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun funcThatThrowsBeforePromise(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun throwError(error: Throwable): Unit
+  
+  @DoNotStrip
+  @Keep
   abstract fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String
   
   @DoNotStrip
@@ -195,6 +209,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun promiseThrows(): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun awaitPromise(promise: Promise<Unit>): Promise<Unit>
   
   @DoNotStrip
   @Keep
@@ -226,6 +252,39 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   private fun callWithOptional(value: Double?, callback: Func_void_std__optional_double_): Unit {
     val __result = callWithOptional(value, callback.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  private fun callSumUpNTimes(callback: Func_std__shared_ptr_Promise_double__, n: Double): Promise<Double> {
+    val __result = callSumUpNTimes(callback.toLambda(), n)
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
+  
+  @DoNotStrip
+  @Keep
+  private fun getValueFromJSCallbackAndWait(getValue: Func_std__shared_ptr_Promise_double__): Promise<Double> {
+    val __result = getValueFromJSCallbackAndWait(getValue.toLambda())
+    return __result
+  }
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getValueFromJsCallback(callback: () -> Promise<String>, andThenCall: (valueFromJs: String) -> Unit): Promise<Unit>
+  
+  @DoNotStrip
+  @Keep
+  private fun getValueFromJsCallback(callback: Func_std__shared_ptr_Promise_std__string__, andThenCall: Func_void_std__string): Promise<Unit> {
+    val __result = getValueFromJsCallback(callback.toLambda(), andThenCall.toLambda())
     return __result
   }
   

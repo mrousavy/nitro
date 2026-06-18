@@ -76,6 +76,11 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           name: 'NitroModules/JArrayBuffer.hpp',
           space: 'system',
         })
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/JUnit.hpp',
+          space: 'system',
+        })
         break
       case 'promise':
         imports.push({
@@ -327,6 +332,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'jni::JThrowable'
+          default:
+            return this.type.getCode(language)
+        }
       default:
         return this.type.getCode(language)
     }
@@ -516,6 +528,57 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
             return parameterName
         }
       }
+      case 'promise': {
+        switch (language) {
+          case 'c++': {
+            const promise = getTypeAs(this.type, PromiseType)
+            const resolvingType = promise.resultingType.getCode('c++')
+            const bridge = new KotlinCxxBridgedType(promise.resultingType)
+            if (promise.resultingType.kind === 'void') {
+              // void: resolve()
+              return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+  ${parameterName}->addOnResolvedListener([=]() {
+    __promise->cthis()->resolve(JUnit::instance());
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception_ptr& __error) {
+    auto __jniError = jni::getJavaExceptionForCppException(__error);
+    __promise->cthis()->reject(__jniError);
+  });
+  return __localPromise;
+}()
+`.trim()
+            } else {
+              // T: resolve(T)
+              return `
+[&]() {
+  jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+  jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+  ${parameterName}->addOnResolvedListener([=](const ${resolvingType}& __result) {
+    __promise->cthis()->resolve(${indent(bridge.parseFromCppToKotlin('__result', 'c++', true), '    ')});
+  });
+  ${parameterName}->addOnRejectedListener([=](const std::exception_ptr& __error) {
+    auto __jniError = jni::getJavaExceptionForCppException(__error);
+    __promise->cthis()->reject(__jniError);
+  });
+  return __localPromise;
+}()
+`.trim()
+            }
+          }
+          default:
+            return parameterName
+        }
+      }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::getJavaExceptionForCppException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName
@@ -695,31 +758,38 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               // it's a Promise<T>
               resolveBody = `
 auto __result = jni::static_ref_cast<${resultingType.getTypeCode('c++', true)}>(__boxedResult);
-__promise->set_value(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
+__promise->resolve(${resultingType.parseFromKotlinToCpp('__result', 'c++', true)});
           `.trim()
             } else {
               // it's a Promise<void>
               resolveBody = `
-__promise->set_value();
+__promise->resolve();
           `.trim()
             }
             return `
 [&]() {
-  auto __promise = std::make_shared<std::promise<${actualCppType}>>();
+  auto __promise = Promise<${actualCppType}>::create();
   ${parameterName}->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
     ${indent(resolveBody, '    ')}
   });
-  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-    std::runtime_error __error(__message->toStdString());
-    __promise->set_exception(std::make_exception_ptr(__error));
+  ${parameterName}->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+    jni::JniException __jniError(__throwable);
+    __promise->reject(std::make_exception_ptr(__jniError));
   });
-  return __promise->get_future();
+  return __promise;
 }()
         `.trim()
           default:
             return parameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return `jni::JniException(${parameterName})`
+          default:
+            return parameterName
+        }
       default:
         // no need to parse anything, just return as is
         return parameterName

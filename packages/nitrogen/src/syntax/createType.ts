@@ -26,6 +26,7 @@ import {
   type Language,
 } from '../getPlatformSpecs.js'
 import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { ErrorType } from './types/ErrorType.js'
 
 function isSymbol(type: TSMorphType, symbolName: string): boolean {
   const symbol = type.getSymbol()
@@ -53,6 +54,10 @@ function isArrayBuffer(type: TSMorphType): boolean {
 
 function isMap(type: TSMorphType): boolean {
   return isSymbol(type, 'AnyMap')
+}
+
+function isError(type: TSMorphType): boolean {
+  return isSymbol(type, 'Error')
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -149,6 +154,18 @@ function getTypeId(type: TSMorphType, isOptional: boolean): string {
   return key
 }
 
+export function addKnownType(
+  key: string,
+  type: Type,
+  language: Language
+): void {
+  if (knownTypes[language].has(key)) {
+    // type is already known
+    return
+  }
+  knownTypes[language].set(key, type)
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */
@@ -233,6 +250,9 @@ export function createType(
     } else if (isMap(type)) {
       // Map
       return new MapType()
+    } else if (isError(type)) {
+      // Error
+      return new ErrorType()
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()
@@ -282,7 +302,12 @@ export function createType(
     } else if (extendsHybridObject(type, true)) {
       // It is another HybridObject being referenced!
       const typename = type.getSymbolOrThrow().getEscapedName()
-      return new HybridObjectType(typename, language)
+      const baseTypes = type
+        .getBaseTypes()
+        .filter((t) => extendsHybridObject(t, true))
+        .map((b) => createType(language, b, false))
+      const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
+      return new HybridObjectType(typename, language, baseHybrids)
     } else if (isDirectlyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
       return new HybridObjectBaseType()

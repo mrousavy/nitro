@@ -14,7 +14,7 @@ import com.margelo.nitro.core.*
 import dalvik.annotation.optimization.FastNative
 
 /**
- * Represents the JavaScript callback `(path: string) => void`.
+ * Represents the JavaScript callback `(valueFromJs: string) => void`.
  * This is implemented in C++, via a `std::function<...>`.
  */
 @DoNotStrip
@@ -35,12 +35,12 @@ class Func_void_std__string {
    * Converts this function to a Kotlin Lambda.
    * This exists purely as syntactic sugar, and has minimal runtime overhead.
    */
-  fun toLambda(): (path: String) -> Unit = this::call
+  fun toLambda(): (valueFromJs: String) -> Unit = this::call
 
   /**
    * Call the given JS callback.
    * @throws Throwable if the JS function itself throws an error, or if the JS function/runtime has already been deleted.
    */
   @FastNative
-  external fun call(path: String): Unit
+  external fun call(valueFromJs: String): Unit
 }

@@ -82,6 +82,7 @@ Create a `nitro.json` file in the root directory of your Nitro Module (next to `
 
 ```json title="nitro.json"
 {
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
   "cxxNamespace": ["math"],
   "ios": {
     "iosModuleName": "NitroMath"
@@ -119,7 +120,7 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm run nitro-codegen
+    npx nitro-codegen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
@@ -205,9 +206,8 @@ To implement `Math` now, you just need to implement the spec:
   <TabItem value="swift" label="Swift" default>
     ```swift title="HybridMath.swift"
     class HybridMath : HybridMathSpec {
-      var hybridContext = margelo.nitro.HybridContext()
-      var memorySize: Int {
-        return getSizeOf(self)
+      public override var memorySize: Int {
+        return 0
       }
 
       public func add(a: Double, b: Double) throws -> Double {

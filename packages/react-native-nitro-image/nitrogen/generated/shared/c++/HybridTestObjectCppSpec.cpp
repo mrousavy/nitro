@@ -37,6 +37,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalArray", &HybridTestObjectCppSpec::setOptionalArray);
       prototype.registerHybridGetter("optionalEnum", &HybridTestObjectCppSpec::getOptionalEnum);
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectCppSpec::setOptionalEnum);
+      prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectCppSpec::getOptionalOldEnum);
+      prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectCppSpec::setOptionalOldEnum);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
@@ -46,8 +48,6 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("getVariantTuple", &HybridTestObjectCppSpec::getVariantTuple);
       prototype.registerHybridMethod("flip", &HybridTestObjectCppSpec::flip);
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
-      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
-      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
@@ -61,6 +61,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createMap", &HybridTestObjectCppSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectCppSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectCppSpec::funcThatThrows);
+      prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectCppSpec::funcThatThrowsBeforePromise);
+      prototype.registerHybridMethod("throwError", &HybridTestObjectCppSpec::throwError);
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
@@ -68,9 +70,15 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);
       prototype.registerHybridMethod("promiseThrows", &HybridTestObjectCppSpec::promiseThrows);
+      prototype.registerHybridMethod("awaitAndGetPromise", &HybridTestObjectCppSpec::awaitAndGetPromise);
+      prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectCppSpec::awaitAndGetComplexPromise);
+      prototype.registerHybridMethod("awaitPromise", &HybridTestObjectCppSpec::awaitPromise);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectCppSpec::callCallback);
       prototype.registerHybridMethod("callAll", &HybridTestObjectCppSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectCppSpec::callWithOptional);
+      prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectCppSpec::callSumUpNTimes);
+      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
+      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectCppSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectCppSpec::getDriver);

@@ -18,7 +18,7 @@ public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/NitroModules;";
 
 private:
-  explicit JNitroModules();
+  explicit JNitroModules() = default;
 
 private:
   // JNI Methods

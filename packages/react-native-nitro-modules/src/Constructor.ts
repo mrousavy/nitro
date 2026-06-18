@@ -6,7 +6,7 @@ const cache = new Map<string, Function>()
 /**
  * Get a constructor function for the given `HybridObject` {@linkcode T}.
  * @param name The name of the `HybridObject` under which it was registered at.
- * @returns An instance of {@linkcode T}
+ * @returns A constructor that creates instances of {@linkcode T}
  * @example
  * ```ts
  * export const HybridImage = getHybridObjectConstructor<Image>('Image')

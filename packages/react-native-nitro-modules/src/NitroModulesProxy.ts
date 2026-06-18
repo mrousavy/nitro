@@ -33,6 +33,12 @@ export interface NitroModulesProxy extends HybridObject {
    * preprocessor flag.
    */
   buildType: 'debug' | 'release'
+  /**
+   * Gets the native Nitro Modules core runtime version that this app is built with.
+   * This should be kept in sync with the JS version (package.json), otherwise it could
+   * introduce undefined behaviour.
+   */
+  version: string
 
   /**
    * Boxes the given {@linkcode hybridObject} into a {@linkcode BoxedHybridObject<T>}, which can

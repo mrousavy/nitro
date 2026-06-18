@@ -24,17 +24,6 @@ struct TypeInfo final {
 public:
   TypeInfo() = delete;
 
-  /**
-   * Get the name of the currently thrown exception
-   */
-  static inline const char* getCurrentExceptionName() {
-#if __has_include(<cxxabi.h>)
-    return __cxxabiv1::__cxa_current_exception_type()->name();
-#else
-    return "<unknown>";
-#endif
-  }
-
   static inline std::string replaceRegex(const std::string& original, const std::string& pattern, const std::string& replacement) {
     std::regex re(pattern);
     return std::regex_replace(original, re, replacement);
@@ -46,15 +35,20 @@ public:
     std::string name = typeName;
 #if __has_include(<cxxabi.h>)
     int status = 0;
-    char* demangled_name = abi::__cxa_demangle(name.c_str(), NULL, NULL, &status);
+    char* demangled_name = abi::__cxa_demangle(name.c_str(), nullptr, nullptr, &status);
     if (demangled_name != nullptr) {
       name = demangled_name;
       std::free(demangled_name);
     }
 #endif
 
+#ifdef ANDROID
+    // std::__ndk1 -> std::__1
+    name = replaceRegex(name, R"(std::__ndk1)", "std::__1");
+#endif
+
     // Make a few edge-cases nicer.
-    name = replaceRegex(name, R"(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>)", "std::string");
+    name = replaceRegex(name, R"(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> ?>)", "std::string");
     name = replaceRegex(name, R"(std::__1::vector<([^>]+), std::__1::allocator<\1>>)", "std::vector<$1>");
     name = replaceRegex(name, R"(std::__1::map<([^,]+), ([^>]+), std::__1::less<\1>, std::__1::allocator<std::__1::pair<const \1, \2>>>)",
                         "std::map<$1, $2>");
@@ -111,6 +105,18 @@ public:
     ((stream << TypeInfo::getFriendlyTypename<Types>(removeNamespace) << ", "), ...);
     std::string string = stream.str();
     return string.substr(0, string.length() - 2);
+  }
+
+  /**
+   * Get the name of the currently thrown exception
+   */
+  static inline std::string getCurrentExceptionName() {
+#if __has_include(<cxxabi.h>)
+    std::string name = __cxxabiv1::__cxa_current_exception_type()->name();
+    return demangleName(name);
+#else
+    return "<unknown>";
+#endif
   }
 };
 

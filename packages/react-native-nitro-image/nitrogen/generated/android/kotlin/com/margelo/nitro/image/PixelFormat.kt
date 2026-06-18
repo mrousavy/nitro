@@ -18,5 +18,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 enum class PixelFormat {
   RGB,
   YUV_8BIT,
-  YUV_10BIT
+  YUV_10BIT;
+
+  @DoNotStrip
+  @Keep
+  private val _ordinal = ordinal
 }

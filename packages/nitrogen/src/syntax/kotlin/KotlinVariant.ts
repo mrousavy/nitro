@@ -23,7 +23,7 @@ export function createKotlinVariant(variant: VariantType): SourceFile[] {
     const innerName = getVariantInnerName(v)
     return `
 @DoNotStrip
-data class ${innerName}(val value: ${v.getCode('kotlin')}): ${kotlinName}()
+data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlinName}()
       `.trim()
   })
 
@@ -44,6 +44,7 @@ val is${v.getCode('kotlin')}: Boolean
     const innerName = getVariantInnerName(v)
     return `
 @JvmStatic
+@DoNotStrip
 fun create(value: ${v.getCode('kotlin')}): ${kotlinName} = ${innerName}(value)
     `.trim()
   })

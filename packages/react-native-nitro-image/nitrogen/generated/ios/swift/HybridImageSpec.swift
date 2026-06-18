@@ -8,26 +8,8 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the Image HybridObject.
- * Implement this protocol to create Swift-based instances of Image.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridImage : HybridImageSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
- */
-public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
+/// See ``HybridImageSpec``
+public protocol HybridImageSpec_protocol: AnyObject {
   // Properties
   var size: ImageSize { get }
   var pixelFormat: PixelFormat { get }
@@ -37,3 +19,34 @@ public protocol HybridImageSpec: AnyObject, HybridObjectSpec {
   func toArrayBuffer(format: ImageFormat) throws -> Double
   func saveToFile(path: String, onFinished: @escaping ((_ path: String) -> Void)) throws -> Void
 }
+
+/// See ``HybridImageSpec``
+public class HybridImageSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridImageSpec_cxx? = nil
+  public func getCxxWrapper() -> HybridImageSpec_cxx {
+  #if DEBUG
+    guard self is HybridImageSpec else {
+      fatalError("`self` is not a `HybridImageSpec`! Did you accidentally inherit from `HybridImageSpec_base` instead of `HybridImageSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridImageSpec_cxx(self as! HybridImageSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
+  public var memorySize: Int { return 0 }
+}
+
+/**
+ * A Swift base-protocol representing the Image HybridObject.
+ * Implement this protocol to create Swift-based instances of Image.
+ * ```swift
+ * class HybridImage : HybridImageSpec {
+ *   // ...
+ * }
+ * ```
+ */
+public typealias HybridImageSpec = HybridImageSpec_protocol & HybridImageSpec_base

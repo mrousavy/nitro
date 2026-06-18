@@ -1,10 +1,15 @@
 {
-  "cxxNamespace": ["image"],
+  "$schema": "https://nitro.margelo.com/nitro.schema.json",
+  "cxxNamespace": [
+    "image"
+  ],
   "ios": {
     "iosModuleName": "NitroImage"
   },
   "android": {
-    "androidNamespace": ["image"],
+    "androidNamespace": [
+      "image"
+    ],
     "androidCxxLibName": "NitroImage"
   },
   "autolinking": {
@@ -28,5 +33,7 @@
       "kotlin": "HybridChild"
     }
   },
-  "ignorePaths": ["node_modules"]
+  "ignorePaths": [
+    "**/node_modules"
+  ]
 }

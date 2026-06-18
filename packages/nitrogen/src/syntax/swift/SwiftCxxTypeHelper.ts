@@ -6,7 +6,7 @@ import { FunctionType } from '../types/FunctionType.js'
 import { getTypeAs } from '../types/getTypeAs.js'
 import { OptionalType } from '../types/OptionalType.js'
 import { RecordType } from '../types/RecordType.js'
-import type { Type } from '../types/Type.js'
+import type { NamedType, Type } from '../types/Type.js'
 import { TupleType } from '../types/TupleType.js'
 import { escapeComments, indent } from '../../utils.js'
 import { PromiseType } from '../types/PromiseType.js'
@@ -14,8 +14,11 @@ import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { NitroConfig } from '../../config/NitroConfig.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
+import { VoidType } from '../types/VoidType.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
+import { ErrorType } from '../types/ErrorType.js'
+import { ResultWrappingType } from '../types/ResultWrappingType.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -29,6 +32,7 @@ export interface SwiftCxxHelper {
   funcName: string
   specializationName: string
   cxxType: string
+  dependencies: SwiftCxxHelper[]
 }
 
 export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
@@ -49,6 +53,10 @@ export function createSwiftCxxHelpers(type: Type): SwiftCxxHelper | undefined {
       return createCxxTupleSwiftHelper(getTypeAs(type, TupleType))
     case 'promise':
       return createCxxPromiseSwiftHelper(getTypeAs(type, PromiseType))
+    case 'result-wrapper':
+      return createCxxResultWrapperSwiftHelper(
+        getTypeAs(type, ResultWrappingType)
+      )
     default:
       return undefined
   }
@@ -68,6 +76,11 @@ function createCxxHybridObjectSwiftHelper(
   const swiftWrappingType = NitroConfig.getCxxNamespace('c++', HybridTSpecSwift)
   const swiftPartType = `${modulename}::${HybridTSpecCxx}`
   const name = escapeCppName(actualType)
+
+  const upcastHelpers = type.baseTypes.map((base) =>
+    createCxxUpcastHelper(base, type)
+  )
+
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -86,8 +99,8 @@ void* _Nonnull get_${name}(${name} cppType);
     cxxImplementation: {
       code: `
 ${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
-  ${swiftPartType} swiftPart = ${swiftPartType}Unsafe::fromUnsafe(swiftUnsafePointer);
-  return HybridContext::getOrCreate<${swiftWrappingType}>(swiftPart);
+  ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
+  return std::make_shared<${swiftWrappingType}>(swiftPart);
 }
 void* _Nonnull get_${name}(${name} cppType) {
   std::shared_ptr<${swiftWrappingType}> swiftWrapper = std::dynamic_pointer_cast<${swiftWrappingType}>(cppType);
@@ -97,20 +110,10 @@ void* _Nonnull get_${name}(${name} cppType) {
   }
 #endif
   ${swiftPartType} swiftPart = swiftWrapper->getSwiftPart();
-  return ${swiftPartType}Unsafe::toUnsafe(swiftPart);
+  return swiftPart.toUnsafe();
 }
     `.trim(),
       requiredIncludes: [
-        {
-          language: 'c++',
-          name: 'NitroModules/HybridContext.hpp',
-          space: 'system',
-          forwardDeclaration: getForwardDeclaration(
-            'class',
-            'HybridContext',
-            'margelo::nitro'
-          ),
-        },
         {
           language: 'c++',
           // Hybrid Object Swift C++ class wrapper
@@ -125,6 +128,49 @@ void* _Nonnull get_${name}(${name} cppType) {
         },
       ],
     },
+    dependencies: [...upcastHelpers, createCxxWeakPtrHelper(type)],
+  }
+}
+
+function createCxxUpcastHelper(
+  baseType: HybridObjectType,
+  childType: HybridObjectType
+): SwiftCxxHelper {
+  const cppBaseType = baseType.getCode('c++')
+  const cppChildType = childType.getCode('c++')
+  const funcName = escapeCppName(
+    `upcast_${childType.hybridObjectName}_to_${baseType.hybridObjectName}`
+  )
+  return {
+    cxxType: cppBaseType,
+    funcName: funcName,
+    specializationName: funcName,
+    cxxHeader: {
+      code: `
+inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
+`.trim(),
+      requiredIncludes: [],
+    },
+    dependencies: [],
+  }
+}
+
+function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
+  const actualType = type.getCode('c++', 'weak')
+  const specializationName = escapeCppName(actualType)
+  const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: specializationName,
+    cxxHeader: {
+      code: `
+using ${specializationName} = ${actualType};
+inline ${specializationName} ${funcName}(const ${type.getCode('c++', 'strong')}& strong) { return strong; }
+`.trim(),
+      requiredIncludes: [],
+    },
+    dependencies: [],
   }
 }
 
@@ -158,6 +204,7 @@ inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& v
         ...wrappedBridge.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
@@ -193,6 +240,7 @@ inline ${actualType} create_${name}(size_t size) {
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
@@ -237,6 +285,7 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
@@ -328,10 +377,10 @@ public:
   }
 private:
   ${actualType} _function;
-};
+} SWIFT_NONCOPYABLE;
 inline ${name} create_${name}(void* _Nonnull closureHolder, ${functionPointerParam}, void(* _Nonnull destroy)(void* _Nonnull)) {
   std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-  return ${name}([sharedClosureHolder, call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
+  return ${name}([sharedClosureHolder = std::move(sharedClosureHolder), call](${paramsSignature.join(', ')}) -> ${type.returnType.getCode('c++')} {
     ${indent(callSwiftFuncBody, '    ')}
   });
 }
@@ -353,6 +402,7 @@ inline std::shared_ptr<${wrapperName}> share_${name}(const ${name}& value) {
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
@@ -414,6 +464,7 @@ ${getFunctions.join('\n')}
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
@@ -454,16 +505,78 @@ inline ${actualType} create_${name}(${typesSignature}) {
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [],
   }
 }
 
 /**
- * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `PromiseHolder`.
+ * Create a C++ `create_result` function that can be called from Swift to create a `Result<T>`.
+ */
+function createCxxResultWrapperSwiftHelper(
+  type: ResultWrappingType
+): SwiftCxxHelper {
+  const actualType = type.getCode('c++')
+  const name = escapeCppName(type.getCode('c++'))
+  const funcName = `create_${name}`
+
+  const functions: string[] = []
+  if (type.result.kind === 'void') {
+    functions.push(
+      `
+inline ${name} ${funcName}() {
+  return ${actualType}::withValue();
+}`.trim()
+    )
+  } else {
+    const typeParam = type.result.canBePassedByReference
+      ? `const ${type.result.getCode('c++')}&`
+      : type.result.getCode('c++')
+    functions.push(
+      `
+inline ${name} ${funcName}(${typeParam} value) {
+  return ${actualType}::withValue(${type.result.canBePassedByReference ? 'value' : 'std::move(value)'});
+}`.trim()
+    )
+  }
+  functions.push(
+    `
+inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) {
+  return ${actualType}::withError(error);
+}`.trim()
+  )
+
+  return {
+    cxxType: actualType,
+    specializationName: name,
+    funcName: funcName,
+    cxxHeader: {
+      code: `
+using ${name} = ${actualType};
+${functions.join('\n')}
+      `.trim(),
+      requiredIncludes: type.getRequiredImports(),
+    },
+    dependencies: [],
+  }
+}
+
+/**
+ * Creates a C++ `create_promise_T()` function that can be called from Swift to create a `std::shared_ptr<Promise<T>>`.
  */
 function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
   const resultingType = type.resultingType.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
-  const actualType = `PromiseHolder<${resultingType}>`
+  const actualType = `std::shared_ptr<Promise<${resultingType}>>`
+
+  const resolverArgs: NamedType[] = []
+  if (type.resultingType.kind !== 'void') {
+    resolverArgs.push(new NamedWrappingType('result', type.resultingType))
+  }
+  const resolveFunction = new FunctionType(new VoidType(), resolverArgs)
+  const rejectFunction = new FunctionType(new VoidType(), [
+    new NamedWrappingType('error', new ErrorType()),
+  ])
+
   const name = escapeCppName(actualType)
   return {
     cxxType: actualType,
@@ -476,17 +589,26 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  */
 using ${name} = ${actualType};
 inline ${actualType} create_${name}() {
-  return ${actualType}();
+  return Promise<${resultingType}>::create();
 }
        `.trim(),
       requiredIncludes: [
         {
-          name: 'NitroModules/PromiseHolder.hpp',
+          name: 'NitroModules/Promise.hpp',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'memory',
           space: 'system',
           language: 'c++',
         },
         ...bridgedType.getRequiredImports(),
       ],
     },
+    dependencies: [
+      createCxxFunctionSwiftHelper(resolveFunction),
+      createCxxFunctionSwiftHelper(rejectFunction),
+    ],
   }
 }

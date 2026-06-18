@@ -8,10 +8,14 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AnyMap` to properly resolve imports.
+namespace NitroModules { class AnyMap; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `ArrayBuffer` to properly resolve imports.
 namespace NitroModules { class ArrayBuffer; }
+// Forward declaration of `Car` to properly resolve imports.
+namespace margelo::nitro::image { struct Car; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
@@ -22,36 +26,42 @@ namespace margelo::nitro::image { class HybridImageFactorySpec; }
 namespace margelo::nitro::image { class HybridImageSpec; }
 // Forward declaration of `HybridTestObjectSwiftKotlinSpec` to properly resolve imports.
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
 
 // Forward declarations of Swift defined types
-// Forward declaration of `HybridBaseSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridBaseSpecCxx; }
-// Forward declaration of `HybridChildSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridChildSpecCxx; }
-// Forward declaration of `HybridImageFactorySpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageFactorySpecCxx; }
-// Forward declaration of `HybridImageSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridImageSpecCxx; }
-// Forward declaration of `HybridTestObjectSwiftKotlinSpecCxx` to properly resolve imports.
-namespace NitroImage { class HybridTestObjectSwiftKotlinSpecCxx; }
+// Forward declaration of `HybridBaseSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridBaseSpec_cxx; }
+// Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridImageFactorySpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridImageFactorySpec_cxx; }
+// Forward declaration of `HybridImageSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridImageSpec_cxx; }
+// Forward declaration of `HybridTestObjectSwiftKotlinSpec_cxx` to properly resolve imports.
+namespace NitroImage { class HybridTestObjectSwiftKotlinSpec_cxx; }
 
 // Include C++ defined types
+#include "Car.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
 #include "HybridImageFactorySpec.hpp"
 #include "HybridImageSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
+#include "OldEnum.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include <NitroModules/AnyMap.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
-#include <NitroModules/PromiseHolder.hpp>
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/Result.hpp>
+#include <exception>
 #include <functional>
-#include <future>
 #include <memory>
 #include <optional>
 #include <string>
@@ -81,10 +91,10 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::string& /* path */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__string create_Func_void_std__string(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::string), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__string([sharedClosureHolder, call](const std::string& path) -> void {
+    return Func_void_std__string([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::string& path) -> void {
       call(sharedClosureHolder.get(), path);
     });
   }
@@ -100,6 +110,28 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<margelo::nitro::image::HybridImageSpec> create_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(std__shared_ptr_margelo__nitro__image__HybridImageSpec_ cppType);
   
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridImageSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridImageSpec_ = std::weak_ptr<margelo::nitro::image::HybridImageSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridImageSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageSpec_(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& strong) { return strong; }
+  
+  // pragma MARK: Result<double>
+  using Result_double_ = Result<double>;
+  inline Result_double_ create_Result_double_(double value) {
+    return Result<double>::withValue(std::move(value));
+  }
+  inline Result_double_ create_Result_double_(const std::exception_ptr& error) {
+    return Result<double>::withError(error);
+  }
+  
+  // pragma MARK: Result<void>
+  using Result_void_ = Result<void>;
+  inline Result_void_ create_Result_void_() {
+    return Result<void>::withValue();
+  }
+  inline Result_void_ create_Result_void_(const std::exception_ptr& error) {
+    return Result<void>::withError(error);
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>`.
@@ -108,6 +140,19 @@ namespace margelo::nitro::image::bridge::swift {
   std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec> create_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_ cppType);
   
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>
+  using std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ = std::weak_ptr<margelo::nitro::image::HybridImageFactorySpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridImageFactorySpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridImageFactorySpec_(const std::shared_ptr<margelo::nitro::image::HybridImageFactorySpec>& strong) { return strong; }
+  
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::shared_ptr<margelo::nitro::image::HybridImageSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridImageSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridImageSpec>>::withError(error);
+  }
+  
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>`.
@@ -115,6 +160,10 @@ namespace margelo::nitro::image::bridge::swift {
   using std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
   std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(void* _Nonnull swiftUnsafePointer);
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ = std::weak_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec_(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& strong) { return strong; }
   
   // pragma MARK: std::optional<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
   /**
@@ -161,6 +210,15 @@ namespace margelo::nitro::image::bridge::swift {
   using std__optional_Powertrain_ = std::optional<Powertrain>;
   inline std::optional<Powertrain> create_std__optional_Powertrain_(const Powertrain& value) {
     return std::optional<Powertrain>(value);
+  }
+  
+  // pragma MARK: std::optional<OldEnum>
+  /**
+   * Specialized version of `std::optional<OldEnum>`.
+   */
+  using std__optional_OldEnum_ = std::optional<OldEnum>;
+  inline std::optional<OldEnum> create_std__optional_OldEnum_(const OldEnum& value) {
+    return std::optional<OldEnum>(value);
   }
   
   // pragma MARK: std::vector<double>
@@ -213,15 +271,80 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(const std::vector<Powertrain>& /* array */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__vector_Powertrain_ create_Func_void_std__vector_Powertrain_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::vector<Powertrain>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__vector_Powertrain_([sharedClosureHolder, call](const std::vector<Powertrain>& array) -> void {
+    return Func_void_std__vector_Powertrain_([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::vector<Powertrain>& array) -> void {
       call(sharedClosureHolder.get(), array);
     });
   }
   inline std::shared_ptr<Func_void_std__vector_Powertrain__Wrapper> share_Func_void_std__vector_Powertrain_(const Func_void_std__vector_Powertrain_& value) {
     return std::make_shared<Func_void_std__vector_Powertrain__Wrapper>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<void>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<void>>`.
+   */
+  using std__shared_ptr_Promise_void__ = std::shared_ptr<Promise<void>>;
+  inline std::shared_ptr<Promise<void>> create_std__shared_ptr_Promise_void__() {
+    return Promise<void>::create();
+  }
+  
+  // pragma MARK: std::function<void()>
+  /**
+   * Specialized version of `std::function<void()>`.
+   */
+  using Func_void = std::function<void()>;
+  /**
+   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
+   */
+  class Func_void_Wrapper final {
+  public:
+    explicit Func_void_Wrapper(const std::function<void()>& func): _function(func) {}
+    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::move(func)) {}
+    inline void call() const {
+      _function();
+    }
+  private:
+    std::function<void()> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void create_Func_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> void {
+      call(sharedClosureHolder.get());
+    });
+  }
+  inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
+    return std::make_shared<Func_void_Wrapper>(value);
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  /**
+   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
+   */
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__exception_ptr_Wrapper final {
+  public:
+    explicit Func_void_std__exception_ptr_Wrapper(const std::function<void(const std::exception_ptr& /* error */)>& func): _function(func) {}
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::move(func)) {}
+    inline void call(std::exception_ptr error) const {
+      _function(error);
+    }
+  private:
+    std::function<void(const std::exception_ptr& /* error */)> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::exception_ptr), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_std__exception_ptr([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::exception_ptr& error) -> void {
+      call(sharedClosureHolder.get(), error);
+    });
+  }
+  inline std::shared_ptr<Func_void_std__exception_ptr_Wrapper> share_Func_void_std__exception_ptr(const Func_void_std__exception_ptr& value) {
+    return std::make_shared<Func_void_std__exception_ptr_Wrapper>(value);
   }
   
   // pragma MARK: std::optional<bool>
@@ -262,50 +385,124 @@ namespace margelo::nitro::image::bridge::swift {
     return std::get<1>(variantWrapper.variant);
   }
   
-  // pragma MARK: PromiseHolder<int64_t>
+  // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
-   * Specialized version of `PromiseHolder<int64_t>`.
+   * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
    */
-  using PromiseHolder_int64_t_ = PromiseHolder<int64_t>;
-  inline PromiseHolder<int64_t> create_PromiseHolder_int64_t_() {
-    return PromiseHolder<int64_t>();
+  using std__shared_ptr_Promise_int64_t__ = std::shared_ptr<Promise<int64_t>>;
+  inline std::shared_ptr<Promise<int64_t>> create_std__shared_ptr_Promise_int64_t__() {
+    return Promise<int64_t>::create();
   }
   
-  // pragma MARK: PromiseHolder<void>
+  // pragma MARK: std::function<void(int64_t /* result */)>
   /**
-   * Specialized version of `PromiseHolder<void>`.
+   * Specialized version of `std::function<void(int64_t)>`.
    */
-  using PromiseHolder_void_ = PromiseHolder<void>;
-  inline PromiseHolder<void> create_PromiseHolder_void_() {
-    return PromiseHolder<void>();
-  }
-  
-  // pragma MARK: std::function<void()>
+  using Func_void_int64_t = std::function<void(int64_t /* result */)>;
   /**
-   * Specialized version of `std::function<void()>`.
+   * Wrapper class for a `std::function<void(int64_t / * result * /)>`, this can be used from Swift.
    */
-  using Func_void = std::function<void()>;
-  /**
-   * Wrapper class for a `std::function<void()>`, this can be used from Swift.
-   */
-  class Func_void_Wrapper final {
+  class Func_void_int64_t_Wrapper final {
   public:
-    explicit Func_void_Wrapper(const std::function<void()>& func): _function(func) {}
-    explicit Func_void_Wrapper(std::function<void()>&& func): _function(std::move(func)) {}
-    inline void call() const {
-      _function();
+    explicit Func_void_int64_t_Wrapper(const std::function<void(int64_t /* result */)>& func): _function(func) {}
+    explicit Func_void_int64_t_Wrapper(std::function<void(int64_t /* result */)>&& func): _function(std::move(func)) {}
+    inline void call(int64_t result) const {
+      _function(result);
     }
   private:
-    std::function<void()> _function;
-  };
-  inline Func_void create_Func_void(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::function<void(int64_t /* result */)> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void_int64_t create_Func_void_int64_t(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, int64_t), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void([sharedClosureHolder, call]() -> void {
-      call(sharedClosureHolder.get());
+    return Func_void_int64_t([sharedClosureHolder = std::move(sharedClosureHolder), call](int64_t result) -> void {
+      call(sharedClosureHolder.get(), result);
     });
   }
-  inline std::shared_ptr<Func_void_Wrapper> share_Func_void(const Func_void& value) {
-    return std::make_shared<Func_void_Wrapper>(value);
+  inline std::shared_ptr<Func_void_int64_t_Wrapper> share_Func_void_int64_t(const Func_void_int64_t& value) {
+    return std::make_shared<Func_void_int64_t_Wrapper>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<double>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<double>>`.
+   */
+  using std__shared_ptr_Promise_double__ = std::shared_ptr<Promise<double>>;
+  inline std::shared_ptr<Promise<double>> create_std__shared_ptr_Promise_double__() {
+    return Promise<double>::create();
+  }
+  
+  // pragma MARK: std::function<void(double /* result */)>
+  /**
+   * Specialized version of `std::function<void(double)>`.
+   */
+  using Func_void_double = std::function<void(double /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(double / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_double_Wrapper final {
+  public:
+    explicit Func_void_double_Wrapper(const std::function<void(double /* result */)>& func): _function(func) {}
+    explicit Func_void_double_Wrapper(std::function<void(double /* result */)>&& func): _function(std::move(func)) {}
+    inline void call(double result) const {
+      _function(result);
+    }
+  private:
+    std::function<void(double /* result */)> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void_double create_Func_void_double(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, double), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_double([sharedClosureHolder = std::move(sharedClosureHolder), call](double result) -> void {
+      call(sharedClosureHolder.get(), result);
+    });
+  }
+  inline std::shared_ptr<Func_void_double_Wrapper> share_Func_void_double(const Func_void_double& value) {
+    return std::make_shared<Func_void_double_Wrapper>(value);
+  }
+  
+  // pragma MARK: std::optional<Person>
+  /**
+   * Specialized version of `std::optional<Person>`.
+   */
+  using std__optional_Person_ = std::optional<Person>;
+  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
+    return std::optional<Person>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<Car>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<Car>>`.
+   */
+  using std__shared_ptr_Promise_Car__ = std::shared_ptr<Promise<Car>>;
+  inline std::shared_ptr<Promise<Car>> create_std__shared_ptr_Promise_Car__() {
+    return Promise<Car>::create();
+  }
+  
+  // pragma MARK: std::function<void(const Car& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const Car&)>`.
+   */
+  using Func_void_Car = std::function<void(const Car& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const Car& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_Car_Wrapper final {
+  public:
+    explicit Func_void_Car_Wrapper(const std::function<void(const Car& /* result */)>& func): _function(func) {}
+    explicit Func_void_Car_Wrapper(std::function<void(const Car& /* result */)>&& func): _function(std::move(func)) {}
+    inline void call(Car result) const {
+      _function(result);
+    }
+  private:
+    std::function<void(const Car& /* result */)> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void_Car create_Func_void_Car(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, Car), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_Car([sharedClosureHolder = std::move(sharedClosureHolder), call](const Car& result) -> void {
+      call(sharedClosureHolder.get(), result);
+    });
+  }
+  inline std::shared_ptr<Func_void_Car_Wrapper> share_Func_void_Car(const Func_void_Car& value) {
+    return std::make_shared<Func_void_Car_Wrapper>(value);
   }
   
   // pragma MARK: std::optional<double>
@@ -334,10 +531,10 @@ namespace margelo::nitro::image::bridge::swift {
     }
   private:
     std::function<void(std::optional<double> /* maybe */)> _function;
-  };
+  } SWIFT_NONCOPYABLE;
   inline Func_void_std__optional_double_ create_Func_void_std__optional_double_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, std::optional<double>), void(* _Nonnull destroy)(void* _Nonnull)) {
     std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
-    return Func_void_std__optional_double_([sharedClosureHolder, call](std::optional<double> maybe) -> void {
+    return Func_void_std__optional_double_([sharedClosureHolder = std::move(sharedClosureHolder), call](std::optional<double> maybe) -> void {
       call(sharedClosureHolder.get(), maybe);
     });
   }
@@ -345,23 +542,123 @@ namespace margelo::nitro::image::bridge::swift {
     return std::make_shared<Func_void_std__optional_double__Wrapper>(value);
   }
   
-  // pragma MARK: std::optional<Person>
+  // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
   /**
-   * Specialized version of `std::optional<Person>`.
+   * Specialized version of `std::function<std::shared_ptr<Promise<double>>()>`.
    */
-  using std__optional_Person_ = std::optional<Person>;
-  inline std::optional<Person> create_std__optional_Person_(const Person& value) {
-    return std::optional<Person>(value);
+  using Func_std__shared_ptr_Promise_double__ = std::function<std::shared_ptr<Promise<double>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<double>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_double___Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_double___Wrapper(const std::function<std::shared_ptr<Promise<double>>()>& func): _function(func) {}
+    explicit Func_std__shared_ptr_Promise_double___Wrapper(std::function<std::shared_ptr<Promise<double>>()>&& func): _function(std::move(func)) {}
+    inline std::shared_ptr<Promise<double>> call() const {
+      auto __result = _function();
+      return __result;
+    }
+  private:
+    std::function<std::shared_ptr<Promise<double>>()> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_std__shared_ptr_Promise_double__ create_Func_std__shared_ptr_Promise_double__(void* _Nonnull closureHolder, std::shared_ptr<Promise<double>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_std__shared_ptr_Promise_double__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<double>> {
+      auto __result = call(sharedClosureHolder.get());
+      return __result;
+    });
+  }
+  inline std::shared_ptr<Func_std__shared_ptr_Promise_double___Wrapper> share_Func_std__shared_ptr_Promise_double__(const Func_std__shared_ptr_Promise_double__& value) {
+    return std::make_shared<Func_std__shared_ptr_Promise_double___Wrapper>(value);
   }
   
-  // pragma MARK: PromiseHolder<std::shared_ptr<ArrayBuffer>>
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   /**
-   * Specialized version of `PromiseHolder<std::shared_ptr<ArrayBuffer>>`.
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.
    */
-  using PromiseHolder_std__shared_ptr_ArrayBuffer__ = PromiseHolder<std::shared_ptr<ArrayBuffer>>;
-  inline PromiseHolder<std::shared_ptr<ArrayBuffer>> create_PromiseHolder_std__shared_ptr_ArrayBuffer__() {
-    return PromiseHolder<std::shared_ptr<ArrayBuffer>>();
+  using Func_std__shared_ptr_Promise_std__string__ = std::function<std::shared_ptr<Promise<std::string>>()>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::string>>()>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__string___Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(const std::function<std::shared_ptr<Promise<std::string>>()>& func): _function(func) {}
+    explicit Func_std__shared_ptr_Promise_std__string___Wrapper(std::function<std::shared_ptr<Promise<std::string>>()>&& func): _function(std::move(func)) {}
+    inline std::shared_ptr<Promise<std::string>> call() const {
+      auto __result = _function();
+      return __result;
+    }
+  private:
+    std::function<std::shared_ptr<Promise<std::string>>()> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* _Nonnull closureHolder, std::shared_ptr<Promise<std::string>>(* _Nonnull call)(void* _Nonnull /* closureHolder */), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_std__shared_ptr_Promise_std__string__([sharedClosureHolder = std::move(sharedClosureHolder), call]() -> std::shared_ptr<Promise<std::string>> {
+      auto __result = call(sharedClosureHolder.get());
+      return __result;
+    });
   }
+  inline std::shared_ptr<Func_std__shared_ptr_Promise_std__string___Wrapper> share_Func_std__shared_ptr_Promise_std__string__(const Func_std__shared_ptr_Promise_std__string__& value) {
+    return std::make_shared<Func_std__shared_ptr_Promise_std__string___Wrapper>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::string>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::string>>`.
+   */
+  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
+  inline std::shared_ptr<Promise<std::string>> create_std__shared_ptr_Promise_std__string__() {
+    return Promise<std::string>::create();
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ = std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> create_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___() {
+    return Promise<std::shared_ptr<ArrayBuffer>>::create();
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<ArrayBuffer>&)>`.
+   */
+  using Func_void_std__shared_ptr_ArrayBuffer_ = std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<ArrayBuffer>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_ArrayBuffer__Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(const std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>& func): _function(func) {}
+    explicit Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>&& func): _function(std::move(func)) {}
+    inline void call(ArrayBufferHolder result) const {
+      _function(result.getArrayBuffer());
+    }
+  private:
+    std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)> _function;
+  } SWIFT_NONCOPYABLE;
+  inline Func_void_std__shared_ptr_ArrayBuffer_ create_Func_void_std__shared_ptr_ArrayBuffer_(void* _Nonnull closureHolder, void(* _Nonnull call)(void* _Nonnull /* closureHolder */, ArrayBufferHolder), void(* _Nonnull destroy)(void* _Nonnull)) {
+    std::shared_ptr<void> sharedClosureHolder(closureHolder, destroy);
+    return Func_void_std__shared_ptr_ArrayBuffer_([sharedClosureHolder = std::move(sharedClosureHolder), call](const std::shared_ptr<ArrayBuffer>& result) -> void {
+      call(sharedClosureHolder.get(), ArrayBufferHolder(result));
+    });
+  }
+  inline std::shared_ptr<Func_void_std__shared_ptr_ArrayBuffer__Wrapper> share_Func_void_std__shared_ptr_ArrayBuffer_(const Func_void_std__shared_ptr_ArrayBuffer_& value) {
+    return std::make_shared<Func_void_std__shared_ptr_ArrayBuffer__Wrapper>(value);
+  }
+  
+  // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
+  /**
+   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
+   */
+  using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
+  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
+  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridBaseSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridBaseSpec_ = std::weak_ptr<margelo::nitro::image::HybridBaseSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridBaseSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& strong) { return strong; }
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridChildSpec>
   /**
@@ -372,11 +669,190 @@ namespace margelo::nitro::image::bridge::swift {
   void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(std__shared_ptr_margelo__nitro__image__HybridChildSpec_ cppType);
   
   // pragma MARK: std::shared_ptr<margelo::nitro::image::HybridBaseSpec>
-  /**
-   * Specialized version of `std::shared_ptr<margelo::nitro::image::HybridBaseSpec>`.
-   */
-  using std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ = std::shared_ptr<margelo::nitro::image::HybridBaseSpec>;
-  std::shared_ptr<margelo::nitro::image::HybridBaseSpec> create_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(void* _Nonnull swiftUnsafePointer);
-  void* _Nonnull get_std__shared_ptr_margelo__nitro__image__HybridBaseSpec_(std__shared_ptr_margelo__nitro__image__HybridBaseSpec_ cppType);
+  inline std::shared_ptr<margelo::nitro::image::HybridBaseSpec> upcast_Child_to_Base(std::shared_ptr<margelo::nitro::image::HybridChildSpec> child) { return child; }
+  
+  // pragma MARK: std::weak_ptr<margelo::nitro::image::HybridChildSpec>
+  using std__weak_ptr_margelo__nitro__image__HybridChildSpec_ = std::weak_ptr<margelo::nitro::image::HybridChildSpec>;
+  inline std__weak_ptr_margelo__nitro__image__HybridChildSpec_ weakify_std__shared_ptr_margelo__nitro__image__HybridChildSpec_(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& strong) { return strong; }
+  
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridTestObjectSwiftKotlinSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::string>
+  using Result_std__string_ = Result<std::string>;
+  inline Result_std__string_ create_Result_std__string_(const std::string& value) {
+    return Result<std::string>::withValue(value);
+  }
+  inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) {
+    return Result<std::string>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::string>>
+  using Result_std__vector_std__string__ = Result<std::vector<std::string>>;
+  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value) {
+    return Result<std::vector<std::string>>::withValue(value);
+  }
+  inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::exception_ptr& error) {
+    return Result<std::vector<std::string>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<double>>
+  using Result_std__vector_double__ = Result<std::vector<double>>;
+  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value) {
+    return Result<std::vector<double>>::withValue(value);
+  }
+  inline Result_std__vector_double__ create_Result_std__vector_double__(const std::exception_ptr& error) {
+    return Result<std::vector<double>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<Person>>
+  using Result_std__vector_Person__ = Result<std::vector<Person>>;
+  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value) {
+    return Result<std::vector<Person>>::withValue(value);
+  }
+  inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) {
+    return Result<std::vector<Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<Powertrain>>
+  using Result_std__vector_Powertrain__ = Result<std::vector<Powertrain>>;
+  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value) {
+    return Result<std::vector<Powertrain>>::withValue(value);
+  }
+  inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) {
+    return Result<std::vector<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<AnyMap>>
+  using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) {
+    return Result<std::shared_ptr<AnyMap>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<AnyMap>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<void>>>
+  using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) {
+    return Result<std::shared_ptr<Promise<void>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<Promise<void>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<Powertrain>>
+  using Result_std__optional_Powertrain__ = Result<std::optional<Powertrain>>;
+  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(std::optional<Powertrain> value) {
+    return Result<std::optional<Powertrain>>::withValue(std::move(value));
+  }
+  inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) {
+    return Result<std::optional<Powertrain>>::withError(error);
+  }
+  
+  // pragma MARK: Result<int64_t>
+  using Result_int64_t_ = Result<int64_t>;
+  inline Result_int64_t_ create_Result_int64_t_(int64_t value) {
+    return Result<int64_t>::withValue(std::move(value));
+  }
+  inline Result_int64_t_ create_Result_int64_t_(const std::exception_ptr& error) {
+    return Result<int64_t>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<int64_t>>>
+  using Result_std__shared_ptr_Promise_int64_t___ = Result<std::shared_ptr<Promise<int64_t>>>;
+  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value) {
+    return Result<std::shared_ptr<Promise<int64_t>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<Promise<int64_t>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<double>>>
+  using Result_std__shared_ptr_Promise_double___ = Result<std::shared_ptr<Promise<double>>>;
+  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value) {
+    return Result<std::shared_ptr<Promise<double>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<Promise<double>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<Car>>>
+  using Result_std__shared_ptr_Promise_Car___ = Result<std::shared_ptr<Promise<Car>>>;
+  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value) {
+    return Result<std::shared_ptr<Promise<Car>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<Promise<Car>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<Car>
+  using Result_Car_ = Result<Car>;
+  inline Result_Car_ create_Result_Car_(const Car& value) {
+    return Result<Car>::withValue(value);
+  }
+  inline Result_Car_ create_Result_Car_(const std::exception_ptr& error) {
+    return Result<Car>::withError(error);
+  }
+  
+  // pragma MARK: Result<bool>
+  using Result_bool_ = Result<bool>;
+  inline Result_bool_ create_Result_bool_(bool value) {
+    return Result<bool>::withValue(std::move(value));
+  }
+  inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) {
+    return Result<bool>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::optional<Person>>
+  using Result_std__optional_Person__ = Result<std::optional<Person>>;
+  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value) {
+    return Result<std::optional<Person>>::withValue(value);
+  }
+  inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) {
+    return Result<std::optional<Person>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
+  using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
+  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) {
+    return Result<std::shared_ptr<ArrayBuffer>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<ArrayBuffer>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>
+  using Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ = Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>;
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value) {
+    return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::shared_ptr<margelo::nitro::image::HybridChildSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridChildSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridChildSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>
+  using Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ = Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>;
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::shared_ptr<margelo::nitro::image::HybridBaseSpec>& value) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__ create_Result_std__shared_ptr_margelo__nitro__image__HybridBaseSpec__(const std::exception_ptr& error) {
+    return Result<std::shared_ptr<margelo::nitro::image::HybridBaseSpec>>::withError(error);
+  }
 
 } // namespace margelo::nitro::image::bridge::swift

@@ -3,7 +3,7 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "<<iosModuleName>>"
+  s.name         = "$$iosModuleName$$"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -22,8 +22,15 @@ Pod::Spec.new do |s|
     "cpp/**/*.{hpp,cpp}",
   ]
 
-  load 'nitrogen/generated/ios/<<iosModuleName>>+autolinking.rb'
+  s.pod_target_xcconfig = {
+    # C++ compiler flags, mainly for folly.
+    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+  }
+
+  load 'nitrogen/generated/ios/$$iosModuleName$$+autolinking.rb'
   add_nitrogen_files(s)
 
+  s.dependency 'React-jsi'
+  s.dependency 'React-callinvoker'
   install_modules_dependencies(s)
 end

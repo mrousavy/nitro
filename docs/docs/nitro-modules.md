@@ -18,32 +18,17 @@ In addition to the base react-native library template, a Nitro Module also conta
 
 ## Creating a Nitro Module
 
-### 1. Download the template
+### 1. Initialize the template
 
-The **mrousavy/nitro** repository contains a template ([`packages/template`](https://github.com/mrousavy/nitro/tree/main/packages/template)) which can be used to create a new Nitro Module:
+To create a new Nitro Module, simply run `nitro-codegen init <moduleName>`:
 
 ```sh
-git clone https://github.com/mrousavy/nitro /tmp/nitro
-cp -R /tmp/nitro/packages/template my-new-library
+npx nitro-codegen@latest init react-native-math
 ```
 
-### 2. Replace all placeholders
+### 2. Set up an example app
 
-You need to replace all `<<*>>` placeholders and filenames for each value in `nitro.json`. For example, `<<iosModuleName>>` can be replaced with `NitroMath`:
-
-```ruby title="NitroMath.podspec"
-...
-Pod::Spec.new do |s|
-// diff-remove
-  s.name         = "<<iosModuleName>>"
-// diff-add
-  s.name         = "NitroMath"
-...
-```
-
-### 3. Set up an example app
-
-After properly creating a Nitro Module, it's time to set up an example app to test your library:
+After creating a Nitro Module, it's time to set up an example app to test your library:
 
 <Tabs groupId="expo-or-bare">
   <TabItem value="expo" label="Expo" default>
@@ -58,7 +43,7 @@ After properly creating a Nitro Module, it's time to set up an example app to te
   </TabItem>
 </Tabs>
 
-### 4. Implement your Hybrid Objects
+### 3. Implement your Hybrid Objects
 
 Once you set up the library, you can start implementing your Hybrid Objects!
 

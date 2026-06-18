@@ -9,11 +9,6 @@ import Foundation
 import NitroModules
 
 class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
-  var hybridContext: margelo.nitro.HybridContext = .init()
-  var memorySize: Int {
-    return 0
-  }
-
   var optionalArray: [String]? = []
 
   var someVariant: Variant_String_Double = .someDouble(55)
@@ -35,6 +30,8 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? = nil
 
   var optionalEnum: Powertrain? = nil
+
+  var optionalOldEnum: OldEnum? = nil
 
   func simpleFunc() throws {
     // do nothing
@@ -59,6 +56,32 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void {
     callback(value)
   }
+
+  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double> {
+    return .async {
+      let jsResult = try await getValue().await()
+      return jsResult
+    }
+  }
+
+  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void> {
+    return .async {
+      let jsResult = try await callback().await()
+      andThenCall(jsResult)
+    }
+  }
+
+  func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double> {
+    var result = 0.0
+    return Promise.async {
+      for i in 1...Int(n) {
+        let current = try await callback().await()
+        result += current
+      }
+      return result
+    }
+  }
+
 
   func bounceStrings(array: [String]) throws -> [String] {
     return array
@@ -113,9 +136,15 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   }
 
   func funcThatThrows() throws -> Double {
-    // TODO: Swift functions can not throw yet! Errors are not propagated up to C++.
-    // throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
-    return 55
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing seven lambs!")
+  }
+
+  func funcThatThrowsBeforePromise() throws -> Promise<Void> {
+    throw RuntimeError.error(withMessage: "This function will only work after sacrificing eight lambs!")
+  }
+
+  func throwError(error: Error) throws -> Void {
+    throw error
   }
 
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String {
@@ -165,6 +194,24 @@ class HybridTestObjectSwift : HybridTestObjectSwiftKotlinSpec {
   func promiseThrows() throws -> Promise<Void> {
     return Promise.async {
       throw RuntimeError.error(withMessage: "Promise throws :)")
+    }
+  }
+
+  func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
+  func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car> {
+    return .async {
+      let result = try await promise.await()
+      return result
+    }
+  }
+  func awaitPromise(promise: Promise<Void>) throws -> Promise<Void> {
+    return .async {
+      try await promise.await()
     }
   }
 

@@ -11,6 +11,8 @@
 namespace margelo::nitro::image { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::image { enum class Powertrain; }
+// Forward declaration of `OldEnum` to properly resolve imports.
+namespace margelo::nitro::image { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::image { struct Person; }
 // Forward declaration of `AnyMap` to properly resolve imports.
@@ -33,26 +35,33 @@ namespace margelo::nitro::image { class HybridBaseSpec; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "JPowertrain.hpp"
+#include "OldEnum.hpp"
+#include "JOldEnum.hpp"
 #include <variant>
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "JPerson.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <future>
+#include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include "Car.hpp"
 #include "JCar.hpp"
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
+#include <NitroModules/JUnit.hpp>
 #include "HybridChildSpec.hpp"
 #include "JHybridChildSpec.hpp"
 #include "HybridBaseSpec.hpp"
 #include "JHybridBaseSpec.hpp"
 #include <functional>
 #include "JFunc_void_std__vector_Powertrain_.hpp"
+#include <exception>
 #include "JFunc_void.hpp"
 #include "JFunc_void_std__optional_double_.hpp"
+#include "JFunc_std__shared_ptr_Promise_double__.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "JFunc_void_std__string.hpp"
 
 namespace margelo::nitro::image {
 
@@ -183,6 +192,15 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalEnum(std::optional<Powertrain> optionalEnum) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JPowertrain> /* optionalEnum */)>("setOptionalEnum");
     method(_javaPart, optionalEnum.has_value() ? JPowertrain::fromCpp(optionalEnum.value()) : nullptr);
+  }
+  std::optional<OldEnum> JHybridTestObjectSwiftKotlinSpec::getOptionalOldEnum() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JOldEnum>()>("getOptionalOldEnum");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JOldEnum> /* optionalOldEnum */)>("setOptionalOldEnum");
+    method(_javaPart, optionalOldEnum.has_value() ? JOldEnum::fromCpp(optionalOldEnum.value()) : nullptr);
   }
   std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");
@@ -326,6 +344,25 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart);
     return __result;
   }
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::funcThatThrowsBeforePromise() {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("funcThatThrowsBeforePromise");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  void JHybridTestObjectSwiftKotlinSpec::throwError(const std::exception_ptr& error) {
+    static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JThrowable> /* error */)>("throwError");
+    method(_javaPart, jni::getJavaExceptionForCppException(error));
+  }
   std::string JHybridTestObjectSwiftKotlinSpec::tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<jni::JString>(double /* num */, jboolean /* boo */, jni::alias_ref<jni::JString> /* str */)>("tryOptionalParams");
     auto __result = method(_javaPart, num, boo, str.has_value() ? jni::make_jstring(str.value()) : nullptr);
@@ -346,50 +383,130 @@ namespace margelo::nitro::image {
     auto __result = method(_javaPart, value);
     return __result;
   }
-  std::future<int64_t> JHybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync(double value) {
+  std::shared_ptr<Promise<int64_t>> JHybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync(double value) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* value */)>("calculateFibonacciAsync");
     auto __result = method(_javaPart, value);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<int64_t>>();
+      auto __promise = Promise<int64_t>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<jni::JLong>(__boxedResult);
-        __promise->set_value(__result->value());
+        __promise->resolve(__result->value());
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
-  std::future<void> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::wait(double seconds) {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(double /* seconds */)>("wait");
     auto __result = method(_javaPart, seconds);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<void>>();
+      auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        __promise->set_value();
+        __promise->resolve();
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
-  std::future<void> JHybridTestObjectSwiftKotlinSpec::promiseThrows() {
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::promiseThrows() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("promiseThrows");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<void>>();
+      auto __promise = Promise<void>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        __promise->set_value();
+        __promise->resolve();
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
-      return __promise->get_future();
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitAndGetPromise");
+    auto __result = method(_javaPart, [&]() {
+      jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+      jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+      promise->addOnResolvedListener([=](const double& __result) {
+        __promise->cthis()->resolve(jni::JDouble::valueOf(__result));
+      });
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
+        auto __jniError = jni::getJavaExceptionForCppException(__error);
+        __promise->cthis()->reject(__jniError);
+      });
+      return __localPromise;
+    }());
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<Car>> JHybridTestObjectSwiftKotlinSpec::awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitAndGetComplexPromise");
+    auto __result = method(_javaPart, [&]() {
+      jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+      jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+      promise->addOnResolvedListener([=](const Car& __result) {
+        __promise->cthis()->resolve(JCar::fromCpp(__result));
+      });
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
+        auto __jniError = jni::getJavaExceptionForCppException(__error);
+        __promise->cthis()->reject(__jniError);
+      });
+      return __localPromise;
+    }());
+    return [&]() {
+      auto __promise = Promise<Car>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JCar>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::awaitPromise(const std::shared_ptr<Promise<void>>& promise) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JPromise::javaobject> /* promise */)>("awaitPromise");
+    auto __result = method(_javaPart, [&]() {
+      jni::local_ref<JPromise::javaobject> __localPromise = JPromise::create();
+      jni::global_ref<JPromise::javaobject> __promise = jni::make_global(__localPromise);
+      promise->addOnResolvedListener([=]() {
+        __promise->cthis()->resolve(JUnit::instance());
+      });
+      promise->addOnRejectedListener([=](const std::exception_ptr& __error) {
+        auto __jniError = jni::getJavaExceptionForCppException(__error);
+        __promise->cthis()->reject(__jniError);
+      });
+      return __localPromise;
+    }());
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
     }();
   }
   void JHybridTestObjectSwiftKotlinSpec::callCallback(const std::function<void()>& callback) {
@@ -403,6 +520,53 @@ namespace margelo::nitro::image {
   void JHybridTestObjectSwiftKotlinSpec::callWithOptional(std::optional<double> value, const std::function<void(std::optional<double> /* maybe */)>& callback) {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<jni::JDouble> /* value */, jni::alias_ref<JFunc_void_std__optional_double_::javaobject> /* callback */)>("callWithOptional");
     method(_javaPart, value.has_value() ? jni::JDouble::valueOf(value.value()) : nullptr, JFunc_void_std__optional_double_::fromCpp(callback));
+  }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::callSumUpNTimes(const std::function<std::shared_ptr<Promise<double>>()>& callback, double n) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* callback */, double /* n */)>("callSumUpNTimes");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(callback), n);
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<double>> JHybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_double__::javaobject> /* getValue */)>("getValueFromJSCallbackAndWait");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_double__::fromCpp(getValue));
+    return [&]() {
+      auto __promise = Promise<double>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<jni::JDouble>(__boxedResult);
+        __promise->resolve(__result->value());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<void>> JHybridTestObjectSwiftKotlinSpec::getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) {
+    static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>(jni::alias_ref<JFunc_std__shared_ptr_Promise_std__string__::javaobject> /* callback */, jni::alias_ref<JFunc_void_std__string::javaobject> /* andThenCall */)>("getValueFromJsCallback");
+    auto __result = method(_javaPart, JFunc_std__shared_ptr_Promise_std__string__::fromCpp(callback), JFunc_void_std__string::fromCpp(andThenCall));
+    return [&]() {
+      auto __promise = Promise<void>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        __promise->resolve();
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
   }
   Car JHybridTestObjectSwiftKotlinSpec::getCar() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JCar>()>("getCar");
@@ -433,20 +597,20 @@ namespace margelo::nitro::image {
     static const auto method = _javaPart->getClass()->getMethod<void(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */, double /* value */)>("setAllValuesTo");
     method(_javaPart, JArrayBuffer::wrap(buffer), value);
   }
-  std::future<std::shared_ptr<ArrayBuffer>> JHybridTestObjectSwiftKotlinSpec::createArrayBufferAsync() {
+  std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> JHybridTestObjectSwiftKotlinSpec::createArrayBufferAsync() {
     static const auto method = _javaPart->getClass()->getMethod<jni::local_ref<JPromise::javaobject>()>("createArrayBufferAsync");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = std::make_shared<std::promise<std::shared_ptr<ArrayBuffer>>>();
+      auto __promise = Promise<std::shared_ptr<ArrayBuffer>>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
         auto __result = jni::static_ref_cast<JArrayBuffer::javaobject>(__boxedResult);
-        __promise->set_value(__result->cthis()->getArrayBuffer());
+        __promise->resolve(__result->cthis()->getArrayBuffer());
       });
-      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JString>& __message) {
-        std::runtime_error __error(__message->toStdString());
-        __promise->set_exception(std::make_exception_ptr(__error));
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
       });
-      return __promise->get_future();
+      return __promise;
     }();
   }
   std::shared_ptr<margelo::nitro::image::HybridChildSpec> JHybridTestObjectSwiftKotlinSpec::createChild() {

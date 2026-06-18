@@ -8,26 +8,8 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the TestObjectSwiftKotlin HybridObject.
- * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
- */
-public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
+/// See ``HybridTestObjectSwiftKotlinSpec``
+public protocol HybridTestObjectSwiftKotlinSpec_protocol: AnyObject {
   // Properties
   var thisObject: (any HybridTestObjectSwiftKotlinSpec) { get }
   var optionalHybrid: (any HybridTestObjectSwiftKotlinSpec)? { get set }
@@ -40,6 +22,7 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   var optionalString: String? { get set }
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
+  var optionalOldEnum: OldEnum? { get set }
   var someVariant: Variant_String_Double { get set }
 
   // Methods
@@ -56,6 +39,8 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func createMap() throws -> AnyMapHolder
   func mapRoundtrip(map: AnyMapHolder) throws -> AnyMapHolder
   func funcThatThrows() throws -> Double
+  func funcThatThrowsBeforePromise() throws -> Promise<Void>
+  func throwError(error: Error) throws -> Void
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
@@ -63,9 +48,15 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func calculateFibonacciAsync(value: Double) throws -> Promise<Int64>
   func wait(seconds: Double) throws -> Promise<Void>
   func promiseThrows() throws -> Promise<Void>
+  func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double>
+  func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
+  func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>
   func callCallback(callback: @escaping (() -> Void)) throws -> Void
   func callAll(first: @escaping (() -> Void), second: @escaping (() -> Void), third: @escaping (() -> Void)) throws -> Void
   func callWithOptional(value: Double?, callback: @escaping ((_ maybe: Double?) -> Void)) throws -> Void
+  func callSumUpNTimes(callback: @escaping (() -> Promise<Double>), n: Double) throws -> Promise<Double>
+  func getValueFromJSCallbackAndWait(getValue: @escaping (() -> Promise<Double>)) throws -> Promise<Double>
+  func getValueFromJsCallback(callback: @escaping (() -> Promise<String>), andThenCall: @escaping ((_ valueFromJs: String) -> Void)) throws -> Promise<Void>
   func getCar() throws -> Car
   func isCarElectric(car: Car) throws -> Bool
   func getDriver(car: Car) throws -> Person?
@@ -81,3 +72,34 @@ public protocol HybridTestObjectSwiftKotlinSpec: AnyObject, HybridObjectSpec {
   func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
 }
+
+/// See ``HybridTestObjectSwiftKotlinSpec``
+public class HybridTestObjectSwiftKotlinSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridTestObjectSwiftKotlinSpec_cxx? = nil
+  public func getCxxWrapper() -> HybridTestObjectSwiftKotlinSpec_cxx {
+  #if DEBUG
+    guard self is HybridTestObjectSwiftKotlinSpec else {
+      fatalError("`self` is not a `HybridTestObjectSwiftKotlinSpec`! Did you accidentally inherit from `HybridTestObjectSwiftKotlinSpec_base` instead of `HybridTestObjectSwiftKotlinSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridTestObjectSwiftKotlinSpec_cxx(self as! HybridTestObjectSwiftKotlinSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
+  public var memorySize: Int { return 0 }
+}
+
+/**
+ * A Swift base-protocol representing the TestObjectSwiftKotlin HybridObject.
+ * Implement this protocol to create Swift-based instances of TestObjectSwiftKotlin.
+ * ```swift
+ * class HybridTestObjectSwiftKotlin : HybridTestObjectSwiftKotlinSpec {
+ *   // ...
+ * }
+ * ```
+ */
+public typealias HybridTestObjectSwiftKotlinSpec = HybridTestObjectSwiftKotlinSpec_protocol & HybridTestObjectSwiftKotlinSpec_base

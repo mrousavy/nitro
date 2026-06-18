@@ -27,6 +27,9 @@ import {
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
 import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
+import { VoidType } from '../types/VoidType.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
+import { ErrorType } from '../types/ErrorType.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -92,10 +95,16 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
         return true
       case 'promise':
-        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        // Promise<T> <> std::shared_ptr<Promise<T>>
+        return true
+      case 'error':
+        // Error <> std.exception_ptr
         return true
       case 'map':
         // AnyMapHolder <> AnyMap
+        return true
+      case 'result-wrapper':
+        // Result<T> <> T
         return true
       default:
         return false
@@ -128,12 +137,6 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           'ArrayBufferHolder',
           'NitroModules'
         ),
-        language: 'c++',
-        space: 'system',
-      })
-    } else if (this.type.kind === 'promise') {
-      imports.push({
-        name: 'NitroModules/PromiseHolder.hpp',
         language: 'c++',
         space: 'system',
       })
@@ -223,6 +226,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'variant':
       case 'tuple':
       case 'record':
+      case 'result-wrapper':
       case 'promise': {
         const bridge = this.getBridgeOrThrow()
         switch (language) {
@@ -250,6 +254,15 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'std::exception_ptr'
+          case 'swift':
+            return 'std.exception_ptr'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -276,7 +289,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
+      case 'enum': {
         if (this.isBridgingToDirectCppTarget) {
           return cppParameterName
         }
@@ -293,6 +306,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
         const getFunc = `bridge.get_${bridge.specializationName}`
@@ -302,7 +316,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return `
 { () -> ${name.HybridTSpec} in
   let __unsafePointer = ${getFunc}(${cppParameterName})
-  let __instance = ${name.HybridTSpecCxx}Unsafe.fromUnsafe(__unsafePointer)
+  let __instance = ${name.HybridTSpecCxx}.fromUnsafe(__unsafePointer)
   return __instance.get${name.HybridTSpec}()
 }()`.trim()
           default:
@@ -328,9 +342,59 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       }
       case 'promise': {
+        const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
-          case 'c++':
-            return `[]() -> ${this.getTypeCode('c++')} { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }()`
+          case 'swift': {
+            if (promise.resultingType.kind === 'void') {
+              // It's void - resolve()
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              return `
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __resolver = SwiftClosure { __promise.resolve(withResult: ()) }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = __resolver.getFunctionCopy()
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  ${cppParameterName}.pointee.addOnResolvedListener(__resolverCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}()`.trim()
+            } else {
+              // It's resolving to a type - resolve(T)
+              const resolverFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('result', promise.resultingType),
+              ])
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const addResolverName = promise.resultingType
+                .canBePassedByReference
+                ? 'addOnResolvedListener'
+                : 'addOnResolvedListenerCopy'
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              return `
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) in
+    __promise.resolve(withResult: __result)
+  }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  ${cppParameterName}.pointee.${addResolverName}(__resolverCpp)
+  ${cppParameterName}.pointee.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}()`.trim()
+            }
+          }
           default:
             return cppParameterName
         }
@@ -340,6 +404,15 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
         switch (language) {
           case 'swift':
+            if (wrapping.type.kind === 'enum') {
+              const enumType = getTypeAs(wrapping.type, EnumType)
+              if (enumType.jsType === 'enum') {
+                // TODO: Remove this hack once Swift fixes this shit.
+                // A JS enum is implemented as a number/int based enum.
+                // For some reason, those break in Swift. I have no idea why.
+                return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
+              }
+            }
             if (!wrapping.needsSpecialHandling) {
               return `${cppParameterName}.value`
             }
@@ -471,7 +544,7 @@ case ${i}:
   let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
     let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
-    return ${indent(resultBridged.parseFromSwiftToCpp('__result', 'swift'), '  ')}
+    return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
             }
@@ -479,6 +552,13 @@ case ${i}:
             return cppParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `RuntimeError.from(cppError: ${cppParameterName})`
+          default:
+            return cppParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -507,15 +587,12 @@ case ${i}:
         }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
-        const name = getTypeHybridObjectName(this.type)
-        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
-  let __pointer = ${name.HybridTSpecCxx}Unsafe.toUnsafe(__cxxWrapped)
-  return ${makeFunc}(__pointer)
+  let __cxxWrapped = ${swiftParameterName}.getCxxWrapper()
+  return __cxxWrapped.getCxxPart()
 }()`.trim()
           default:
             return swiftParameterName
@@ -585,7 +662,7 @@ case ${i}:
         )
         switch (language) {
           case 'c++':
-            return `${swiftParameterName}.getFuture()`
+            return swiftParameterName
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
@@ -593,11 +670,11 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __promiseHolder = ${makePromise}()
+  let __promise = ${makePromise}()
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-  return __promiseHolder
+    .then({ __result in __promise.pointee.resolve(${arg}) })
+    .catch({ __error in __promise.pointee.reject(__error.toCpp()) })
+  return __promise
 }()`.trim()
           default:
             return swiftParameterName
@@ -703,7 +780,7 @@ case ${i}:
               .map((p) => `__${p.escapedName}`)
               .join(', ')
             const cFuncParamsSignature = [
-              '__closureHolder: UnsafeMutableRawPointer?',
+              '__closureHolder: UnsafeMutableRawPointer',
               ...func.parameters.map((p) => {
                 const bridged = new SwiftCxxBridgedType(p)
                 return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
@@ -712,7 +789,7 @@ case ${i}:
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  class ClosureHolder {
+  final class ClosureHolder {
     let closure: ${func.getCode('swift')}
     init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
       self.closure = closure
@@ -724,11 +801,11 @@ case ${i}:
 
   let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
   func __callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).takeUnretainedValue()
+    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).takeUnretainedValue()
     closure.invoke(${indent(cFuncParamsForward, '    ')})
   }
-  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer?) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).release()
+  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer) -> Void {
+    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder).release()
   }
 
   return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
@@ -739,6 +816,13 @@ case ${i}:
             return swiftParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.toCpp()`
+          default:
+            return swiftParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''

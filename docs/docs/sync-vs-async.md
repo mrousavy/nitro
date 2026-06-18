@@ -84,10 +84,10 @@ On the native side you still start out with a synchronous method, but you can re
   <TabItem value="c++" label="C++">
     ```cpp title="HybridMiner.hpp"
     class HybridMiner: public HybridMinerSpec {
-      std::future<double> mineOneBitcoin() override {
+      Promise<double> mineOneBitcoin() override {
         // 1. synchronous in here, JS Thread is still blocked
         //    useful e.g. for argument checking before starting async Thread
-        return std::async(std::launch::async, []() {
+        return Promise<double>::async([]() {
           // 2. asynchronous in here, JS Thread is now free
           return computeBitcoin();
         });

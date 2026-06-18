@@ -35,6 +35,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridSetter("optionalArray", &HybridTestObjectSwiftKotlinSpec::setOptionalArray);
       prototype.registerHybridGetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalEnum);
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalEnum);
+      prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalOldEnum);
+      prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalOldEnum);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);
@@ -50,6 +52,8 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSwiftKotlinSpec::funcThatThrows);
+      prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectSwiftKotlinSpec::funcThatThrowsBeforePromise);
+      prototype.registerHybridMethod("throwError", &HybridTestObjectSwiftKotlinSpec::throwError);
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectSwiftKotlinSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectSwiftKotlinSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectSwiftKotlinSpec::tryOptionalEnum);
@@ -57,9 +61,15 @@ namespace margelo::nitro::image {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectSwiftKotlinSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectSwiftKotlinSpec::wait);
       prototype.registerHybridMethod("promiseThrows", &HybridTestObjectSwiftKotlinSpec::promiseThrows);
+      prototype.registerHybridMethod("awaitAndGetPromise", &HybridTestObjectSwiftKotlinSpec::awaitAndGetPromise);
+      prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectSwiftKotlinSpec::awaitAndGetComplexPromise);
+      prototype.registerHybridMethod("awaitPromise", &HybridTestObjectSwiftKotlinSpec::awaitPromise);
       prototype.registerHybridMethod("callCallback", &HybridTestObjectSwiftKotlinSpec::callCallback);
       prototype.registerHybridMethod("callAll", &HybridTestObjectSwiftKotlinSpec::callAll);
       prototype.registerHybridMethod("callWithOptional", &HybridTestObjectSwiftKotlinSpec::callWithOptional);
+      prototype.registerHybridMethod("callSumUpNTimes", &HybridTestObjectSwiftKotlinSpec::callSumUpNTimes);
+      prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
+      prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
       prototype.registerHybridMethod("isCarElectric", &HybridTestObjectSwiftKotlinSpec::isCarElectric);
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);

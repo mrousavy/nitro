@@ -163,9 +163,8 @@ Now implement `NitroImageViewManager` in Swift and Kotlin, and assume it has to 
   <TabItem value="swift" label="iOS (Swift)" default>
     ```swift
     class HybridNitroImageViewManager: HybridNitroImageViewManagerSpec {
-      public var hybridContext = margelo.nitro.HybridContext()
-      public var memorySize: Int {
-        return getSizeOf(self)
+      public override var memorySize: Int {
+        return 0
       }
       private var nitroId: Double? = nil
       private var view: NitroImageView? {

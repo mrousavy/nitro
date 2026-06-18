@@ -29,7 +29,7 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
-    const hybridObject = new HybridObjectType(base.name, spec.language)
+    const hybridObject = new HybridObjectType(base)
     bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
     const imports = hybridObject.getRequiredImports()
     cppForwardDeclarations.push(

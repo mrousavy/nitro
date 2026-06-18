@@ -102,12 +102,6 @@ These are all the types Nitro supports out of the box:
     <td><code>Variant_A_B_C</code></td>
   </tr>
   <tr>
-    <td><code>Promise&lt;T&gt;</code></td>
-    <td><code>std::future&lt;T&gt;</code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
-    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
-  </tr>
-  <tr>
     <td><code>(T...) =&gt; void</code></td>
     <td><code>std::function&lt;void (T...)&gt;</code></td>
     <td><code>@escaping (T...) -&gt; Void</code></td>
@@ -115,15 +109,27 @@ These are all the types Nitro supports out of the box:
   </tr>
   <tr>
     <td><code>(T...) =&gt; R</code></td>
-    <td><code>std::function&lt;std::future&lt;R&gt; (T...)&gt;</code></td>
-    <td>❌</td>
-    <td>❌</td>
+    <td><code>std::function&lt;std::shared_ptr&lt;Promise&lt;R&gt;&gt; (T...)&gt;</code></td>
+    <td><code>@escaping (T...) -&gt; <a href="./ios/core/Promise.swift">Promise&lt;R&gt;</a></code></td>
+    <td><code>(T...) -&gt; <a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;R&gt;</a></code></td>
   </tr>
   <tr>
     <td><code>Record&lt;string, T&gt;</code></td>
     <td><code>std::unordered_map&lt;std::string, T&gt;</code></td>
     <td><code>Dictionary&lt;String, T&gt;</code></td>
     <td><code>Map&lt;String, T&gt;</code></td>
+  </tr>
+  <tr>
+    <td><code>Error</code></td>
+    <td><code>std::exception_ptr</code></td>
+    <td><code>Error</code></td>
+    <td><code>Throwable</code></td>
+  </tr>
+  <tr>
+    <td><code>Promise&lt;T&gt;</code></td>
+    <td><code>std::shared_ptr&lt;<a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp">Promise&lt;T&gt;</a>&gt;</code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
+    <td><code><a href="https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
     <td><code>object</code></td>

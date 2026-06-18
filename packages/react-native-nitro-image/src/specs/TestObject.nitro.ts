@@ -50,6 +50,7 @@ interface SharedTestObjectProps {
   optionalString?: string
   optionalArray?: string[]
   optionalEnum?: Powertrain
+  optionalOldEnum?: OldEnum
 
   // Basic function tests
   simpleFunc(): void
@@ -73,6 +74,8 @@ interface SharedTestObjectProps {
 
   // Errors
   funcThatThrows(): number
+  funcThatThrowsBeforePromise(): Promise<void>
+  throwError(error: Error): void
 
   // Optional parameters
   tryOptionalParams(num: number, boo: boolean, str?: string): string
@@ -88,6 +91,11 @@ interface SharedTestObjectProps {
   wait(seconds: number): Promise<void>
   promiseThrows(): Promise<void>
 
+  // Complex Promises
+  awaitAndGetPromise(promise: Promise<number>): Promise<number>
+  awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car>
+  awaitPromise(promise: Promise<void>): Promise<void>
+
   // Callbacks
   callCallback(callback: () => void): void
   callAll(first: () => void, second: () => void, third: () => void): void
@@ -95,6 +103,14 @@ interface SharedTestObjectProps {
     value: number | undefined,
     callback: (maybe: number | undefined) => void
   ): void
+  callSumUpNTimes(callback: () => number, n: number): Promise<number>
+
+  // Callbacks that return values
+  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
+  getValueFromJsCallback(
+    callback: () => string,
+    andThenCall: (valueFromJs: string) => void
+  ): Promise<void>
 
   // Objects
   getCar(): Car
@@ -138,13 +154,6 @@ export interface TestObjectCpp
   someTuple: [number, string]
   flip(tuple: Float3): Float3
   passTuple(tuple: TestTuple): [number, string, boolean]
-
-  // Callbacks that return values
-  getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
-  getValueFromJsCallback(
-    callback: () => string,
-    andThenCall: (valueFromJs: string) => void
-  ): Promise<void>
 
   // Other HybridObjects
   readonly thisObject: TestObjectCpp

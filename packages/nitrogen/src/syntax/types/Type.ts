@@ -7,6 +7,7 @@ export type TypeKind =
   | 'bigint'
   | 'boolean'
   | 'enum'
+  | 'error'
   | 'function'
   | 'hybrid-object'
   | 'hybrid-object-base'
@@ -20,6 +21,7 @@ export type TypeKind =
   | 'struct'
   | 'tuple'
   | 'variant'
+  | 'result-wrapper'
   | 'void'
 
 /**

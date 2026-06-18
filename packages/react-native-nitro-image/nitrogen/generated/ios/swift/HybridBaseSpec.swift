@@ -8,29 +8,42 @@
 import Foundation
 import NitroModules
 
-/**
- * A Swift protocol representing the Base HybridObject.
- * Implement this protocol to create Swift-based instances of Base.
- *
- * When implementing this protocol, make sure to initialize `hybridContext` - example:
- * ```
- * public class HybridBase : HybridBaseSpec {
- *   // Initialize HybridContext
- *   var hybridContext = margelo.nitro.HybridContext()
- *
- *   // Return size of the instance to inform JS GC about memory pressure
- *   var memorySize: Int {
- *     return getSizeOf(self)
- *   }
- *
- *   // ...
- * }
- * ```
- */
-public protocol HybridBaseSpec: AnyObject, HybridObjectSpec {
+/// See ``HybridBaseSpec``
+public protocol HybridBaseSpec_protocol: AnyObject {
   // Properties
   var baseValue: Double { get }
 
   // Methods
   
 }
+
+/// See ``HybridBaseSpec``
+public class HybridBaseSpec_base: HybridObjectSpec {
+  private weak var cxxWrapper: HybridBaseSpec_cxx? = nil
+  public func getCxxWrapper() -> HybridBaseSpec_cxx {
+  #if DEBUG
+    guard self is HybridBaseSpec else {
+      fatalError("`self` is not a `HybridBaseSpec`! Did you accidentally inherit from `HybridBaseSpec_base` instead of `HybridBaseSpec`?")
+    }
+  #endif
+    if let cxxWrapper = self.cxxWrapper {
+      return cxxWrapper
+    } else {
+      let cxxWrapper = HybridBaseSpec_cxx(self as! HybridBaseSpec)
+      self.cxxWrapper = cxxWrapper
+      return cxxWrapper
+    }
+  }
+  public var memorySize: Int { return 0 }
+}
+
+/**
+ * A Swift base-protocol representing the Base HybridObject.
+ * Implement this protocol to create Swift-based instances of Base.
+ * ```swift
+ * class HybridBase : HybridBaseSpec {
+ *   // ...
+ * }
+ * ```
+ */
+public typealias HybridBaseSpec = HybridBaseSpec_protocol & HybridBaseSpec_base

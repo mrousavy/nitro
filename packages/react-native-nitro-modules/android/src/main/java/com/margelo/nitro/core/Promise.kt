@@ -5,9 +5,11 @@ import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Represents a Promise that can be passed to JS.
@@ -23,17 +25,26 @@ import kotlin.concurrent.thread
 @Keep
 @DoNotStrip
 class Promise<T> {
+  @Keep
+  @DoNotStrip
   private val mHybridData: HybridData
 
   /**
    * Creates a new Promise with fully manual control over the `resolve(..)`/`reject(..)` functions
    */
-  init {
+  constructor() {
     mHybridData = initHybrid()
   }
 
+  @Suppress("unused")
+  @Keep
+  @DoNotStrip
+  private constructor(hybridData: HybridData) {
+    mHybridData = hybridData
+  }
+
   /**
-   * Resolves the Promise with the given result.
+   * Resolves the Promise with the given [result].
    * Any `onResolved` listeners will be invoked.
    */
   fun resolve(result: T) {
@@ -41,17 +52,72 @@ class Promise<T> {
   }
 
   /**
-   * Rejects the Promise with the given error.
+   * Rejects the Promise with the given [error].
    * Any `onRejected` listeners will be invoked.
    */
   fun reject(error: Throwable) {
-    nativeReject(error.toString())
+    nativeReject(error)
+  }
+
+  /**
+   * Add a continuation listener to this `Promise<T>`.
+   * Once the `Promise<T>` resolves, the [listener] will be called.
+   */
+  fun then(listener: (result: T) -> Unit): Promise<T> {
+    addOnResolvedListener { boxedResult ->
+      @Suppress("UNCHECKED_CAST")
+      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
+      listener(result)
+    }
+    return this
+  }
+
+  /**
+   * Add an error continuation listener to this `Promise<T>`.
+   * Once the `Promise<T>` rejects, the [listener] will be called with the error.
+   */
+  fun catch(listener: (throwable: Throwable) -> Unit): Promise<T> {
+    addOnRejectedListener(listener)
+    return this
+  }
+
+  /**
+   * Asynchronously await the result of the Promise.
+   * If the Promise is already resolved/rejected, this will continue immediately,
+   * otherwise it will asynchronously wait for a result or throw on a rejection.
+   * This function can only be used from a coroutine context.
+   */
+  suspend fun await(): T {
+    return suspendCoroutine { continuation ->
+      then { result -> continuation.resume(result) }
+      catch { error -> continuation.resumeWithException(error) }
+    }
   }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
-  private external fun nativeReject(error: String)
+  private external fun nativeReject(error: Throwable)
+  private external fun addOnResolvedListener(callback: OnResolvedCallback)
+  private external fun addOnRejectedListener(callback: OnRejectedCallback)
   private external fun initHybrid(): HybridData
+
+  // Nested callbacks - need to be JavaClasses so we can access them with JNI
+  @Keep
+  @DoNotStrip
+  private fun interface OnResolvedCallback {
+    @Suppress("unused")
+    @Keep
+    @DoNotStrip
+    fun onResolved(result: Any)
+  }
+  @Keep
+  @DoNotStrip
+  private fun interface OnRejectedCallback {
+    @Suppress("unused")
+    @Keep
+    @DoNotStrip
+    fun onRejected(error: Throwable)
+  }
 
   companion object {
     private val defaultScope = CoroutineScope(Dispatchers.Default)

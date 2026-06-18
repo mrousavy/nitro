@@ -27,6 +27,7 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
     override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
     override var optionalArray: Array<String>? = null
     override var optionalEnum: Powertrain? = null
+    override var optionalOldEnum: OldEnum? = null
 
     override fun simpleFunc() {
         // do nothing
@@ -92,6 +93,14 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         throw Error("This function will only work after sacrificing seven lambs!")
     }
 
+    override fun funcThatThrowsBeforePromise(): Promise<Unit> {
+        throw Error("This function will only work after sacrificing eight lambs!")
+    }
+
+    override fun throwError(error: Throwable): Unit {
+        throw error
+    }
+
     override fun tryOptionalParams(num: Double, boo: Boolean, str: String?): String {
         return str ?: "value omitted!"
     }
@@ -134,6 +143,26 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         }
     }
 
+    override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitAndGetComplexPromise(promise: Promise<Car>): Promise<Car> {
+        return Promise.async {
+            val result = promise.await()
+            return@async result
+        }
+    }
+
+    override fun awaitPromise(promise: Promise<Unit>): Promise<Unit> {
+        return Promise.async {
+            promise.await()
+        }
+    }
+
     override fun callCallback(callback: () -> Unit) {
         callback()
     }
@@ -142,10 +171,35 @@ class HybridTestObjectKotlin: HybridTestObjectSwiftKotlinSpec() {
         callback(value)
     }
 
+    override fun getValueFromJSCallbackAndWait(getValue: (() -> Promise<Double>)): Promise<Double> {
+        return Promise.async {
+            val jsResult = getValue().await()
+            return@async jsResult
+        }
+    }
+
+    override fun getValueFromJsCallback(callback: (() -> Promise<String>), andThenCall: ((valueFromJs: String) -> Unit)): Promise<Unit> {
+        return Promise.async {
+            val jsResult = callback().await()
+            andThenCall(jsResult)
+        }
+    }
+
     override fun callAll(first: () -> Unit, second: () -> Unit, third: () -> Unit) {
         first()
         second()
         third()
+    }
+
+    override fun callSumUpNTimes(callback: () -> Promise<Double>, n: Double): Promise<Double> {
+        var result = 0.0
+        return Promise.async {
+            for (i in 1..n.toInt()) {
+                val current = callback().await()
+                result += current
+            }
+            return@async result
+        }
     }
 
     override fun getCar(): Car {
