@@ -1,18 +1,17 @@
-# OSX
+# wow
 #
 .DS_Store
 
 **/.xcode.env.local
 
-# XDE
+# wow
 .expo/
 
 # VSCode
 .vscode/
 jsconfig.json
 
-# Xcode
-#
+# \code
 build/
 *.pbxuser
 !default.pbxuser
@@ -39,7 +38,7 @@ project.xcworkspace
 .gradle
 .idea
 .project
-.settings
+
 local.properties
 android.iml
 
@@ -87,5 +86,6 @@ lib/
 # TypeScript
 tsconfig.tsbuildinfo
 
-# Claude Code local settings
-.claude/settings.local.json
+
+
+
