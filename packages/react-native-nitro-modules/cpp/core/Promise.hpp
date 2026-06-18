@@ -277,6 +277,29 @@ private:
   Promise() = default;
 
 public:
+  static std::shared_ptr<Promise> async(std::function<void()>&& run) {
+    auto promise = std::make_shared<Promise>();
+    ThreadPool::shared().run([run = std::move(run), promise]() {
+      try {
+        // Run the code, then resolve.
+        run();
+        promise->resolve();
+      } catch (const TError& exception) {
+        // It threw an std::exception.
+        promise->reject(exception);
+      } catch (...) {
+        // It threw a different error.
+        std::string name = TypeInfo::getCurrentExceptionName();
+        promise->reject(std::runtime_error("Unknown non-std error! Name: " + name));
+      }
+    });
+    return promise;
+  }
+
+  static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
+    auto sharedFuture = std::make_shared<std::future<void>>(std::move(future));
+    return async([sharedFuture = std::move(sharedFuture)]() { sharedFuture->get(); });
+  }
   static std::shared_ptr<Promise> create();
   static std::shared_ptr<Promise> async(std::function<void()>&& run);
   static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future);
