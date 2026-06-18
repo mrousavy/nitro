@@ -14,6 +14,7 @@ struct JSIConverter;
 
 #include "AnyMap.hpp"
 #include "JSIHelpers.hpp"
+#include "PropNameIDCache.hpp"
 #include <jsi/jsi.h>
 #include <unordered_map>
 
@@ -33,7 +34,7 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
     map.reserve(length);
     for (size_t i = 0; i < length; ++i) {
       std::string key = propertyNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
-      jsi::Value value = object.getProperty(runtime, key.c_str());
+      jsi::Value value = object.getProperty(runtime, PropNameIDCache::get(runtime, key));
       map.emplace(key, JSIConverter<ValueType>::fromJSI(runtime, value));
     }
     return map;
@@ -55,11 +56,13 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
     if (!isPlainObject(runtime, object)) {
       return false;
     }
-    jsi::Array properties = object.getPropertyNames(runtime);
-    size_t size = properties.size(runtime);
+
+    jsi::Array propNames = object.getPropertyNames(runtime);
+    size_t size = propNames.size(runtime);
     for (size_t i = 0; i < size; i++) {
-      bool canConvertProp = JSIConverter<ValueType>::canConvert(runtime, properties.getValueAtIndex(runtime, i));
-      if (!canConvertProp) {
+      std::string key = propNames.getValueAtIndex(runtime, i).asString(runtime).utf8(runtime);
+      jsi::Value propValue = object.getProperty(runtime, PropNameIDCache::get(runtime, key));
+      if (!JSIConverter<ValueType>::canConvert(runtime, propValue)) {
         return false;
       }
     }

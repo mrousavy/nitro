@@ -1,40 +1,43 @@
 import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import type { FileWithReferencedTypes } from '../SourceFile.js'
 import { StructType } from '../types/StructType.js'
 import { SwiftCxxBridgedType } from './SwiftCxxBridgedType.js'
-import { BRIDGE_NAMESPACE } from './SwiftHybridObjectBridge.js'
 
 export function createSwiftStructBridge(
   struct: StructType
 ): FileWithReferencedTypes {
-  const fullName = NitroConfig.getCxxNamespace('swift', struct.structName)
+  const fullName = NitroConfig.current.getCxxNamespace(
+    'swift',
+    struct.structName
+  )
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
   const init = createSwiftBridgedConstructor(struct)
   const bridgedProps = struct.properties
     .map((p) => {
       const bridge = new SwiftCxxBridgedType(p, true)
       const cppName = `self.__${p.escapedName}`
       return `
+@inline(__always)
 var ${p.escapedName}: ${p.getCode('swift')} {
-  @inline(__always)
-  get {
-    return ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '    ')}
-  }
-  @inline(__always)
-  set {
-    ${cppName} = ${indent(bridge.parseFromSwiftToCpp('newValue', 'swift'), '    ')}
-  }
+  return ${indent(bridge.parseFromCppToSwift(cppName, 'swift'), '  ')}
 }
     `.trim()
     })
     .join('\n\n')
 
+  const requiredImports = struct.properties
+    .flatMap((p) => p.getRequiredImports('swift'))
+    .map((i) => `import ${i.name}`)
+  requiredImports.push('import NitroModules')
+  const imports = requiredImports.filter(isNotDuplicate)
+
   const code = `
 ${createFileMetadataString(`${struct.structName}.swift`)}
 
-import NitroModules
+${imports.join('\n')}
 
 /**
  * Represents an instance of \`${struct.structName}\`, backed by a C++ struct.
@@ -42,7 +45,7 @@ import NitroModules
 public typealias ${struct.structName} = ${fullName}
 
 public extension ${struct.structName} {
-  private typealias bridge = ${BRIDGE_NAMESPACE}
+  private typealias bridge = ${bridgeNamespace}
 
   ${indent(init, '  ')}
 

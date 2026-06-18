@@ -15,6 +15,7 @@ interface Props {
 
 interface JNIHybridObjectRegistration {
   cppCode: string
+  cppDefinition: string
   requiredImports: SourceImport[]
 }
 
@@ -23,30 +24,35 @@ export function createJNIHybridObjectRegistration({
   jniClassName,
 }: Props): JNIHybridObjectRegistration {
   const { JHybridTSpec } = getHybridObjectName(hybridObjectName)
-  const jniNamespace = NitroConfig.getAndroidPackage('c++/jni', jniClassName)
+  const jniNamespace = NitroConfig.current.getAndroidPackage(
+    'c++/jni',
+    jniClassName
+  )
 
   return {
     requiredImports: [
       { name: `${JHybridTSpec}.hpp`, language: 'c++', space: 'user' },
-      {
-        name: 'NitroModules/JNISharedPtr.hpp',
-        language: 'c++',
-        space: 'system',
-      },
       {
         name: 'NitroModules/DefaultConstructableObject.hpp',
         language: 'c++',
         space: 'system',
       },
     ],
+    cppDefinition: `
+struct ${JHybridTSpec}Impl: public jni::JavaClass<${JHybridTSpec}Impl, ${JHybridTSpec}::JavaPart> {
+  static constexpr auto kJavaDescriptor = "L${jniNamespace};";
+  static std::shared_ptr<${JHybridTSpec}> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<${JHybridTSpec}Impl::javaobject()>();
+    jni::local_ref<${JHybridTSpec}::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->get${JHybridTSpec}();
+  }
+};
+    `.trim(),
     cppCode: `
 HybridObjectRegistry::registerHybridObjectConstructor(
   "${hybridObjectName}",
   []() -> std::shared_ptr<HybridObject> {
-    static DefaultConstructableObject<${JHybridTSpec}::javaobject> object("${jniNamespace}");
-    auto instance = object.create();
-    auto globalRef = jni::make_global(instance);
-    return JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(globalRef);
+    return ${JHybridTSpec}Impl::create();
   }
 );
       `.trim(),

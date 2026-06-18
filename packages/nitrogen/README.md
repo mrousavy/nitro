@@ -1,4 +1,4 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com/docs/concepts/nitrogen">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-nitrogen-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-nitrogen-light.png" />
@@ -12,15 +12,17 @@
 
 ## Installation
 
-Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your react-native library:
+Install [nitrogen](https://npmjs.org/nitrogen) as a `devDependency` in your Nitro Module:
 ```sh
-npm i nitro-codegen -D
+npm i nitrogen -D
 ```
-> [!WARNING]
-> Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
 
+Then, generate your specs;
 
+```sh
+npx nitrogen
+```
 
 ## Usage
 
-See the [Nitrogen documentation](https://nitro.margelo.com/docs/nitrogen) for more information.
+See the [Nitrogen documentation](https://nitro.margelo.com/docs/concepts/nitrogen) for more information.

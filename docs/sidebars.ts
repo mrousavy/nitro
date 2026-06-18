@@ -1,4 +1,4 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
 /**
  * Creating a sidebar enables you to:
@@ -12,43 +12,76 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
  */
 const sidebars: SidebarsConfig = {
   docs: [
-    'what-is-nitro',
-    'nitro-modules',
-    'hybrid-objects',
-    'nitrogen',
-    'minimum-requirements',
-    'using-nitro-in-your-app',
-    'using-nitro-in-a-library',
-    'configuration-nitro-json',
-    'sync-vs-async',
+    {
+      type: 'category',
+      label: 'Getting started',
+      items: [
+        'getting-started/what-is-nitro',
+        'getting-started/how-to-build-a-nitro-module',
+        'getting-started/configuration-nitro-json',
+        'getting-started/minimum-requirements',
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: [
+        'concepts/nitro-modules',
+        'concepts/hybrid-objects',
+        'concepts/hybrid-views',
+        'concepts/nitrogen',
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      items: [
+        'guides/errors',
+        'guides/performance-tips',
+        'guides/worklets',
+        'guides/android-context',
+        'guides/entry-point',
+        'guides/sync-vs-async',
+        'guides/view-components',
+        'guides/troubleshooting',
+        'guides/running-example-app',
+      ]
+    },
     {
       type: 'category',
       label: 'Types',
       items: [
-        'types/types',
+        'types/typing-system',
         'types/primitives',
+        'types/strings',
         'types/arrays',
+        'types/array-buffers',
         'types/optionals',
-        'types/tuples',
-        'types/variants',
+        'types/nulls',
         'types/promises',
         'types/callbacks',
+        'types/tuples',
+        'types/variants',
+        'types/dates',
         'types/typed-maps',
         'types/untyped-maps',
-        'types/array-buffers',
         'types/hybrid-objects',
+        'types/custom-structs',
+        'types/custom-enums',
         'types/custom-types',
+        'types/raw-jsi-value',
       ],
     },
-    'errors',
-    'performance-tips',
-    'view-components',
-    'worklets',
-    'entry-point',
-    'comparison',
-    'for-users',
-    'troubleshooting',
-    'contributing',
+    {
+      type: 'category',
+      label: 'Resources',
+      items: [
+        'resources/awesome-nitro-modules',
+        'resources/comparison',
+        'resources/for-library-users',
+        'resources/contributing',
+      ]
+    },
   ],
 };
 

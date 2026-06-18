@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class ArrayType implements Type {
   readonly itemType: Type
@@ -17,9 +17,12 @@ export class ArrayType implements Type {
   get kind(): TypeKind {
     return 'array'
   }
+  get isEquatable(): boolean {
+    return this.itemType.isEquatable
+  }
 
-  getCode(language: Language): string {
-    const itemCode = this.itemType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const itemCode = this.itemType.getCode(language, options)
 
     switch (language) {
       case 'c++':
@@ -32,7 +35,10 @@ export class ArrayType implements Type {
             return 'DoubleArray'
           case 'boolean':
             return 'BooleanArray'
-          case 'bigint':
+          case 'int64':
+            return 'LongArray'
+          case 'uint64':
+            // ULong is just interpret as LongArray in Java.
             return 'LongArray'
           default:
             return `Array<${itemCode}>`
@@ -46,14 +52,17 @@ export class ArrayType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.itemType.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
-        language: 'c++',
-        name: 'vector',
-        space: 'system',
-      },
-      ...this.itemType.getRequiredImports(),
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.itemType.getRequiredImports(language),
     ]
+    if (language === 'c++') {
+      imports.push({
+        name: 'vector',
+        language: 'c++',
+        space: 'system',
+      })
+    }
+    return imports
   }
 }

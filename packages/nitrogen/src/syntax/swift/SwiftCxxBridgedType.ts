@@ -26,7 +26,12 @@ import {
 } from './SwiftCxxTypeHelper.js'
 import { createSwiftEnumBridge } from './SwiftEnum.js'
 import { createSwiftStructBridge } from './SwiftStruct.js'
-import { createSwiftVariant, getSwiftVariantCaseName } from './SwiftVariant.js'
+import { createSwiftVariant } from './SwiftVariant.js'
+import { VoidType } from '../types/VoidType.js'
+import { NamedWrappingType } from '../types/NamedWrappingType.js'
+import { ErrorType } from '../types/ErrorType.js'
+import { createSwiftFunctionBridge } from './SwiftFunction.js'
+import type { Language } from '../../getPlatformSpecs.js'
 
 // TODO: Remove enum bridge once Swift fixes bidirectional enums crashing the `-Swift.h` header.
 
@@ -40,7 +45,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   }
 
   get hasType(): boolean {
-    return this.type.kind !== 'void' && this.type.kind !== 'null'
+    return this.type.kind !== 'void'
   }
 
   get canBePassedByReference(): boolean {
@@ -64,6 +69,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'optional':
         // swift::Optional<T> <> std::optional<T>
         return true
+      case 'null':
+        // NullType <> nitro::null
+        return true
       case 'string':
         // swift::String <> std::string
         return true
@@ -79,23 +87,26 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'tuple':
         // (A, B) <> std::tuple<A, B>
         return true
-      case 'struct':
-        // SomeStruct (Swift extension) <> SomeStruct (C++)
-        return true
       case 'function':
         // (@ecaping () -> Void) <> std::function<...>
         return true
       case 'array-buffer':
         // ArrayBufferHolder <> std::shared_ptr<ArrayBuffer>
-        if (this.isBridgingToDirectCppTarget) {
-          return false
-        }
+        return true
+      case 'date':
+        // Date <> double
         return true
       case 'promise':
-        // PromiseHolder<T> <> std::shared_ptr<std::promise<T>>
+        // Promise<T> <> std::shared_ptr<Promise<T>>
+        return true
+      case 'error':
+        // Error <> std.exception_ptr
         return true
       case 'map':
         // AnyMapHolder <> AnyMap
+        return true
+      case 'result-wrapper':
+        // Result<T> <> T
         return true
       default:
         return false
@@ -117,26 +128,22 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     return bridge
   }
 
-  getRequiredImports(): SourceImport[] {
-    const imports = this.type.getRequiredImports()
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports = this.type.getRequiredImports(language)
 
-    if (this.type.kind === 'array-buffer') {
-      imports.push({
-        name: 'NitroModules/ArrayBufferHolder.hpp',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'ArrayBufferHolder',
-          'NitroModules'
-        ),
-        language: 'c++',
-        space: 'system',
-      })
-    } else if (this.type.kind === 'promise') {
-      imports.push({
-        name: 'NitroModules/PromiseHolder.hpp',
-        language: 'c++',
-        space: 'system',
-      })
+    if (language === 'c++') {
+      if (this.type.kind === 'array-buffer') {
+        imports.push({
+          name: 'NitroModules/ArrayBufferHolder.hpp',
+          forwardDeclaration: getForwardDeclaration(
+            'class',
+            'ArrayBufferHolder',
+            'NitroModules'
+          ),
+          language: 'c++',
+          space: 'system',
+        })
+      }
     }
 
     // Recursively look into referenced types (e.g. the `T` of a `optional<T>`, or `T` of a `T[]`)
@@ -147,7 +154,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         return
       }
       const bridged = new SwiftCxxBridgedType(t)
-      imports.push(...bridged.getRequiredImports())
+      imports.push(...bridged.getRequiredImports(language))
     })
 
     return imports
@@ -173,10 +180,24 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         files.push(extensionFile)
         break
       }
+      case 'function': {
+        const functionType = getTypeAs(this.type, FunctionType)
+        const extensionFile = createSwiftFunctionBridge(functionType)
+        files.push(extensionFile)
+        break
+      }
+      case 'promise': {
+        // Promise needs resolver and rejecter funcs in Swift
+        const promiseType = getTypeAs(this.type, PromiseType)
+        files.push(createSwiftFunctionBridge(promiseType.resolverFunction))
+        files.push(createSwiftFunctionBridge(promiseType.rejecterFunction))
+        break
+      }
       case 'variant': {
         const variant = getTypeAs(this.type, VariantType)
         const file = createSwiftVariant(variant)
         files.push(file)
+        break
       }
     }
 
@@ -211,7 +232,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map': {
         switch (language) {
           case 'swift':
-            return 'margelo.nitro.TSharedMap'
+            return 'margelo.nitro.SharedAnyMap'
           default:
             return this.type.getCode(language)
         }
@@ -223,6 +244,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'variant':
       case 'tuple':
       case 'record':
+      case 'result-wrapper':
       case 'promise': {
         const bridge = this.getBridgeOrThrow()
         switch (language) {
@@ -234,11 +256,25 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return this.type.getCode(language)
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return 'margelo.nitro.NullType'
+          default:
+            return this.type.getCode(language)
+        }
       case 'array-buffer':
         if (this.isBridgingToDirectCppTarget) {
           return this.type.getCode(language)
         } else {
-          return `ArrayBufferHolder`
+          switch (language) {
+            case 'swift':
+              return 'ArrayBuffer'
+            case 'c++':
+              return `ArrayBufferHolder`
+            default:
+              throw new Error(`Invalid language! ${language}`)
+          }
         }
       case 'string': {
         switch (language) {
@@ -250,6 +286,22 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             throw new Error(`Invalid language! ${language}`)
         }
       }
+      case 'date':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.chrono_time`
+          default:
+            return this.type.getCode(language)
+        }
+      case 'error':
+        switch (language) {
+          case 'c++':
+            return 'std::exception_ptr'
+          case 'swift':
+            return 'std.exception_ptr'
+          default:
+            throw new Error(`Invalid language! ${language}`)
+        }
       default:
         // No workaround - just return normal type
         return this.type.getCode(language)
@@ -276,7 +328,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
     language: 'swift' | 'c++'
   ): string {
     switch (this.type.kind) {
-      case 'enum':
+      case 'enum': {
         if (this.isBridgingToDirectCppTarget) {
           return cppParameterName
         }
@@ -285,7 +337,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           case 'c++':
             return `static_cast<int>(${cppParameterName})`
           case 'swift':
-            const fullName = NitroConfig.getCxxNamespace(
+            const fullName = NitroConfig.current.getCxxNamespace(
               'swift',
               enumType.enumName
             )
@@ -293,6 +345,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
           default:
             throw new Error(`Invalid language! ${language}`)
         }
+      }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
         const getFunc = `bridge.get_${bridge.specializationName}`
@@ -300,9 +353,9 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             return `
-{ () -> ${name.HybridTSpec} in
+{ () -> any ${name.HybridTSpec} in
   let __unsafePointer = ${getFunc}(${cppParameterName})
-  let __instance = ${name.HybridTSpecCxx}Unsafe.fromUnsafe(__unsafePointer)
+  let __instance = ${name.HybridTSpecCxx}.fromUnsafe(__unsafePointer)
   return __instance.get${name.HybridTSpec}()
 }()`.trim()
           default:
@@ -313,7 +366,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         switch (language) {
           case 'swift':
             if (this.isBridgingToDirectCppTarget) {
-              return `ArrayBufferHolder(${cppParameterName})`
+              return `ArrayBuffer(${cppParameterName})`
             } else {
               return cppParameterName
             }
@@ -328,24 +381,104 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
         }
       }
       case 'promise': {
+        const promise = getTypeAs(this.type, PromiseType)
         switch (language) {
-          case 'c++':
-            return `[]() -> ${this.getTypeCode('c++')} { throw std::runtime_error("Promise<..> cannot be converted to Swift yet!"); }()`
+          case 'swift': {
+            const bridge = this.getBridgeOrThrow()
+            if (promise.resultingType.kind === 'void') {
+              // It's void - resolve()
+              const resolverFunc = new FunctionType(new VoidType(), [])
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              return `
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __resolver = { __promise.resolve(withResult: ()) }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.addOnResolvedListener(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}()`.trim()
+            } else {
+              // It's resolving to a type - resolve(T)
+              const resolverFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('result', promise.resultingType),
+              ])
+              const rejecterFunc = new FunctionType(new VoidType(), [
+                new NamedWrappingType('error', new ErrorType()),
+              ])
+              const resolverFuncBridge = new SwiftCxxBridgedType(resolverFunc)
+              const rejecterFuncBridge = new SwiftCxxBridgedType(rejecterFunc)
+              const resolverFuncName = promise.resultingType
+                .canBePassedByReference
+                ? 'addOnResolvedListener'
+                : 'addOnResolvedListenerCopy'
+              return `
+{ () -> ${promise.getCode('swift')} in
+  let __promise = ${promise.getCode('swift')}()
+  let __resolver = { (__result: ${promise.resultingType.getCode('swift')}) in
+    __promise.resolve(withResult: __result)
+  }
+  let __rejecter = { (__error: Error) in
+    __promise.reject(withError: __error)
+  }
+  let __resolverCpp = ${indent(resolverFuncBridge.parseFromSwiftToCpp('__resolver', 'swift'), '  ')}
+  let __rejecterCpp = ${indent(rejecterFuncBridge.parseFromSwiftToCpp('__rejecter', 'swift'), '  ')}
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(${cppParameterName})
+  __promiseHolder.${resolverFuncName}(__resolverCpp)
+  __promiseHolder.addOnRejectedListener(__rejecterCpp)
+  return __promise
+}()`.trim()
+            }
+          }
           default:
             return cppParameterName
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return `NullType.null`
+          default:
+            return cppParameterName
+        }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
+        const bridge = this.getBridgeOrThrow()
         switch (language) {
           case 'swift':
-            if (!wrapping.needsSpecialHandling) {
-              return `${cppParameterName}.value`
+            if (wrapping.type.kind === 'enum') {
+              const enumType = getTypeAs(wrapping.type, EnumType)
+              if (enumType.jsType === 'enum') {
+                // TODO: Remove this hack once Swift fixes this shit.
+                // A JS enum is implemented as a number/int based enum.
+                // For some reason, those break in Swift. I have no idea why.
+                return `${cppParameterName}.has_value() ? ${cppParameterName}.pointee : nil`
+              }
+            }
+            // TODO: Remove this check for booleans/doubles once https://github.com/swiftlang/swift/issues/84848 is fixed.
+            //       Right now, optionals of doubles or booleans (and who knows what else?) fail to compile when `.value` is used.
+            const swiftBug84848Workaround =
+              optional.wrappingType.kind === 'boolean' ||
+              optional.wrappingType.kind === 'number'
+            if (!swiftBug84848Workaround) {
+              if (!wrapping.needsSpecialHandling) {
+                return `${cppParameterName}.value`
+              }
             }
             return `
 { () -> ${optional.getCode('swift')} in
-  if let __unwrapped = ${cppParameterName}.value {
+  if bridge.has_value_${bridge.specializationName}(${cppParameterName}) {
+    let __unwrapped = bridge.get_${bridge.specializationName}(${cppParameterName})
     return ${indent(wrapping.parseFromCppToSwift('__unwrapped', language), '    ')}
   } else {
     return nil
@@ -364,11 +497,20 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
             return cppParameterName
         }
       }
+      case 'date': {
+        switch (language) {
+          case 'swift':
+            return `Date(fromChrono: ${cppParameterName})`.trim()
+          default:
+            return cppParameterName
+        }
+      }
       case 'array': {
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
+            // We have to iterate the element one by one to create a resulting Array (mapped)
             return `${cppParameterName}.map({ __item in ${wrapping.parseFromCppToSwift('__item', 'swift')} })`.trim()
           default:
             return cppParameterName
@@ -377,7 +519,7 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'map': {
         switch (language) {
           case 'swift':
-            return `AnyMapHolder(withCppPart: ${cppParameterName})`
+            return `AnyMap(withCppPart: ${cppParameterName})`
           default:
             return cppParameterName
         }
@@ -385,9 +527,10 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'record': {
         const bridge = this.getBridgeOrThrow()
         const getKeysFunc = `bridge.get_${bridge.specializationName}_keys`
+        const getValueFunc = `bridge.get_${bridge.specializationName}_value`
         const record = getTypeAs(this.type, RecordType)
-        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
-        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType, true)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType, true)
         switch (language) {
           case 'swift':
             return `
@@ -395,8 +538,8 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
   var __dictionary = ${record.getCode('swift')}(minimumCapacity: ${cppParameterName}.size())
   let __keys = ${getKeysFunc}(${cppParameterName})
   for __key in __keys {
-    let __value = ${cppParameterName}[__key]!
-    __dictionary[${wrappingKey.parseFromCppToSwift('__key', 'swift')}] = ${wrappingValue.parseFromCppToSwift('__value', 'swift')}
+    let __value = ${getValueFunc}(${cppParameterName}, __key)
+    __dictionary[${indent(wrappingKey.parseFromCppToSwift('__key', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromCppToSwift('__value', 'swift'), '    ')}
   }
   return __dictionary
 }()`.trim()
@@ -415,25 +558,28 @@ export class SwiftCxxBridgedType implements BridgedType<'swift', 'c++'> {
       case 'variant': {
         const bridge = this.getBridgeOrThrow()
         const variant = getTypeAs(this.type, VariantType)
-        const cases = variant.variants
-          .map((t, i) => {
-            const getFunc = `bridge.get_${bridge.specializationName}_${i}`
-            const wrapping = new SwiftCxxBridgedType(t)
-            const caseName = getSwiftVariantCaseName(t)
+        const valueInitialization = this.isBridgingToDirectCppTarget
+          ? `bridge.${bridge.specializationName}(${cppParameterName})`
+          : cppParameterName
+        const cases = variant.cases
+          .map(([label, v], i) => {
+            const wrapping = new SwiftCxxBridgedType(v, true)
+            const parse = wrapping.parseFromCppToSwift('__actual', 'swift')
             return `
 case ${i}:
-  let __actual = ${getFunc}(${cppParameterName})
-  return .${caseName}(${indent(wrapping.parseFromCppToSwift('__actual', 'swift'), '  ')})`.trim()
+  let __actual = __variant.get_${i}()
+  return .${label}(${indent(parse, '  ')})`.trim()
           })
           .join('\n')
         switch (language) {
           case 'swift':
             return `
 { () -> ${variant.getCode('swift')} in
-  switch ${cppParameterName}.index() {
+  let __variant = ${valueInitialization}
+  switch __variant.index() {
     ${indent(cases, '    ')}
     default:
-      fatalError("Variant can never have index \\(${cppParameterName}.index())!")
+      fatalError("Variant can never have index \\(__variant.index())!")
   }
 }()`.trim()
           default:
@@ -444,7 +590,9 @@ case ${i}:
         const funcType = getTypeAs(this.type, FunctionType)
         switch (language) {
           case 'swift':
-            const swiftClosureType = funcType.getCode('swift', false)
+            const swiftClosureType = funcType.getCode('swift', {
+              includeNameInfo: false,
+            })
             const bridge = this.getBridgeOrThrow()
             const paramsSignature = funcType.parameters.map(
               (p) => `__${p.escapedName}: ${p.getCode('swift')}`
@@ -459,19 +607,22 @@ case ${i}:
             if (funcType.returnType.kind === 'void') {
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    __sharedClosure.pointee.call(${indent(paramsForward.join(', '), '  ')})
+    __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
   }
 }()`.trim()
             } else {
-              const resultBridged = new SwiftCxxBridgedType(funcType.returnType)
+              const resultBridged = new SwiftCxxBridgedType(
+                funcType.returnType,
+                true
+              )
               return `
 { () -> ${swiftClosureType} in
-  let __sharedClosure = bridge.share_${bridge.specializationName}(${cppParameterName})
+  let __wrappedFunction = bridge.wrap_${bridge.specializationName}(${cppParameterName})
   return { ${signature} in
-    let __result = __sharedClosure.pointee.call(${paramsForward.join(', ')})
-    return ${indent(resultBridged.parseFromSwiftToCpp('__result', 'swift'), '  ')}
+    let __result = __wrappedFunction.call(${indent(paramsForward.join(', '), '    ')})
+    return ${indent(resultBridged.parseFromCppToSwift('__result', 'swift'), '    ')}
   }
 }()`.trim()
             }
@@ -479,6 +630,13 @@ case ${i}:
             return cppParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `RuntimeError.from(cppError: ${cppParameterName})`
+          default:
+            return cppParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''
@@ -497,6 +655,7 @@ case ${i}:
         if (this.isBridgingToDirectCppTarget) {
           return swiftParameterName
         }
+        // TODO: Remove the int casting once https://github.com/swiftlang/swift/issues/75330 is fixed.
         switch (language) {
           case 'c++':
             return `static_cast<${this.type.getCode('c++')}>(${swiftParameterName})`
@@ -507,20 +666,24 @@ case ${i}:
         }
       case 'hybrid-object': {
         const bridge = this.getBridgeOrThrow()
-        const name = getTypeHybridObjectName(this.type)
-        const makeFunc = `bridge.${bridge.funcName}`
         switch (language) {
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __cxxWrapped = ${name.HybridTSpecCxx}(${swiftParameterName})
-  let __pointer = ${name.HybridTSpecCxx}Unsafe.toUnsafe(__cxxWrapped)
-  return ${makeFunc}(__pointer)
+  let __cxxWrapped = ${swiftParameterName}.getCxxWrapper()
+  return __cxxWrapped.getCxxPart()
 }()`.trim()
           default:
             return swiftParameterName
         }
       }
+      case 'null':
+        switch (language) {
+          case 'swift':
+            return `margelo.nitro.NullType.null`
+          default:
+            return swiftParameterName
+        }
       case 'optional': {
         const optional = getTypeAs(this.type, OptionalType)
         const wrapping = new SwiftCxxBridgedType(optional.wrappingType, true)
@@ -545,6 +708,14 @@ case ${i}:
         switch (language) {
           case 'swift':
             return `std.string(${swiftParameterName})`
+          default:
+            return swiftParameterName
+        }
+      }
+      case 'date': {
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.toCpp()`
           default:
             return swiftParameterName
         }
@@ -584,8 +755,6 @@ case ${i}:
           true
         )
         switch (language) {
-          case 'c++':
-            return `${swiftParameterName}.getFuture()`
           case 'swift':
             const arg =
               promise.resultingType.kind === 'void'
@@ -593,11 +762,12 @@ case ${i}:
                 : resolvingType.parseFromSwiftToCpp('__result', 'swift')
             return `
 { () -> bridge.${bridge.specializationName} in
-  let __promiseHolder = ${makePromise}()
+  let __promise = ${makePromise}()
+  let __promiseHolder = bridge.wrap_${bridge.specializationName}(__promise)
   ${swiftParameterName}
-    .then({ __result in __promiseHolder.resolve(${arg}) })
-    .catch({ __error in __promiseHolder.reject(std.string(String(describing: __error))) })
-  return __promiseHolder
+    .then({ __result in __promiseHolder.resolve(${indent(arg, '      ')}) })
+    .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+  return __promise
 }()`.trim()
           default:
             return swiftParameterName
@@ -605,11 +775,12 @@ case ${i}:
       }
       case 'array': {
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = `bridge.${bridge.funcName}`
         const array = getTypeAs(this.type, ArrayType)
         const wrapping = new SwiftCxxBridgedType(array.itemType, true)
         switch (language) {
           case 'swift':
+            // array has to be iterated and converted one-by-one
+            const makeFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
   var __vector = ${makeFunc}(${swiftParameterName}.count)
@@ -625,7 +796,10 @@ case ${i}:
       case 'tuple': {
         const tuple = getTypeAs(this.type, TupleType)
         const bridge = this.getBridgeOrThrow()
-        const makeFunc = NitroConfig.getCxxNamespace(language, bridge.funcName)
+        const makeFunc = NitroConfig.current.getCxxNamespace(
+          language,
+          bridge.funcName
+        )
         switch (language) {
           case 'swift':
             const typesForward = tuple.itemTypes
@@ -644,20 +818,26 @@ case ${i}:
         const variant = getTypeAs(this.type, VariantType)
         switch (language) {
           case 'swift':
-            const cases = variant.variants
-              .map((t) => {
-                const caseName = getSwiftVariantCaseName(t)
-                const wrapping = new SwiftCxxBridgedType(t)
+            const cases = variant.cases
+              .map(([label, v]) => {
+                const wrapping = new SwiftCxxBridgedType(v, true)
                 const parse = wrapping.parseFromSwiftToCpp('__value', 'swift')
-                return `case .${caseName}(let __value):\n  return bridge.${bridge.funcName}(${parse})`
+                return `
+case .${label}(let __value):
+  return bridge.${bridge.funcName}(${indent(parse, '  ')})`.trim()
               })
               .join('\n')
-            return `
+            let code = `
 { () -> bridge.${bridge.specializationName} in
   switch ${swiftParameterName} {
     ${indent(cases, '    ')}
   }
 }()`.trim()
+            if (this.isBridgingToDirectCppTarget) {
+              // If we bridge directly to a C++ variant, we need to return the .variant of our wrapper type.
+              code += `.variant`
+            }
+            return code
           default:
             return swiftParameterName
         }
@@ -666,15 +846,15 @@ case ${i}:
         const bridge = this.getBridgeOrThrow()
         const createMap = `bridge.${bridge.funcName}`
         const record = getTypeAs(this.type, RecordType)
-        const wrappingKey = new SwiftCxxBridgedType(record.keyType)
-        const wrappingValue = new SwiftCxxBridgedType(record.valueType)
+        const wrappingKey = new SwiftCxxBridgedType(record.keyType, true)
+        const wrappingValue = new SwiftCxxBridgedType(record.valueType, true)
         switch (language) {
           case 'swift':
             return `
 { () -> bridge.${bridge.specializationName} in
   var __map = ${createMap}(${swiftParameterName}.count)
   for (__k, __v) in ${swiftParameterName} {
-    __map[${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}] = ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')}
+    bridge.emplace_${bridge.specializationName}(&__map, ${indent(wrappingKey.parseFromSwiftToCpp('__k', 'swift'), '    ')}, ${indent(wrappingValue.parseFromSwiftToCpp('__v', 'swift'), '    ')})
   }
   return __map
 }()`.trim()
@@ -686,52 +866,11 @@ case ${i}:
         switch (language) {
           case 'swift': {
             const bridge = this.getBridgeOrThrow()
-            const func = getTypeAs(this.type, FunctionType)
-            const cFuncParamsForward = func.parameters
-              .map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return bridged.parseFromCppToSwift(
-                  `__${p.escapedName}`,
-                  'swift'
-                )
-              })
-              .join(', ')
-            const paramsSignature = func.parameters
-              .map((p) => `_ __${p.escapedName}: ${p.getCode('swift')}`)
-              .join(', ')
-            const paramsForward = func.parameters
-              .map((p) => `__${p.escapedName}`)
-              .join(', ')
-            const cFuncParamsSignature = [
-              '__closureHolder: UnsafeMutableRawPointer?',
-              ...func.parameters.map((p) => {
-                const bridged = new SwiftCxxBridgedType(p)
-                return `__${p.escapedName}: ${bridged.getTypeCode('swift')}`
-              }),
-            ].join(', ')
             const createFunc = `bridge.${bridge.funcName}`
             return `
 { () -> bridge.${bridge.specializationName} in
-  class ClosureHolder {
-    let closure: ${func.getCode('swift')}
-    init(wrappingClosure closure: @escaping ${func.getCode('swift')}) {
-      self.closure = closure
-    }
-    func invoke(${paramsSignature}) {
-      self.closure(${indent(paramsForward, '    ')})
-    }
-  }
-
-  let __closureHolder = Unmanaged.passRetained(ClosureHolder(wrappingClosure: ${swiftParameterName})).toOpaque()
-  func __callClosure(${cFuncParamsSignature}) -> Void {
-    let closure = Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).takeUnretainedValue()
-    closure.invoke(${indent(cFuncParamsForward, '    ')})
-  }
-  func __destroyClosure(_ __closureHolder: UnsafeMutableRawPointer?) -> Void {
-    Unmanaged<ClosureHolder>.fromOpaque(__closureHolder!).release()
-  }
-
-  return ${createFunc}(__closureHolder, __callClosure, __destroyClosure)
+  let __closureWrapper = ${bridge.specializationName}(${swiftParameterName})
+  return ${createFunc}(__closureWrapper.toUnsafe())
 }()
   `.trim()
           }
@@ -739,6 +878,13 @@ case ${i}:
             return swiftParameterName
         }
       }
+      case 'error':
+        switch (language) {
+          case 'swift':
+            return `${swiftParameterName}.toCpp()`
+          default:
+            return swiftParameterName
+        }
       case 'void':
         // When type is void, don't return anything
         return ''

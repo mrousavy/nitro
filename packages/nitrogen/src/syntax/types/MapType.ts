@@ -1,5 +1,4 @@
 import type { Language } from '../../getPlatformSpecs.js'
-import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
 import type { Type, TypeKind } from './Type.js'
 
@@ -12,13 +11,16 @@ export class MapType implements Type {
   get kind(): TypeKind {
     return 'map'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {
       case 'c++':
         return 'std::shared_ptr<AnyMap>'
       case 'swift':
-        return 'AnyMapHolder'
+        return 'AnyMap'
       case 'kotlin':
         return 'AnyMap'
       default:
@@ -30,18 +32,31 @@ export class MapType implements Type {
   getExtraFiles(): SourceFile[] {
     return []
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
-        name: 'NitroModules/AnyMap.hpp',
-        forwardDeclaration: getForwardDeclaration(
-          'class',
-          'AnyMap',
-          'NitroModules'
-        ),
-        language: 'c++',
-        space: 'system',
-      },
-    ]
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    switch (language) {
+      case 'c++':
+        imports.push({
+          name: 'NitroModules/AnyMap.hpp',
+          language: 'c++',
+          space: 'system',
+        })
+        break
+      case 'swift':
+        imports.push({
+          name: 'NitroModules',
+          language: 'swift',
+          space: 'system',
+        })
+        break
+      case 'kotlin':
+        imports.push({
+          name: 'com.margelo.nitro.core.AnyMap',
+          language: 'kotlin',
+          space: 'system',
+        })
+        break
+    }
+    return imports
   }
 }

@@ -22,7 +22,7 @@ namespace margelo::nitro {
  * 3. Pass the object from `.toObject()` it to JS (either install in global, or return somehow)
  * 4. From JS, you can access methods on this HybridObject to create all other HybridObjects.
  */
-class HybridNitroModulesProxy : public HybridObject {
+class HybridNitroModulesProxy final : public HybridObject {
 public:
   explicit HybridNitroModulesProxy() : HybridObject(TAG) {}
 
@@ -37,10 +37,19 @@ public:
 
   // Helpers
   std::shared_ptr<BoxedHybridObject> box(const std::shared_ptr<HybridObject>& hybridObject);
+  std::shared_ptr<HybridObject> updateMemorySize(const std::shared_ptr<HybridObject>& hybridObject);
   jsi::Value hasNativeState(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
+  jsi::Value isHybridObject(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t size);
+  std::shared_ptr<ArrayBuffer> createNativeArrayBuffer(double size);
 
   // Build Info
   std::string getBuildType();
+  std::string getVersion();
+
+  // Allocation tests
+  double debug_getTotalAllocatedHybridObjects();
+  static void debug_notifyHybridObjectAllocated();
+  static void debug_notifyHybridObjectDeallocated();
 
 private:
   static constexpr auto TAG = "NitroModulesProxy";

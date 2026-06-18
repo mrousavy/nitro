@@ -7,8 +7,9 @@
 
 #pragma once
 
+#include "BorrowingReference.hpp"
 #include "HybridFunction.hpp"
-#include "OwningReference.hpp"
+#include "NitroDefines.hpp"
 #include "Prototype.hpp"
 #include "PrototypeChain.hpp"
 #include <functional>
@@ -29,11 +30,6 @@ using namespace facebook;
  * as long as it has a valid NativeState (`this`).
  */
 class HybridObjectPrototype {
-private:
-  PrototypeChain _prototypeChain;
-  bool _didLoadMethods = false;
-  static constexpr auto TAG = "HybridObjectPrototype";
-
 public:
   HybridObjectPrototype() {}
 
@@ -46,8 +42,8 @@ public:
 
 private:
   static jsi::Value createPrototype(jsi::Runtime& runtime, const std::shared_ptr<Prototype>& prototype);
-  using PrototypeCache = std::unordered_map<NativeInstanceId, OwningReference<jsi::Object>>;
-  static std::unordered_map<jsi::Runtime*, PrototypeCache> _prototypeCache;
+  using PrototypeCache = std::unordered_map<NativeInstanceId, BorrowingReference<jsi::Object>>;
+  static std::unordered_map<jsi::Runtime * NON_NULL, PrototypeCache> _prototypeCache;
 
 protected:
   /**
@@ -61,16 +57,15 @@ private:
   /**
    * Ensures that all Hybrid Methods, Getters and Setters are initialized by calling loadHybridMethods().
    */
-  inline void ensureInitialized() {
-    if (!_didLoadMethods) [[unlikely]] {
-      // lazy-load all exposed methods
-      loadHybridMethods();
-      _didLoadMethods = true;
-    }
-  }
+  void ensureInitialized();
+
+private:
+  PrototypeChain _prototypeChain;
+  volatile bool _didLoadMethods = false;
+  static constexpr auto TAG = "HybridObjectPrototype";
 
 protected:
-  using RegisterFn = void (*)(Prototype&);
+  using RegisterFn = void (*NON_NULL)(Prototype&);
   /**
    * Registers the given methods inside the Hybrid Object's prototype.
    *
@@ -79,7 +74,7 @@ protected:
    * **Do not conditionally register hybrid methods, getters or setter!**
    */
   template <typename Derived>
-  inline void registerHybrids(Derived* thisInstance, RegisterFn registerFunc) {
+  inline void registerHybrids(Derived* NON_NULL /* this */, RegisterFn registerFunc) {
     const std::shared_ptr<Prototype>& prototype = _prototypeChain.extendPrototype<Derived>();
 
     if (!prototype->hasHybrids()) {

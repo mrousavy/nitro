@@ -52,7 +52,7 @@ export interface SourceImport {
    * If this is a C++ import, it could also be forward-declared.
    * @example
    * ```cpp
-   * namespace NitroImage {
+   * namespace NitroTest {
    *   class HybridImage;
    * }
    * ```

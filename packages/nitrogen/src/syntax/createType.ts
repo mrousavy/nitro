@@ -1,10 +1,9 @@
 import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
-import { NullType } from './types/NullType.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
 import { StringType } from './types/StringType.js'
-import { BigIntType } from './types/BigIntType.js'
+import { Int64Type } from './types/Int64Type.js'
 import { VoidType } from './types/VoidType.js'
 import { ArrayType } from './types/ArrayType.js'
 import { FunctionType } from './types/FunctionType.js'
@@ -21,38 +20,42 @@ import { VariantType } from './types/VariantType.js'
 import { MapType } from './types/MapType.js'
 import { TupleType } from './types/TupleType.js'
 import {
-  extendsHybridObject,
-  isDirectlyHybridObject,
+  isAnyHybridSubclass,
+  isDirectlyAnyHybridObject,
+  isHybridView,
   type Language,
 } from '../getPlatformSpecs.js'
-import { HybridObjectBaseType } from './types/HybridObjectBaseType.js'
+import { AnyHybridObjectType } from './types/AnyHybridObjectType.js'
+import { ErrorType } from './types/ErrorType.js'
+import { getBaseTypes, getHybridObjectNitroModuleConfig } from '../utils.js'
+import { DateType } from './types/DateType.js'
+import { NitroConfig } from '../config/NitroConfig.js'
+import { CustomType } from './types/CustomType.js'
+import {
+  isSyncFunction,
+  isArrayBuffer,
+  isCustomType,
+  isDate,
+  isError,
+  isMap,
+  isPromise,
+  isRecord,
+  isInt64,
+  isUInt64,
+} from './isCoreType.js'
+import { getCustomTypeConfig } from './getCustomTypeConfig.js'
+import { compareLooselyness } from './helpers.js'
+import { NullType } from './types/NullType.js'
+import { UInt64Type } from './types/UInt64Type.js'
 
-function isSymbol(type: TSMorphType, symbolName: string): boolean {
-  const symbol = type.getSymbol()
-  if (symbol?.getName() === symbolName) {
-    return true
+function getHybridObjectName(type: TSMorphType): string {
+  const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
+  if (symbol == null) {
+    throw new Error(
+      `Cannot get name of \`${type.getText()}\` - symbol not found!`
+    )
   }
-  const aliasSymbol = type.getAliasSymbol()
-  if (aliasSymbol?.getName() === symbolName) {
-    return true
-  }
-  return false
-}
-
-function isPromise(type: TSMorphType): boolean {
-  return isSymbol(type, 'Promise')
-}
-
-function isRecord(type: TSMorphType): boolean {
-  return isSymbol(type, 'Record')
-}
-
-function isArrayBuffer(type: TSMorphType): boolean {
-  return isSymbol(type, 'ArrayBuffer')
-}
-
-function isMap(type: TSMorphType): boolean {
-  return isSymbol(type, 'AnyMap')
+  return symbol.getEscapedName()
 }
 
 function getFunctionCallSignature(func: TSMorphType): Signature {
@@ -86,16 +89,17 @@ function getArguments<N extends number>(
   count: N
 ): Tuple<TSMorphType<ts.Type>, N> {
   const typeArguments = type.getTypeArguments()
-  const aliasTypeArguments = type.getAliasTypeArguments()
-
   if (typeArguments.length === count) {
     return typeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
+  const aliasTypeArguments = type.getAliasTypeArguments()
   if (aliasTypeArguments.length === count) {
     return aliasTypeArguments as Tuple<TSMorphType<ts.Type>, N>
   }
+
   throw new Error(
-    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} type arguments instead of ${count}!`
+    `Type ${type.getText()} looks like a ${typename}, but has ${typeArguments.length} or ${aliasTypeArguments.length} type arguments instead of ${count}!`
   )
 }
 
@@ -149,6 +153,18 @@ function getTypeId(type: TSMorphType, isOptional: boolean): string {
   return key
 }
 
+export function addKnownType(
+  key: string,
+  type: Type,
+  language: Language
+): void {
+  if (knownTypes[language].has(key)) {
+    // type is already known
+    return
+  }
+  knownTypes[language].set(key, type)
+}
+
 /**
  * Create a new type (or return it from cache if it is already known)
  */
@@ -171,20 +187,31 @@ export function createType(
       return new OptionalType(wrapping)
     }
 
-    if (type.isNull() || type.isUndefined()) {
+    if (type.isNull()) {
       return new NullType()
     } else if (type.isBoolean() || type.isBooleanLiteral()) {
       return new BooleanType()
     } else if (type.isNumber() || type.isNumberLiteral()) {
       if (type.isEnumLiteral()) {
-        // enum literals are technically just numbers - but we treat them differently in C++.
-        return createType(language, type.getBaseTypeOfLiteralType(), isOptional)
+        // An enum is just a number, that's why it's a number literal.
+        // Get the base of the literal, which would be our enum's definition.
+        const baseType = type.getBaseTypeOfLiteralType()
+        if (!baseType.isEnum()) {
+          // The base of the literal is not the enum definition, we need to throw.
+          throw new Error(
+            `The enum "${type.getLiteralValue()}" (${type.getText()}) is either a single-value-enum, or an enum-literal. Use a separately defined enum with at least 2 cases instead!`
+          )
+        }
+        // Call createType(...) now with the enum type.
+        return createType(language, baseType, isOptional)
       }
       return new NumberType()
     } else if (type.isString()) {
       return new StringType()
-    } else if (type.isBigInt() || type.isBigIntLiteral()) {
-      return new BigIntType()
+    } else if (isInt64(type)) {
+      return new Int64Type()
+    } else if (isUInt64(type)) {
+      return new UInt64Type()
     } else if (type.isVoid()) {
       return new VoidType()
     } else if (type.isArray()) {
@@ -200,25 +227,28 @@ export function createType(
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
-      const returnType = createType(
-        language,
-        funcReturnType,
-        funcReturnType.isNullable()
-      )
+      const isReturnOptional = funcReturnType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
+      const returnType = createType(language, funcReturnType, isReturnOptional)
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
         const isNullable = parameterType.isNullable() || p.isOptional()
         return createNamedType(language, p.getName(), parameterType, isNullable)
       })
-      return new FunctionType(returnType, parameters)
+      const isSync = isSyncFunction(type)
+      return new FunctionType(returnType, parameters, isSync)
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
+      const isResolvingOptional = promiseResolvingType
+        .getUnionTypes()
+        .some((t) => t.isUndefined())
       const resolvingType = createType(
         language,
         promiseResolvingType,
-        promiseResolvingType.isNullable()
+        isResolvingOptional
       )
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
@@ -233,6 +263,16 @@ export function createType(
     } else if (isMap(type)) {
       // Map
       return new MapType()
+    } else if (isDate(type)) {
+      // Date
+      return new DateType()
+    } else if (isError(type)) {
+      // Error
+      return new ErrorType()
+    } else if (isCustomType(type)) {
+      // Custom C++ type (manually written)
+      const { name, config } = getCustomTypeConfig(type)
+      return new CustomType(name, config)
     } else if (type.isEnum()) {
       // It is an enum. We need to generate a C++ declaration for the enum
       const typename = type.getSymbolOrThrow().getEscapedName()
@@ -267,9 +307,10 @@ export function createType(
         // It consists of different types - that means it's a variant!
         let variants = type
           .getUnionTypes()
-          // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
-          .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
+          // Filter out any undefineds/voids, as those are already treated as `isOptional`.
+          .filter((t) => !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
+          .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {
@@ -277,18 +318,28 @@ export function createType(
           return variants[0]!
         }
 
-        return new VariantType(variants)
+        const name = type.getAliasSymbol()?.getName()
+        return new VariantType(variants, name)
       }
-    } else if (extendsHybridObject(type, true)) {
-      // It is another HybridObject being referenced!
-      const typename = type.getSymbolOrThrow().getEscapedName()
-      return new HybridObjectType(typename, language)
-    } else if (isDirectlyHybridObject(type)) {
+    } else if (isDirectlyAnyHybridObject(type)) {
       // It is a HybridObject directly/literally. Base type
-      return new HybridObjectBaseType()
+      return new AnyHybridObjectType()
+    } else if (isAnyHybridSubclass(type)) {
+      // It is another HybridObject being referenced!
+      const typename = getHybridObjectName(type)
+      const baseTypes = getBaseTypes(type)
+        .filter((t) => isAnyHybridSubclass(t))
+        .map((b) => createType(language, b, false))
+      const baseHybrids = baseTypes.filter((b) => b instanceof HybridObjectType)
+      const sourceConfig =
+        getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
+      return new HybridObjectType(typename, language, baseHybrids, sourceConfig)
     } else if (type.isInterface()) {
       // It is an `interface T { ... }`, which is a `struct`
-      const typename = type.getSymbolOrThrow().getName()
+      const symbol = type.getAliasSymbol() ?? type.getSymbol()
+      if (symbol == null)
+        throw new Error(`Interface "${type.getText()}" does not have a Symbol!`)
+      const typename = symbol.getName()
       const properties = getInterfaceProperties(language, type)
       return new StructType(typename, properties)
     } else if (type.isObject()) {
@@ -310,10 +361,39 @@ export function createType(
       throw new Error(
         `String literal ${type.getText()} cannot be represented in C++ because it is ambiguous between a string and a discriminating union enum.`
       )
-    } else {
+    } else if (type.isUndefined()) {
       throw new Error(
-        `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+        `The TypeScript type "undefined" cannot be represented in Nitro.\n` +
+          `- If you want to make a type optional, add \`?\` to its name, or make it an union with \`undefined\`.\n` +
+          `- If you want a method that returns nothing, use \`void\` instead.\n` +
+          `- If you want to represent an explicit absence of a value, use \`null\` instead.`
       )
+    } else if (type.isAny()) {
+      throw new Error(
+        `The TypeScript type "${type.getText()}" resolved to any - any is not supported in Nitro.`
+      )
+    } else if (type.isBigInt()) {
+      throw new Error(
+        `Using a bigint without specifying signedness is deprecated! Use \`Int64\` or \`UInt64\` instead.`
+      )
+    } else if (type.isLiteral()) {
+      throw new Error(
+        `The literal "${type.getLiteralValue()}" cannot be used as a type!`
+      )
+    } else {
+      if (type.getSymbol() == null) {
+        // There is no declaration for it!
+        // Could be an invalid import, e.g. an alias
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be resolved - is it imported properly? ` +
+            `Make sure to import it properly using fully specified relative or absolute imports, no aliases.`
+        )
+      } else {
+        // A different error
+        throw new Error(
+          `The TypeScript type "${type.getText()}" cannot be represented in C++!`
+        )
+      }
     }
   }
 

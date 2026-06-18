@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
+#include "Null.hpp"
 #include <map>
 #include <memory>
 #include <string>
@@ -17,7 +19,7 @@ struct AnyValue;
 using AnyArray = std::vector<AnyValue>;
 using AnyObject = std::unordered_map<std::string, AnyValue>;
 
-using VariantType = std::variant<std::monostate, bool, double, int64_t, std::string, AnyArray, AnyObject>;
+using VariantType = std::variant<NullType, bool, double, int64_t, std::string, AnyArray, AnyObject>;
 struct AnyValue : VariantType {
   using VariantType::variant;
 
@@ -35,14 +37,8 @@ struct AnyValue : VariantType {
  * 3. Objects of primitives
  */
 class AnyMap final {
-public:
-  /**
-   * Create a new instance of AnyMap.
-   */
-  explicit AnyMap() {}
-  /**
-   * Create a new instance of AnyMap with the given amount of spaces pre-allocated.
-   */
+private:
+  AnyMap() = default;
   explicit AnyMap(size_t size) {
     _map.reserve(size);
   }
@@ -52,13 +48,13 @@ public:
    * Create a new `shared_ptr` instance of AnyMap.
    */
   static std::shared_ptr<AnyMap> make() {
-    return std::make_shared<AnyMap>();
+    return std::shared_ptr<AnyMap>(new AnyMap());
   }
   /**
    * Create a new `shared_ptr` instance of AnyMap with the given amount of spaces pre-allocated.
    */
   static std::shared_ptr<AnyMap> make(size_t size) {
-    return std::make_shared<AnyMap>(size);
+    return std::shared_ptr<AnyMap>(new AnyMap(size));
   }
 
 public:
@@ -74,6 +70,10 @@ public:
    * Deletes all keys and values inside the map.
    */
   void clear() noexcept;
+  /**
+   * Get all keys this `AnyMap` instance contains.
+   */
+  std::vector<std::string> getAllKeys() const;
 
 public:
   /**
@@ -92,10 +92,10 @@ public:
    */
   bool isBoolean(const std::string& key) const;
   /**
-   * Returns whether the value under the given key is a `bigint`.
-   * If the value is not a `bigint` (or there is no value at the given `key`), this returns `false`.
+   * Returns whether the value under the given key is a `int64_t`.
+   * If the value is not a `int64_t` (or there is no value at the given `key`), this returns `false`.
    */
-  bool isBigInt(const std::string& key) const;
+  bool isInt64(const std::string& key) const;
   /**
    * Returns whether the value under the given key is a `string`.
    * If the value is not a `string` (or there is no value at the given `key`), this returns `false`.
@@ -117,7 +117,7 @@ public:
    * Returns the null value at the given `key`.
    * If no `null` value exists at the given `key`, this method will throw.
    */
-  std::monostate getNull(const std::string& key) const;
+  NullType getNull(const std::string& key) const;
   /**
    * Returns the double value at the given `key`.
    * If no `double` value exists at the given `key`, this method will throw.
@@ -129,10 +129,10 @@ public:
    */
   bool getBoolean(const std::string& key) const;
   /**
-   * Returns the bigint value at the given `key`.
-   * If no `bigint` value exists at the given `key`, this method will throw.
+   * Returns the Int64 value at the given `key`.
+   * If no `int64_t` value exists at the given `key`, this method will throw.
    */
-  int64_t getBigInt(const std::string& key) const;
+  int64_t getInt64(const std::string& key) const;
   /**
    * Returns the string value at the given `key`.
    * If no `string` value exists at the given `key`, this method will throw.
@@ -148,6 +148,12 @@ public:
    * If no object value exists at the given `key`, this method will throw.
    */
   AnyObject getObject(const std::string& key) const;
+
+  /**
+   * Get the value at the given `key` as it's boxed `AnyValue`.
+   * If no object value exists at the given `key`, this method will throw.
+   */
+  AnyValue getAny(const std::string& key) const;
 
 public:
   /**
@@ -166,10 +172,10 @@ public:
    */
   void setBoolean(const std::string& key, bool value);
   /**
-   * Set the value at the given key to the given `bigint`.
+   * Set the value at the given key to the given `int64_t`.
    * If the key already exists, this will overwrite the value at that `key`.
    */
-  void setBigInt(const std::string& key, int64_t value);
+  void setInt64(const std::string& key, int64_t value);
   /**
    * Set the value at the given key to the given `string`.
    * If the key already exists, this will overwrite the value at that `key`.
@@ -195,10 +201,16 @@ public:
   /**
    * Get the actual C++ map that holds all keys and variant values.
    */
-  const std::unordered_map<std::string, AnyValue>& getMap() const;
+  std::unordered_map<std::string, AnyValue>& getMap();
+
+public:
+  /**
+   * Merge all keys and values from given `other` `AnyMap` into this `AnyMap`.
+   */
+  void merge(const std::shared_ptr<AnyMap>& other);
 
 private:
   std::unordered_map<std::string, AnyValue> _map;
-};
+} SWIFT_NONCOPYABLE;
 
 } // namespace margelo::nitro

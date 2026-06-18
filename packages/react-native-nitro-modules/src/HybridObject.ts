@@ -5,8 +5,8 @@
  * to platform-specific languages like Swift or Kotlin
  */
 export interface PlatformSpec {
-  ios?: 'swift' | 'c++'
-  android?: 'kotlin' | 'c++'
+  ios?: 'c++' | 'swift'
+  android?: 'c++' | 'kotlin'
 }
 
 /**
@@ -19,9 +19,7 @@ export interface PlatformSpec {
  * All `HybridObject`s are implemented using `NativeState`, and inherit their properties
  * and methods from their prototype, so the actual JS object is empty.
  *
- * @type Platforms: The type of platforms this HybridObject will be implemented in. By default, it is
- * a C++ `HybridObject`.
- * @default { ios: 'c++', android: 'c++' }
+ * @type Platforms: The type of platforms this HybridObject will be implemented in.
  * @example
  * ```ts
  * interface Photo extends HybridObject<{ ios: 'swift', android: 'kotlin' }> {
@@ -32,7 +30,7 @@ export interface PlatformSpec {
  * }
  * ```
  */
-export interface HybridObject<Platforms extends PlatformSpec = {}> {
+export interface HybridObject<Platforms extends PlatformSpec> {
   /**
    * Holds a type-name describing the native `HybridObject` instance.
    *
@@ -41,7 +39,7 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    *
    * Nitro prototypes also have a `__type`.
    *
-   * - For actual HybridObject instances, this is `NativeState<...>`
+   * - For actual HybridObject instances, this is `HybridObject<...>`
    * - For prototypes this is `Prototype<...>`.
    *
    * @internal
@@ -76,14 +74,13 @@ export interface HybridObject<Platforms extends PlatformSpec = {}> {
    * ```ts
    * const hybridA = SomeModule.getExistingHybridInstance()
    * const hybridB = SomeModule.getExistingHybridInstance()
-   * console.log(hybridA === hybridB) // false
    * console.log(hybridA.equals(hybridB)) // true
    * ```
    */
   equals(other: HybridObject<Platforms>): boolean
   /**
    * Disposes any resources this {@linkcode HybridObject} might hold natively,
-   * and finally releases this {@linkcode HybridObject}'s `NativeState`.
+   * and releases this {@linkcode HybridObject}'s `NativeState`.
    *
    * After calling {@linkcode dispose()}, this object can no longer be used.
    *

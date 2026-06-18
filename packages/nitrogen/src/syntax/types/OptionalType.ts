@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class OptionalType implements Type {
   readonly wrappingType: Type
@@ -16,16 +16,35 @@ export class OptionalType implements Type {
   get kind(): TypeKind {
     return 'optional'
   }
+  get isEquatable(): boolean {
+    return this.wrappingType.isEquatable
+  }
+  get needsBraces(): boolean {
+    switch (this.wrappingType.kind) {
+      case 'function':
+        return true
+      default:
+        return false
+    }
+  }
 
-  getCode(language: Language): string {
-    const wrapping = this.wrappingType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const wrapping = this.wrappingType.getCode(language, options)
     switch (language) {
       case 'c++':
         return `std::optional<${wrapping}>`
       case 'swift':
-        return `${wrapping}?`
+        if (this.needsBraces) {
+          return `(${wrapping})?`
+        } else {
+          return `${wrapping}?`
+        }
       case 'kotlin':
-        return `${wrapping}?`
+        if (this.needsBraces) {
+          return `(${wrapping})?`
+        } else {
+          return `${wrapping}?`
+        }
       default:
         throw new Error(
           `Language ${language} is not yet supported for OptionalType!`
@@ -35,14 +54,16 @@ export class OptionalType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.wrappingType.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] =
+      this.wrappingType.getRequiredImports(language)
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'optional',
         space: 'system',
-      },
-      ...this.wrappingType.getRequiredImports(),
-    ]
+      })
+    }
+    return imports
   }
 }

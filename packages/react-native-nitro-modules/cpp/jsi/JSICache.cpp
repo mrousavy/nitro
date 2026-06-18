@@ -6,20 +6,19 @@
 //
 
 #include "JSICache.hpp"
+#include "CommonGlobals.hpp"
 #include "JSIHelpers.hpp"
 #include "NitroDefines.hpp"
 
 namespace margelo::nitro {
 
-static constexpr auto CACHE_PROP_NAME = "__nitroModulesJSICache";
-
 template <typename T>
-inline void destroyReferences(const std::vector<BorrowingReference<T>>& references) {
+inline void destroyReferences(const std::vector<WeakReference<T>>& references) {
   for (auto& func : references) {
-    OwningReference<T> owning = func.lock();
-    if (owning) {
+    BorrowingReference<T> reference = func.lock();
+    if (reference) {
       // Destroy all functions that we might still have in cache, some callbacks and Promises may now become invalid.
-      owning.destroy();
+      reference.destroy();
     }
   }
 }
@@ -28,9 +27,11 @@ JSICache::~JSICache() {
   Logger::log(LogLevel::Info, TAG, "Destroying JSICache...");
   std::unique_lock lock(_mutex);
 
+  destroyReferences(_valueCache);
   destroyReferences(_objectCache);
   destroyReferences(_functionCache);
   destroyReferences(_weakObjectCache);
+  destroyReferences(_propNameIDCache);
   destroyReferences(_arrayBufferCache);
 }
 
@@ -47,23 +48,23 @@ JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
     Logger::log(LogLevel::Warning, TAG, "JSICache was created, but it is no longer strong!");
   }
 
-#ifdef NITRO_DEBUG
-  if (runtime.global().hasProperty(runtime, CACHE_PROP_NAME)) [[unlikely]] {
-    throw std::runtime_error("The Runtime \"" + getRuntimeId(runtime) + "\" already has a global cache! (\"" + CACHE_PROP_NAME + "\")");
-  }
-#endif
-
   // Cache doesn't exist yet.
   Logger::log(LogLevel::Info, TAG, "Creating new JSICache<T> for runtime %s..", getRuntimeId(runtime).c_str());
   // Create new cache
-  auto nativeState = std::shared_ptr<JSICache>(new JSICache());
+  std::shared_ptr<JSICache> nativeState(new JSICache());
   // Wrap it in a jsi::Value using NativeState
   jsi::Object cache(runtime);
   cache.setNativeState(runtime, nativeState);
-  // Inject it into the jsi::Runtime's global so it's memory is managed by it
-  runtime.global().setProperty(runtime, CACHE_PROP_NAME, std::move(cache));
-  // Add it to our map of caches
+  // Add it to our map of caches first, because the next `::defineGlobal(...)` call will already be using it (recursively)
   _globalCache[&runtime] = nativeState;
+  try {
+    // Call Object.defineProperty(global, ...) now with our cache (it internally already uses cache)
+    CommonGlobals::defineGlobal(runtime, KnownGlobalPropertyName::JSI_CACHE, std::move(cache));
+  } catch (...) {
+    // If `defineGlobal(...)` failed, we should remove it from `_globalCache` so we don't have invalid caches.
+    _globalCache.erase(&runtime);
+    throw;
+  }
   // Return it
   return JSICacheReference(nativeState);
 }

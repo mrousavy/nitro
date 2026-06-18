@@ -3,14 +3,18 @@ import { escapeCppName, toReferenceType } from '../helpers.js'
 import { Parameter } from '../Parameter.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { PromiseType } from './PromiseType.js'
-import type { NamedType, Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, NamedType, Type, TypeKind } from './Type.js'
+
+export interface GetFunctionCodeOptions extends GetCodeOptions {
+  includeNameInfo?: boolean
+}
 
 export class FunctionType implements Type {
   readonly returnType: Type
   readonly parameters: NamedType[]
 
-  constructor(returnType: Type, parameters: NamedType[]) {
-    if (returnType.kind === 'void') {
+  constructor(returnType: Type, parameters: NamedType[], isSync = false) {
+    if (returnType.kind === 'void' || isSync) {
       // void callbacks are async, but we don't care about the result.
       this.returnType = returnType
     } else {
@@ -18,6 +22,13 @@ export class FunctionType implements Type {
       this.returnType = new PromiseType(returnType)
     }
     this.parameters = parameters
+
+    if (isSync && returnType.kind === 'void') {
+      throw new Error(
+        `Function \`${this.jsName}\` cannot be sync (\`Sync<...>\`) AND return \`void\`, as this is ambiguous. ` +
+          `Either return a value (even if it's just a \`boolean\`) to keep it sync, or make it async.`
+      )
+    }
   }
 
   get specializationName(): string {
@@ -44,6 +55,9 @@ export class FunctionType implements Type {
 
   get kind(): TypeKind {
     return 'function'
+  }
+  get isEquatable(): boolean {
+    return false
   }
 
   /**
@@ -90,40 +104,41 @@ export class FunctionType implements Type {
     return `${returnType}(*${name})(${params})`
   }
 
-  getCode(language: Language, includeNameInfo = true): string {
+  getCode(language: Language, options: GetFunctionCodeOptions = {}): string {
+    const includeNameInfo = options.includeNameInfo ?? true
     switch (language) {
       case 'c++': {
         const params = this.parameters
           .map((p) => {
-            const type = p.getCode('c++')
+            const type = p.getCode('c++', options)
             const code = p.canBePassedByReference ? toReferenceType(type) : type
             if (includeNameInfo) return `${code} /* ${p.name} */`
             else return code
           })
           .join(', ')
-        const returnType = this.returnType.getCode(language)
+        const returnType = this.returnType.getCode(language, options)
         return `std::function<${returnType}(${params})>`
       }
       case 'swift': {
         const params = this.parameters
           .map((p) => {
             if (includeNameInfo)
-              return `_ ${p.escapedName}: ${p.getCode(language)}`
-            else return p.getCode(language)
+              return `_ ${p.escapedName}: ${p.getCode(language, options)}`
+            else return p.getCode(language, options)
           })
           .join(', ')
-        const returnType = this.returnType.getCode(language)
-        return `((${params}) -> ${returnType})`
+        const returnType = this.returnType.getCode(language, options)
+        return `(${params}) -> ${returnType}`
       }
       case 'kotlin': {
         const params = this.parameters
           .map((p) => {
             if (includeNameInfo)
-              return `${p.escapedName}: ${p.getCode(language)}`
-            else return p.getCode(language)
+              return `${p.escapedName}: ${p.getCode(language, options)}`
+            else return p.getCode(language, options)
           })
           .join(', ')
-        const returnType = this.returnType.getCode(language)
+        const returnType = this.returnType.getCode(language, options)
         return `(${params}) -> ${returnType}`
       }
       default:
@@ -138,15 +153,18 @@ export class FunctionType implements Type {
       ...this.parameters.flatMap((p) => p.getExtraFiles()),
     ]
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = [
+      ...this.returnType.getRequiredImports(language),
+      ...this.parameters.flatMap((p) => p.getRequiredImports(language)),
+    ]
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'functional',
         space: 'system',
-      },
-      ...this.returnType.getRequiredImports(),
-      ...this.parameters.flatMap((p) => p.getRequiredImports()),
-    ]
+      })
+    }
+    return imports
   }
 }

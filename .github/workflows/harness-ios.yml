@@ -1,0 +1,168 @@
+name: Harness iOS
+
+concurrency:
+  group: harness-ios-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      device_model:
+        description: "iOS Simulator device model"
+        required: false
+        default: "iPhone 17 Pro"
+        type: string
+      ios_version:
+        description: "iOS version"
+        required: false
+        default: "26.5"
+        type: string
+      xcode_version:
+        description: "Xcode version"
+        required: false
+        default: "26.5"
+        type: string
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/harness-ios.yml"
+      - "example/ios/**"
+      - "**/nitrogen/generated/shared/**"
+      - "**/nitrogen/generated/ios/**"
+      - "packages/react-native-nitro-test/cpp/**"
+      - "packages/react-native-nitro-test/ios/**"
+      - "packages/react-native-nitro-test-external/cpp/**"
+      - "packages/react-native-nitro-test-external/ios/**"
+      - "packages/react-native-nitro-modules/cpp/**"
+      - "packages/react-native-nitro-modules/ios/**"
+      - "packages/react-native-nitro-modules/src/**"
+      - "**/bun.lock"
+      - "**/Podfile.lock"
+      - "**/*.podspec"
+      - "**/react-native.config.js"
+      - "**/nitro.json"
+      - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
+      - "example/rn-harness.config.mjs"
+  pull_request:
+    paths:
+      - ".github/workflows/harness-ios.yml"
+      - "example/ios/**"
+      - "**/nitrogen/generated/shared/**"
+      - "**/nitrogen/generated/ios/**"
+      - "packages/react-native-nitro-test/cpp/**"
+      - "packages/react-native-nitro-test/ios/**"
+      - "packages/react-native-nitro-test-external/cpp/**"
+      - "packages/react-native-nitro-test-external/ios/**"
+      - "packages/react-native-nitro-modules/cpp/**"
+      - "packages/react-native-nitro-modules/ios/**"
+      - "packages/react-native-nitro-modules/src/**"
+      - "**/bun.lock"
+      - "**/Podfile.lock"
+      - "**/*.podspec"
+      - "**/react-native.config.js"
+      - "**/nitro.json"
+      - "example/__tests__/**"
+      - "example/src/getTests.ts"
+      - "example/src/testing/**"
+      - "example/jest.harness.config.mjs"
+      - "example/package.json"
+      - "example/rn-harness.config.mjs"
+
+env:
+  # Device configuration - can be overridden by workflow_dispatch inputs
+  DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
+  IOS_VERSION: ${{ github.event.inputs.ios_version || '26.5' }}
+  XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.5' }}
+  USE_CCACHE: 1
+  DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.5' }}.app/Contents/Developer
+  HARNESS_DEBUG: 1
+
+jobs:
+  harness_ios_new:
+    name: Harness iOS (new architecture)
+    runs-on: macOS-26
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install npm dependencies (bun)
+        run: bun install
+
+      - name: Install Ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 1.5G
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-ccache-example-ios
+          create-symlink: true
+      - name: Setup ccache behavior
+        run: |
+          echo "CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros" >> $GITHUB_ENV
+          echo "CCACHE_FILECLONE=true" >> $GITHUB_ENV
+          echo "CCACHE_DEPEND=true" >> $GITHUB_ENV
+          echo "CCACHE_INODECACHE=true" >> $GITHUB_ENV
+
+      - name: Setup Ruby (bundle)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7.2
+          bundler-cache: true
+          working-directory: example
+
+      - name: Select Xcode ${{ env.XCODE_VERSION }}
+        run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
+
+      - name: Restore Pods cache
+        uses: actions/cache@v5
+        with:
+          path: example/ios/Pods
+          key: ${{ runner.os }}-${{ runner.arch }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-pods-
+      - name: Install Pods
+        working-directory: example
+        run: bun pods
+
+      - name: Restore DerivedData cache
+        uses: actions/cache@v5
+        with:
+          path: example/ios/build
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
+
+      - name: Build iOS app
+        working-directory: example/ios
+        run: |
+          set -o pipefail
+          xcodebuild \
+            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            -derivedDataPath build -UseModernBuildSystem=YES \
+            -workspace NitroExample.xcworkspace \
+            -scheme NitroExample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -showBuildTimingSummary \
+            ONLY_ACTIVE_ARCH=YES \
+            build \
+            CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
+
+      - name: Install Watchman
+        run: brew install watchman
+
+      - name: Run Harness E2E tests
+        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
+        uses: callstackincubator/react-native-harness@v1.2.0
+        with:
+          runner: ios
+          projectRoot: example
+          app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
+          packageManager: bun

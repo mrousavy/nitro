@@ -22,7 +22,10 @@ private:
 
 public:
   template <typename... Args>
-  static void log(LogLevel level, const char* tag, const char* format, Args... args) {
+  static void log([[maybe_unused]] LogLevel level,              //
+                  [[maybe_unused]] const char* NON_NULL tag,    //
+                  [[maybe_unused]] const char* NON_NULL format, //
+                  [[maybe_unused]] Args... args) {
 #ifdef NITRO_DEBUG
     // 1. Make sure args can be passed to sprintf(..)
     static_assert(all_are_trivially_copyable<Args...>(), "All arguments passed to Logger::log(..) must be trivially copyable! "
@@ -36,11 +39,11 @@ public:
 #endif
   }
 
-  static void nativeLog(LogLevel level, const char* tag, const std::string& string);
+  static void nativeLog(LogLevel level, const char* NON_NULL tag, const std::string& string);
 
 private:
   template <typename... Args>
-  static std::string formatString(const char* format, Args... args) {
+  static std::string formatString(const char* NON_NULL format, Args... args) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wformat-security"
     int size = snprintf(nullptr, 0, format, args...) + 1; // Extra space for '\0'

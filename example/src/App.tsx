@@ -6,9 +6,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
+import { ViewScreen } from './screens/ViewScreen'
+import { EvalScreen } from './screens/EvalScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
+const map = require('./img/map.png')
+const terminal = require('./img/terminal.webp')
 
 const Tabs = createBottomTabNavigator()
 
@@ -28,10 +32,10 @@ export default function App() {
           component={HybridObjectTestsScreen}
           options={{
             tabBarLabel: 'Tests',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={dna}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size * 1.2, height: size * 1.2 }}
               />
             ),
@@ -42,11 +46,39 @@ export default function App() {
           component={BenchmarksScreen}
           options={{
             tabBarLabel: 'Benchmarks',
-            tabBarIcon: ({ size, focused }) => (
+            tabBarIcon: ({ size, color }) => (
               <Image
                 source={rocket}
-                tintColor={focused ? undefined : 'grey'}
+                tintColor={color}
                 style={{ width: size * 1.4, height: size * 1.4 }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="View"
+          component={ViewScreen}
+          options={{
+            tabBarLabel: 'View',
+            tabBarIcon: ({ size, color }) => (
+              <Image
+                source={map}
+                tintColor={color}
+                style={{ width: size, height: size }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Eval"
+          component={EvalScreen}
+          options={{
+            tabBarLabel: 'Eval',
+            tabBarIcon: ({ size, color }) => (
+              <Image
+                source={terminal}
+                tintColor={color}
+                style={{ width: size, height: size }}
               />
             ),
           }}

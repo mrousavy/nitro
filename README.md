@@ -1,4 +1,4 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/static/img/banner-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="./docs/static/img/banner-nitro-modules-light.png" />
@@ -8,11 +8,39 @@
 
 <br />
 
-**Nitro Modules** are highly efficient native modules with a statically compiled binding layer to JSI, and typesafe JS bindings.
-It consists of two parts:
+**Nitro Modules** are fast, type-safe native modules for React Native with statically compiled bindings to JSI.
+They consist of two parts:
 
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
-- [**nitrogen**](packages/nitrogen): A code-generator for nitro module library authors
+- [**nitrogen**](packages/nitrogen): An optional code-generator for nitro module library authors
+
+## Example
+
+Declaration (TypeScript):
+```ts
+export interface Math extends HybridObject<{ ios: 'c++' }> {
+  add(a: number, b: number): number
+}
+```
+
+Implementation (C++, Swift or Kotlin):
+```cpp
+class HybridMath: public HybridMathSpec {
+public:
+  HybridMath(): HybridObject(TAG) {}
+  double add(double a, double b) override {
+    return a + b;
+  }
+}
+```
+
+Usage (TypeScript):
+```ts
+import { NitroModules } from 'react-native-nitro-modules'
+
+const math = NitroModules.createHybridObject<Math>('Math')
+const result = math.add(5, 3)
+```
 
 ## Installation
 
@@ -26,10 +54,12 @@ cd ios && pod install
 
 - [**Nitro** docs 📚](https://nitro.margelo.com)
 - [**Community Discord** 💬](https://margelo.com/discord)
+- [**Nitro Module Builder** AI GPT 🤖](https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder)
+- [**How to build a Nitro Module** YouTube Tutorial ▶️](https://youtu.be/528SxTGnIlc?si=IxH7n09ZVe4iwRPv)
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
-- [**react-native-nitro-image** example module](./packages/react-native-nitro-image/README.md)
-- [`TestObject.nitro.ts` example playground](./packages/react-native-nitro-image/src/specs/TestObject.nitro.ts)
+- [**react-native-nitro-test** example module](./packages/react-native-nitro-test/README.md)
+- [`TestObject.nitro.ts` example playground](./packages/react-native-nitro-test/src/specs/TestObject.nitro.ts)
 
 ## Supported Platforms
 
@@ -57,7 +87,7 @@ We build fast and beautiful apps. Contact us at [margelo.com](https://margelo.co
 
 ## Contributing
 
-See the [contributing guide](https://nitro.margelo.com/docs/contributing) to learn how to contribute to the repository and the development workflow.
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for the contribution flow (PR expectations, the required test-per-fix rule, and the nitrogen workflow). For environment setup and reproduction walkthroughs, see the [contributing guide](https://nitro.margelo.com/docs/resources/contributing) on the docs site.
 
 ## License
 

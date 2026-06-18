@@ -7,9 +7,11 @@
 
 #pragma once
 
-#include "OwningReference.hpp"
+#include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <thread>
+#include <vector>
 
 namespace margelo::nitro {
 
@@ -26,7 +28,7 @@ using DeleteFn = std::function<void()>;
  * - `NativeArrayBuffer`: Created from native (C++), and can either own the memory (`isOwner()`), or borrow it.
  * - `JSArrayBuffer`: Received from JS, and will only be alive for as long as the JS Runtime is actually alive.
  *
- * Also, an `ArrayBuffer` can either own it's memory, or just borrow it's memory.
+ * Also, an `ArrayBuffer` can either own its memory, or just borrow its memory.
  * - Owning = the `ArrayBuffer`'s `data()` is alive as long as the `ArrayBuffer` is alive.
  *   When this `ArrayBuffer` gets deleted, it will free the memory.
  * - Borrowed = the `ArrayBuffer`'s `data()` might be deleted at any point from an external source (e.g. the JS garbage collector).
@@ -52,7 +54,28 @@ public:
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
    * and calls `deleteFunc` in which `data` should be deleted.
    */
-  static std::shared_ptr<ArrayBuffer> makeBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  static std::shared_ptr<ArrayBuffer> wrap(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given data of the given size
+   * into a newly allocated buffer.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(const uint8_t* NON_NULL data, size_t size);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given `std::vector`.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(const std::vector<uint8_t>& data);
+  /**
+   * Create a new `NativeArrayBuffer` that moves the given `std::vector`.
+   */
+  static std::shared_ptr<ArrayBuffer> move(std::vector<uint8_t>&& data);
+  /**
+   * Create a new `NativeArrayBuffer` that copies the given `std::shared_ptr<ArrayBuffer>`.
+   */
+  static std::shared_ptr<ArrayBuffer> copy(const std::shared_ptr<ArrayBuffer>& buffer);
+  /**
+   * Create a new `NativeArrayBuffer` that allocates a new buffer of the given size.
+   */
+  static std::shared_ptr<ArrayBuffer> allocate(size_t size);
 };
 
 /**
@@ -76,16 +99,16 @@ public:
    * Once this `ArrayBuffer` goes out of scope, `deleteFunc` will be called.
    * The caller is responsible for deleting the memory (`data`) here.
    */
-  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  NativeArrayBuffer(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc);
   ~NativeArrayBuffer();
 
 public:
-  uint8_t* data() override;
+  uint8_t* NON_NULL data() override;
   size_t size() const override;
   bool isOwner() const noexcept override;
 
 private:
-  uint8_t* _data;
+  uint8_t* NON_NULL _data;
   size_t _size;
   DeleteFn _deleteFunc;
 };
@@ -93,24 +116,24 @@ private:
 /**
  * Represents a JS-based `ArrayBuffer`.
  *
- * While it's underlying data might have been allocated on the native side (`NativeArrayBuffer`),
+ * While its underlying data might have been allocated on the native side (`NativeArrayBuffer`),
  * we only have a JS reference to the `ArrayBuffer` object so it is considered a "borrowed"-resource.
  *
  * `data()` and `size()` can only be accessed synchronously on the JS Runtime Thread.
  * If you want to access it elsewhere, copy the buffer first.
  *
- * If the JS ArrayBuffer (or it's JS Runtime) have already been deleted, `data()` returns `nullptr`.
+ * If the JS ArrayBuffer (or its JS Runtime) have already been deleted, `data()` returns `nullptr`.
  */
 class JSArrayBuffer final : public ArrayBuffer {
 public:
-  explicit JSArrayBuffer(jsi::Runtime* runtime, OwningReference<jsi::ArrayBuffer> jsReference);
+  explicit JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference);
   ~JSArrayBuffer();
 
 public:
   /**
    * Gets the data this `ArrayBuffer` points to, or `nullptr` if it has already been deleted.
    */
-  uint8_t* data() override;
+  uint8_t* NULLABLE data() override;
   /**
    * Gets the size of the data this `ArrayBuffer` points to, or `0` if it has already been deleted.
    */
@@ -120,9 +143,14 @@ public:
    */
   bool isOwner() const noexcept override;
 
+public:
+  BorrowingReference<jsi::ArrayBuffer> getJSReference() const noexcept {
+    return _jsReference;
+  }
+
 private:
-  jsi::Runtime* _runtime;
-  OwningReference<jsi::ArrayBuffer> _jsReference;
+  jsi::Runtime& _runtime;
+  BorrowingReference<jsi::ArrayBuffer> _jsReference;
   std::thread::id _initialThreadId;
 };
 

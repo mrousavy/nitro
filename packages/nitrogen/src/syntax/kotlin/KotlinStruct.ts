@@ -7,11 +7,51 @@ import type { SourceFile } from '../SourceFile.js'
 import type { StructType } from '../types/StructType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
+interface BridgedProperty {
+  name: string
+  type: KotlinCxxBridgedType
+}
+
 export function createKotlinStruct(structType: StructType): SourceFile[] {
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
-  const values = structType.properties.map(
-    (p) => `val ${p.escapedName}: ${p.getCode('kotlin')}`
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
+
+  const bridgedProperties = structType.properties.map<BridgedProperty>((p) => ({
+    name: p.escapedName,
+    type: new KotlinCxxBridgedType(p),
+  }))
+  const properties = bridgedProperties
+    .map(({ name, type }) => {
+      return `
+@DoNotStrip
+@Keep
+val ${name}: ${type.getTypeCode('kotlin', false)}
+`.trim()
+    })
+    .join(',\n')
+
+  const cxxCreateFunctionParameters = bridgedProperties
+    .map(({ name, type }) => {
+      return `${name}: ${type.getTypeCode('kotlin', false)}`
+    })
+    .join(', ')
+  const cxxCreateFunctionForward = bridgedProperties
+    .map((p) => p.name)
+    .join(', ')
+
+  const extraImports = structType.properties
+    .flatMap((t) => t.getRequiredImports('kotlin'))
+    .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
+
+  const secondaryConstructor = createKotlinConstructor(structType)
+
+  const equalityComparators = structType.properties.map(
+    (p) => `Objects.deepEquals(this.${p.escapedName}, other.${p.escapedName})`
   )
+  const propertiesList = structType.properties
+    .map((p) => p.escapedName)
+    .join(',\n')
+
   const code = `
 ${createFileMetadataString(`${structType.structName}.kt`)}
 
@@ -19,7 +59,8 @@ package ${packageName}
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
+import java.util.Objects
+${extraImports.join('\n')}
 
 /**
  * Represents the JavaScript object/struct "${structType.structName}".
@@ -27,12 +68,39 @@ import com.margelo.nitro.core.*
 @DoNotStrip
 @Keep
 data class ${structType.structName}(
-  ${indent(values.join(',\n'), '  ')}
-)
+  ${indent(properties, '  ')}
+) {
+  ${indent(secondaryConstructor, '  ')}
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is ${structType.structName}) return false
+    return ${equalityComparators.join(`\n      && `)}
+  }
+
+  override fun hashCode(): Int {
+    return arrayOf<Any?>(
+      ${indent(propertiesList, '      ')}
+    ).contentDeepHashCode()
+  }
+
+  companion object {
+    /**
+     * Constructor called from C++
+     */
+    @DoNotStrip
+    @Keep
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(${cxxCreateFunctionParameters}): ${structType.structName} {
+      return ${structType.structName}(${cxxCreateFunctionForward})
+    }
+  }
+}
   `.trim()
 
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     structType.structName
   )
@@ -44,7 +112,7 @@ data class ${structType.structName}(
   const imports = structType.properties
     .flatMap((p) => getReferencedTypes(p))
     .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
+    .flatMap((t) => t.getRequiredImports('c++'))
   const includes = imports
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
@@ -65,17 +133,18 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the the Kotlin data class "${structType.structName}".
+   * The C++ JNI bridge between the C++ struct "${structType.structName}" and the Kotlin data class "${structType.structName}".
    */
   struct J${structType.structName} final: public jni::JavaClass<J${structType.structName}> {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
 
   public:
     /**
      * Convert this Java/Kotlin-based struct to the C++ struct ${structType.structName} by copying all values to C++.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     ${structType.structName} toCpp() const {
       ${indent(jniStructInitializerBody, '      ')}
     }
@@ -98,7 +167,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${structType.structName}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({
@@ -109,6 +178,33 @@ namespace ${cxxNamespace} {
     platform: 'android',
   })
   return files
+}
+
+function createKotlinConstructor(structType: StructType): string {
+  const bridgedProperties = structType.properties.map<BridgedProperty>((p) => ({
+    name: p.escapedName,
+    type: new KotlinCxxBridgedType(p),
+  }))
+  const needsSpecialHandling = bridgedProperties.some(
+    ({ type }) => type.needsSpecialHandling
+  )
+  if (needsSpecialHandling) {
+    const kotlinParams = structType.properties.map(
+      (p) => `${p.escapedName}: ${p.getCode('kotlin')}`
+    )
+    const paramsForward = bridgedProperties.map(({ name, type }) =>
+      type.parseFromKotlinToCpp(name, 'kotlin')
+    )
+    return `
+/**
+ * Create a new instance of ${structType.structName} from Kotlin
+ */
+constructor(${kotlinParams.join(', ')}):
+       this(${paramsForward.join(', ')})
+      `.trim()
+  } else {
+    return `/* primary constructor */`
+  }
 }
 
 function createJNIStructInitializer(structType: StructType): string {
@@ -140,14 +236,27 @@ function createCppStructInitializer(
   cppValueName: string,
   structType: StructType
 ): string {
-  const lines: string[] = []
-  lines.push(`return newInstance(`)
-  const names = structType.properties.map((p) => {
-    const name = `${cppValueName}.${p.escapedName}`
-    const bridge = new KotlinCxxBridgedType(p)
-    return bridge.parse(name, 'c++', 'kotlin', 'c++')
-  })
-  lines.push(`  ${indent(names.join(',\n'), '  ')}`)
-  lines.push(');')
-  return lines.join('\n')
+  const jniTypes = structType.properties
+    .map((p) => {
+      const bridge = new KotlinCxxBridgedType(p)
+      return bridge.asJniReferenceType('alias')
+    })
+    .join(', ')
+  const params = structType.properties
+    .map((p) => {
+      const name = `${cppValueName}.${p.escapedName}`
+      const bridge = new KotlinCxxBridgedType(p)
+      return bridge.parse(name, 'c++', 'kotlin', 'c++')
+    })
+    .join(',\n')
+
+  return `
+using JSignature = J${structType.structName}(${jniTypes});
+static const auto clazz = javaClassStatic();
+static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+return create(
+  clazz,
+  ${indent(params, '  ')}
+);
+  `.trim()
 }

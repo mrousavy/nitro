@@ -6,6 +6,7 @@
 
 #include "HybridObjectPrototype.hpp"
 
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>
@@ -29,45 +30,54 @@ public:
    * Create a new instance of a `HybridObject`.
    * The given `name` will be used for logging and stringifying.
    */
-  explicit HybridObject(const char* name);
+  explicit HybridObject(const char* NON_NULL name);
   /**
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
    */
-  virtual ~HybridObject();
+  ~HybridObject() override;
   /**
    * HybridObjects cannot be copied.
    */
-  HybridObject(const HybridObject& copy) = default;
+  HybridObject(const HybridObject& copy) = delete;
   /**
    * HybridObjects cannot be moved.
    */
-  HybridObject(HybridObject&& move) = default;
+  HybridObject(HybridObject&& move) = delete;
   /**
    * HybridObjects cannot be default-constructed!
+   * Use this instead;
+   * ```cpp
+   * MyHybridObject(): HybridObject(TAG) {}
+   * ```
    */
   HybridObject() {
-    throw std::runtime_error("Cannot default-construct HybridObject!");
+    throw std::runtime_error("Cannot default-construct HybridObject! "
+                             "Did you forget to add the `HybridObject(TAG)` base-constructor call to your Hybrid Object's constructor?");
   }
 
 public:
   /**
    * Return the `jsi::Object` that holds this `HybridObject`. (boxed in a `jsi::Value`)
    * This properly assigns (or creates) the base prototype for this type,
-   * and assigns it's NativeState.
+   * and assigns its NativeState.
    * Additionally, this sets the external memory pressure for proper GC memory management.
    */
   jsi::Value toObject(jsi::Runtime& runtime);
 
 public:
   /**
-   * Get the `std::shared_ptr` instance of this HybridObject.
+   * Get the `std::shared_ptr` instance of this HybridObject as its concrete type.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
   template <typename Derived>
-  std::shared_ptr<Derived> shared() {
-    return std::dynamic_pointer_cast<Derived>(shared_from_this());
+  std::shared_ptr<Derived> shared_cast() {
+    return std::dynamic_pointer_cast<Derived>(shared());
   }
+  /**
+   * Get the `std::shared_ptr` instance of this HybridObject.
+   */
+  virtual std::shared_ptr<HybridObject> shared();
 
 public:
   /**
@@ -80,7 +90,7 @@ public:
    * While two `jsi::Object`s of the same `HybridObject` might not be equal when compared with `==`,
    * they might still be the same `HybridObject` - in this case `equals(other)` will return true.
    */
-  bool equals(std::shared_ptr<HybridObject> other);
+  virtual bool equals(const std::shared_ptr<HybridObject>& other);
   /**
    * Get a string representation of this `HybridObject` - useful for logging or debugging.
    */
@@ -89,7 +99,7 @@ public:
    * Eagerly- (and manually-) dispose all native resources this `HybridObject` holds.
    * This method can only be manually called from JS using `dispose()`.
    *
-   * If this method is never manually called, a `HybridObject` is expected to disposes it's
+   * If this method is never manually called, a `HybridObject` is expected to disposes its
    * resources as usual via the object's destructor (`~HybridObject()`, `deinit` or `finalize()`).
    *
    * By default, this method does nothing. It can be overridden to perform actual disposing/cleanup
@@ -102,7 +112,7 @@ private:
    * The actual `dispose()` function from JS.
    * This needs to be a raw JSI function as we remove the NativeState here.
    */
-  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count);
+  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* NON_NULL args, size_t count);
 
 protected:
   /**
@@ -135,8 +145,8 @@ protected:
 
 private:
   static constexpr auto TAG = "HybridObject";
-  const char* _name = TAG;
-  std::unordered_map<jsi::Runtime*, OwningReference<jsi::WeakObject>> _objectCache;
+  const char* NON_NULL _name = TAG;
+  std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::WeakObject>> _objectCache;
 };
 
 } // namespace margelo::nitro

@@ -42,11 +42,11 @@ static inline bool isPlainObject(jsi::Runtime& runtime, const jsi::Object& objec
  * Get an ID for the given Runtime.
  *
  * The ID usually consists of a Runtime description (e.g. "HermesRuntime"),
- * and it's Thread (e.g. "com.facebook.react.runtime.JavaScript")
+ * and its Thread's name (e.g. "com.facebook.react.runtime.JavaScript")
  */
 static inline std::string getRuntimeId(jsi::Runtime& runtime) {
   std::string threadName = ThreadUtils::getThreadName();
-  return runtime.description() + std::string(" (") + threadName + std::string(")");
+  return runtime.description() + " (" + threadName + ")";
 }
 
 } // namespace margelo::nitro

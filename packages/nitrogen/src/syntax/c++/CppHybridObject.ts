@@ -3,7 +3,6 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import { indent } from '../../utils.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { includeHeader, includeNitroHeader } from './includeNitroHeader.js'
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 
@@ -14,8 +13,11 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
     ...spec.methods.flatMap((m) => m.getExtraFiles()),
   ]
   const extraIncludes = [
-    ...spec.properties.flatMap((p) => p.getRequiredImports()),
-    ...spec.methods.flatMap((m) => m.getRequiredImports()),
+    ...spec.properties.flatMap((p) => p.getRequiredImports('c++')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('c++')),
+    ...spec.baseTypes.flatMap((b) =>
+      new HybridObjectType(b).getRequiredImports('c++')
+    ),
   ]
   const cppForwardDeclarations = extraIncludes
     .map((i) => i.forwardDeclaration)
@@ -24,18 +26,21 @@ export function createCppHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const cppExtraIncludes = extraIncludes
     .map((i) => includeHeader(i))
     .filter(isNotDuplicate)
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
   const name = getHybridObjectName(spec.name)
+
+  const properties = spec.properties.map((p) =>
+    p.getCode('c++', { virtual: true })
+  )
+  const methods = spec.methods.map((m) => m.getCode('c++', { virtual: true }))
 
   const bases = ['public virtual HybridObject']
   for (const base of spec.baseTypes) {
-    const hybridObject = new HybridObjectType(base.name, spec.language)
-    bases.push(`public virtual ${getHybridObjectName(base.name).HybridTSpec}`)
-    const imports = hybridObject.getRequiredImports()
-    cppForwardDeclarations.push(
-      ...imports.map((i) => i.forwardDeclaration).filter((f) => f != null)
-    )
-    cppExtraIncludes.push(...imports.map((i) => includeHeader(i)))
+    const baseName = getHybridObjectName(base.name).HybridTSpec
+    const fullName = base.config.isExternalConfig
+      ? base.config.getCxxNamespace('c++', baseName)
+      : baseName
+    bases.push(`public virtual ${fullName}`)
   }
 
   // Generate the full header / code
@@ -73,15 +78,15 @@ namespace ${cxxNamespace} {
       explicit ${name.HybridTSpec}(): HybridObject(TAG) { }
 
       // Destructor
-      virtual ~${name.HybridTSpec}() { }
+      ~${name.HybridTSpec}() override = default;
 
     public:
       // Properties
-      ${indent(spec.properties.map((p) => p.getCode('c++', { virtual: true })).join('\n'), '      ')}
+      ${indent(properties.join('\n'), '      ')}
 
     public:
       // Methods
-      ${indent(spec.methods.map((m) => m.getCode('c++', { virtual: true })).join('\n'), '      ')}
+      ${indent(methods.join('\n'), '      ')}
 
     protected:
       // Hybrid Setup
@@ -98,14 +103,16 @@ namespace ${cxxNamespace} {
   // Each C++ method needs to be registered in the HybridObject - that's getters, setters and normal methods.
   const registrations: string[] = []
   for (const property of spec.properties) {
+    const getterMethod = property.getGetterName('other')
+    const setterMethod = property.getSetterName('other')
     // getter
     registrations.push(
-      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${property.cppGetterName});`
+      `prototype.registerHybridGetter("${property.name}", &${name.HybridTSpec}::${getterMethod});`
     )
     if (!property.isReadonly) {
       // setter
       registrations.push(
-        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${property.cppSetterName});`
+        `prototype.registerHybridSetter("${property.name}", &${name.HybridTSpec}::${setterMethod});`
       )
     }
   }

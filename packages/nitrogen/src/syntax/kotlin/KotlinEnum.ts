@@ -5,8 +5,10 @@ import type { SourceFile } from '../SourceFile.js'
 import { EnumType } from '../types/EnumType.js'
 
 export function createKotlinEnum(enumType: EnumType): SourceFile[] {
-  const members = enumType.enumMembers.map((m) => m.name.toUpperCase())
-  const packageName = NitroConfig.getAndroidPackage('java/kotlin')
+  const members = enumType.enumMembers.map(
+    (m) => `${m.name.toUpperCase()}(${m.value})`
+  )
+  const packageName = NitroConfig.current.getAndroidPackage('java/kotlin')
   const code = `
 ${createFileMetadataString(`${enumType.enumName}.kt`)}
 
@@ -20,13 +22,15 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class ${enumType.enumName} {
-  ${indent(members.join(',\n'), '  ')}
+enum class ${enumType.enumName}(@DoNotStrip @Keep val value: Int) {
+  ${indent(members.join(',\n'), '  ')};
+
+  companion object
 }
   `.trim()
 
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const jniClassDescriptor = NitroConfig.current.getAndroidPackage(
     'c++/jni',
     enumType.enumName
   )
@@ -45,20 +49,21 @@ namespace ${cxxNamespace} {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the the Kotlin enum "${enumType.enumName}".
+   * The C++ JNI bridge between the C++ enum "${enumType.enumName}" and the Kotlin enum "${enumType.enumName}".
    */
   struct J${enumType.enumName} final: public jni::JavaClass<J${enumType.enumName}> {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
+    static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
 
   public:
     /**
      * Convert this Java/Kotlin-based enum to the C++ enum ${enumType.enumName}.
      */
     [[maybe_unused]]
+    [[nodiscard]]
     ${enumType.enumName} toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldOrdinal = clazz->getField<int>("ordinal");
+      static const auto fieldOrdinal = clazz->getField<int>("value");
       int ordinal = this->getFieldValue(fieldOrdinal);
       return static_cast<${enumType.enumName}>(ordinal);
     }
@@ -81,7 +86,7 @@ namespace ${cxxNamespace} {
     content: code,
     language: 'kotlin',
     name: `${enumType.enumName}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: NitroConfig.current.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push({
@@ -100,23 +105,17 @@ function getCppToJniConverterCode(
 ): string {
   const jniEnumName = `J${enumType.enumName}`
 
-  const fields = enumType.enumMembers.map((m) => {
-    const fieldName = `field${capitalizeName(m.name)}`
-    return `static const auto ${fieldName} = clazz->getStaticField<${jniEnumName}>("${m.name}");`
-  })
-
   const cases = enumType.enumMembers.map((m) => {
     const fieldName = `field${capitalizeName(m.name)}`
     return `
 case ${enumType.enumName}::${m.name}:
+  static const auto ${fieldName} = clazz->getStaticField<${jniEnumName}>("${m.name}");
   return clazz->getStaticFieldValue(${fieldName});
 `.trim()
   })
 
   return `
 static const auto clazz = javaClassStatic();
-${fields.join('\n')}
-
 switch (${cppValueName}) {
   ${indent(cases.join('\n'), '  ')}
   default:

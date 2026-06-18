@@ -1,6 +1,11 @@
 import type { SourceFile } from './syntax/SourceFile.js'
 import path from 'path'
+import fs from 'fs'
 import type { SwiftCxxHelper } from './syntax/swift/SwiftCxxTypeHelper.js'
+import type { Type } from 'ts-morph'
+import { isNotDuplicate } from './syntax/helpers.js'
+import { readUserConfig } from './config/getConfig.js'
+import { NitroConfig } from './config/NitroConfig.js'
 
 export function capitalizeName(name: string): string {
   if (name.length === 0) return name
@@ -50,26 +55,41 @@ export function escapeComments(string: string): string {
     .replace(/\/\//g, '/ /') // Escape single-line comment
 }
 
+const HAS_UNIX_PATHS = path.join('a', 'b').includes('/')
+export function toUnixPath(p: string): string {
+  if (HAS_UNIX_PATHS) return p
+  return p.replaceAll('\\', '/')
+}
+
+const sep = path.sep
+export function unsafeFastJoin(...segments: string[]): string {
+  // this function should really not take any unsafe strings like `/` or `\`.
+  return segments.join(sep)
+}
+
 function getFullPath(file: SourceFile): string {
-  return path.join(
+  return unsafeFastJoin(
     file.platform,
     file.language,
     ...file.subdirectory,
-    file.content
+    file.name
   )
 }
-export function filterDuplicateFiles(
-  f: SourceFile,
-  i: number,
-  array: SourceFile[]
-): boolean {
-  const otherIndex = array.findIndex((f2) => getFullPath(f) === getFullPath(f2))
-  if (otherIndex !== i) {
-    if (array[i]?.content !== array[otherIndex]?.content) {
-      throw new Error(`File "${f.name}"'s content differs!`)
+
+/**
+ * Deduplicates all files via their full path.
+ * If content differs, you are f*cked.
+ */
+export function deduplicateFiles(files: SourceFile[]): SourceFile[] {
+  const map = new Map<string, SourceFile>()
+  for (const file of files) {
+    const filePath = getFullPath(file)
+
+    if (!map.has(filePath)) {
+      map.set(filePath, file)
     }
   }
-  return otherIndex === i
+  return [...map.values()]
 }
 
 export function filterDuplicateHelperBridges(
@@ -95,4 +115,46 @@ export function toLowerCamelCase(string: string): string {
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
 
   return camelCaseString + camelCased.join('')
+}
+
+export function getBaseTypes(type: Type): Type[] {
+  const baseTypes = type.getBaseTypes()
+  const symbol = type.getSymbol()
+  if (symbol != null) {
+    baseTypes.push(...symbol.getDeclaredType().getBaseTypes())
+  }
+  const recursive = baseTypes.flatMap((b) => [b, ...getBaseTypes(b)])
+  return recursive.filter(isNotDuplicate)
+}
+
+export function getHybridObjectNitroModuleConfig(
+  type: Type
+): NitroConfig | undefined {
+  const symbol = type.getSymbol() ?? type.getAliasSymbol()
+  if (!symbol) return undefined
+
+  const declarations =
+    symbol.getValueDeclaration() || symbol.getDeclarations()[0]
+  if (!declarations) return undefined
+
+  const sourceFile = declarations.getSourceFile()
+  let filePath: string = sourceFile.getFilePath()
+
+  while (true) {
+    // go up one dir
+    const newFilePath = path.resolve(path.join(filePath, '..'))
+    if (filePath === newFilePath) {
+      // going 'cd ..' in that path didn't change a thing - so we
+      // reached the root directory. we didn't find a nitro.json anywhere.
+      return undefined
+    }
+    filePath = newFilePath
+
+    const nitroJsonPath = path.join(filePath, 'nitro.json')
+    const hasNitroJson = fs.existsSync(nitroJsonPath)
+    if (hasNitroJson) {
+      const config = readUserConfig(nitroJsonPath)
+      return new NitroConfig(config)
+    }
+  }
 }

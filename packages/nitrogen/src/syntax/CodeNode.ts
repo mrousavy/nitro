@@ -20,5 +20,5 @@ export interface CodeNode {
    *
    * All imports returned here must be included in the current file (e.g. `#include "..."` or `import ...`)
    */
-  getRequiredImports(): SourceImport[]
+  getRequiredImports(language: Language): SourceImport[]
 }

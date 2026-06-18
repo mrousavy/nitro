@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class TupleType implements Type {
   readonly itemTypes: Type[]
@@ -17,9 +17,12 @@ export class TupleType implements Type {
   get kind(): TypeKind {
     return 'tuple'
   }
+  get isEquatable(): boolean {
+    return this.itemTypes.every((t) => t.isEquatable)
+  }
 
-  getCode(language: Language): string {
-    const types = this.itemTypes.map((t) => t.getCode(language))
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const types = this.itemTypes.map((t) => t.getCode(language, options))
 
     switch (language) {
       case 'c++':
@@ -37,14 +40,17 @@ export class TupleType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.itemTypes.flatMap((t) => t.getExtraFiles())
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports = this.itemTypes.flatMap((t) =>
+      t.getRequiredImports(language)
+    )
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'tuple',
         space: 'system',
-      },
-      ...this.itemTypes.flatMap((t) => t.getRequiredImports()),
-    ]
+      })
+    }
+    return imports
   }
 }

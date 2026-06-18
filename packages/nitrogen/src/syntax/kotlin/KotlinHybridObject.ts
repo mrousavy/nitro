@@ -1,13 +1,13 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
 import { indent } from '../../utils.js'
+import { createKotlinHybridViewManager } from '../../views/kotlin/KotlinHybridViewManager.js'
 import { getAllTypes } from '../getAllTypes.js'
 import { getHybridObjectName } from '../getHybridObjectName.js'
-import { createFileMetadataString } from '../helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
-import type { SourceFile } from '../SourceFile.js'
-import { type Type } from '../types/Type.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
+import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -20,19 +20,45 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const javaPackage = NitroConfig.getAndroidPackage('java/kotlin')
-  const cppLibName = NitroConfig.getAndroidCxxLibName()
+  const extraImports: SourceImport[] = [
+    ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
+    ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
+    ...spec.baseTypes.flatMap((b) =>
+      new HybridObjectType(b).getRequiredImports('kotlin')
+    ),
+    {
+      name: 'com.margelo.nitro.core.HybridObject',
+      space: 'system',
+      language: 'kotlin',
+    },
+  ]
+  if (spec.isHybridView) {
+    extraImports.push({
+      name: 'com.margelo.nitro.views.HybridView',
+      space: 'system',
+      language: 'kotlin',
+    })
+  }
 
-  let kotlinBase = 'HybridObject'
+  let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
+  let cxxPartBase = 'HybridObject.CxxPart'
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported in Kotlin!`
       )
     }
-    const base = spec.baseTypes[0]!.name
-    kotlinBase = getHybridObjectName(base).HybridTSpec
+    const base = spec.baseTypes[0]!
+    const baseHybrid = new HybridObjectType(base)
+    kotlinBase = baseHybrid.getCode('kotlin')
+    cxxPartBase = `${kotlinBase}.CxxPart`
   }
+
+  const imports = extraImports
+    .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
+
+  const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 
   // 1. Create Kotlin abstract class definition
   const abstractClassCode = `
@@ -40,11 +66,10 @@ ${createFileMetadataString(`${name.HybridTSpec}.kt`)}
 
 package ${javaPackage}
 
-import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
+${imports.join('\n')}
 
 /**
  * A Kotlin class representing the ${spec.name} HybridObject.
@@ -52,45 +77,36 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-@Suppress("RedundantSuppression", "KotlinJniMissingFunction", "PropertyName", "RedundantUnitReturnType", "unused")
+@Suppress(
+  "KotlinJniMissingFunction", "unused",
+  "RedundantSuppression", "RedundantUnitReturnType", "SimpleRedundantLet",
+  "LocalVariableName", "PropertyName", "PrivatePropertyName", "FunctionName"
+)
 abstract class ${name.HybridTSpec}: ${kotlinBase}() {
-  @DoNotStrip
-  private var mHybridData: HybridData = initHybrid()
-
-  init {
-    // Pass this \`HybridData\` through to it's base class,
-    // to represent inheritance to JHybridObject on C++ side
-    super.updateNative(mHybridData)
-  }
-
-  /**
-   * Call from a child class to initialize HybridData with a child.
-   */
-  override fun updateNative(hybridData: HybridData) {
-    mHybridData = hybridData
-  }
-
   // Properties
   ${indent(properties, '  ')}
 
   // Methods
   ${indent(methods, '  ')}
 
-  private external fun initHybrid(): HybridData
+  // Default implementation of \`HybridObject.toString()\`
+  override fun toString(): String {
+    return "[HybridObject ${name.T}]"
+  }
+
+  // C++ backing class
+  @DoNotStrip
+  @Keep
+  protected open class CxxPart(javaPart: ${name.HybridTSpec}): ${cxxPartBase}(javaPart) {
+    // C++ ${name.JHybridTSpec}::CxxPart::initHybrid(...)
+    external override fun initHybrid(): HybridData
+  }
+  override fun createCxxPart(): CxxPart {
+    return CxxPart(this)
+  }
 
   companion object {
-    private const val TAG = "${name.HybridTSpec}"
-    init {
-      try {
-        Log.i(TAG, "Loading ${cppLibName} C++ library...")
-        System.loadLibrary("${cppLibName}")
-        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
-      } catch (e: Error) {
-        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
-                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
-        throw e
-      }
-    }
+    protected const val TAG = "${name.HybridTSpec}"
   }
 }
   `.trim()
@@ -108,28 +124,29 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
     content: abstractClassCode,
     language: 'kotlin',
     name: `${name.HybridTSpec}.kt`,
-    subdirectory: NitroConfig.getAndroidPackageDirectory(),
+    subdirectory: spec.config.getAndroidPackageDirectory(),
     platform: 'android',
   })
   files.push(...cppFiles)
   files.push(...extraFiles)
-  return files
-}
 
-function requiresSpecialBridging(type: Type): boolean {
-  return (
-    type.getCode('kotlin') !==
-    new KotlinCxxBridgedType(type).getTypeCode('kotlin')
-  )
+  if (spec.isHybridView) {
+    const viewFiles = createKotlinHybridViewManager(spec)
+    files.push(...viewFiles)
+  }
+
+  return files
 }
 
 function getMethodForwardImplementation(method: Method): string {
   const bridgedReturn = new KotlinCxxBridgedType(method.returnType)
   const requiresBridge =
-    requiresSpecialBridging(method.returnType) ||
-    method.parameters.some((p) => requiresSpecialBridging(p.type))
+    bridgedReturn.needsSpecialHandling ||
+    method.parameters.some((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      return bridged.needsSpecialHandling
+    })
 
-  const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
   if (requiresBridge) {
     const paramsSignature = method.parameters.map((p) => {
       const bridge = new KotlinCxxBridgedType(p.type)
@@ -143,33 +160,32 @@ function getMethodForwardImplementation(method: Method): string {
       '__result',
       'kotlin'
     )
+    const code = method.getCode('kotlin', { virtual: true })
     return `
 ${code}
 
 @DoNotStrip
 @Keep
-private fun ${method.name}(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
+private fun ${method.name}_cxx(${paramsSignature.join(', ')}): ${bridgedReturn.getTypeCode('kotlin')} {
   val __result = ${method.name}(${paramsForward.join(', ')})
   return ${returnForward}
 }
     `.trim()
   } else {
+    const code = method.getCode('kotlin', { doNotStrip: true, virtual: true })
     return code
   }
 }
 
 function getPropertyForwardImplementation(property: Property): string {
-  const code = property.getCode('kotlin', { doNotStrip: true, virtual: true })
-  if (requiresSpecialBridging(property.type)) {
-    const bridged = new KotlinCxxBridgedType(property.type)
-
+  const bridged = new KotlinCxxBridgedType(property.type)
+  if (bridged.needsSpecialHandling) {
     let keyword = property.isReadonly ? 'val' : 'var'
-    let modifiers: string[] = []
-    modifiers.push('@get:DoNotStrip', '@get:Keep')
-    if (!property.isReadonly) modifiers.push('@set:DoNotStrip', '@set:Keep')
     let lines: string[] = []
     lines.push(
       `
+@Keep
+@DoNotStrip
 get() {
   return ${indent(bridged.parseFromKotlinToCpp(property.name, 'kotlin'), '  ')}
 }
@@ -178,19 +194,28 @@ get() {
     if (!property.isReadonly) {
       lines.push(
         `
+@Keep
+@DoNotStrip
 set(value) {
   ${property.name} = ${indent(bridged.parseFromCppToKotlin('value', 'kotlin'), '  ')}
 }
       `.trim()
       )
     }
+    const code = property.getCode('kotlin', {
+      virtual: true,
+    })
     return `
 ${code}
 
-private ${keyword} ${property.name}: ${bridged.getTypeCode('kotlin')}
+private ${keyword} ${property.name}_cxx: ${bridged.getTypeCode('kotlin')}
   ${indent(lines.join('\n'), '  ')}
     `.trim()
   } else {
+    const code = property.getCode('kotlin', {
+      doNotStrip: true,
+      virtual: true,
+    })
     return code
   }
 }

@@ -1,5 +1,12 @@
-import { promises as fs } from 'fs'
+import { Dirent, promises as fs } from 'fs'
 import path from 'path'
+
+type DirentCompat = Dirent & { path?: string }
+
+function getFilePath(file: DirentCompat, rootDir: string): string {
+  const dir = file.parentPath ?? file.path ?? rootDir
+  return path.join(dir, file.name)
+}
 
 export async function getFiles(directory: string): Promise<string[]> {
   try {
@@ -8,7 +15,7 @@ export async function getFiles(directory: string): Promise<string[]> {
       withFileTypes: true,
     })
 
-    return files.filter((f) => f.isFile()).map((f) => path.join(f.path, f.name))
+    return files.filter((f) => f.isFile()).map((f) => getFilePath(f, directory))
   } catch (error) {
     if (
       typeof error === 'object' &&

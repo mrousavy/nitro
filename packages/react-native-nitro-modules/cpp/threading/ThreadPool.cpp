@@ -12,7 +12,7 @@
 namespace margelo::nitro {
 
 ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxThreadsCount)
-    : _isAlive(true), _name(name), _threadCountLimit(maxThreadsCount) {
+    : _isAlive(true), _threadCountLimit(maxThreadsCount), _name(name) {
   Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads (max: %i)...", name, initialThreadsCount,
               maxThreadsCount);
 
@@ -64,12 +64,12 @@ void ThreadPool::run(std::function<void()>&& task) {
   }
   // New scope because of RAII lock
   {
-    // lock on the mutex - we want to emplace the task back in the queue
+    // lock on the mutex - we want to push the task back in the queue
     std::unique_lock<std::mutex> lock(_queueMutex);
     if (!_isAlive) {
       throw std::runtime_error("Cannot queue the given task - the ThreadPool has already been stopped!");
     }
-    _tasks.emplace(std::move(task));
+    _tasks.push(std::move(task));
   }
   // Notify about a new task - one of the workers will pick it up
   _condition.notify_one();

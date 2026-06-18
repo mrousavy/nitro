@@ -10,6 +10,9 @@ export class StringType implements Type {
   get kind(): TypeKind {
     return 'string'
   }
+  get isEquatable(): boolean {
+    return true
+  }
 
   getCode(language: Language): string {
     switch (language) {
@@ -30,13 +33,15 @@ export class StringType implements Type {
     return []
   }
 
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] = []
+    if (language === 'c++') {
+      imports.push({
         language: 'c++',
         name: 'string',
         space: 'system',
-      },
-    ]
+      })
+    }
+    return imports
   }
 }

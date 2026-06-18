@@ -3,7 +3,6 @@ import { createCppHybridObjectRegistration } from '../../syntax/c++/CppHybridObj
 import { includeHeader } from '../../syntax/c++/includeNitroHeader.js'
 import { createFileMetadataString } from '../../syntax/helpers.js'
 import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
-import { BRIDGE_NAMESPACE } from '../../syntax/swift/SwiftHybridObjectBridge.js'
 import { createSwiftHybridObjectRegistration } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { getUmbrellaHeaderName } from './createSwiftUmbrellaHeader.js'
@@ -12,38 +11,52 @@ type ObjcFile = Omit<SourceFile, 'language'> & { language: 'objective-c++' }
 type SwiftFile = Omit<SourceFile, 'language'> & { language: 'swift' }
 
 export function createHybridObjectIntializer(): [ObjcFile, SwiftFile] | [] {
-  const autolinkingClassName = `${NitroConfig.getIosModuleName()}Autolinking`
+  const autolinkingClassName = `${NitroConfig.current.getIosModuleName()}Autolinking`
   const umbrellaHeaderName = getUmbrellaHeaderName()
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('swift')
 
-  const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects =
+    NitroConfig.current.getAutolinkedHybridObjects()
 
-  const swiftFunctions: string[] = []
+  const swiftRegistrations: string[] = []
   const cppRegistrations: string[] = []
   const cppImports: SourceImport[] = []
   let containsSwiftObjects = false
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
-
-    if (config?.cpp != null) {
-      // Autolink a C++ HybridObject!
-      const { cppCode, requiredImports } = createCppHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        cppClassName: config.cpp,
-      })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+    const implementation =
+      NitroConfig.current.getIosAutolinkedImplementation(hybridObjectName)
+    if (implementation == null) {
+      continue
     }
-    if (config?.swift != null) {
-      // Autolink a Swift HybridObject!
-      containsSwiftObjects = true
-      const { cppCode, requiredImports, swiftFunction } =
-        createSwiftHybridObjectRegistration({
+
+    switch (implementation.language) {
+      case 'c++': {
+        // Autolink a C++ HybridObject!
+        const { cppCode, requiredImports } = createCppHybridObjectRegistration({
           hybridObjectName: hybridObjectName,
-          swiftClassName: config.swift,
+          cppClassName: implementation.implementationClassName,
         })
-      cppImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
-      swiftFunctions.push(swiftFunction)
+        cppImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      case 'swift': {
+        // Autolink a Swift HybridObject!
+        containsSwiftObjects = true
+        const { cppCode, requiredImports, swiftRegistrationMethods } =
+          createSwiftHybridObjectRegistration({
+            hybridObjectName: hybridObjectName,
+            swiftClassName: implementation.implementationClassName,
+          })
+        cppImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        swiftRegistrations.push(swiftRegistrationMethods)
+        break
+      }
+      default:
+        throw new Error(
+          `The HybridObject "${hybridObjectName}" cannot be autolinked on iOS - Language "${implementation.language}" is not supported on iOS!`
+        )
     }
   }
 
@@ -74,7 +87,7 @@ ${imports}
 
 + (void) load {
   using namespace margelo::nitro;
-  using namespace ${NitroConfig.getCxxNamespace('c++')};
+  using namespace ${NitroConfig.current.getCxxNamespace('c++')};
 
   ${indent(cppRegistrations.join('\n'), '  ')}
 }
@@ -85,10 +98,14 @@ ${imports}
   const swiftCode = `
 ${createFileMetadataString(`${autolinkingClassName}.swift`)}
 
-public final class ${autolinkingClassName} {
-  public typealias bridge = ${BRIDGE_NAMESPACE}
+import NitroModules
 
-  ${indent(swiftFunctions.join('\n\n'), '  ')}
+// TODO: Use empty enums once Swift supports exporting them as namespaces
+//       See: https://github.com/swiftlang/swift/pull/83616
+public final class ${autolinkingClassName} {
+  public typealias bridge = ${bridgeNamespace}
+
+  ${indent(swiftRegistrations.join('\n\n'), '  ')}
 }
   `.trim()
 

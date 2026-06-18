@@ -19,7 +19,7 @@ using namespace facebook;
  */
 class JAnyValue final : public jni::HybridClass<JAnyValue> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/AnyValue;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/AnyValue;";
 
   /**
    * Represents an `Array<AnyValue>`
@@ -78,7 +78,7 @@ protected:
 
 private:
   // Java initializers
-  explicit JAnyValue(/* null */) : _value(std::monostate()) {}
+  explicit JAnyValue(NullType null) : _value(null) {}
   explicit JAnyValue(double value) : _value(value) {}
   explicit JAnyValue(bool value) : _value(value) {}
   explicit JAnyValue(int64_t value) : _value(value) {}
@@ -91,7 +91,7 @@ private:
 
 protected:
   bool isNull() {
-    return std::holds_alternative<std::monostate>(_value);
+    return std::holds_alternative<NullType>(_value);
   }
   bool isDouble() {
     return std::holds_alternative<double>(_value);
@@ -99,7 +99,7 @@ protected:
   bool isBoolean() {
     return std::holds_alternative<bool>(_value);
   }
-  bool isBigInt() {
+  bool isInt64() {
     return std::holds_alternative<int64_t>(_value);
   }
   bool isString() {
@@ -119,13 +119,13 @@ protected:
   bool asBoolean() {
     return std::get<bool>(_value);
   }
-  int64_t asBigInt() {
+  int64_t asInt64() {
     return std::get<int64_t>(_value);
   }
   std::string asString() {
     return std::get<std::string>(_value);
   }
-  jni::alias_ref<JAnyArray> asAnyArray() {
+  jni::local_ref<JAnyArray> asAnyArray() {
     auto vector = std::get<AnyArray>(_value);
     auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
     for (size_t i = 0; i < vector.size(); i++) {
@@ -134,7 +134,7 @@ protected:
     }
     return javaArray;
   }
-  jni::alias_ref<JAnyObject> asAnyObject() {
+  jni::local_ref<JAnyObject> asAnyObject() {
     auto map = std::get<AnyObject>(_value);
     auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
     for (const auto& entry : map) {
@@ -170,14 +170,14 @@ public:
         makeNativeMethod("isNull", JAnyValue::isNull),
         makeNativeMethod("isDouble", JAnyValue::isDouble),
         makeNativeMethod("isBoolean", JAnyValue::isBoolean),
-        makeNativeMethod("isBigInt", JAnyValue::isBigInt),
+        makeNativeMethod("isInt64", JAnyValue::isInt64),
         makeNativeMethod("isString", JAnyValue::isString),
         makeNativeMethod("isAnyArray", JAnyValue::isAnyArray),
         makeNativeMethod("isAnyObject", JAnyValue::isAnyObject),
         // get
         makeNativeMethod("asDouble", JAnyValue::asDouble),
         makeNativeMethod("asBoolean", JAnyValue::asBoolean),
-        makeNativeMethod("asBigInt", JAnyValue::asBigInt),
+        makeNativeMethod("asInt64", JAnyValue::asInt64),
         makeNativeMethod("asString", JAnyValue::asString),
         makeNativeMethod("asAnyArray", JAnyValue::asAnyArray),
         makeNativeMethod("asAnyObject", JAnyValue::asAnyObject),

@@ -20,7 +20,7 @@ using namespace facebook;
  */
 class JAnyMap final : public jni::HybridClass<JAnyMap> {
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/AnyMap;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/AnyMap;";
 
 public:
   /**
@@ -30,17 +30,38 @@ public:
     return makeCxxInstance();
   }
   /**
+   * Create a new, empty `AnyMap` with the given preallocated size from Java.
+   */
+  static jni::local_ref<JAnyMap::jhybriddata> initHybridPreallocatedSize(jni::alias_ref<jhybridobject>, jint preallocatedSize) {
+    return makeCxxInstance(preallocatedSize);
+  }
+  /**
    * Create a new `JAnyMap` from an existing `AnyMap`.
    */
   static jni::local_ref<JAnyMap::javaobject> create(const std::shared_ptr<AnyMap>& map) {
     return newObjectCxxArgs(map);
   }
+  /**
+   * Create a new `JAnyMap` from the given preallocated size.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create(int preallocatedSize) {
+    return newObjectCxxArgs(preallocatedSize);
+  }
+  /**
+   * Create a new empty `JAnyMap`.
+   */
+  static jni::local_ref<JAnyMap::javaobject> create() {
+    return newObjectCxxArgs();
+  }
 
 private:
   JAnyMap() {
-    _map = std::make_shared<AnyMap>();
+    _map = AnyMap::make();
   }
-  JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
+  JAnyMap(jint preallocatedSize) {
+    _map = AnyMap::make(static_cast<size_t>(preallocatedSize));
+  }
+  explicit JAnyMap(const std::shared_ptr<AnyMap>& map) : _map(map) {}
 
 protected:
   bool contains(const std::string& key) {
@@ -52,6 +73,7 @@ protected:
   void clear() {
     _map->clear();
   }
+  jni::local_ref<jni::JArrayClass<jni::JString>> getAllKeys();
 
 protected:
   bool isNull(const std::string& key) {
@@ -63,8 +85,8 @@ protected:
   bool isBoolean(const std::string& key) {
     return _map->isBoolean(key);
   }
-  bool isBigInt(const std::string& key) {
-    return _map->isBigInt(key);
+  bool isInt64(const std::string& key) {
+    return _map->isInt64(key);
   }
   bool isString(const std::string& key) {
     return _map->isString(key);
@@ -83,31 +105,15 @@ protected:
   bool getBoolean(const std::string& key) {
     return _map->getBoolean(key);
   }
-  int64_t getBigInt(const std::string& key) {
-    return _map->getBigInt(key);
+  int64_t getInt64(const std::string& key) {
+    return _map->getInt64(key);
   }
   std::string getString(const std::string& key) {
     return _map->getString(key);
   }
-  jni::alias_ref<JAnyArray> getAnyArray(const std::string& key) {
-    const auto& vector = _map->getArray(key);
-    auto javaArray = jni::JArrayClass<JAnyValue::javaobject>::newArray(vector.size());
-    for (size_t i = 0; i < vector.size(); i++) {
-      auto value = JAnyValue::create(vector[i]);
-      javaArray->setElement(i, value.get());
-    }
-    return javaArray;
-  }
-  jni::alias_ref<JAnyObject> getAnyObject(const std::string& key) {
-    const auto& map = _map->getObject(key);
-    auto javaMap = jni::JHashMap<jni::JString, JAnyValue::javaobject>::create(map.size());
-    for (const auto& entry : map) {
-      auto string = jni::make_jstring(entry.first);
-      auto value = JAnyValue::create(entry.second);
-      javaMap->put(string, value);
-    }
-    return javaMap;
-  }
+  jni::local_ref<JAnyArray> getAnyArray(const std::string& key);
+  jni::local_ref<JAnyObject> getAnyObject(const std::string& key);
+  jni::local_ref<JAnyValue::javaobject> getAnyValue(const std::string& key);
 
 protected:
   void setNull(const std::string& key) {
@@ -119,32 +125,46 @@ protected:
   void setBoolean(const std::string& key, bool value) {
     _map->setBoolean(key, value);
   }
-  void setBigInt(const std::string& key, int64_t value) {
-    _map->setBigInt(key, value);
+  void setInt64(const std::string& key, int64_t value) {
+    _map->setInt64(key, value);
   }
   void setString(const std::string& key, const std::string& value) {
     _map->setString(key, value);
   }
-  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value) {
-    std::vector<AnyValue> vector;
-    size_t size = value->size();
-    vector.reserve(size);
-    for (size_t i = 0; i < size; i++) {
-      auto anyValue = value->getElement(i);
-      vector.push_back(anyValue->cthis()->getValue());
-    }
-    _map->setArray(key, vector);
-  }
-  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value) {
-    std::unordered_map<std::string, AnyValue> map;
-    map.reserve(value->size());
-    for (const auto& entry : *value) {
-      map.emplace(entry.first->toStdString(), entry.second->cthis()->getValue());
-    }
-    _map->setObject(key, map);
+  void setAnyArray(const std::string& key, jni::alias_ref<JAnyArray> value);
+  void setAnyObject(const std::string& key, const jni::alias_ref<JAnyObject>& value);
+  void setAnyValue(const std::string& key, const jni::alias_ref<JAnyValue::javaobject>& value);
+
+protected:
+  void merge(jni::alias_ref<JAnyMap::javaobject> other) {
+    _map->merge(other->cthis()->_map);
   }
 
+  /**
+   * Bulk-converts the entire `JAnyMap` to a Java `HashMap<String, Object>` in a single JNI call.
+   */
+  jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> toHashMap();
+
+  /**
+   * Bulk-converts a Java `Map<String, Object>` into this `JAnyMap` in a single JNI call.
+   *
+   * When `ignoreIncompatible` is `true`, this will drop keys that can't be converted.
+   * When `ignoreIncompatible` is `false`, this will throw when a key cannot be converted.
+   */
+  static jni::local_ref<JAnyMap::javaobject> fromMap(jni::alias_ref<jclass>, jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> javaMap,
+                                                     bool ignoreIncompatible);
+
+private:
+  static jni::local_ref<jni::JObject> anyValueToJObject(const AnyValue& value);
+  static jni::local_ref<jni::JArrayList<jni::JObject>> anyArrayToJList(const AnyArray& array);
+  static jni::local_ref<jni::JHashMap<jni::JString, jni::JObject>> anyObjectToJHashMap(const AnyObject& object);
+
+  static AnyValue jObjectToAnyValue(jni::alias_ref<jni::JObject> jObject);
+  static AnyArray jListToAnyArray(jni::alias_ref<jni::JList<jni::JObject>> jList);
+  static AnyObject jHashMapToAnyObject(jni::alias_ref<jni::JMap<jni::JString, jni::JObject>> jMap);
+
 public:
+  [[nodiscard]]
   std::shared_ptr<AnyMap> getMap() const {
     return _map;
   }
@@ -159,33 +179,42 @@ public:
     registerHybrid({
         // init
         makeNativeMethod("initHybrid", JAnyMap::initHybrid),
+        makeNativeMethod("initHybrid", JAnyMap::initHybridPreallocatedSize),
         // helpers
         makeNativeMethod("contains", JAnyMap::contains),
         makeNativeMethod("remove", JAnyMap::remove),
         makeNativeMethod("clear", JAnyMap::clear),
+        makeNativeMethod("getAllKeys", JAnyMap::getAllKeys),
         // is
         makeNativeMethod("isNull", JAnyMap::isNull),
         makeNativeMethod("isDouble", JAnyMap::isDouble),
         makeNativeMethod("isBoolean", JAnyMap::isBoolean),
-        makeNativeMethod("isBigInt", JAnyMap::isBigInt),
+        makeNativeMethod("isInt64", JAnyMap::isInt64),
         makeNativeMethod("isString", JAnyMap::isString),
         makeNativeMethod("isArray", JAnyMap::isArray),
         makeNativeMethod("isObject", JAnyMap::isObject),
         // get
         makeNativeMethod("getDouble", JAnyMap::getDouble),
         makeNativeMethod("getBoolean", JAnyMap::getBoolean),
-        makeNativeMethod("getBigInt", JAnyMap::getBigInt),
+        makeNativeMethod("getInt64", JAnyMap::getInt64),
         makeNativeMethod("getString", JAnyMap::getString),
         makeNativeMethod("getAnyArray", JAnyMap::getAnyArray),
         makeNativeMethod("getAnyObject", JAnyMap::getAnyObject),
+        makeNativeMethod("getAnyValue", JAnyMap::getAnyValue),
         // set
         makeNativeMethod("setNull", JAnyMap::setNull),
         makeNativeMethod("setDouble", JAnyMap::setDouble),
         makeNativeMethod("setBoolean", JAnyMap::setBoolean),
-        makeNativeMethod("setBigInt", JAnyMap::setBigInt),
+        makeNativeMethod("setInt64", JAnyMap::setInt64),
         makeNativeMethod("setString", JAnyMap::setString),
         makeNativeMethod("setAnyArray", JAnyMap::setAnyArray),
         makeNativeMethod("setAnyObject", JAnyMap::setAnyObject),
+        makeNativeMethod("setAnyValue", JAnyMap::setAnyValue),
+        // merge
+        makeNativeMethod("merge", JAnyMap::merge),
+        // bulk conversion
+        makeNativeMethod("toHashMap", JAnyMap::toHashMap),
+        makeNativeMethod("fromMap", JAnyMap::fromMap),
     });
   }
 };

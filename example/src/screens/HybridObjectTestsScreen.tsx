@@ -4,22 +4,25 @@ import {
   StyleSheet,
   View,
   Text,
-  ScrollView,
   Button,
   Platform,
+  TextInput,
+  FlatList,
 } from 'react-native'
 import {
   HybridTestObjectCpp,
   HybridTestObjectSwiftKotlin,
   HybridChild,
   HybridBase,
-} from 'react-native-nitro-image'
+} from 'react-native-nitro-test'
 import { getTests, type TestRunner } from '../getTests'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
+import { TestCase, TestState } from '../components/TestCase'
+import { KeyboardDismissBackground } from '../components/KeyboardDismissBackground'
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
@@ -28,18 +31,6 @@ console.log(HybridChild.childValue)
 
 logPrototypeChain(HybridTestObjectCpp)
 
-interface TestState {
-  runner: TestRunner
-  state: '📱 Click to run' | '⏳ Running' | '❌ Failed' | '✅ Passed'
-  extraMessage: string
-}
-
-interface TestCaseProps {
-  test: TestState
-  onRunPressed: () => void
-  isOdd: boolean
-}
-
 const PLATFORM_LANGUAGE =
   Platform.select({
     android: 'Kotlin',
@@ -47,36 +38,16 @@ const PLATFORM_LANGUAGE =
     macos: 'Swift',
   }) ?? '???'
 
-function TestCase({
-  test,
-  onRunPressed,
-  isOdd,
-}: TestCaseProps): React.ReactElement {
-  const colors = useColors()
-  return (
-    <View
-      style={[
-        styles.testCase,
-        { backgroundColor: isOdd ? colors.oddBackground : colors.background },
-      ]}
-    >
-      <View style={styles.testBox}>
-        <Text style={styles.testName}>{test.runner.name}</Text>
-        <View style={styles.smallVSpacer} />
-        <Text style={styles.testStatus} numberOfLines={6}>
-          {test.state} ({test.extraMessage})
-        </Text>
-      </View>
-      <View style={styles.flex} />
-      <Button title="Run" onPress={onRunPressed} />
-    </View>
-  )
-}
+type TestFilter = 'all' | 'passed' | 'failed' | 'pending'
+
+const FILTER_OPTIONS: TestFilter[] = ['all', 'passed', 'failed', 'pending']
 
 export function HybridObjectTestsScreen() {
   const safeArea = useSafeAreaInsets()
   const colors = useColors()
   const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [searchQuery, setSearchQuery] = React.useState('')
+  const [statusFilter, setStatusFilter] = React.useState<TestFilter>('all')
   const selectedObject = [HybridTestObjectCpp, HybridTestObjectSwiftKotlin][
     selectedIndex
   ]
@@ -85,7 +56,7 @@ export function HybridObjectTestsScreen() {
     () => getTests(selectedObject ?? HybridTestObjectCpp),
     [selectedObject]
   )
-  const [tests, setTests] = React.useState<TestState[]>(() =>
+  const [unfilteredTests, setTests] = React.useState<TestState[]>(() =>
     allTests.map((t) => ({
       runner: t,
       state: '📱 Click to run',
@@ -103,25 +74,89 @@ export function HybridObjectTestsScreen() {
     )
   }, [allTests])
 
-  const status = React.useMemo(() => {
-    const passed = tests.filter((t) => t.state === '✅ Passed').length
-    const failed = tests.filter((t) => t.state === '❌ Failed').length
-    const running = tests.filter((t) => t.state === '⏳ Running').length
+  const selectedFilterIndex = FILTER_OPTIONS.indexOf(statusFilter)
 
-    if (running > 0) {
-      return `⏳ Running ${running}/${tests.length} tests...`
+  const searchFilteredTests = React.useMemo(() => {
+    // as a base we take all unfiltered tests
+    const tests = unfilteredTests
+
+    const query = searchQuery.trim().toLowerCase()
+    if (query === '') {
+      // no search query
+      return tests
     }
-    if (passed > 0 || failed > 0) {
-      if (passed > 0 && failed > 0) {
-        return `✅ Passed ${passed}/${tests.length} tests, ❌ failed ${failed}/${tests.length} tests.`
-      } else if (passed > 0) {
-        return `✅ Passed ${passed}/${tests.length} tests.`
-      } else if (failed > 0) {
-        return `❌ Failed ${failed}/${tests.length} tests.`
+    return tests.filter((t) => t.runner.name.toLowerCase().includes(query))
+  }, [searchQuery, unfilteredTests])
+
+  const statusFilteredTests = React.useMemo(() => {
+    // as a base, we take all tests filtered by our search query
+    const tests = searchFilteredTests
+
+    if (statusFilter === 'all') {
+      return tests
+    }
+
+    return tests.filter((t) => {
+      switch (statusFilter) {
+        case 'passed':
+          return t.state === '✅ Passed'
+        case 'failed':
+          return t.state === '❌ Failed'
+        case 'pending':
+          return t.state === '📱 Click to run'
+        default:
+          return true
+      }
+    })
+  }, [searchFilteredTests, statusFilter])
+
+  const testCounts = React.useMemo(() => {
+    const passed = searchFilteredTests.filter(
+      (t) => t.state === '✅ Passed'
+    ).length
+    const failed = searchFilteredTests.filter(
+      (t) => t.state === '❌ Failed'
+    ).length
+    const pending = searchFilteredTests.filter(
+      (t) => t.state === '📱 Click to run'
+    ).length
+    const running = searchFilteredTests.filter(
+      (t) => t.state === '⏳ Running'
+    ).length
+
+    return {
+      passed,
+      failed,
+      pending,
+      running,
+      total: searchFilteredTests.length,
+    }
+  }, [searchFilteredTests])
+
+  const filterLabels = React.useMemo(() => {
+    return [
+      `All (${testCounts.total})`,
+      `✅ ${testCounts.passed}`,
+      `❌ ${testCounts.failed}`,
+      `📱 ${testCounts.pending}`,
+    ]
+  }, [testCounts])
+
+  const status = React.useMemo(() => {
+    if (testCounts.running > 0) {
+      return `⏳ Running ${testCounts.running}/${testCounts.total} tests...`
+    }
+    if (testCounts.passed > 0 || testCounts.failed > 0) {
+      if (testCounts.passed > 0 && testCounts.failed > 0) {
+        return `✅ Passed ${testCounts.passed}/${testCounts.total} tests, ❌ failed ${testCounts.failed}/${testCounts.total} tests.`
+      } else if (testCounts.passed > 0) {
+        return `✅ Passed ${testCounts.passed}/${testCounts.total} tests.`
+      } else if (testCounts.failed > 0) {
+        return `❌ Failed ${testCounts.failed}/${testCounts.total} tests.`
       }
     }
     return `📱 Idle`
-  }, [tests])
+  }, [testCounts])
 
   const updateTest = (
     runner: TestRunner,
@@ -158,12 +193,19 @@ export function HybridObjectTestsScreen() {
   }
 
   const runAllTests = () => {
-    tests.forEach((t) => runTest(t))
+    searchFilteredTests.forEach((t) => runTest(t))
+    requestAnimationFrame(() => {
+      gc()
+    })
   }
 
   return (
     <View style={[styles.container, { paddingTop: safeArea.top }]}>
-      <Text style={styles.header}>HybridObject Tests</Text>
+      <KeyboardDismissBackground />
+
+      <Text style={[styles.header, { color: colors.text }]}>
+        HybridObject Tests
+      </Text>
       <View style={styles.topControls}>
         <SegmentedControl
           style={styles.segmentedControl}
@@ -174,22 +216,72 @@ export function HybridObjectTestsScreen() {
           }}
         />
         <View style={styles.flex} />
-        <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
+        <Text style={[styles.buildTypeText, { color: colors.text }]}>
+          {NitroModules.buildType}
+        </Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {tests.map((t, i) => (
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={[
+            styles.searchInput,
+            { color: colors.text, borderColor: colors.border },
+          ]}
+          placeholder="Search tests..."
+          placeholderTextColor={colors.textSecondary}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+        {searchQuery.length > 0 && (
+          <Text
+            style={[styles.searchResultsText, { color: colors.textSecondary }]}
+          >
+            Showing {searchFilteredTests.length} of {unfilteredTests.length}{' '}
+            tests
+          </Text>
+        )}
+      </View>
+
+      <View style={styles.filterContainer}>
+        <SegmentedControl
+          style={styles.filterSegmentedControl}
+          values={filterLabels}
+          selectedIndex={selectedFilterIndex}
+          onChange={({ nativeEvent: { selectedSegmentIndex } }) => {
+            setStatusFilter(FILTER_OPTIONS[selectedSegmentIndex]!)
+          }}
+        />
+      </View>
+
+      <FlatList
+        data={statusFilteredTests}
+        keyExtractor={(test) => test.runner.name}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={{ color: colors.textSecondary }}>
+              Nothing selected.
+            </Text>
+          </View>
+        }
+        renderItem={({ item: test, index }) => (
           <TestCase
-            key={`test-${i}`}
-            test={t}
-            onRunPressed={() => runTest(t)}
-            isOdd={i % 2 === 0}
+            test={test}
+            onRunPressed={() => runTest(test)}
+            isOdd={index % 2 === 0}
           />
-        ))}
-      </ScrollView>
+        )}
+      />
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{status}</Text>
+        <Text
+          style={[styles.resultText, { color: colors.text }]}
+          numberOfLines={2}
+        >
+          {status}
+        </Text>
         <View style={styles.flex} />
         <Button title="Run all tests" onPress={runAllTests} />
       </View>
@@ -207,7 +299,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  scrollContent: {},
+  emptyContainer: {
+    flex: 1,
+    paddingTop: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   topControls: {
     marginHorizontal: 15,
     marginBottom: 10,
@@ -225,40 +322,34 @@ const styles = StyleSheet.create({
   segmentedControl: {
     minWidth: 180,
   },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+  searchContainer: {
+    marginHorizontal: 15,
+    marginBottom: 10,
   },
-  testCase: {
-    width: '100%',
-    paddingHorizontal: 15,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    paddingVertical: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  testBox: {
-    flexShrink: 1,
-    flexDirection: 'column',
-  },
-  testName: {
+  searchInput: {
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
     fontSize: 16,
-    fontWeight: 'bold',
   },
-  testStatus: {
-    fontSize: 14,
-    flex: 1,
+  searchResultsText: {
+    fontSize: 12,
+    marginTop: 4,
+    opacity: 0.7,
   },
-  smallVSpacer: {
-    height: 5,
+  filterContainer: {
+    marginHorizontal: 15,
+    marginBottom: 10,
+  },
+  filterSegmentedControl: {
+    height: 32,
+  },
+  resultText: {
+    flexShrink: 1,
   },
   flex: { flex: 1 },
   bottomView: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     borderTopRightRadius: 15,
     borderTopLeftRadius: 15,
     elevation: 15,

@@ -12,6 +12,7 @@ on:
       - '**/*.jsx'
       - '**/*.json'
       - '**/*.lockb'
+      - '**/nitro.json'
       - '**/package.json'
       - 'packages/nitrogen/**'
   pull_request:
@@ -23,15 +24,19 @@ on:
       - '**/*.jsx'
       - '**/*.json'
       - '**/*.lockb'
+      - '**/nitro.json'
       - '**/package.json'
       - 'packages/nitrogen/**'
 
 jobs:
   lint:
-    name: Run Nitrogen for example module (react-native-nitro-image)
-    runs-on: ubuntu-latest
+    name: Run Nitrogen for example module (react-native-nitro-test)
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
@@ -40,9 +45,13 @@ jobs:
       - name: Build all packages
         run: bun run build
 
-      - name: Run nitro-codegen in packages/react-native-nitro-image
-        working-directory: packages/react-native-nitro-image
-        run: bun i && bun specs-ci
+      - name: Run nitrogen in packages/react-native-nitro-test-external
+        working-directory: packages/react-native-nitro-test-external
+        run: bun i && bun specs
+
+      - name: Run nitrogen in packages/react-native-nitro-test
+        working-directory: packages/react-native-nitro-test
+        run: bun i && bun specs
 
       - name: Verify no files have changed after nitrogen
-        run: git diff --exit-code HEAD -- . ':(exclude)bun.lockb'
+        run: git diff --exit-code HEAD -- . ':(exclude)bun.lock'

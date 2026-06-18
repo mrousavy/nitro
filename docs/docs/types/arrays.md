@@ -6,21 +6,14 @@ import TabItem from '@theme/TabItem';
 
 # Arrays (`T[]`)
 
-Arrays of items are represented with the most common, and most efficient array datastructures in native languages, such as `std::vector<T>` or `Array<T>`.
+Arrays are represented with the most common and efficient native data structures, such as `std::vector<T>` in C++ or `Array<T>` in Swift and Kotlin.
 
 
 <Tabs>
   <TabItem value="ts" label="TypeScript" default>
     ```ts
-    interface Contacts extends HybridObject {
+    interface Contacts extends HybridObject<{ … }> {
       getAllUsers(): User[]
-    }
-    ```
-  </TabItem>
-  <TabItem value="cpp" label="C++">
-    ```cpp
-    class HybridContacts : public HybridContactsSpec {
-      std::vector<User> getAllUsers();
     }
     ```
   </TabItem>
@@ -35,6 +28,13 @@ Arrays of items are represented with the most common, and most efficient array d
     ```kotlin
     class HybridContacts: HybridContactsSpec() {
       fun getAllUsers(): Array<User>
+    }
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    class HybridContacts : public HybridContactsSpec {
+      std::vector<User> getAllUsers();
     }
     ```
   </TabItem>

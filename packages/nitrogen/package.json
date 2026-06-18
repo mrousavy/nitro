@@ -1,7 +1,7 @@
 {
-  "name": "nitro-codegen",
-  "version": "0.16.2",
-  "description": "The code-generator for react-native-nitro-modules.",
+  "name": "nitrogen",
+  "version": "0.35.9",
+  "description": "Code generator for React Native Nitro Modules that turns TypeScript specs into C++, Swift, and Kotlin bindings.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
   "source": "src/index",
@@ -21,28 +21,27 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com/docs/concepts/nitrogen",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "postinstall": "bun build || exit 0;",
     "build": "bun tsc",
     "start": "tsc && node lib/index.js",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
-    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions",
+    "lint-ci": "eslint \"**/*.{js,ts,tsx}\" -f @jamesacarr/github-actions --max-warnings 0",
     "release": "release-it"
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "^0.16.2",
-    "ts-morph": "^24.0.0",
-    "yargs": "^17.7.2",
-    "zod": "^3.23.8"
+    "react-native-nitro-modules": "^0.35.9",
+    "ts-morph": "^28.0.0",
+    "yargs": "^18.0.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^22.8.4"
+    "@types/node": "^25.9.1"
   },
   "release-it": {
     "npm": {

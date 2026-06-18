@@ -1,14 +1,14 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-react-native-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
-    <img alt="Nitrogen" src="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
+    <img alt="React Native Nitro Modules" src="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
   </picture>
 </a>
 
 <br />
 
-**react-native-nitro-modules** is a core library that contains highly efficient statically compiled JS to C++ bindings.
+**react-native-nitro-modules** is the core React Native Nitro package for building fast, type-safe native modules with statically compiled JSI bindings.
 
 It uses JSI to generate C++ templates that can bridge virtually any JS type to a C++ type with minimal overhead.
 
@@ -134,10 +134,16 @@ The following C++ / JS types are supported out of the box:
     <td><code>String</code></td>
   </tr>
   <tr>
-    <td><code>bigint</code></td>
-    <td><code>int64_t</code> / <code>uint64_t</code></td>
+    <td><code>Int64</code> (<code>bigint</code>)</td>
+    <td><code>int64_t</code></td>
     <td><code>Int64</code></td>
     <td><code>Long</code></td>
+  </tr>
+  <tr>
+    <td><code>UInt64</code> (<code>bigint</code>)</td>
+    <td><code>uint64_t</code></td>
+    <td><code>UInt64</code></td>
+    <td><code>ULong</code></td>
   </tr>
   <tr>
     <td><code>T[]</code></td>
@@ -170,10 +176,10 @@ The following C++ / JS types are supported out of the box:
     <td><code>T?</code></td>
   </tr>
   <tr>
-    <td><code>Promise&lt;T&gt;</code></td>
-    <td><code>std::future&lt;T&gt;</code></td>
-    <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
-    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
+    <td><code>null</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
+    <td><code>NullType</code></td>
   </tr>
   <tr>
     <td><code>(T...) =&gt; void</code></td>
@@ -183,45 +189,69 @@ The following C++ / JS types are supported out of the box:
   </tr>
   <tr>
     <td><code>(T...) =&gt; R</code></td>
-    <td><code>std::function&lt;std::future&lt;R&gt; (T...)&gt;</code></td>
-    <td>❌</td>
-    <td>❌</td>
+    <td><code>std::function&lt;std::shared_ptr&lt;<a href="./cpp/core/Promise.hpp">Promise&lt;R&gt;</a>&gt; (T...)&gt;</code></td>
+    <td><code>(T...) -&gt; <a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
+    <td><code>(T...) -&gt; <a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
   </tr>
   <tr>
-    <td><code>{ ... }</code></td>
+    <td><code>Sync&lt;(T...) =&gt; R&gt;</code></td>
+    <td><code>std::function&lt;R (T...)&gt;</code></td>
+    <td><code>@escaping (T...) -&gt; R</code></td>
+    <td><code>(T...) -&gt; R</code></td>
+  </tr>
+  <tr>
+    <td><code>Error</code></td>
+    <td><code>std::exception_ptr</code></td>
+    <td><code>Error</code></td>
+    <td><code>Throwable</code></td>
+  </tr>
+  <tr>
+    <td><code>Promise&lt;T&gt;</code></td>
+    <td><code>std::shared_ptr&lt;<a href="./cpp/core/Promise.hpp">Promise&lt;T&gt;</a>&gt;</code></td>
+    <td><code><a href="./ios/core/Promise.swift">Promise&lt;T&gt;</a></code></td>
+    <td><code><a href="./android/src/main/java/com/margelo/nitro/core/Promise.kt">Promise&lt;T&gt;</a></code></td>
+  </tr>
+  <tr>
+    <td><code><a href="./src/AnyMap.ts">AnyMap</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/AnyMap.hpp">AnyMap</a>&gt;</code></td>
-    <td><code><a href="./ios/core/AnyMapHolder.swift">AnyMapHolder</a></code></td>
+    <td><code><a href="./ios/core/AnyMap.swift">AnyMap</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/AnyMap.kt">AnyMap</a></code></td>
   </tr>
   <tr>
     <td><code>ArrayBuffer</code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/ArrayBuffer.hpp">ArrayBuffer</a>&gt;</code></td>
-    <td><code><a href="./ios/core/ArrayBufferHolder.swift">ArrayBufferHolder</a></code></td>
+    <td><code><a href="./ios/core/ArrayBuffer.swift">ArrayBuffer</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/ArrayBuffer.kt">ArrayBuffer</a></code></td>
+  </tr>
+  <tr>
+    <td><code>Date</code></td>
+    <td><code>std::chrono::system_clock::time_point</code></td>
+    <td><code>Date</code></td>
+    <td><code>java.time.Instant</code></td>
   </tr>
   <tr>
     <td>..any <code><a href="./src/HybridObject.ts">HybridObject</a></code></td>
     <td><code>std::shared_ptr&lt;<a href="./cpp/core/HybridObject.hpp">HybridObject</a>&gt;</code></td>
-    <td><code><a href="./ios/core/HybridObjectSpec.swift">HybridObjectSpec</a></code></td>
+    <td><code><a href="./ios/core/HybridObject.swift">HybridObject</a></code></td>
     <td><code><a href="./android/src/main/java/com/margelo/nitro/core/HybridObject.kt">HybridObject</a></code></td>
   </tr>
   <tr>
     <td>..any <code>interface</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>struct T</code></td>
+    <td><code>data class T</code></td>
   </tr>
   <tr>
     <td>..any <code>enum</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
   <tr>
     <td>..any <code>union</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
-    <td><code>T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
+    <td><code>enum T</code></td>
   </tr>
 </table>
 

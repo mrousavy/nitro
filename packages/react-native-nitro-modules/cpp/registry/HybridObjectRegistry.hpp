@@ -27,7 +27,7 @@ public:
 public:
   /**
    * Registers the given HybridObject in the `HybridObjectRegistry`.
-   * It will be uniquely identified via it's `hybridObjectName`, and can be initialized from
+   * It will be uniquely identified via its `hybridObjectName`, and can be initialized from
    * JS using `NitroModules.createHybridObject<T>(name)` - which will call the `constructorFn` here.
    */
   static void registerHybridObjectConstructor(const std::string& hybridObjectName, HybridObjectConstructorFn&& constructorFn);
@@ -44,6 +44,7 @@ public:
 
 private:
   static std::unordered_map<std::string, HybridObjectConstructorFn>& getRegistry();
+  static std::string getAllRegisteredHybridObjectNamesToString();
 
 private:
   static constexpr auto TAG = "HybridObjectRegistry";

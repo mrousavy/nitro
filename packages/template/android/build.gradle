@@ -5,7 +5,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.1"
+    classpath "com.android.tools.build:gradle:9.2.1"
   }
 }
 
@@ -20,22 +20,23 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
-apply from: '../nitrogen/generated/android/<<androidCxxLibName>>+autolinking.gradle'
+apply from: '../nitrogen/generated/android/$$androidCxxLibName$$+autolinking.gradle'
+apply from: "./fix-prefab.gradle"
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
 }
 
 def getExtOrDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["<<androidCxxLibName>>_" + name]
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties["$$androidCxxLibName$$_" + name]
 }
 
 def getExtOrIntegerDefault(name) {
-  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["<<androidCxxLibName>>_" + name]).toInteger()
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["$$androidCxxLibName$$_" + name]).toInteger()
 }
 
 android {
-  namespace "com.margelo.nitro.<<androidNamespace>>"
+  namespace "com.margelo.nitro.$$androidNamespace$$"
 
   ndkVersion getExtOrDefault("ndkVersion")
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
@@ -47,9 +48,18 @@ android {
 
     externalNativeBuild {
       cmake {
-        cppFlags "-O2 -frtti -fexceptions -Wall -fstack-protector-all"
-        arguments "-DANDROID_STL=c++_shared"
+        cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
+        arguments "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
         abiFilters (*reactNativeArchitectures())
+
+        buildTypes {
+          debug {
+            cppFlags "-O1 -g"
+          }
+          release {
+            cppFlags "-O2"
+          }
+        }
       }
     }
   }
@@ -65,6 +75,7 @@ android {
             "META-INF",
             "META-INF/**",
             "**/libc++_shared.so",
+            "**/libNitroModules.so",
             "**/libfbjni.so",
             "**/libjsi.so",
             "**/libfolly_json.so",

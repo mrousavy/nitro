@@ -7,8 +7,10 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 namespace margelo::nitro {
 
@@ -18,7 +20,7 @@ namespace margelo::nitro {
  * This function can be used at compile time as a constexpr to build
  * statically optimized switch statements.
  */
-constexpr uint64_t hashString(const char* str, size_t length) {
+constexpr uint64_t hashString(const char* NON_NULL str, size_t length) {
   uint64_t hash = 14695981039346656037ull; // FNV offset basis
   const uint64_t fnv_prime = 1099511628211ull;
 
@@ -38,6 +40,22 @@ constexpr uint64_t hashString(const char* str, size_t length) {
 template <size_t N>
 constexpr uint64_t hashString(const char (&str)[N]) {
   return hashString(str, N - 1); // N includes the null terminator, so subtract 1
+}
+
+/**
+ * Hashes the given `string_view` using the FNV-1a hashing algorithm.
+ * This can be constexpr.
+ */
+constexpr uint64_t hashString(const std::string_view& string) {
+  return hashString(string.data(), string.length());
+}
+
+/**
+ * Hashes the given `string` using the FNV-1a hashing algorithm.
+ * This happens at runtime.
+ */
+inline uint64_t hashString(const std::string& string) {
+  return hashString(string.c_str(), string.length());
 }
 
 } // namespace margelo::nitro

@@ -73,20 +73,6 @@ struct JSIConverter<int> final {
   }
 };
 
-// std::monostate <> null
-template <>
-struct JSIConverter<std::monostate> final {
-  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
-    return std::monostate();
-  }
-  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
-    return jsi::Value::null();
-  }
-  static inline bool canConvert(jsi::Runtime&, const jsi::Value& value) {
-    return value.isNull() || value.isUndefined();
-  }
-};
-
 // double <> number
 template <>
 struct JSIConverter<double> final {
@@ -118,7 +104,7 @@ struct JSIConverter<float> final {
 // int64_t <> BigInt
 template <>
 struct JSIConverter<int64_t> final {
-  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline int64_t fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asInt64(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, int64_t arg) {
@@ -136,7 +122,7 @@ struct JSIConverter<int64_t> final {
 // uint64_t <> BigInt
 template <>
 struct JSIConverter<uint64_t> final {
-  static inline double fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline uint64_t fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
     return arg.asBigInt(runtime).asUint64(runtime);
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, uint64_t arg) {
@@ -179,15 +165,30 @@ struct JSIConverter<std::string> final {
   }
 };
 
+// std::monostate <> void/undefined
+template <>
+struct JSIConverter<std::monostate> final {
+  static inline std::monostate fromJSI(jsi::Runtime&, const jsi::Value&) {
+    return std::monostate{};
+  }
+  static inline jsi::Value toJSI(jsi::Runtime&, std::monostate) {
+    return jsi::Value();
+  }
+  static inline bool canConvert(jsi::Runtime&, const jsi::Value&) {
+    return true;
+  }
+};
+
 } // namespace margelo::nitro
 
 #include "JSIConverter+AnyMap.hpp"
 #include "JSIConverter+ArrayBuffer.hpp"
+#include "JSIConverter+Date.hpp"
 #include "JSIConverter+Exception.hpp"
 #include "JSIConverter+Function.hpp"
-#include "JSIConverter+Future.hpp"
 #include "JSIConverter+HostObject.hpp"
-#include "JSIConverter+HybridObject.hpp"
+#include "JSIConverter+NativeState.hpp"
+#include "JSIConverter+Null.hpp"
 #include "JSIConverter+Optional.hpp"
 #include "JSIConverter+Promise.hpp"
 #include "JSIConverter+Tuple.hpp"

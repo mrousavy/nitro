@@ -9,41 +9,62 @@ import { getJNINativeRegistrations } from '../../syntax/kotlin/JNINativeRegistra
 import { createJNIHybridObjectRegistration } from '../../syntax/kotlin/KotlinHybridObjectRegistration.js'
 import type { SourceFile, SourceImport } from '../../syntax/SourceFile.js'
 import { indent } from '../../utils.js'
+import { getBuildingWithGeneratedCmakeDefinition } from './createCMakeExtension.js'
 
 export function createHybridObjectIntializer(): SourceFile[] {
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const autolinkingClassName = `${NitroConfig.getAndroidCxxLibName()}OnLoad`
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const cppLibName = NitroConfig.current.getAndroidCxxLibName()
+  const javaNamespace = NitroConfig.current.getAndroidPackage('java/kotlin')
+  const autolinkingClassName = `${NitroConfig.current.getAndroidCxxLibName()}OnLoad`
 
-  const jniRegistrations = getJNINativeRegistrations().map(
-    (r) => `${r.namespace}::${r.className}::registerNatives();`
-  )
+  const jniRegistrations = getJNINativeRegistrations()
+    .map((r) => `${r.namespace}::${r.className}::registerNatives();`)
+    .filter(isNotDuplicate)
 
-  const autolinkedHybridObjects = NitroConfig.getAutolinkedHybridObjects()
+  const autolinkedHybridObjects =
+    NitroConfig.current.getAutolinkedHybridObjects()
 
   const cppHybridObjectImports: SourceImport[] = []
   const cppRegistrations: string[] = []
+  const cppDefinitions: string[] = []
   for (const hybridObjectName of Object.keys(autolinkedHybridObjects)) {
-    const config = autolinkedHybridObjects[hybridObjectName]
-
-    if (config?.cpp != null) {
-      // Autolink a C++ HybridObject!
-      const { cppCode, requiredImports } = createCppHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        cppClassName: config.cpp,
-      })
-      cppHybridObjectImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+    const implementation =
+      NitroConfig.current.getAndroidAutolinkedImplementation(hybridObjectName)
+    if (implementation == null) {
+      continue
     }
-    if (config?.kotlin != null) {
-      // Autolink a Kotlin HybridObject through JNI/C++!
-      const { cppCode, requiredImports } = createJNIHybridObjectRegistration({
-        hybridObjectName: hybridObjectName,
-        jniClassName: config.kotlin,
-      })
-      cppHybridObjectImports.push(...requiredImports)
-      cppRegistrations.push(cppCode)
+
+    switch (implementation.language) {
+      case 'c++': {
+        // Autolink a C++ HybridObject!
+        const { cppCode, requiredImports } = createCppHybridObjectRegistration({
+          hybridObjectName: hybridObjectName,
+          cppClassName: implementation.implementationClassName,
+        })
+        cppHybridObjectImports.push(...requiredImports)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      case 'kotlin': {
+        // Autolink a Kotlin HybridObject through JNI/C++!
+        const { cppCode, cppDefinition, requiredImports } =
+          createJNIHybridObjectRegistration({
+            hybridObjectName: hybridObjectName,
+            jniClassName: implementation.implementationClassName,
+          })
+        cppHybridObjectImports.push(...requiredImports)
+        cppDefinitions.push(cppDefinition)
+        cppRegistrations.push(cppCode)
+        break
+      }
+      default:
+        throw new Error(
+          `The HybridObject "${hybridObjectName}" cannot be autolinked on Android - Language "${implementation.language}" is not supported on Android!`
+        )
     }
   }
+
+  const buildingWithDefinition = getBuildingWithGeneratedCmakeDefinition()
 
   const includes = [
     ...getJNINativeRegistrations().map((r) => includeHeader(r.import)),
@@ -56,27 +77,40 @@ export function createHybridObjectIntializer(): SourceFile[] {
 ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
 #include <jni.h>
+#include <functional>
 #include <NitroModules/NitroDefines.hpp>
 
 namespace ${cxxNamespace} {
 
+  [[deprecated("Use registerNatives() instead.")]]
+  int initialize(JavaVM* vm);
+
   /**
-   * Initializes the native (C++) part of ${NitroConfig.getAndroidCxxLibName()}, and autolinks all Hybrid Objects.
-   * Call this in your \`JNI_OnLoad\` function (probably inside \`cpp-adapter.cpp\`).
+   * Register the native (C++) part of ${cppLibName}, and autolinks all Hybrid Objects.
+   * Call this in your \`JNI_OnLoad\` function (probably inside \`cpp-adapter.cpp\`),
+   * inside a \`facebook::jni::initialize(vm, ...)\` call.
    * Example:
    * \`\`\`cpp (cpp-adapter.cpp)
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
-   *   return ${cxxNamespace}::initialize(vm);
+   *   return facebook::jni::initialize(vm, []() {
+   *     // register all ${cppLibName} HybridObjects
+   *     ${cxxNamespace}::registerNatives();
+   *     // any other custom registrations go here.
+   *   });
    * }
    * \`\`\`
    */
-  int initialize(JavaVM* vm);
+  void registerAllNatives();
 
 } // namespace ${cxxNamespace}
 
     `
   const cppCode = `
 ${createFileMetadataString(`${autolinkingClassName}.cpp`)}
+
+#ifndef ${buildingWithDefinition}
+#error ${autolinkingClassName}.cpp is not being built with the autogenerated CMakeLists.txt project. Is a different CMakeLists.txt building this?
+#endif
 
 #include "${autolinkingClassName}.hpp"
 
@@ -89,21 +123,58 @@ ${includes}
 namespace ${cxxNamespace} {
 
 int initialize(JavaVM* vm) {
-  using namespace margelo::nitro;
-  using namespace ${cxxNamespace};
-  using namespace facebook;
-
-  return facebook::jni::initialize(vm, [] {
-    // Register native JNI methods
-    ${indent(jniRegistrations.join('\n'), '    ')}
-
-    // Register Nitro Hybrid Objects
-    ${indent(cppRegistrations.join('\n'), '    ')}
+  return facebook::jni::initialize(vm, []() {
+    ::${cxxNamespace}::registerAllNatives();
   });
 }
 
-} // namespace ${cxxNamespace}
+${cppDefinitions.join('\n')}
 
+void registerAllNatives() {
+  using namespace margelo::nitro;
+  using namespace ${cxxNamespace};
+
+  // Register native JNI methods
+  ${indent(jniRegistrations.join('\n'), '  ')}
+
+  // Register Nitro Hybrid Objects
+  ${indent(cppRegistrations.join('\n'), '  ')}
+}
+
+} // namespace ${cxxNamespace}
+  `.trim()
+
+  const kotlinCode = `
+${createFileMetadataString(`${autolinkingClassName}.kt`)}
+
+package ${javaNamespace}
+
+import android.util.Log
+
+internal class ${autolinkingClassName} {
+  companion object {
+    private const val TAG = "${autolinkingClassName}"
+    private var didLoad = false
+    /**
+     * Initializes the native part of "${cppLibName}".
+     * This method is idempotent and can be called more than once.
+     */
+    @JvmStatic
+    fun initializeNative() {
+      if (didLoad) return
+      try {
+        Log.i(TAG, "Loading ${cppLibName} C++ library...")
+        System.loadLibrary("${cppLibName}")
+        Log.i(TAG, "Successfully loaded ${cppLibName} C++ library!")
+        didLoad = true
+      } catch (e: Error) {
+        Log.e(TAG, "Failed to load ${cppLibName} C++ library! Is it properly installed and linked? " +
+                    "Is the name correct? (see \`CMakeLists.txt\`, at \`add_library(...)\`)", e)
+        throw e
+      }
+    }
+  }
+}
   `.trim()
 
   return [
@@ -122,11 +193,11 @@ int initialize(JavaVM* vm) {
       subdirectory: [],
     },
     {
-      content: '',
+      content: kotlinCode,
       language: 'kotlin',
       name: `${autolinkingClassName}.kt`,
       platform: 'android',
-      subdirectory: [],
+      subdirectory: ['kotlin', ...javaNamespace.split('.')],
     },
   ]
 }

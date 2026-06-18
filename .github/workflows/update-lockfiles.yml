@@ -1,4 +1,4 @@
-name: 'Update Lockfiles (bun.lockb + Podfile.lock)'
+name: 'Update Lockfiles (bun.lock + Podfile.lock)'
 
 on:
   push:
@@ -17,11 +17,11 @@ permissions:
 
 jobs:
   update-lockfiles:
-    name: "Update lockfiles (bun.lockb + Podfile.lock)"
+    name: "Update lockfiles (Podfile.lock)"
     if: github.actor == 'dependabot[bot]'
-    runs-on: macOS-latest
+    runs-on: macOS-26
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
@@ -35,16 +35,25 @@ jobs:
           bundler-cache: true
           working-directory: example/ios
 
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
+
       - run: |
           bun install
-          git add bun.lockb
 
           cd example
           bundle install
           bun pods
-          git add ios/Podfile.lock
-
           cd ..
+
+          cd docs
+          bun install
+          cd ..
+
+          git add bun.lock
+          git add example/ios/Podfile.lock
+          git add example/Gemfile.lock
+
           git config --global user.name 'dependabot[bot]'
           git config --global user.email 'dependabot[bot]@users.noreply.github.com'
           git commit --amend --no-edit

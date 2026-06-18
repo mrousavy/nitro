@@ -32,12 +32,15 @@ include_directories(
   ../cpp/threading
   ../cpp/turbomodule
   ../cpp/utils
+  ../cpp/views
   # Android-specific C++ includes
   src/main/cpp/core
   src/main/cpp/registry
   src/main/cpp/turbomodule
   src/main/cpp/platform
+  src/main/cpp/threading
   src/main/cpp/utils
+  src/main/cpp/views
 )
 
 # Find required libraries

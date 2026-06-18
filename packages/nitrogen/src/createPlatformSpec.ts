@@ -3,8 +3,12 @@ import type { SourceFile } from './syntax/SourceFile.js'
 import { createCppHybridObject } from './syntax/c++/CppHybridObject.js'
 import {
   extendsHybridObject,
+  isHybridView,
+  isAnyHybridSubclass,
   isDirectlyHybridObject,
   type Language,
+  isHybridViewProps,
+  isHybridViewMethods,
 } from './getPlatformSpecs.js'
 import type { HybridObjectSpec } from './syntax/HybridObjectSpec.js'
 import { Property } from './syntax/Property.js'
@@ -13,6 +17,9 @@ import { createSwiftHybridObject } from './syntax/swift/SwiftHybridObject.js'
 import { createKotlinHybridObject } from './syntax/kotlin/KotlinHybridObject.js'
 import { createType } from './syntax/createType.js'
 import { Parameter } from './syntax/Parameter.js'
+import { getBaseTypes, getHybridObjectNitroModuleConfig } from './utils.js'
+import { NitroConfig } from './config/NitroConfig.js'
+import { isMemberOverridingFromBase } from './syntax/isMemberOverridingFromBase.js'
 
 export function generatePlatformFiles(
   interfaceType: Type,
@@ -38,6 +45,35 @@ export function generatePlatformFiles(
 }
 
 function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
+  const config = getHybridObjectNitroModuleConfig(type) ?? NitroConfig.current
+
+  if (isHybridView(type)) {
+    const symbol = type.getAliasSymbolOrThrow()
+    const name = symbol.getEscapedName()
+
+    // It's a Hybrid View - the `Props & Methods` types are just intersected together.
+    const unions = type.getIntersectionTypes()
+    const props = unions.find((t) => isHybridViewProps(t))
+    const methods = unions.find((t) => isHybridViewMethods(t))
+    if (props == null)
+      throw new Error(
+        `Props cannot be null! ${name}<...> (HybridView) requires type arguments.`
+      )
+    const propsSpec = getHybridObjectSpec(props, language)
+    const methodsSpec =
+      methods != null ? getHybridObjectSpec(methods, language) : undefined
+
+    return {
+      baseTypes: [],
+      isHybridView: true,
+      language: language,
+      methods: methodsSpec?.methods ?? [],
+      properties: propsSpec.properties,
+      name: name,
+      config: config,
+    }
+  }
+
   const symbol = type.getSymbolOrThrow()
   const name = symbol.getEscapedName()
 
@@ -75,21 +111,16 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
 
     if (Node.isPropertySignature(declaration)) {
       const t = declaration.getType()
-      const propType = createType(
-        language,
-        t,
-        prop.isOptional() || t.isNullable()
-      )
+      const isOptional =
+        prop.isOptional() || t.getUnionTypes().some((u) => u.isUndefined())
+      const propType = createType(language, t, isOptional)
       properties.push(
         new Property(prop.getName(), propType, declaration.isReadonly())
       )
     } else if (Node.isMethodSignature(declaration)) {
       const returnType = declaration.getReturnType()
-      const methodReturnType = createType(
-        language,
-        returnType,
-        returnType.isNullable()
-      )
+      const isOptional = returnType.getUnionTypes().some((t) => t.isUndefined())
+      const methodReturnType = createType(language, returnType, isOptional)
       const methodParameters = declaration
         .getParameters()
         .map((p) => new Parameter(p, language))
@@ -103,9 +134,8 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     }
   }
 
-  const bases = type
-    .getBaseTypes()
-    .filter((t) => extendsHybridObject(t, false))
+  const bases = getBaseTypes(type)
+    .filter((t) => isAnyHybridSubclass(t))
     .map((t) => getHybridObjectSpec(t, language))
 
   const spec: HybridObjectSpec = {
@@ -114,7 +144,24 @@ function getHybridObjectSpec(type: Type, language: Language): HybridObjectSpec {
     properties: properties,
     methods: methods,
     baseTypes: bases,
+    isHybridView: isHybridView(type),
+    config: config,
   }
+
+  for (const member of [...properties, ...methods]) {
+    const isOverridingBaseMember = isMemberOverridingFromBase(
+      member.name,
+      spec,
+      language
+    )
+    if (isOverridingBaseMember) {
+      throw new Error(
+        `\`${name}.${member.name}\` is overriding a member of one of it's base classes. ` +
+          `This is unsupported, override on the native side instead!`
+      )
+    }
+  }
+
   return spec
 }
 

@@ -14,11 +14,9 @@ import { HybridObjectType } from '../../syntax/types/HybridObjectType.js'
 import { getForwardDeclaration } from '../../syntax/c++/getForwardDeclaration.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 
-const SWIFT_BRIDGE_NAMESPACE = ['bridge', 'swift']
-
 export function createSwiftCxxBridge(): SourceFile[] {
-  const moduleName = NitroConfig.getIosModuleName()
-  const bridgeName = `${moduleName}-Swift-Cxx-Bridge`
+  const bridgeName = NitroConfig.current.getSwiftBridgeHeaderName()
+  const bridgeNamespace = NitroConfig.current.getSwiftBridgeNamespace('c++')
 
   const types = getAllKnownTypes('swift').map((t) => new SwiftCxxBridgedType(t))
 
@@ -31,6 +29,7 @@ export function createSwiftCxxBridge(): SourceFile[] {
       })
     })
     .filter((b) => b != null)
+    .flatMap((b) => [b, ...b?.dependencies])
     .filter(filterDuplicateHelperBridges)
   const headerHelperFunctions = bridges
     .map((b) => `// pragma MARK: ${b.cxxType}\n${b.cxxHeader.code}`)
@@ -62,19 +61,20 @@ export function createSwiftCxxBridge(): SourceFile[] {
     .map((i) => includeHeader(i, true))
     .filter(isNotDuplicate)
 
-  const namespace = NitroConfig.getCxxNamespace(
-    'c++',
-    ...SWIFT_BRIDGE_NAMESPACE
-  )
-
   const forwardDeclaredSwiftTypes = types
     .filter((t) => t.type.kind === 'hybrid-object')
     .map((t) => {
       const hybridObject = getTypeAs(t.type, HybridObjectType)
+      const hybridObjectModuleName =
+        hybridObject.sourceConfig.getIosModuleName()
       const { HybridTSpecCxx } = getHybridObjectName(
         hybridObject.hybridObjectName
       )
-      return getForwardDeclaration('class', HybridTSpecCxx, moduleName)
+      return getForwardDeclaration(
+        'class',
+        HybridTSpecCxx,
+        hybridObjectModuleName
+      )
     })
     .filter(isNotDuplicate)
 
@@ -96,11 +96,11 @@ ${includesHeader.sort().join('\n')}
  * Contains specialized versions of C++ templated types so they can be accessed from Swift,
  * as well as helper functions to interact with those C++ types from Swift.
  */
-namespace ${namespace} {
+namespace ${bridgeNamespace} {
 
   ${indent(headerHelperFunctions, '  ')}
 
-} // namespace ${namespace}
+} // namespace ${bridgeNamespace}
 `
 
   const source = `
@@ -111,11 +111,11 @@ ${createFileMetadataString(`${bridgeName}.cpp`)}
 // Include C++ implementation defined types
 ${includesImplementation.sort().join('\n')}
 
-namespace ${namespace} {
+namespace ${bridgeNamespace} {
 
   ${indent(implementationHelperFunctions, '  ')}
 
-} // namespace ${namespace}
+} // namespace ${bridgeNamespace}
 `
 
   const files: SourceFile[] = []

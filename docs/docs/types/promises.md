@@ -14,25 +14,17 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
     In TypeScript, a `Promise<T>` is represented using the built-in `Promise<T>` type, which can be awaited:
 
     ```ts
-    interface Math extends HybridObject {
+    interface Math extends HybridObject<{ … }> {
       fibonacci(n: number): Promise<number>
     }
 
     const math = // ...
     await math.fibonacci(13)
     ```
-  </TabItem>
-  <TabItem value="cpp" label="C++">
-    In C++, a `Promise<T>` is represented as an `std::future<T>`. For example, create one with [`std::async`](https://en.cppreference.com/w/cpp/thread/async):
 
-    ```cpp
-    std::future<double> fibonacci(double n) {
-      return std::async(std::launch::async, [=]() -> double {
-        // This runs on a separate Thread!
-        return calculateFibonacciSequence(n);
-      });
-    }
-    ```
+    :::note
+    The `Promise<T>` type is built-in in JavaScript.
+    :::
   </TabItem>
   <TabItem value="swift" label="Swift">
     In Swift, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/ios/core/Promise.swift) type - for example, to use Swift's new async/await syntax:
@@ -45,6 +37,10 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
       }
     }
     ```
+
+    :::note
+    Import Promise from Nitro: `import NitroModules`
+    :::
   </TabItem>
   <TabItem value="kotlin" label="Kotlin">
     In Kotlin, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/android/src/main/java/com/margelo/nitro/core/Promise.kt) type - for example, to use Kotlin's coroutine syntax:
@@ -57,6 +53,26 @@ This allows your native code to perform heavy-, long-running tasks in parallel, 
       }
     }
     ```
+
+    :::note
+    Import Promise from Nitro: `import com.margelo.nitro.core.Promise`
+    :::
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    In C++, a `Promise<T>` can be created via Nitro's [`Promise<T>`](https://github.com/mrousavy/nitro/blob/main/packages/react-native-nitro-modules/cpp/core/Promise.hpp) type - for example, to use an asynchronous Thread pool:
+
+    ```cpp
+    std::shared_ptr<Promise<double>> fibonacci(double n) {
+      return Promise<double>::async([=]() -> double {
+        // This runs on a separate Thread!
+        return calculateFibonacciSequence(n);
+      });
+    }
+    ```
+
+    :::note
+    Import Promise from Nitro: `#include <NitroModules/Promise.hpp>`
+    :::
   </TabItem>
 </Tabs>
 
@@ -68,7 +84,7 @@ func saveToFile(image: HybridImage) -> Promise<Void> {
   // code-error
                                      ^ // Error: Cannot return void!
   return Promise.async {
-    data.writeToFile("file://tmp/img.png")
+    try await data.writeToFile("file://tmp/img.png")
   }
 }
 ```

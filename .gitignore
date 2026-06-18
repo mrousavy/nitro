@@ -33,6 +33,7 @@ project.xcworkspace
 
 # Android/IJ
 #
+.kotlin
 .classpath
 .cxx
 .gradle
@@ -85,3 +86,6 @@ lib/
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Claude Code local settings
+.claude/settings.local.json

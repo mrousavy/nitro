@@ -1,5 +1,4 @@
-import { NitroConfig } from '../../config/NitroConfig.js'
-import { createIndentation, indent } from '../../utils.js'
+import { indent } from '../../utils.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { includeHeader } from '../c++/includeNitroHeader.js'
 import { getAllTypes } from '../getAllTypes.js'
@@ -9,6 +8,7 @@ import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import type { Property } from '../Property.js'
 import type { SourceFile, SourceImport } from '../SourceFile.js'
+import type { Type } from '../types/Type.js'
 import { addJNINativeRegistration } from './JNINativeRegistrations.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
@@ -31,35 +31,52 @@ export function createFbjniHybridObject(spec: HybridObjectSpec): SourceFile[] {
   const methodsDecl = methods
     .map((p) => p.getCode('c++', { override: true }))
     .join('\n')
-  const jniClassDescriptor = NitroConfig.getAndroidPackage(
+  const jniClassDescriptor = spec.config.getAndroidPackage(
     'c++/jni',
     name.HybridTSpec
   )
-  const cxxNamespace = NitroConfig.getCxxNamespace('c++')
-  const spaces = createIndentation(name.JHybridTSpec.length)
+  const cxxPartJniClassDescriptor = `${jniClassDescriptor}$CxxPart`
+  const cxxNamespace = spec.config.getCxxNamespace('c++')
 
-  let cppBase = 'JHybridObject'
+  let cppBaseClass = 'JHybridObject'
+  let javaPartBaseClass = 'JHybridObject::JavaPart'
+  let cxxPartBaseClass = 'JHybridObject::CxxPart'
+  const constructorCalls = [
+    `HybridObject(${name.HybridTSpec}::TAG)`,
+    `JHybridObject(javaPart)`,
+  ]
   if (spec.baseTypes.length > 0) {
     if (spec.baseTypes.length > 1) {
       throw new Error(
         `${name.T}: Inheriting from multiple HybridObject bases is not yet supported on Kotlin!`
       )
     }
-    cppBase = getHybridObjectName(spec.baseTypes[0]!.name).JHybridTSpec
+    const base = spec.baseTypes[0]!
+    let baseTypename = getHybridObjectName(base.name).JHybridTSpec
+    if (base.config.isExternalConfig) {
+      // It's an external type we inherit from - we have to prefix the namespace
+      baseTypename = base.config.getCxxNamespace('c++', baseTypename)
+    }
+    cppBaseClass = baseTypename
+    javaPartBaseClass = `${baseTypename}::JavaPart`
+    cxxPartBaseClass = `${baseTypename}::CxxPart`
+    constructorCalls.push(`${baseTypename}(javaPart)`)
   }
   const cppImports: SourceImport[] = []
-  const cppConstructorCalls = [`HybridObject(${name.HybridTSpec}::TAG)`]
   for (const base of spec.baseTypes) {
     const { JHybridTSpec } = getHybridObjectName(base.name)
-    cppConstructorCalls.push('HybridBase(jThis)')
+
+    const headerName = base.config.isExternalConfig
+      ? `${base.config.getAndroidCxxLibName()}/${JHybridTSpec}.hpp`
+      : `${JHybridTSpec}.hpp`
     cppImports.push({
       language: 'c++',
-      name: `${JHybridTSpec}.hpp`,
-      space: 'user',
+      name: headerName,
+      space: base.config.isExternalConfig ? 'system' : 'user',
       forwardDeclaration: getForwardDeclaration(
         'class',
         JHybridTSpec,
-        NitroConfig.getCxxNamespace('c++')
+        base.config.getCxxNamespace('c++')
       ),
     })
   }
@@ -83,30 +100,32 @@ namespace ${cxxNamespace} {
 
   using namespace facebook;
 
-  class ${name.JHybridTSpec}: public jni::HybridClass<${name.JHybridTSpec}, ${cppBase}>,
-${spaces}          public virtual ${name.HybridTSpec} {
+  class ${name.JHybridTSpec}: public virtual ${name.HybridTSpec}, public virtual ${cppBaseClass} {
   public:
-    static auto constexpr kJavaDescriptor = "L${jniClassDescriptor};";
-    static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
-    static void registerNatives();
-
-  protected:
-    // C++ constructor (called from Java via \`initHybrid()\`)
-    explicit ${name.JHybridTSpec}(jni::alias_ref<jhybridobject> jThis) :
-      ${indent(cppConstructorCalls.join(',\n'), '      ')},
-      _javaPart(jni::make_global(jThis)) {}
+    struct JavaPart: public jni::JavaClass<JavaPart, ${javaPartBaseClass}> {
+      static constexpr auto kJavaDescriptor = "L${jniClassDescriptor};";
+      std::shared_ptr<${name.JHybridTSpec}> get${name.JHybridTSpec}();
+    };
+    struct CxxPart: public jni::HybridClass<CxxPart, ${cxxPartBaseClass}> {
+      static constexpr auto kJavaDescriptor = "L${cxxPartJniClassDescriptor};";
+      static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> jThis);
+      static void registerNatives();
+      using HybridBase::HybridBase;
+    protected:
+      std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) override;
+    };
 
   public:
-    virtual ~${name.JHybridTSpec}() {
+    explicit ${name.JHybridTSpec}(const jni::local_ref<${name.JHybridTSpec}::JavaPart>& javaPart):
+      ${indent(constructorCalls.join(',\n'), '      ')},
+      _javaPart(jni::make_global(javaPart)) {}
+    ~${name.JHybridTSpec}() override {
       // Hermes GC can destroy JS objects on a non-JNI Thread.
       jni::ThreadScope::WithClassLoader([&] { _javaPart.reset(); });
     }
 
   public:
-    size_t getExternalMemorySize() noexcept override;
-
-  public:
-    inline const jni::global_ref<${name.JHybridTSpec}::javaobject>& getJavaPart() const noexcept {
+    inline const jni::global_ref<${name.JHybridTSpec}::JavaPart>& getJavaPart() const noexcept {
       return _javaPart;
     }
 
@@ -119,9 +138,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     ${indent(methodsDecl, '    ')}
 
   private:
-    friend HybridBase;
-    using HybridBase::HybridBase;
-    jni::global_ref<${name.JHybridTSpec}::javaobject> _javaPart;
+    jni::global_ref<${name.JHybridTSpec}::JavaPart> _javaPart;
   };
 
 } // namespace ${cxxNamespace}
@@ -130,7 +147,7 @@ ${spaces}          public virtual ${name.HybridTSpec} {
   // Make sure we register all native JNI methods on app startup
   addJNINativeRegistration({
     namespace: cxxNamespace,
-    className: `${name.JHybridTSpec}`,
+    className: `${name.JHybridTSpec}::CxxPart`,
     import: {
       name: `${name.JHybridTSpec}.hpp`,
       space: 'user',
@@ -142,12 +159,13 @@ ${spaces}          public virtual ${name.HybridTSpec} {
     .map((m) => getFbjniPropertyForwardImplementation(spec, m))
     .join('\n')
   const methodsImpl = methods
-    .map((m) => getFbjniMethodForwardImplementation(spec, m))
+    .map((m) => getFbjniMethodForwardImplementation(spec, m, m.name))
     .join('\n')
   const allTypes = getAllTypes(spec)
+  allTypes.push(...getAllBaseTypes(spec)) // <-- remember, we copy all base methods & properties over too
   const jniImports = allTypes
     .map((t) => new KotlinCxxBridgedType(t))
-    .flatMap((t) => t.getRequiredImports())
+    .flatMap((t) => t.getRequiredImports('c++'))
     .filter((i) => i != null)
   const cppIncludes = jniImports
     .map((i) => includeHeader(i))
@@ -168,19 +186,31 @@ ${cppIncludes.join('\n')}
 
 namespace ${cxxNamespace} {
 
-  jni::local_ref<${name.JHybridTSpec}::jhybriddata> ${name.JHybridTSpec}::initHybrid(jni::alias_ref<jhybridobject> jThis) {
+  std::shared_ptr<${name.JHybridTSpec}> ${name.JHybridTSpec}::JavaPart::get${name.JHybridTSpec}() {
+    auto hybridObject = JHybridObject::JavaPart::getJHybridObject();
+    auto castHybridObject = std::dynamic_pointer_cast<${name.JHybridTSpec}>(hybridObject);
+    if (castHybridObject == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to downcast JHybridObject to ${name.JHybridTSpec}!");
+    }
+    return castHybridObject;
+  }
+
+  jni::local_ref<${name.JHybridTSpec}::CxxPart::jhybriddata> ${name.JHybridTSpec}::CxxPart::initHybrid(jni::alias_ref<jhybridobject> jThis) {
     return makeCxxInstance(jThis);
   }
 
-  void ${name.JHybridTSpec}::registerNatives() {
-    registerHybrid({
-      makeNativeMethod("initHybrid", ${name.JHybridTSpec}::initHybrid),
-    });
+  std::shared_ptr<JHybridObject> ${name.JHybridTSpec}::CxxPart::createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+    auto castJavaPart = jni::dynamic_ref_cast<${name.JHybridTSpec}::JavaPart>(javaPart);
+    if (castJavaPart == nullptr) [[unlikely]] {
+      throw std::runtime_error("Failed to cast JHybridObject::JavaPart to ${name.JHybridTSpec}::JavaPart!");
+    }
+    return std::make_shared<${name.JHybridTSpec}>(castJavaPart);
   }
 
-  size_t ${name.JHybridTSpec}::getExternalMemorySize() noexcept {
-    static const auto method = _javaPart->getClass()->getMethod<jlong()>("getMemorySize");
-    return method(_javaPart);
+  void ${name.JHybridTSpec}::CxxPart::registerNatives() {
+    registerHybrid({
+      makeNativeMethod("initHybrid", ${name.JHybridTSpec}::CxxPart::initHybrid),
+    });
   }
 
   // Properties
@@ -212,11 +242,19 @@ namespace ${cxxNamespace} {
 
 function getFbjniMethodForwardImplementation(
   spec: HybridObjectSpec,
-  method: Method
+  method: Method,
+  jniMethodName: string
 ): string {
   const name = getHybridObjectName(spec.name)
 
   const returnJNI = new KotlinCxxBridgedType(method.returnType)
+  const requiresBridge =
+    returnJNI.needsSpecialHandling ||
+    method.parameters.some((p) => {
+      const bridged = new KotlinCxxBridgedType(p.type)
+      return bridged.needsSpecialHandling
+    })
+  const methodName = requiresBridge ? `${jniMethodName}_cxx` : jniMethodName
 
   const returnType = returnJNI.asJniReferenceType('local')
   const paramsTypes = method.parameters
@@ -237,14 +275,14 @@ function getFbjniMethodForwardImplementation(
   if (returnJNI.hasType) {
     // return something - we need to parse it
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = _javaPart->javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 auto __result = method(${paramsForward.join(', ')});
 return ${returnJNI.parse('__result', 'kotlin', 'c++', 'c++')};
     `
   } else {
     // void method. no return
     body = `
-static const auto method = _javaPart->getClass()->getMethod<${cxxSignature}>("${method.name}");
+static const auto method = _javaPart->javaClassStatic()->getMethod<${cxxSignature}>("${methodName}");
 method(${paramsForward.join(', ')});
    `
   }
@@ -262,9 +300,29 @@ function getFbjniPropertyForwardImplementation(
   spec: HybridObjectSpec,
   property: Property
 ): string {
-  const methods = property.cppMethods.map((m) =>
-    getFbjniMethodForwardImplementation(spec, m)
+  const methods: string[] = []
+
+  // getter
+  const getter = getFbjniMethodForwardImplementation(
+    spec,
+    property.cppGetter,
+    property.getGetterName('jvm')
   )
+  methods.push(getter)
+
+  if (property.cppSetter != null) {
+    // setter
+    const setter = getFbjniMethodForwardImplementation(
+      spec,
+      property.cppSetter,
+      property.getSetterName('jvm')
+    )
+    methods.push(setter)
+  }
 
   return methods.join('\n')
+}
+
+function getAllBaseTypes(spec: HybridObjectSpec): Type[] {
+  return spec.baseTypes.flatMap((b) => getAllTypes(b))
 }

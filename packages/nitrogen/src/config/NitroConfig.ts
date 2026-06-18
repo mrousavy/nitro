@@ -1,50 +1,54 @@
 import chalk from 'chalk'
 import { readUserConfig } from './getConfig.js'
-import type { NitroUserConfig } from './NitroUserConfig.js'
+import type {
+  AutolinkingAndroidImplementation,
+  AutolinkingIOSImplementation,
+  AutolinkingPlatformImplementation,
+  NitroUserConfig,
+} from './NitroUserConfig.js'
 
 const CXX_BASE_NAMESPACE = ['margelo', 'nitro']
 const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
 
-const defaultConfigPath = './nitro.json'
-
-let userConfig: NitroUserConfig | undefined
-export function getUserConfig(): NitroUserConfig {
-  if (userConfig == null) {
-    console.log(
-      chalk.reset(`🔧  Loading ${chalk.underline('nitro.json')} config...`)
-    )
-    userConfig = readUserConfig(defaultConfigPath)
-  }
-  return userConfig
-}
-
-export function setUserConfigPath(path: string) {
-  console.log(
-    `🔧  Loading ${chalk.underline('nitro.json')} config from ${chalk.underline(path)}...`
-  )
-  userConfig = readUserConfig(path)
-}
-
 /**
  * Represents the properly parsed `nitro.json` config of the current executing directory.
  */
-export const NitroConfig = {
+export class NitroConfig {
+  private readonly config: NitroUserConfig
+  private static singleton: NitroConfig | undefined
+
+  constructor(config: NitroUserConfig) {
+    this.config = config
+  }
+
+  static get current(): NitroConfig {
+    if (this.singleton == null) {
+      console.log(
+        chalk.reset(`🔧  Loading ${chalk.underline('nitro.json')} config...`)
+      )
+      const defaultConfigPath = './nitro.json'
+      const config = readUserConfig(defaultConfigPath)
+      this.singleton = new NitroConfig(config)
+    }
+    return this.singleton
+  }
+
   /**
    * Returns the name of the Android C++ library (aka name in CMakeLists.txt `add_library(..)`).
    * This will be loaded via `System.loadLibrary(...)`.
-   * @example `NitroImage`
+   * @example `NitroTest`
    */
   getAndroidCxxLibName(): string {
-    return getUserConfig().android.androidCxxLibName
-  },
+    return this.config.android.androidCxxLibName
+  }
 
   /**
    * Returns the iOS module name (aka Pod name) of the module that will be generated.
-   * @example `NitroImage`
+   * @example `NitroTest`
    */
   getIosModuleName(): string {
-    return getUserConfig().ios.iosModuleName
-  },
+    return this.config.ios.iosModuleName
+  }
 
   /**
    * Represents the C++ namespace of the module that will be generated.
@@ -55,7 +59,7 @@ export const NitroConfig = {
     language: 'c++' | 'swift',
     ...subDefinitionName: string[]
   ): string {
-    const userNamespace = getUserConfig().cxxNamespace
+    const userNamespace = this.config.cxxNamespace
     const namespace = [
       ...CXX_BASE_NAMESPACE,
       ...userNamespace,
@@ -69,7 +73,7 @@ export const NitroConfig = {
       default:
         throw new Error(`Invalid language for getCxxNamespace: ${language}`)
     }
-  },
+  }
 
   /**
    * Represents the Android namespace of the module that will be generated.
@@ -80,7 +84,7 @@ export const NitroConfig = {
     language: 'java/kotlin' | 'c++/jni',
     ...subPackage: string[]
   ): string {
-    const userPackage = getUserConfig().android.androidNamespace
+    const userPackage = this.config.android.androidNamespace
     const namespace = [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
 
     switch (language) {
@@ -91,30 +95,93 @@ export const NitroConfig = {
       default:
         throw new Error(`Invalid language for getAndroidPackage: ${language}`)
     }
-  },
+  }
 
   /**
    * Return the directory of the android package, and a given sub-package.
    * This will be used on android to put files from a package in their respective package folder.
    */
   getAndroidPackageDirectory(...subPackage: string[]): string[] {
-    const userPackage = getUserConfig().android.androidNamespace
+    const userPackage = this.config.android.androidNamespace
     return [...ANDROID_BASE_NAMESPACE, ...userPackage, ...subPackage]
-  },
-
-  /**
-   * Get the paths that will be ignored when loading the TypeScript project.
-   * In most cases, this just contains `node_modules/`.
-   */
-  getIgnorePaths(): string[] {
-    return getUserConfig().ignorePaths ?? []
-  },
+  }
 
   /**
    * Get the autolinking configuration of all HybridObjects.
    * Those will be generated and default-constructed.
    */
   getAutolinkedHybridObjects(): NitroUserConfig['autolinking'] {
-    return getUserConfig().autolinking
-  },
+    return this.config.autolinking
+  }
+
+  getPlatformAutolinkedImplementation(
+    hybridObjectName: string,
+    platform: string
+  ): AutolinkingPlatformImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+
+    // "all" applies to every platform and should automatically include
+    // future platforms without having to expand explicit key lists here.
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig[platform]
+  }
+
+  getIosAutolinkedImplementation(
+    hybridObjectName: string
+  ): AutolinkingIOSImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig.ios
+  }
+
+  getAndroidAutolinkedImplementation(
+    hybridObjectName: string
+  ): AutolinkingAndroidImplementation | undefined {
+    const objectConfig = this.config.autolinking[hybridObjectName]
+    if (objectConfig == null) {
+      return undefined
+    }
+    if (objectConfig.all != null) {
+      return objectConfig.all
+    }
+    return objectConfig.android
+  }
+
+  /**
+   * Get the paths that will be ignored when loading the TypeScript project.
+   * In most cases, this just contains `node_modules/`.
+   */
+  getIgnorePaths(): string[] {
+    return this.config.ignorePaths ?? []
+  }
+
+  getGitAttributesGeneratedFlag(): boolean {
+    return this.config.gitAttributesGeneratedFlag ?? false
+  }
+
+  get isExternalConfig(): boolean {
+    // If the C++ namespaces are NOT equal, we are an external config.
+    return (
+      this.getCxxNamespace('c++') !== NitroConfig.current.getCxxNamespace('c++')
+    )
+  }
+
+  getSwiftBridgeHeaderName(): string {
+    const moduleName = this.getIosModuleName()
+    return `${moduleName}-Swift-Cxx-Bridge`
+  }
+
+  getSwiftBridgeNamespace(language: 'c++' | 'swift'): string {
+    return this.getCxxNamespace(language, 'bridge', 'swift')
+  }
 }

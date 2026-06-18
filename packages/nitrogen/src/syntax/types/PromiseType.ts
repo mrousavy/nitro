@@ -1,12 +1,18 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import { ErrorType } from './ErrorType.js'
+import { FunctionType } from './FunctionType.js'
+import { NamedWrappingType } from './NamedWrappingType.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
+import { VoidType } from './VoidType.js'
 
 export class PromiseType implements Type {
   readonly resultingType: Type
+  readonly errorType: Type
 
   constructor(resultingType: Type) {
     this.resultingType = resultingType
+    this.errorType = new ErrorType()
   }
 
   get canBePassedByReference(): boolean {
@@ -16,12 +22,31 @@ export class PromiseType implements Type {
   get kind(): TypeKind {
     return 'promise'
   }
+  get isEquatable(): boolean {
+    return false
+  }
 
-  getCode(language: Language): string {
-    const resultingCode = this.resultingType.getCode(language)
+  get resolverFunction(): FunctionType {
+    if (this.resultingType.kind === 'void') {
+      return new FunctionType(new VoidType(), [])
+    } else {
+      return new FunctionType(new VoidType(), [
+        new NamedWrappingType('value', this.resultingType),
+      ])
+    }
+  }
+
+  get rejecterFunction(): FunctionType {
+    return new FunctionType(new VoidType(), [
+      new NamedWrappingType('error', this.errorType),
+    ])
+  }
+
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const resultingCode = this.resultingType.getCode(language, options)
     switch (language) {
       case 'c++':
-        return `std::future<${resultingCode}>`
+        return `std::shared_ptr<Promise<${resultingCode}>>`
       case 'swift':
         return `Promise<${resultingCode}>`
       case 'kotlin':
@@ -35,14 +60,32 @@ export class PromiseType implements Type {
   getExtraFiles(): SourceFile[] {
     return this.resultingType.getExtraFiles()
   }
-  getRequiredImports(): SourceImport[] {
-    return [
-      {
-        language: 'c++',
-        name: 'future',
-        space: 'system',
-      },
-      ...this.resultingType.getRequiredImports(),
-    ]
+  getRequiredImports(language: Language): SourceImport[] {
+    const imports: SourceImport[] =
+      this.resultingType.getRequiredImports(language)
+    switch (language) {
+      case 'c++':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/Promise.hpp',
+          space: 'system',
+        })
+        break
+      case 'swift':
+        imports.push({
+          name: 'NitroModules',
+          language: 'swift',
+          space: 'system',
+        })
+        break
+      case 'kotlin':
+        imports.push({
+          name: 'com.margelo.nitro.core.Promise',
+          language: 'kotlin',
+          space: 'system',
+        })
+        break
+    }
+    return imports
   }
 }

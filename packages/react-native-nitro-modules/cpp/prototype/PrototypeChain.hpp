@@ -63,7 +63,7 @@ private:
       return node;
     } else {
       if (node->hasBase()) {
-        // We didn't find a match in this prototype, let's recursively try it's parent!
+        // We didn't find a match in this prototype, let's recursively try its parent!
         return getOrExtendPrototype<Derived>(node->getBase());
       } else {
         // We didn't find `Derived` and we don't have a base- add a child and shift the tree by one.

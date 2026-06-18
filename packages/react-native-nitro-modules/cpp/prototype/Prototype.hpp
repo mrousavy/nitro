@@ -60,16 +60,12 @@ public:
   static std::shared_ptr<Prototype> get(const NativeInstanceId& typeId, const std::shared_ptr<Prototype>& base = nullptr) {
     static std::unordered_map<NativeInstanceId, std::shared_ptr<Prototype>> _prototypesCache;
 
-    const auto& found = _prototypesCache.find(typeId);
-    if (found != _prototypesCache.end()) {
-      // We know this C++ type ID / Prototype - return it!
-      return found->second;
-    } else {
+    auto [it, inserted] = _prototypesCache.try_emplace(typeId);
+    if (inserted) {
       // This is the first time we see this C++ type ID - create a new base Prototype for this.
-      auto prototype = std::shared_ptr<Prototype>(new Prototype(typeId, base));
-      _prototypesCache.emplace(typeId, prototype);
-      return prototype;
+      it->second = std::shared_ptr<Prototype>(new Prototype(typeId, base));
     }
+    return it->second;
   }
 
 public:
@@ -110,7 +106,7 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType>
-  inline void registerHybridGetter(std::string name, ReturnType (Derived::*method)()) {
+  inline void registerHybridGetter(std::string name, InstanceMethod<Derived, ReturnType> method) {
     if (_getters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Getter \"" + name + "\" - a getter with that name already exists!");
     }
@@ -129,7 +125,7 @@ public:
    * ```
    */
   template <typename Derived, typename ValueType>
-  inline void registerHybridSetter(std::string name, void (Derived::*method)(ValueType)) {
+  inline void registerHybridSetter(std::string name, InstanceMethod<Derived, void, ValueType> method) {
     if (_setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Property Setter \"" + name + "\" - a setter with that name already exists!");
     }
@@ -148,7 +144,7 @@ public:
    * ```
    */
   template <typename Derived, typename ReturnType, typename... Args>
-  inline void registerHybridMethod(std::string name, ReturnType (Derived::*method)(Args...)) {
+  inline void registerHybridMethod(std::string name, InstanceMethod<Derived, ReturnType, Args...> method) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }
@@ -167,9 +163,7 @@ public:
    * ```
    */
   template <typename Derived>
-  inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount,
-                                      jsi::Value (Derived::*method)(jsi::Runtime& runtime, const jsi::Value& thisArg,
-                                                                    const jsi::Value* args, size_t count)) {
+  inline void registerRawHybridMethod(std::string name, size_t expectedArgumentsCount, RawInstanceMethod<Derived> method) {
     if (_getters.contains(name) || _setters.contains(name)) [[unlikely]] {
       throw std::runtime_error("Cannot add Hybrid Method \"" + name + "\" - a property with that name already exists!");
     }

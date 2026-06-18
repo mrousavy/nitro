@@ -3,14 +3,15 @@
 import yargs from 'yargs/yargs'
 import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
-import { prettifyDirectory } from './getCurrentDir.js'
-import { writeUserConfigFile } from './config/NitroUserConfig.js'
+import { prettifyDirectory } from './prettifyDirectory.js'
 import { getFiles } from './getFiles.js'
 import { runNitrogen } from './nitrogen.js'
 import { promises as fs } from 'fs'
 import { isValidLogLevel, setLogLevel } from './Logger.js'
+import { initNewNitroModule } from './init.js'
+import { NITROGEN_VERSION } from './config/nitrogenVersion.js'
 
-const commandName = 'nitro-codegen'
+const commandName = 'nitrogen'
 
 // Maximum of 100 col width
 const cliWidth = Math.min(process.stdout.columns * 0.9, 100)
@@ -63,29 +64,33 @@ await yargs(hideBin(process.argv))
   .command(
     'init <moduleName>',
     `Usage: ${chalk.bold(`${commandName} init <moduleName> [options]`)}\n` +
-      `Generate a ${chalk.underline('nitro.json')} config file in the current directory.`,
+      `Create a new Nitro Module.`,
     (y) =>
-      y.positional('moduleName', {
-        type: 'string',
-        description: 'The name of the Nitro module that will be created.',
-        demandOption: true,
-      }),
+      y
+        .positional('moduleName', {
+          type: 'string',
+          description: 'The name of the Nitro Module that will be created.',
+          demandOption: true,
+        })
+        .option('path', {
+          type: 'string',
+          description: `A custom path to create the new Nitro Module in - instead of the current working directory.`,
+          default: process.cwd(),
+        }),
     async (argv) => {
-      console.log(
-        `⚙️ Creating ${chalk.underline('nitro.json')} for Nitro Module "${argv.moduleName}"...`
-      )
-      await writeUserConfigFile(argv.moduleName, process.cwd())
-      console.log(`🎉 Created Nitro Module "${argv.moduleName}"!`)
+      await initNewNitroModule(argv.path, argv.moduleName)
     }
   )
   .usage(
     `Usage: ${chalk.bold('$0 [options]')}\n` +
       `$0 is a code-generater for Nitro Modules (${chalk.underline('https://github.com/mrousavy/nitro')})\n` +
       `It converts all TypeScript specs found in ${chalk.underline('**/*.nitro.ts')} to C++, Swift or Kotlin specs.\n` +
-      `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in it's root directory.`
+      `Each library/module must have a ${chalk.underline('nitro.json')} configuration file in its root directory.\n` +
+      `$Nitrogen Version: ${chalk.bold(NITROGEN_VERSION)}`
   )
   .help()
   .strict()
+  .version(NITROGEN_VERSION)
   .wrap(cliWidth).argv
 
 async function runNitrogenCommand(

@@ -11,6 +11,7 @@
 
 #import "CallInvokerDispatcher.hpp"
 #import "InstallNitro.hpp"
+#import "NitroLogger.hpp"
 
 #import <ReactCommon/CallInvoker.h>
 #import <ReactCommon/RCTTurboModuleWithJSIBindings.h>
@@ -28,23 +29,30 @@ using namespace margelo;
  */
 @implementation NativeNitroModules {
   bool _didInstall;
+  NSString* _Nullable _errorMessage;
   std::weak_ptr<react::CallInvoker> _callInvoker;
 }
 RCT_EXPORT_MODULE(NitroModules)
 
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
-  auto callInvoker = _callInvoker.lock();
+  std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
-    throw std::runtime_error("Cannot install global.NitroModulesProxy - CallInvoker was null!");
+    throw std::runtime_error("Cannot install `global.NitroModulesProxy` - CallInvoker was null!");
   }
 
   // 2. Wrap CallInvoker as Dispatcher
   auto dispatcher = std::make_shared<nitro::CallInvokerDispatcher>(callInvoker);
 
   // 3. Install Nitro
-  nitro::install(runtime, dispatcher);
-  _didInstall = true;
+  try {
+    nitro::install(runtime, dispatcher);
+    _didInstall = true;
+  } catch (const std::exception& exc) {
+    nitro::Logger::log(nitro::LogLevel::Error, "NitroModules", "Failed to install Nitro! %s", exc.what());
+    _errorMessage = [NSString stringWithCString:exc.what() encoding:kCFStringEncodingUTF8];
+    _didInstall = false;
+  }
 }
 
 - (NSString*)install {
@@ -52,6 +60,9 @@ RCT_EXPORT_MODULE(NitroModules)
     // installJSIBindingsWithRuntime ran successfully.
     return nil;
   } else {
+    if (_errorMessage != nil) {
+      return _errorMessage;
+    }
     return @"installJSIBindingsWithRuntime: was not called - JSI Bindings could not be installed!";
   }
 }

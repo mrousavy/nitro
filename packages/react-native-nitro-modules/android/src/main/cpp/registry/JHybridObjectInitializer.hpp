@@ -18,12 +18,12 @@ using namespace facebook;
 struct JHybridObjectInitializer : public jni::JavaClass<JHybridObjectInitializer> {
 public:
   jni::local_ref<JHybridObject::javaobject> call() const {
-    const auto method = this->getClass()->getMethod<JHybridObject::javaobject()>("initialize");
+    const auto method = this->javaClassStatic()->getMethod<JHybridObject::javaobject()>("initialize");
     return method(self());
   }
 
 public:
-  static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObjectInitializer;";
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObjectInitializer;";
 };
 
 } // namespace margelo::nitro

@@ -15,7 +15,7 @@ namespace margelo::nitro {
 using namespace facebook;
 
 /**
- * A Dispatcher that uses react::CallInvoker for it's implementation
+ * A Dispatcher that uses react::CallInvoker for its implementation
  */
 class CallInvokerDispatcher final : public Dispatcher {
 public:
