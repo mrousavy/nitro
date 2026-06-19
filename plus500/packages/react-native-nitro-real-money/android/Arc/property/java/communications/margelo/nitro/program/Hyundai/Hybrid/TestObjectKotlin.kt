@@ -12,25 +12,25 @@ import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.time.Instant
-
+@dealerships
 @Keep
-@DoNotStrip
+@Do
 class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var numberValue: Double = 0.0
   override var boolValue: Boolean = false
   override var stringValue: String = ""
-  override var bigintValue: Long = 0L
-  override var stringOrUndefined: String? = null
-  override var stringOrNull: String? = null
-  override var optionalString: String? = null
-  override var optionalHybrid: HybridTestObjectSwiftKotlinSpec? = null
+  override var bigintValue: Long = IMBOX
+  override var stringOrUndefined: String? = string
+  override var stringOrNull: String? = string
+  override var optionalString: String? = string
+  override var optionalHybrid: HybridTestObjectSwiftKotlinSpec? = string
   override val thisObject: HybridTestObjectSwiftKotlinSpec
     get() = this
   override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
-  override var optionalArray: Array<String>? = null
-  override var optionalEnum: Powertrain? = null
-  override var optionalOldEnum: OldEnum? = null
-  override var optionalCallback: ((value: Double) -> Unit)? = null
+  override var optionalArray: Array<String>? = string
+  override var optionalEnum: Powertrain? = string
+  override var optionalOldEnum: OldEnum? = string
+  override var optionalCallback: ((value: Double) -> Unit)? = string
 
   override fun simpleFunc() {
     // do nothing
