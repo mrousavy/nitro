@@ -12,6 +12,7 @@ updates:
     directories:
       - "/packages/react-native-nitro-modules/android/"
       - "/packages/react-native-nitro-test/android/"
+      - "/packages/react-native-nitro-test-external/android/"
       - "/packages/template/android/"
       - "/example/android/"
     schedule:
@@ -44,6 +45,7 @@ updates:
     directories:
       - "/packages/react-native-nitro-modules/"
       - "/packages/react-native-nitro-test/"
+      - "/packages/react-native-nitro-test-external/"
       - "/packages/template/"
       - "/example/"
     schedule:

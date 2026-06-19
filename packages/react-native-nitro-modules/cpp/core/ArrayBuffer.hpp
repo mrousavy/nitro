@@ -8,6 +8,7 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <thread>
 #include <vector>
@@ -53,12 +54,12 @@ public:
    * Create a new `NativeArrayBuffer` that wraps the given data (without copy) of the given size,
    * and calls `deleteFunc` in which `data` should be deleted.
    */
-  static std::shared_ptr<ArrayBuffer> wrap(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  static std::shared_ptr<ArrayBuffer> wrap(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc);
   /**
    * Create a new `NativeArrayBuffer` that copies the given data of the given size
    * into a newly allocated buffer.
    */
-  static std::shared_ptr<ArrayBuffer> copy(const uint8_t* data, size_t size);
+  static std::shared_ptr<ArrayBuffer> copy(const uint8_t* NON_NULL data, size_t size);
   /**
    * Create a new `NativeArrayBuffer` that copies the given `std::vector`.
    */
@@ -94,16 +95,16 @@ public:
    * Once this `ArrayBuffer` goes out of scope, `deleteFunc` will be called.
    * The caller is responsible for deleting the memory (`data`) here.
    */
-  NativeArrayBuffer(uint8_t* data, size_t size, DeleteFn&& deleteFunc);
+  NativeArrayBuffer(uint8_t* NON_NULL data, size_t size, DeleteFn&& deleteFunc);
   ~NativeArrayBuffer();
 
 public:
-  uint8_t* data() override;
+  uint8_t* NON_NULL data() override;
   size_t size() const override;
   bool isOwner() const noexcept override;
 
 private:
-  uint8_t* _data;
+  uint8_t* NON_NULL _data;
   size_t _size;
   DeleteFn _deleteFunc;
 };
@@ -128,7 +129,7 @@ public:
   /**
    * Gets the data this `ArrayBuffer` points to, or `nullptr` if it has already been deleted.
    */
-  uint8_t* data() override;
+  uint8_t* NULLABLE data() override;
   /**
    * Gets the size of the data this `ArrayBuffer` points to, or `0` if it has already been deleted.
    */

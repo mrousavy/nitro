@@ -3,7 +3,7 @@ import { Type as TSMorphType, type ts } from 'ts-morph'
 import type { Language } from '../../getPlatformSpecs.js'
 import { getForwardDeclaration } from '../c++/getForwardDeclaration.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 import { createCppEnum } from '../c++/CppEnum.js'
 import { escapeCppName } from '../helpers.js'
 import { createCppUnion } from '../c++/CppUnion.js'
@@ -89,10 +89,14 @@ export class EnumType implements Type {
     return 'enum'
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, { fullyQualified }: GetCodeOptions = {}): string {
     switch (language) {
       case 'c++':
-        return this.enumName
+        if (fullyQualified) {
+          return NitroConfig.current.getCxxNamespace('c++', this.enumName)
+        } else {
+          return this.enumName
+        }
       case 'swift':
         return this.enumName
       case 'kotlin':

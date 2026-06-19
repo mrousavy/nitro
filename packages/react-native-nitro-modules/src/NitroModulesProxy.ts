@@ -24,6 +24,10 @@ export interface NitroModulesProxy extends HybridObject {
    */
   hasHybridObject(name: string): boolean
   /**
+   * Returns whether the given {@linkcode object} is a {@linkcode HybridObject}, or not.
+   */
+  isHybridObject(object: object): object is HybridObject
+  /**
    * Get a list of all registered Hybrid Objects.
    */
   getAllHybridObjectNames(): string[]

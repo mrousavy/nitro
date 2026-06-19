@@ -26,7 +26,7 @@ const char* levelToString(LogLevel level) {
   }
 }
 
-void Logger::nativeLog(LogLevel level, const char* tag, const std::string& message) {
+void Logger::nativeLog([[maybe_unused]] LogLevel level, [[maybe_unused]] const char* tag, [[maybe_unused]] const std::string& message) {
 #ifdef NITRO_DEBUG
   const char* logLevel = levelToString(level);
   NSLog(@"[%s] [Nitro.%s] %s", logLevel, tag, message.c_str());

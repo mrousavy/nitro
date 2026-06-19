@@ -157,11 +157,6 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
               space: 'user',
             })
           }
-          imports.push({
-            language: 'c++',
-            name: 'NitroModules/JNISharedPtr.hpp',
-            space: 'system',
-          })
           break
         }
       }
@@ -264,7 +259,16 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
                 return `jni::JArrayClass<${bridgedItem.getTypeCode(language)}>`
             }
           case 'kotlin':
-            return `Array<${bridgedItem.getTypeCode(language)}>`
+            switch (array.itemType.kind) {
+              case 'number':
+                return 'DoubleArray'
+              case 'boolean':
+                return 'BooleanArray'
+              case 'bigint':
+                return 'LongArray'
+              default:
+                return `Array<${bridgedItem.getTypeCode(language)}>`
+            }
           default:
             return this.type.getCode(language)
         }
@@ -728,7 +732,7 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
           case 'c++':
             const hybrid = getTypeAs(this.type, HybridObjectType)
             const fullName = this.getFullJHybridObjectName(hybrid)
-            return `JNISharedPtr::make_shared_from_jni<${fullName}>(jni::make_global(${parameterName}))`
+            return `${parameterName}->cthis()->shared_cast<${fullName}>()`
           default:
             return parameterName
         }

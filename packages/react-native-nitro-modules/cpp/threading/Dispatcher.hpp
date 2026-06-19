@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include "Promise.hpp"
 #include <functional>
 #include <jsi/jsi.h>
@@ -73,7 +74,7 @@ public:
   }
 
 private:
-  static std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> _globalCache;
+  static std::unordered_map<jsi::Runtime * NON_NULL, std::weak_ptr<Dispatcher>> _globalCache;
 
 private:
   static constexpr auto TAG = "Dispatcher";

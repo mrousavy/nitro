@@ -87,18 +87,21 @@ class Promise<T> {
    * otherwise it will asynchronously wait for a result or throw on a rejection.
    * This function can only be used from a coroutine context.
    */
-  suspend fun await(): T {
-    return suspendCoroutine { continuation ->
+  suspend fun await(): T =
+    suspendCoroutine { continuation ->
       then { result -> continuation.resume(result) }
       catch { error -> continuation.resumeWithException(error) }
     }
-  }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
+
   private external fun nativeReject(error: Throwable)
+
   private external fun addOnResolvedListener(callback: OnResolvedCallback)
+
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
+
   private external fun initHybrid(): HybridData
 
   // Nested callbacks - need to be JavaClasses so we can access them with JNI
@@ -110,6 +113,7 @@ class Promise<T> {
     @DoNotStrip
     fun onResolved(result: Any)
   }
+
   @Keep
   @DoNotStrip
   private fun interface OnRejectedCallback {
@@ -131,7 +135,10 @@ class Promise<T> {
      * When the suspending function returns, the Promise gets resolved. If the suspending
      * function throws, the Promise gets rejected.
      */
-    fun <T> async(scope: CoroutineScope = defaultScope, run: suspend () -> T): Promise<T> {
+    fun <T> async(
+      scope: CoroutineScope = defaultScope,
+      run: suspend () -> T,
+    ): Promise<T> {
       val promise = Promise<T>()
       scope.launch {
         try {
@@ -167,15 +174,11 @@ class Promise<T> {
     /**
      * Creates a new Promise that is already resolved with the given result.
      */
-    fun <T> resolved(result: T): Promise<T> {
-      return Promise<T>().apply { resolve(result) }
-    }
+    fun <T> resolved(result: T): Promise<T> = Promise<T>().apply { resolve(result) }
 
     /**
      * Creates a new Promise that is already rejected with the given error.
      */
-    fun <T> rejected(error: Throwable): Promise<T> {
-      return Promise<T>().apply { reject(error) }
-    }
+    fun <T> rejected(error: Throwable): Promise<T> = Promise<T>().apply { reject(error) }
   }
 }

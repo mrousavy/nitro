@@ -50,6 +50,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceStrings", &HybridTestObjectSwiftKotlinSpec::bounceStrings);
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectSwiftKotlinSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectSwiftKotlinSpec::bounceStructs);
+      prototype.registerHybridMethod("sumUpAllPassengers", &HybridTestObjectSwiftKotlinSpec::sumUpAllPassengers);
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectSwiftKotlinSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectSwiftKotlinSpec::complexEnumCallback);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
@@ -63,6 +64,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectSwiftKotlinSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectSwiftKotlinSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectSwiftKotlinSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("tryTrailingOptional", &HybridTestObjectSwiftKotlinSpec::tryTrailingOptional);
       prototype.registerHybridMethod("add1Hour", &HybridTestObjectSwiftKotlinSpec::add1Hour);
       prototype.registerHybridMethod("currentDate", &HybridTestObjectSwiftKotlinSpec::currentDate);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectSwiftKotlinSpec::calculateFibonacciSync);
@@ -79,6 +81,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectSwiftKotlinSpec::callbackAsyncPromiseBuffer);
       prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectSwiftKotlinSpec::getComplexCallback);
+      prototype.registerHybridMethod("twoOptionalCallbacks", &HybridTestObjectSwiftKotlinSpec::twoOptionalCallbacks);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectSwiftKotlinSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectSwiftKotlinSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectSwiftKotlinSpec::getCar);
@@ -86,6 +89,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getDriver", &HybridTestObjectSwiftKotlinSpec::getDriver);
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectSwiftKotlinSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectSwiftKotlinSpec::bounceWrappedJsStyleStruct);
+      prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectSwiftKotlinSpec::bounceOptionalWrapper);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectSwiftKotlinSpec::copyBuffer);
@@ -98,6 +102,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantWeirdNumbersEnum", &HybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectSwiftKotlinSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectSwiftKotlinSpec::passNamedVariant);
+      prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectSwiftKotlinSpec::passAllEmptyObjectVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectSwiftKotlinSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectSwiftKotlinSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectSwiftKotlinSpec::createBaseActualChild);
@@ -107,6 +112,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("castBase", &HybridTestObjectSwiftKotlinSpec::castBase);
       prototype.registerHybridMethod("callbackSync", &HybridTestObjectSwiftKotlinSpec::callbackSync);
       prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectSwiftKotlinSpec::getIsViewBlue);
+      prototype.registerHybridMethod("bounceExternalHybrid", &HybridTestObjectSwiftKotlinSpec::bounceExternalHybrid);
+      prototype.registerHybridMethod("createInternalObject", &HybridTestObjectSwiftKotlinSpec::createInternalObject);
     });
   }
 

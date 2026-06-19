@@ -16,7 +16,7 @@ using namespace facebook;
 
 static constexpr auto GLOBAL_DISPATCHER_HOLDER_NAME = "__nitroDispatcher";
 
-std::unordered_map<jsi::Runtime*, std::weak_ptr<Dispatcher>> Dispatcher::_globalCache;
+std::unordered_map<jsi::Runtime * NON_NULL, std::weak_ptr<Dispatcher>> Dispatcher::_globalCache;
 
 void Dispatcher::installRuntimeGlobalDispatcher(jsi::Runtime& runtime, std::shared_ptr<Dispatcher> dispatcher) {
   Logger::log(LogLevel::Info, TAG, "Installing global Dispatcher Holder into Runtime \"%s\"...", getRuntimeId(runtime).c_str());

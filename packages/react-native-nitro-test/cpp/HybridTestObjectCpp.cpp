@@ -9,10 +9,12 @@
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
 #include <chrono>
+#include <sstream>
 #include <thread>
 
 #include "HybridBase.hpp"
 #include "HybridChild.hpp"
+#include "HybridSomeInternalObject.hpp"
 
 namespace margelo::nitro::test {
 
@@ -106,7 +108,7 @@ void HybridTestObjectCpp::setSomeTuple(const std::tuple<double, std::string>& tu
 }
 
 std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::getThisObject() {
-  return shared<HybridTestObjectCppSpec>();
+  return shared_cast<HybridTestObjectCppSpec>();
 }
 
 std::optional<Powertrain> HybridTestObjectCpp::getOptionalEnum() {
@@ -146,6 +148,10 @@ void HybridTestObjectCpp::simpleFunc() {
   // do nothing
 }
 
+CustomString HybridTestObjectCpp::bounceCustomType(CustomString value) {
+  return value;
+}
+
 void HybridTestObjectCpp::multipleArguments(double num, const std::string& str, bool boo) {
   Logger::log(LogLevel::Info, TAG, "Arguments received! num: %f | str: %s | boo: %i", num, str.c_str(), boo);
 }
@@ -160,6 +166,24 @@ std::vector<double> HybridTestObjectCpp::bounceNumbers(const std::vector<double>
 
 std::vector<Person> HybridTestObjectCpp::bounceStructs(const std::vector<Person>& array) {
   return array;
+}
+
+std::string HybridTestObjectCpp::sumUpAllPassengers(const std::vector<Car>& cars) {
+  std::ostringstream oss;
+  bool first = true;
+
+  for (const auto& car : cars) {
+    for (const auto& passenger : car.passengers) {
+      if (!first) {
+        // separator
+        oss << ", ";
+      }
+      oss << passenger.name << " (" << passenger.age << ")";
+      first = false;
+    }
+  }
+
+  return oss.str();
 }
 
 std::vector<Powertrain> HybridTestObjectCpp::bounceEnums(const std::vector<Powertrain>& array) {
@@ -226,6 +250,10 @@ std::optional<Powertrain> HybridTestObjectCpp::tryOptionalEnum(std::optional<Pow
   return value;
 }
 
+bool HybridTestObjectCpp::tryTrailingOptional(double /* num */, const std::string& /* str */, std::optional<bool> boo) {
+  return boo.has_value() ? boo.value() : false;
+}
+
 std::chrono::system_clock::time_point HybridTestObjectCpp::add1Hour(std::chrono::system_clock::time_point date) {
   return date + std::chrono::hours(1);
 }
@@ -242,6 +270,11 @@ HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, s
   } else {
     return {"holds something else!"};
   }
+}
+
+std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) {
+  return variant;
 }
 
 std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
@@ -350,6 +383,16 @@ std::function<void(double)> HybridTestObjectCpp::getComplexCallback() {
   return [](double value) { Logger::log(LogLevel::Info, TAG, "Callback called with %f", value); };
 }
 
+void HybridTestObjectCpp::twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first,
+                                               const std::optional<std::function<void(const std::string& /* value */)>>& second) {
+  if (first.has_value()) {
+    first.value()(value);
+  }
+  if (second.has_value()) {
+    second.value()("Hello!");
+  }
+}
+
 std::shared_ptr<Promise<double>>
 HybridTestObjectCpp::getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) {
   return Promise<double>::async([=]() -> double {
@@ -405,7 +448,7 @@ HybridTestObjectCpp::getValueFromJsCallback(const std::function<std::shared_ptr<
 }
 
 Car HybridTestObjectCpp::getCar() {
-  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, true);
+  return Car(2018, "Lamborghini", "Huracan Performante", 640, Powertrain::GAS, std::nullopt, {}, true, std::nullopt, {100, 10});
 }
 
 bool HybridTestObjectCpp::isCarElectric(const Car& car) {
@@ -426,6 +469,10 @@ void HybridTestObjectCpp::jsStyleObjectAsParameters(const JsStyleStruct& params)
 
 WrappedJsStruct HybridTestObjectCpp::bounceWrappedJsStyleStruct(const WrappedJsStruct& value) {
   return value;
+}
+
+OptionalWrapper HybridTestObjectCpp::bounceOptionalWrapper(const OptionalWrapper& wrapper) {
+  return wrapper;
 }
 
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
@@ -530,6 +577,15 @@ bool HybridTestObjectCpp::getIsViewBlue(const std::shared_ptr<HybridTestViewSpec
 double HybridTestObjectCpp::callbackSync(const std::function<double()>& callback) {
   double value = callback();
   return value;
+}
+
+std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::bounceExternalHybrid(
+    const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) {
+  return externalObject;
+}
+
+std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> HybridTestObjectCpp::createInternalObject() {
+  return std::make_shared<HybridSomeInternalObject>();
 }
 
 void HybridTestObjectCpp::dispose() {

@@ -51,7 +51,7 @@ import ${javaNamespace}.*
 /**
  * Represents the React Native \`ViewManager\` for the "${spec.name}" Nitro HybridView.
  */
-class ${manager}: SimpleViewManager<View>() {
+open class ${manager}: SimpleViewManager<View>() {
   private val views = hashMapOf<View, ${viewImplementation}>()
 
   override fun getName(): String {
@@ -115,6 +115,10 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 
 #pragma once
 
+#ifndef RN_SERIALIZABLE_STATE
+#error ${spec.config.getAndroidCxxLibName()} was compiled without the 'RN_SERIALIZABLE_STATE' flag. This flag is required for Nitro Views - set it in your CMakeLists!
+#endif
+
 #include <fbjni/fbjni.h>
 #include <react/fabric/StateWrapperImpl.h>
 #include <react/fabric/CoreComponentsRegistry.h>
@@ -169,7 +173,6 @@ ${createFileMetadataString(`J${stateUpdaterName}.cpp`)}
 #include "J${stateUpdaterName}.hpp"
 #include "views/${component}.hpp"
 #include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JNISharedPtr.hpp>
 
 namespace ${cxxNamespace} {
 
@@ -205,7 +208,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props.hybridRef.value;
     if (maybeFunc.has_value()) {
-      auto shared = JNISharedPtr::make_shared_from_jni<${JHybridTSpec}>(jni::make_global(javaView));
+      std::shared_ptr<${JHybridTSpec}> shared = javaView->cthis()->shared_cast<${JHybridTSpec}>();
       maybeFunc.value()(shared);
     }
     // TODO: Set isDirty = false

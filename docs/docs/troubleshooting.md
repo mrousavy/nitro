@@ -14,7 +14,11 @@ First, make sure you meet the [minimum requirements](minimum-requirements) for N
 
 ## Ask for help
 
-If you want to ask for help, join our [Margelo Community Discord](https://margelo.com/discord).
+If you want to ask for help, join our [Margelo Community Discord](https://margelo.com/discord). Be respectful of everyone's time.
+
+## Run the example app
+
+Each release of Nitro contains a pre-built release version of the [Nitro Example app](https://github.com/mrousavy/nitro/tree/main/example). You can run this by following the ["Running the Example app" guide](running-example-app).
 
 ## Build error
 

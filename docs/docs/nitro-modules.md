@@ -20,10 +20,10 @@ In addition to the base react-native library template, a Nitro Module also conta
 
 ### 1. Initialize the template
 
-To create a new Nitro Module, simply run `nitro-codegen init <moduleName>`:
+To create a new Nitro Module, simply run `nitrogen init <moduleName>`:
 
 ```sh
-npx nitro-codegen@latest init react-native-math
+npx nitrogen@latest init react-native-math
 ```
 
 ### 2. Implement your Hybrid Objects
@@ -68,6 +68,6 @@ After creating a Nitro Module, it's time to set up an example app to test your l
 
 :::tip
 The Hybrid Objects from your Nitro Module will be registered in the `HybridObjectRegistry`. This registration process needs to be called from somewhere:
-- In React Native, this happens in the `*Package.java` file which calls `.initializeNative()`.
+- In React Native, this happens in the `*Package.kt` file which calls `.initializeNative()`.
 - If you are not using React Native, you need to manually call `.initializeNative()` in your library's entry point.
 :::

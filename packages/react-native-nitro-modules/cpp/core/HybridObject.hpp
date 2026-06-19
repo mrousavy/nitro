@@ -6,6 +6,7 @@
 
 #include "HybridObjectPrototype.hpp"
 
+#include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
 #include <type_traits>
@@ -29,7 +30,7 @@ public:
    * Create a new instance of a `HybridObject`.
    * The given `name` will be used for logging and stringifying.
    */
-  explicit HybridObject(const char* name);
+  explicit HybridObject(const char* NON_NULL name);
   /**
    * Called when no more references to the given `HybridObject` exist in both C++ and JS.
    * JS might keep references for longer, as it is a garbage collected language.
@@ -45,9 +46,14 @@ public:
   HybridObject(HybridObject&& move) = delete;
   /**
    * HybridObjects cannot be default-constructed!
+   * Use this instead;
+   * ```cpp
+   * MyHybridObject(): HybridObject(TAG) {}
+   * ```
    */
   HybridObject() {
-    throw std::runtime_error("Cannot default-construct HybridObject!");
+    throw std::runtime_error("Cannot default-construct HybridObject! "
+                             "Did you forget to add the `HybridObject(TAG)` base-constructor call to your Hybrid Object's constructor?");
   }
 
 public:
@@ -61,13 +67,17 @@ public:
 
 public:
   /**
-   * Get the `std::shared_ptr` instance of this HybridObject.
+   * Get the `std::shared_ptr` instance of this HybridObject as it's concrete type.
    * The HybridObject must be managed inside a `shared_ptr` already, otherwise this will fail.
    */
   template <typename Derived>
-  std::shared_ptr<Derived> shared() {
-    return std::dynamic_pointer_cast<Derived>(shared_from_this());
+  std::shared_ptr<Derived> shared_cast() {
+    return std::dynamic_pointer_cast<Derived>(shared());
   }
+  /**
+   * Get the `std::shared_ptr` instance of this HybridObject.
+   */
+  virtual std::shared_ptr<HybridObject> shared();
 
 public:
   /**
@@ -102,7 +112,7 @@ private:
    * The actual `dispose()` function from JS.
    * This needs to be a raw JSI function as we remove the NativeState here.
    */
-  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* args, size_t count);
+  jsi::Value disposeRaw(jsi::Runtime& runtime, const jsi::Value& thisArg, const jsi::Value* NON_NULL args, size_t count);
 
 protected:
   /**
@@ -135,7 +145,7 @@ protected:
 
 private:
   static constexpr auto TAG = "HybridObject";
-  const char* _name = TAG;
+  const char* NON_NULL _name = TAG;
   std::unordered_map<jsi::Runtime*, BorrowingReference<jsi::WeakObject>> _objectCache;
 };
 

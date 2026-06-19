@@ -40,22 +40,22 @@ Then, run [nitrogen](nitrogen):
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npx nitro-codegen
+    npx nitrogen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn nitro-codegen
+    yarn nitrogen
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm nitro-codegen
+    pnpm nitrogen
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun nitro-codegen
+    bun nitrogen
     ```
   </TabItem>
 </Tabs>
@@ -114,17 +114,16 @@ Now run nitrogen again.
 
 On Android, you need to register the generated view manager in your React Native package:
 
-```java title="CameraPackage.java"
+```kotlin title="CameraPackage.kt"
 // ...
-public class CameraPackage extends TurboReactPackage {
+public class CameraPackage: TurboReactPackage() {
   // ...
 
-  @Override
-  public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
-    List<ViewManager> viewManagers = new ArrayList<>();
+  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+    val viewManagers = ArrayList<ViewManager<*, *>>()
     // diff-add
-    viewManagers.add(new HybridCameraViewManager());
-    return viewManagers;
+    viewManagers.add(HybridCameraViewManager())
+    return viewManagers
   }
 }
 ```
@@ -233,7 +232,7 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
 Whereas Nitro allows passing JS functions to native code directly, React Native core doesn't allow that. Instead, functions are wrapped in an event listener registry, and a simple boolean is passed to the native side.
 Unfortunately React Native's renderer does not allow changing this behaviour, so functions cannot be passed directly to Nitro Views. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
 
-So every function (`() => void`) has to be wrapped in an object with one key - `f` - which holds the function: `{ f: () => void }`
+To simplify this, React Native exposes the `callback(...)` method:
 
 ```tsx
 export interface CameraProps extends HybridViewProps {
@@ -245,7 +244,7 @@ function App() {
   // diff-remove
   return <Camera onCaptured={(i) => console.log(i)} />
   // diff-add
-  return <Camera onCaptured={{ f: (i) => console.log(i) }} />
+  return <Camera onCaptured={callback((i) => console.log(i))} />
 }
 ```
 
@@ -283,6 +282,6 @@ function App() {
 }
 ```
 
-> Note: If you're wondering about the `{ f: ... }` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
+> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
 
 The `ref` from within `hybridRef`'s callback is pointing to the `HybridObject` directly - you can also pass this around freely.

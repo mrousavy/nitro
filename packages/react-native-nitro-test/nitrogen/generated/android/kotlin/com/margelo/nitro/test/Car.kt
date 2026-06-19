@@ -21,13 +21,36 @@ data class Car
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val year: Double,
+    @DoNotStrip
+    @Keep
     val make: String,
+    @DoNotStrip
+    @Keep
     val model: String,
+    @DoNotStrip
+    @Keep
     val power: Double,
+    @DoNotStrip
+    @Keep
     val powertrain: Powertrain,
+    @DoNotStrip
+    @Keep
     val driver: Person?,
-    val isFast: Boolean?
+    @DoNotStrip
+    @Keep
+    val passengers: Array<Person>,
+    @DoNotStrip
+    @Keep
+    val isFast: Boolean?,
+    @DoNotStrip
+    @Keep
+    val favouriteTrack: String?,
+    @DoNotStrip
+    @Keep
+    val performanceScores: DoubleArray
   ) {
   /* main constructor */
 }

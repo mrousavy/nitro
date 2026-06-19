@@ -29,6 +29,7 @@ namespace margelo::nitro::test {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridBaseSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridBaseSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:

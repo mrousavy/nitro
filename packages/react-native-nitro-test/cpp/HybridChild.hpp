@@ -25,6 +25,10 @@ public:
   double getChildValue() override {
     return 30;
   }
+
+  std::variant<std::string, Car> bounceVariant(const std::variant<std::string, Car>& variant) override {
+    return variant;
+  }
 };
 
 }; // namespace margelo::nitro::test

@@ -16,6 +16,7 @@ namespace margelo::nitro::test {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("childValue", &HybridChildSpec::getChildValue);
+      prototype.registerHybridMethod("bounceVariant", &HybridChildSpec::bounceVariant);
     });
   }
 

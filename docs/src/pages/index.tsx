@@ -6,6 +6,7 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import ThemedImage from '@theme/ThemedImage';
 import styles from './index.module.css';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import React from 'react';
 
 const Icon = require('@site/static/img/nos.png').default;
 
@@ -36,7 +37,7 @@ function HomepageHeader() {
   );
 }
 
-export default function Home(): JSX.Element {
+export default function Home(): React.ReactElement {
   return (
     <Layout
       title="Welcome to Nitro!"

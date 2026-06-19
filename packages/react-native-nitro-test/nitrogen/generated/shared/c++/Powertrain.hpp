@@ -38,26 +38,24 @@ namespace margelo::nitro::test {
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ Powertrain <> JS Powertrain (union)
   template <>
-  struct JSIConverter<Powertrain> final {
-    static inline Powertrain fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::Powertrain> final {
+    static inline margelo::nitro::test::Powertrain fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       std::string unionValue = JSIConverter<std::string>::fromJSI(runtime, arg);
       switch (hashString(unionValue.c_str(), unionValue.size())) {
-        case hashString("electric"): return Powertrain::ELECTRIC;
-        case hashString("gas"): return Powertrain::GAS;
-        case hashString("hybrid"): return Powertrain::HYBRID;
+        case hashString("electric"): return margelo::nitro::test::Powertrain::ELECTRIC;
+        case hashString("gas"): return margelo::nitro::test::Powertrain::GAS;
+        case hashString("hybrid"): return margelo::nitro::test::Powertrain::HYBRID;
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert \"" + unionValue + "\" to enum Powertrain - invalid value!");
       }
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, Powertrain arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, margelo::nitro::test::Powertrain arg) {
       switch (arg) {
-        case Powertrain::ELECTRIC: return JSIConverter<std::string>::toJSI(runtime, "electric");
-        case Powertrain::GAS: return JSIConverter<std::string>::toJSI(runtime, "gas");
-        case Powertrain::HYBRID: return JSIConverter<std::string>::toJSI(runtime, "hybrid");
+        case margelo::nitro::test::Powertrain::ELECTRIC: return JSIConverter<std::string>::toJSI(runtime, "electric");
+        case margelo::nitro::test::Powertrain::GAS: return JSIConverter<std::string>::toJSI(runtime, "gas");
+        case margelo::nitro::test::Powertrain::HYBRID: return JSIConverter<std::string>::toJSI(runtime, "hybrid");
         default: [[unlikely]]
           throw std::invalid_argument("Cannot convert Powertrain to JS - invalid value: "
                                     + std::to_string(static_cast<int>(arg)) + "!");

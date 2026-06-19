@@ -2,8 +2,10 @@ import {
   type HybridObject,
   type AnyMap,
   type Sync,
+  type CustomType,
 } from 'react-native-nitro-modules'
 import type { TestView } from './TestView.nitro'
+import type { SomeExternalObject } from 'react-native-nitro-test-external'
 
 // Tuples become `std::tuple<...>` in C++.
 // In contrast to arrays, they are length-checked, and can have different types inside them.
@@ -42,7 +44,10 @@ export interface Car {
   power: number
   powertrain: Powertrain
   driver?: Person
+  passengers: Person[]
   isFast?: boolean
+  favouriteTrack?: string
+  performanceScores: number[]
 }
 
 // A `type T = { ... }` declaration is the same as a `interface T { ... }` - it's a `struct` in C++.
@@ -55,13 +60,27 @@ interface JsStyleStruct {
   value: number
   onChanged: (num: number) => void
 }
-interface WrappedJsStruct {
+export interface WrappedJsStruct {
   value: JsStyleStruct
+  items: JsStyleStruct[]
+}
+export interface OptionalWrapper {
+  optionalArrayBuffer?: ArrayBuffer
+  optionalString?: string
 }
 
+interface SecondMapWrapper {
+  second: Record<string, string>
+}
 interface MapWrapper {
   map: Record<string, string>
+  secondMap: SecondMapWrapper
 }
+export type CustomString = CustomType<
+  string,
+  'CustomString',
+  { include: 'CustomString.hpp' }
+>
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -90,6 +109,7 @@ interface SharedTestObjectProps {
   bounceStrings(array: string[]): string[]
   bounceNumbers(array: number[]): number[]
   bounceStructs(array: Person[]): Person[]
+  sumUpAllPassengers(cars: Car[]): string
   bounceEnums(array: Powertrain[]): Powertrain[]
   complexEnumCallback(
     array: Powertrain[],
@@ -116,6 +136,7 @@ interface SharedTestObjectProps {
   tryOptionalParams(num: number, boo: boolean, str?: string): string
   tryMiddleParam(num: number, boo: boolean | undefined, str: string): string
   tryOptionalEnum(value?: Powertrain): Powertrain | undefined
+  tryTrailingOptional(num: number, str: string, boo?: boolean): boolean
 
   // Variants
   someVariant: number | string
@@ -148,6 +169,11 @@ interface SharedTestObjectProps {
     callback: () => Promise<ArrayBuffer>
   ): Promise<ArrayBuffer>
   getComplexCallback(): (value: number) => void
+  twoOptionalCallbacks(
+    value: number,
+    first?: (value: number) => void,
+    second?: (value: string) => void
+  ): void
 
   // Callbacks that return values
   getValueFromJSCallbackAndWait(getValue: () => number): Promise<number>
@@ -162,6 +188,7 @@ interface SharedTestObjectProps {
   getDriver(car: Car): Person | undefined
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
+  bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
@@ -182,6 +209,9 @@ interface SharedTestObjectProps {
   ): WeirdNumbersEnum | boolean
   getVariantObjects(variant: Person | Car): Person | Car
   passNamedVariant(variant: NamedVariant): NamedVariant
+  passAllEmptyObjectVariant(
+    variant: OptionalWrapper | Base
+  ): OptionalWrapper | Base
 
   // Inheritance
   createChild(): Child
@@ -197,6 +227,10 @@ interface SharedTestObjectProps {
 
   // Views
   getIsViewBlue(view: TestView): boolean
+
+  // External HybridObjects
+  bounceExternalHybrid(externalObject: SomeExternalObject): SomeExternalObject
+  createInternalObject(): SomeExternalObject
 }
 
 // This is a C++-based `HybridObject`.
@@ -218,6 +252,8 @@ export interface TestObjectCpp
   newTestObject(): TestObjectCpp
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+
+  bounceCustomType(value: CustomString): CustomString
 }
 
 // This is a Swift/Kotlin-based `HybridObject`.
@@ -246,4 +282,6 @@ export interface Base
 // The native `Child` Swift/Kotlin class will inherit from the `Base` Swift/Kotlin class.
 export interface Child extends Base {
   readonly childValue: number
+  // tests if the same variant can be used in a different HybridObject
+  bounceVariant(variant: NamedVariant): NamedVariant
 }

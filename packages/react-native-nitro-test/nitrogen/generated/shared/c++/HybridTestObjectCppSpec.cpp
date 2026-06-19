@@ -48,6 +48,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
+      prototype.registerHybridMethod("bounceCustomType", &HybridTestObjectCppSpec::bounceCustomType);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectCppSpec::addNumbers);
       prototype.registerHybridMethod("addStrings", &HybridTestObjectCppSpec::addStrings);
@@ -55,6 +56,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceStrings", &HybridTestObjectCppSpec::bounceStrings);
       prototype.registerHybridMethod("bounceNumbers", &HybridTestObjectCppSpec::bounceNumbers);
       prototype.registerHybridMethod("bounceStructs", &HybridTestObjectCppSpec::bounceStructs);
+      prototype.registerHybridMethod("sumUpAllPassengers", &HybridTestObjectCppSpec::sumUpAllPassengers);
       prototype.registerHybridMethod("bounceEnums", &HybridTestObjectCppSpec::bounceEnums);
       prototype.registerHybridMethod("complexEnumCallback", &HybridTestObjectCppSpec::complexEnumCallback);
       prototype.registerHybridMethod("createMap", &HybridTestObjectCppSpec::createMap);
@@ -68,6 +70,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("tryOptionalParams", &HybridTestObjectCppSpec::tryOptionalParams);
       prototype.registerHybridMethod("tryMiddleParam", &HybridTestObjectCppSpec::tryMiddleParam);
       prototype.registerHybridMethod("tryOptionalEnum", &HybridTestObjectCppSpec::tryOptionalEnum);
+      prototype.registerHybridMethod("tryTrailingOptional", &HybridTestObjectCppSpec::tryTrailingOptional);
       prototype.registerHybridMethod("add1Hour", &HybridTestObjectCppSpec::add1Hour);
       prototype.registerHybridMethod("currentDate", &HybridTestObjectCppSpec::currentDate);
       prototype.registerHybridMethod("calculateFibonacciSync", &HybridTestObjectCppSpec::calculateFibonacciSync);
@@ -84,6 +87,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("callbackAsyncPromise", &HybridTestObjectCppSpec::callbackAsyncPromise);
       prototype.registerHybridMethod("callbackAsyncPromiseBuffer", &HybridTestObjectCppSpec::callbackAsyncPromiseBuffer);
       prototype.registerHybridMethod("getComplexCallback", &HybridTestObjectCppSpec::getComplexCallback);
+      prototype.registerHybridMethod("twoOptionalCallbacks", &HybridTestObjectCppSpec::twoOptionalCallbacks);
       prototype.registerHybridMethod("getValueFromJSCallbackAndWait", &HybridTestObjectCppSpec::getValueFromJSCallbackAndWait);
       prototype.registerHybridMethod("getValueFromJsCallback", &HybridTestObjectCppSpec::getValueFromJsCallback);
       prototype.registerHybridMethod("getCar", &HybridTestObjectCppSpec::getCar);
@@ -91,6 +95,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getDriver", &HybridTestObjectCppSpec::getDriver);
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectCppSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectCppSpec::bounceWrappedJsStyleStruct);
+      prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectCppSpec::bounceOptionalWrapper);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectCppSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectCppSpec::copyBuffer);
@@ -103,6 +108,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantWeirdNumbersEnum", &HybridTestObjectCppSpec::getVariantWeirdNumbersEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);
+      prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectCppSpec::passAllEmptyObjectVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectCppSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectCppSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectCppSpec::createBaseActualChild);
@@ -112,6 +118,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("castBase", &HybridTestObjectCppSpec::castBase);
       prototype.registerHybridMethod("callbackSync", &HybridTestObjectCppSpec::callbackSync);
       prototype.registerHybridMethod("getIsViewBlue", &HybridTestObjectCppSpec::getIsViewBlue);
+      prototype.registerHybridMethod("bounceExternalHybrid", &HybridTestObjectCppSpec::bounceExternalHybrid);
+      prototype.registerHybridMethod("createInternalObject", &HybridTestObjectCppSpec::createInternalObject);
     });
   }
 

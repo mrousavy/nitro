@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-example",
-  "version": "0.27.4",
+  "version": "0.30.0",
   "private": true,
   "scripts": {
     "start": "react-native start --client-logs",
@@ -14,6 +14,7 @@
     "bundle-install": "bundle install",
     "pods": "cd ios && bundle exec pod install",
     "build:android": "cd android && ./gradlew assembleDebug --no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a",
+    "build:android-release": "cd android && ./gradlew assembleRelease --no-daemon",
     "build:ios": "cd ios && xcodebuild -workspace NitroExample.xcworkspace -scheme NitroExample -configuration Debug -sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO"
   },
   "dependencies": {
@@ -22,26 +23,27 @@
     "@react-navigation/native": "^7.1.17",
     "deep-equal": "^2.2.3",
     "react": "19.1.1",
-    "react-native": "0.80.2",
+    "react-native": "0.82.0",
     "react-native-nitro-test": "*",
+    "react-native-nitro-test-external": "*",
     "react-native-nitro-modules": "*",
-    "react-native-safe-area-context": "^5.5.2",
-    "react-native-screens": "^4.13.1"
+    "react-native-safe-area-context": "^5.6.0",
+    "react-native-screens": "^4.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/preset-env": "^7.28.0",
-    "@babel/runtime": "^7.27.6",
-    "@react-native-community/cli": "19.1.0",
-    "@react-native-community/cli-platform-android": "19.1.0",
-    "@react-native-community/cli-platform-ios": "19.1.0",
-    "@react-native/babel-preset": "0.80.2",
-    "@react-native/eslint-config": "0.80.2",
-    "@react-native/metro-config": "0.80.2",
-    "@react-native/typescript-config": "0.80.2",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/runtime": "^7.28.4",
+    "@react-native-community/cli": "20.0.2",
+    "@react-native-community/cli-platform-android": "20.0.2",
+    "@react-native-community/cli-platform-ios": "20.0.2",
+    "@react-native/babel-preset": "0.82.0",
+    "@react-native/eslint-config": "0.82.0",
+    "@react-native/metro-config": "0.82.0",
+    "@react-native/typescript-config": "0.82.0",
     "@types/deep-equal": "^1.0.4",
     "babel-plugin-module-resolver": "^5.0.2",
-    "nitro-codegen": "*"
+    "nitrogen": "*"
   },
   "engines": {
     "node": ">=18"

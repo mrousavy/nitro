@@ -95,7 +95,7 @@ abstract class ${name.HybridTSpec}: ${kotlinBase}() {
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "${name.HybridTSpec}"
+    protected const val TAG = "${name.HybridTSpec}"
   }
 }
   `.trim()

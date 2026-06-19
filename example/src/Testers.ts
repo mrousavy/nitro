@@ -3,6 +3,7 @@ import { stringify } from './utils'
 
 export type Must = 'equals' | 'throws'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _someType = typeof false
 export type JSType = typeof _someType
 
@@ -100,12 +101,59 @@ export class State<T> {
     return this
   }
 
+  toStringContain(string: string): State<T> {
+    if (typeof this.result !== 'string') {
+      this.onFailed(
+        `Expected "${stringify(this.result)}" (${typeof this.result}) to be a string, but it isn't!`
+      )
+    } else {
+      if (!this.result.includes(string)) {
+        this.onFailed(
+          `Expected "${this.result}" to contain the string "${string}", but it didn't!`
+        )
+      } else {
+        this.onPassed()
+      }
+    }
+    return this
+  }
+
   cleanup(func: () => void): State<T> {
     setTimeout(() => {
       func()
     }, 1000)
     return this
   }
+}
+
+function timeoutedPromise<T>(
+  promise: Promise<T>,
+  timeout: number = 1500
+): Promise<T> {
+  return new Promise(async (resolve, reject) => {
+    let didResolve = false
+    requestAnimationFrame(() => {
+      setImmediate(() => {
+        setTimeout(() => {
+          if (!didResolve) reject(new Error(`Timeouted!`))
+        }, timeout)
+      })
+    })
+    try {
+      const r = await promise
+      if (didResolve) {
+        throw new Error(`Tried resolving Promise after it already timeouted!`)
+      }
+      didResolve = true
+      resolve(r)
+    } catch (e) {
+      if (didResolve) {
+        throw new Error(`Tried rejecting Promise after it already timeouted!`)
+      }
+      didResolve = true
+      reject(e)
+    }
+  })
 }
 
 export function it<T>(action: () => Promise<T>): Promise<State<T>>
@@ -116,7 +164,8 @@ export function it<T>(
   try {
     const syncResult = action()
     if (syncResult instanceof Promise) {
-      return syncResult
+      const wrapped = timeoutedPromise<T>(syncResult)
+      return wrapped
         .then((asyncResult) => new State<T>(asyncResult, undefined))
         .catch((error) => new State<T>(undefined, error))
     }

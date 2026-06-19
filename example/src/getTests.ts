@@ -5,7 +5,11 @@ import {
   type Car,
   type Person,
   type Powertrain,
+  type WrappedJsStruct,
+  type OptionalWrapper,
   WeirdNumbersEnum,
+  CustomString,
+  Base,
 } from 'react-native-nitro-test'
 import type { State } from './Testers'
 import { it } from './Testers'
@@ -14,7 +18,7 @@ import {
   getHybridObjectConstructor,
   NitroModules,
 } from 'react-native-nitro-modules'
-import { InteractionManager } from 'react-native'
+import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
 
 type TestResult =
   | {
@@ -42,7 +46,28 @@ const TEST_CAR: Car = {
   power: 640,
   powertrain: 'gas',
   driver: undefined, // <-- value needs to be explicitly set, to equal it with native's std::optional<..>
+  passengers: [
+    { age: 25, name: 'Sebastian' },
+    { age: 27, name: 'Daniel' },
+  ],
   isFast: true,
+  favouriteTrack: undefined,
+  performanceScores: [100, 0],
+}
+const TEST_CAR_2: Car = {
+  year: 2006,
+  make: 'Mitsubishi',
+  model: 'Evolution IX',
+  power: 280,
+  powertrain: 'gas',
+  driver: TEST_PERSON,
+  passengers: [
+    { age: 18, name: 'Lukas' },
+    { age: 23, name: 'Simon' },
+  ],
+  isFast: true,
+  favouriteTrack: 'the road',
+  performanceScores: [2, 5],
 }
 const TEST_MAP: Record<string, number | boolean> = {
   someKey: 55,
@@ -55,12 +80,18 @@ const TEST_MAP_2: Record<string, string> = {
   'anotherKey': 'another-value',
   'third-key': 'thirdValue',
 }
-const TEST_WRAPPED_STRUCT = {
+const TEST_WRAPPED_STRUCT: WrappedJsStruct = {
   value: {
     value: 55.3,
-    onChanged: () => {},
+    onChanged: (_num: number) => {},
   },
+  items: [],
 }
+const TEST_OPTIONAL_WRAPPER: OptionalWrapper = {
+  optionalArrayBuffer: new ArrayBuffer(1024),
+  optionalString: 'hello!',
+}
+const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
 const BASE_DATE = new Date()
 const DATE_PLUS_1H = (() => {
@@ -68,6 +99,16 @@ const DATE_PLUS_1H = (() => {
   const oneHourInMilliseconds = 1000 * 60 * 60
   return new Date(current + oneHourInMilliseconds)
 })()
+
+const BASE = NitroModules.createHybridObject<Base>('Base')
+
+function sumUpAllPassengers(cars: Car[]): string {
+  return cars
+    .flatMap((c) =>
+      c.passengers.flatMap((p) => `${p.name} (${p.age.toFixed(0)})`)
+    )
+    .join(', ')
+}
 
 function createTest<T>(
   name: string,
@@ -95,33 +136,12 @@ function createTest<T>(
   }
 }
 
-function timeoutedPromise<T>(
-  run: (complete: (value: T) => void) => void | Promise<void>
-): Promise<T> {
-  return new Promise(async (resolve, reject) => {
-    let didResolve = false
-    InteractionManager.runAfterInteractions(() => {
-      requestAnimationFrame(() => {
-        setImmediate(() => {
-          setTimeout(() => {
-            if (!didResolve) reject(new Error(`Timeouted!`))
-          }, 1500)
-        })
-      })
-    })
-    try {
-      await run((value) => {
-        if (didResolve) {
-          throw new Error(`Promise was already rejected!`)
-        }
-        didResolve = true
-        resolve(value)
-      })
-    } catch (e) {
-      didResolve = true
-      reject(e)
-    }
-  })
+/**
+ * Returns the given {@linkcode string} in debug, and `''` in release.
+ * This is used for testing the C++ type names, which are obfuscated in release.
+ */
+function debugOnly(string: string): string {
+  return NitroModules.buildType === 'debug' ? string : ''
 }
 
 export function getTests(
@@ -141,6 +161,12 @@ export function getTests(
         .didReturn('object')
         .toContain('toString')
         .toContain('equals')
+    ),
+    createTest('Logging HybridObject.prototype works', () =>
+      it(() => stringify(Object.getPrototypeOf(testObject)))
+        .didNotThrow()
+        .didReturn('string')
+        .toStringContain('[empty-object HybridObject')
     ),
     createTest('Two HybridObjects are not equal (a == b)', () =>
       it(
@@ -394,19 +420,32 @@ export function getTests(
           { age: 5, name: 'Ben' },
         ])
     ),
+    createTest('sumUpAllPassengers(...) equals', () =>
+      it(() => testObject.sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
+        .didNotThrow()
+        .didReturn('string')
+        .equals(sumUpAllPassengers([TEST_CAR, TEST_CAR_2]))
+    ),
     createTest('bounceWrappedJsStyleStruct(...) equals', () =>
       it(() => testObject.bounceWrappedJsStyleStruct(TEST_WRAPPED_STRUCT))
         .didNotThrow()
         .didReturn('object')
-        .equals(TEST_WRAPPED_STRUCT)
+        // TODO: We can't do .equals(...) here because of how Functions are deep-equal'd
+        .toContain('value')
+    ),
+    createTest('bounceOptionalWrapper(...) equals', () =>
+      it(() => testObject.bounceOptionalWrapper(TEST_OPTIONAL_WRAPPER))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_OPTIONAL_WRAPPER)
     ),
 
     createTest('complexEnumCallback(...)', async () =>
       (
-        await it<Powertrain[]>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<Powertrain[]>(() => {
+          return new Promise((resolve) => {
             testObject.complexEnumCallback(['gas', 'electric'], (result) => {
-              complete(result)
+              resolve(result)
             })
           })
         })
@@ -592,6 +631,16 @@ export function getTests(
         .didNotThrow()
         .equals(undefined)
     ),
+    createTest('tryTrailingOptional(...)', () =>
+      it(() => testObject.tryTrailingOptional(0, '', false))
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('tryTrailingOptional(...)', () =>
+      it(() => testObject.tryTrailingOptional(0, '', true))
+        .didNotThrow()
+        .equals(true)
+    ),
 
     // Variants tests
     createTest('set someVariant to 55', () =>
@@ -618,7 +667,7 @@ export function getTests(
           // @ts-expect-error
           (testObject.someVariant = false)
       ).didThrow(
-        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in variant<std::string, double>!`
+        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<std::string, double>!')}`
       )
     ),
 
@@ -645,6 +694,33 @@ export function getTests(
         )
       ).didThrow()
     ),
+    createTest('passAllEmptyObjectVariant(...) with empty obj ({})', () =>
+      it(() => testObject.passAllEmptyObjectVariant({}))
+        .didNotThrow()
+        .didReturn('object')
+    ),
+    createTest('passAllEmptyObjectVariant(...) with first obj', () =>
+      it(() =>
+        testObject.passAllEmptyObjectVariant({
+          optionalString: 'optional string!',
+        })
+      )
+        .didNotThrow()
+        .didReturn('object')
+        // @ts-expect-error idk why this keyof is `never`...
+        .toContain('optionalString')
+    ),
+    createTest('passAllEmptyObjectVariant(...) with second obj', () =>
+      it(() => testObject.passAllEmptyObjectVariant(BASE))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(BASE)
+    ),
+    createTest('createChild().bounceVariant(...) works', () =>
+      it(() => testObject.createChild().bounceVariant('hello!'))
+        .didNotThrow()
+        .equals('hello!')
+    ),
     // Complex variants tests
     createTest('getVariantEnum(...) converts enum', () =>
       it(() => testObject.getVariantEnum(OldEnum.THIRD))
@@ -659,13 +735,13 @@ export function getTests(
     createTest('getVariantEnum(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum('string')).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
       )
     ),
     createTest('getVariantEnum(...) throws at too high numerical value', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum(9999)).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in variant<bool, margelo::nitro::test::OldEnum>!`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
       )
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
@@ -683,7 +759,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum('string')).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
         )
     ),
     createTest(
@@ -691,7 +767,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum(99999)).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in variant<bool, margelo::nitro::test::WeirdNumbersEnum>!`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
         )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
@@ -714,7 +790,7 @@ export function getTests(
     createTest('getVariantObjects(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantObjects('some-string')).didThrow(
-        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
+        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
       )
     ),
     createTest(
@@ -724,7 +800,7 @@ export function getTests(
           // @ts-expect-error
           testObject.getVariantObjects({ someValue: 55 })
         ).didThrow(
-          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!`
+          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
         )
     ),
     createTest('getVariantHybrid(...) converts Hybrid', () =>
@@ -818,9 +894,11 @@ export function getTests(
                 // @ts-expect-error
                 [10, 20]
               )
-            ).didThrow(
-              `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but std::tuple<double, double, double> expects 3 items.`
             )
+              .didThrow(
+                `Error: ${testObject.name}.flip(...): The given JS Array has 2 items, but ${debugOnly('std::tuple<double, double, double>')}`
+              )
+              .didThrow('expects 3 items')
           ),
           createTest('passTuple(...)', () =>
             it(() => testObject.passTuple([13, 'hello', true]))
@@ -832,6 +910,19 @@ export function getTests(
           // Swift/Kotlin Test Object does not have tuples yet!
         ]),
 
+    // Custom Types tests
+    ...('bounceCustomType' in testObject
+      ? [
+          createTest('bounceCustomType(...) works', () =>
+            it(() => testObject.bounceCustomType(TEST_CUSTOM_TYPE))
+              .didNotThrow()
+              .equals(TEST_CUSTOM_TYPE)
+          ),
+        ]
+      : [
+          // Swift/Kotlin Test Object does not have CustomTypes!
+        ]),
+
     createTest('bounceMap(map) === map', () =>
       it(() => testObject.bounceMap(TEST_MAP))
         .didNotThrow()
@@ -839,7 +930,12 @@ export function getTests(
         .equals(TEST_MAP)
     ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
-      it(() => testObject.extractMap({ map: TEST_MAP_2 }))
+      it(() =>
+        testObject.extractMap({
+          map: TEST_MAP_2,
+          secondMap: { second: TEST_MAP_2 },
+        })
+      )
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP_2)
@@ -880,17 +976,14 @@ export function getTests(
     ),
     createTest('JS Promise<number> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = (_: number) => {}
-            const promise = new Promise<number>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitAndGetPromise(promise)
-            resolve(5)
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = (_: number) => {}
+          const promise = new Promise<number>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitAndGetPromise(promise)
+          resolve(5)
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -898,17 +991,14 @@ export function getTests(
     ),
     createTest('JS Promise<Car> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = (_: Car) => {}
-            const promise = new Promise<Car>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitAndGetComplexPromise(promise)
-            resolve(TEST_CAR)
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = (_: Car) => {}
+          const promise = new Promise<Car>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitAndGetComplexPromise(promise)
+          resolve(TEST_CAR)
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -916,17 +1006,14 @@ export function getTests(
     ),
     createTest('JS Promise<void> can be awaited on native side', async () =>
       (
-        await it(() => {
-          return timeoutedPromise(async (complete) => {
-            let resolve = () => {}
-            const promise = new Promise<void>((r) => {
-              resolve = r
-            })
-            const nativePromise = testObject.awaitPromise(promise)
-            resolve()
-            const result = await nativePromise
-            complete(result)
+        await it(async () => {
+          let resolve = () => {}
+          const promise = new Promise<void>((r) => {
+            resolve = r
           })
+          const nativePromise = testObject.awaitPromise(promise)
+          resolve()
+          return await nativePromise
         })
       )
         .didNotThrow()
@@ -936,16 +1023,14 @@ export function getTests(
       'JS Promise<void> that rejects will also reject on native',
       async () =>
         (
-          await it(() => {
-            return timeoutedPromise(async () => {
-              let reject = (_: Error) => {}
-              const promise = new Promise<void>((_, r) => {
-                reject = r
-              })
-              const nativePromise = testObject.awaitPromise(promise)
-              reject(new Error(`rejected from JS!`))
-              await nativePromise
+          await it(async () => {
+            let reject = (_: Error) => {}
+            const promise = new Promise<void>((_, r) => {
+              reject = r
             })
+            const nativePromise = testObject.awaitPromise(promise)
+            reject(new Error(`rejected from JS!`))
+            return await nativePromise
           })
         ).didThrow()
     ),
@@ -954,9 +1039,9 @@ export function getTests(
     createTest('callCallback(...)', async () =>
       (
         await it<boolean>(async () => {
-          return timeoutedPromise((complete) => {
+          return new Promise((resolve) => {
             testObject.callCallback(() => {
-              complete(true)
+              resolve(true)
             })
           })
         })
@@ -966,10 +1051,10 @@ export function getTests(
     ),
     createTest('callWithOptional(undefined)', async () =>
       (
-        await it<number | undefined>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<number | undefined>(() => {
+          return new Promise((resolve) => {
             testObject.callWithOptional(undefined, (val) => {
-              complete(val)
+              resolve(val)
             })
           })
         })
@@ -979,10 +1064,10 @@ export function getTests(
     ),
     createTest('callWithOptional(433)', async () =>
       (
-        await it<number | undefined>(async () => {
-          return timeoutedPromise((complete) => {
+        await it<number | undefined>(() => {
+          return new Promise((resolve) => {
             testObject.callWithOptional(433, (val) => {
-              complete(val)
+              resolve(val)
             })
           })
         })
@@ -1015,12 +1100,12 @@ export function getTests(
     ),
     createTest('Multiple callbacks are all called: callAll(...)', async () =>
       (
-        await it(async () => {
-          return timeoutedPromise((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             let calledCount = 0
             const func = () => {
               calledCount++
-              if (calledCount === 3) complete(calledCount)
+              if (calledCount === 3) resolve(calledCount)
             }
             testObject.callAll(func, func, func)
           })
@@ -1041,12 +1126,10 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise(async (complete) => {
-              const result = await testObject.callbackAsyncPromise(async () => {
-                return 13
-              })
-              complete(result)
+            const result = await testObject.callbackAsyncPromise(async () => {
+              return 13
             })
+            return result
           })
         )
           .didNotThrow()
@@ -1057,14 +1140,12 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise<ArrayBuffer>(async (complete) => {
-              const result = await testObject.callbackAsyncPromiseBuffer(
-                async () => {
-                  return await testObject.createArrayBufferAsync()
-                }
-              )
-              complete(result)
-            })
+            const result = await testObject.callbackAsyncPromiseBuffer(
+              async () => {
+                return await testObject.createArrayBufferAsync()
+              }
+            )
+            return result
           })
         )
           .didNotThrow()
@@ -1076,10 +1157,8 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            return timeoutedPromise<ArrayBuffer>(async () => {
-              await testObject.callbackAsyncPromise(() => {
-                throw new Error(`throwing in JS!`)
-              })
+            await testObject.callbackAsyncPromise(() => {
+              throw new Error(`throwing in JS!`)
             })
           })
         ).didThrow()
@@ -1088,6 +1167,31 @@ export function getTests(
       it(() => testObject.getComplexCallback())
         .didNotThrow()
         .didReturn('function')
+    ),
+    createTest(
+      'Calling twoOptionalCallbacks(...) works with callbacks',
+      async () =>
+        (
+          await it(async () => {
+            return new Promise((resolve) => {
+              let counter = 0
+              const onWasCalled = () => {
+                counter++
+                if (counter === 2) resolve(counter)
+              }
+              testObject.twoOptionalCallbacks(
+                55,
+                () => onWasCalled(),
+                () => onWasCalled()
+              )
+            })
+          })
+        )
+          .didNotThrow()
+          .equals(2)
+    ),
+    createTest('Calling twoOptionalCallbacks(...) works with undefined', () =>
+      it(() => testObject.twoOptionalCallbacks(55)).didNotThrow()
     ),
 
     // Objects
@@ -1101,6 +1205,7 @@ export function getTests(
         .toContain('power')
         .toContain('powertrain')
         .toContain('driver')
+        .toContain('favouriteTrack')
     ),
     createTest('isCarElectric(...)', () =>
       it(() =>
@@ -1109,8 +1214,10 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
@@ -1123,8 +1230,10 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
@@ -1137,9 +1246,11 @@ export function getTests(
           year: 2018,
           model: 'Huracan Performante',
           power: 640,
+          passengers: [],
           powertrain: 'gas',
           driver: { age: 24, name: 'marc' },
           isFast: true,
+          performanceScores: [100, 0],
         })
       )
         .didNotThrow()
@@ -1147,14 +1258,14 @@ export function getTests(
     ),
     createTest('jsStyleObjectAsParameters()', async () =>
       (
-        await it(() =>
-          timeoutedPromise<number>((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             testObject.jsStyleObjectAsParameters({
               value: 55,
-              onChanged: (num) => complete(num),
+              onChanged: (num) => resolve(num),
             })
           })
-        )
+        })
       )
         .didNotThrow()
         .didReturn('number')
@@ -1429,7 +1540,7 @@ export function getTests(
     ),
     createTest('bounceChild(Base) throws', () =>
       it(() => {
-        if (__DEV__) {
+        if (NitroModules.buildType === 'debug') {
           const child = testObject.createBase()
           // @ts-expect-error
           testObject.bounceChild(child)
@@ -1465,6 +1576,21 @@ export function getTests(
       })
         .didNotThrow()
         .equals(55)
+    ),
+    createTest('bounceExternalHybrid(...) works', () =>
+      it(() => {
+        return testObject.bounceExternalHybrid(HybridSomeExternalObject)
+      })
+        .didNotThrow()
+        .equals(HybridSomeExternalObject)
+    ),
+    createTest('createInternalObject(...) returns a different subclass', () =>
+      it(() => {
+        const object = testObject.createInternalObject()
+        return object.getValue()
+      })
+        .didNotThrow()
+        .equals('This is overridden!')
     ),
     createTest('new T() works', () =>
       it(() => {
@@ -1519,16 +1645,16 @@ export function getTests(
     ),
     createTest('testObject.dispose() works and calls callback', async () =>
       (
-        await it(() =>
-          timeoutedPromise<boolean>((complete) => {
+        await it(() => {
+          return new Promise((resolve) => {
             const hybridObject = testObject.newTestObject()
             hybridObject.optionalCallback = () => {
-              complete(true)
+              resolve(true)
             }
             // dispose() will call this.optionalCallback() one last time then the object is gone
             hybridObject.dispose()
           })
-        )
+        })
       )
         .didNotThrow()
         .equals(true)
@@ -1580,6 +1706,13 @@ export function getTests(
     createTest('NitroModules.hasHybridObject(testObject.name) to be true', () =>
       it(() => {
         return NitroModules.hasHybridObject(testObject.name)
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('NitroModules.isHybridObject(testObject) to be true', () =>
+      it(() => {
+        return NitroModules.isHybridObject(testObject)
       })
         .didNotThrow()
         .equals(true)

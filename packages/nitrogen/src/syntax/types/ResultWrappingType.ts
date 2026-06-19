@@ -1,7 +1,7 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { ErrorType } from './ErrorType.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class ResultWrappingType implements Type {
   readonly result: Type
@@ -20,12 +20,13 @@ export class ResultWrappingType implements Type {
     return 'result-wrapper'
   }
 
-  getCode(language: Language): string {
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const type = this.result.getCode(language, options)
     switch (language) {
       case 'c++':
-        return `Result<${this.result.getCode(language)}>`
+        return `Result<${type}>`
       case 'swift':
-        return this.result.getCode(language)
+        return type
       default:
         throw new Error(
           `Language ${language} is not yet supported for VariantType!`

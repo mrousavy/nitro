@@ -52,29 +52,25 @@ Nitrogen should be installed as a dev-dependency in the Nitro Module (library).
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npm i nitro-codegen --save-dev
+    npm i nitrogen --save-dev
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn add nitro-codegen -D
+    yarn add nitrogen -D
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm add nitro-codegen -D
+    pnpm add nitrogen -D
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun i nitro-codegen -d
+    bun i nitrogen -d
     ```
   </TabItem>
 </Tabs>
-
-:::warning
-Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
-:::
 
 Each Nitro Module needs to have a `nitro.json` configuration file.
 
@@ -120,29 +116,25 @@ Now run nitrogen:
 <Tabs groupId="package-manager">
   <TabItem value="npm" label="npm" default>
     ```sh
-    npx nitro-codegen
+    npx nitrogen
     ```
   </TabItem>
   <TabItem value="yarn" label="yarn">
     ```sh
-    yarn nitro-codegen
+    yarn nitrogen
     ```
   </TabItem>
   <TabItem value="pnpm" label="pnpm">
     ```sh
-    pnpm nitro-codegen
+    pnpm nitrogen
     ```
   </TabItem>
   <TabItem value="bun" label="bun">
     ```sh
-    bun nitro-codegen
+    bun nitrogen
     ```
   </TabItem>
 </Tabs>
-
-:::warning
-Nitrogen is currently named `nitro-codegen` instead of `nitrogen` on npm.
-:::
 
 This will always generate a shared C++ interface, and then optionall also Swift and Kotlin sub-classes. The specs go into `./nitrogen/generated/`:
 
@@ -292,7 +284,7 @@ Make sure `HybridMath` is default-constructible and scoped inside the correct na
 <Tabs>
   <TabItem value="template" label="With the Nitro template">
 
-  If you created a library using the [Nitro Module template](https://github.com/mrousavy/nitro/tree/main/packages/template), your library already initializes the C++ autolinking process from your `*Package.java` and `OnLoad.cpp` files.
+  If you created a library using the [Nitro Module template](https://github.com/mrousavy/nitro/tree/main/packages/template), your library already initializes the C++ autolinking process from your `*Package.kt` and `OnLoad.cpp` files.
 
   </TabItem>
   <TabItem value="manually" label="Manually">
@@ -308,13 +300,15 @@ Make sure `HybridMath` is default-constructible and scoped inside the correct na
   }
   ```
 
-  Then, to actually load and initialize the C++ part of your library (which calls `JNI_OnLoad` from above), call `initializeNative()` from your library's entry point (`*Package.java`):
+  Then, to actually load and initialize the C++ part of your library (which calls `JNI_OnLoad` from above), call `initializeNative()` from your library's entry point (`*Package.kt`):
 
-  ```java title="NitroMathPackage.java"
-  public class NitroMathPackage extends TurboReactPackage {
+  ```kotlin title="NitroMathPackage.kt"
+  public class NitroMathPackage: TurboReactPackage() {
     // ...
-    static {
-      NitroMathOnLoad.initializeNative();
+    companion object {
+      init {
+        NitroMathOnLoad.initializeNative();
+      }
     }
   }
   ```

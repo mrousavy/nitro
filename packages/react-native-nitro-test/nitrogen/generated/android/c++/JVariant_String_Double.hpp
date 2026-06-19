@@ -65,16 +65,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JVariant_String_Double_impl
-
-  std::variant<std::string, double> JVariant_String_Double::toCpp() const {
-    if (isInstanceOf(JVariant_String_Double_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_impl::First*>(this)->getValue();
-      return jniValue->toStdString();
-    } else if (isInstanceOf(JVariant_String_Double_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_String_Double_impl::Second*>(this)->getValue();
-      return jniValue;
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test

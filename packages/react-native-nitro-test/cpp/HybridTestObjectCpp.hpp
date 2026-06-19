@@ -63,6 +63,8 @@ public:
   std::variant<std::string, double> getSomeVariant() override;
   void setSomeVariant(const std::variant<std::string, double>& variant) override;
   std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
+  std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
+  passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
   std::tuple<double, std::string> getSomeTuple() override;
   void setSomeTuple(const std::tuple<double, std::string>& tuple) override;
   std::shared_ptr<HybridTestObjectCppSpec> getThisObject() override;
@@ -80,6 +82,7 @@ public:
   double addNumbers(double a, double b) override;
   std::string addStrings(const std::string& a, const std::string& b) override;
   void simpleFunc() override;
+  CustomString bounceCustomType(CustomString value) override;
   void multipleArguments(double num, const std::string& str, bool boo) override;
   std::shared_ptr<AnyMap> createMap() override;
   std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) override;
@@ -90,6 +93,7 @@ public:
   std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
   std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
   std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+  bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override;
   std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
   std::chrono::system_clock::time_point currentDate() override;
   std::variant<std::string, double>
@@ -98,6 +102,7 @@ public:
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
   std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+  std::string sumUpAllPassengers(const std::vector<Car>& cars) override;
   std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
   void complexEnumCallback(const std::vector<Powertrain>& array,
                            const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
@@ -129,6 +134,8 @@ public:
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(
       const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
   std::function<void(double)> getComplexCallback() override;
+  void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first,
+                            const std::optional<std::function<void(const std::string& /* value */)>>& second) override;
 
   std::shared_ptr<Promise<void>>
   getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback,
@@ -142,6 +149,7 @@ public:
   std::optional<Person> getDriver(const Car& car) override;
   void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
   WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
+  OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
   std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool /* copy */) override;
   std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
   std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
@@ -161,6 +169,10 @@ public:
 
   bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
   double callbackSync(const std::function<double()>& callback) override;
+
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
+  bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
+  std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
 
   // Raw JSI functions
   jsi::Value rawJsiFunc(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);

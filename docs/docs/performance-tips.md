@@ -168,7 +168,7 @@ interface GoodDatabase extends HybridObject {
 
 ## Use Hybrid Objects to implement proxy-results
 
-If a function returns a large amount of data to JS, but only a sub-set of that data is used, we can implement it as a [Hybrid Object](types/hybrid-objects) instead of a [struct](types/custom-types).
+If a function returns a large amount of data to JS, but only a sub-set of that data is used, we can implement it as a [Hybrid Object](types/hybrid-objects) instead of a [struct](types/custom-structs).
 
 This way data will be accessed lazily, and all the data that the user does not access will never be converted to JS, which means Nitro has to do less work:
 

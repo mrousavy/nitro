@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { StyleSheet, View, Text, Button, Platform } from 'react-native'
-import { NitroModules } from 'react-native-nitro-modules'
+import { callback, NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { HybridTestObjectSwiftKotlin, TestView } from 'react-native-nitro-test'
@@ -31,8 +31,9 @@ export function ViewScreenImpl() {
           }}
           style={styles.view}
           isBlue={i % 2 === 0}
-          someCallback={{ f: () => console.log(`Callback called!`) }}
+          someCallback={callback(() => console.log(`Callback called!`))}
           colorScheme="dark"
+          hasBeenCalled={false}
           onTouchEnd={() => {
             console.log(`Touched View #${i}!`)
           }}
@@ -67,7 +68,9 @@ export function ViewScreenImpl() {
       </View>
 
       <View style={[styles.bottomView, { backgroundColor: colors.background }]}>
-        <Text>{isUpdating ? '🔄 Updating...' : '📱 Idle'}</Text>
+        <Text style={styles.resultText} numberOfLines={2}>
+          {isUpdating ? '🔄 Updating...' : '📱 Idle'}
+        </Text>
         <View style={styles.flex} />
         <Button
           title={isUpdating ? 'Stop Updating' : 'Start Updating'}
@@ -151,6 +154,9 @@ const styles = StyleSheet.create({
   testBox: {
     flexShrink: 1,
     flexDirection: 'column',
+  },
+  resultText: {
+    flexShrink: 1,
   },
   testName: {
     fontSize: 16,

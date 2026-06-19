@@ -5,7 +5,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.12.0"
+    classpath "com.android.tools.build:gradle:8.13.0"
   }
 }
 
@@ -136,6 +136,8 @@ dependencies {
 
   // Add a dependency on NitroModules
   implementation project(":react-native-nitro-modules")
+  // Add a dependency on NitroTestExternal (for SomeExternalObject)
+  implementation project(":react-native-nitro-test-external")
 }
 
 if (isNewArchitectureEnabled()) {

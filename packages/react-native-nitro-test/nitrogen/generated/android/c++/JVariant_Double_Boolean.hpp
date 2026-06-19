@@ -64,16 +64,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JVariant_Double_Boolean_impl
-
-  std::variant<double, bool> JVariant_Double_Boolean::toCpp() const {
-    if (isInstanceOf(JVariant_Double_Boolean_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::First*>(this)->getValue();
-      return jniValue;
-    } else if (isInstanceOf(JVariant_Double_Boolean_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Double_Boolean_impl::Second*>(this)->getValue();
-      return static_cast<bool>(jniValue);
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test

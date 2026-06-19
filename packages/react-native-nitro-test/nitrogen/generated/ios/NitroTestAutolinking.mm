@@ -37,28 +37,28 @@
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestObjectSwiftKotlin",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestObjectSwiftKotlin();
+      std::shared_ptr<HybridTestObjectSwiftKotlinSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestObjectSwiftKotlin();
       return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Base",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::test::HybridBaseSpec> hybridObject = NitroTest::NitroTestAutolinking::createBase();
+      std::shared_ptr<HybridBaseSpec> hybridObject = NitroTest::NitroTestAutolinking::createBase();
       return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "Child",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::test::HybridChildSpec> hybridObject = NitroTest::NitroTestAutolinking::createChild();
+      std::shared_ptr<HybridChildSpec> hybridObject = NitroTest::NitroTestAutolinking::createChild();
       return hybridObject;
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(
     "TestView",
     []() -> std::shared_ptr<HybridObject> {
-      std::shared_ptr<margelo::nitro::test::HybridTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestView();
+      std::shared_ptr<HybridTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createTestView();
       return hybridObject;
     }
   );

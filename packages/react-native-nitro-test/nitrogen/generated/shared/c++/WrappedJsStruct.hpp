@@ -17,11 +17,17 @@
 #else
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
+#if __has_include(<NitroModules/JSIHelpers.hpp>)
+#include <NitroModules/JSIHelpers.hpp>
+#else
+#error NitroModules cannot be found! Are you sure you installed NitroModules properly?
+#endif
 
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 
 #include "JsStyleStruct.hpp"
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -31,30 +37,31 @@ namespace margelo::nitro::test {
   struct WrappedJsStruct {
   public:
     JsStyleStruct value     SWIFT_PRIVATE;
+    std::vector<JsStyleStruct> items     SWIFT_PRIVATE;
 
   public:
     WrappedJsStruct() = default;
-    explicit WrappedJsStruct(JsStyleStruct value): value(value) {}
+    explicit WrappedJsStruct(JsStyleStruct value, std::vector<JsStyleStruct> items): value(value), items(items) {}
   };
 
 } // namespace margelo::nitro::test
 
 namespace margelo::nitro {
 
-  using namespace margelo::nitro::test;
-
   // C++ WrappedJsStruct <> JS WrappedJsStruct (object)
   template <>
-  struct JSIConverter<WrappedJsStruct> final {
-    static inline WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  struct JSIConverter<margelo::nitro::test::WrappedJsStruct> final {
+    static inline margelo::nitro::test::WrappedJsStruct fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
-      return WrappedJsStruct(
-        JSIConverter<JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value"))
+      return margelo::nitro::test::WrappedJsStruct(
+        JSIConverter<margelo::nitro::test::JsStyleStruct>::fromJSI(runtime, obj.getProperty(runtime, "value")),
+        JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::fromJSI(runtime, obj.getProperty(runtime, "items"))
       );
     }
-    static inline jsi::Value toJSI(jsi::Runtime& runtime, const WrappedJsStruct& arg) {
+    static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::WrappedJsStruct& arg) {
       jsi::Object obj(runtime);
-      obj.setProperty(runtime, "value", JSIConverter<JsStyleStruct>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, "value", JSIConverter<margelo::nitro::test::JsStyleStruct>::toJSI(runtime, arg.value));
+      obj.setProperty(runtime, "items", JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::toJSI(runtime, arg.items));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -62,7 +69,11 @@ namespace margelo::nitro {
         return false;
       }
       jsi::Object obj = value.getObject(runtime);
-      if (!JSIConverter<JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
+      if (!nitro::isPlainObject(runtime, obj)) {
+        return false;
+      }
+      if (!JSIConverter<margelo::nitro::test::JsStyleStruct>::canConvert(runtime, obj.getProperty(runtime, "value"))) return false;
+      if (!JSIConverter<std::vector<margelo::nitro::test::JsStyleStruct>>::canConvert(runtime, obj.getProperty(runtime, "items"))) return false;
       return true;
     }
   };

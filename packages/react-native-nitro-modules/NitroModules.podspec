@@ -40,9 +40,11 @@ Pod::Spec.new do |s|
     "cpp/entrypoint/InstallNitro.hpp",
     "cpp/registry/HybridObjectRegistry.hpp",
     "cpp/jsi/JSIConverter.hpp",
+    "cpp/jsi/JSIHelpers.hpp",
     "cpp/platform/NitroLogger.hpp",
     "cpp/threading/Dispatcher.hpp",
     "cpp/utils/JSCallback.hpp",
+    "cpp/utils/FastVectorCopy.hpp",
     "cpp/utils/NitroHash.hpp",
     "cpp/utils/NitroDefines.hpp",
     "cpp/views/CachedProp.hpp",
@@ -64,13 +66,18 @@ Pod::Spec.new do |s|
     "SWIFT_OBJC_INTEROP_MODE" => "objcxx",
     # Enables stricter modular headers
     "DEFINES_MODULE" => "YES",
+    # Enables some experimental Swift features
+    "OTHER_SWIFT_FLAGS" => "-enable-experimental-feature AddressableParameters",
   }
 
   if has_react_native()
     react_native_version = get_react_native_version()
     if (react_native_version < 80)
       # C++ compiler flags, for folly when building as static framework:
+      current_header_search_paths = Array(xcconfig["HEADER_SEARCH_PATHS"])
+      xcconfig["HEADER_SEARCH_PATHS"] = current_header_search_paths + ["${PODS_ROOT}/RCT-Folly"]
       xcconfig["GCC_PREPROCESSOR_DEFINITIONS"] = "$(inherited) FOLLY_NO_CONFIG FOLLY_CFG_NO_COROUTINES"
+      xcconfig["OTHER_CPLUSPLUSFLAGS"] = "$(inherited) -DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1"
     end
   end
 

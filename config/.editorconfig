@@ -1,0 +1,6 @@
+[*.{kt,kts}]
+ktlint_standard_filename = disabled
+
+[*]
+indent_style = space
+indent_size = 2

@@ -19,7 +19,11 @@ const config: Config = {
   projectName: 'nitro',
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenAnchors: 'throw',
+  onBrokenMarkdownLinks: 'throw',
+
+  // Runs animations on page change
+  clientModules: ['./src/clientModules/pageSwitchFadeAnimation.ts'],
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -64,11 +68,19 @@ const config: Config = {
           'hybrid-objects.md',
           'hybrid-views.md',
           'nitrogen.md',
-          'using-nitro-in-a-library.md',
-          'using-nitro-in-your-app.md',
+          'how-to-build-a-nitro-module.md',
         ]
       },
     ],
+    [
+      require('./src/plugins/generate-og-images'),
+      {
+        docsDir: "docs",
+        outDir: "static/og",
+        width: 1200,
+        height: 630,
+      },
+    ]
   ],
 
   markdown: {
@@ -76,7 +88,7 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
-    image: 'img/social-card.png',
+    image: 'img/social-cards/og-card.png',
     tableOfContents: {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
@@ -122,6 +134,16 @@ const config: Config = {
           docId: 'for-library-users',
           position: 'right',
           label: 'Installation',
+        },
+        {
+          href: 'https://youtu.be/528SxTGnIlc?si=IxH7n09ZVe4iwRPv',
+          label: 'YouTube Tutorial',
+          position: 'right',
+        },
+        {
+          href: 'https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder',
+          label: 'Ask AI',
+          position: 'right',
         },
         {
           href: 'https://github.com/mrousavy/nitro/releases/latest',
@@ -214,21 +236,25 @@ const config: Config = {
           'react, native, nitro, modules, react-native, native, turbo, expo, documentation, fast, hybrid, hybrid-object, objects, nitrogen, coding, docs, guides, marc, rousavy, mrousavy',
       },
       {
-        name: 'og:title',
+        property: 'og:site_name',
         content: 'Nitro Documentation',
       },
       {
-        name: 'og:type',
+        property: 'og:type',
         content: 'application',
       },
       {
-        name: 'og:description',
+        property: 'og:description',
         content:
           'A framework to build mindblowingly fast native modules with type-safe statically compiled JS bindings.',
       },
       {
-        name: 'og:image',
-        content: '/img/social-card.png',
+        property: 'og:image',
+        content: '/img/social-cards/og-card.png',
+      },
+      {
+        property: 'twitter:creator',
+        content: '@mrousavy',
       },
     ],
     prism: {

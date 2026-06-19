@@ -1,6 +1,6 @@
 import type { Language } from '../../getPlatformSpecs.js'
 import { type SourceFile, type SourceImport } from '../SourceFile.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 
 export class ArrayType implements Type {
   readonly itemType: Type
@@ -18,8 +18,8 @@ export class ArrayType implements Type {
     return 'array'
   }
 
-  getCode(language: Language): string {
-    const itemCode = this.itemType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const itemCode = this.itemType.getCode(language, options)
 
     switch (language) {
       case 'c++':

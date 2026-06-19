@@ -7,12 +7,10 @@
 
 import Foundation
 
-/**
- * Holds instances of `std::shared_ptr<ArrayBuffer>`, which can be passed
- * between native and JS **without copy**.
- *
- * See `data`, `size` and `isOwning`.
- */
+/// Holds instances of `std::shared_ptr<ArrayBuffer>`, which can be passed
+/// between native and JS **without copy**.
+///
+/// See `data`, `size` and `isOwning`.
 public typealias ArrayBuffer = margelo.nitro.ArrayBufferHolder
 
 @available(*, deprecated, renamed: "ArrayBuffer")
@@ -20,16 +18,18 @@ public typealias ArrayBufferHolder = ArrayBuffer
 
 // pragma MARK: Wrap
 
-public extension ArrayBuffer {
+extension ArrayBuffer {
   /**
    * Create a new `ArrayBuffer` that wraps the given `data` of the given `size`
    * without performing a copy.
    * When the `ArrayBuffer` is no longer used, `onDelete` will be called, in which
    * you as a caller are responsible for deleting `data`.
    */
-  static func wrap(dataWithoutCopy data: UnsafeMutablePointer<UInt8>,
-                   size: Int,
-                   onDelete delete: @escaping () -> Void) -> ArrayBuffer {
+  public static func wrap(
+    dataWithoutCopy data: UnsafeMutablePointer<UInt8>,
+    size: Int,
+    onDelete delete: @escaping () -> Void
+  ) -> ArrayBuffer {
     // Convert escaping Swift closure to a `void*`
     let swiftClosure = SwiftClosure(wrappingClosure: delete)
     // Create ArrayBuffer with our wrapped Swift closure to make it callable as a C-function pointer
@@ -42,23 +42,26 @@ public extension ArrayBuffer {
    * When the `ArrayBuffer` is no longer used, `onDelete` will be called, in which
    * you as a caller are responsible for deleting `data`.
    */
-  static func wrap(dataWithoutCopy data: UnsafeMutableRawPointer,
-                   size: Int,
-                   onDelete delete: @escaping () -> Void) -> ArrayBuffer {
-    return ArrayBuffer.wrap(dataWithoutCopy: data.assumingMemoryBound(to: UInt8.self),
-                                  size: size,
-                                  onDelete: delete)
+  public static func wrap(
+    dataWithoutCopy data: UnsafeMutableRawPointer,
+    size: Int,
+    onDelete delete: @escaping () -> Void
+  ) -> ArrayBuffer {
+    return ArrayBuffer.wrap(
+      dataWithoutCopy: data.assumingMemoryBound(to: UInt8.self),
+      size: size,
+      onDelete: delete)
   }
 }
 
 // pragma MARK: Allocate
 
-public extension ArrayBuffer {
+extension ArrayBuffer {
   /**
    * Allocate a new buffer of the given `size`.
    * If `initializeToZero` is `true`, all bytes are set to `0`, otherwise they are left untouched.
    */
-  static func allocate(size: Int, initializeToZero: Bool = false) -> ArrayBuffer {
+  public static func allocate(size: Int, initializeToZero: Bool = false) -> ArrayBuffer {
     let data = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
     if initializeToZero {
       data.initialize(repeating: 0, count: size)
@@ -72,12 +75,14 @@ public extension ArrayBuffer {
 
 // pragma MARK: Copy
 
-public extension ArrayBuffer {
+extension ArrayBuffer {
   /**
    * Copy the given `UnsafeMutablePointer<UInt8>` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(of other: UnsafeMutablePointer<UInt8>,
-                   size: Int) -> ArrayBuffer {
+  public static func copy(
+    of other: UnsafeMutablePointer<UInt8>,
+    size: Int
+  ) -> ArrayBuffer {
     // 1. Create new `UnsafeMutablePointer<UInt8>`
     let copy = UnsafeMutablePointer<UInt8>.allocate(capacity: size)
     // 2. Copy over data
@@ -92,23 +97,26 @@ public extension ArrayBuffer {
   /**
    * Copy the given `UnsafeMutableRawPointer` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(of other: UnsafeMutableRawPointer,
-                   size: Int) -> ArrayBuffer {
-    return ArrayBuffer.copy(of: other.assumingMemoryBound(to: UInt8.self),
-                                  size: size)
+  public static func copy(
+    of other: UnsafeMutableRawPointer,
+    size: Int
+  ) -> ArrayBuffer {
+    return ArrayBuffer.copy(
+      of: other.assumingMemoryBound(to: UInt8.self),
+      size: size)
   }
 
   /**
    * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(of other: ArrayBuffer) -> ArrayBuffer {
+  public static func copy(of other: ArrayBuffer) -> ArrayBuffer {
     return ArrayBuffer.copy(of: other.data, size: other.size)
   }
 
   /**
    * Copy the given `Data` into a new **owning** `ArrayBuffer`.
    */
-  static func copy(data: Data) throws -> ArrayBuffer {
+  public static func copy(data: Data) throws -> ArrayBuffer {
     // 1. Create new `ArrayBuffer` of same size
     let size = data.count
     let arrayBuffer = ArrayBuffer.allocate(size: size)
@@ -123,17 +131,16 @@ public extension ArrayBuffer {
   }
 }
 
-
 // pragma MARK: Data
 
-public extension ArrayBuffer {
+extension ArrayBuffer {
   /**
    * Wrap this `ArrayBuffer` in a `Data` instance, without performing a copy.
    * - `copyIfNeeded`: If this `ArrayBuffer` is **non-owning**, the foreign
    *                   data may needs to be copied to be safely used outside of the scope of the caller function.
    *                   This flag controls that.
    */
-  func toData(copyIfNeeded: Bool) -> Data {
+  public func toData(copyIfNeeded: Bool) -> Data {
     let shouldCopy = copyIfNeeded && !self.isOwner
     if shouldCopy {
       // COPY DATA
@@ -143,12 +150,14 @@ public extension ArrayBuffer {
       // 1. Get the std::shared_ptr<ArrayBuffer>
       var sharedPointer = self.getArrayBuffer()
       // 2. Create a Data object WRAPPING our pointer
-      return Data(bytesNoCopy: self.data, count: self.size, deallocator: .custom({ buffer, size in
-        // 3. Capture the std::shared_ptr<ArrayBuffer> in the deallocator lambda so it stays alive.
-        //    As soon as this lambda gets called, the `sharedPointer` gets deleted causing the
-        //    underlying `ArrayBuffer` to be freed.
-        sharedPointer.reset()
-      }))
+      return Data(
+        bytesNoCopy: self.data, count: self.size,
+        deallocator: .custom({ buffer, size in
+          // 3. Capture the std::shared_ptr<ArrayBuffer> in the deallocator lambda so it stays alive.
+          //    As soon as this lambda gets called, the `sharedPointer` gets deleted causing the
+          //    underlying `ArrayBuffer` to be freed.
+          sharedPointer.reset()
+        }))
     }
   }
 }

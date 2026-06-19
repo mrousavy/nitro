@@ -7,10 +7,12 @@ import { useColors } from './useColors'
 import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
+import { EvalScreen } from './screens/EvalScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
 const map = require('./img/map.png')
+const terminal = require('./img/terminal.webp')
 
 const Tabs = createBottomTabNavigator()
 
@@ -61,6 +63,20 @@ export default function App() {
             tabBarIcon: ({ size, focused }) => (
               <Image
                 source={map}
+                tintColor={focused ? undefined : 'grey'}
+                style={{ width: size, height: size }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Eval"
+          component={EvalScreen}
+          options={{
+            tabBarLabel: 'Eval',
+            tabBarIcon: ({ size, focused }) => (
+              <Image
+                source={terminal}
                 tintColor={focused ? undefined : 'grey'}
                 style={{ width: size, height: size }}
               />

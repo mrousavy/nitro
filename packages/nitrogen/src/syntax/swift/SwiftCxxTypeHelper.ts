@@ -19,6 +19,7 @@ import { VoidType } from '../types/VoidType.js'
 import { NamedWrappingType } from '../types/NamedWrappingType.js'
 import { ErrorType } from '../types/ErrorType.js'
 import { ResultWrappingType } from '../types/ResultWrappingType.js'
+import { isPrimitivelyCopyable } from './isPrimitivelyCopyable.js'
 
 export interface SwiftCxxHelper {
   cxxHeader: {
@@ -107,6 +108,7 @@ function createCxxHybridObjectSwiftHelper(
   let getImplementation: string
   let createImplementation: string
   if (!type.sourceConfig.isExternalConfig) {
+    // We own the implementation - we call into Swift to convert it internally
     createImplementation = `
 ${swiftPartType} swiftPart = ${swiftPartType}::fromUnsafe(swiftUnsafePointer);
 return std::make_shared<${swiftWrappingType}>(swiftPart);
@@ -122,9 +124,18 @@ ${swiftPartType}& swiftPart = swiftWrapper->getSwiftPart();
 return swiftPart.toUnsafe();
 `.trim()
   } else {
+    // It's an external type - we have to delegate the call to the external library's functions
     const cxxNamespace = type.sourceConfig.getSwiftBridgeNamespace('c++')
-    createImplementation = `return ${cxxNamespace}::create_${name}(swiftUnsafePointer);`
-    getImplementation = `return ${cxxNamespace}::get_${name}(cppType);`
+    const internalType = type.getCode('c++', { fullyQualified: false })
+    const internalName = escapeCppName(internalType)
+    createImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::create_${internalName}(swiftUnsafePointer);
+`.trim()
+    getImplementation = `
+// Implemented in ${type.sourceConfig.getIosModuleName()}
+return ${cxxNamespace}::get_${internalName}(cppType);
+`.trim()
   }
 
   return {
@@ -137,17 +148,17 @@ return swiftPart.toUnsafe();
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-${actualType} create_${name}(void* _Nonnull swiftUnsafePointer);
-void* _Nonnull get_${name}(${name} cppType);
+${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept;
+void* NON_NULL get_${name}(${name} cppType);
     `.trim(),
       requiredIncludes: type.getRequiredImports('c++'),
     },
     cxxImplementation: {
       code: `
-${actualType} create_${name}(void* _Nonnull swiftUnsafePointer) {
+${actualType} create_${name}(void* NON_NULL swiftUnsafePointer) noexcept {
   ${indent(createImplementation, '  ')}
 }
-void* _Nonnull get_${name}(${name} cppType) {
+void* NON_NULL get_${name}(${name} cppType) {
   ${indent(getImplementation, '  ')}
 }
     `.trim(),
@@ -180,7 +191,7 @@ function createCxxUpcastHelper(
     specializationName: funcName,
     cxxHeader: {
       code: `
-inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
+inline ${cppBaseType} ${funcName}(${cppChildType} child) noexcept { return child; }
 `.trim(),
       requiredIncludes: [],
     },
@@ -189,9 +200,10 @@ inline ${cppBaseType} ${funcName}(${cppChildType} child) { return child; }
 }
 
 function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
-  const actualType = type.getCode('c++', 'weak')
+  const actualType = type.getCode('c++', { mode: 'weak' })
   const specializationName = escapeCppName(actualType)
   const funcName = `weakify_${escapeCppName(type.getCode('c++'))}`
+  const parameterType = type.getCode('c++', { mode: 'strong' })
   return {
     cxxType: actualType,
     funcName: funcName,
@@ -199,7 +211,7 @@ function createCxxWeakPtrHelper(type: HybridObjectType): SwiftCxxHelper {
     cxxHeader: {
       code: `
 using ${specializationName} = ${actualType};
-inline ${specializationName} ${funcName}(const ${type.getCode('c++', 'strong')}& strong) { return strong; }
+inline ${specializationName} ${funcName}(const ${parameterType}& strong) noexcept { return strong; }
 `.trim(),
       requiredIncludes: [],
     },
@@ -214,6 +226,8 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const wrappedBridge = new SwiftCxxBridgedType(type.wrappingType, true)
   const name = escapeCppName(actualType)
+  // TODO: Remove has_ and get_ wrappers once https://github.com/swiftlang/swift/issues/83801 is fixed.
+  // TODO: Remove create_ wrapper once https://github.com/swiftlang/swift/issues/75834 is fixed.
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -224,8 +238,14 @@ function createCxxOptionalSwiftHelper(type: OptionalType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) {
+inline ${actualType} create_${name}(const ${wrappedBridge.getTypeCode('c++')}& value) noexcept {
   return ${actualType}(${indent(wrappedBridge.parseFromSwiftToCpp('value', 'c++'), '    ')});
+}
+inline bool has_value_${name}(const ${actualType}& optional) noexcept {
+  return optional.has_value();
+}
+inline ${wrappedBridge.getTypeCode('c++')} get_${name}(const ${actualType}& optional) noexcept {
+  return *optional;
 }
     `.trim(),
       requiredIncludes: [
@@ -248,25 +268,51 @@ function createCxxVectorSwiftHelper(type: ArrayType): SwiftCxxHelper {
   const actualType = type.getCode('c++')
   const bridgedType = new SwiftCxxBridgedType(type)
   const name = escapeCppName(actualType)
-  return {
-    cxxType: actualType,
-    funcName: `create_${name}`,
-    specializationName: name,
-    cxxHeader: {
-      code: `
+  let code: string
+  let funcName: string
+  if (isPrimitivelyCopyable(type.itemType)) {
+    const itemType = type.itemType.getCode('c++')
+    funcName = `copy_${name}`
+    code = `
 /**
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+inline ${actualType} copy_${name}(const ${itemType}* CONTIGUOUS_MEMORY NON_NULL data, size_t size) noexcept {
+  return margelo::nitro::FastVectorCopy<${itemType}>(data, size);
+}
+inline const ${itemType}* CONTIGUOUS_MEMORY NON_NULL get_data_${name}(const ${actualType}& vector) noexcept {
+  return vector.data();
+}
+`.trim()
+  } else {
+    funcName = `create_${name}`
+    code = `
+/**
+ * Specialized version of \`${escapeComments(actualType)}\`.
+ */
+using ${name} = ${actualType};
+inline ${actualType} create_${name}(size_t size) noexcept {
   ${actualType} vector;
   vector.reserve(size);
   return vector;
-}
-    `.trim(),
+}`.trim()
+  }
+
+  return {
+    cxxType: actualType,
+    funcName: funcName,
+    specializationName: name,
+    cxxHeader: {
+      code: code,
       requiredIncludes: [
         {
           name: 'vector',
+          space: 'system',
+          language: 'c++',
+        },
+        {
+          name: 'NitroModules/FastVectorCopy.hpp',
           space: 'system',
           language: 'c++',
         },
@@ -296,12 +342,12 @@ function createCxxUnorderedMapSwiftHelper(type: RecordType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(size_t size) {
+inline ${actualType} create_${name}(size_t size) noexcept {
   ${actualType} map;
   map.reserve(size);
   return map;
 }
-inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
+inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) noexcept {
   std::vector<${keyType}> keys;
   keys.reserve(map.size());
   for (const auto& entry : map) {
@@ -309,7 +355,10 @@ inline std::vector<${keyType}> get_${name}_keys(const ${name}& map) {
   }
   return keys;
 }
-inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) {
+inline ${valueType} get_${name}_value(const ${name}& map, const ${keyType}& key) noexcept {
+  return map.find(key)->second;
+}
+inline void emplace_${name}(${name}& map, const ${keyType}& key, const ${valueType}& value) noexcept {
   map.emplace(key, value);
 }
       `.trim(),
@@ -381,6 +430,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     `.trim()
   }
 
+  // TODO: Remove our std::function wrapper once https://github.com/swiftlang/swift/issues/75844 is fixed.
   return {
     cxxType: actualType,
     funcName: `create_${name}`,
@@ -388,7 +438,7 @@ return ${returnBridge.parseFromSwiftToCpp('__result', 'c++')};
     cxxHeader: {
       code: `
 /**
- * Specialized version of \`${type.getCode('c++', false)}\`.
+ * Specialized version of \`${type.getCode('c++', { includeNameInfo: false })}\`.
  */
 using ${name} = ${actualType};
 /**
@@ -397,14 +447,14 @@ using ${name} = ${actualType};
 class ${wrapperName} final {
 public:
   explicit ${wrapperName}(${actualType}&& func): _function(std::make_unique<${actualType}>(std::move(func))) {}
-  inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const {
+  inline ${callFuncReturnType} call(${callCppFuncParamsSignature.join(', ')}) const noexcept {
     ${indent(callCppFuncBody, '    ')}
   }
 private:
   std::unique_ptr<${actualType}> _function;
 } SWIFT_NONCOPYABLE;
-${name} create_${name}(void* _Nonnull swiftClosureWrapper);
-inline ${wrapperName} wrap_${name}(${name} value) {
+${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept;
+inline ${wrapperName} wrap_${name}(${name} value) noexcept {
   return ${wrapperName}(std::move(value));
 }
     `.trim(),
@@ -424,7 +474,7 @@ inline ${wrapperName} wrap_${name}(${name} value) {
     },
     cxxImplementation: {
       code: `
-${name} create_${name}(void* _Nonnull swiftClosureWrapper) {
+${name} create_${name}(void* NON_NULL swiftClosureWrapper) noexcept {
   auto swiftClosure = ${swiftClassName}::fromUnsafe(swiftClosureWrapper);
   return [swiftClosure = std::move(swiftClosure)](${paramsSignature.join(', ')}) mutable -> ${type.returnType.getCode('c++')} {
     ${indent(body, '    ')}
@@ -457,14 +507,14 @@ function createCxxVariantSwiftHelper(type: VariantType): SwiftCxxHelper {
       : t.getCode('c++')
 
     return `
-inline ${name} create_${name}(${param} value) {
+inline ${name} create_${name}(${param} value) noexcept {
   return ${name}(value);
 }
       `.trim()
   })
   const getFunctions = type.variants.map((t, i) => {
     return `
-inline ${t.getCode('c++')} get_${i}() const {
+inline ${t.getCode('c++')} get_${i}() const noexcept {
   return std::get<${i}>(variant);
 }`.trim()
   })
@@ -482,10 +532,10 @@ inline ${t.getCode('c++')} get_${i}() const {
 struct ${name} {
   ${actualType} variant;
   ${name}(${actualType} variant): variant(variant) { }
-  operator ${actualType}() const {
+  operator ${actualType}() const noexcept {
     return variant;
   }
-  inline size_t index() const {
+  inline size_t index() const noexcept {
     return variant.index();
   }
   ${indent(getFunctions.join('\n'), '  ')}
@@ -530,7 +580,7 @@ function createCxxTupleSwiftHelper(type: TupleType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}(${typesSignature}) {
+inline ${actualType} create_${name}(${typesSignature}) noexcept {
   return ${actualType} { ${typesForward} };
 }
      `.trim(),
@@ -553,6 +603,7 @@ inline ${actualType} create_${name}(${typesSignature}) {
 function createCxxResultWrapperSwiftHelper(
   type: ResultWrappingType
 ): SwiftCxxHelper {
+  // TODO: Remove the ResultWrappingType once https://github.com/swiftlang/swift/issues/75290 is fixed.
   const actualType = type.getCode('c++')
   const name = escapeCppName(type.getCode('c++'))
   const funcName = `create_${name}`
@@ -561,7 +612,7 @@ function createCxxResultWrapperSwiftHelper(
   if (type.result.kind === 'void') {
     functions.push(
       `
-inline ${name} ${funcName}() {
+inline ${name} ${funcName}() noexcept {
   return ${actualType}::withValue();
 }`.trim()
     )
@@ -571,14 +622,14 @@ inline ${name} ${funcName}() {
       : type.result.getCode('c++')
     functions.push(
       `
-inline ${name} ${funcName}(${typeParam} value) {
+inline ${name} ${funcName}(${typeParam} value) noexcept {
   return ${actualType}::withValue(${type.result.canBePassedByReference ? 'value' : 'std::move(value)'});
 }`.trim()
     )
   }
   functions.push(
     `
-inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) {
+inline ${name} ${funcName}(const ${type.error.getCode('c++')}& error) noexcept {
   return ${actualType}::withError(error);
 }`.trim()
   )
@@ -626,10 +677,10 @@ function createCxxPromiseSwiftHelper(type: PromiseType): SwiftCxxHelper {
  * Specialized version of \`${escapeComments(actualType)}\`.
  */
 using ${name} = ${actualType};
-inline ${actualType} create_${name}() {
+inline ${actualType} create_${name}() noexcept {
   return Promise<${resultingType}>::create();
 }
-inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) {
+inline PromiseHolder<${resultingType}> wrap_${name}(${actualType} promise) noexcept {
   return PromiseHolder<${resultingType}>(std::move(promise));
 }
        `.trim(),

@@ -36,7 +36,7 @@ jobs:
     name: Compile TypeScript (tsc)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
       - uses: reviewdog/action-setup@v1
 
@@ -53,7 +53,7 @@ jobs:
     name: Lint TypeScript (eslint, prettier)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
       - uses: reviewdog/action-setup@v1
 
@@ -65,6 +65,9 @@ jobs:
         run: bun lint-ci
       - name: Run ESLint CI in packages/nitrogen
         working-directory: packages/nitrogen
+        run: bun lint-ci
+      - name: Run ESLint CI in packages/react-native-nitro-test-external
+        working-directory: packages/react-native-nitro-test-external
         run: bun lint-ci
       - name: Run ESLint CI in packages/react-native-nitro-test
         working-directory: packages/react-native-nitro-test
@@ -78,6 +81,9 @@ jobs:
         run: bun lint
       - name: Run ESLint with auto-fix in packages/nitrogen
         working-directory: packages/nitrogen
+        run: bun lint
+      - name: Run ESLint with auto-fix in packages/react-native-nitro-test-external
+        working-directory: packages/react-native-nitro-test-external
         run: bun lint
       - name: Run ESLint with auto-fix in packages/react-native-nitro-test
         working-directory: packages/react-native-nitro-test

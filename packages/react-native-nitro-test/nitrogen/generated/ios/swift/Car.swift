@@ -18,20 +18,34 @@ public extension Car {
   /**
    * Create a new instance of `Car`.
    */
-  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, isFast: Bool?) {
+  init(year: Double, make: String, model: String, power: Double, powertrain: Powertrain, driver: Person?, passengers: [Person], isFast: Bool?, favouriteTrack: String?, performanceScores: [Double]) {
     self.init(year, std.string(make), std.string(model), power, powertrain, { () -> bridge.std__optional_Person_ in
       if let __unwrappedValue = driver {
         return bridge.create_std__optional_Person_(__unwrappedValue)
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__vector_Person_ in
+      var __vector = bridge.create_std__vector_Person_(passengers.count)
+      for __item in passengers {
+        __vector.push_back(__item)
+      }
+      return __vector
     }(), { () -> bridge.std__optional_bool_ in
       if let __unwrappedValue = isFast {
         return bridge.create_std__optional_bool_(__unwrappedValue)
       } else {
         return .init()
       }
-    }())
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = favouriteTrack {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+      } else {
+        return .init()
+      }
+    }(), performanceScores.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+      return bridge.copy_std__vector_double_(__pointer.baseAddress!, performanceScores.count)
+    })
   }
 
   var year: Double {
@@ -92,13 +106,7 @@ public extension Car {
   var driver: Person? {
     @inline(__always)
     get {
-      return { () -> Person? in
-        if let __unwrapped = self.__driver.value {
-          return __unwrapped
-        } else {
-          return nil
-        }
-      }()
+      return self.__driver.value
     }
     @inline(__always)
     set {
@@ -108,6 +116,23 @@ public extension Car {
         } else {
           return .init()
         }
+      }()
+    }
+  }
+  
+  var passengers: [Person] {
+    @inline(__always)
+    get {
+      return self.__passengers.map({ __item in __item })
+    }
+    @inline(__always)
+    set {
+      self.__passengers = { () -> bridge.std__vector_Person_ in
+        var __vector = bridge.create_std__vector_Person_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
       }()
     }
   }
@@ -126,6 +151,47 @@ public extension Car {
           return .init()
         }
       }()
+    }
+  }
+  
+  var favouriteTrack: String? {
+    @inline(__always)
+    get {
+      return { () -> String? in
+        if bridge.has_value_std__optional_std__string_(self.__favouriteTrack) {
+          let __unwrapped = bridge.get_std__optional_std__string_(self.__favouriteTrack)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__favouriteTrack = { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var performanceScores: [Double] {
+    @inline(__always)
+    get {
+      return { () -> [Double] in
+        let __data = bridge.get_data_std__vector_double_(self.__performanceScores)
+        let __size = self.__performanceScores.size()
+        return Array(UnsafeBufferPointer(start: __data, count: __size))
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__performanceScores = newValue.withUnsafeBufferPointer { __pointer -> bridge.std__vector_double_ in
+        return bridge.copy_std__vector_double_(__pointer.baseAddress!, newValue.count)
+      }
     }
   }
 }

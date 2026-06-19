@@ -18,14 +18,14 @@ public extension MapWrapper {
   /**
    * Create a new instance of `MapWrapper`.
    */
-  init(map: Dictionary<String, String>) {
+  init(map: Dictionary<String, String>, secondMap: SecondMapWrapper) {
     self.init({ () -> bridge.std__unordered_map_std__string__std__string_ in
       var __map = bridge.create_std__unordered_map_std__string__std__string_(map.count)
       for (__k, __v) in map {
         bridge.emplace_std__unordered_map_std__string__std__string_(&__map, std.string(__k), std.string(__v))
       }
       return __map
-    }())
+    }(), secondMap)
   }
 
   var map: Dictionary<String, String> {
@@ -35,7 +35,7 @@ public extension MapWrapper {
         var __dictionary = Dictionary<String, String>(minimumCapacity: self.__map.size())
         let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__map)
         for __key in __keys {
-          let __value = self.__map[__key]!
+          let __value = bridge.get_std__unordered_map_std__string__std__string__value(self.__map, __key)
           __dictionary[String(__key)] = String(__value)
         }
         return __dictionary
@@ -50,6 +50,17 @@ public extension MapWrapper {
         }
         return __map
       }()
+    }
+  }
+  
+  var secondMap: SecondMapWrapper {
+    @inline(__always)
+    get {
+      return self.__secondMap
+    }
+    @inline(__always)
+    set {
+      self.__secondMap = newValue
     }
   }
 }

@@ -20,7 +20,6 @@
 #include <functional>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
-#include <functional>
 #include <optional>
 
 namespace margelo::nitro::test::views {
@@ -48,7 +47,7 @@ namespace margelo::nitro::test::views {
     CachedProp<bool> hasBeenCalled;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
-    CachedProp<std::optional<std::function<void(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& /* ref */)>>> hybridRef;
+    CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

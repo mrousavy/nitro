@@ -7,7 +7,7 @@
 
 import Foundation
 
-class HybridBase : HybridBaseSpec {
+class HybridBase: HybridBaseSpec {
   var baseValue: Double {
     return 10
   }

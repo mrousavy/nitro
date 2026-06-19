@@ -66,16 +66,4 @@ namespace margelo::nitro::test {
       }
     };
   } // namespace JVariant_Boolean_OldEnum_impl
-
-  std::variant<bool, OldEnum> JVariant_Boolean_OldEnum::toCpp() const {
-    if (isInstanceOf(JVariant_Boolean_OldEnum_impl::First::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Boolean_OldEnum_impl::First*>(this)->getValue();
-      return static_cast<bool>(jniValue);
-    } else if (isInstanceOf(JVariant_Boolean_OldEnum_impl::Second::javaClassStatic())) {
-      auto jniValue = static_cast<const JVariant_Boolean_OldEnum_impl::Second*>(this)->getValue();
-      return jniValue->toCpp();
-    }
-    throw std::invalid_argument("Variant is unknown Kotlin instance!");
-  }
-
 } // namespace margelo::nitro::test

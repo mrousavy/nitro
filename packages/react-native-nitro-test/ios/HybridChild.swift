@@ -7,11 +7,15 @@
 
 import Foundation
 
-class HybridChild : HybridChildSpec {
+class HybridChild: HybridChildSpec {
   var baseValue: Double {
     return 20
   }
   var childValue: Double {
     return 30
+  }
+
+  func bounceVariant(variant: NamedVariant) throws -> NamedVariant {
+    return variant
   }
 }

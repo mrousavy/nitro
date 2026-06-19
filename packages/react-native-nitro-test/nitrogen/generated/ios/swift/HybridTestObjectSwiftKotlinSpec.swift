@@ -7,6 +7,7 @@
 
 import Foundation
 import NitroModules
+import NitroTestExternal
 
 /// See ``HybridTestObjectSwiftKotlinSpec``
 public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
@@ -36,6 +37,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceStrings(array: [String]) throws -> [String]
   func bounceNumbers(array: [Double]) throws -> [Double]
   func bounceStructs(array: [Person]) throws -> [Person]
+  func sumUpAllPassengers(cars: [Car]) throws -> String
   func bounceEnums(array: [Powertrain]) throws -> [Powertrain]
   func complexEnumCallback(array: [Powertrain], callback: @escaping (_ array: [Powertrain]) -> Void) throws -> Void
   func createMap() throws -> AnyMap
@@ -49,6 +51,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func tryOptionalParams(num: Double, boo: Bool, str: String?) throws -> String
   func tryMiddleParam(num: Double, boo: Bool?, str: String) throws -> String
   func tryOptionalEnum(value: Powertrain?) throws -> Powertrain?
+  func tryTrailingOptional(num: Double, str: String, boo: Bool?) throws -> Bool
   func add1Hour(date: Date) throws -> Date
   func currentDate() throws -> Date
   func calculateFibonacciSync(value: Double) throws -> Int64
@@ -65,6 +68,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func callbackAsyncPromise(callback: @escaping () -> Promise<Promise<Double>>) throws -> Promise<Double>
   func callbackAsyncPromiseBuffer(callback: @escaping () -> Promise<Promise<ArrayBuffer>>) throws -> Promise<ArrayBuffer>
   func getComplexCallback() throws -> (_ value: Double) -> Void
+  func twoOptionalCallbacks(value: Double, first: ((_ value: Double) -> Void)?, second: ((_ value: String) -> Void)?) throws -> Void
   func getValueFromJSCallbackAndWait(getValue: @escaping () -> Promise<Double>) throws -> Promise<Double>
   func getValueFromJsCallback(callback: @escaping () -> Promise<String>, andThenCall: @escaping (_ valueFromJs: String) -> Void) throws -> Promise<Void>
   func getCar() throws -> Car
@@ -72,6 +76,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getDriver(car: Car) throws -> Person?
   func jsStyleObjectAsParameters(params: JsStyleStruct) throws -> Void
   func bounceWrappedJsStyleStruct(value: WrappedJsStruct) throws -> WrappedJsStruct
+  func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
@@ -84,6 +89,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum
   func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
+  func passAllEmptyObjectVariant(variant: Variant_OptionalWrapper__any_HybridBaseSpec_) throws -> Variant_OptionalWrapper__any_HybridBaseSpec_
   func createChild() throws -> (any HybridChildSpec)
   func createBase() throws -> (any HybridBaseSpec)
   func createBaseActualChild() throws -> (any HybridBaseSpec)
@@ -93,6 +99,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
   func callbackSync(callback: @escaping () -> Double) throws -> Double
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
+  func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
+  func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
 }
 
 /// See ``HybridTestObjectSwiftKotlinSpec``

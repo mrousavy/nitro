@@ -7,18 +7,16 @@
 
 import Foundation
 
-/**
- * Represents any value representable by the `AnyMap`.
- * Note: Arrays are currently not implemented due to a Swift compiler bug https://github.com/swiftlang/swift/issues/75994
- */
+/// Represents any value representable by the `AnyMap`.
+/// Note: Arrays are currently not implemented due to a Swift compiler bug https://github.com/swiftlang/swift/issues/75994
 public indirect enum AnyValue {
   case null
   case number(Double)
   case bool(Bool)
   case bigint(Int64)
   case string(String)
-  case array(Array<AnyValue>)
-  case object(Dictionary<String, AnyValue>)
+  case array([AnyValue])
+  case object([String: AnyValue])
 
   static func create(_ value: margelo.nitro.AnyValue) -> AnyValue {
     if margelo.nitro.AnyMapUtils.is_AnyValue_null(value) {
@@ -41,10 +39,8 @@ public indirect enum AnyValue {
   }
 }
 
-/**
- * Represents an `AnyMap`- an untyped map instance.
- * See C++ `AnyMap.hpp` for more information.
- */
+/// Represents an `AnyMap`- an untyped map instance.
+/// See C++ `AnyMap.hpp` for more information.
 public final class AnyMap: @unchecked Sendable {
   public let cppPart: margelo.nitro.SharedAnyMap
 
@@ -150,7 +146,7 @@ public final class AnyMap: @unchecked Sendable {
    * If no value exists at the given key, or if it is not a double,
    * this function throws.
    */
-  public func getObject(key: String) -> Dictionary<String, AnyValue> {
+  public func getObject(key: String) -> [String: AnyValue] {
     let value = cppPart.pointee.getObject(std.string(key))
     return value.toSwift()
   }
@@ -202,7 +198,7 @@ public final class AnyMap: @unchecked Sendable {
   /**
    * Set the given key to the given object value.
    */
-  public func setObject(key: String, value: Dictionary<String, AnyValue>) {
+  public func setObject(key: String, value: [String: AnyValue]) {
     cppPart.pointee.setObject(std.string(key), margelo.nitro.AnyObject.create(value))
   }
 
@@ -297,7 +293,7 @@ extension margelo.nitro.AnyValue {
   static func create(_ value: [AnyValue]) -> margelo.nitro.AnyValue {
     return margelo.nitro.AnyMapUtils.create_AnyValue(margelo.nitro.AnyArray.create(value))
   }
-  static func create(_ value: Dictionary<String, AnyValue>) -> margelo.nitro.AnyValue {
+  static func create(_ value: [String: AnyValue]) -> margelo.nitro.AnyValue {
     return margelo.nitro.AnyMapUtils.create_AnyValue(margelo.nitro.AnyObject.create(value))
   }
 }
@@ -335,7 +331,7 @@ extension margelo.nitro.AnyArray {
 // pragma MARK: margelo.nitro.AnyObject extension
 
 extension margelo.nitro.AnyObject {
-  static func create(_ dictionary: Dictionary<String, AnyValue>) -> margelo.nitro.AnyObject {
+  static func create(_ dictionary: [String: AnyValue]) -> margelo.nitro.AnyObject {
     var object = margelo.nitro.AnyObject()
     object.reserve(dictionary.count)
     for (key, value) in dictionary {
@@ -344,9 +340,9 @@ extension margelo.nitro.AnyObject {
     return object
   }
 
-  func toSwift() -> Dictionary<String, AnyValue> {
+  func toSwift() -> [String: AnyValue] {
     let keys = margelo.nitro.AnyMapUtils.getAnyObjectKeys(self)
-    var dictionary = Dictionary<String, AnyValue>(minimumCapacity: keys.size())
+    var dictionary = [String: AnyValue](minimumCapacity: keys.size())
     for key in keys {
       let value = margelo.nitro.AnyMapUtils.getAnyObjectValue(self, key)
       dictionary[String(key)] = AnyValue.create(value)
@@ -354,7 +350,6 @@ extension margelo.nitro.AnyObject {
     return dictionary
   }
 }
-
 
 @available(*, deprecated, renamed: "AnyMap")
 public typealias AnyMapHolder = AnyMap

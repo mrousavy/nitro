@@ -12,7 +12,7 @@
 It consists of two parts:
 
 - [**react-native-nitro-modules**](packages/react-native-nitro-modules): The core C++ library powering all nitro modules
-- [**nitrogen**](packages/nitrogen): A code-generator for nitro module library authors
+- [**nitrogen**](packages/nitrogen): An optional code-generator for nitro module library authors
 
 ## Example
 
@@ -51,6 +51,8 @@ cd ios && pod install
 
 - [**Nitro** docs 📚](https://nitro.margelo.com)
 - [**Community Discord** 💬](https://margelo.com/discord)
+- [**Nitro Module Builder** AI GPT 🤖](https://chatgpt.com/g/g-6870125d0fcc8191925bd20a02c78bcf-nitro-module-builder)
+- [**How to build a Nitro Module** YouTube Tutorial ▶️](https://youtu.be/528SxTGnIlc?si=IxH7n09ZVe4iwRPv)
 - [**nitrogen**/README.md](./packages/nitrogen/README.md)
 - [**react-native-nitro-modules**/README.md](./packages/react-native-nitro-modules/README.md)
 - [**react-native-nitro-test** example module](./packages/react-native-nitro-test/README.md)

@@ -17,8 +17,7 @@ const sidebars: SidebarsConfig = {
       label: 'Getting started',
       items: [
         'what-is-nitro',
-        'using-nitro-in-your-app',
-        'using-nitro-in-a-library',
+        'how-to-build-a-nitro-module',
         'configuration-nitro-json',
         'minimum-requirements',
       ]
@@ -44,14 +43,16 @@ const sidebars: SidebarsConfig = {
         'sync-vs-async',
         'view-components',
         'troubleshooting',
+        'running-example-app',
       ]
     },
     {
       type: 'category',
       label: 'Types',
       items: [
-        'types/types',
+        'types/typing-system',
         'types/primitives',
+        'types/strings',
         'types/arrays',
         'types/optionals',
         'types/tuples',
@@ -63,6 +64,8 @@ const sidebars: SidebarsConfig = {
         'types/untyped-maps',
         'types/array-buffers',
         'types/hybrid-objects',
+        'types/custom-structs',
+        'types/custom-enums',
         'types/custom-types',
       ],
     },

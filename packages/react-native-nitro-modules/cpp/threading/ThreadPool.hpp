@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "NitroDefines.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <functional>
@@ -25,7 +26,7 @@ public:
    * Create a new ThreadPool with the given number of minimum workers/threads.
    * The Thread Pool can expand on the fly if it is busy.
    */
-  explicit ThreadPool(const char* const name, size_t initialThreadsCount, size_t maxThreadsCount);
+  explicit ThreadPool(const char* NON_NULL const name, size_t initialThreadsCount, size_t maxThreadsCount);
   ~ThreadPool();
   ThreadPool(const ThreadPool&) = delete;
   ThreadPool(ThreadPool&&) = delete;
@@ -58,7 +59,7 @@ private:
   std::atomic<bool> _isAlive;
   std::atomic<size_t> _threadCount;
   size_t _threadCountLimit;
-  const char* _name;
+  const char* NON_NULL _name;
   static constexpr auto TAG = "ThreadPool";
 };
 

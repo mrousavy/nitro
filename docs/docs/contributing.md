@@ -12,7 +12,7 @@ The nitro repo is a Bun monorepo, and is set up like this:
 
 - `example/`: A react-native app that uses `react-native-nitro-modules` and `react-native-nitro-test`.
 - `packages/`
-  - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitro-codegen`.
+  - `/nitrogen/`: The Node app that generates Nitro bindings. On npm, it is called `nitrogen`.
   - `/react-native-nitro-modules/`: The core Nitro Modules library which contains mostly C++ code.
   - `/react-native-nitro-test/`: An example Nitro Module library that contains a lot of test code.
   - `/template/`: A template for a Nitro Module library.
@@ -132,6 +132,18 @@ For C++, we use clang-format:
 
 ```sh
 bun lint-cpp
+```
+
+For Swift, we use swift format:
+
+```sh
+bun lint-swift
+```
+
+For Kotlin, we use ktlint:
+
+```sh
+bun lint-kotlin
 ```
 
 Make sure to lint your files everytime before creating a PR. This is also enforced in the CI, but linting beforehand also applies auto-fixes.

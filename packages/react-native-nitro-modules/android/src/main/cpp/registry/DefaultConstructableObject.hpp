@@ -15,7 +15,7 @@ namespace margelo::nitro {
 using namespace facebook;
 
 template <typename T>
-class DefaultConstructableObject {
+class DefaultConstructableObject final {
 public:
   explicit DefaultConstructableObject(const char* javaClassDescriptor) {
     try {

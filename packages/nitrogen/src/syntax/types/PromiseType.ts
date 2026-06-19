@@ -3,7 +3,7 @@ import { type SourceFile, type SourceImport } from '../SourceFile.js'
 import { ErrorType } from './ErrorType.js'
 import { FunctionType } from './FunctionType.js'
 import { NamedWrappingType } from './NamedWrappingType.js'
-import type { Type, TypeKind } from './Type.js'
+import type { GetCodeOptions, Type, TypeKind } from './Type.js'
 import { VoidType } from './VoidType.js'
 
 export class PromiseType implements Type {
@@ -39,8 +39,8 @@ export class PromiseType implements Type {
     ])
   }
 
-  getCode(language: Language): string {
-    const resultingCode = this.resultingType.getCode(language)
+  getCode(language: Language, options?: GetCodeOptions): string {
+    const resultingCode = this.resultingType.getCode(language, options)
     switch (language) {
       case 'c++':
         return `std::shared_ptr<Promise<${resultingCode}>>`

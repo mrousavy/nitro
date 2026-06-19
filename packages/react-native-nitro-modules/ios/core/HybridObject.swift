@@ -7,9 +7,7 @@
 
 import Foundation
 
-/**
- * A base protocol for all Swift-based Hybrid Objects.
- */
+/// A base protocol for all Swift-based Hybrid Objects.
 public protocol HybridObject: AnyObject {
   /**
    * Get the memory size of the Swift instance (plus any external heap allocations),
@@ -41,9 +39,9 @@ public protocol HybridObject: AnyObject {
   func dispose()
 }
 
-public extension HybridObject {
+extension HybridObject {
   // By default, this returns `0`.
-  var memorySize: Int { return 0 }
+  public var memorySize: Int { return 0 }
   // By default, this does nothing.
-  func dispose() { }
+  public func dispose() {}
 }

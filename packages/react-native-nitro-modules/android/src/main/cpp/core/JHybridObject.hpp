@@ -23,9 +23,21 @@ class JHybridObject : public jni::HybridClass<JHybridObject>, public virtual Hyb
 public:
   static auto constexpr kJavaDescriptor = "Lcom/margelo/nitro/core/HybridObject;";
 
-  ~JHybridObject() override = default;
+public:
+  // C++ constructor (called from Java via `initHybrid()`)
+  explicit JHybridObject(jni::alias_ref<jhybridobject> jThis) : _javaPart(jni::make_global(jThis)) {}
+  // C++ default constructor used by older Nitro versions (deprecated in favor of the jThis one)
+  [[deprecated]] JHybridObject() = default;
+
+public:
+  ~JHybridObject() override;
+
+public:
+  // `shared()` has custom logic because we ref-count using `jni::global_ref`!
+  std::shared_ptr<HybridObject> shared() override;
 
 private:
+  jni::global_ref<JHybridObject::javaobject> _javaPart;
   friend HybridBase;
 };
 

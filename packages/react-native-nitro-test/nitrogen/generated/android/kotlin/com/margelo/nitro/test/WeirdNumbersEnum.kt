@@ -15,12 +15,8 @@ import com.facebook.proguard.annotations.DoNotStrip
  */
 @DoNotStrip
 @Keep
-enum class WeirdNumbersEnum {
-  A,
-  B,
-  C;
-
-  @DoNotStrip
-  @Keep
-  private val _ordinal = ordinal
+enum class WeirdNumbersEnum(@DoNotStrip @Keep val value: Int) {
+  A(0),
+  B(32),
+  C(64);
 }

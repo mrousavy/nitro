@@ -18,8 +18,14 @@ public extension WrappedJsStruct {
   /**
    * Create a new instance of `WrappedJsStruct`.
    */
-  init(value: JsStyleStruct) {
-    self.init(value)
+  init(value: JsStyleStruct, items: [JsStyleStruct]) {
+    self.init(value, { () -> bridge.std__vector_JsStyleStruct_ in
+      var __vector = bridge.create_std__vector_JsStyleStruct_(items.count)
+      for __item in items {
+        __vector.push_back(__item)
+      }
+      return __vector
+    }())
   }
 
   var value: JsStyleStruct {
@@ -30,6 +36,23 @@ public extension WrappedJsStruct {
     @inline(__always)
     set {
       self.__value = newValue
+    }
+  }
+  
+  var items: [JsStyleStruct] {
+    @inline(__always)
+    get {
+      return self.__items.map({ __item in __item })
+    }
+    @inline(__always)
+    set {
+      self.__items = { () -> bridge.std__vector_JsStyleStruct_ in
+        var __vector = bridge.create_std__vector_JsStyleStruct_(newValue.count)
+        for __item in newValue {
+          __vector.push_back(__item)
+        }
+        return __vector
+      }()
     }
   }
 }

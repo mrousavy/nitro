@@ -29,6 +29,7 @@ namespace margelo::nitro::test {
     // C++ constructor (called from Java via `initHybrid()`)
     explicit JHybridTestObjectSwiftKotlinSpec(jni::alias_ref<jhybridobject> jThis) :
       HybridObject(HybridTestObjectSwiftKotlinSpec::TAG),
+      HybridBase(jThis),
       _javaPart(jni::make_global(jThis)) {}
 
   public:
@@ -48,9 +49,9 @@ namespace margelo::nitro::test {
 
   public:
     // Properties
-    std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> getThisObject() override;
-    std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() override;
-    void setOptionalHybrid(const std::optional<std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) override;
+    std::shared_ptr<HybridTestObjectSwiftKotlinSpec> getThisObject() override;
+    std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getOptionalHybrid() override;
+    void setOptionalHybrid(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optionalHybrid) override;
     double getNumberValue() override;
     void setNumberValue(double numberValue) override;
     bool getBoolValue() override;
@@ -78,8 +79,8 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec> newTestObject() override;
-    std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<margelo::nitro::test::HybridTestObjectSwiftKotlinSpec>>& variant) override;
+    std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override;
+    std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) override;
     void simpleFunc() override;
     double addNumbers(double a, double b) override;
     std::string addStrings(const std::string& a, const std::string& b) override;
@@ -87,6 +88,7 @@ namespace margelo::nitro::test {
     std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
     std::vector<double> bounceNumbers(const std::vector<double>& array) override;
     std::vector<Person> bounceStructs(const std::vector<Person>& array) override;
+    std::string sumUpAllPassengers(const std::vector<Car>& cars) override;
     std::vector<Powertrain> bounceEnums(const std::vector<Powertrain>& array) override;
     void complexEnumCallback(const std::vector<Powertrain>& array, const std::function<void(const std::vector<Powertrain>& /* array */)>& callback) override;
     std::shared_ptr<AnyMap> createMap() override;
@@ -100,6 +102,7 @@ namespace margelo::nitro::test {
     std::string tryOptionalParams(double num, bool boo, const std::optional<std::string>& str) override;
     std::string tryMiddleParam(double num, std::optional<bool> boo, const std::string& str) override;
     std::optional<Powertrain> tryOptionalEnum(std::optional<Powertrain> value) override;
+    bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override;
     std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
     std::chrono::system_clock::time_point currentDate() override;
     int64_t calculateFibonacciSync(double value) override;
@@ -116,6 +119,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<Promise<double>> callbackAsyncPromise(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>& callback) override;
     std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> callbackAsyncPromiseBuffer(const std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>& callback) override;
     std::function<void(double /* value */)> getComplexCallback() override;
+    void twoOptionalCallbacks(double value, const std::optional<std::function<void(double /* value */)>>& first, const std::optional<std::function<void(const std::string& /* value */)>>& second) override;
     std::shared_ptr<Promise<double>> getValueFromJSCallbackAndWait(const std::function<std::shared_ptr<Promise<double>>()>& getValue) override;
     std::shared_ptr<Promise<void>> getValueFromJsCallback(const std::function<std::shared_ptr<Promise<std::string>>()>& callback, const std::function<void(const std::string& /* valueFromJs */)>& andThenCall) override;
     Car getCar() override;
@@ -123,6 +127,7 @@ namespace margelo::nitro::test {
     std::optional<Person> getDriver(const Car& car) override;
     void jsStyleObjectAsParameters(const JsStyleStruct& params) override;
     WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) override;
+    OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) override;
     std::shared_ptr<ArrayBuffer> createArrayBuffer() override;
     std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override;
     std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
@@ -135,15 +140,18 @@ namespace margelo::nitro::test {
     std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
     std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
-    std::shared_ptr<margelo::nitro::test::HybridChildSpec> createChild() override;
-    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBase() override;
-    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> createBaseActualChild() override;
-    std::shared_ptr<margelo::nitro::test::HybridChildSpec> bounceChild(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override;
-    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override;
-    std::shared_ptr<margelo::nitro::test::HybridBaseSpec> bounceChildBase(const std::shared_ptr<margelo::nitro::test::HybridChildSpec>& child) override;
-    std::shared_ptr<margelo::nitro::test::HybridChildSpec> castBase(const std::shared_ptr<margelo::nitro::test::HybridBaseSpec>& base) override;
+    std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) override;
+    std::shared_ptr<HybridChildSpec> createChild() override;
+    std::shared_ptr<HybridBaseSpec> createBase() override;
+    std::shared_ptr<HybridBaseSpec> createBaseActualChild() override;
+    std::shared_ptr<HybridChildSpec> bounceChild(const std::shared_ptr<HybridChildSpec>& child) override;
+    std::shared_ptr<HybridBaseSpec> bounceBase(const std::shared_ptr<HybridBaseSpec>& base) override;
+    std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override;
+    std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override;
     double callbackSync(const std::function<double()>& callback) override;
-    bool getIsViewBlue(const std::shared_ptr<margelo::nitro::test::HybridTestViewSpec>& view) override;
+    bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
+    std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
+    std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;
 
   private:
     friend HybridBase;

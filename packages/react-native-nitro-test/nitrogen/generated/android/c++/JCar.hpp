@@ -16,6 +16,7 @@
 #include "Powertrain.hpp"
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -48,8 +49,14 @@ namespace margelo::nitro::test {
       jni::local_ref<JPowertrain> powertrain = this->getFieldValue(fieldPowertrain);
       static const auto fieldDriver = clazz->getField<JPerson>("driver");
       jni::local_ref<JPerson> driver = this->getFieldValue(fieldDriver);
+      static const auto fieldPassengers = clazz->getField<jni::JArrayClass<JPerson>>("passengers");
+      jni::local_ref<jni::JArrayClass<JPerson>> passengers = this->getFieldValue(fieldPassengers);
       static const auto fieldIsFast = clazz->getField<jni::JBoolean>("isFast");
       jni::local_ref<jni::JBoolean> isFast = this->getFieldValue(fieldIsFast);
+      static const auto fieldFavouriteTrack = clazz->getField<jni::JString>("favouriteTrack");
+      jni::local_ref<jni::JString> favouriteTrack = this->getFieldValue(fieldFavouriteTrack);
+      static const auto fieldPerformanceScores = clazz->getField<jni::JArrayDouble>("performanceScores");
+      jni::local_ref<jni::JArrayDouble> performanceScores = this->getFieldValue(fieldPerformanceScores);
       return Car(
         year,
         make->toStdString(),
@@ -57,7 +64,24 @@ namespace margelo::nitro::test {
         power,
         powertrain->toCpp(),
         driver != nullptr ? std::make_optional(driver->toCpp()) : std::nullopt,
-        isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt
+        [&]() {
+          size_t __size = passengers->size();
+          std::vector<Person> __vector;
+          __vector.reserve(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            auto __element = passengers->getElement(__i);
+            __vector.push_back(__element->toCpp());
+          }
+          return __vector;
+        }(),
+        isFast != nullptr ? std::make_optional(static_cast<bool>(isFast->value())) : std::nullopt,
+        favouriteTrack != nullptr ? std::make_optional(favouriteTrack->toStdString()) : std::nullopt,
+        [&]() {
+          size_t __size = performanceScores->size();
+          std::vector<double> __vector(__size);
+          performanceScores->getRegion(0, __size, __vector.data());
+          return __vector;
+        }()
       );
     }
 
@@ -74,7 +98,23 @@ namespace margelo::nitro::test {
         value.power,
         JPowertrain::fromCpp(value.powertrain),
         value.driver.has_value() ? JPerson::fromCpp(value.driver.value()) : nullptr,
-        value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr
+        [&]() {
+          size_t __size = value.passengers.size();
+          jni::local_ref<jni::JArrayClass<JPerson>> __array = jni::JArrayClass<JPerson>::newArray(__size);
+          for (size_t __i = 0; __i < __size; __i++) {
+            const auto& __element = value.passengers[__i];
+            __array->setElement(__i, *JPerson::fromCpp(__element));
+          }
+          return __array;
+        }(),
+        value.isFast.has_value() ? jni::JBoolean::valueOf(value.isFast.value()) : nullptr,
+        value.favouriteTrack.has_value() ? jni::make_jstring(value.favouriteTrack.value()) : nullptr,
+        [&]() {
+          size_t __size = value.performanceScores.size();
+          jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+          __array->setRegion(0, __size, value.performanceScores.data());
+          return __array;
+        }()
       );
     }
   };

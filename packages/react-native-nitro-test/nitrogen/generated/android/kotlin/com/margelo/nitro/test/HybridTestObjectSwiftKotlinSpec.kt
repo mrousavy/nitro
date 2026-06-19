@@ -11,6 +11,7 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.*
+import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
 /**
  * A Kotlin class representing the TestObjectSwiftKotlin HybridObject.
@@ -166,6 +167,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun sumUpAllPassengers(cars: Array<Car>): String
+  
+  @DoNotStrip
+  @Keep
   abstract fun bounceEnums(array: Array<Powertrain>): Array<Powertrain>
   
   abstract fun complexEnumCallback(array: Array<Powertrain>, callback: (array: Array<Powertrain>) -> Unit): Unit
@@ -220,6 +225,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun tryOptionalEnum(value: Powertrain?): Powertrain?
+  
+  @DoNotStrip
+  @Keep
+  abstract fun tryTrailingOptional(num: Double, str: String, boo: Boolean?): Boolean
   
   @DoNotStrip
   @Keep
@@ -320,6 +329,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return Func_void_double_java(__result)
   }
   
+  abstract fun twoOptionalCallbacks(value: Double, first: ((value: Double) -> Unit)?, second: ((value: String) -> Unit)?): Unit
+  
+  @DoNotStrip
+  @Keep
+  private fun twoOptionalCallbacks_cxx(value: Double, first: Func_void_double?, second: Func_void_std__string?): Unit {
+    val __result = twoOptionalCallbacks(value, first?.let { it }, second?.let { it })
+    return __result
+  }
+  
   abstract fun getValueFromJSCallbackAndWait(getValue: () -> Promise<Double>): Promise<Double>
   
   @DoNotStrip
@@ -357,6 +375,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
   
   @DoNotStrip
   @Keep
@@ -408,6 +430,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun passAllEmptyObjectVariant(variant: Variant_OptionalWrapper_HybridBaseSpec): Variant_OptionalWrapper_HybridBaseSpec
+  
+  @DoNotStrip
+  @Keep
   abstract fun createChild(): HybridChildSpec
   
   @DoNotStrip
@@ -446,10 +472,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun getIsViewBlue(view: HybridTestViewSpec): Boolean
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceExternalHybrid(externalObject: com.margelo.nitro.test.external.HybridSomeExternalObjectSpec): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun createInternalObject(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
   private external fun initHybrid(): HybridData
 
   companion object {
-    private const val TAG = "HybridTestObjectSwiftKotlinSpec"
+    protected const val TAG = "HybridTestObjectSwiftKotlinSpec"
   }
 }

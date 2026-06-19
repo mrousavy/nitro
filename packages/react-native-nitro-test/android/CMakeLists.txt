@@ -21,10 +21,12 @@ include_directories(
 )
 
 find_library(LOG_LIB log)
+find_package(react-native-nitro-test-external REQUIRED)   # <-- for the SomeExternalObject type
 
 # Link all libraries together
 target_link_libraries(
         ${PACKAGE_NAME}
         ${LOG_LIB}
         android                                   # <-- Android core
+        react-native-nitro-test-external::NitroTestExternal
 )

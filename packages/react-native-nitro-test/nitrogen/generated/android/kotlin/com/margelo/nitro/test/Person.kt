@@ -21,7 +21,11 @@ data class Person
   @DoNotStrip
   @Keep
   constructor(
+    @DoNotStrip
+    @Keep
     val name: String,
+    @DoNotStrip
+    @Keep
     val age: Double
   ) {
   /* main constructor */

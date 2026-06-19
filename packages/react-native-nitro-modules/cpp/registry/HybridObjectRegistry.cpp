@@ -76,7 +76,7 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
         "- If you use Nitrogen, make sure your `nitro.json` contains `" +
         hybridObjectName +
         "` on this platform.\n"
-        "- If you use Nitrogen, make sure your library (*Package.java)/app (MainApplication.java) calls "
+        "- If you use Nitrogen, make sure your library (*Package.kt)/app (MainApplication.kt) calls "
         "`$$androidCxxLibName$$OnLoad.initializeNative()` somewhere on app-startup.\n"
         "- If you use Nitrogen, make sure your `cpp-adapter.cpp`/`OnLoad.cpp` calls `margelo::nitro::$$cxxNamespace$$::initialize(vm)`.\n"
         "- If you use Nitrogen, inspect the generated `$$androidCxxLibName$$OnLoad.cpp` file.\n"

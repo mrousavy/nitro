@@ -3,4 +3,5 @@
     "@react-native/typescript-config",
   ],
   "include": ["src", "index.js"],
+  "exclude": ["**/node_modules", "**/Pods"]
 }
