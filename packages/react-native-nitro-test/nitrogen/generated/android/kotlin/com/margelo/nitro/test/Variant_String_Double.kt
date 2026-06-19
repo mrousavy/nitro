@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "String|Double".
+ * Represents the TypeScript variant "String | Double".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -21,6 +21,7 @@ sealed class Variant_String_Double {
   @DoNotStrip
   data class Second(@DoNotStrip val value: Double): Variant_String_Double()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T
@@ -30,6 +31,22 @@ sealed class Variant_String_Double {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): String? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): Double? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> match(first: (String) -> R, second: (Double) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

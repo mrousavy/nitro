@@ -262,7 +262,7 @@ std::chrono::system_clock::time_point HybridTestObjectCpp::currentDate() {
 }
 
 std::variant<std::string, double>
-HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) {
+HybridTestObjectCpp::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
   if (std::holds_alternative<std::string>(either)) {
     return std::get<std::string>(either);
   } else if (std::holds_alternative<double>(either)) {
@@ -272,8 +272,12 @@ HybridTestObjectCpp::passVariant(const std::variant<std::string, double, bool, s
   }
 }
 
-std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>
-HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) {
+std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
+HybridTestObjectCpp::passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) {
+  return variant;
+}
+
+ComplexVariant HybridTestObjectCpp::bounceComplexVariant(const ComplexVariant& variant) {
   return variant;
 }
 
@@ -315,8 +319,8 @@ int64_t HybridTestObjectCpp::calculateFibonacciSync(double value) {
   return calculateFibonacci(value);
 }
 
-std::unordered_map<std::string, std::variant<double, bool>>
-HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) {
+std::unordered_map<std::string, std::variant<bool, double>>
+HybridTestObjectCpp::bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) {
   return map;
 }
 
@@ -429,6 +433,14 @@ std::shared_ptr<Promise<void>> HybridTestObjectCpp::promiseThrows() {
   return Promise<void>::async([=]() { throw std::runtime_error("Promise throws :)"); });
 }
 
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::promiseReturnsInstantly() {
+  return Promise<double>::resolved(55);
+}
+
+std::shared_ptr<Promise<double>> HybridTestObjectCpp::promiseReturnsInstantlyAsync() {
+  return Promise<double>::async([=]() { return 55; });
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();
@@ -475,9 +487,18 @@ OptionalWrapper HybridTestObjectCpp::bounceOptionalWrapper(const OptionalWrapper
   return wrapper;
 }
 
+OptionalCallback HybridTestObjectCpp::bounceOptionalCallback(const OptionalCallback& value) {
+  return value;
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBufferFromNativeBuffer(bool /* copy */) {
-  // On C++, we are already using a "native" buffer.
-  return createArrayBuffer();
+  // Let's just use the move method here for native buffer to test this too.
+  std::vector<uint8_t> data;
+  data.resize(1024 * 1024 * 10); // 10 MB
+  for (size_t i = 0; i < data.size(); i++) {
+    data[i] = i % 255;
+  }
+  return ArrayBuffer::move(std::move(data));
 }
 
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {

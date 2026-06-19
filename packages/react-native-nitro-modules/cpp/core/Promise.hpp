@@ -270,153 +270,48 @@ public:
 
 public:
   Promise(const Promise&) = delete;
+  Promise(Promise&&) = delete;
+  ~Promise();
 
 private:
   Promise() = default;
 
 public:
-  ~Promise() {
-    if (isPending()) [[unlikely]] {
-      std::runtime_error error("Timeouted: Promise<void> was destroyed!");
-      reject(std::make_exception_ptr(error));
-    }
-  }
+  static std::shared_ptr<Promise> create();
+  static std::shared_ptr<Promise> async(std::function<void()>&& run);
+  static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future);
+  static std::shared_ptr<Promise> resolved();
+  static std::shared_ptr<Promise> rejected(const std::exception_ptr& error);
 
 public:
-  static std::shared_ptr<Promise> create() {
-    return std::shared_ptr<Promise>(new Promise());
-  }
-
-  static std::shared_ptr<Promise> async(std::function<void()>&& run) {
-    auto promise = create();
-    ThreadPool::shared().run([run = std::move(run), promise]() {
-      try {
-        // Run the code, then resolve.
-        run();
-        promise->resolve();
-      } catch (...) {
-        // It threw an error.
-        promise->reject(std::current_exception());
-      }
-    });
-    return promise;
-  }
-
-  static std::shared_ptr<Promise> awaitFuture(std::future<void>&& future) {
-    auto sharedFuture = std::make_shared<std::future<void>>(std::move(future));
-    return async([sharedFuture = std::move(sharedFuture)]() { sharedFuture->get(); });
-  }
-
-  static std::shared_ptr<Promise> resolved() {
-    auto promise = create();
-    promise->resolve();
-    return promise;
-  }
-  static std::shared_ptr<Promise> rejected(const std::exception_ptr& error) {
-    auto promise = create();
-    promise->reject(error);
-    return promise;
-  }
+  void resolve();
+  void reject(const std::exception_ptr& exception);
 
 public:
-  void resolve() {
-    std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
-    _isResolved = true;
-    for (const auto& onResolved : _onResolvedListeners) {
-      onResolved();
-    }
-    didFinish();
-  }
-  void reject(const std::exception_ptr& exception) {
-    if (exception == nullptr) [[unlikely]] {
-      throw std::runtime_error("Cannot reject Promise<void> with a null exception_ptr!");
-    }
-
-    std::unique_lock lock(_mutex);
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
-    _error = exception;
-    for (const auto& onRejected : _onRejectedListeners) {
-      onRejected(exception);
-    }
-    didFinish();
-  }
+  void addOnResolvedListener(OnResolvedFunc&& onResolved);
+  void addOnResolvedListener(const OnResolvedFunc& onResolved);
+  void addOnRejectedListener(OnRejectedFunc&& onRejected);
+  void addOnRejectedListener(const OnRejectedFunc& onRejected);
 
 public:
-  void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    std::unique_lock lock(_mutex);
-    if (_isResolved) {
-      onResolved();
-    } else {
-      _onResolvedListeners.push_back(std::move(onResolved));
-    }
-  }
-  void addOnResolvedListener(const OnResolvedFunc& onResolved) {
-    std::unique_lock lock(_mutex);
-    if (_isResolved) {
-      onResolved();
-    } else {
-      _onResolvedListeners.push_back(onResolved);
-    }
-  }
-  void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::unique_lock lock(_mutex);
-    if (_error) {
-      onRejected(_error);
-    } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(std::move(onRejected));
-    }
-  }
-  void addOnRejectedListener(const OnRejectedFunc& onRejected) {
-    std::unique_lock lock(_mutex);
-    if (_error) {
-      onRejected(_error);
-    } else {
-      // Promise is not yet rejected, put the listener in our queue.
-      _onRejectedListeners.push_back(onRejected);
-    }
-  }
+  std::future<void> await();
 
 public:
-  std::future<void> await() {
-    auto promise = std::make_shared<std::promise<void>>();
-    addOnResolvedListener([promise]() { promise->set_value(); });
-    addOnRejectedListener([promise](const std::exception_ptr& error) { promise->set_exception(error); });
-    return promise->get_future();
-  }
+  const std::exception_ptr& getError();
 
 public:
-  inline const std::exception_ptr& getError() {
-    if (!isRejected()) {
-      throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
-    }
-    return _error;
-  }
-
-public:
-  [[nodiscard]]
   inline bool isResolved() const noexcept {
     return _isResolved;
   }
-  [[nodiscard]]
   inline bool isRejected() const noexcept {
     return _error != nullptr;
   }
-  [[nodiscard]]
   inline bool isPending() const noexcept {
     return !isResolved() && !isRejected();
   }
 
 private:
-  void didFinish() noexcept {
-    _onResolvedListeners.clear();
-    _onRejectedListeners.clear();
-  }
+  void didFinish() noexcept;
 
 private:
   std::mutex _mutex;

@@ -23,18 +23,16 @@ namespace margelo::nitro::test { enum class OldEnum; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -67,6 +65,7 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 #include "JsStyleStruct.hpp"
 #include "WrappedJsStruct.hpp"
 #include "OptionalWrapper.hpp"
+#include "OptionalCallback.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
@@ -131,7 +130,7 @@ namespace margelo::nitro::test {
     public:
       // Methods
       virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
-      virtual std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> getVariantHybrid(const std::variant<Person, std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& variant) = 0;
+      virtual std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
       virtual std::string addStrings(const std::string& a, const std::string& b) = 0;
@@ -145,7 +144,7 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;
-      virtual std::unordered_map<std::string, std::variant<double, bool>> bounceMap(const std::unordered_map<std::string, std::variant<double, bool>>& map) = 0;
+      virtual std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) = 0;
       virtual std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() = 0;
@@ -160,6 +159,8 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<Promise<int64_t>> calculateFibonacciAsync(double value) = 0;
       virtual std::shared_ptr<Promise<void>> wait(double seconds) = 0;
       virtual std::shared_ptr<Promise<void>> promiseThrows() = 0;
+      virtual std::shared_ptr<Promise<double>> promiseReturnsInstantly() = 0;
+      virtual std::shared_ptr<Promise<double>> promiseReturnsInstantlyAsync() = 0;
       virtual std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) = 0;
       virtual std::shared_ptr<Promise<Car>> awaitAndGetComplexPromise(const std::shared_ptr<Promise<Car>>& promise) = 0;
       virtual std::shared_ptr<Promise<void>> awaitPromise(const std::shared_ptr<Promise<void>>& promise) = 0;
@@ -179,6 +180,7 @@ namespace margelo::nitro::test {
       virtual void jsStyleObjectAsParameters(const JsStyleStruct& params) = 0;
       virtual WrappedJsStruct bounceWrappedJsStyleStruct(const WrappedJsStruct& value) = 0;
       virtual OptionalWrapper bounceOptionalWrapper(const OptionalWrapper& wrapper) = 0;
+      virtual OptionalCallback bounceOptionalCallback(const OptionalCallback& value) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
       virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
@@ -186,12 +188,13 @@ namespace margelo::nitro::test {
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
-      virtual std::variant<std::string, double> passVariant(const std::variant<std::string, double, bool, std::vector<double>, std::vector<std::string>>& either) = 0;
+      virtual std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) = 0;
       virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
       virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
       virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
-      virtual std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>> passAllEmptyObjectVariant(const std::variant<OptionalWrapper, std::shared_ptr<HybridBaseSpec>>& variant) = 0;
+      virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;
+      virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::chrono::system_clock::time_point, std::shared_ptr<Promise<double>>, std::shared_ptr<AnyMap>>& variant) = 0;
       virtual std::shared_ptr<HybridChildSpec> createChild() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBase() = 0;
       virtual std::shared_ptr<HybridBaseSpec> createBaseActualChild() = 0;

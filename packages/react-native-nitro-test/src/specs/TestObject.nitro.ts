@@ -69,6 +69,10 @@ export interface OptionalWrapper {
   optionalString?: string
 }
 
+interface OptionalCallback {
+  callback?: (() => void) | number
+}
+
 interface SecondMapWrapper {
   second: Record<string, string>
 }
@@ -81,6 +85,14 @@ export type CustomString = CustomType<
   'CustomString',
   { include: 'CustomString.hpp' }
 >
+
+type CoreTypesVariant =
+  | ArrayBuffer
+  | Promise<number>
+  | ((value: number) => void)
+  | WrappedJsStruct
+  | Date
+  | AnyMap
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -150,6 +162,8 @@ interface SharedTestObjectProps {
   calculateFibonacciAsync(value: number): Promise<bigint>
   wait(seconds: number): Promise<void>
   promiseThrows(): Promise<void>
+  promiseReturnsInstantly(): Promise<number>
+  promiseReturnsInstantlyAsync(): Promise<number>
 
   // Complex Promises
   awaitAndGetPromise(promise: Promise<number>): Promise<number>
@@ -189,6 +203,7 @@ interface SharedTestObjectProps {
   jsStyleObjectAsParameters(params: JsStyleStruct): void
   bounceWrappedJsStyleStruct(value: WrappedJsStruct): WrappedJsStruct
   bounceOptionalWrapper(wrapper: OptionalWrapper): OptionalWrapper
+  bounceOptionalCallback(value: OptionalCallback): OptionalCallback
 
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
@@ -212,6 +227,7 @@ interface SharedTestObjectProps {
   passAllEmptyObjectVariant(
     variant: OptionalWrapper | Base
   ): OptionalWrapper | Base
+  bounceComplexVariant(variant: CoreTypesVariant): CoreTypesVariant
 
   // Inheritance
   createChild(): Child

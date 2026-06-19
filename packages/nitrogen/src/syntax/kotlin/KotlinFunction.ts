@@ -23,6 +23,7 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
   const extraImports = functionType
     .getRequiredImports('kotlin')
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -32,7 +33,6 @@ package ${packageName}
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 import dalvik.annotation.optimization.FastNative
 ${extraImports.join('\n')}
 

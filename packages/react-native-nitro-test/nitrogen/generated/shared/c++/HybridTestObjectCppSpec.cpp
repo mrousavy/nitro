@@ -77,6 +77,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("calculateFibonacciAsync", &HybridTestObjectCppSpec::calculateFibonacciAsync);
       prototype.registerHybridMethod("wait", &HybridTestObjectCppSpec::wait);
       prototype.registerHybridMethod("promiseThrows", &HybridTestObjectCppSpec::promiseThrows);
+      prototype.registerHybridMethod("promiseReturnsInstantly", &HybridTestObjectCppSpec::promiseReturnsInstantly);
+      prototype.registerHybridMethod("promiseReturnsInstantlyAsync", &HybridTestObjectCppSpec::promiseReturnsInstantlyAsync);
       prototype.registerHybridMethod("awaitAndGetPromise", &HybridTestObjectCppSpec::awaitAndGetPromise);
       prototype.registerHybridMethod("awaitAndGetComplexPromise", &HybridTestObjectCppSpec::awaitAndGetComplexPromise);
       prototype.registerHybridMethod("awaitPromise", &HybridTestObjectCppSpec::awaitPromise);
@@ -96,6 +98,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("jsStyleObjectAsParameters", &HybridTestObjectCppSpec::jsStyleObjectAsParameters);
       prototype.registerHybridMethod("bounceWrappedJsStyleStruct", &HybridTestObjectCppSpec::bounceWrappedJsStyleStruct);
       prototype.registerHybridMethod("bounceOptionalWrapper", &HybridTestObjectCppSpec::bounceOptionalWrapper);
+      prototype.registerHybridMethod("bounceOptionalCallback", &HybridTestObjectCppSpec::bounceOptionalCallback);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectCppSpec::createArrayBufferFromNativeBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectCppSpec::copyBuffer);
@@ -109,6 +112,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);
       prototype.registerHybridMethod("passAllEmptyObjectVariant", &HybridTestObjectCppSpec::passAllEmptyObjectVariant);
+      prototype.registerHybridMethod("bounceComplexVariant", &HybridTestObjectCppSpec::bounceComplexVariant);
       prototype.registerHybridMethod("createChild", &HybridTestObjectCppSpec::createChild);
       prototype.registerHybridMethod("createBase", &HybridTestObjectCppSpec::createBase);
       prototype.registerHybridMethod("createBaseActualChild", &HybridTestObjectCppSpec::createBaseActualChild);

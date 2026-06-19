@@ -60,7 +60,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JWrappedJsStruct::javaobject> fromCpp(const WrappedJsStruct& value) {
-      return newInstance(
+      using JSignature = JWrappedJsStruct(jni::alias_ref<JJsStyleStruct>, jni::alias_ref<jni::JArrayClass<JJsStyleStruct>>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         JJsStyleStruct::fromCpp(value.value),
         [&]() {
           size_t __size = value.items.size();

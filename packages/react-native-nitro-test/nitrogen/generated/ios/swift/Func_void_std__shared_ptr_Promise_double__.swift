@@ -6,7 +6,7 @@
 ///
 
 import NitroModules
-
+import NitroModules
 
 /**
  * Wraps a Swift `(_ value: Promise<Double>) -> Void` as a class.

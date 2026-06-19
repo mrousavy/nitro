@@ -11,7 +11,7 @@ import com.facebook.proguard.annotations.DoNotStrip
 
 
 /**
- * Represents the TypeScript variant "Boolean|OldEnum".
+ * Represents the TypeScript variant "Boolean | OldEnum".
  */
 @Suppress("ClassName")
 @DoNotStrip
@@ -21,6 +21,7 @@ sealed class Variant_Boolean_OldEnum {
   @DoNotStrip
   data class Second(@DoNotStrip val value: OldEnum): Variant_Boolean_OldEnum()
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     is First -> value as? T
     is Second -> value as? T
@@ -30,6 +31,22 @@ sealed class Variant_Boolean_OldEnum {
     get() = this is First
   val isSecond: Boolean
     get() = this is Second
+
+  fun asFirstOrNull(): Boolean? {
+    val value = (this as? First)?.value ?: return null
+    return value
+  }
+  fun asSecondOrNull(): OldEnum? {
+    val value = (this as? Second)?.value ?: return null
+    return value
+  }
+
+  inline fun <R> match(first: (Boolean) -> R, second: (OldEnum) -> R): R {
+    return when (this) {
+      is First -> first(value)
+      is Second -> second(value)
+    }
+  }
 
   companion object {
     @JvmStatic

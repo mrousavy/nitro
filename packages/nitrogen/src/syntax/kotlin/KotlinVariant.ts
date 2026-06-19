@@ -7,19 +7,25 @@ import {
   toReferenceType,
 } from '../helpers.js'
 import type { SourceFile } from '../SourceFile.js'
+import { OptionalType } from '../types/OptionalType.js'
 import { type VariantType } from '../types/VariantType.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
 
 export function createKotlinVariant(variant: VariantType): SourceFile[] {
-  const jsName = variant.variants.map((v) => v.getCode('kotlin')).join('|')
+  const jsName = variant.variants.map((v) => v.getCode('kotlin')).join(' | ')
+  const cxxName = variant
+    .getCode('c++')
+    .replaceAll('/* ', '')
+    .replaceAll(' */', '')
   const kotlinName = variant.getAliasName('kotlin')
   const namespace = `J${kotlinName}_impl`
 
   const innerClasses = variant.cases.map(([label, v]) => {
     const innerName = capitalizeName(label)
+    const bridge = new KotlinCxxBridgedType(v)
     return `
 @DoNotStrip
-data class ${innerName}(@DoNotStrip val value: ${v.getCode('kotlin')}): ${kotlinName}()
+data class ${innerName}(@DoNotStrip val value: ${bridge.getTypeCode('kotlin')}): ${kotlinName}()
       `.trim()
   })
 
@@ -35,19 +41,42 @@ val is${innerName}: Boolean
   get() = this is ${innerName}
     `.trim()
   })
+  const asFunctions = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
+    const bridge = new KotlinCxxBridgedType(v)
+    const optional = new OptionalType(v)
+    return `
+fun as${innerName}OrNull(): ${optional.getCode('kotlin')} {
+  val value = (this as? ${innerName})?.value ?: return null
+  return ${bridge.parseFromCppToKotlin('value', 'kotlin')}
+}
+    `.trim()
+  })
+  const matchParameters = variant.cases.map(([label, v]) => {
+    return `${label}: (${v.getCode('kotlin')}) -> R`
+  })
+  const matchCases = variant.cases.map(([label, v]) => {
+    const innerName = capitalizeName(label)
+    const bridge = new KotlinCxxBridgedType(v)
+    return `
+is ${innerName} -> ${label}(${bridge.parseFromCppToKotlin('value', 'kotlin')})
+    `.trim()
+  })
 
   const createFunctions = variant.cases.map(([label, v]) => {
+    const bridge = new KotlinCxxBridgedType(v)
     const innerName = capitalizeName(label)
     return `
 @JvmStatic
 @DoNotStrip
-fun create(value: ${v.getCode('kotlin')}): ${kotlinName} = ${innerName}(value)
-    `.trim()
+fun create(value: ${bridge.getTypeCode('kotlin')}): ${kotlinName} = ${innerName}(${bridge.parseFromCppToKotlin('value', 'kotlin')})
+`.trim()
   })
 
   const extraImports = variant.variants
     .flatMap((t) => t.getRequiredImports('kotlin'))
     .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const code = `
 ${createFileMetadataString(`${kotlinName}.kt`)}
@@ -65,11 +94,20 @@ ${extraImports.join('\n')}
 sealed class ${kotlinName} {
   ${indent(innerClasses.join('\n'), '  ')}
 
+  @Deprecated("getAs() is not type-safe. Use fold/asFirstOrNull/asSecondOrNull instead.", level = DeprecationLevel.ERROR)
   inline fun <reified T> getAs(): T? = when (this) {
     ${indent(getterCases.join('\n'), '    ')}
   }
 
   ${indent(isFunctions.join('\n'), '  ')}
+
+  ${indent(asFunctions.join('\n'), '  ')}
+
+  inline fun <R> match(${matchParameters.join(', ')}): R {
+    return when (this) {
+      ${indent(matchCases.join('\n'), '      ')}
+    }
+  }
 
   companion object {
     ${indent(createFunctions.join('\n'), '    ')}
@@ -177,7 +215,7 @@ ${createFileMetadataString(`J${kotlinName}.cpp`)}
 
 namespace ${cxxNamespace} {
   /**
-   * Converts J${kotlinName} to ${variant.getCode('c++')}
+   * Converts J${kotlinName} to ${cxxName}
    */
   ${variant.getCode('c++')} J${kotlinName}::toCpp() const {
     ${indent(cppGetIfs.join(' else '), '    ')}

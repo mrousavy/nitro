@@ -76,7 +76,9 @@ class ArrayBuffer {
    * the foreign data needs to be either _wrapped_, or _copied_ to be represented as a `ByteBuffer`.
    * This flag controls that behaviour.
    */
-  fun getBuffer(copyIfNeeded: Boolean): ByteBuffer = getByteBuffer(copyIfNeeded)
+  fun getBuffer(copyIfNeeded: Boolean): ByteBuffer {
+    return getByteBuffer(copyIfNeeded)
+  }
 
   /**
    * Get the underlying `HardwareBuffer` if this `ArrayBuffer` was created with one.
@@ -89,10 +91,46 @@ class ArrayBuffer {
   }
 
   /**
+   * Copies the underlying data into a `ByteArray`.
+   * If this `ArrayBuffer` is backed by a GPU-HardwareBuffer,
+   * this performs a GPU-download.
+   */
+  fun toByteArray(): ByteArray {
+    val buffer = this.getBuffer(false)
+    if (buffer.hasArray()) {
+      // It's a CPU-backed array - we can return this directly if the size matches
+      val array = buffer.array()
+      if (array.size == this.size) {
+        // The ByteBuffer is 1:1 mapped to a byte array - return as is!
+        return array
+      }
+      // we had a CPU-backed array, but it's size differs from our ArrayBuffer size.
+      // This might be because the ArrayBuffer has a smaller view of the data, so we need
+      // to resort back to a good ol' copy.
+    }
+    // It's not a 1:1 mapped array (e.g. HardwareBuffer) - we need to copy to the CPU
+    val copy = ByteBuffer.allocate(buffer.capacity())
+    copy.put(buffer)
+    return copy.array()
+  }
+
+  /**
+   * Returns an **owning** version of this `ArrayBuffer`.
+   * If this `ArrayBuffer` already is **owning**, it is returned as-is.
+   * If this `ArrayBuffer` is **non-owning**, it is _copied_.
+   */
+  fun asOwning(): ArrayBuffer {
+    if (!isOwner) {
+      return ArrayBuffer.copy(this)
+    }
+    return this
+  }
+
+  /**
    * Create a new **owning-** `ArrayBuffer` that holds the given `ByteBuffer`.
    * The `ByteBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
    */
-  constructor(byteBuffer: ByteBuffer) {
+  internal constructor(byteBuffer: ByteBuffer) {
     if (!byteBuffer.isDirect) {
       throw Error(
         "ArrayBuffers can only be created from direct ByteBuffers, " +
@@ -107,7 +145,7 @@ class ArrayBuffer {
    * The `HardwareBuffer` needs to remain valid for as long as the `ArrayBuffer` is alive.
    */
   @RequiresApi(Build.VERSION_CODES.O)
-  constructor(hardwareBuffer: HardwareBuffer) {
+  internal constructor(hardwareBuffer: HardwareBuffer) {
     if (hardwareBuffer.isClosed) {
       throw Error("Cannot create ArrayBuffer from an already-closed HardwareBuffer!")
     }
@@ -186,6 +224,15 @@ class ArrayBuffer {
     }
 
     /**
+     * Copy the given `ByteArray` into a new **owning** `ArrayBuffer`.
+     */
+    fun copy(byteArray: ByteArray): ArrayBuffer {
+      val byteBuffer = ByteBuffer.allocateDirect(byteArray.size)
+      byteBuffer.put(byteArray)
+      return ArrayBuffer.wrap(byteBuffer)
+    }
+
+    /**
      * Copy the given `HardwareBuffer` into a new **owning** `ArrayBuffer`.
      */
     @RequiresApi(Build.VERSION_CODES.O)
@@ -206,6 +253,8 @@ class ArrayBuffer {
      * Wrap the given `HardwareBuffer` in a new **owning** `ArrayBuffer`.
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer = ArrayBuffer(hardwareBuffer)
+    fun wrap(hardwareBuffer: HardwareBuffer): ArrayBuffer {
+      return ArrayBuffer(hardwareBuffer)
+    }
   }
 }

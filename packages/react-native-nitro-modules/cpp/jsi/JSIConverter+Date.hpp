@@ -63,8 +63,7 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
     auto msSinceEpoch = static_cast<double>(ms);
 
     // TODO: Cache this
-    jsi::Object global = runtime.global();
-    jsi::Function dateCtor = global.getPropertyAsFunction(runtime, "Date");
+    jsi::Function dateCtor = runtime.global().getPropertyAsFunction(runtime, "Date");
 
     jsi::Value jsDate = dateCtor.callAsConstructor(runtime, {jsi::Value(msSinceEpoch)});
     return jsDate;
@@ -73,7 +72,9 @@ struct JSIConverter<std::chrono::system_clock::time_point> final {
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
     if (value.isObject()) {
       jsi::Object object = value.getObject(runtime);
-      return object.hasProperty(runtime, "valueOf");
+
+      jsi::Function dateCtor = runtime.global().getPropertyAsFunction(runtime, "Date");
+      return object.instanceOf(runtime, dateCtor);
     }
     return false;
   }

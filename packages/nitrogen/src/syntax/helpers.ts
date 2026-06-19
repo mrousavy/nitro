@@ -3,6 +3,7 @@ import type { SourceFile } from './SourceFile.js'
 import type { Type } from './types/Type.js'
 import { getTypeAs } from './types/getTypeAs.js'
 import { OptionalType } from './types/OptionalType.js'
+import { ArrayType } from './types/ArrayType.js'
 
 type Comment = '///' | '#'
 
@@ -48,6 +49,105 @@ export function escapeCppName(string: string): string {
   }
 
   return escapedStr
+}
+
+/**
+ * Get a type's "looselyness".
+ * The concept is as follows:
+ * - If a `type` is easy to runtime-check in JSI (e.g. a `number` is just `.isNumber()`),
+ * it should have a very low looselyness value returned here.
+ * - If a `type` is hard to runtime-check in JSI (e.g. `AnyMap` can have any key),
+ * it should have a very high looselyness value returned here.
+ * - Type's looselyness values are compared against each other to determine in which
+ * order they should be runtime type-checked - e.g. `AnyMap` should be last (as it can
+ * always be `true` if it's just an `object`), and `Promise` should be sooner (as it can
+ * be `instanceof` checked)
+ * - As a performance optimization, rank faster checks earlier (e.g. `isNumber()` before
+ * `instanceof`, as `instanceof` requires global constructor lookup)
+ */
+function getTypeLooselyness(type: Type): number {
+  switch (type.kind) {
+    case 'array-buffer':
+      // We have `.isArrayBuffer()`
+      return 0
+    case 'bigint':
+      // We have `.isBigInt()`
+      return 0
+    case 'boolean':
+      // We have `.isBool()`
+      return 0
+    case 'null':
+      // We have `isNull()`
+      return 0
+    case 'number':
+      // We have `isNumber()` (but it can also be an enum)
+      return 1
+    case 'optional':
+      // We have `isUndefined()`
+      return 0
+    case 'function':
+      // We have `.isFunction()`
+      return 0
+    case 'string':
+      // We have `.isString()` (but it can also be a union)
+      return 1
+    case 'enum':
+      // We have `.isNumber()` or `.isString()` and is within range, only
+      // if it's not within range, it can fallback to `string` or `number`
+      return 0
+    case 'array':
+      // We have `.isArray()` - but it should extend the item type's looselyness
+      const arrayType = getTypeAs(type, ArrayType)
+      return 0.5 * getTypeLooselyness(arrayType.itemType)
+    case 'hybrid-object':
+      // We have `getNativeState<T>()`
+      return 0
+    case 'hybrid-object-base':
+      // We have `getNativeState<HybridObject>()`
+      return 1
+    case 'tuple':
+      // We have `.isArray()` and `canConvert<T>()`
+      return 1
+    case 'date':
+      // We have `instanceof Date`
+      return 2
+    case 'error':
+      // We have `instanceof Error`
+      return 2
+    case 'promise':
+      // We have `instanceof Promise`
+      return 2
+    case 'custom-type':
+      // Up to the user
+      return 1
+    case 'record':
+      // Super loose, only type counts
+      return 3
+    case 'map':
+      // This is just super loose
+      return 4
+    case 'struct':
+      // We check each property individually
+      return 1
+    case 'variant':
+      // Pretty loose
+      return 2
+    case 'result-wrapper':
+      // Not loose at all
+      return 0
+    case 'void':
+      // Not a type
+      return 0
+  }
+}
+
+/**
+ * Compares the "looselyness" of the types.
+ * Returns a positive number if {@linkcode a} is more loose than {@linkcode b},
+ * and a negative number if otherwise.
+ */
+export function compareLooselyness(a: Type, b: Type): number {
+  return getTypeLooselyness(a) - getTypeLooselyness(b)
 }
 
 export function isBooleanPropertyPrefix(name: string): boolean {

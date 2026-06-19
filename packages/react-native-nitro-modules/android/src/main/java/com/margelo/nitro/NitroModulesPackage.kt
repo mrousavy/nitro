@@ -10,15 +10,16 @@ class NitroModulesPackage : TurboReactPackage() {
   override fun getModule(
     name: String,
     reactContext: ReactApplicationContext,
-  ): NativeModule? =
-    if (name == NitroModules.NAME) {
+  ): NativeModule? {
+    return if (name == NitroModules.NAME) {
       NitroModules(reactContext)
     } else {
       null
     }
+  }
 
-  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider =
-    ReactModuleInfoProvider {
+  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
+    return ReactModuleInfoProvider {
       val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
       val isTurboModule: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
       moduleInfos[NitroModules.NAME] =
@@ -33,4 +34,5 @@ class NitroModulesPackage : TurboReactPackage() {
         )
       moduleInfos
     }
+  }
 }

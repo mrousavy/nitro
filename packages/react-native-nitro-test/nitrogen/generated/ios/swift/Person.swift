@@ -22,24 +22,38 @@ public extension Person {
     self.init(std.string(name), age)
   }
 
+  private var self.__cache__name String? = nil
   var name: String {
     @inline(__always)
-    get {
-      return String(self.__name)
+    mutating get {
+      if let self.__cache__name {
+        return self.__cache__name
+      }
+      let __result = String(self.__name)
+      self.__cache__name = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__name = newValue
       self.__name = std.string(newValue)
     }
   }
   
+  private var self.__cache__age Double? = nil
   var age: Double {
     @inline(__always)
-    get {
-      return self.__age
+    mutating get {
+      if let self.__cache__age {
+        return self.__cache__age
+      }
+      let __result = self.__age
+      self.__cache__age = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__age = newValue
       self.__age = newValue
     }
   }

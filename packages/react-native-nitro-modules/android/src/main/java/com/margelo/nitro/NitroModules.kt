@@ -1,5 +1,6 @@
 package com.margelo.nitro
 
+import android.util.Log
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
@@ -23,7 +24,9 @@ class NitroModules internal constructor(
     applicationContext = context
   }
 
-  override fun getName(): String = NAME
+  override fun getName(): String {
+    return NAME
+  }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   override fun install(): String? {
@@ -44,6 +47,7 @@ class NitroModules internal constructor(
       return null
     } catch (e: Throwable) {
       // ?. Something went wrong! Maybe a JNI error?
+      Log.e(NAME, "Failed to install Nitro!", e)
       return e.message
     }
   }

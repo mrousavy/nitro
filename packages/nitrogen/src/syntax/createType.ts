@@ -43,6 +43,7 @@ import {
   isRecord,
 } from './isCoreType.js'
 import { getCustomTypeConfig } from './getCustomTypeConfig.js'
+import { compareLooselyness } from './helpers.js'
 
 function getHybridObjectName(type: TSMorphType): string {
   const symbol = isHybridView(type) ? type.getAliasSymbol() : type.getSymbol()
@@ -189,8 +190,17 @@ export function createType(
       return new BooleanType()
     } else if (type.isNumber() || type.isNumberLiteral()) {
       if (type.isEnumLiteral()) {
-        // enum literals are technically just numbers - but we treat them differently in C++.
-        return createType(language, type.getBaseTypeOfLiteralType(), isOptional)
+        // An enum is just a number, that's why it's a number literal.
+        // Get the base of the literal, which would be our enum's definition.
+        const baseType = type.getBaseTypeOfLiteralType()
+        if (!baseType.isEnum()) {
+          // The base of the literal is not the enum definition, we need to throw.
+          throw new Error(
+            `The enum "${type.getLiteralValue()}" (${type.getText()}) is either a single-value-enum, or an enum-literal. Use a separately defined enum with at least 2 cases instead!`
+          )
+        }
+        // Call createType(...) now with the enum type.
+        return createType(language, baseType, isOptional)
       }
       return new NumberType()
     } else if (type.isString()) {
@@ -293,6 +303,7 @@ export function createType(
           // Filter out any nulls or undefineds, as those are already treated as `isOptional`.
           .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
           .map((t) => createType(language, t, false))
+          .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
 
         if (variants.length === 1) {

@@ -47,13 +47,8 @@ if (__DEV__) {
   }
 }
 
-declare global {
-  var __nitroModulesJSICache: {}
-  var __nitroDispatcher: {}
-}
-
 export function isRuntimeAlive() {
-  const cache = globalThis.__nitroModulesJSICache
+  const cache = globalThis.__nitroJsiCache
   const dispatcher = globalThis.__nitroDispatcher
   return cache != null && dispatcher != null
 }

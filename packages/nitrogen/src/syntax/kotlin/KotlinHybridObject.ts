@@ -6,7 +6,7 @@ import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { HybridObjectSpec } from '../HybridObjectSpec.js'
 import { Method } from '../Method.js'
 import { Property } from '../Property.js'
-import type { SourceFile } from '../SourceFile.js'
+import type { SourceFile, SourceImport } from '../SourceFile.js'
 import { HybridObjectType } from '../types/HybridObjectType.js'
 import { createFbjniHybridObject } from './FbjniHybridObject.js'
 import { KotlinCxxBridgedType } from './KotlinCxxBridgedType.js'
@@ -20,13 +20,26 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     .map((m) => getMethodForwardImplementation(m))
     .join('\n\n')
 
-  const extraImports = [
+  const extraImports: SourceImport[] = [
     ...spec.properties.flatMap((p) => p.getRequiredImports('kotlin')),
     ...spec.methods.flatMap((m) => m.getRequiredImports('kotlin')),
     ...spec.baseTypes.flatMap((b) =>
       new HybridObjectType(b).getRequiredImports('kotlin')
     ),
   ]
+  if (spec.isHybridView) {
+    extraImports.push({
+      name: 'com.margelo.nitro.views.HybridView',
+      space: 'system',
+      language: 'kotlin',
+    })
+  } else {
+    extraImports.push({
+      name: 'com.margelo.nitro.core.HybridObject',
+      space: 'system',
+      language: 'kotlin',
+    })
+  }
 
   let kotlinBase = spec.isHybridView ? 'HybridView' : 'HybridObject'
   if (spec.baseTypes.length > 0) {
@@ -40,14 +53,9 @@ export function createKotlinHybridObject(spec: HybridObjectSpec): SourceFile[] {
     kotlinBase = baseHybrid.getCode('kotlin')
   }
 
-  const imports: string[] = []
-  imports.push('import com.margelo.nitro.core.*')
-  if (spec.isHybridView) {
-    imports.push('import com.margelo.nitro.views.*')
-  }
-  imports.push(
-    ...extraImports.map((i) => `import ${i.name}`).filter(isNotDuplicate)
-  )
+  const imports = extraImports
+    .map((i) => `import ${i.name}`)
+    .filter(isNotDuplicate)
 
   const javaPackage = spec.config.getAndroidPackage('java/kotlin')
 

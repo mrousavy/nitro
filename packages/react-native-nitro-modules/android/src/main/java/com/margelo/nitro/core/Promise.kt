@@ -87,11 +87,12 @@ class Promise<T> {
    * otherwise it will asynchronously wait for a result or throw on a rejection.
    * This function can only be used from a coroutine context.
    */
-  suspend fun await(): T =
-    suspendCoroutine { continuation ->
+  suspend fun await(): T {
+    return suspendCoroutine { continuation ->
       then { result -> continuation.resume(result) }
       catch { error -> continuation.resumeWithException(error) }
     }
+  }
 
   // C++ functions
   private external fun nativeResolve(result: Any)
@@ -174,11 +175,15 @@ class Promise<T> {
     /**
      * Creates a new Promise that is already resolved with the given result.
      */
-    fun <T> resolved(result: T): Promise<T> = Promise<T>().apply { resolve(result) }
+    fun <T> resolved(result: T): Promise<T> {
+      return Promise<T>().apply { resolve(result) }
+    }
 
     /**
      * Creates a new Promise that is already rejected with the given error.
      */
-    fun <T> rejected(error: Throwable): Promise<T> = Promise<T>().apply { reject(error) }
+    fun <T> rejected(error: Throwable): Promise<T> {
+      return Promise<T>().apply { reject(error) }
+    }
   }
 }

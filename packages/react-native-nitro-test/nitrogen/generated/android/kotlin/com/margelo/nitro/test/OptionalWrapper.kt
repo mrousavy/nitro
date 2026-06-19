@@ -9,24 +9,31 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
-
+import com.margelo.nitro.core.ArrayBuffer
 
 /**
  * Represents the JavaScript object/struct "OptionalWrapper".
  */
 @DoNotStrip
 @Keep
-data class OptionalWrapper
+data class OptionalWrapper(
   @DoNotStrip
   @Keep
-  constructor(
+  val optionalArrayBuffer: ArrayBuffer?,
+  @DoNotStrip
+  @Keep
+  val optionalString: String?
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val optionalArrayBuffer: ArrayBuffer?,
-    @DoNotStrip
-    @Keep
-    val optionalString: String?
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(optionalArrayBuffer: ArrayBuffer?, optionalString: String?): OptionalWrapper {
+      return OptionalWrapper(optionalArrayBuffer, optionalString)
+    }
+  }
 }

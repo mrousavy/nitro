@@ -9,7 +9,6 @@ package com.margelo.nitro.test
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.*
 
 
 /**
@@ -17,13 +16,21 @@ import com.margelo.nitro.core.*
  */
 @DoNotStrip
 @Keep
-data class SecondMapWrapper
+data class SecondMapWrapper(
   @DoNotStrip
   @Keep
-  constructor(
+  val second: Map<String, String>
+) {
+  private companion object {
+    /**
+     * Constructor called from C++
+     */
     @DoNotStrip
     @Keep
-    val second: Map<String, String>
-  ) {
-  /* main constructor */
+    @Suppress("unused")
+    @JvmStatic
+    private fun fromCpp(second: Map<String, String>): SecondMapWrapper {
+      return SecondMapWrapper(second)
+    }
+  }
 }

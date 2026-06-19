@@ -47,7 +47,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JPerson::javaobject> fromCpp(const Person& value) {
-      return newInstance(
+      using JSignature = JPerson(jni::alias_ref<jni::JString>, double);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         jni::make_jstring(value.name),
         value.age
       );

@@ -6,7 +6,7 @@
 ///
 
 import NitroModules
-
+import NitroModules
 
 /**
  * Wraps a Swift `() -> Promise<String>` as a class.

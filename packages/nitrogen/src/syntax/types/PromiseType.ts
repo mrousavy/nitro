@@ -60,12 +60,28 @@ export class PromiseType implements Type {
   getRequiredImports(language: Language): SourceImport[] {
     const imports: SourceImport[] =
       this.resultingType.getRequiredImports(language)
-    if (language === 'c++') {
-      imports.push({
-        language: 'c++',
-        name: 'NitroModules/Promise.hpp',
-        space: 'system',
-      })
+    switch (language) {
+      case 'c++':
+        imports.push({
+          language: 'c++',
+          name: 'NitroModules/Promise.hpp',
+          space: 'system',
+        })
+        break
+      case 'swift':
+        imports.push({
+          name: 'NitroModules',
+          language: 'swift',
+          space: 'system',
+        })
+        break
+      case 'kotlin':
+        imports.push({
+          name: 'com.margelo.nitro.core.Promise',
+          language: 'kotlin',
+          space: 'system',
+        })
+        break
     }
     return imports
   }

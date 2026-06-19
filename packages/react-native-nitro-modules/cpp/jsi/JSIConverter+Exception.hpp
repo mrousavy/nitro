@@ -51,7 +51,8 @@ struct JSIConverter<std::exception_ptr> final {
       return false;
     }
     jsi::Object object = value.getObject(runtime);
-    return object.hasProperty(runtime, "name") && object.hasProperty(runtime, "message");
+    jsi::Function errorCtor = runtime.global().getPropertyAsFunction(runtime, "Error");
+    return object.instanceOf(runtime, errorCtor);
   }
 };
 

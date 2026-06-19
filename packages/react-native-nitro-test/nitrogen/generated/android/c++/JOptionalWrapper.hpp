@@ -51,7 +51,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JOptionalWrapper::javaobject> fromCpp(const OptionalWrapper& value) {
-      return newInstance(
+      using JSignature = JOptionalWrapper(jni::alias_ref<JArrayBuffer::javaobject>, jni::alias_ref<jni::JString>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         value.optionalArrayBuffer.has_value() ? JArrayBuffer::wrap(value.optionalArrayBuffer.value()) : nullptr,
         value.optionalString.has_value() ? jni::make_jstring(value.optionalString.value()) : nullptr
       );

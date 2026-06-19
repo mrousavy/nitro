@@ -57,7 +57,11 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JMapWrapper::javaobject> fromCpp(const MapWrapper& value) {
-      return newInstance(
+      using JSignature = JMapWrapper(jni::alias_ref<jni::JMap<jni::JString, jni::JString>>, jni::alias_ref<JSecondMapWrapper>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
         [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
           auto __map = jni::JHashMap<jni::JString, jni::JString>::create(value.map.size());
           for (const auto& __entry : value.map) {

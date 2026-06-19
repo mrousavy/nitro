@@ -28,10 +28,14 @@ public extension MapWrapper {
     }(), secondMap)
   }
 
+  private var self.__cache__map Dictionary<String, String>? = nil
   var map: Dictionary<String, String> {
     @inline(__always)
-    get {
-      return { () -> Dictionary<String, String> in
+    mutating get {
+      if let self.__cache__map {
+        return self.__cache__map
+      }
+      let __result = { () -> Dictionary<String, String> in
         var __dictionary = Dictionary<String, String>(minimumCapacity: self.__map.size())
         let __keys = bridge.get_std__unordered_map_std__string__std__string__keys(self.__map)
         for __key in __keys {
@@ -40,9 +44,12 @@ public extension MapWrapper {
         }
         return __dictionary
       }()
+      self.__cache__map = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__map = newValue
       self.__map = { () -> bridge.std__unordered_map_std__string__std__string_ in
         var __map = bridge.create_std__unordered_map_std__string__std__string_(newValue.count)
         for (__k, __v) in newValue {
@@ -53,13 +60,20 @@ public extension MapWrapper {
     }
   }
   
+  private var self.__cache__secondMap SecondMapWrapper? = nil
   var secondMap: SecondMapWrapper {
     @inline(__always)
-    get {
-      return self.__secondMap
+    mutating get {
+      if let self.__cache__secondMap {
+        return self.__cache__secondMap
+      }
+      let __result = self.__secondMap
+      self.__cache__secondMap = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__secondMap = newValue
       self.__secondMap = newValue
     }
   }

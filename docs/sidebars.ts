@@ -67,6 +67,7 @@ const sidebars: SidebarsConfig = {
         'types/custom-structs',
         'types/custom-enums',
         'types/custom-types',
+        'types/raw-jsi-value',
       ],
     },
     {

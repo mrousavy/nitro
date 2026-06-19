@@ -28,24 +28,38 @@ public extension WrappedJsStruct {
     }())
   }
 
+  private var self.__cache__value JsStyleStruct? = nil
   var value: JsStyleStruct {
     @inline(__always)
-    get {
-      return self.__value
+    mutating get {
+      if let self.__cache__value {
+        return self.__cache__value
+      }
+      let __result = self.__value
+      self.__cache__value = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__value = newValue
       self.__value = newValue
     }
   }
   
+  private var self.__cache__items [JsStyleStruct]? = nil
   var items: [JsStyleStruct] {
     @inline(__always)
-    get {
-      return self.__items.map({ __item in __item })
+    mutating get {
+      if let self.__cache__items {
+        return self.__cache__items
+      }
+      let __result = self.__items.map({ __item in __item })
+      self.__cache__items = __result
+      return __result
     }
     @inline(__always)
     set {
+      self.__cache__items = newValue
       self.__items = { () -> bridge.std__vector_JsStyleStruct_ in
         var __vector = bridge.create_std__vector_JsStyleStruct_(newValue.count)
         for __item in newValue {

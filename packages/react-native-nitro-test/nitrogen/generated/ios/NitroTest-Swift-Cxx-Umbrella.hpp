@@ -8,10 +8,6 @@
 #pragma once
 
 // Forward declarations of C++ defined types
-// Forward declaration of `AnyMap` to properly resolve imports.
-namespace NitroModules { class AnyMap; }
-// Forward declaration of `ArrayBuffer` to properly resolve imports.
-namespace NitroModules { class ArrayBuffer; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
@@ -32,6 +28,8 @@ namespace margelo::nitro::test { struct JsStyleStruct; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `OptionalCallback` to properly resolve imports.
+namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalWrapper; }
 // Forward declaration of `Person` to properly resolve imports.
@@ -55,6 +53,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "JsStyleStruct.hpp"
 #include "MapWrapper.hpp"
 #include "OldEnum.hpp"
+#include "OptionalCallback.hpp"
 #include "OptionalWrapper.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"

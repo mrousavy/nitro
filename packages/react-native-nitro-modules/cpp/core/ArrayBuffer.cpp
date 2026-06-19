@@ -32,6 +32,11 @@ std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const std::vector<uint8_t>& data)
   return ArrayBuffer::copy(data.data(), data.size());
 }
 
+std::shared_ptr<ArrayBuffer> ArrayBuffer::move(std::vector<uint8_t>&& data) {
+  auto* vector = new std::vector<uint8_t>(std::move(data));
+  return ArrayBuffer::wrap(vector->data(), vector->size(), [=]() { delete vector; });
+}
+
 std::shared_ptr<ArrayBuffer> ArrayBuffer::copy(const std::shared_ptr<ArrayBuffer>& buffer) {
   return ArrayBuffer::copy(buffer->data(), buffer->size());
 }

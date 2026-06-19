@@ -1,10 +1,9 @@
 //
-// Created by Marc Rousavy on 21.02.24.
+// Created by Marc Rousavy on 16.10.25.
 //
 
 #pragma once
 
-// Forward declare a few of the common types that might have cyclic includes.
 namespace margelo::nitro {
 class HybridObject;
 } // namespace margelo::nitro
@@ -19,7 +18,7 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
-// HybridObject(NativeState) <> {}
+// NativeState <> {}
 template <typename T>
 struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>> final {
   using TPointee = typename T::element_type;
@@ -35,21 +34,28 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::NativeState>>
       }
     }
 #endif
-    jsi::Object object = arg.asObject(runtime);
 
+    jsi::Object object = arg.asObject(runtime);
 #ifdef NITRO_DEBUG
-    if (!object.hasNativeState<TPointee>(runtime)) [[unlikely]] {
-      if (!object.hasNativeState(runtime)) [[unlikely]] {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
-      } else {
-        std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
-        throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It has a different NativeState<T>!"));
-      }
+    if (!object.hasNativeState(runtime)) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "It does not have a NativeState!"));
     }
 #endif
+
     std::shared_ptr<jsi::NativeState> nativeState = object.getNativeState(runtime);
-    return std::dynamic_pointer_cast<TPointee>(nativeState);
+    std::shared_ptr<TPointee> result = std::dynamic_pointer_cast<TPointee>(nativeState);
+    if (result == nullptr) [[unlikely]] {
+      std::string stringRepresentation = arg.toString(runtime).utf8(runtime);
+      std::string typeName = TypeInfo::getFriendlyTypename<TPointee>();
+      throw jsi::JSError(runtime, invalidTypeErrorMessage(stringRepresentation, "Downcasting failed - It has a different NativeState<T>!\n"
+                                                                                "- Did you accidentally pass a different type?\n"
+                                                                                "- Is react-native-nitro-modules linked multiple times? "
+                                                                                "Ensure you don't have any duplicate symbols for `" +
+                                                                                    typeName + "` in your app's binary."));
+    }
+
+    return result;
   }
 
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const T& arg) {
