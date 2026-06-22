@@ -52,15 +52,20 @@ std::shared_ptr<Promise<void>> Promise<void>::rejected(const std::exception_ptr&
 }
 
 void Promise<void>::resolve() {
-  std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
   assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
-  _isResolved = true;
-  for (const auto& onResolved : _onResolvedListeners) {
+  std::vector<OnResolvedFunc> listeners;
+  std::vector<OnRejectedFunc> dropped;
+  {
+    std::unique_lock lock(_mutex);
+    _isResolved = true;
+    listeners = std::move(_onResolvedListeners);
+    dropped = std::move(_onRejectedListeners);
+  }
+  for (const auto& onResolved : listeners) {
     onResolved();
   }
-  didFinish();
 }
 
 void Promise<void>::reject(const std::exception_ptr& exception) {
@@ -68,20 +73,26 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
     throw std::runtime_error("Cannot reject Promise<void> with a null exception_ptr!");
   }
 
-  std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
   assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-  _error = exception;
-  for (const auto& onRejected : _onRejectedListeners) {
+  std::vector<OnRejectedFunc> listeners;
+  std::vector<OnResolvedFunc> dropped;
+  {
+    std::unique_lock lock(_mutex);
+    _error = exception;
+    listeners = std::move(_onRejectedListeners);
+    dropped = std::move(_onResolvedListeners);
+  }
+  for (const auto& onRejected : listeners) {
     onRejected(exception);
   }
-  didFinish();
 }
 
 void Promise<void>::addOnResolvedListener(OnResolvedFunc&& onResolved) {
   std::unique_lock lock(_mutex);
-  if (_isResolved) {
+  if (isResolved(lock)) {
+    lock.unlock();
     onResolved();
   } else {
     _onResolvedListeners.push_back(std::move(onResolved));
@@ -89,7 +100,8 @@ void Promise<void>::addOnResolvedListener(OnResolvedFunc&& onResolved) {
 }
 void Promise<void>::addOnResolvedListener(const OnResolvedFunc& onResolved) {
   std::unique_lock lock(_mutex);
-  if (_isResolved) {
+  if (isResolved(lock)) {
+    lock.unlock();
     onResolved();
   } else {
     _onResolvedListeners.push_back(onResolved);
@@ -97,8 +109,10 @@ void Promise<void>::addOnResolvedListener(const OnResolvedFunc& onResolved) {
 }
 void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
   std::unique_lock lock(_mutex);
-  if (_error) {
-    onRejected(_error);
+  if (isRejected(lock)) {
+    std::exception_ptr error = _error;
+    lock.unlock();
+    onRejected(error);
   } else {
     // Promise is not yet rejected, put the listener in our queue.
     _onRejectedListeners.push_back(std::move(onRejected));
@@ -106,8 +120,10 @@ void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
 }
 void Promise<void>::addOnRejectedListener(const OnRejectedFunc& onRejected) {
   std::unique_lock lock(_mutex);
-  if (_error) {
-    onRejected(_error);
+  if (isRejected(lock)) {
+    std::exception_ptr error = _error;
+    lock.unlock();
+    onRejected(error);
   } else {
     // Promise is not yet rejected, put the listener in our queue.
     _onRejectedListeners.push_back(onRejected);
@@ -122,15 +138,11 @@ std::future<void> Promise<void>::await() {
 }
 
 const std::exception_ptr& Promise<void>::getError() const {
-  if (!isRejected()) {
+  std::unique_lock lock(_mutex);
+  if (!isRejected(lock)) {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }
   return _error;
-}
-
-void Promise<void>::didFinish() noexcept {
-  _onResolvedListeners.clear();
-  _onRejectedListeners.clear();
 }
 
 } // namespace margelo::nitro

@@ -98,26 +98,38 @@ public:
    * Resolves this Promise with the given result, and calls any pending listeners.
    */
   void resolve(TResult&& result) {
-    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
-    _state = std::move(result);
-    for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(std::get<TResult>(_state));
+    std::vector<OnResolvedFunc> listeners;
+    std::vector<OnRejectedFunc> dropped;
+    const TResult* resolvedValue;
+    {
+      std::unique_lock lock(_mutex);
+      _state = std::move(result);
+      resolvedValue = &std::get<TResult>(_state);
+      listeners = std::move(_onResolvedListeners);
+      dropped = std::move(_onRejectedListeners);
     }
-    didFinish();
+    for (const auto& onResolved : listeners) {
+      onResolved(*resolvedValue);
+    }
   }
   void resolve(const TResult& result) {
-    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
-    _state = result;
-    for (const auto& onResolved : _onResolvedListeners) {
-      onResolved(std::get<TResult>(_state));
+    std::vector<OnResolvedFunc> listeners;
+    std::vector<OnRejectedFunc> dropped;
+    {
+      std::unique_lock lock(_mutex);
+      _state = result;
+      listeners = std::move(_onResolvedListeners);
+      dropped = std::move(_onRejectedListeners);
     }
-    didFinish();
+    for (const auto& onResolved : listeners) {
+      onResolved(result);
+    }
   }
   /**
    * Rejects this Promise with the given error, and calls any pending listeners.
@@ -128,15 +140,20 @@ public:
       throw std::runtime_error("Cannot reject Promise<" + typeName + "> with a null exception_ptr!");
     }
 
-    std::unique_lock lock(_mutex);
 #ifdef NITRO_DEBUG
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
-    _state = exception;
-    for (const auto& onRejected : _onRejectedListeners) {
+    std::vector<OnRejectedFunc> listeners;
+    std::vector<OnResolvedFunc> dropped;
+    {
+      std::unique_lock lock(_mutex);
+      _state = exception;
+      listeners = std::move(_onRejectedListeners);
+      dropped = std::move(_onResolvedListeners);
+    }
+    for (const auto& onRejected : listeners) {
       onRejected(exception);
     }
-    didFinish();
   }
 
 public:
@@ -147,8 +164,10 @@ public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
+      const TResult& result = std::get<TResult>(_state);
+      lock.unlock();
       // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_state));
+      onResolved(result);
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(std::move(onResolved));
@@ -157,8 +176,10 @@ public:
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
+      const TResult& result = std::get<TResult>(_state);
+      lock.unlock();
       // Promise is already resolved! Call the callback immediately
-      onResolved(std::get<TResult>(_state));
+      onResolved(result);
     } else {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
@@ -172,8 +193,10 @@ public:
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
+      std::exception_ptr error = std::get<std::exception_ptr>(_state);
+      lock.unlock();
       // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<std::exception_ptr>(_state));
+      onRejected(error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
@@ -182,8 +205,10 @@ public:
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
+      std::exception_ptr error = std::get<std::exception_ptr>(_state);
+      lock.unlock();
       // Promise is already rejected! Call the callback immediately
-      onRejected(std::get<std::exception_ptr>(_state));
+      onRejected(error);
     } else {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
@@ -207,7 +232,8 @@ public:
    * If the Promise is not resolved, this will throw.
    */
   inline const TResult& getResult() const {
-    if (!isResolved()) {
+    std::unique_lock lock(_mutex);
+    if (!isResolved(lock)) {
       std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
       throw std::runtime_error("Cannot get result when Promise<" + typeName + "> is not yet resolved!");
     }
@@ -218,7 +244,8 @@ public:
    * If the Promise is not rejected, this will throw.
    */
   inline const std::exception_ptr& getError() const {
-    if (!isRejected()) {
+    std::unique_lock lock(_mutex);
+    if (!isRejected(lock)) {
       std::string typeName = TypeInfo::getFriendlyTypename<TResult>(true);
       throw std::runtime_error("Cannot get error when Promise<" + typeName + "> is not yet rejected!");
     }
@@ -231,34 +258,45 @@ public:
    */
   [[nodiscard]]
   inline bool isResolved() const noexcept {
-    return std::holds_alternative<TResult>(_state);
+    std::unique_lock lock(_mutex);
+    return isResolved(lock);
   }
   /**
    * Gets whether this Promise has been rejected with an error, or not.
    */
   [[nodiscard]]
   inline bool isRejected() const noexcept {
-    return std::holds_alternative<std::exception_ptr>(_state);
+    std::unique_lock lock(_mutex);
+    return isRejected(lock);
   }
   /**
    * Gets whether this Promise has not yet been resolved nor rejected.
    */
   [[nodiscard]]
   inline bool isPending() const noexcept {
-    return std::holds_alternative<std::monostate>(_state);
+    std::unique_lock lock(_mutex);
+    return isPending(lock);
   }
 
 private:
-  void didFinish() noexcept {
-    _onResolvedListeners.clear();
-    _onRejectedListeners.clear();
+  [[nodiscard]]
+  inline bool isResolved(const std::unique_lock<std::mutex>&) const noexcept {
+    return std::holds_alternative<TResult>(_state);
+  }
+  [[nodiscard]]
+  inline bool isRejected(const std::unique_lock<std::mutex>&) const noexcept {
+    return std::holds_alternative<std::exception_ptr>(_state);
+  }
+  [[nodiscard]]
+  inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
+    return std::holds_alternative<std::monostate>(_state);
   }
 
 private:
   std::variant<std::monostate, TResult, std::exception_ptr> _state;
   std::vector<OnResolvedFunc> _onResolvedListeners;
   std::vector<OnRejectedFunc> _onRejectedListeners;
-  std::mutex _mutex;
+  mutable std::mutex _mutex;
 };
 
 // Specialization for void
@@ -301,20 +339,31 @@ public:
 
 public:
   inline bool isResolved() const noexcept {
-    return _isResolved;
+    std::unique_lock lock(_mutex);
+    return isResolved(lock);
   }
   inline bool isRejected() const noexcept {
-    return _error != nullptr;
+    std::unique_lock lock(_mutex);
+    return isRejected(lock);
   }
   inline bool isPending() const noexcept {
-    return !isResolved() && !isRejected();
+    std::unique_lock lock(_mutex);
+    return isPending(lock);
   }
 
 private:
-  void didFinish() noexcept;
+  inline bool isResolved(const std::unique_lock<std::mutex>&) const noexcept {
+    return _isResolved;
+  }
+  inline bool isRejected(const std::unique_lock<std::mutex>&) const noexcept {
+    return _error != nullptr;
+  }
+  inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
+    return !_isResolved && _error == nullptr;
+  }
 
 private:
-  std::mutex _mutex;
+  mutable std::mutex _mutex;
   bool _isResolved = false;
   std::exception_ptr _error;
   std::vector<OnResolvedFunc> _onResolvedListeners;
