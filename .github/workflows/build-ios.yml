@@ -53,7 +53,7 @@ jobs:
           - name: no_frameworks
             use_frameworks: ""   # intentionally unset
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
 
       - name: Set USE_FRAMEWORKS
