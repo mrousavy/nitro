@@ -120,17 +120,15 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
     std::vector<OnResolvedFunc> listeners;
-    std::vector<OnRejectedFunc> dropped;
-    const TResult* resolvedValue;
+    std::vector<OnResolvedFunc> listeners;
     {
       std::unique_lock lock(_mutex);
       _state = result;
-      resolvedValue = &std::get<TResult>(_state);
       listeners = std::move(_onResolvedListeners);
-      dropped = std::move(_onRejectedListeners);
+      clearAllListeners(lock);
     }
     for (const auto& onResolved : listeners) {
-      onResolved(*resolvedValue);
+      onResolved(result);
     }
   }
   /**
