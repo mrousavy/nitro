@@ -102,13 +102,14 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
     std::vector<OnResolvedFunc> listeners;
+    std::vector<OnRejectedFunc> dropped;
     const TResult* resolvedValue;
     {
       std::unique_lock lock(_mutex);
       _state = std::move(result);
       resolvedValue = &std::get<TResult>(_state);
       listeners = std::move(_onResolvedListeners);
-      clearAllListeners(lock);
+      dropped = std::move(_onRejectedListeners);
     }
     for (const auto& onResolved : listeners) {
       onResolved(*resolvedValue);
@@ -119,13 +120,14 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
     std::vector<OnResolvedFunc> listeners;
+    std::vector<OnRejectedFunc> dropped;
     const TResult* resolvedValue;
     {
       std::unique_lock lock(_mutex);
       _state = result;
       resolvedValue = &std::get<TResult>(_state);
       listeners = std::move(_onResolvedListeners);
-      clearAllListeners(lock);
+      dropped = std::move(_onRejectedListeners);
     }
     for (const auto& onResolved : listeners) {
       onResolved(*resolvedValue);
@@ -144,11 +146,12 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
     std::vector<OnRejectedFunc> listeners;
+    std::vector<OnResolvedFunc> dropped;
     {
       std::unique_lock lock(_mutex);
       _state = exception;
       listeners = std::move(_onRejectedListeners);
-      clearAllListeners(lock);
+      dropped = std::move(_onResolvedListeners);
     }
     for (const auto& onRejected : listeners) {
       onRejected(exception);
@@ -290,10 +293,6 @@ private:
   inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
     return std::holds_alternative<std::monostate>(_state);
   }
-  void clearAllListeners(const std::unique_lock<std::mutex>&) noexcept {
-    _onResolvedListeners.clear();
-    _onRejectedListeners.clear();
-  }
 
 private:
   std::variant<std::monostate, TResult, std::exception_ptr> _state;
@@ -364,7 +363,6 @@ private:
   inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
     return !_isResolved && _error == nullptr;
   }
-  void clearAllListeners(const std::unique_lock<std::mutex>&) noexcept;
 
 private:
   mutable std::mutex _mutex;

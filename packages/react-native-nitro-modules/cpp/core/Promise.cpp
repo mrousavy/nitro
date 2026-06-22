@@ -56,11 +56,12 @@ void Promise<void>::resolve() {
   assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
   std::vector<OnResolvedFunc> listeners;
+  std::vector<OnRejectedFunc> dropped;
   {
     std::unique_lock lock(_mutex);
     _isResolved = true;
     listeners = std::move(_onResolvedListeners);
-    clearAllListeners(lock);
+    dropped = std::move(_onRejectedListeners);
   }
   for (const auto& onResolved : listeners) {
     onResolved();
@@ -76,11 +77,12 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
   assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
 #endif
   std::vector<OnRejectedFunc> listeners;
+  std::vector<OnResolvedFunc> dropped;
   {
     std::unique_lock lock(_mutex);
     _error = exception;
     listeners = std::move(_onRejectedListeners);
-    clearAllListeners(lock);
+    dropped = std::move(_onResolvedListeners);
   }
   for (const auto& onRejected : listeners) {
     onRejected(exception);
@@ -147,11 +149,6 @@ const std::exception_ptr& Promise<void>::getError() const {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }
   return _error;
-}
-
-void Promise<void>::clearAllListeners(const std::unique_lock<std::mutex>&) noexcept {
-  _onResolvedListeners.clear();
-  _onRejectedListeners.clear();
 }
 
 } // namespace margelo::nitro
