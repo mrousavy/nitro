@@ -92,29 +92,24 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
 void Promise<void>::addOnResolvedListener(OnResolvedFunc&& onResolved) {
   std::unique_lock lock(_mutex);
   if (isResolved(lock)) {
-    // Promise is already resolved! Call the callback immediately.
     lock.unlock();
     onResolved();
   } else {
-    // Promise is not yet resolved, put the listener in our queue.
     _onResolvedListeners.push_back(std::move(onResolved));
   }
 }
 void Promise<void>::addOnResolvedListener(const OnResolvedFunc& onResolved) {
   std::unique_lock lock(_mutex);
   if (isResolved(lock)) {
-    // Promise is already resolved! Call the callback immediately.
     lock.unlock();
     onResolved();
   } else {
-    // Promise is not yet resolved, put the listener in our queue.
     _onResolvedListeners.push_back(onResolved);
   }
 }
 void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
   std::unique_lock lock(_mutex);
   if (isRejected(lock)) {
-    // Promise is already rejected! Call the callback immediately.
     std::exception_ptr error = _error;
     lock.unlock();
     onRejected(error);

@@ -164,24 +164,20 @@ public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
-      // Promise is already resolved! Call the callback immediately.
       const TResult& result = std::get<TResult>(_state);
       lock.unlock();
       onResolved(result);
     } else {
-      // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<TResult>(_state)) {
-      // Promise is already resolved! Call the callback immediately.
       const TResult& result = std::get<TResult>(_state);
       lock.unlock();
       onResolved(result);
     } else {
-      // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
     }
   }
@@ -193,24 +189,20 @@ public:
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
-      // Promise is already rejected! Call the callback immediately.
       std::exception_ptr error = std::get<std::exception_ptr>(_state);
       lock.unlock();
       onRejected(error);
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::unique_lock lock(_mutex);
     if (std::holds_alternative<std::exception_ptr>(_state)) {
-      // Promise is already rejected! Call the callback immediately.
       std::exception_ptr error = std::get<std::exception_ptr>(_state);
       lock.unlock();
       onRejected(error);
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }
   }
