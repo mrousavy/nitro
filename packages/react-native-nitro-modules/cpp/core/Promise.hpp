@@ -102,17 +102,16 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
     std::vector<OnResolvedFunc> listeners;
+    const TResult* resolvedValue;
     {
       std::unique_lock lock(_mutex);
       _state = std::move(result);
-      listeners = takeResolvedListenersAndClearAllListeners(lock);
+      resolvedValue = &std::get<TResult>(_state);
+      listeners = std::move(_onResolvedListeners);
+      clearAllListeners(lock);
     }
-    if (listeners.empty()) {
-      return;
-    }
-    const TResult& resolvedValue = getResult();
     for (const auto& onResolved : listeners) {
-      onResolved(resolvedValue);
+      onResolved(*resolvedValue);
     }
   }
   void resolve(const TResult& result) {
@@ -120,17 +119,16 @@ public:
     assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
 #endif
     std::vector<OnResolvedFunc> listeners;
+    const TResult* resolvedValue;
     {
       std::unique_lock lock(_mutex);
       _state = result;
-      listeners = takeResolvedListenersAndClearAllListeners(lock);
+      resolvedValue = &std::get<TResult>(_state);
+      listeners = std::move(_onResolvedListeners);
+      clearAllListeners(lock);
     }
-    if (listeners.empty()) {
-      return;
-    }
-    const TResult& resolvedValue = getResult();
     for (const auto& onResolved : listeners) {
-      onResolved(resolvedValue);
+      onResolved(*resolvedValue);
     }
   }
   /**
@@ -149,7 +147,8 @@ public:
     {
       std::unique_lock lock(_mutex);
       _state = exception;
-      listeners = takeRejectedListenersAndClearAllListeners(lock);
+      listeners = std::move(_onRejectedListeners);
+      clearAllListeners(lock);
     }
     for (const auto& onRejected : listeners) {
       onRejected(exception);
@@ -162,24 +161,28 @@ public:
    * If the Promise is already resolved, the listener will be immediately called.
    */
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
-    {
-      std::unique_lock lock(_mutex);
-      if (!isResolved(lock)) {
-        _onResolvedListeners.push_back(std::move(onResolved));
-        return;
-      }
+    std::unique_lock lock(_mutex);
+    if (std::holds_alternative<TResult>(_state)) {
+      // Promise is already resolved! Call the callback immediately.
+      const TResult& result = std::get<TResult>(_state);
+      lock.unlock();
+      onResolved(result);
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back(std::move(onResolved));
     }
-    onResolved(getResult());
   }
   void addOnResolvedListener(const OnResolvedFunc& onResolved) {
-    {
-      std::unique_lock lock(_mutex);
-      if (!isResolved(lock)) {
-        _onResolvedListeners.push_back(onResolved);
-        return;
-      }
+    std::unique_lock lock(_mutex);
+    if (std::holds_alternative<TResult>(_state)) {
+      // Promise is already resolved! Call the callback immediately.
+      const TResult& result = std::get<TResult>(_state);
+      lock.unlock();
+      onResolved(result);
+    } else {
+      // Promise is not yet resolved, put the listener in our queue.
+      _onResolvedListeners.push_back(onResolved);
     }
-    onResolved(getResult());
   }
 
   /**
@@ -187,28 +190,28 @@ public:
    * If the Promise is already rejected, the listener will be immediately called.
    */
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
-    std::exception_ptr error;
-    {
-      std::unique_lock lock(_mutex);
-      if (!isRejected(lock)) {
-        _onRejectedListeners.push_back(std::move(onRejected));
-        return;
-      }
-      error = std::get<std::exception_ptr>(_state);
+    std::unique_lock lock(_mutex);
+    if (std::holds_alternative<std::exception_ptr>(_state)) {
+      // Promise is already rejected! Call the callback immediately.
+      std::exception_ptr error = std::get<std::exception_ptr>(_state);
+      lock.unlock();
+      onRejected(error);
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(std::move(onRejected));
     }
-    onRejected(error);
   }
   void addOnRejectedListener(const OnRejectedFunc& onRejected) {
-    std::exception_ptr error;
-    {
-      std::unique_lock lock(_mutex);
-      if (!isRejected(lock)) {
-        _onRejectedListeners.push_back(onRejected);
-        return;
-      }
-      error = std::get<std::exception_ptr>(_state);
+    std::unique_lock lock(_mutex);
+    if (std::holds_alternative<std::exception_ptr>(_state)) {
+      // Promise is already rejected! Call the callback immediately.
+      std::exception_ptr error = std::get<std::exception_ptr>(_state);
+      lock.unlock();
+      onRejected(error);
+    } else {
+      // Promise is not yet rejected, put the listener in our queue.
+      _onRejectedListeners.push_back(onRejected);
     }
-    onRejected(error);
   }
 
 public:
@@ -287,16 +290,6 @@ private:
   inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
     return std::holds_alternative<std::monostate>(_state);
   }
-  std::vector<OnResolvedFunc> takeResolvedListenersAndClearAllListeners(const std::unique_lock<std::mutex>& lock) {
-    auto listeners = std::move(_onResolvedListeners);
-    clearAllListeners(lock);
-    return listeners;
-  }
-  std::vector<OnRejectedFunc> takeRejectedListenersAndClearAllListeners(const std::unique_lock<std::mutex>& lock) {
-    auto listeners = std::move(_onRejectedListeners);
-    clearAllListeners(lock);
-    return listeners;
-  }
   void clearAllListeners(const std::unique_lock<std::mutex>&) noexcept {
     _onResolvedListeners.clear();
     _onRejectedListeners.clear();
@@ -371,8 +364,6 @@ private:
   inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
     return !_isResolved && _error == nullptr;
   }
-  std::vector<OnResolvedFunc> takeResolvedListenersAndClearAllListeners(const std::unique_lock<std::mutex>&);
-  std::vector<OnRejectedFunc> takeRejectedListenersAndClearAllListeners(const std::unique_lock<std::mutex>&);
   void clearAllListeners(const std::unique_lock<std::mutex>&) noexcept;
 
 private:

@@ -59,7 +59,8 @@ void Promise<void>::resolve() {
   {
     std::unique_lock lock(_mutex);
     _isResolved = true;
-    listeners = takeResolvedListenersAndClearAllListeners(lock);
+    listeners = std::move(_onResolvedListeners);
+    clearAllListeners(lock);
   }
   for (const auto& onResolved : listeners) {
     onResolved();
@@ -78,7 +79,8 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
   {
     std::unique_lock lock(_mutex);
     _error = exception;
-    listeners = takeRejectedListenersAndClearAllListeners(lock);
+    listeners = std::move(_onRejectedListeners);
+    clearAllListeners(lock);
   }
   for (const auto& onRejected : listeners) {
     onRejected(exception);
@@ -86,48 +88,50 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
 }
 
 void Promise<void>::addOnResolvedListener(OnResolvedFunc&& onResolved) {
-  {
-    std::unique_lock lock(_mutex);
-    if (!isResolved(lock)) {
-      _onResolvedListeners.push_back(std::move(onResolved));
-      return;
-    }
+  std::unique_lock lock(_mutex);
+  if (isResolved(lock)) {
+    // Promise is already resolved! Call the callback immediately.
+    lock.unlock();
+    onResolved();
+  } else {
+    // Promise is not yet resolved, put the listener in our queue.
+    _onResolvedListeners.push_back(std::move(onResolved));
   }
-  onResolved();
 }
 void Promise<void>::addOnResolvedListener(const OnResolvedFunc& onResolved) {
-  {
-    std::unique_lock lock(_mutex);
-    if (!isResolved(lock)) {
-      _onResolvedListeners.push_back(onResolved);
-      return;
-    }
+  std::unique_lock lock(_mutex);
+  if (isResolved(lock)) {
+    // Promise is already resolved! Call the callback immediately.
+    lock.unlock();
+    onResolved();
+  } else {
+    // Promise is not yet resolved, put the listener in our queue.
+    _onResolvedListeners.push_back(onResolved);
   }
-  onResolved();
 }
 void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
-  std::exception_ptr error;
-  {
-    std::unique_lock lock(_mutex);
-    if (!isRejected(lock)) {
-      _onRejectedListeners.push_back(std::move(onRejected));
-      return;
-    }
-    error = _error;
+  std::unique_lock lock(_mutex);
+  if (isRejected(lock)) {
+    // Promise is already rejected! Call the callback immediately.
+    std::exception_ptr error = _error;
+    lock.unlock();
+    onRejected(error);
+  } else {
+    // Promise is not yet rejected, put the listener in our queue.
+    _onRejectedListeners.push_back(std::move(onRejected));
   }
-  onRejected(error);
 }
 void Promise<void>::addOnRejectedListener(const OnRejectedFunc& onRejected) {
-  std::exception_ptr error;
-  {
-    std::unique_lock lock(_mutex);
-    if (!isRejected(lock)) {
-      _onRejectedListeners.push_back(onRejected);
-      return;
-    }
-    error = _error;
+  std::unique_lock lock(_mutex);
+  if (isRejected(lock)) {
+    // Promise is already rejected! Call the callback immediately.
+    std::exception_ptr error = _error;
+    lock.unlock();
+    onRejected(error);
+  } else {
+    // Promise is not yet rejected, put the listener in our queue.
+    _onRejectedListeners.push_back(onRejected);
   }
-  onRejected(error);
 }
 
 std::future<void> Promise<void>::await() {
@@ -143,18 +147,6 @@ const std::exception_ptr& Promise<void>::getError() const {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }
   return _error;
-}
-
-std::vector<Promise<void>::OnResolvedFunc> Promise<void>::takeResolvedListenersAndClearAllListeners(const std::unique_lock<std::mutex>& lock) {
-  auto listeners = std::move(_onResolvedListeners);
-  clearAllListeners(lock);
-  return listeners;
-}
-
-std::vector<Promise<void>::OnRejectedFunc> Promise<void>::takeRejectedListenersAndClearAllListeners(const std::unique_lock<std::mutex>& lock) {
-  auto listeners = std::move(_onRejectedListeners);
-  clearAllListeners(lock);
-  return listeners;
 }
 
 void Promise<void>::clearAllListeners(const std::unique_lock<std::mutex>&) noexcept {
