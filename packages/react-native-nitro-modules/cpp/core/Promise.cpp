@@ -121,7 +121,6 @@ void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
 void Promise<void>::addOnRejectedListener(const OnRejectedFunc& onRejected) {
   std::unique_lock lock(_mutex);
   if (isRejected(lock)) {
-    // Promise is already rejected! Call the callback immediately.
     std::exception_ptr error = _error;
     lock.unlock();
     onRejected(error);
