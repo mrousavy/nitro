@@ -166,8 +166,10 @@ public:
     if (std::holds_alternative<TResult>(_state)) {
       const TResult& result = std::get<TResult>(_state);
       lock.unlock();
+      // Promise is already resolved! Call the callback immediately
       onResolved(result);
     } else {
+      // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
@@ -176,8 +178,10 @@ public:
     if (std::holds_alternative<TResult>(_state)) {
       const TResult& result = std::get<TResult>(_state);
       lock.unlock();
+      // Promise is already resolved! Call the callback immediately
       onResolved(result);
     } else {
+      // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
     }
   }
@@ -191,8 +195,10 @@ public:
     if (std::holds_alternative<std::exception_ptr>(_state)) {
       std::exception_ptr error = std::get<std::exception_ptr>(_state);
       lock.unlock();
+      // Promise is already rejected! Call the callback immediately
       onRejected(error);
     } else {
+      // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
@@ -201,8 +207,10 @@ public:
     if (std::holds_alternative<std::exception_ptr>(_state)) {
       std::exception_ptr error = std::get<std::exception_ptr>(_state);
       lock.unlock();
+      // Promise is already rejected! Call the callback immediately
       onRejected(error);
     } else {
+      // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }
   }
