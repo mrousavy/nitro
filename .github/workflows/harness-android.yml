@@ -126,6 +126,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-asan-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
             ${{ runner.os }}-gradle-
+
+      - name: Package AddressSanitizer runtime
+        working-directory: example/android
+        run: |
+          set -euo pipefail
+          ndk_version="$(sed -n 's/.*ndkVersion = "\([^"]*\)".*/\1/p' build.gradle | head -1)"
+          asan_runtime="$(find "$ANDROID_HOME/ndk/${ndk_version}/toolchains/llvm/prebuilt" -path "*/lib/linux/libclang_rt.asan-${DEVICE_ARCH}-android.so" -print -quit)"
+          if [ -z "$asan_runtime" ]; then
+            echo "Could not find AddressSanitizer runtime for ${DEVICE_ARCH} in NDK ${ndk_version}"
+            exit 1
+          fi
+
+          mkdir -p "app/src/debug/jniLibs/${DEVICE_ARCH}"
+          cp "$asan_runtime" "app/src/debug/jniLibs/${DEVICE_ARCH}/"
+
       - name: Build Android app
         working-directory: example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
