@@ -59,6 +59,10 @@ react {
  */
 def enableProguardInReleaseBuilds = true
 
+def isThreadSanitizerEnabled() {
+    return System.getenv("NITRO_ENABLE_TSAN") == "1"
+}
+
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
  *
@@ -108,6 +112,14 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    if (isThreadSanitizerEnabled()) {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging true
+            }
         }
     }
 }

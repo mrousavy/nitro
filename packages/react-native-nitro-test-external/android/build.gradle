@@ -18,6 +18,10 @@ def isNewArchitectureEnabled() {
   return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
 }
 
+def isThreadSanitizerEnabled() {
+  return System.getenv("NITRO_ENABLE_TSAN") == "1"
+}
+
 apply plugin: "com.android.library"
 apply plugin: 'org.jetbrains.kotlin.android'
 apply from: '../nitrogen/generated/android/NitroTestExternal+autolinking.gradle'
@@ -50,6 +54,10 @@ android {
       cmake {
         cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
         arguments "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+        if (isThreadSanitizerEnabled()) {
+          cppFlags "-fsanitize=thread -fno-omit-frame-pointer"
+          arguments "-DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=thread"
+        }
         abiFilters (*reactNativeArchitectures())
 
         buildTypes {
