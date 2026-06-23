@@ -142,8 +142,10 @@ jobs:
         working-directory: example/ios
         run: |
           set -o pipefail
+          CLANG="$(xcrun --find clang)"
+          CLANGXX="$(xcrun --find clang++)"
           xcodebuild \
-            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            CC="$CLANG" CPLUSPLUS="$CLANGXX" LD="$CLANG" LDPLUSPLUS="$CLANGXX" \
             -derivedDataPath build -UseModernBuildSystem=YES \
             -workspace NitroExample.xcworkspace \
             -scheme NitroExample \
