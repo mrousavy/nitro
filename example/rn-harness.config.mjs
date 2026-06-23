@@ -33,8 +33,8 @@ const config = {
   ],
   defaultRunner: 'android',
   platformReadyTimeout: process.env.CI === 'true' ? 420000 : 300000,
-  bridgeTimeout: process.env.CI === 'true' ? 180000 : 60000,
-  bundleStartTimeout: process.env.CI === 'true' ? 120000 : 60000,
+  bridgeTimeout: process.env.CI === 'true' ? 600000 : 60000,
+  bundleStartTimeout: process.env.CI === 'true' ? 600000 : 60000,
 }
 
 export default config
