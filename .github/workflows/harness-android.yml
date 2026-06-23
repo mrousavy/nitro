@@ -77,7 +77,6 @@ env:
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_7_API_36' }}
   AVD_DISK_SIZE: 1G
   AVD_HEAP_SIZE: 1G
-  TSAN_OPTIONS: "halt_on_error=1"
 
 jobs:
   harness_android_new:
@@ -139,7 +138,7 @@ jobs:
           cat > "app/src/debug/resources/lib/x86_64/wrap.sh" <<EOF
           #!/system/bin/sh
           HERE="\$(cd "\$(dirname "\$0")" && pwd)"
-          export TSAN_OPTIONS="\${TSAN_OPTIONS:-halt_on_error=1}"
+          export TSAN_OPTIONS="halt_on_error=1"
           export LD_PRELOAD="\$HERE/libclang_rt.tsan-x86_64-android.so"
           "\$@"
           EOF
