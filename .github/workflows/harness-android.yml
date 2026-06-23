@@ -85,7 +85,7 @@ jobs:
     strategy:
       matrix:
         min-sdk:
-          - '26'
+          - '27'
     steps:
       - uses: actions/checkout@v7
         with:
@@ -122,9 +122,9 @@ jobs:
             ~/.gradle/wrapper
             example/android/.gradle
             example/android/app/.cxx
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
+          key: ${{ runner.os }}-gradle-asan-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
+            ${{ runner.os }}-gradle-asan-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
             ${{ runner.os }}-gradle-
       - name: Build Android app
         working-directory: example/android

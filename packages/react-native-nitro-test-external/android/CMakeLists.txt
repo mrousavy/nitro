@@ -10,6 +10,9 @@ add_library(${PACKAGE_NAME} SHARED
         src/main/cpp/cpp-adapter.cpp
 )
 
+target_compile_options(${PACKAGE_NAME} PUBLIC -fsanitize=address -fno-omit-frame-pointer)
+set_target_properties(${PACKAGE_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address")
+
 # Add Nitrogen specs :)
 include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/NitroTestExternal+autolinking.cmake)
 
