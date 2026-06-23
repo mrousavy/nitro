@@ -130,14 +130,34 @@ jobs:
         working-directory: example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
 
-      - name: Run Harness E2E tests
-        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
-        uses: callstackincubator/react-native-harness@v1.2.0
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls /dev/kvm
+
+      - name: Restore AVD cache
+        uses: actions/cache@v5
         with:
-          runner: android
-          projectRoot: example
-          app: android/app/build/outputs/apk/debug/app-debug.apk
-          packageManager: bun
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: ${{ runner.os }}-avd-${{ env.DEVICE_API_LEVEL }}-${{ env.DEVICE_ARCH }}-${{ env.DEVICE_PROFILE }}-${{ env.AVD_NAME }}
+
+      - name: Run Harness E2E tests
+        working-directory: example
+        env:
+          HARNESS_APP_PATH: android/app/build/outputs/apk/debug/app-debug.apk
+        run: bun test:harness --harnessRunner android
+
+      - name: Upload Harness crash reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: harness-android-crash-reports
+          path: example/.harness/crash-reports/**/*
+          if-no-files-found: ignore
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon

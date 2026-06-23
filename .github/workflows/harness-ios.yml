@@ -159,10 +159,15 @@ jobs:
         run: brew install watchman
 
       - name: Run Harness E2E tests
-        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
-        uses: callstackincubator/react-native-harness@v1.2.0
+        working-directory: example
+        env:
+          HARNESS_APP_PATH: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
+        run: bun test:harness --harnessRunner ios
+
+      - name: Upload Harness crash reports
+        if: always()
+        uses: actions/upload-artifact@v7
         with:
-          runner: ios
-          projectRoot: example
-          app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
-          packageManager: bun
+          name: harness-ios-crash-reports
+          path: example/.harness/crash-reports/**/*
+          if-no-files-found: ignore
