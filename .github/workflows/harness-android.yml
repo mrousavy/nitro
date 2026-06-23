@@ -77,8 +77,7 @@ env:
   AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_7_API_36' }}
   AVD_DISK_SIZE: 1G
   AVD_HEAP_SIZE: 1G
-  NITRO_ENABLE_TSAN: 1
-  TSAN_OPTIONS: halt_on_error=1
+  TSAN_OPTIONS: "halt_on_error=1"
 
 jobs:
   harness_android_new:
@@ -132,40 +131,19 @@ jobs:
         working-directory: example/android
         run: |
           set -euo pipefail
-
-          case "${{ env.DEVICE_ARCH }}" in
-            arm64-v8a)
-              tsan_arch="aarch64"
-              apk_arch="arm64-v8a"
-              ;;
-            x86_64)
-              tsan_arch="x86_64"
-              apk_arch="x86_64"
-              ;;
-            *)
-              echo "ThreadSanitizer is only available for arm64-v8a and x86_64, got '${{ env.DEVICE_ARCH }}'"
-              exit 1
-              ;;
-          esac
-
           ndk_version="$(sed -n 's/.*ndkVersion = "\([^"]*\)".*/\1/p' build.gradle | head -1)"
-          tsan_runtime="$(find "$ANDROID_HOME/ndk/${ndk_version}/toolchains/llvm/prebuilt" -path "*/lib/linux/libclang_rt.tsan-${tsan_arch}-android.so" -print -quit)"
-          if [ -z "$tsan_runtime" ]; then
-            echo "Could not find ThreadSanitizer runtime for ${tsan_arch}"
-            exit 1
-          fi
+          tsan_runtime="$(find "$ANDROID_HOME/ndk/${ndk_version}/toolchains/llvm/prebuilt" -path "*/lib/linux/libclang_rt.tsan-x86_64-android.so" -print -quit)"
 
-          mkdir -p "app/src/debug/jniLibs/${apk_arch}" "app/src/debug/resources/lib/${apk_arch}"
-          cp "$tsan_runtime" "app/src/debug/jniLibs/${apk_arch}/"
-          cat > "app/src/debug/resources/lib/${apk_arch}/wrap.sh" <<'EOF'
+          mkdir -p "app/src/debug/jniLibs/x86_64" "app/src/debug/resources/lib/x86_64"
+          cp "$tsan_runtime" "app/src/debug/jniLibs/x86_64/"
+          cat > "app/src/debug/resources/lib/x86_64/wrap.sh" <<EOF
           #!/system/bin/sh
-          HERE="$(cd "$(dirname "$0")" && pwd)"
-          export TSAN_OPTIONS="${TSAN_OPTIONS:-halt_on_error=1}"
-          export LD_PRELOAD="$HERE/libclang_rt.tsan-x86_64-android.so"
-          "$@"
+          HERE="\$(cd "\$(dirname "\$0")" && pwd)"
+          export TSAN_OPTIONS="\${TSAN_OPTIONS:-halt_on_error=1}"
+          export LD_PRELOAD="\$HERE/libclang_rt.tsan-x86_64-android.so"
+          "\$@"
           EOF
-          sed -i "s/libclang_rt.tsan-x86_64-android.so/libclang_rt.tsan-${tsan_arch}-android.so/g" "app/src/debug/resources/lib/${apk_arch}/wrap.sh"
-          chmod +x "app/src/debug/resources/lib/${apk_arch}/wrap.sh"
+          chmod +x "app/src/debug/resources/lib/x86_64/wrap.sh"
 
       - name: Build Android app
         working-directory: example/android

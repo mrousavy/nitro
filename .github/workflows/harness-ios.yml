@@ -81,7 +81,7 @@ env:
   USE_CCACHE: 1
   DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.5' }}.app/Contents/Developer
   HARNESS_DEBUG: 1
-  TSAN_OPTIONS: halt_on_error=1
+  TSAN_OPTIONS: "halt_on_error=1"
 
 jobs:
   harness_ios_new:
