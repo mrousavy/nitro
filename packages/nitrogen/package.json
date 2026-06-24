@@ -1,6 +1,6 @@
 {
   "name": "nitrogen",
-  "version": "0.35.9",
+  "version": "0.35.10",
   "description": "Code generator for React Native Nitro Modules that turns TypeScript specs into C++, Swift, and Kotlin bindings.",
   "main": "lib/index",
   "types": "lib/index.d.ts",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "react-native-nitro-modules": "^0.35.9",
+    "react-native-nitro-modules": "^0.35.10",
     "ts-morph": "^28.0.0",
     "yargs": "^18.0.0",
     "zod": "^4.4.3"
