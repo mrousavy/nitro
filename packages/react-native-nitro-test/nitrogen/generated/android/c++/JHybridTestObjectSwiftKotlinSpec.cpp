@@ -33,6 +33,10 @@ namespace margelo::nitro::test { struct OptionalCallback; }
 namespace margelo::nitro::test { struct OptionalEnumWrapper; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
+// Forward declaration of `SomeEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeEnum; }
+// Forward declaration of `SomeOtherEnum` to properly resolve imports.
+namespace margelo::nitro::test { enum class SomeOtherEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridSomeExternalObjectSpec` to properly resolve imports.
@@ -100,6 +104,14 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "WeirdNumbersEnum.hpp"
 #include "JVariant_Boolean_WeirdNumbersEnum.hpp"
 #include "JWeirdNumbersEnum.hpp"
+#include "SomeEnum.hpp"
+#include "JVariant_Boolean_SomeEnum.hpp"
+#include "JSomeEnum.hpp"
+#include "SomeOtherEnum.hpp"
+#include "JVariant_SomeEnum_SomeOtherEnum.hpp"
+#include "JSomeOtherEnum.hpp"
+#include "JVariant_Boolean_SomeEnum_SomeOtherEnum.hpp"
+#include "JVariant_SomeEnum_Double.hpp"
 #include "JVariant_Car_Person.hpp"
 #include "JNamedVariant.hpp"
 #include "HybridBaseSpec.hpp"
@@ -1269,6 +1281,31 @@ namespace margelo::nitro::test {
   std::variant<bool, WeirdNumbersEnum> JHybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_WeirdNumbersEnum>(jni::alias_ref<JVariant_Boolean_WeirdNumbersEnum> /* variant */)>("getVariantWeirdNumbersEnum");
     auto __result = method(_javaPart, JVariant_Boolean_WeirdNumbersEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<bool, SomeEnum> JHybridTestObjectSwiftKotlinSpec::getVariantSomeEnum(const std::variant<bool, SomeEnum>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_SomeEnum>(jni::alias_ref<JVariant_Boolean_SomeEnum> /* variant */)>("getVariantSomeEnum");
+    auto __result = method(_javaPart, JVariant_Boolean_SomeEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<SomeEnum, SomeOtherEnum> JHybridTestObjectSwiftKotlinSpec::getVariantMultipleEnums(const std::variant<SomeEnum, SomeOtherEnum>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_SomeEnum_SomeOtherEnum>(jni::alias_ref<JVariant_SomeEnum_SomeOtherEnum> /* variant */)>("getVariantMultipleEnums");
+    auto __result = method(_javaPart, JVariant_SomeEnum_SomeOtherEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::string JHybridTestObjectSwiftKotlinSpec::getVariantStringAndEnum(const std::string& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<jni::JString>(jni::alias_ref<jni::JString> /* variant */)>("getVariantStringAndEnum");
+    auto __result = method(_javaPart, jni::make_jstring(variant));
+    return __result->toStdString();
+  }
+  std::variant<bool, SomeEnum, SomeOtherEnum> JHybridTestObjectSwiftKotlinSpec::getVariantThreeTypes(const std::variant<bool, SomeEnum, SomeOtherEnum>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_SomeEnum_SomeOtherEnum>(jni::alias_ref<JVariant_Boolean_SomeEnum_SomeOtherEnum> /* variant */)>("getVariantThreeTypes");
+    auto __result = method(_javaPart, JVariant_Boolean_SomeEnum_SomeOtherEnum::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<SomeEnum, double> JHybridTestObjectSwiftKotlinSpec::getVariantNumberAndEnum(const std::variant<SomeEnum, double>& variant) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JVariant_SomeEnum_Double>(jni::alias_ref<JVariant_SomeEnum_Double> /* variant */)>("getVariantNumberAndEnum");
+    auto __result = method(_javaPart, JVariant_SomeEnum_Double::fromCpp(variant));
     return __result->toCpp();
   }
   std::variant<Car, Person> JHybridTestObjectSwiftKotlinSpec::getVariantObjects(const std::variant<Car, Person>& variant) {
