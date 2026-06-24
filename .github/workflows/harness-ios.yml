@@ -134,22 +134,25 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-asan-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-asan-dd-
 
       - name: Build iOS app
         working-directory: example/ios
         run: |
           set -o pipefail
+          CLANG="$(xcrun --find clang)"
+          CLANGXX="$(xcrun --find clang++)"
           xcodebuild \
-            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            CC="$CLANG" CPLUSPLUS="$CLANGXX" LD="$CLANG" LDPLUSPLUS="$CLANGXX" \
             -derivedDataPath build -UseModernBuildSystem=YES \
             -workspace NitroExample.xcworkspace \
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
             -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -enableAddressSanitizer YES \
             -showBuildTimingSummary \
             ONLY_ACTIVE_ARCH=YES \
             build \

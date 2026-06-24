@@ -18,6 +18,9 @@ add_library(NitroModules SHARED
             ${android_files}
 )
 
+target_compile_options(NitroModules PUBLIC -fsanitize=address -fno-omit-frame-pointer)
+set_target_properties(NitroModules PROPERTIES LINK_FLAGS "-fsanitize=address")
+
 # Specifies a path to native header files.
 include_directories(
   # Shared C++ includes

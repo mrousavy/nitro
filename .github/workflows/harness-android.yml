@@ -85,7 +85,7 @@ jobs:
     strategy:
       matrix:
         min-sdk:
-          - '26'
+          - '27'
     steps:
       - uses: actions/checkout@v7
         with:
@@ -122,10 +122,40 @@ jobs:
             ~/.gradle/wrapper
             example/android/.gradle
             example/android/app/.cxx
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
+          key: ${{ runner.os }}-gradle-asan-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
+            ${{ runner.os }}-gradle-asan-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
             ${{ runner.os }}-gradle-
+
+      - name: Configure AddressSanitizer runtime
+        working-directory: example/android
+        run: |
+          set -euo pipefail
+          ndk_version="$(sed -n 's/.*ndkVersion = "\([^"]*\)".*/\1/p' build.gradle | head -1)"
+          asan_runtime="$(find "$ANDROID_HOME/ndk/${ndk_version}/toolchains/llvm/prebuilt" -path "*/lib/linux/libclang_rt.asan-${DEVICE_ARCH}-android.so" -print -quit)"
+          if [ -z "$asan_runtime" ]; then
+            echo "Could not find AddressSanitizer runtime for ${DEVICE_ARCH} in NDK ${ndk_version}"
+            exit 1
+          fi
+
+          perl -0pi -e 's/android \{\n/android {\n    packagingOptions {\n        jniLibs {\n            useLegacyPackaging true\n        }\n    }\n/' app/build.gradle
+
+          mkdir -p "app/src/debug/jniLibs/${DEVICE_ARCH}" "app/src/debug/resources/lib/${DEVICE_ARCH}"
+          cp "$asan_runtime" "app/src/debug/jniLibs/${DEVICE_ARCH}/"
+          cat > "app/src/debug/resources/lib/${DEVICE_ARCH}/wrap.sh" <<EOF
+          #!/system/bin/sh
+          HERE="\$(cd "\$(dirname "\$0")" && pwd)"
+          export ASAN_OPTIONS=log_to_syslog=false,allow_user_segv_handler=1
+          ASAN_LIB="\$(ls "\$HERE"/libclang_rt.asan-*-android.so)"
+          if [ -f "\$HERE/libc++_shared.so" ]; then
+            export LD_PRELOAD="\$ASAN_LIB \$HERE/libc++_shared.so"
+          else
+            export LD_PRELOAD="\$ASAN_LIB"
+          fi
+          exec "\$@"
+          EOF
+          chmod +x "app/src/debug/resources/lib/${DEVICE_ARCH}/wrap.sh"
+
       - name: Build Android app
         working-directory: example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
