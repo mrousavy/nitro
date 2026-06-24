@@ -133,16 +133,8 @@ jobs:
           ndk_version="$(sed -n 's/.*ndkVersion = "\([^"]*\)".*/\1/p' build.gradle | head -1)"
           tsan_runtime="$(find "$ANDROID_HOME/ndk/${ndk_version}/toolchains/llvm/prebuilt" -path "*/lib/linux/libclang_rt.tsan-x86_64-android.so" -print -quit)"
 
-          mkdir -p "app/src/debug/jniLibs/x86_64" "app/src/debug/resources/lib/x86_64"
+          mkdir -p "app/src/debug/jniLibs/x86_64"
           cp "$tsan_runtime" "app/src/debug/jniLibs/x86_64/"
-          cat > "app/src/debug/resources/lib/x86_64/wrap.sh" <<EOF
-          #!/system/bin/sh
-          HERE="\$(cd "\$(dirname "\$0")" && pwd)"
-          export TSAN_OPTIONS="halt_on_error=1"
-          export LD_PRELOAD="\$HERE/libclang_rt.tsan-x86_64-android.so"
-          "\$@"
-          EOF
-          chmod +x "app/src/debug/resources/lib/x86_64/wrap.sh"
 
       - name: Build Android app
         working-directory: example/android

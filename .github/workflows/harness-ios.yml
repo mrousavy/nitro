@@ -78,7 +78,7 @@ env:
   DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
   IOS_VERSION: ${{ github.event.inputs.ios_version || '26.5' }}
   XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.5' }}
-  USE_CCACHE: 1
+  USE_CCACHE: 0
   DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.5' }}.app/Contents/Developer
   HARNESS_DEBUG: 1
 
@@ -95,19 +95,6 @@ jobs:
 
       - name: Install npm dependencies (bun)
         run: bun install
-
-      - name: Install Ccache
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          max-size: 1.5G
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-ccache-example-ios
-          create-symlink: true
-      - name: Setup ccache behavior
-        run: |
-          echo "CCACHE_SLOPPINESS=clang_index_store,file_stat_matches,include_file_ctime,include_file_mtime,ivfsoverlay,pch_defines,modules,system_headers,time_macros" >> $GITHUB_ENV
-          echo "CCACHE_FILECLONE=true" >> $GITHUB_ENV
-          echo "CCACHE_DEPEND=true" >> $GITHUB_ENV
-          echo "CCACHE_INODECACHE=true" >> $GITHUB_ENV
 
       - name: Setup Ruby (bundle)
         uses: ruby/setup-ruby@v1
@@ -134,9 +121,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-tsan-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-tsan-dd-
 
       - name: Build iOS app
         working-directory: example/ios
