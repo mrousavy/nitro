@@ -83,7 +83,7 @@ env:
   HARNESS_DEBUG: 1
 
 jobs:
-  harness_ios_new:
+  harness_ios_new2:
     name: Harness iOS (new architecture)
     runs-on: macOS-26
     steps:
