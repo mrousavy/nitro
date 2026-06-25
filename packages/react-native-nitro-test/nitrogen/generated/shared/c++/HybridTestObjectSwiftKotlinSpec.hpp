@@ -60,12 +60,12 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include <NitroModules/Promise.hpp>
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -150,6 +150,7 @@ namespace margelo::nitro::test {
     public:
       // Methods
       virtual std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> newTestObjectAsync() = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) = 0;
       virtual void simpleFunc() = 0;
       virtual double addNumbers(double a, double b) = 0;
