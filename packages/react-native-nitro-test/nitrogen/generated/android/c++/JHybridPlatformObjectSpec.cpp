@@ -49,5 +49,10 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart);
     return __result->toStdString();
   }
+  std::string JHybridPlatformObjectSpec::getReactContextInfo() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getReactContextInfo");
+    auto __result = method(_javaPart);
+    return __result->toStdString();
+  }
 
 } // namespace margelo::nitro::test
