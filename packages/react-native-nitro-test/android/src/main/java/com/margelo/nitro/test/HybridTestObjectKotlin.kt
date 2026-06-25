@@ -597,7 +597,9 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun newTestObjectAsync(): Promise<HybridTestObjectSwiftKotlinSpec> {
-    return Promise.parallel<HybridTestObjectSwiftKotlinSpec> { HybridTestObjectKotlin() }
+    return Promise.parallel<HybridTestObjectSwiftKotlinSpec> {
+      HybridTestObjectKotlin()
+    }
   }
 
   override fun getIsViewBlue(view: HybridTestViewSpec): Boolean {
