@@ -80,12 +80,18 @@ env:
 
 jobs:
   harness_android_new:
-    name: Harness Android (new architecture)
+    name: Harness Android (${{ matrix.sanitizer.name }}, new architecture)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         min-sdk:
           - '26'
+        sanitizer:
+          - name: Default
+            gradle_property: ""
+          - name: ASan
+            gradle_property: "address"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -122,13 +128,13 @@ jobs:
             ~/.gradle/wrapper
             example/android/.gradle
             example/android/app/.cxx
-          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
+          key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ matrix.sanitizer.name }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-
+            ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ matrix.sanitizer.name }}-
             ${{ runner.os }}-gradle-
       - name: Build Android app
         working-directory: example/android
-        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }}
+        run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }} -PnitroSanitizer=${{ matrix.sanitizer.gradle_property }}
 
       - name: Run Harness E2E tests
         # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.

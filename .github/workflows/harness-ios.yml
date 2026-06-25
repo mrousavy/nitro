@@ -84,8 +84,18 @@ env:
 
 jobs:
   harness_ios_new:
-    name: Harness iOS (new architecture)
+    name: Harness iOS (${{ matrix.sanitizer.name }}, new architecture)
     runs-on: macOS-26
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer:
+          - name: Default
+            xcodebuild_flags: ""
+          - name: ASan
+            xcodebuild_flags: "-enableAddressSanitizer YES"
+          - name: TSan
+            xcodebuild_flags: "-enableThreadSanitizer YES"
     steps:
       - uses: actions/checkout@v7
         with:
@@ -100,7 +110,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 1.5G
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-ccache-example-ios
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-ccache-example-ios
           create-symlink: true
       - name: Setup ccache behavior
         run: |
@@ -134,24 +144,25 @@ jobs:
         uses: actions/cache@v6
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-
 
       - name: Build iOS app
         working-directory: example/ios
         run: |
           set -o pipefail
+          SANITIZER_FLAGS="${{ matrix.sanitizer.xcodebuild_flags }}"
           xcodebuild \
-            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
             -derivedDataPath build -UseModernBuildSystem=YES \
             -workspace NitroExample.xcworkspace \
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -destination 'generic/platform=iOS Simulator' \
+            ${SANITIZER_FLAGS} \
             -showBuildTimingSummary \
-            ONLY_ACTIVE_ARCH=YES \
+            ARCHS=arm64 \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 

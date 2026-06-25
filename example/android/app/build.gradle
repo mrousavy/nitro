@@ -77,6 +77,19 @@ def isNewArchitectureEnabled() {
 }
 logger.warn("Building with newArchEnabled = ${isNewArchitectureEnabled()}...")
 
+def nitroSanitizer = rootProject.findProperty('nitroSanitizer') ?: ''
+def nitroSanitizerRuntime = [
+    address: 'asan',
+][nitroSanitizer]
+def nitroSanitizerUsesWrap = nitroSanitizer == 'address'
+
+if (nitroSanitizer != '' && nitroSanitizerRuntime == null) {
+    throw new GradleException("Unsupported nitroSanitizer: ${nitroSanitizer}")
+}
+
+def nitroSanitizerJniLibsDir = layout.buildDirectory.dir("generated/nitroSanitizerJniLibs")
+def nitroSanitizerResourcesDir = layout.buildDirectory.dir("generated/nitroSanitizerResources")
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -110,6 +123,21 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    if (nitroSanitizerRuntime != null) {
+        packaging {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+        sourceSets {
+            debug {
+                jniLibs.srcDir(nitroSanitizerJniLibsDir)
+                if (nitroSanitizerUsesWrap) {
+                    resources.srcDir(nitroSanitizerResourcesDir)
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -120,5 +148,66 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
+    }
+}
+
+if (nitroSanitizerRuntime != null) {
+    def abiToRuntimeArch = [
+        'arm64-v8a': 'aarch64',
+        'armeabi-v7a': 'arm',
+        'x86': 'i686',
+        'x86_64': 'x86_64',
+    ]
+    def architectures = (rootProject.findProperty('reactNativeArchitectures') ?: 'armeabi-v7a,x86,x86_64,arm64-v8a').split(',')
+    def copyNitroSanitizerRuntime = tasks.register('copyNitroSanitizerRuntime', Sync) {
+        into(nitroSanitizerJniLibsDir)
+
+        architectures.each { abi ->
+            def runtimeArch = abiToRuntimeArch[abi]
+            if (runtimeArch == null) {
+                throw new GradleException("Unsupported ABI for nitroSanitizer: ${abi}")
+            }
+
+            def runtimeFileName = "libclang_rt.${nitroSanitizerRuntime}-${runtimeArch}-android.so"
+            def runtimeFiles = fileTree("${android.ndkDirectory}/toolchains/llvm/prebuilt") {
+                include "**/${runtimeFileName}"
+            }
+
+            from({ runtimeFiles.files }) {
+                into abi
+            }
+            doFirst {
+                if (runtimeFiles.files.size() != 1) {
+                    throw new GradleException("Expected one ${runtimeFileName} in ${android.ndkDirectory}, found ${runtimeFiles.files.size()}")
+                }
+            }
+        }
+    }
+    def copyNitroSanitizerWrap = nitroSanitizerUsesWrap ? tasks.register('copyNitroSanitizerWrap', Sync) {
+        into(nitroSanitizerResourcesDir)
+
+        def wrapScript = file("${android.ndkDirectory}/wrap.sh/asan.sh")
+        architectures.each { abi ->
+            from(wrapScript) {
+                rename { 'wrap.sh' }
+                into "lib/${abi}"
+            }
+        }
+        doFirst {
+            if (!wrapScript.isFile()) {
+                throw new GradleException("Expected ASan wrap script at ${wrapScript}")
+            }
+        }
+    } : null
+
+    afterEvaluate {
+        tasks.named('mergeDebugJniLibFolders').configure {
+            dependsOn(copyNitroSanitizerRuntime)
+        }
+        if (copyNitroSanitizerWrap != null) {
+            tasks.named('processDebugJavaRes').configure {
+                dependsOn(copyNitroSanitizerWrap)
+            }
+        }
     }
 }
