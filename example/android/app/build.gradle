@@ -80,6 +80,7 @@ logger.warn("Building with newArchEnabled = ${isNewArchitectureEnabled()}...")
 def nitroSanitizer = rootProject.findProperty('nitroSanitizer') ?: ''
 def nitroSanitizerRuntime = [
     address: 'asan',
+    thread: 'tsan',
 ][nitroSanitizer]
 def nitroSanitizerUsesWrap = nitroSanitizer == 'address'
 

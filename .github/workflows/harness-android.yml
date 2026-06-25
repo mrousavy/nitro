@@ -92,6 +92,8 @@ jobs:
             gradle_property: ""
           - name: ASan
             gradle_property: "address"
+          - name: TSan
+            gradle_property: "thread"
     steps:
       - uses: actions/checkout@v7
         with:
