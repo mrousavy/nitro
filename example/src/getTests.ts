@@ -1434,16 +1434,14 @@ export function getTests(
       async () =>
         (
           await it(async () => {
-            // C++-only: the C++ `Promise<T>` race. `newTestObjectAsync` resolves a HybridObject
-            // off the JS thread; the race is between resolve() and JSIConverter::toJSI reading
-            // Promise `_state` on the JS thread. Passes functionally — the verdict is Thread
-            // Sanitizer (build the example with ENABLE_THREAD_SANITIZER=YES).
-            const HybridTestObjectCpp =
-              getHybridObjectConstructor<TestObjectCpp>('TestObjectCpp')
-            const cpp = new HybridTestObjectCpp()
+            // Resolves a HybridObject off the JS thread; the race is between resolve() and
+            // JSIConverter::toJSI reading Promise state on the JS thread. Passes functionally;
+            // the verdict is Thread Sanitizer.
             for (let round = 0; round < 20; round++) {
               await Promise.all(
-                Array.from({ length: 32 }, () => cpp.newTestObjectAsync())
+                Array.from({ length: 32 }, () =>
+                  testObject.newTestObjectAsync()
+                )
               )
             }
             return true

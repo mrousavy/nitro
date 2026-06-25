@@ -341,8 +341,8 @@ export interface TestObjectCpp
   // Type-specifics
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
-  // Returns a HybridObject from a Promise resolved off the JS thread (on the ThreadPool, via
-  // Promise::async). Used to reproduce the data race between resolve() and JSIConverter::toJSI.
+  // Returns a HybridObject from a Promise resolved off the JS thread. Used to reproduce the data
+  // race between resolve() and JSIConverter::toJSI.
   newTestObjectAsync(): Promise<TestObjectCpp>
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
@@ -364,6 +364,7 @@ export interface TestObjectSwiftKotlin
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
+  newTestObjectAsync(): Promise<TestObjectSwiftKotlin>
   optionalHybrid?: TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
