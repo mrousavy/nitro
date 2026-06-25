@@ -63,6 +63,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include <NitroModules/Promise.hpp>
 #include "Person.hpp"
 #include <NitroModules/HybridObject.hpp>
 #include "CustomString.hpp"
@@ -70,7 +71,6 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -160,6 +160,7 @@ namespace margelo::nitro::test {
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<HybridTestObjectCppSpec> newTestObject() = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> newTestObjectAsync() = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) = 0;
       virtual CustomString bounceCustomType(CustomString value) = 0;
