@@ -23,6 +23,10 @@ using namespace margelo;
 @interface NativeNitroModules () <RCTTurboModuleWithJSIBindings>
 @end
 
+// Captured once when RN decorates this module at startup; lets any Nitro
+// HybridObject reach sibling RN modules on iOS via +sharedModuleRegistry.
+static RCTModuleRegistry* gNitroSharedModuleRegistry = nil;
+
 /**
  * NativeNitroModules implementation for the new architecture.
  * This uses `installJSIBindingsWithRuntime:` to install the `global.NitroModulesProxy` into the JS Runtime.
@@ -31,8 +35,20 @@ using namespace margelo;
   bool _didInstall;
   NSString* _Nullable _errorMessage;
   std::weak_ptr<react::CallInvoker> _callInvoker;
+  __weak RCTModuleRegistry* _moduleRegistry;
 }
 RCT_EXPORT_MODULE(NitroModules)
+
+- (RCTModuleRegistry*)moduleRegistry {
+  return _moduleRegistry;
+}
+- (void)setModuleRegistry:(RCTModuleRegistry*)moduleRegistry {
+  _moduleRegistry = moduleRegistry;
+  gNitroSharedModuleRegistry = moduleRegistry;
+}
++ (nullable RCTModuleRegistry*)sharedModuleRegistry {
+  return gNitroSharedModuleRegistry;
+}
 
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
