@@ -203,6 +203,7 @@ public:
   void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
   std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
+  std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> newTestObjectAsync() override;
 
   std::shared_ptr<HybridBaseSpec> createBase() override;
   std::shared_ptr<HybridChildSpec> createChild() override;

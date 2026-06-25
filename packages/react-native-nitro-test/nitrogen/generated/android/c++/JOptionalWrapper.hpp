@@ -20,7 +20,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "OptionalWrapper" and the the Kotlin data class "OptionalWrapper".
+   * The C++ JNI bridge between the C++ struct "OptionalWrapper" and the Kotlin data class "OptionalWrapper".
    */
   struct JOptionalWrapper final: public jni::JavaClass<JOptionalWrapper> {
   public:

@@ -34,7 +34,7 @@ jobs:
     name: Compile TypeScript (tsc)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
@@ -47,7 +47,7 @@ jobs:
     name: Lint TypeScript (eslint, prettier)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)

@@ -1,14 +1,14 @@
-<a href="https://margelo.com">
+<a href="https://nitro.margelo.com">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="../../docs/static/img/banner-react-native-nitro-modules-dark.png" />
     <source media="(prefers-color-scheme: light)" srcset="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
-    <img alt="Nitrogen" src="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
+    <img alt="React Native Nitro Modules" src="../../docs/static/img/banner-react-native-nitro-modules-light.png" />
   </picture>
 </a>
 
 <br />
 
-**react-native-nitro-modules** is a core library that contains highly efficient statically compiled JS to C++ bindings.
+**react-native-nitro-modules** is the core React Native Nitro package for building fast, type-safe native modules with statically compiled JSI bindings.
 
 It uses JSI to generate C++ templates that can bridge virtually any JS type to a C++ type with minimal overhead.
 

@@ -19,7 +19,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "JsStyleStruct" and the the Kotlin data class "JsStyleStruct".
+   * The C++ JNI bridge between the C++ struct "JsStyleStruct" and the Kotlin data class "JsStyleStruct".
    */
   struct JJsStyleStruct final: public jni::JavaClass<JJsStyleStruct> {
   public:

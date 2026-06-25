@@ -16,13 +16,13 @@ ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxT
   Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads (max: %i)...", name, initialThreadsCount,
               maxThreadsCount);
 
+  std::unique_lock<std::mutex> lock(_queueMutex);
   for (size_t i = 0; i < initialThreadsCount; i++) {
-    addThread();
+    addThread(lock);
   }
 }
 
-void ThreadPool::addThread() {
-  std::unique_lock<std::mutex> lock(_queueMutex);
+void ThreadPool::addThread(std::unique_lock<std::mutex>& queueMutexLock) {
   if (!_isAlive) {
     return;
   }
@@ -58,16 +58,14 @@ void ThreadPool::addThread() {
 }
 
 void ThreadPool::run(std::function<void()>&& task) {
-  // If there are tasks still waiting to be finished, just start a new Thread.
-  if (!_tasks.empty() && _threadCount < _threadCountLimit) {
-    addThread();
-  }
-  // New scope because of RAII lock
   {
-    // lock on the mutex - we want to push the task back in the queue
     std::unique_lock<std::mutex> lock(_queueMutex);
     if (!_isAlive) {
       throw std::runtime_error("Cannot queue the given task - the ThreadPool has already been stopped!");
+    }
+    // If there are tasks still waiting to be finished, just start a new Thread.
+    if (!_tasks.empty() && _threadCount < _threadCountLimit) {
+      addThread(lock);
     }
     _tasks.push(std::move(task));
   }

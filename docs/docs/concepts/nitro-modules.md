@@ -1,4 +1,5 @@
 ---
+description: Understand Nitro Modules, the React Native library structure for type-safe native modules backed by Hybrid Objects and statically compiled JSI bindings.
 ---
 
 import Tabs from '@theme/Tabs';

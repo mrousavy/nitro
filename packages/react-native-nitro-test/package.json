@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-test",
-  "version": "0.35.9",
+  "version": "0.35.11",
   "description": "A testing playground library for Nitro Modules.",
   "main": "lib/index",
   "module": "lib/index",
@@ -40,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com/docs/guides/running-example-app",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

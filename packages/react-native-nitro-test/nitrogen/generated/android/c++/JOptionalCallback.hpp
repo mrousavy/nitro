@@ -22,7 +22,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "OptionalCallback" and the the Kotlin data class "OptionalCallback".
+   * The C++ JNI bridge between the C++ struct "OptionalCallback" and the Kotlin data class "OptionalCallback".
    */
   struct JOptionalCallback final: public jni::JavaClass<JOptionalCallback> {
   public:

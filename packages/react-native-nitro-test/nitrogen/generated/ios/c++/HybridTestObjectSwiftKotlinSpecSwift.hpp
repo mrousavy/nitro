@@ -63,12 +63,12 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
 #include <functional>
+#include <NitroModules/Promise.hpp>
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <unordered_map>
@@ -261,6 +261,14 @@ namespace margelo::nitro::test {
     // Methods
     inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override {
       auto __result = _swiftPart.newTestObject();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> newTestObjectAsync() override {
+      auto __result = _swiftPart.newTestObjectAsync();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
