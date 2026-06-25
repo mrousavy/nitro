@@ -52,7 +52,7 @@ android {
     externalNativeBuild {
       cmake {
         cppFlags "-frtti -fexceptions -Wall -Wextra -fstack-protector-all"
-        arguments "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+        arguments "-DANDROID_STL=c++_shared", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON", "-DNITRO_SANITIZER=${rootProject.findProperty('nitroSanitizer') ?: ''}"
         abiFilters (*reactNativeArchitectures())
 
         buildTypes {
