@@ -17,7 +17,7 @@ namespace margelo::nitro::test::external {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "OptionalPrimitivesHolder" and the the Kotlin data class "OptionalPrimitivesHolder".
+   * The C++ JNI bridge between the C++ struct "OptionalPrimitivesHolder" and the Kotlin data class "OptionalPrimitivesHolder".
    */
   struct JOptionalPrimitivesHolder final: public jni::JavaClass<JOptionalPrimitivesHolder> {
   public:

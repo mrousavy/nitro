@@ -1,4 +1,5 @@
 ---
+description: Improve Nitro Module performance by choosing static types, efficient Hybrid Object APIs, and lower-overhead native binding patterns.
 ---
 
 import Tabs from '@theme/Tabs';

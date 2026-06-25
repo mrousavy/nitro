@@ -18,7 +18,7 @@ namespace margelo::nitro::test {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "PartialPerson" and the the Kotlin data class "PartialPerson".
+   * The C++ JNI bridge between the C++ struct "PartialPerson" and the Kotlin data class "PartialPerson".
    */
   struct JPartialPerson final: public jni::JavaClass<JPartialPerson> {
   public:

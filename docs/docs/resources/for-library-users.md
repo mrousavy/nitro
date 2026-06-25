@@ -1,4 +1,7 @@
 ---
+title: Installation
+sidebar_label: Installation
+description: Install react-native-nitro-modules in a React Native app and configure Nitro-powered libraries on iOS and Android.
 ---
 
 import Tabs from '@theme/Tabs';

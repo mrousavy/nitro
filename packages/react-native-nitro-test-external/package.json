@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-test-external",
-  "version": "0.35.9",
+  "version": "0.35.11",
   "description": "react-native-nitro-test-external",
   "main": "lib/index",
   "module": "lib/index",
@@ -48,7 +48,7 @@
   "bugs": {
     "url": "https://github.com/mrousavy/nitro/issues"
   },
-  "homepage": "https://github.com/mrousavy/nitro#readme",
+  "homepage": "https://nitro.margelo.com",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

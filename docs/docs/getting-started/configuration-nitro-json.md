@@ -1,4 +1,6 @@
 ---
+title: Configuration (nitro.json)
+description: Configure nitro.json for a React Native Nitro Module, including C++ namespace, iOS module name, Android package, and code generation paths.
 ---
 
 # Configuration (`nitro.json`)

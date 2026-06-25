@@ -1429,6 +1429,27 @@ export function getTests(
           .didNotThrow()
           .equals(true)
     ),
+    createTest(
+      'newTestObjectAsync() under parallel load does not data-race (run under Thread Sanitizer)',
+      async () =>
+        (
+          await it(async () => {
+            // Resolves a HybridObject off the JS thread; the race is between resolve() and
+            // JSIConverter::toJSI reading Promise state on the JS thread. Passes functionally;
+            // the verdict is Thread Sanitizer.
+            for (let round = 0; round < 20; round++) {
+              await Promise.all(
+                Array.from({ length: 32 }, () =>
+                  testObject.newTestObjectAsync()
+                )
+              )
+            }
+            return true
+          })
+        )
+          .didNotThrow()
+          .equals(true)
+    ),
     createTest('promiseThatResolvesVoidInstantly() works', async () =>
       (await it(() => testObject.promiseThatResolvesVoidInstantly()))
         .didNotThrow()

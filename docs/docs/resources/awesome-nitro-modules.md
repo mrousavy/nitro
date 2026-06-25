@@ -1,9 +1,20 @@
 ---
+title: Awesome Nitro Modules
+sidebar_label: Awesome Nitro Modules
+description: Libraries built with React Native Nitro Modules, including production React Native packages powered by Nitro, Nitrogen, and type-safe JSI bindings.
+keywords:
+  - React Native Nitro Modules
+  - libraries built with Nitro
+  - Nitro Modules ecosystem
+  - React Native native modules
+  - JSI native modules
 ---
 
 # Awesome Nitro Modules
 
-A curated collection of community-built Nitro Modules.
+Libraries built with React Native Nitro Modules.
+
+A curated collection of community-built Nitro Modules, including production React Native libraries powered by Nitro, Nitrogen, and type-safe JSI bindings.
 
 > **Want to add your module?** PRs are welcome!
 
@@ -27,6 +38,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/mrousavy/react-native-vision-camera) |
+| **react-native-data-scanner** | One-shot QR/barcode/data scanning | [GitHub](https://github.com/mrousavy/react-native-data-scanner) |
 | **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
 
 ### Animation & Graphics
@@ -98,6 +110,7 @@ A curated collection of community-built Nitro Modules.
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-unistyles** | Universal styling system | [GitHub](https://github.com/jpudysz/react-native-unistyles) |
+| **react-native-alternate-app-icon** | Dynamic alternate app icon switching | [GitHub](https://github.com/rutvik24/react-native-alternate-app-icon) |
 
 ### Text & Content
 
@@ -113,6 +126,7 @@ A curated collection of community-built Nitro Modules.
 | **react-native-nitro-buffer** | 100% Node.js-compatible `Buffer` | [GitHub](https://github.com/iwater/react-native-nitro-buffer) |
 | **react-native-nitro-zlib** | Node.js `zlib` implementation | [GitHub](https://github.com/iwater/react-native-nitro-zlib) |
 | **react-native-clusterer** | Marker clustering for maps | [GitHub](https://github.com/JiriHoffmann/react-native-clusterer) |
+| **react-native-nitro-google-signin** | Universal (One Tap) Google Sign-In | [GitHub](https://github.com/react-native-nitro-google-sign-in/google-signin) |
 | **react-native-nitro-google-sso** | Google Sign-In | [GitHub](https://github.com/patrickkabwe/react-native-nitro-google-sso) |
 | **react-native-nitro-ota** | High-performance OTA updates | [GitHub](https://github.com/riteshshukla04/react-native-nitro-ota) |
 | **react-native-nitro-version-check** | High-performance Version checking utilities | [GitHub](https://github.com/AlshehriAli0/react-native-nitro-version-check) |

@@ -1,4 +1,6 @@
 ---
+title: Nitro Typing System
+description: Understand Nitro's static, type-safe, and null-safe conversion system for JavaScript, C++, Swift, and Kotlin native module types.
 ---
 
 # Nitro's Typing System

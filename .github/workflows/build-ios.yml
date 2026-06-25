@@ -53,7 +53,7 @@ jobs:
           - name: no_frameworks
             use_frameworks: ""   # intentionally unset
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
 
       - name: Set USE_FRAMEWORKS
@@ -87,7 +87,7 @@ jobs:
         run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
 
       - name: Restore Pods cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: example/ios/Pods
           key: ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
@@ -98,7 +98,7 @@ jobs:
         run: bun pods
 
       - name: Restore DerivedData cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: example/ios/build
           key: ${{ runner.os }}-${{ runner.arch }}-${{ matrix.use_frameworks }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}

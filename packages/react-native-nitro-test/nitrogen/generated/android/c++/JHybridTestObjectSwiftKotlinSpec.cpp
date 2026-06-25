@@ -64,6 +64,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>
 #include "JVariant_String_Double.hpp"
+#include <NitroModules/Promise.hpp>
+#include <NitroModules/JPromise.hpp>
 #include "Person.hpp"
 #include "JVariant_HybridTestObjectSwiftKotlinSpec_Person.hpp"
 #include "JPerson.hpp"
@@ -74,8 +76,6 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/JAnyMap.hpp>
-#include <NitroModules/Promise.hpp>
-#include <NitroModules/JPromise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/JArrayBuffer.hpp>
 #include <unordered_map>
@@ -361,6 +361,22 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JHybridTestObjectSwiftKotlinSpec::JavaPart>()>("newTestObject");
     auto __result = method(_javaPart);
     return __result->getJHybridTestObjectSwiftKotlinSpec();
+  }
+  std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> JHybridTestObjectSwiftKotlinSpec::newTestObjectAsync() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("newTestObjectAsync");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JHybridTestObjectSwiftKotlinSpec::JavaPart>(__boxedResult);
+        __promise->resolve(__result->getJHybridTestObjectSwiftKotlinSpec());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
   }
   std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person> JHybridTestObjectSwiftKotlinSpec::getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& variant) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person>(jni::alias_ref<JVariant_HybridTestObjectSwiftKotlinSpec_Person> /* variant */)>("getVariantHybrid");

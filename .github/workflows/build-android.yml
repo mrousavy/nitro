@@ -48,7 +48,7 @@ jobs:
           - '24'
           - '26'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
 
       - name: Install npm dependencies (bun)
@@ -65,7 +65,7 @@ jobs:
           java-package: jdk
 
       - name: Restore Gradle/CMake cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ~/.gradle/caches

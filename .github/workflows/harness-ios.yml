@@ -84,10 +84,20 @@ env:
 
 jobs:
   harness_ios_new:
-    name: Harness iOS (new architecture)
+    name: Harness iOS (${{ matrix.sanitizer.name }}, new architecture)
     runs-on: macOS-26
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer:
+          - name: Default
+            xcodebuild_flags: ""
+          - name: ASan
+            xcodebuild_flags: "-enableAddressSanitizer YES"
+          - name: TSan
+            xcodebuild_flags: "-enableThreadSanitizer YES"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -100,7 +110,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2
         with:
           max-size: 1.5G
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-ccache-example-ios
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-ccache-example-ios
           create-symlink: true
       - name: Setup ccache behavior
         run: |
@@ -120,7 +130,7 @@ jobs:
         run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
 
       - name: Restore Pods cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: example/ios/Pods
           key: ${{ runner.os }}-${{ runner.arch }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
@@ -131,27 +141,31 @@ jobs:
         run: bun pods
 
       - name: Restore DerivedData cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: example/ios/build
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-dd-
+            ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-
 
       - name: Build iOS app
         working-directory: example/ios
         run: |
           set -o pipefail
+          CLANG="$(xcrun -f clang)"
+          CLANGXX="$(xcrun -f clang++)"
+          SANITIZER_FLAGS="${{ matrix.sanitizer.xcodebuild_flags }}"
           xcodebuild \
-            CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ \
+            CC="${CLANG}" CPLUSPLUS="${CLANGXX}" LD="${CLANG}" LDPLUSPLUS="${CLANGXX}" \
             -derivedDataPath build -UseModernBuildSystem=YES \
             -workspace NitroExample.xcworkspace \
             -scheme NitroExample \
             -sdk iphonesimulator \
             -configuration Debug \
-            -destination 'platform=iOS Simulator,arch=arm64,name=${{ env.DEVICE_MODEL }}' \
+            -destination 'generic/platform=iOS Simulator' \
+            ${SANITIZER_FLAGS} \
             -showBuildTimingSummary \
-            ONLY_ACTIVE_ARCH=YES \
+            ARCHS=arm64 \
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 
