@@ -1,10 +1,11 @@
 import * as React from 'react'
 
-import { StyleSheet, View, Text, Button, Platform } from 'react-native'
+import { StyleSheet, View, Text, Button, Pressable, Platform } from 'react-native'
 import { callback, NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import {
+  GradientView,
   HybridTestObjectSwiftKotlin,
   RecyclableTestView,
   TestView,
@@ -76,6 +77,27 @@ export function ViewScreenImpl() {
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
+      <View style={styles.gradientBannerWrapper}>
+        <GradientView
+          colors={['#FF0080', '#7928CA']}
+          style={styles.gradientBanner}
+        >
+          <Text style={styles.gradientTitle}>Nitro GradientView</Text>
+          <Text style={styles.gradientSubtitle}>
+            These children are mounted on top of a native gradient
+          </Text>
+          <Pressable
+            onPress={() => console.log('Gradient child button tapped!')}
+            style={({ pressed }) => [
+              styles.tapChild,
+              pressed && styles.tapChildPressed,
+            ]}
+          >
+            <Text style={styles.tapChildText}>Tap a child</Text>
+          </Pressable>
+        </GradientView>
+      </View>
+
       <View style={styles.resultContainer}>
         <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
@@ -127,6 +149,47 @@ const styles = StyleSheet.create({
       android: 'monospace',
     }),
     fontWeight: 'bold',
+  },
+  gradientBannerWrapper: {
+    marginHorizontal: 15,
+    marginBottom: 15,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  gradientBanner: {
+    padding: 16,
+    gap: 8,
+  },
+  gradientTitle: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  gradientSubtitle: {
+    color: 'white',
+    fontSize: 13,
+  },
+  tapChild: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 999,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tapChildPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.96 }],
+  },
+  tapChildText: {
+    color: '#7928CA',
+    fontSize: 14,
+    fontWeight: '700',
   },
   segmentedControl: {
     minWidth: 180,

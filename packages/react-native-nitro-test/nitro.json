@@ -74,6 +74,16 @@
         "language": "kotlin",
         "implementationClassName": "HybridRecyclableTestView"
       }
+    },
+    "GradientView": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridGradientView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridGradientView"
+      }
     }
   },
   "ignorePaths": [

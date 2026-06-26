@@ -17,6 +17,7 @@
 #include "HybridPlatformObjectSpecSwift.hpp"
 #include "HybridTestViewSpecSwift.hpp"
 #include "HybridRecyclableTestViewSpecSwift.hpp"
+#include "HybridGradientViewSpecSwift.hpp"
 
 @interface NitroTestAutolinking : NSObject
 @end
@@ -75,6 +76,13 @@
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
       std::shared_ptr<HybridRecyclableTestViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createRecyclableTestView();
+      return hybridObject;
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "GradientView",
+    []() -> std::shared_ptr<HybridObject> {
+      std::shared_ptr<HybridGradientViewSpec> hybridObject = NitroTest::NitroTestAutolinking::createGradientView();
       return hybridObject;
     }
   );
