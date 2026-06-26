@@ -117,6 +117,12 @@ public:
         // 3. Actually call the method with JSI values as arguments and return a JSI value again.
         //    Internally, this method converts the JSI values to C++ values using `JSIConverter<T>`.
         return callMethod(hybridInstance.get(), method, runtime, args, count, std::index_sequence_for<Args...>{});
+      } catch(const std::runtime_error& e) {
+          std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
+          throw jsi::JSError(runtime, funcName + ": " + e.what());
+      } catch(const jsi::JSError& e) {
+          std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
+          throw jsi::JSError(runtime, funcName + " threw an error: " + e.getMessage());
       } catch (const std::exception& exception) {
         // Some exception was thrown - add method name information and re-throw as `JSError`.
         std::string funcName = getHybridFuncFullName<THybrid>(kind, name, hybridInstance.get());
