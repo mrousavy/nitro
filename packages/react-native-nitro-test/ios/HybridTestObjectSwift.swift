@@ -274,6 +274,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectSwift()
   }
 
+  func newTestObjectAsync() throws -> Promise<any HybridTestObjectSwiftKotlinSpec> {
+    return Promise.parallel { HybridTestObjectSwift() }
+  }
+
   func funcThatThrows() throws -> Double {
     throw RuntimeError.error(
       withMessage: "This function will only work after sacrificing seven lambs!")

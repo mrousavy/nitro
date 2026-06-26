@@ -690,6 +690,13 @@ std::shared_ptr<HybridTestObjectCppSpec> HybridTestObjectCpp::newTestObject() {
   return std::make_shared<HybridTestObjectCpp>();
 }
 
+std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> HybridTestObjectCpp::newTestObjectAsync() {
+  // Resolves a HybridObject off the JS thread (on the Nitro ThreadPool). The near-instant closure
+  // keeps the resolve()-vs-toJSI window wide so the C++ Promise `_state` race surfaces under TSan.
+  return Promise<std::shared_ptr<HybridTestObjectCppSpec>>::async(
+      []() -> std::shared_ptr<HybridTestObjectCppSpec> { return std::make_shared<HybridTestObjectCpp>(); });
+}
+
 jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t count) {
   jsi::Array array(runtime, count);
   for (size_t i = 0; i < count; i++) {

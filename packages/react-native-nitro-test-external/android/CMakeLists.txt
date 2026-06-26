@@ -10,6 +10,14 @@ add_library(${PACKAGE_NAME} SHARED
         src/main/cpp/cpp-adapter.cpp
 )
 
+set(NITRO_SANITIZER "" CACHE STRING "Native sanitizer")
+if(NITRO_SANITIZER STREQUAL "address")
+  target_compile_options(${PACKAGE_NAME} PUBLIC -fsanitize=address -fno-omit-frame-pointer)
+  set_target_properties(${PACKAGE_NAME} PROPERTIES LINK_FLAGS "-fsanitize=address")
+elseif(NOT NITRO_SANITIZER STREQUAL "")
+  message(FATAL_ERROR "Unsupported NITRO_SANITIZER: ${NITRO_SANITIZER}")
+endif()
+
 # Add Nitrogen specs :)
 include(${CMAKE_SOURCE_DIR}/../nitrogen/generated/android/NitroTestExternal+autolinking.cmake)
 

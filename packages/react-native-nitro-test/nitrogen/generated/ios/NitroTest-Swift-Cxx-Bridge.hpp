@@ -357,6 +357,62 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = std::weak_ptr<HybridTestObjectSwiftKotlinSpec>;
   inline std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ weakify_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& strong) noexcept { return strong; }
   
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___ = std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> create_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___() noexcept {
+    return Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> wrap_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> promise) noexcept {
+    return PromiseHolder<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>&)>`.
+   */
+  using Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ = std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper(std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<HybridTestObjectSwiftKotlinSpec> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ create_Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper wrap_Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ value) noexcept {
+    return Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  /**
+   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
+   */
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__exception_ptr_Wrapper final {
+  public:
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    inline void call(std::exception_ptr error) const noexcept {
+      _function->operator()(error);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
+    return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
   // pragma MARK: std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>`.
@@ -647,28 +703,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) noexcept {
     return PromiseHolder<double>(std::move(promise));
-  }
-  
-  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  /**
-   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
-   */
-  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__exception_ptr_Wrapper final {
-  public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
-    inline void call(std::exception_ptr error) const noexcept {
-      _function->operator()(error);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
-    return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::vector<std::shared_ptr<Promise<double>>>
@@ -1618,6 +1652,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>
+  using Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ = Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>;
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ create_Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____(const std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ create_Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>
