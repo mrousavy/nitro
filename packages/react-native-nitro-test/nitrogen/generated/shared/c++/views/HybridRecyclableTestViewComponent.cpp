@@ -17,6 +17,16 @@
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <cxxreact/ReactNativeVersion.h>
+
+// react-native 0.87 removed the `at(name, prefix, suffix)` overload of
+// `react::RawProps` in favor of a single-argument `at(name)`. Keep supporting
+// older versions (<= 0.86) that still require the 3-argument form.
+#if REACT_NATIVE_VERSION_MAJOR > 0 || REACT_NATIVE_VERSION_MINOR > 86
+#define NITRO_RAWPROPS_AT(rawProps, name) (rawProps).at(name)
+#else
+#define NITRO_RAWPROPS_AT(rawProps, name) (rawProps).at(name, nullptr, nullptr)
+#endif
 
 namespace margelo::nitro::test::views {
 
@@ -28,7 +38,7 @@ namespace margelo::nitro::test::views {
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
     isBlue([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
+        const react::RawValue* rawValue = NITRO_RAWPROPS_AT(rawProps, "isBlue");
         if (rawValue == nullptr) return sourceProps.isBlue;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
@@ -38,7 +48,7 @@ namespace margelo::nitro::test::views {
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> {
       try {
-        const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
+        const react::RawValue* rawValue = NITRO_RAWPROPS_AT(rawProps, "hybridRef");
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
@@ -81,3 +91,5 @@ namespace margelo::nitro::test::views {
 #endif
 
 } // namespace margelo::nitro::test::views
+
+#undef NITRO_RAWPROPS_AT
