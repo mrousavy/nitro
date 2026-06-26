@@ -209,7 +209,6 @@ namespace ${namespace} {
       `
 ${name}([&]() -> CachedProp<${type}> {
   try {
-  
     const react::RawValue* rawValue = getRawProp(rawProps, "${prop.name}");
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;

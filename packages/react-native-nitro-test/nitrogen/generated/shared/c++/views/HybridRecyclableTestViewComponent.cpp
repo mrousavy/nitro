@@ -29,9 +29,6 @@ namespace margelo::nitro::test::views {
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
     isBlue([&]() -> CachedProp<bool> {
       try {
-        // `getRawProp` adapts to React Native's `RawProps::at(...)` signature, which
-        // changed from `at(name, prefix, suffix)` to `at(name)` in RN 0.87 (nightly
-        // 2026-06-25). See NitroModules/RawPropsCompat.hpp.
         const react::RawValue* rawValue = getRawProp(rawProps, "isBlue");
         if (rawValue == nullptr) return sourceProps.isBlue;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
@@ -42,9 +39,6 @@ namespace margelo::nitro::test::views {
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> {
       try {
-        // `getRawProp` adapts to React Native's `RawProps::at(...)` signature, which
-        // changed from `at(name, prefix, suffix)` to `at(name)` in RN 0.87 (nightly
-        // 2026-06-25). See NitroModules/RawPropsCompat.hpp.
         const react::RawValue* rawValue = getRawProp(rawProps, "hybridRef");
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
