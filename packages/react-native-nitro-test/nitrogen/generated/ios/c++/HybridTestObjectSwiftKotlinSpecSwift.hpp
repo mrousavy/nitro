@@ -20,6 +20,8 @@ namespace margelo::nitro::test { enum class Powertrain; }
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
 namespace margelo::nitro::test { struct PartialPerson; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -65,6 +67,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <functional>
 #include <NitroModules/Promise.hpp>
 #include "Person.hpp"
+#include "Scores.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"

@@ -18,7 +18,7 @@ public extension PartialPerson {
   /**
    * Create a new instance of `PartialPerson`.
    */
-  init(name: String?, age: Double?) {
+  init(name: String?, age: Double?, scores: Scores?, siblings: [Double]?) {
     self.init({ () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = name {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
@@ -28,6 +28,24 @@ public extension PartialPerson {
     }(), { () -> bridge.std__optional_double_ in
       if let __unwrappedValue = age {
         return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_Scores_ in
+      if let __unwrappedValue = scores {
+        return bridge.create_std__optional_Scores_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__vector_double__ in
+      if let __unwrappedValue = siblings {
+        return bridge.create_std__optional_std__vector_double__({ () -> bridge.std__vector_double_ in
+          var __vector = bridge.create_std__vector_double_(__unwrappedValue.count)
+          for __item in __unwrappedValue {
+            __vector.push_back(__item)
+          }
+          return __vector
+        }())
       } else {
         return .init()
       }
@@ -52,6 +70,23 @@ public extension PartialPerson {
       if bridge.has_value_std__optional_double_(self.__age) {
         let __unwrapped = bridge.get_std__optional_double_(self.__age)
         return __unwrapped
+      } else {
+        return nil
+      }
+    }()
+  }
+  
+  @inline(__always)
+  var scores: Scores? {
+    return self.__scores.value
+  }
+  
+  @inline(__always)
+  var siblings: [Double]? {
+    return { () -> [Double]? in
+      if bridge.has_value_std__optional_std__vector_double__(self.__siblings) {
+        let __unwrapped = bridge.get_std__optional_std__vector_double__(self.__siblings)
+        return __unwrapped.map({ __item in __item })
       } else {
         return nil
       }

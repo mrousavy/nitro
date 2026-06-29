@@ -12,9 +12,11 @@
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
+#include "JScores.hpp"
 #include "JVariant_String_Double.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "Scores.hpp"
 #include <optional>
 #include <string>
 #include <variant>

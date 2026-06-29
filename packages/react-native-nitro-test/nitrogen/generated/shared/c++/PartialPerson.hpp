@@ -28,10 +28,13 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `Scores` to properly resolve imports.
+namespace margelo::nitro::test { struct Scores; }
 
 #include <string>
 #include <optional>
+#include "Scores.hpp"
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -42,10 +45,12 @@ namespace margelo::nitro::test {
   public:
     std::optional<std::string> name     SWIFT_PRIVATE;
     std::optional<double> age     SWIFT_PRIVATE;
+    std::optional<Scores> scores     SWIFT_PRIVATE;
+    std::optional<std::vector<double>> siblings     SWIFT_PRIVATE;
 
   public:
     PartialPerson() = default;
-    explicit PartialPerson(std::optional<std::string> name, std::optional<double> age): name(name), age(age) {}
+    explicit PartialPerson(std::optional<std::string> name, std::optional<double> age, std::optional<Scores> scores, std::optional<std::vector<double>> siblings): name(name), age(age), scores(scores), siblings(siblings) {}
 
   public:
     friend bool operator==(const PartialPerson& lhs, const PartialPerson& rhs) = default;
@@ -62,13 +67,17 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::test::PartialPerson(
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "name"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "age")))
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "age"))),
+        JSIConverter<std::optional<margelo::nitro::test::Scores>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "scores"))),
+        JSIConverter<std::optional<std::vector<double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "siblings")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::PartialPerson& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "name"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.name));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "age"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.age));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "scores"), JSIConverter<std::optional<margelo::nitro::test::Scores>>::toJSI(runtime, arg.scores));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "siblings"), JSIConverter<std::optional<std::vector<double>>>::toJSI(runtime, arg.siblings));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -81,6 +90,8 @@ namespace margelo::nitro {
       }
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "name")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "age")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::test::Scores>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "scores")))) return false;
+      if (!JSIConverter<std::optional<std::vector<double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "siblings")))) return false;
       return true;
     }
   };

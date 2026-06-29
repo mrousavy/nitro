@@ -10,8 +10,11 @@
 #include <fbjni/fbjni.h>
 #include "PartialPerson.hpp"
 
+#include "JScores.hpp"
+#include "Scores.hpp"
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -36,9 +39,20 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JString> name = this->getFieldValue(fieldName);
       static const auto fieldAge = clazz->getField<jni::JDouble>("age");
       jni::local_ref<jni::JDouble> age = this->getFieldValue(fieldAge);
+      static const auto fieldScores = clazz->getField<JScores>("scores");
+      jni::local_ref<JScores> scores = this->getFieldValue(fieldScores);
+      static const auto fieldSiblings = clazz->getField<jni::JArrayDouble>("siblings");
+      jni::local_ref<jni::JArrayDouble> siblings = this->getFieldValue(fieldSiblings);
       return PartialPerson(
         name != nullptr ? std::make_optional(name->toStdString()) : std::nullopt,
-        age != nullptr ? std::make_optional(age->value()) : std::nullopt
+        age != nullptr ? std::make_optional(age->value()) : std::nullopt,
+        scores != nullptr ? std::make_optional(scores->toCpp()) : std::nullopt,
+        siblings != nullptr ? std::make_optional([&]() {
+          size_t __size = siblings->size();
+          std::vector<double> __vector(__size);
+          siblings->getRegion(0, __size, __vector.data());
+          return __vector;
+        }()) : std::nullopt
       );
     }
 
@@ -48,13 +62,20 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JPartialPerson::javaobject> fromCpp(const PartialPerson& value) {
-      using JSignature = JPartialPerson(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>);
+      using JSignature = JPartialPerson(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<JScores>, jni::alias_ref<jni::JArrayDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
         value.name.has_value() ? jni::make_jstring(value.name.value()) : nullptr,
-        value.age.has_value() ? jni::JDouble::valueOf(value.age.value()) : nullptr
+        value.age.has_value() ? jni::JDouble::valueOf(value.age.value()) : nullptr,
+        value.scores.has_value() ? JScores::fromCpp(value.scores.value()) : nullptr,
+        value.siblings.has_value() ? [&]() {
+          size_t __size = value.siblings.value().size();
+          jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+          __array->setRegion(0, __size, value.siblings.value().data());
+          return __array;
+        }() : nullptr
       );
     }
   };

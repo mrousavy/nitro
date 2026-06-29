@@ -10,7 +10,10 @@
 #include <fbjni/fbjni.h>
 #include "Person.hpp"
 
+#include "JScores.hpp"
+#include "Scores.hpp"
 #include <string>
+#include <vector>
 
 namespace margelo::nitro::test {
 
@@ -35,9 +38,20 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JString> name = this->getFieldValue(fieldName);
       static const auto fieldAge = clazz->getField<double>("age");
       double age = this->getFieldValue(fieldAge);
+      static const auto fieldScores = clazz->getField<JScores>("scores");
+      jni::local_ref<JScores> scores = this->getFieldValue(fieldScores);
+      static const auto fieldSiblings = clazz->getField<jni::JArrayDouble>("siblings");
+      jni::local_ref<jni::JArrayDouble> siblings = this->getFieldValue(fieldSiblings);
       return Person(
         name->toStdString(),
-        age
+        age,
+        scores->toCpp(),
+        [&]() {
+          size_t __size = siblings->size();
+          std::vector<double> __vector(__size);
+          siblings->getRegion(0, __size, __vector.data());
+          return __vector;
+        }()
       );
     }
 
@@ -47,13 +61,20 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JPerson::javaobject> fromCpp(const Person& value) {
-      using JSignature = JPerson(jni::alias_ref<jni::JString>, double);
+      using JSignature = JPerson(jni::alias_ref<jni::JString>, double, jni::alias_ref<JScores>, jni::alias_ref<jni::JArrayDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
         jni::make_jstring(value.name),
-        value.age
+        value.age,
+        JScores::fromCpp(value.scores),
+        [&]() {
+          size_t __size = value.siblings.size();
+          jni::local_ref<jni::JArrayDouble> __array = jni::JArrayDouble::newArray(__size);
+          __array->setRegion(0, __size, value.siblings.data());
+          return __array;
+        }()
       );
     }
   };

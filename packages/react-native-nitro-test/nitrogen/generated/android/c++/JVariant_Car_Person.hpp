@@ -19,6 +19,8 @@
 #include "JPowertrain.hpp"
 #include <optional>
 #include "JPerson.hpp"
+#include "Scores.hpp"
+#include "JScores.hpp"
 #include <vector>
 #include "JVariant_String_Double.hpp"
 
