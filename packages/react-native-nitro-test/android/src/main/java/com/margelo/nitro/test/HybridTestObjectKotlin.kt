@@ -519,6 +519,10 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
+  override fun bounceVariantUnionEnum(variant: Variant_Powertrain_Car): Variant_Powertrain_Car {
+    return variant
+  }
+
   override fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum {
     return variant
   }

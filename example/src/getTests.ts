@@ -1156,6 +1156,28 @@ export function getTests(
         `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
       )
     ),
+    createTest("bounceVariantUnionEnum(...) converts 'gas'", () =>
+      it(() => testObject.bounceVariantUnionEnum('gas'))
+        .didNotThrow()
+        .equals('gas')
+    ),
+    createTest('bounceVariantUnionEnum(...) converts Car', () =>
+      it(() => testObject.bounceVariantUnionEnum(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('bounceVariantUnionEnum(...) throws at wrong string', () =>
+      // @ts-expect-error
+      it(() => testObject.bounceVariantUnionEnum('diesel')).didThrow()
+    ),
+    createTest('bounceVariantUnionEnum(...) throws at wrong object', () =>
+      // @ts-expect-error
+      it(() => testObject.bounceVariantUnionEnum({})).didThrow()
+    ),
+    createTest('bounceVariantUnionEnum(...) throws at wrong type (boolean)', () =>
+      // @ts-expect-error
+      it(() => testObject.bounceVariantUnionEnum(true)).didThrow()
+    ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
       it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
         .didNotThrow()

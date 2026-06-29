@@ -365,6 +365,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
+  func bounceVariantUnionEnum(variant: Variant_Powertrain_Car) throws -> Variant_Powertrain_Car {
+    return variant
+  }
+
   func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws
     -> Variant_Bool_WeirdNumbersEnum
   {
