@@ -1239,6 +1239,18 @@ export function getTests(
           testObject.getVariantHybrid({ someValue: 55 })
         ).didThrow()
     ),
+    createTest('getVariantHybridEnum(...) converts Hybrid', () =>
+      // @ts-expect-error TypeScript spazzes out since it can be both types of HybridObject
+      it(() => testObject.getVariantHybridEnum(testObject))
+        .didNotThrow()
+        // @ts-expect-error
+        .toContain('getVariantHybridEnum')
+    ),
+    createTest('getVariantHybridEnum(...) converts string union enum', () =>
+      it(() => testObject.getVariantHybridEnum('electric'))
+        .didNotThrow()
+        .equals('electric')
+    ),
     createTest('passNamedVariant(...) works', () =>
       it(() => testObject.passNamedVariant('Hello world!'))
         .didNotThrow()
