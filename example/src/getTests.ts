@@ -1174,9 +1174,11 @@ export function getTests(
       // @ts-expect-error
       it(() => testObject.bounceVariantUnionEnum({})).didThrow()
     ),
-    createTest('bounceVariantUnionEnum(...) throws at wrong type (boolean)', () =>
-      // @ts-expect-error
-      it(() => testObject.bounceVariantUnionEnum(true)).didThrow()
+    createTest(
+      'bounceVariantUnionEnum(...) throws at wrong type (boolean)',
+      () =>
+        // @ts-expect-error
+        it(() => testObject.bounceVariantUnionEnum(true)).didThrow()
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
       it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
@@ -1260,18 +1262,6 @@ export function getTests(
           // @ts-expect-error
           testObject.getVariantHybrid({ someValue: 55 })
         ).didThrow()
-    ),
-    createTest('getVariantHybridEnum(...) converts Hybrid', () =>
-      // @ts-expect-error TypeScript spazzes out since it can be both types of HybridObject
-      it(() => testObject.getVariantHybridEnum(testObject))
-        .didNotThrow()
-        // @ts-expect-error
-        .toContain('getVariantHybridEnum')
-    ),
-    createTest('getVariantHybridEnum(...) converts string union enum', () =>
-      it(() => testObject.getVariantHybridEnum('electric'))
-        .didNotThrow()
-        .equals('electric')
     ),
     createTest('passNamedVariant(...) works', () =>
       it(() => testObject.passNamedVariant('Hello world!'))

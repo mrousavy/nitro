@@ -11,7 +11,7 @@ import NitroTestExternal
 class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   var optionalArray: [String]? = []
 
-  var someVariant: Variant_String_Double = .second(55)
+  var someVariant: Variant_Double_String = .first(55)
 
   var numberValue: Double = 0.0
 
@@ -338,16 +338,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
-  func passVariant(either: Variant_Bool__Double___String__String_Double) throws
-    -> Variant_String_Double
+  func passVariant(either: Variant_Bool__Double___String__Double_String) throws
+    -> Variant_Double_String
   {
     switch either {
-    case .fourth(let string):
-      return .first(string)
-    case .fifth(let double):
-      return .second(double)
+    case .fourth(let double):
+      return .first(double)
+    case .fifth(let string):
+      return .second(string)
     default:
-      return .first("holds something else!")
+      return .second("holds something else!")
     }
   }
 
@@ -361,7 +361,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
-  func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum {
+  func getVariantEnum(variant: Variant_OldEnum_Bool) throws -> Variant_OldEnum_Bool {
     return variant
   }
 
@@ -369,13 +369,13 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return variant
   }
 
-  func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws
-    -> Variant_Bool_WeirdNumbersEnum
+  func getVariantWeirdNumbersEnum(variant: Variant_WeirdNumbersEnum_Bool) throws
+    -> Variant_WeirdNumbersEnum_Bool
   {
     return variant
   }
 
-  func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person {
+  func getVariantObjects(variant: Variant_Person_Car) throws -> Variant_Person_Car {
     return variant
   }
 
