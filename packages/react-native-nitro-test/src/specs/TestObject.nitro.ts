@@ -126,7 +126,7 @@ type CoreTypesVariant =
   | AnyMap
 
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
-interface PartialPerson extends Partial<Person> { }
+interface PartialPerson extends Partial<Person> {}
 
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
@@ -363,8 +363,8 @@ export interface TestObjectCpp
 // it will be flattened out and every property/method will be added here.
 export interface TestObjectSwiftKotlin
   extends
-  HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
-  SharedTestObjectProps {
+    HybridObject<{ ios: 'swift'; android: 'kotlin' }>,
+    SharedTestObjectProps {
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
