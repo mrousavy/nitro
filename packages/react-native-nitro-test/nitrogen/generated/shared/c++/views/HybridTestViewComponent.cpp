@@ -13,6 +13,7 @@
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/PropNameIDCache.hpp>
+#include <NitroModules/RawPropsCompat.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
@@ -28,7 +29,7 @@ namespace margelo::nitro::test::views {
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
     isBlue([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
+        const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "isBlue");
         if (rawValue == nullptr) return sourceProps.isBlue;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
@@ -38,7 +39,7 @@ namespace margelo::nitro::test::views {
     }()),
     hasBeenCalled([&]() -> CachedProp<bool> {
       try {
-        const react::RawValue* rawValue = rawProps.at("hasBeenCalled", nullptr, nullptr);
+        const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "hasBeenCalled");
         if (rawValue == nullptr) return sourceProps.hasBeenCalled;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.hasBeenCalled);
@@ -48,7 +49,7 @@ namespace margelo::nitro::test::views {
     }()),
     colorScheme([&]() -> CachedProp<ColorScheme> {
       try {
-        const react::RawValue* rawValue = rawProps.at("colorScheme", nullptr, nullptr);
+        const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "colorScheme");
         if (rawValue == nullptr) return sourceProps.colorScheme;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<ColorScheme>::fromRawValue(*runtime, value, sourceProps.colorScheme);
@@ -58,7 +59,7 @@ namespace margelo::nitro::test::views {
     }()),
     someCallback([&]() -> CachedProp<std::function<void()>> {
       try {
-        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
+        const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "someCallback");
         if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
@@ -68,7 +69,7 @@ namespace margelo::nitro::test::views {
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> {
       try {
-        const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
+        const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "hybridRef");
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
         return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
