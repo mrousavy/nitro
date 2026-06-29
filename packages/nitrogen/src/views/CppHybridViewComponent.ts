@@ -209,7 +209,7 @@ namespace ${namespace} {
       `
 ${name}([&]() -> CachedProp<${type}> {
   try {
-    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
+    const react::RawValue* rawValue = RawPropsCompat::at(rawProps, "${prop.name}");
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
     return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
@@ -234,6 +234,7 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JSIConverter.hpp>
 #include <NitroModules/PropNameIDCache.hpp>
+#include <NitroModules/RawPropsCompat.hpp>
 #include <react/renderer/core/RawValue.h>
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
