@@ -1023,7 +1023,7 @@ export function getTests(
           // @ts-expect-error
           (testObject.someVariant = false)
       ).didThrow(
-        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<std::string, double>!')}`
+        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<double, std::string>!')}`
       )
     ),
 
