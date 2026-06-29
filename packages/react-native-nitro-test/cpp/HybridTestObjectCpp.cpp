@@ -403,6 +403,11 @@ HybridTestObjectCpp::getVariantHybrid(const std::variant<std::shared_ptr<HybridT
   return variant;
 }
 
+std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>
+HybridTestObjectCpp::getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) {
+  return variant;
+}
+
 std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
 HybridTestObjectCpp::getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) {
   return variant;

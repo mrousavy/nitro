@@ -85,8 +85,8 @@ namespace margelo::nitro::test {
     void setHasBooleanWritable(bool hasBooleanWritable) override;
     bool getIsBooleanWritable() override;
     void setIsBooleanWritable(bool isBooleanWritable) override;
-    std::variant<std::string, double> getSomeVariant() override;
-    void setSomeVariant(const std::variant<std::string, double>& someVariant) override;
+    std::variant<double, std::string> getSomeVariant() override;
+    void setSomeVariant(const std::variant<double, std::string>& someVariant) override;
 
   public:
     // Methods
@@ -169,10 +169,11 @@ namespace margelo::nitro::test {
     void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) override;
     std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() override;
     std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) override;
-    std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override;
-    std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
-    std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
-    std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
+    std::variant<double, std::string> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) override;
+    std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) override;
+    std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) override;
+    std::variant<WeirdNumbersEnum, bool> getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) override;
+    std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
     std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
     std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override;
     std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) override;

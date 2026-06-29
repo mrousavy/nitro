@@ -145,6 +145,8 @@ public:
   std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
   std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
   getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) override;
+  std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>
+  getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 

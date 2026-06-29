@@ -347,6 +347,9 @@ export interface TestObjectCpp
   newTestObjectAsync(): Promise<TestObjectCpp>
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  getVariantHybridEnum(
+    variant: TestObjectCpp | Powertrain
+  ): TestObjectCpp | Powertrain
 
   // Any HybridObject
   bounceAnyHybrid(object: AnyHybridObject): AnyHybridObject

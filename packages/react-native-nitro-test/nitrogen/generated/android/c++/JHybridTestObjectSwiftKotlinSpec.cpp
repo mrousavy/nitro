@@ -63,7 +63,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include <functional>
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>
-#include "JVariant_String_Double.hpp"
+#include "JVariant_Double_String.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include "Person.hpp"
@@ -96,11 +96,12 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JVariant_______Unit_Double.hpp"
 #include "OptionalEnumWrapper.hpp"
 #include "JOptionalEnumWrapper.hpp"
-#include "JVariant_Boolean_OldEnum.hpp"
+#include "JVariant_OldEnum_Boolean.hpp"
+#include "JVariant_Powertrain_Car.hpp"
 #include "WeirdNumbersEnum.hpp"
-#include "JVariant_Boolean_WeirdNumbersEnum.hpp"
+#include "JVariant_WeirdNumbersEnum_Boolean.hpp"
 #include "JWeirdNumbersEnum.hpp"
-#include "JVariant_Car_Person.hpp"
+#include "JVariant_Person_Car.hpp"
 #include "JNamedVariant.hpp"
 #include "HybridBaseSpec.hpp"
 #include "JVariant_HybridBaseSpec_OptionalWrapper.hpp"
@@ -125,7 +126,7 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
-#include "JVariant_Boolean_DoubleArray_Array_String__String_Double.hpp"
+#include "JVariant_Boolean_DoubleArray_Array_String__Double_String.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JHybridTestViewSpec.hpp"
@@ -346,14 +347,14 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isBooleanWritable */)>("setBooleanWritable");
     method(_javaPart, isBooleanWritable);
   }
-  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>()>("getSomeVariant");
+  std::variant<double, std::string> JHybridTestObjectSwiftKotlinSpec::getSomeVariant() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Double_String>()>("getSomeVariant");
     auto __result = method(_javaPart);
     return __result->toCpp();
   }
-  void JHybridTestObjectSwiftKotlinSpec::setSomeVariant(const std::variant<std::string, double>& someVariant) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_String_Double> /* someVariant */)>("setSomeVariant");
-    method(_javaPart, JVariant_String_Double::fromCpp(someVariant));
+  void JHybridTestObjectSwiftKotlinSpec::setSomeVariant(const std::variant<double, std::string>& someVariant) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_Double_String> /* someVariant */)>("setSomeVariant");
+    method(_javaPart, JVariant_Double_String::fromCpp(someVariant));
   }
 
   // Methods
@@ -1272,24 +1273,29 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
     return __result->cthis()->getArrayBuffer();
   }
-  std::variant<std::string, double> JHybridTestObjectSwiftKotlinSpec::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_String_Double>(jni::alias_ref<JVariant_Boolean_DoubleArray_Array_String__String_Double> /* either */)>("passVariant");
-    auto __result = method(_javaPart, JVariant_Boolean_DoubleArray_Array_String__String_Double::fromCpp(either));
+  std::variant<double, std::string> JHybridTestObjectSwiftKotlinSpec::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Double_String>(jni::alias_ref<JVariant_Boolean_DoubleArray_Array_String__Double_String> /* either */)>("passVariant");
+    auto __result = method(_javaPart, JVariant_Boolean_DoubleArray_Array_String__Double_String::fromCpp(either));
     return __result->toCpp();
   }
-  std::variant<bool, OldEnum> JHybridTestObjectSwiftKotlinSpec::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_OldEnum>(jni::alias_ref<JVariant_Boolean_OldEnum> /* variant */)>("getVariantEnum");
-    auto __result = method(_javaPart, JVariant_Boolean_OldEnum::fromCpp(variant));
+  std::variant<OldEnum, bool> JHybridTestObjectSwiftKotlinSpec::getVariantEnum(const std::variant<OldEnum, bool>& variant) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_OldEnum_Boolean>(jni::alias_ref<JVariant_OldEnum_Boolean> /* variant */)>("getVariantEnum");
+    auto __result = method(_javaPart, JVariant_OldEnum_Boolean::fromCpp(variant));
     return __result->toCpp();
   }
-  std::variant<bool, WeirdNumbersEnum> JHybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Boolean_WeirdNumbersEnum>(jni::alias_ref<JVariant_Boolean_WeirdNumbersEnum> /* variant */)>("getVariantWeirdNumbersEnum");
-    auto __result = method(_javaPart, JVariant_Boolean_WeirdNumbersEnum::fromCpp(variant));
+  std::variant<Powertrain, Car> JHybridTestObjectSwiftKotlinSpec::bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Powertrain_Car>(jni::alias_ref<JVariant_Powertrain_Car> /* variant */)>("bounceVariantUnionEnum");
+    auto __result = method(_javaPart, JVariant_Powertrain_Car::fromCpp(variant));
     return __result->toCpp();
   }
-  std::variant<Car, Person> JHybridTestObjectSwiftKotlinSpec::getVariantObjects(const std::variant<Car, Person>& variant) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Car_Person>(jni::alias_ref<JVariant_Car_Person> /* variant */)>("getVariantObjects");
-    auto __result = method(_javaPart, JVariant_Car_Person::fromCpp(variant));
+  std::variant<WeirdNumbersEnum, bool> JHybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_WeirdNumbersEnum_Boolean>(jni::alias_ref<JVariant_WeirdNumbersEnum_Boolean> /* variant */)>("getVariantWeirdNumbersEnum");
+    auto __result = method(_javaPart, JVariant_WeirdNumbersEnum_Boolean::fromCpp(variant));
+    return __result->toCpp();
+  }
+  std::variant<Person, Car> JHybridTestObjectSwiftKotlinSpec::getVariantObjects(const std::variant<Person, Car>& variant) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_Person_Car>(jni::alias_ref<JVariant_Person_Car> /* variant */)>("getVariantObjects");
+    auto __result = method(_javaPart, JVariant_Person_Car::fromCpp(variant));
     return __result->toCpp();
   }
   std::variant<std::string, Car> JHybridTestObjectSwiftKotlinSpec::passNamedVariant(const std::variant<std::string, Car>& variant) {

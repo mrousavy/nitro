@@ -144,8 +144,8 @@ namespace margelo::nitro::test {
       virtual void setHasBooleanWritable(bool hasBooleanWritable) = 0;
       virtual bool getIsBooleanWritable() = 0;
       virtual void setIsBooleanWritable(bool isBooleanWritable) = 0;
-      virtual std::variant<std::string, double> getSomeVariant() = 0;
-      virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
+      virtual std::variant<double, std::string> getSomeVariant() = 0;
+      virtual void setSomeVariant(const std::variant<double, std::string>& someVariant) = 0;
 
     public:
       // Methods
@@ -228,10 +228,11 @@ namespace margelo::nitro::test {
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
-      virtual std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) = 0;
-      virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
-      virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
-      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
+      virtual std::variant<double, std::string> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) = 0;
+      virtual std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) = 0;
+      virtual std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) = 0;
+      virtual std::variant<WeirdNumbersEnum, bool> getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) = 0;
+      virtual std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;
       virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) = 0;
