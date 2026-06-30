@@ -8,8 +8,6 @@
 #pragma once
 
 // Forward declarations of C++ defined types
-// Forward declaration of `AdvancedPowertrain` to properly resolve imports.
-namespace margelo::nitro::test { enum class AdvancedPowertrain; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -46,6 +44,8 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -68,7 +68,6 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
-#include "AdvancedPowertrain.hpp"
 #include "Car.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
@@ -85,6 +84,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "TruckPowertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -517,18 +517,18 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::optional<AdvancedPowertrain>
+  // pragma MARK: std::optional<TruckPowertrain>
   /**
-   * Specialized version of `std::optional<AdvancedPowertrain>`.
+   * Specialized version of `std::optional<TruckPowertrain>`.
    */
-  using std__optional_AdvancedPowertrain_ = std::optional<AdvancedPowertrain>;
-  inline std::optional<AdvancedPowertrain> create_std__optional_AdvancedPowertrain_(const AdvancedPowertrain& value) noexcept {
-    return std::optional<AdvancedPowertrain>(value);
+  using std__optional_TruckPowertrain_ = std::optional<TruckPowertrain>;
+  inline std::optional<TruckPowertrain> create_std__optional_TruckPowertrain_(const TruckPowertrain& value) noexcept {
+    return std::optional<TruckPowertrain>(value);
   }
-  inline bool has_value_std__optional_AdvancedPowertrain_(const std::optional<AdvancedPowertrain>& optional) noexcept {
+  inline bool has_value_std__optional_TruckPowertrain_(const std::optional<TruckPowertrain>& optional) noexcept {
     return optional.has_value();
   }
-  inline AdvancedPowertrain get_std__optional_AdvancedPowertrain_(const std::optional<AdvancedPowertrain>& optional) noexcept {
+  inline TruckPowertrain get_std__optional_TruckPowertrain_(const std::optional<TruckPowertrain>& optional) noexcept {
     return optional.value();
   }
   

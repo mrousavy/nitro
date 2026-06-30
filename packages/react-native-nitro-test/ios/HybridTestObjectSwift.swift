@@ -37,7 +37,7 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var optionalOldEnum: OldEnum? = nil
 
-  var optionalEnumPlusOne: AdvancedPowertrain? = nil
+  var optionalEnumPlusOne: TruckPowertrain? = nil
 
   var optionalCallback: ((Double) -> Void)? = nil
 

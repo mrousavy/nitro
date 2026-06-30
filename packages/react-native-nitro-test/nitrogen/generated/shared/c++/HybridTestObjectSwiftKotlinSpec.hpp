@@ -19,8 +19,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
-// Forward declaration of `AdvancedPowertrain` to properly resolve imports.
-namespace margelo::nitro::test { enum class AdvancedPowertrain; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -61,7 +61,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
-#include "AdvancedPowertrain.hpp"
+#include "TruckPowertrain.hpp"
 #include <functional>
 #include <NitroModules/Promise.hpp>
 #include "Person.hpp"
@@ -139,8 +139,8 @@ namespace margelo::nitro::test {
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
-      virtual std::optional<AdvancedPowertrain> getOptionalEnumPlusOne() = 0;
-      virtual void setOptionalEnumPlusOne(std::optional<AdvancedPowertrain> optionalEnumPlusOne) = 0;
+      virtual std::optional<TruckPowertrain> getOptionalEnumPlusOne() = 0;
+      virtual void setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) = 0;
       virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
       virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
       virtual bool getHasBoolean() = 0;

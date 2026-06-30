@@ -371,12 +371,12 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
-  public final var optionalEnumPlusOne: bridge.std__optional_AdvancedPowertrain_ {
+  public final var optionalEnumPlusOne: bridge.std__optional_TruckPowertrain_ {
     @inline(__always)
     get {
-      return { () -> bridge.std__optional_AdvancedPowertrain_ in
+      return { () -> bridge.std__optional_TruckPowertrain_ in
         if let __unwrappedValue = self.__implementation.optionalEnumPlusOne {
-          return bridge.create_std__optional_AdvancedPowertrain_(__unwrappedValue)
+          return bridge.create_std__optional_TruckPowertrain_(__unwrappedValue)
         } else {
           return .init()
         }

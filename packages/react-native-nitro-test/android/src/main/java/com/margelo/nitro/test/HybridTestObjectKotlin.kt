@@ -34,7 +34,7 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var optionalArray: Array<String>? = null
   override var optionalEnum: Powertrain? = null
   override var optionalOldEnum: OldEnum? = null
-  override var optionalEnumPlusOne: AdvancedPowertrain? = null
+  override var optionalEnumPlusOne: TruckPowertrain? = null
   override var optionalCallback: ((value: Double) -> Unit)? = null
 
   override val hasBoolean = false

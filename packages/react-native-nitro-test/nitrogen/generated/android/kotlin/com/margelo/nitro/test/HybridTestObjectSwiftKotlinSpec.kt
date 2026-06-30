@@ -124,7 +124,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var optionalEnumPlusOne: AdvancedPowertrain?
+  abstract var optionalEnumPlusOne: TruckPowertrain?
   
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
