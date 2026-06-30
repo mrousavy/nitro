@@ -22,6 +22,14 @@ const apps: App[] = [
     featured: true,
   },
   {
+    name: 'v0',
+    company: 'Vercel, Inc.',
+    scale: 'Public iOS app',
+    category: 'Developer Tools',
+    icon: '/img/apps-using-nitro/v0.png',
+    accent: '#111111',
+  },
+  {
     name: 'Coinbase',
     company: 'Coinbase Inc.',
     scale: '50M+ installs',
@@ -231,9 +239,9 @@ export default function AppsUsingNitroShowcase() {
           <span className={styles.eyebrow}>Production ready</span>
           <h2>Nitro is already running inside apps people use every day.</h2>
           <p>
-            From social networks and finance to commerce, food, connectivity,
-            sports, health, music, and creator tools, Nitro powers native code
-            paths in real production apps.
+            From social networks and finance to developer tools, commerce,
+            food, connectivity, sports, health, music, and creator tools, Nitro
+            powers native code paths in real production apps.
           </p>
         </div>
         <div className={styles.statsGrid} aria-label="Nitro production usage stats">
@@ -246,7 +254,7 @@ export default function AppsUsingNitroShowcase() {
             <span>combined public app install counts</span>
           </div>
           <div>
-            <strong>9</strong>
+            <strong>10</strong>
             <span>product categories</span>
           </div>
         </div>
@@ -265,8 +273,9 @@ export default function AppsUsingNitroShowcase() {
       </div>
 
       <p className={styles.note}>
-        Based on public app data and public native symbols. App names and icons belong
-        to their respective owners; no affiliation or endorsement is implied.
+        Based on public app data, public native symbols, and open-source notices. App
+        names and icons belong to their respective owners; no affiliation or
+        endorsement is implied.
       </p>
     </section>
   );

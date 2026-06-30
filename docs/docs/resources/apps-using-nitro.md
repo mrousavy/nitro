@@ -15,7 +15,7 @@ import AppsUsingNitroShowcase from '@site/src/components/AppsUsingNitroShowcase'
 # Apps using Nitro
 
 Nitro is not just a benchmark project. It is already shipping in large-scale
-production apps across finance, commerce, social, food, connectivity, sports,
-health, music, and productivity.
+production apps across finance, commerce, social, developer tools, food,
+connectivity, sports, health, music, and productivity.
 
 <AppsUsingNitroShowcase />
