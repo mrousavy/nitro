@@ -33,13 +33,13 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:DoNotStrip
   @get:Keep
   abstract val thisObject: HybridTestObjectSwiftKotlinSpec
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var optionalHybrid: HybridTestObjectSwiftKotlinSpec?
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
