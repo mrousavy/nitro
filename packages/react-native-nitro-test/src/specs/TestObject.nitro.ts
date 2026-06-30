@@ -24,7 +24,6 @@ export type NamedVariant = string | Car
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
-
 type AdvancedPowertrain = Powertrain | 'diesel'
 
 // A classic TypeScript enum also becomes an `enum` in C++.
