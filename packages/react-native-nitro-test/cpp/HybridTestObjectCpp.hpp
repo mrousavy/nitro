@@ -32,7 +32,7 @@ private:
   NullType _null = nitro::null;
   std::optional<std::string> _optionalString;
   std::variant<nitro::NullType, std::string> _nullableString;
-  std::variant<std::string, double> _variant;
+  std::variant<double, std::string> _variant;
   std::tuple<double, std::string> _tuple;
   std::optional<std::vector<std::string>> _optionalArray;
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
@@ -74,8 +74,8 @@ public:
   void setStringOrNull(const std::variant<nitro::NullType, std::string>& stringOrNull) override;
   std::optional<std::vector<std::string>> getOptionalArray() override;
   void setOptionalArray(const std::optional<std::vector<std::string>>& optionalArray) override;
-  std::variant<std::string, double> getSomeVariant() override;
-  void setSomeVariant(const std::variant<std::string, double>& variant) override;
+  std::variant<double, std::string> getSomeVariant() override;
+  void setSomeVariant(const std::variant<double, std::string>& variant) override;
   std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) override;
   std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
   passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) override;
@@ -121,8 +121,8 @@ public:
   bool tryTrailingOptional(double num, const std::string& str, std::optional<bool> boo) override;
   std::chrono::system_clock::time_point add1Hour(std::chrono::system_clock::time_point date) override;
   std::chrono::system_clock::time_point currentDate() override;
-  std::variant<std::string, double>
-  passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override;
+  std::variant<double, std::string>
+  passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) override;
 
   std::vector<std::string> bounceStrings(const std::vector<std::string>& array) override;
   std::vector<double> bounceNumbers(const std::vector<double>& array) override;
@@ -140,11 +140,14 @@ public:
   std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override;
   std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override;
 
-  std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override;
-  std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override;
-  std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override;
+  std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) override;
+  std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) override;
+  std::variant<WeirdNumbersEnum, bool> getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) override;
+  std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override;
   std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
   getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) override;
+  std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>
+  getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) override;
   std::variant<std::tuple<double, double>, std::tuple<double, double, double>>
   getVariantTuple(const std::variant<std::tuple<double, double>, std::tuple<double, double, double>>& variant) override;
 

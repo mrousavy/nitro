@@ -57,11 +57,11 @@ namespace margelo::nitro::test {
     std::optional<bool> isFast     SWIFT_PRIVATE;
     std::optional<std::string> favouriteTrack     SWIFT_PRIVATE;
     std::vector<double> performanceScores     SWIFT_PRIVATE;
-    std::optional<std::variant<std::string, double>> someVariant     SWIFT_PRIVATE;
+    std::optional<std::variant<double, std::string>> someVariant     SWIFT_PRIVATE;
 
   public:
     Car() = default;
-    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::vector<Person> passengers, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores, std::optional<std::variant<std::string, double>> someVariant): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), passengers(passengers), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores), someVariant(someVariant) {}
+    explicit Car(double year, std::string make, std::string model, double power, Powertrain powertrain, std::optional<Person> driver, std::vector<Person> passengers, std::optional<bool> isFast, std::optional<std::string> favouriteTrack, std::vector<double> performanceScores, std::optional<std::variant<double, std::string>> someVariant): year(year), make(make), model(model), power(power), powertrain(powertrain), driver(driver), passengers(passengers), isFast(isFast), favouriteTrack(favouriteTrack), performanceScores(performanceScores), someVariant(someVariant) {}
 
   public:
     friend bool operator==(const Car& lhs, const Car& rhs) = default;
@@ -87,7 +87,7 @@ namespace margelo::nitro {
         JSIConverter<std::optional<bool>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isFast"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "favouriteTrack"))),
         JSIConverter<std::vector<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceScores"))),
-        JSIConverter<std::optional<std::variant<std::string, double>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "someVariant")))
+        JSIConverter<std::optional<std::variant<double, std::string>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "someVariant")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::test::Car& arg) {
@@ -102,7 +102,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "isFast"), JSIConverter<std::optional<bool>>::toJSI(runtime, arg.isFast));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "favouriteTrack"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.favouriteTrack));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "performanceScores"), JSIConverter<std::vector<double>>::toJSI(runtime, arg.performanceScores));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "someVariant"), JSIConverter<std::optional<std::variant<std::string, double>>>::toJSI(runtime, arg.someVariant));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "someVariant"), JSIConverter<std::optional<std::variant<double, std::string>>>::toJSI(runtime, arg.someVariant));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -123,7 +123,7 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<bool>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isFast")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "favouriteTrack")))) return false;
       if (!JSIConverter<std::vector<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "performanceScores")))) return false;
-      if (!JSIConverter<std::optional<std::variant<std::string, double>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "someVariant")))) return false;
+      if (!JSIConverter<std::optional<std::variant<double, std::string>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "someVariant")))) return false;
       return true;
     }
   };

@@ -107,11 +107,11 @@ void HybridTestObjectCpp::setOptionalHybrid(const std::optional<std::shared_ptr<
   _optionalHybrid = optionalHybrid;
 }
 
-std::variant<std::string, double> HybridTestObjectCpp::getSomeVariant() {
+std::variant<double, std::string> HybridTestObjectCpp::getSomeVariant() {
   return _variant;
 }
 
-void HybridTestObjectCpp::setSomeVariant(const std::variant<std::string, double>& variant) {
+void HybridTestObjectCpp::setSomeVariant(const std::variant<double, std::string>& variant) {
   _variant = variant;
 }
 
@@ -366,8 +366,8 @@ std::chrono::system_clock::time_point HybridTestObjectCpp::currentDate() {
   return std::chrono::system_clock::now();
 }
 
-std::variant<std::string, double>
-HybridTestObjectCpp::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) {
+std::variant<double, std::string>
+HybridTestObjectCpp::passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) {
   if (std::holds_alternative<std::string>(either)) {
     return std::get<std::string>(either);
   } else if (std::holds_alternative<double>(either)) {
@@ -386,20 +386,29 @@ ComplexVariant HybridTestObjectCpp::bounceComplexVariant(const ComplexVariant& v
   return variant;
 }
 
-std::variant<bool, OldEnum> HybridTestObjectCpp::getVariantEnum(const std::variant<bool, OldEnum>& variant) {
+std::variant<OldEnum, bool> HybridTestObjectCpp::getVariantEnum(const std::variant<OldEnum, bool>& variant) {
   return variant;
 }
 
-std::variant<bool, WeirdNumbersEnum> HybridTestObjectCpp::getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) {
+std::variant<Powertrain, Car> HybridTestObjectCpp::bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) {
   return variant;
 }
 
-std::variant<Car, Person> HybridTestObjectCpp::getVariantObjects(const std::variant<Car, Person>& variant) {
+std::variant<WeirdNumbersEnum, bool> HybridTestObjectCpp::getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) {
+  return variant;
+}
+
+std::variant<Person, Car> HybridTestObjectCpp::getVariantObjects(const std::variant<Person, Car>& variant) {
   return variant;
 }
 
 std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>
 HybridTestObjectCpp::getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) {
+  return variant;
+}
+
+std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>
+HybridTestObjectCpp::getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) {
   return variant;
 }
 

@@ -1,4 +1,4 @@
-import { ts, Type as TSMorphType, type Signature } from 'ts-morph'
+import { Node, ts, Type as TSMorphType, type Signature } from 'ts-morph'
 import type { Type } from './types/Type.js'
 import { BooleanType } from './types/BooleanType.js'
 import { NumberType } from './types/NumberType.js'
@@ -83,6 +83,54 @@ type Tuple<
   N extends number,
   R extends unknown[] = [],
 > = R['length'] extends N ? R : Tuple<T, N, [T, ...R]>
+
+type TypeNode = Node<ts.TypeNode>
+
+interface UnionConstituent {
+  type: TSMorphType
+  typeNode?: TypeNode
+}
+
+function getAliasTypeNode(type: TSMorphType): TypeNode | undefined {
+  const symbol = type.getNonNullableType().getAliasSymbol()
+  const declaration = symbol?.getDeclarations()[0]
+  if (declaration != null && Node.isTypeAliasDeclaration(declaration)) {
+    return declaration.getTypeNode()
+  }
+  return undefined
+}
+
+function getUnionTypeNodes(
+  type: TSMorphType,
+  typeNode?: TypeNode
+): TypeNode[] | undefined {
+  if (typeNode != null && Node.isUnionTypeNode(typeNode)) {
+    return typeNode.getTypeNodes()
+  }
+
+  const aliasTypeNode = getAliasTypeNode(type)
+  if (aliasTypeNode != null && Node.isUnionTypeNode(aliasTypeNode)) {
+    return aliasTypeNode.getTypeNodes()
+  }
+
+  return undefined
+}
+
+function getUnionConstituents(
+  type: TSMorphType,
+  typeNode?: TypeNode
+): UnionConstituent[] {
+  const typeNodes = getUnionTypeNodes(type, typeNode)
+  if (typeNodes != null) {
+    return typeNodes.map((node) => ({
+      type: node.getType(),
+      typeNode: node,
+    }))
+  }
+
+  return type.getUnionTypes().map((unionType) => ({ type: unionType }))
+}
+
 function getArguments<N extends number>(
   type: TSMorphType,
   typename: string,
@@ -107,14 +155,18 @@ export function createNamedType(
   language: Language,
   name: string,
   type: TSMorphType,
-  isOptional: boolean
+  isOptional: boolean,
+  typeNode?: TypeNode
 ) {
   if (name.startsWith('__')) {
     throw new Error(
       `Name cannot start with two underscores (__) as this is reserved syntax for Nitrogen! (In ${type.getText()})`
     )
   }
-  return new NamedWrappingType(name, createType(language, type, isOptional))
+  return new NamedWrappingType(
+    name,
+    createType(language, type, isOptional, typeNode)
+  )
 }
 
 export function createVoidType(): Type {
@@ -171,7 +223,8 @@ export function addKnownType(
 export function createType(
   language: Language,
   type: TSMorphType,
-  isOptional: boolean
+  isOptional: boolean,
+  typeNode?: TypeNode
 ): Type {
   const key = getTypeId(type, isOptional)
   if (key != null && knownTypes[language].has(key)) {
@@ -183,7 +236,7 @@ export function createType(
 
   const get = () => {
     if (isOptional) {
-      const wrapping = createType(language, type, false)
+      const wrapping = createType(language, type, false, typeNode)
       return new OptionalType(wrapping)
     }
 
@@ -286,10 +339,10 @@ export function createType(
       // - of string literals (then it's an enum)
       // - of type `T | undefined` (then it's just optional `T`)
       // - of different types (then it's a variant `A | B | C`)
-      const types = type.getUnionTypes()
-      const nonNullTypes = types.filter(
-        (t) => !t.isNull() && !t.isUndefined() && !t.isVoid()
-      )
+      const unionConstituents = getUnionConstituents(type, typeNode)
+      const nonNullTypes = unionConstituents
+        .map((c) => c.type)
+        .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
       const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
       if (isEnumUnion) {
         // It consists only of string literaly - that means it's describing an enum!
@@ -305,11 +358,12 @@ export function createType(
         return new EnumType(typename, type)
       } else {
         // It consists of different types - that means it's a variant!
-        let variants = type
-          .getUnionTypes()
+        let variants = unionConstituents
           // Filter out any undefineds/voids, as those are already treated as `isOptional`.
-          .filter((t) => !t.isUndefined() && !t.isVoid())
-          .map((t) => createType(language, t, false))
+          .filter(({ type: t }) => !t.isUndefined() && !t.isVoid())
+          .map(({ type: t, typeNode: node }) =>
+            createType(language, t, false, node)
+          )
           .toSorted(compareLooselyness)
         variants = removeDuplicates(variants)
 

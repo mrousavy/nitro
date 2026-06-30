@@ -288,6 +288,7 @@ interface SharedTestObjectProps {
     either: number | string | number[] | string[] | boolean
   ): number | string
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  bounceVariantUnionEnum(variant: Powertrain | Car): Powertrain | Car
   getVariantWeirdNumbersEnum(
     variant: WeirdNumbersEnum | boolean
   ): WeirdNumbersEnum | boolean
@@ -346,6 +347,9 @@ export interface TestObjectCpp
   newTestObjectAsync(): Promise<TestObjectCpp>
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  getVariantHybridEnum(
+    variant: TestObjectCpp | Powertrain
+  ): TestObjectCpp | Powertrain
 
   // Any HybridObject
   bounceAnyHybrid(object: AnyHybridObject): AnyHybridObject

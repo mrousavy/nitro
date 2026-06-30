@@ -1023,7 +1023,7 @@ export function getTests(
           // @ts-expect-error
           (testObject.someVariant = false)
       ).didThrow(
-        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<std::string, double>!')}`
+        `Error: ${testObject.name}.someVariant: Cannot convert "false" to any type in ${debugOnly('variant<double, std::string>!')}`
       )
     ),
 
@@ -1147,14 +1147,38 @@ export function getTests(
     createTest('getVariantEnum(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum('string')).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<margelo::nitro::test::OldEnum, bool>!')}`
       )
     ),
     createTest('getVariantEnum(...) throws at too high numerical value', () =>
       // @ts-expect-error
       it(() => testObject.getVariantEnum(9999)).didThrow(
-        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::OldEnum>!')}`
+        `Error: ${testObject.name}.getVariantEnum(...): Cannot convert "9999" to any type in ${debugOnly('variant<margelo::nitro::test::OldEnum, bool>!')}`
       )
+    ),
+    createTest("bounceVariantUnionEnum(...) converts 'gas'", () =>
+      it(() => testObject.bounceVariantUnionEnum('gas'))
+        .didNotThrow()
+        .equals('gas')
+    ),
+    createTest('bounceVariantUnionEnum(...) converts Car', () =>
+      it(() => testObject.bounceVariantUnionEnum(TEST_CAR))
+        .didNotThrow()
+        .equals(TEST_CAR)
+    ),
+    createTest('bounceVariantUnionEnum(...) throws at wrong string', () =>
+      // @ts-expect-error
+      it(() => testObject.bounceVariantUnionEnum('diesel')).didThrow()
+    ),
+    createTest('bounceVariantUnionEnum(...) throws at wrong object', () =>
+      // @ts-expect-error
+      it(() => testObject.bounceVariantUnionEnum({})).didThrow()
+    ),
+    createTest(
+      'bounceVariantUnionEnum(...) throws at wrong type (boolean)',
+      () =>
+        // @ts-expect-error
+        it(() => testObject.bounceVariantUnionEnum(true)).didThrow()
     ),
     createTest('getVariantWeirdNumbersEnum(...) converts enum', () =>
       it(() => testObject.getVariantWeirdNumbersEnum(WeirdNumbersEnum.C))
@@ -1171,7 +1195,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum('string')).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "string" to any type in ${debugOnly('variant<margelo::nitro::test::WeirdNumbersEnum, bool>!')}`
         )
     ),
     createTest(
@@ -1179,7 +1203,7 @@ export function getTests(
       () =>
         // @ts-expect-error
         it(() => testObject.getVariantWeirdNumbersEnum(99999)).didThrow(
-          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in ${debugOnly('variant<bool, margelo::nitro::test::WeirdNumbersEnum>!')}`
+          `Error: ${testObject.name}.getVariantWeirdNumbersEnum(...): Cannot convert "99999" to any type in ${debugOnly('variant<margelo::nitro::test::WeirdNumbersEnum, bool>!')}`
         )
     ),
     createTest('getVariantObjects(...) converts Person', () =>
@@ -1202,7 +1226,7 @@ export function getTests(
     createTest('getVariantObjects(...) throws at wrong type (string)', () =>
       // @ts-expect-error
       it(() => testObject.getVariantObjects('some-string')).didThrow(
-        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
+        `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "some-string" to any type in ${debugOnly('variant<margelo::nitro::test::Person, margelo::nitro::test::Car>!')}`
       )
     ),
     createTest(
@@ -1212,7 +1236,7 @@ export function getTests(
           // @ts-expect-error
           testObject.getVariantObjects({ someValue: 55 })
         ).didThrow(
-          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in ${debugOnly('variant<margelo::nitro::test::Car, margelo::nitro::test::Person>!')}`
+          `Error: ${testObject.name}.getVariantObjects(...): Cannot convert "[object Object]" to any type in ${debugOnly('variant<margelo::nitro::test::Person, margelo::nitro::test::Car>!')}`
         )
     ),
     createTest('getVariantHybrid(...) converts Hybrid', () =>
