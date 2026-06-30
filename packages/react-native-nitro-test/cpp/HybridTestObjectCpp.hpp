@@ -38,6 +38,7 @@ private:
   std::optional<std::shared_ptr<HybridTestObjectCppSpec>> _optionalHybrid;
   std::optional<Powertrain> _optionalEnum;
   std::optional<OldEnum> _optionalOldEnum;
+  std::optional<AdvancedPowertrain> _optionalEnumPlusOne;
   std::optional<std::function<void(double)>> _optionalCallback;
   bool _hasBooleanWritable;
   bool _isBooleanWritable;
@@ -89,6 +90,8 @@ public:
   void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
   std::optional<OldEnum> getOptionalOldEnum() override;
   void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
+  std::optional<AdvancedPowertrain> getOptionalEnumPlusOne() override;
+  void setOptionalEnumPlusOne(std::optional<AdvancedPowertrain> optionalEnumPlusOne) override;
   std::optional<std::function<void(double)>> getOptionalCallback() override;
   void setOptionalCallback(const std::optional<std::function<void(double)>>& callback) override;
   bool getHasBoolean() override;

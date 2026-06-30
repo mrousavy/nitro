@@ -77,6 +77,8 @@ namespace margelo::nitro::test {
     void setOptionalEnum(std::optional<Powertrain> optionalEnum) override;
     std::optional<OldEnum> getOptionalOldEnum() override;
     void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) override;
+    std::optional<AdvancedPowertrain> getOptionalEnumPlusOne() override;
+    void setOptionalEnumPlusOne(std::optional<AdvancedPowertrain> optionalEnumPlusOne) override;
     std::optional<std::function<void(double /* value */)>> getOptionalCallback() override;
     void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) override;
     bool getHasBoolean() override;

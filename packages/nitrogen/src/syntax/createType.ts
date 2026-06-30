@@ -339,9 +339,8 @@ export function createType(
       // - of string literals (then it's an enum)
       // - of type `T | undefined` (then it's just optional `T`)
       // - of different types (then it's a variant `A | B | C`)
-      const unionConstituents = getUnionConstituents(type, typeNode)
-      const nonNullTypes = unionConstituents
-        .map((c) => c.type)
+      const nonNullTypes = type
+        .getUnionTypes()
         .filter((t) => !t.isNull() && !t.isUndefined() && !t.isVoid())
       const isEnumUnion = nonNullTypes.every((t) => t.isStringLiteral())
       if (isEnumUnion) {
@@ -358,6 +357,7 @@ export function createType(
         return new EnumType(typename, type)
       } else {
         // It consists of different types - that means it's a variant!
+        const unionConstituents = getUnionConstituents(type, typeNode)
         let variants = unionConstituents
           // Filter out any undefineds/voids, as those are already treated as `isOptional`.
           .filter(({ type: t }) => !t.isUndefined() && !t.isVoid())

@@ -8,6 +8,8 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AdvancedPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class AdvancedPowertrain; }
 // Forward declaration of `Car` to properly resolve imports.
 namespace margelo::nitro::test { struct Car; }
 // Forward declaration of `ColorScheme` to properly resolve imports.
@@ -54,6 +56,7 @@ namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 namespace margelo::nitro::test { struct WrappedJsStruct; }
 
 // Include C++ defined types
+#include "AdvancedPowertrain.hpp"
 #include "Car.hpp"
 #include "ColorScheme.hpp"
 #include "ExternalObjectStruct.hpp"

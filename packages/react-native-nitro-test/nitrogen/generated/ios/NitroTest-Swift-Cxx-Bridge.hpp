@@ -8,6 +8,8 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AdvancedPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class AdvancedPowertrain; }
 // Forward declaration of `ArrayBufferHolder` to properly resolve imports.
 namespace NitroModules { class ArrayBufferHolder; }
 // Forward declaration of `Car` to properly resolve imports.
@@ -66,6 +68,7 @@ namespace NitroTest { class HybridTestObjectSwiftKotlinSpec_cxx; }
 namespace NitroTest { class HybridTestViewSpec_cxx; }
 
 // Include C++ defined types
+#include "AdvancedPowertrain.hpp"
 #include "Car.hpp"
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
@@ -511,6 +514,21 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<AdvancedPowertrain>
+  /**
+   * Specialized version of `std::optional<AdvancedPowertrain>`.
+   */
+  using std__optional_AdvancedPowertrain_ = std::optional<AdvancedPowertrain>;
+  inline std::optional<AdvancedPowertrain> create_std__optional_AdvancedPowertrain_(const AdvancedPowertrain& value) noexcept {
+    return std::optional<AdvancedPowertrain>(value);
+  }
+  inline bool has_value_std__optional_AdvancedPowertrain_(const std::optional<AdvancedPowertrain>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline AdvancedPowertrain get_std__optional_AdvancedPowertrain_(const std::optional<AdvancedPowertrain>& optional) noexcept {
     return optional.value();
   }
   

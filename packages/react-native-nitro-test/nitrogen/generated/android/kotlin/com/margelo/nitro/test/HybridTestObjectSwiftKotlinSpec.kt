@@ -120,6 +120,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:Keep
   abstract var optionalOldEnum: OldEnum?
   
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalEnumPlusOne: AdvancedPowertrain?
+  
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
   private var optionalCallback_cxx: Func_void_double?
