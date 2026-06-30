@@ -474,6 +474,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return value
   }
 
+  override fun bounceGallery(gallery: Gallery): Gallery {
+    return gallery
+  }
+
+
   override fun createArrayBufferFromNativeBuffer(copy: Boolean): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(
