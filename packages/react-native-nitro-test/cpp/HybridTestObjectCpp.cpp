@@ -143,6 +143,14 @@ void HybridTestObjectCpp::setOptionalOldEnum(std::optional<OldEnum> optionalOldE
   _optionalOldEnum = optionalOldEnum;
 }
 
+std::optional<TruckPowertrain> HybridTestObjectCpp::getOptionalEnumPlusOne() {
+  return _optionalEnumPlusOne;
+}
+
+void HybridTestObjectCpp::setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) {
+  _optionalEnumPlusOne = optionalEnumPlusOne;
+}
+
 std::optional<std::function<void(double)>> HybridTestObjectCpp::getOptionalCallback() {
   return _optionalCallback;
 }

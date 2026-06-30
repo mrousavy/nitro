@@ -13,6 +13,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -60,6 +62,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JPowertrain.hpp"
 #include "OldEnum.hpp"
 #include "JOldEnum.hpp"
+#include "TruckPowertrain.hpp"
+#include "JTruckPowertrain.hpp"
 #include <functional>
 #include "JFunc_void_double.hpp"
 #include <NitroModules/JNICallable.hpp>
@@ -301,6 +305,15 @@ namespace margelo::nitro::test {
   void JHybridTestObjectSwiftKotlinSpec::setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JOldEnum> /* optionalOldEnum */)>("setOptionalOldEnum");
     method(_javaPart, optionalOldEnum.has_value() ? JOldEnum::fromCpp(optionalOldEnum.value()) : nullptr);
+  }
+  std::optional<TruckPowertrain> JHybridTestObjectSwiftKotlinSpec::getOptionalEnumPlusOne() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JTruckPowertrain>()>("getOptionalEnumPlusOne");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridTestObjectSwiftKotlinSpec::setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JTruckPowertrain> /* optionalEnumPlusOne */)>("setOptionalEnumPlusOne");
+    method(_javaPart, optionalEnumPlusOne.has_value() ? JTruckPowertrain::fromCpp(optionalEnumPlusOne.value()) : nullptr);
   }
   std::optional<std::function<void(double /* value */)>> JHybridTestObjectSwiftKotlinSpec::getOptionalCallback() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void_double::javaobject>()>("getOptionalCallback_cxx");

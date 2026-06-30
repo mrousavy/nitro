@@ -44,6 +44,8 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -82,6 +84,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "TruckPowertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>
@@ -511,6 +514,21 @@ namespace margelo::nitro::test::bridge::swift {
     return optional.has_value();
   }
   inline OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<TruckPowertrain>
+  /**
+   * Specialized version of `std::optional<TruckPowertrain>`.
+   */
+  using std__optional_TruckPowertrain_ = std::optional<TruckPowertrain>;
+  inline std::optional<TruckPowertrain> create_std__optional_TruckPowertrain_(const TruckPowertrain& value) noexcept {
+    return std::optional<TruckPowertrain>(value);
+  }
+  inline bool has_value_std__optional_TruckPowertrain_(const std::optional<TruckPowertrain>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline TruckPowertrain get_std__optional_TruckPowertrain_(const std::optional<TruckPowertrain>& optional) noexcept {
     return optional.value();
   }
   

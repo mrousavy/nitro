@@ -43,6 +43,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectCppSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectCppSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectCppSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalEnumPlusOne", &HybridTestObjectCppSpec::getOptionalEnumPlusOne);
+      prototype.registerHybridSetter("optionalEnumPlusOne", &HybridTestObjectCppSpec::setOptionalEnumPlusOne);
       prototype.registerHybridGetter("optionalCallback", &HybridTestObjectCppSpec::getOptionalCallback);
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectCppSpec::setOptionalCallback);
       prototype.registerHybridGetter("hasBoolean", &HybridTestObjectCppSpec::getHasBoolean);

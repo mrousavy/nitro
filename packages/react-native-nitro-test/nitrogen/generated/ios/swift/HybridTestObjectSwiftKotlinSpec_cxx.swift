@@ -371,6 +371,23 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var optionalEnumPlusOne: bridge.std__optional_TruckPowertrain_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_TruckPowertrain_ in
+        if let __unwrappedValue = self.__implementation.optionalEnumPlusOne {
+          return bridge.create_std__optional_TruckPowertrain_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalEnumPlusOne = newValue.value
+    }
+  }
+  
   public final var optionalCallback: bridge.std__optional_std__function_void_double____value______ {
     @inline(__always)
     get {

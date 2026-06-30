@@ -24,6 +24,7 @@ export type NamedVariant = string | Car
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
+type TruckPowertrain = Powertrain | 'diesel'
 
 // A classic TypeScript enum also becomes an `enum` in C++.
 // This one is number-backed.
@@ -145,6 +146,7 @@ interface SharedTestObjectProps {
   optionalArray?: string[]
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
+  optionalEnumPlusOne?: TruckPowertrain
   optionalCallback?: (value: number) => void
 
   // Kotlin/Swift simplify boolean names (has*/is*)

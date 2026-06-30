@@ -18,6 +18,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -62,6 +64,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include "TruckPowertrain.hpp"
 #include <functional>
 #include <NitroModules/Promise.hpp>
 #include "Person.hpp"
@@ -223,6 +226,13 @@ namespace margelo::nitro::test {
     }
     inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
       _swiftPart.setOptionalOldEnum(optionalOldEnum);
+    }
+    inline std::optional<TruckPowertrain> getOptionalEnumPlusOne() noexcept override {
+      auto __result = _swiftPart.getOptionalEnumPlusOne();
+      return __result;
+    }
+    inline void setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) noexcept override {
+      _swiftPart.setOptionalEnumPlusOne(optionalEnumPlusOne);
     }
     inline std::optional<std::function<void(double /* value */)>> getOptionalCallback() noexcept override {
       auto __result = _swiftPart.getOptionalCallback();
