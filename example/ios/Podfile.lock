@@ -3,7 +3,7 @@ PODS:
   - hermes-engine (250829098.0.10):
     - hermes-engine/Pre-built (= 250829098.0.10)
   - hermes-engine/Pre-built (250829098.0.10)
-  - NitroModules (0.35.10):
+  - NitroModules (0.36.0):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -26,7 +26,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - NitroTest (0.35.11):
+  - NitroTest (0.36.0):
     - hermes-engine
     - NitroModules
     - NitroTestExternal
@@ -51,7 +51,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - NitroTestExternal (0.35.11):
+  - NitroTestExternal (0.36.0):
     - hermes-engine
     - NitroModules
     - RCTRequired
@@ -2227,10 +2227,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
-  hermes-engine: f0e8ed549bb5a3befb3e292e5c0dafd3e2cee3ab
-  NitroModules: 994eaa7fc39d1fb4b76bb61054312c9796c4a649
-  NitroTest: 5451a2ecbde632427f6f6610b92e1ca54d6e6ada
-  NitroTestExternal: 2d58fc669ced6279011c4a9097d66210168c4916
+  hermes-engine: 411df881c1affac35ba53c66e3317eca368c0678
+  NitroModules: 4156f9c31e1720b729e4e8b997bf0c448c498e59
+  NitroTest: 328092eebc85e8688cebb9084922b6a5f4b037ab
+  NitroTestExternal: df243e044725325707d210a4754eea899427dcd8
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
   RCTRequired: 9f3a7e5645d4bc3f551593de7550bb66ab6e42bc
   RCTSwiftUI: 239ed2eb9e73de5a6f518810630f0c95e01c8702
@@ -2239,7 +2239,7 @@ SPEC CHECKSUMS:
   React: e2dc35338068bbd299c66f043ae0d7f25de8499e
   React-callinvoker: 28b25d21b124c26cebaea713ba7d801b9351dc48
   React-Core: 02ed7d2ffb70437bdf2aba074a13078a7b0b9ff0
-  React-Core-prebuilt: 72454b4caa0309d15c45de529b1c5a0e4607cf9a
+  React-Core-prebuilt: 39feb3a948d3918a0cae461d43c828d977b4e5c5
   React-CoreModules: b3a5a42dadcde3b5d47b325bd912eb2ced89e146
   React-cxxreact: fe8f88dda044e5905e99a00f41b7a874c3908716
   React-debug: 92944dc4d89f56d640e75498266cbde557a48189
@@ -2303,7 +2303,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 25c9c516839be2c5e3d3344f95dc7da5f7e63fc2
   ReactCodegen: 0f100aa6334186385a43f0dd13d63efc6805ea55
   ReactCommon: 7dfc3250793bf36cf221096ff59e1179e13eef7f
-  ReactNativeDependencies: 86c5427d73b954c0671c6ab9691d486b196595b6
+  ReactNativeDependencies: 69d317614e9b1fca501f383f23fb4d9d70ba5053
   RNScreens: 991cc417cd396602a6cf59a42139e5a9d91462a9
   Yoga: 77dfa8673de2874e1855002ae59c68b8be9b007b
 
