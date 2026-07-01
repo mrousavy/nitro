@@ -24,12 +24,29 @@ using namespace margelo;
 - (std::shared_ptr<react::CallInvoker>)jsCallInvoker;
 @end
 
+// Captured when RN decorates this module; lets any Nitro HybridObject reach
+// sibling RN modules on iOS via +sharedModuleRegistry.
+static RCTModuleRegistry* gNitroSharedModuleRegistry = nil;
+
 /**
  * NativeNitroModules implementation for the old architecture.
  * This uses `RCTBridge` to grab the `jsi::Runtime` and `react::CallInvoker`.
  */
-@implementation NativeNitroModules
+@implementation NativeNitroModules {
+  __weak RCTModuleRegistry* _moduleRegistry;
+}
 RCT_EXPORT_MODULE(NitroModules)
+
+- (RCTModuleRegistry*)moduleRegistry {
+  return _moduleRegistry;
+}
+- (void)setModuleRegistry:(RCTModuleRegistry*)moduleRegistry {
+  _moduleRegistry = moduleRegistry;
+  gNitroSharedModuleRegistry = moduleRegistry;
+}
++ (nullable RCTModuleRegistry*)sharedModuleRegistry {
+  return gNitroSharedModuleRegistry;
+}
 
 RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(install) {
   try {
