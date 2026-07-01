@@ -31,6 +31,10 @@ abstract class HybridPlatformObjectSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun getOSVersion(): String
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getReactContextInfo(): String
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {
