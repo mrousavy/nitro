@@ -41,9 +41,9 @@ struct JSIConverter<std::unordered_map<std::string, ValueType>> final {
   }
   static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::unordered_map<std::string, ValueType>& map) {
     jsi::Object object(runtime);
-    for (const auto& pair : map) {
-      jsi::Value value = JSIConverter<ValueType>::toJSI(runtime, pair.second);
-      object.setProperty(runtime, pair.first.c_str(), std::move(value));
+    for (const auto& [key, value] : map) {
+      jsi::Value jsValue = JSIConverter<ValueType>::toJSI(runtime, value);
+      object.setProperty(runtime, PropNameIDCache::get(runtime, key), std::move(jsValue));
     }
     return object;
   }
