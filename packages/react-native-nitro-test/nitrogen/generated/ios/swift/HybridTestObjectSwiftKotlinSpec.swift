@@ -106,6 +106,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceOptionalWrapper(wrapper: OptionalWrapper) throws -> OptionalWrapper
   func bounceOptionalCallback(value: OptionalCallback) throws -> OptionalCallback
   func bounceOptionalEnumStruct(value: OptionalEnumWrapper?) throws -> OptionalEnumWrapper?
+  func bounceGallery(gallery: Gallery) throws -> Gallery
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
