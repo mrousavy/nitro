@@ -31,7 +31,8 @@ struct JSIConverter<std::function<R(Args...)>> final {
   // Promise<T> -> T
   using ActualR = std::conditional_t<isAsync, promise_type_v<R>, R>;
 
-  static inline std::function<R(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+  static inline std::function<R(Args...)> fromJSI(jsi::Runtime& runtime, const jsi::Value& arg,
+                                                  Dispatcher::Priority priority = Dispatcher::Priority::NormalPriority) {
     // Make function global - it'll be managed by the Runtime's memory, and we only have a weak_ref to it.
     jsi::Function function = arg.asObject(runtime).asFunction(runtime);
     BorrowingReference<jsi::Function> sharedFunction;
@@ -45,7 +46,7 @@ struct JSIConverter<std::function<R(Args...)>> final {
     if constexpr (isAsync) {
       // Return type is `Promise<T>` or `void` - it's an async callback!
       std::shared_ptr<Dispatcher> dispatcher = Dispatcher::getRuntimeGlobalDispatcher(runtime);
-      return AsyncJSCallback<ActualR(Args...)>(std::move(callback), dispatcher);
+      return AsyncJSCallback<ActualR(Args...)>(std::move(callback), dispatcher, priority);
     } else {
       // Return type is `T` - it's a sync callback!
       return callback;
