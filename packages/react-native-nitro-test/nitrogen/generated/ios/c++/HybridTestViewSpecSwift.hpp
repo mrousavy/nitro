@@ -17,6 +17,10 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
+#include <NitroModules/Null.hpp>
+#include <variant>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -89,6 +93,27 @@ namespace margelo::nitro::test {
     }
     inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
       _swiftPart.setSomeCallback(someCallback);
+    }
+    inline std::optional<std::string> getOptionalString() noexcept override {
+      auto __result = _swiftPart.getOptionalString();
+      return __result;
+    }
+    inline void setOptionalString(const std::optional<std::string>& optionalString) noexcept override {
+      _swiftPart.setOptionalString(optionalString);
+    }
+    inline std::optional<std::variant<nitro::NullType, std::string>> getNullableString() noexcept override {
+      auto __result = _swiftPart.getNullableString();
+      return __result;
+    }
+    inline void setNullableString(const std::optional<std::variant<nitro::NullType, std::string>>& nullableString) noexcept override {
+      _swiftPart.setNullableString(nullableString);
+    }
+    inline std::optional<std::function<void()>> getOptionalCallback() noexcept override {
+      auto __result = _swiftPart.getOptionalCallback();
+      return __result;
+    }
+    inline void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) noexcept override {
+      _swiftPart.setOptionalCallback(optionalCallback);
     }
 
   public:

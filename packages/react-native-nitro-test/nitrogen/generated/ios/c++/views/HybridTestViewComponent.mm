@@ -99,6 +99,21 @@ using namespace margelo::nitro::test::views;
     swiftPart.setSomeCallback(newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;
   }
+  // optionalString: optional
+  if (newViewProps.optionalString.isDirty) {
+    swiftPart.setOptionalString(newViewProps.optionalString.value);
+    newViewProps.optionalString.isDirty = false;
+  }
+  // nullableString: optional
+  if (newViewProps.nullableString.isDirty) {
+    swiftPart.setNullableString(newViewProps.nullableString.value);
+    newViewProps.nullableString.isDirty = false;
+  }
+  // optionalCallback: optional
+  if (newViewProps.optionalCallback.isDirty) {
+    swiftPart.setOptionalCallback(newViewProps.optionalCallback.value);
+    newViewProps.optionalCallback.isDirty = false;
+  }
 
   swiftPart.afterUpdate();
 
