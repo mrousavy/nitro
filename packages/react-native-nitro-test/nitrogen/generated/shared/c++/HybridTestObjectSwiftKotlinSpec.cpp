@@ -41,6 +41,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectSwiftKotlinSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalEnumPlusOne", &HybridTestObjectSwiftKotlinSpec::getOptionalEnumPlusOne);
+      prototype.registerHybridSetter("optionalEnumPlusOne", &HybridTestObjectSwiftKotlinSpec::setOptionalEnumPlusOne);
       prototype.registerHybridGetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::getOptionalCallback);
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectSwiftKotlinSpec::setOptionalCallback);
       prototype.registerHybridGetter("hasBoolean", &HybridTestObjectSwiftKotlinSpec::getHasBoolean);
@@ -52,6 +54,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridGetter("someVariant", &HybridTestObjectSwiftKotlinSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectSwiftKotlinSpec::setSomeVariant);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectSwiftKotlinSpec::newTestObject);
+      prototype.registerHybridMethod("newTestObjectAsync", &HybridTestObjectSwiftKotlinSpec::newTestObjectAsync);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectSwiftKotlinSpec::getVariantHybrid);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectSwiftKotlinSpec::simpleFunc);
       prototype.registerHybridMethod("addNumbers", &HybridTestObjectSwiftKotlinSpec::addNumbers);
@@ -131,6 +134,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceArrayBuffer", &HybridTestObjectSwiftKotlinSpec::bounceArrayBuffer);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectSwiftKotlinSpec::passVariant);
       prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectSwiftKotlinSpec::getVariantEnum);
+      prototype.registerHybridMethod("bounceVariantUnionEnum", &HybridTestObjectSwiftKotlinSpec::bounceVariantUnionEnum);
       prototype.registerHybridMethod("getVariantWeirdNumbersEnum", &HybridTestObjectSwiftKotlinSpec::getVariantWeirdNumbersEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectSwiftKotlinSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectSwiftKotlinSpec::passNamedVariant);

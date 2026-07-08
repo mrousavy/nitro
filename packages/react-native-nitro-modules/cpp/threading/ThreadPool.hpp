@@ -42,7 +42,7 @@ private:
    * Adds a new Thread to the current Thread Pool.
    * This grows the size by one, and potentially starts work sooner if other Threads are busy.
    */
-  void addThread();
+  void addThread(std::unique_lock<std::mutex>& queueMutexLock);
 
 public:
   /**

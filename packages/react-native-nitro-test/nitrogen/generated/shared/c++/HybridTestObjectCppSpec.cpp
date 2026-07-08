@@ -43,6 +43,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("optionalEnum", &HybridTestObjectCppSpec::setOptionalEnum);
       prototype.registerHybridGetter("optionalOldEnum", &HybridTestObjectCppSpec::getOptionalOldEnum);
       prototype.registerHybridSetter("optionalOldEnum", &HybridTestObjectCppSpec::setOptionalOldEnum);
+      prototype.registerHybridGetter("optionalEnumPlusOne", &HybridTestObjectCppSpec::getOptionalEnumPlusOne);
+      prototype.registerHybridSetter("optionalEnumPlusOne", &HybridTestObjectCppSpec::setOptionalEnumPlusOne);
       prototype.registerHybridGetter("optionalCallback", &HybridTestObjectCppSpec::getOptionalCallback);
       prototype.registerHybridSetter("optionalCallback", &HybridTestObjectCppSpec::setOptionalCallback);
       prototype.registerHybridGetter("hasBoolean", &HybridTestObjectCppSpec::getHasBoolean);
@@ -57,7 +59,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("flip", &HybridTestObjectCppSpec::flip);
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
+      prototype.registerHybridMethod("newTestObjectAsync", &HybridTestObjectCppSpec::newTestObjectAsync);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
+      prototype.registerHybridMethod("getVariantHybridEnum", &HybridTestObjectCppSpec::getVariantHybridEnum);
       prototype.registerHybridMethod("bounceAnyHybrid", &HybridTestObjectCppSpec::bounceAnyHybrid);
       prototype.registerHybridMethod("bounceCustomType", &HybridTestObjectCppSpec::bounceCustomType);
       prototype.registerHybridMethod("simpleFunc", &HybridTestObjectCppSpec::simpleFunc);
@@ -138,6 +142,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceArrayBuffer", &HybridTestObjectCppSpec::bounceArrayBuffer);
       prototype.registerHybridMethod("passVariant", &HybridTestObjectCppSpec::passVariant);
       prototype.registerHybridMethod("getVariantEnum", &HybridTestObjectCppSpec::getVariantEnum);
+      prototype.registerHybridMethod("bounceVariantUnionEnum", &HybridTestObjectCppSpec::bounceVariantUnionEnum);
       prototype.registerHybridMethod("getVariantWeirdNumbersEnum", &HybridTestObjectCppSpec::getVariantWeirdNumbersEnum);
       prototype.registerHybridMethod("getVariantObjects", &HybridTestObjectCppSpec::getVariantObjects);
       prototype.registerHybridMethod("passNamedVariant", &HybridTestObjectCppSpec::passNamedVariant);

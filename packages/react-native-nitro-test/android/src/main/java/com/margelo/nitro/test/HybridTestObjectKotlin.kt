@@ -30,10 +30,11 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var optionalHybrid: HybridTestObjectSwiftKotlinSpec? = null
   override val thisObject: HybridTestObjectSwiftKotlinSpec
     get() = this
-  override var someVariant: Variant_String_Double = Variant_String_Double.create(55.05)
+  override var someVariant: Variant_Double_String = Variant_Double_String.create(55.05)
   override var optionalArray: Array<String>? = null
   override var optionalEnum: Powertrain? = null
   override var optionalOldEnum: OldEnum? = null
+  override var optionalEnumPlusOne: TruckPowertrain? = null
   override var optionalCallback: ((value: Double) -> Unit)? = null
 
   override val hasBoolean = false
@@ -497,13 +498,13 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return Promise.async { createArrayBuffer() }
   }
 
-  override fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double {
+  override fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__Double_String): Variant_Double_String {
     return either.match(
-      { bool -> Variant_String_Double.create("holds something else!") },
-      { doubleArray -> Variant_String_Double.create("holds something else!") },
-      { stringArray -> Variant_String_Double.create("holds something else!") },
-      { string -> Variant_String_Double.create(string) },
-      { double -> Variant_String_Double.create(double) },
+      { bool -> Variant_Double_String.create("holds something else!") },
+      { doubleArray -> Variant_Double_String.create("holds something else!") },
+      { stringArray -> Variant_Double_String.create("holds something else!") },
+      { double -> Variant_Double_String.create(double) },
+      { string -> Variant_Double_String.create(string) },
     )
   }
 
@@ -515,15 +516,19 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return variant
   }
 
-  override fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum {
+  override fun getVariantEnum(variant: Variant_OldEnum_Boolean): Variant_OldEnum_Boolean {
     return variant
   }
 
-  override fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum {
+  override fun bounceVariantUnionEnum(variant: Variant_Powertrain_Car): Variant_Powertrain_Car {
     return variant
   }
 
-  override fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person {
+  override fun getVariantWeirdNumbersEnum(variant: Variant_WeirdNumbersEnum_Boolean): Variant_WeirdNumbersEnum_Boolean {
+    return variant
+  }
+
+  override fun getVariantObjects(variant: Variant_Person_Car): Variant_Person_Car {
     return variant
   }
 
@@ -594,6 +599,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
 
   override fun newTestObject(): HybridTestObjectSwiftKotlinSpec {
     return HybridTestObjectKotlin()
+  }
+
+  override fun newTestObjectAsync(): Promise<HybridTestObjectSwiftKotlinSpec> {
+    return Promise.parallel<HybridTestObjectSwiftKotlinSpec> {
+      HybridTestObjectKotlin()
+    }
   }
 
   override fun getIsViewBlue(view: HybridTestViewSpec): Boolean {

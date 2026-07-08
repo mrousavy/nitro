@@ -62,6 +62,8 @@ namespace margelo::nitro::test { struct SecondMapWrapper; }
 namespace margelo::nitro::test { struct Size; }
 // Forward declaration of `TestViewProps` to properly resolve imports.
 namespace margelo::nitro::test { struct TestViewProps; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `WrappedJsStruct` to properly resolve imports.
@@ -94,6 +96,7 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "SecondMapWrapper.hpp"
 #include "Size.hpp"
 #include "TestViewProps.hpp"
+#include "TruckPowertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
 #include <NitroModules/AnyMap.hpp>

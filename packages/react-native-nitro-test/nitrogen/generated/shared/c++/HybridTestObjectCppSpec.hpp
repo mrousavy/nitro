@@ -19,6 +19,8 @@ namespace margelo::nitro::test { class HybridTestObjectCppSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `HybridObject` to properly resolve imports.
@@ -62,7 +64,9 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include "TruckPowertrain.hpp"
 #include <functional>
+#include <NitroModules/Promise.hpp>
 #include "Person.hpp"
 #include <NitroModules/HybridObject.hpp>
 #include "CustomString.hpp"
@@ -70,7 +74,6 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <unordered_map>
 #include "MapWrapper.hpp"
@@ -143,6 +146,8 @@ namespace margelo::nitro::test {
       virtual void setOptionalEnum(std::optional<Powertrain> optionalEnum) = 0;
       virtual std::optional<OldEnum> getOptionalOldEnum() = 0;
       virtual void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) = 0;
+      virtual std::optional<TruckPowertrain> getOptionalEnumPlusOne() = 0;
+      virtual void setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) = 0;
       virtual std::optional<std::function<void(double /* value */)>> getOptionalCallback() = 0;
       virtual void setOptionalCallback(const std::optional<std::function<void(double /* value */)>>& optionalCallback) = 0;
       virtual bool getHasBoolean() = 0;
@@ -151,8 +156,8 @@ namespace margelo::nitro::test {
       virtual void setHasBooleanWritable(bool hasBooleanWritable) = 0;
       virtual bool getIsBooleanWritable() = 0;
       virtual void setIsBooleanWritable(bool isBooleanWritable) = 0;
-      virtual std::variant<std::string, double> getSomeVariant() = 0;
-      virtual void setSomeVariant(const std::variant<std::string, double>& someVariant) = 0;
+      virtual std::variant<double, std::string> getSomeVariant() = 0;
+      virtual void setSomeVariant(const std::variant<double, std::string>& someVariant) = 0;
 
     public:
       // Methods
@@ -160,7 +165,9 @@ namespace margelo::nitro::test {
       virtual std::tuple<double, double, double> flip(const std::tuple<double, double, double>& tuple) = 0;
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<HybridTestObjectCppSpec> newTestObject() = 0;
+      virtual std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> newTestObjectAsync() = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) = 0;
+      virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain> getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) = 0;
       virtual std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) = 0;
       virtual CustomString bounceCustomType(CustomString value) = 0;
       virtual void simpleFunc() = 0;
@@ -239,10 +246,11 @@ namespace margelo::nitro::test {
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> createArrayBufferAsync() = 0;
       virtual std::shared_ptr<ArrayBuffer> bounceArrayBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
-      virtual std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) = 0;
-      virtual std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) = 0;
-      virtual std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) = 0;
-      virtual std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) = 0;
+      virtual std::variant<double, std::string> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) = 0;
+      virtual std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) = 0;
+      virtual std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) = 0;
+      virtual std::variant<WeirdNumbersEnum, bool> getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) = 0;
+      virtual std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) = 0;
       virtual std::variant<std::string, Car> passNamedVariant(const std::variant<std::string, Car>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper> passAllEmptyObjectVariant(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& variant) = 0;
       virtual std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>> bounceComplexVariant(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& variant) = 0;

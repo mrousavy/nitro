@@ -48,7 +48,7 @@ target_sources(
   ../nitrogen/generated/android/c++/JHybridBaseSpec.cpp
   ../nitrogen/generated/android/c++/JHybridChildSpec.cpp
   ../nitrogen/generated/android/c++/JNamedVariant.cpp
-  ../nitrogen/generated/android/c++/JVariant_String_Double.cpp
+  ../nitrogen/generated/android/c++/JVariant_Double_String.cpp
   ../nitrogen/generated/android/c++/JHybridMeasuredViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridMeasuredViewStateUpdater.cpp
   ../nitrogen/generated/android/c++/JHybridPlatformObjectSpec.cpp
@@ -59,13 +59,14 @@ target_sources(
   ../nitrogen/generated/android/c++/JVariant_HybridTestObjectSwiftKotlinSpec_Person.cpp
   ../nitrogen/generated/android/c++/JVariant_Boolean_Double.cpp
   ../nitrogen/generated/android/c++/JVariant_______Unit_Double.cpp
-  ../nitrogen/generated/android/c++/JVariant_Boolean_OldEnum.cpp
-  ../nitrogen/generated/android/c++/JVariant_Boolean_WeirdNumbersEnum.cpp
-  ../nitrogen/generated/android/c++/JVariant_Car_Person.cpp
+  ../nitrogen/generated/android/c++/JVariant_OldEnum_Boolean.cpp
+  ../nitrogen/generated/android/c++/JVariant_Powertrain_Car.cpp
+  ../nitrogen/generated/android/c++/JVariant_WeirdNumbersEnum_Boolean.cpp
+  ../nitrogen/generated/android/c++/JVariant_Person_Car.cpp
   ../nitrogen/generated/android/c++/JVariant_HybridBaseSpec_OptionalWrapper.cpp
   ../nitrogen/generated/android/c++/JCoreTypesVariant.cpp
   ../nitrogen/generated/android/c++/JStringOrExternal.cpp
-  ../nitrogen/generated/android/c++/JVariant_Boolean_DoubleArray_Array_String__String_Double.cpp
+  ../nitrogen/generated/android/c++/JVariant_Boolean_DoubleArray_Array_String__Double_String.cpp
   ../nitrogen/generated/android/c++/JHybridTestViewSpec.cpp
   ../nitrogen/generated/android/c++/views/JHybridTestViewStateUpdater.cpp
 )

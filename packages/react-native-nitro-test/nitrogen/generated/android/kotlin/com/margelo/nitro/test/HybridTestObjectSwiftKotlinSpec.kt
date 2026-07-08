@@ -11,8 +11,8 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import com.margelo.nitro.core.NullType
-import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.Promise
+import com.margelo.nitro.core.AnyMap
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import com.margelo.nitro.core.HybridObject
@@ -120,6 +120,12 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @set:Keep
   abstract var optionalOldEnum: OldEnum?
   
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalEnumPlusOne: TruckPowertrain?
+  
   abstract var optionalCallback: ((value: Double) -> Unit)?
   
   private var optionalCallback_cxx: Func_void_double?
@@ -158,12 +164,16 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @get:Keep
   @set:DoNotStrip
   @set:Keep
-  abstract var someVariant: Variant_String_Double
+  abstract var someVariant: Variant_Double_String
 
   // Methods
   @DoNotStrip
   @Keep
   abstract fun newTestObject(): HybridTestObjectSwiftKotlinSpec
+  
+  @DoNotStrip
+  @Keep
+  abstract fun newTestObjectAsync(): Promise<HybridTestObjectSwiftKotlinSpec>
   
   @DoNotStrip
   @Keep
@@ -550,19 +560,23 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__String_Double): Variant_String_Double
+  abstract fun passVariant(either: Variant_Boolean_DoubleArray_Array_String__Double_String): Variant_Double_String
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantEnum(variant: Variant_Boolean_OldEnum): Variant_Boolean_OldEnum
+  abstract fun getVariantEnum(variant: Variant_OldEnum_Boolean): Variant_OldEnum_Boolean
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantWeirdNumbersEnum(variant: Variant_Boolean_WeirdNumbersEnum): Variant_Boolean_WeirdNumbersEnum
+  abstract fun bounceVariantUnionEnum(variant: Variant_Powertrain_Car): Variant_Powertrain_Car
   
   @DoNotStrip
   @Keep
-  abstract fun getVariantObjects(variant: Variant_Car_Person): Variant_Car_Person
+  abstract fun getVariantWeirdNumbersEnum(variant: Variant_WeirdNumbersEnum_Boolean): Variant_WeirdNumbersEnum_Boolean
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getVariantObjects(variant: Variant_Person_Car): Variant_Person_Car
   
   @DoNotStrip
   @Keep

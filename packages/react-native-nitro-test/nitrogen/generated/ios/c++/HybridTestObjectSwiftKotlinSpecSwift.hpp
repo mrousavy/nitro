@@ -18,6 +18,8 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { enum class Powertrain; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
+// Forward declaration of `TruckPowertrain` to properly resolve imports.
+namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `Person` to properly resolve imports.
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `PartialPerson` to properly resolve imports.
@@ -62,13 +64,14 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include <vector>
 #include "Powertrain.hpp"
 #include "OldEnum.hpp"
+#include "TruckPowertrain.hpp"
 #include <functional>
+#include <NitroModules/Promise.hpp>
 #include "Person.hpp"
 #include "PartialPerson.hpp"
 #include "Car.hpp"
 #include "HybridChildSpec.hpp"
 #include <NitroModules/AnyMap.hpp>
-#include <NitroModules/Promise.hpp>
 #include <NitroModules/ArrayBuffer.hpp>
 #include <NitroModules/ArrayBufferHolder.hpp>
 #include <unordered_map>
@@ -224,6 +227,13 @@ namespace margelo::nitro::test {
     inline void setOptionalOldEnum(std::optional<OldEnum> optionalOldEnum) noexcept override {
       _swiftPart.setOptionalOldEnum(optionalOldEnum);
     }
+    inline std::optional<TruckPowertrain> getOptionalEnumPlusOne() noexcept override {
+      auto __result = _swiftPart.getOptionalEnumPlusOne();
+      return __result;
+    }
+    inline void setOptionalEnumPlusOne(std::optional<TruckPowertrain> optionalEnumPlusOne) noexcept override {
+      _swiftPart.setOptionalEnumPlusOne(optionalEnumPlusOne);
+    }
     inline std::optional<std::function<void(double /* value */)>> getOptionalCallback() noexcept override {
       auto __result = _swiftPart.getOptionalCallback();
       return __result;
@@ -249,11 +259,11 @@ namespace margelo::nitro::test {
     inline void setIsBooleanWritable(bool isBooleanWritable) noexcept override {
       _swiftPart.setIsBooleanWritable(std::forward<decltype(isBooleanWritable)>(isBooleanWritable));
     }
-    inline std::variant<std::string, double> getSomeVariant() noexcept override {
+    inline std::variant<double, std::string> getSomeVariant() noexcept override {
       auto __result = _swiftPart.getSomeVariant();
       return __result;
     }
-    inline void setSomeVariant(const std::variant<std::string, double>& someVariant) noexcept override {
+    inline void setSomeVariant(const std::variant<double, std::string>& someVariant) noexcept override {
       _swiftPart.setSomeVariant(someVariant);
     }
 
@@ -261,6 +271,14 @@ namespace margelo::nitro::test {
     // Methods
     inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> newTestObject() override {
       auto __result = _swiftPart.newTestObject();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> newTestObjectAsync() override {
+      auto __result = _swiftPart.newTestObjectAsync();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -861,7 +879,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<std::string, double> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, std::string, double>& either) override {
+    inline std::variant<double, std::string> passVariant(const std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>& either) override {
       auto __result = _swiftPart.passVariant(either);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -869,7 +887,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<bool, OldEnum> getVariantEnum(const std::variant<bool, OldEnum>& variant) override {
+    inline std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) override {
       auto __result = _swiftPart.getVariantEnum(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -877,7 +895,15 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<bool, WeirdNumbersEnum> getVariantWeirdNumbersEnum(const std::variant<bool, WeirdNumbersEnum>& variant) override {
+    inline std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) override {
+      auto __result = _swiftPart.bounceVariantUnionEnum(variant);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::variant<WeirdNumbersEnum, bool> getVariantWeirdNumbersEnum(const std::variant<WeirdNumbersEnum, bool>& variant) override {
       auto __result = _swiftPart.getVariantWeirdNumbersEnum(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
@@ -885,7 +911,7 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::variant<Car, Person> getVariantObjects(const std::variant<Car, Person>& variant) override {
+    inline std::variant<Person, Car> getVariantObjects(const std::variant<Person, Car>& variant) override {
       auto __result = _swiftPart.getVariantObjects(variant);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());

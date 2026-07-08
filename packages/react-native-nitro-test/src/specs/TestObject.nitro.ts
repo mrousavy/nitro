@@ -24,6 +24,7 @@ export type NamedVariant = string | Car
 // A discriminating string union becomes an `enum` in C++.
 // This one is string-backed.
 export type Powertrain = 'electric' | 'gas' | 'hybrid'
+type TruckPowertrain = Powertrain | 'diesel'
 
 // A classic TypeScript enum also becomes an `enum` in C++.
 // This one is number-backed.
@@ -145,6 +146,7 @@ interface SharedTestObjectProps {
   optionalArray?: string[]
   optionalEnum?: Powertrain
   optionalOldEnum?: OldEnum
+  optionalEnumPlusOne?: TruckPowertrain
   optionalCallback?: (value: number) => void
 
   // Kotlin/Swift simplify boolean names (has*/is*)
@@ -288,6 +290,7 @@ interface SharedTestObjectProps {
     either: number | string | number[] | string[] | boolean
   ): number | string
   getVariantEnum(variant: OldEnum | boolean): OldEnum | boolean
+  bounceVariantUnionEnum(variant: Powertrain | Car): Powertrain | Car
   getVariantWeirdNumbersEnum(
     variant: WeirdNumbersEnum | boolean
   ): WeirdNumbersEnum | boolean
@@ -341,8 +344,14 @@ export interface TestObjectCpp
   // Type-specifics
   readonly thisObject: TestObjectCpp
   newTestObject(): TestObjectCpp
+  // Returns a HybridObject from a Promise resolved off the JS thread. Used to reproduce the data
+  // race between resolve() and JSIConverter::toJSI.
+  newTestObjectAsync(): Promise<TestObjectCpp>
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
+  getVariantHybridEnum(
+    variant: TestObjectCpp | Powertrain
+  ): TestObjectCpp | Powertrain
 
   // Any HybridObject
   bounceAnyHybrid(object: AnyHybridObject): AnyHybridObject
@@ -361,6 +370,7 @@ export interface TestObjectSwiftKotlin
   // Type-specifics
   readonly thisObject: TestObjectSwiftKotlin
   newTestObject(): TestObjectSwiftKotlin
+  newTestObjectAsync(): Promise<TestObjectSwiftKotlin>
   optionalHybrid?: TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person

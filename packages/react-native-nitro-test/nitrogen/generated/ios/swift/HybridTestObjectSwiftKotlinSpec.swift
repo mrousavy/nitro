@@ -25,15 +25,17 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var optionalArray: [String]? { get set }
   var optionalEnum: Powertrain? { get set }
   var optionalOldEnum: OldEnum? { get set }
+  var optionalEnumPlusOne: TruckPowertrain? { get set }
   var optionalCallback: ((_ value: Double) -> Void)? { get set }
   var hasBoolean: Bool { get }
   var isBoolean: Bool { get }
   var hasBooleanWritable: Bool { get set }
   var isBooleanWritable: Bool { get set }
-  var someVariant: Variant_String_Double { get set }
+  var someVariant: Variant_Double_String { get set }
 
   // Methods
   func newTestObject() throws -> (any HybridTestObjectSwiftKotlinSpec)
+  func newTestObjectAsync() throws -> Promise<(any HybridTestObjectSwiftKotlinSpec)>
   func getVariantHybrid(variant: Variant__any_HybridTestObjectSwiftKotlinSpec__Person) throws -> Variant__any_HybridTestObjectSwiftKotlinSpec__Person
   func simpleFunc() throws -> Void
   func addNumbers(a: Double, b: Double) throws -> Double
@@ -111,10 +113,11 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void
   func createArrayBufferAsync() throws -> Promise<ArrayBuffer>
   func bounceArrayBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
-  func passVariant(either: Variant_Bool__Double___String__String_Double) throws -> Variant_String_Double
-  func getVariantEnum(variant: Variant_Bool_OldEnum) throws -> Variant_Bool_OldEnum
-  func getVariantWeirdNumbersEnum(variant: Variant_Bool_WeirdNumbersEnum) throws -> Variant_Bool_WeirdNumbersEnum
-  func getVariantObjects(variant: Variant_Car_Person) throws -> Variant_Car_Person
+  func passVariant(either: Variant_Bool__Double___String__Double_String) throws -> Variant_Double_String
+  func getVariantEnum(variant: Variant_OldEnum_Bool) throws -> Variant_OldEnum_Bool
+  func bounceVariantUnionEnum(variant: Variant_Powertrain_Car) throws -> Variant_Powertrain_Car
+  func getVariantWeirdNumbersEnum(variant: Variant_WeirdNumbersEnum_Bool) throws -> Variant_WeirdNumbersEnum_Bool
+  func getVariantObjects(variant: Variant_Person_Car) throws -> Variant_Person_Car
   func passNamedVariant(variant: NamedVariant) throws -> NamedVariant
   func passAllEmptyObjectVariant(variant: Variant__any_HybridBaseSpec__OptionalWrapper) throws -> Variant__any_HybridBaseSpec__OptionalWrapper
   func bounceComplexVariant(variant: CoreTypesVariant) throws -> CoreTypesVariant

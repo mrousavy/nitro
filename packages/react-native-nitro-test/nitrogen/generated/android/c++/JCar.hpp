@@ -12,7 +12,7 @@
 
 #include "JPerson.hpp"
 #include "JPowertrain.hpp"
-#include "JVariant_String_Double.hpp"
+#include "JVariant_Double_String.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
 #include <optional>
@@ -59,8 +59,8 @@ namespace margelo::nitro::test {
       jni::local_ref<jni::JString> favouriteTrack = this->getFieldValue(fieldFavouriteTrack);
       static const auto fieldPerformanceScores = clazz->getField<jni::JArrayDouble>("performanceScores");
       jni::local_ref<jni::JArrayDouble> performanceScores = this->getFieldValue(fieldPerformanceScores);
-      static const auto fieldSomeVariant = clazz->getField<JVariant_String_Double>("someVariant");
-      jni::local_ref<JVariant_String_Double> someVariant = this->getFieldValue(fieldSomeVariant);
+      static const auto fieldSomeVariant = clazz->getField<JVariant_Double_String>("someVariant");
+      jni::local_ref<JVariant_Double_String> someVariant = this->getFieldValue(fieldSomeVariant);
       return Car(
         year,
         make->toStdString(),
@@ -96,7 +96,7 @@ namespace margelo::nitro::test {
      */
     [[maybe_unused]]
     static jni::local_ref<JCar::javaobject> fromCpp(const Car& value) {
-      using JSignature = JCar(double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, double, jni::alias_ref<JPowertrain>, jni::alias_ref<JPerson>, jni::alias_ref<jni::JArrayClass<JPerson>>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayDouble>, jni::alias_ref<JVariant_String_Double>);
+      using JSignature = JCar(double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, double, jni::alias_ref<JPowertrain>, jni::alias_ref<JPerson>, jni::alias_ref<jni::JArrayClass<JPerson>>, jni::alias_ref<jni::JBoolean>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JArrayDouble>, jni::alias_ref<JVariant_Double_String>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -125,7 +125,7 @@ namespace margelo::nitro::test {
           __array->setRegion(0, __size, value.performanceScores.data());
           return __array;
         }(),
-        value.someVariant.has_value() ? JVariant_String_Double::fromCpp(value.someVariant.value()) : nullptr
+        value.someVariant.has_value() ? JVariant_Double_String::fromCpp(value.someVariant.value()) : nullptr
       );
     }
   };
