@@ -62,7 +62,12 @@ private:
       // explicitly models null (e.g. `string | null`), treat it as `undefined`.
       // See https://github.com/mrousavy/nitro/issues/1184 and
       // https://github.com/facebook/react-native/blob/v0.85.3/packages/react-native/Libraries/ReactNative/ReactFabricPublicInstance/ReactNativeAttributePayload.js#L270-L277
-      return JSIConverter<T>::fromJSI(runtime, jsi::Value::undefined());
+      jsi::Value undefined = jsi::Value::undefined();
+      if (JSIConverter<T>::canConvert(runtime, undefined)) {
+        return JSIConverter<T>::fromJSI(runtime, undefined);
+      }
+      // T can't represent "no value" either (required prop) - fall through so
+      // the error reports the actual (null) value.
     }
     return JSIConverter<T>::fromJSI(runtime, value);
   }

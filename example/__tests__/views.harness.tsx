@@ -95,6 +95,20 @@ describe('TestView optional props', () => {
     }
   }
 
+  // Resolves once the prop update landed OR a render error was caught, so a
+  // crashing commit fails fast in `expectNoRenderErrors` with the real error
+  // instead of timing out here.
+  async function waitForUpdateOrError(
+    errors: unknown[],
+    hasUpdated: () => boolean
+  ): Promise<void> {
+    await waitFor(() => {
+      if (errors.length === 0 && !hasUpdated()) {
+        throw new Error('prop update has not reached the native view yet')
+      }
+    })
+  }
+
   it('renders with optional props omitted', async () => {
     const { view, errors } = await renderTestView({})
     expect(view.optionalString).toBeUndefined()
@@ -109,9 +123,7 @@ describe('TestView optional props', () => {
     await waitFor(() => expect(view.optionalString).toBe('hello'))
 
     update({})
-    await waitFor(() =>
-      expect(errors.length > 0 || view.optionalString === undefined).toBe(true)
-    )
+    await waitForUpdateOrError(errors, () => view.optionalString === undefined)
     expectNoRenderErrors(errors)
     expect(view.optionalString).toBeUndefined()
     expect(mountCount()).toBe(1)
@@ -124,9 +136,7 @@ describe('TestView optional props', () => {
     await waitFor(() => expect(view.optionalString).toBe('hello'))
 
     update({ optionalString: undefined })
-    await waitFor(() =>
-      expect(errors.length > 0 || view.optionalString === undefined).toBe(true)
-    )
+    await waitForUpdateOrError(errors, () => view.optionalString === undefined)
     expectNoRenderErrors(errors)
     expect(view.optionalString).toBeUndefined()
     expect(mountCount()).toBe(1)
@@ -139,13 +149,9 @@ describe('TestView optional props', () => {
     await waitFor(() => expect(view.optionalString).toBe('first'))
 
     update({})
-    await waitFor(() =>
-      expect(errors.length > 0 || view.optionalString === undefined).toBe(true)
-    )
+    await waitForUpdateOrError(errors, () => view.optionalString === undefined)
     update({ optionalString: 'second' })
-    await waitFor(() =>
-      expect(errors.length > 0 || view.optionalString === 'second').toBe(true)
-    )
+    await waitForUpdateOrError(errors, () => view.optionalString === 'second')
     expectNoRenderErrors(errors)
     expect(view.optionalString).toBe('second')
   })
@@ -157,10 +163,9 @@ describe('TestView optional props', () => {
     await waitFor(() => expect(view.optionalCallback).toBeDefined())
 
     update({})
-    await waitFor(() =>
-      expect(errors.length > 0 || view.optionalCallback === undefined).toBe(
-        true
-      )
+    await waitForUpdateOrError(
+      errors,
+      () => view.optionalCallback === undefined
     )
     expectNoRenderErrors(errors)
     expect(view.optionalCallback).toBeUndefined()
@@ -176,9 +181,21 @@ describe('TestView optional props', () => {
     // `string | null` props explicitly model `null`, so an explicit `null`
     // value must still arrive as `null` - not be swallowed into `undefined`.
     update({ nullableString: null })
-    await waitFor(() =>
-      expect(errors.length > 0 || view.nullableString === null).toBe(true)
-    )
+    await waitForUpdateOrError(errors, () => view.nullableString === null)
+    expectNoRenderErrors(errors)
+    expect(view.nullableString).toBeNull()
+  })
+
+  it('delivers null when nullableString is removed', async () => {
+    const { view, errors, update } = await renderTestView({
+      nullableString: 'hello',
+    })
+    await waitFor(() => expect(view.nullableString).toBe('hello'))
+
+    // React encodes removal as `null` and native cannot tell it apart from an
+    // explicit `null` - since `string | null` models null, it arrives as-is.
+    update({})
+    await waitForUpdateOrError(errors, () => view.nullableString === null)
     expectNoRenderErrors(errors)
     expect(view.nullableString).toBeNull()
   })
