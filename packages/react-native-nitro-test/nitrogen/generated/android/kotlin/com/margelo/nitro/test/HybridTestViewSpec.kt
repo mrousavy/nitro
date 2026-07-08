@@ -10,6 +10,7 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.HybridObject
 import com.margelo.nitro.views.HybridView
 
@@ -56,6 +57,32 @@ abstract class HybridTestViewSpec: HybridView() {
     @DoNotStrip
     set(value) {
       someCallback = value
+    }
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalString: String?
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var nullableString: Variant_NullType_String?
+  
+  abstract var optionalCallback: (() -> Unit)?
+  
+  private var optionalCallback_cxx: Func_void?
+    @Keep
+    @DoNotStrip
+    get() {
+      return optionalCallback?.let { Func_void_java(it) }
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      optionalCallback = value?.let { it }
     }
 
   // Methods

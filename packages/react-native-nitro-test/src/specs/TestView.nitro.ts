@@ -11,6 +11,9 @@ export interface TestViewProps extends HybridViewProps {
   hasBeenCalled: boolean
   colorScheme: ColorScheme
   someCallback: () => void
+  optionalString?: string
+  nullableString?: string | null
+  optionalCallback?: () => void
 }
 export interface TestViewMethods extends HybridViewMethods {
   someMethod(): void

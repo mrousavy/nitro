@@ -58,6 +58,12 @@ namespace margelo::nitro::test {
     void setColorScheme(ColorScheme colorScheme) override;
     std::function<void()> getSomeCallback() override;
     void setSomeCallback(const std::function<void()>& someCallback) override;
+    std::optional<std::string> getOptionalString() override;
+    void setOptionalString(const std::optional<std::string>& optionalString) override;
+    std::optional<std::variant<nitro::NullType, std::string>> getNullableString() override;
+    void setNullableString(const std::optional<std::variant<nitro::NullType, std::string>>& nullableString) override;
+    std::optional<std::function<void()>> getOptionalCallback() override;
+    void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) override;
 
   public:
     // Methods

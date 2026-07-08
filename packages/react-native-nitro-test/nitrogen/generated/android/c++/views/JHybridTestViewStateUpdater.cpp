@@ -53,6 +53,18 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
     hybridView->setSomeCallback(props->someCallback.value);
     props->someCallback.isDirty = false;
   }
+  if (props->optionalString.isDirty) {
+    hybridView->setOptionalString(props->optionalString.value);
+    props->optionalString.isDirty = false;
+  }
+  if (props->nullableString.isDirty) {
+    hybridView->setNullableString(props->nullableString.value);
+    props->nullableString.isDirty = false;
+  }
+  if (props->optionalCallback.isDirty) {
+    hybridView->setOptionalCallback(props->optionalCallback.value);
+    props->optionalCallback.isDirty = false;
+  }
 
   // Update hybridRef if it changed
   if (props->hybridRef.isDirty) {

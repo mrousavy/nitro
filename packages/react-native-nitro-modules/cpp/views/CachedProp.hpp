@@ -46,13 +46,25 @@ public:
       // jsi::Value hasn't changed - no need to convert it again!
       return oldProp;
     }
-    T converted = JSIConverter<T>::fromJSI(runtime, value);
+    T converted = convertFromJSI(runtime, value);
     BorrowingReference<jsi::Value> cached;
     {
       JSICacheReference cache = JSICache::getOrCreateCache(runtime);
       cached = cache.makeShared(jsi::Value(runtime, value));
     }
     return CachedProp<T>(std::move(converted), std::move(cached));
+  }
+
+private:
+  static T convertFromJSI(jsi::Runtime& runtime, const jsi::Value& value) {
+    if (value.isNull() && !JSIConverter<T>::canConvert(runtime, value)) {
+      // React encodes removed (or explicitly `undefined`) props as `null` - unless T
+      // explicitly models null (e.g. `string | null`), treat it as `undefined`.
+      // See https://github.com/mrousavy/nitro/issues/1184 and
+      // https://github.com/facebook/react-native/blob/v0.85.3/packages/react-native/Libraries/ReactNative/ReactFabricPublicInstance/ReactNativeAttributePayload.js#L270-L277
+      return JSIConverter<T>::fromJSI(runtime, jsi::Value::undefined());
+    }
+    return JSIConverter<T>::fromJSI(runtime, value);
   }
 };
 
