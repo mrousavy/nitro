@@ -42,6 +42,30 @@ using namespace margelo::nitro::test::views;
 + (void) load {
   [super load];
   [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[HybridRecyclableTestViewComponent class]];
+
+  // Install self-measurement iff "RecyclableTestView" conforms to `MeasurableView`.
+  if (NitroTest::HybridRecyclableTestViewMeasurer::isMeasurable()) {
+    HybridRecyclableTestViewShadowNode::measureFunction.store(
+      +[](const react::ViewProps& propsBase,
+          const react::LayoutContext& layoutContext,
+          const react::LayoutConstraints& layoutConstraints) -> react::Size {
+        const auto& props = static_cast<const HybridRecyclableTestViewProps&>(propsBase);
+        margelo::nitro::test::RecyclableTestViewProps measureProps {
+          /* isBlue */ props.isBlue.value
+        };
+        margelo::nitro::test::LayoutContext measureContext {
+          /* pointScaleFactor */ layoutContext.pointScaleFactor,
+          /* isRTL */ layoutConstraints.layoutDirection == react::LayoutDirection::RightToLeft
+        };
+        margelo::nitro::test::LayoutConstraints measureConstraints {
+          /* minimumSize */ margelo::nitro::test::Size { layoutConstraints.minimumSize.width, layoutConstraints.minimumSize.height },
+          /* maximumSize */ margelo::nitro::test::Size { layoutConstraints.maximumSize.width, layoutConstraints.maximumSize.height }
+        };
+        auto size = NitroTest::HybridRecyclableTestViewMeasurer::measure(measureProps, measureContext, measureConstraints);
+        return react::Size { static_cast<react::Float>(size.width), static_cast<react::Float>(size.height) };
+      },
+      std::memory_order_release);
+  }
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {

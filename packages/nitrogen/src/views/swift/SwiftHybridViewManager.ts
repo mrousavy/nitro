@@ -16,6 +16,10 @@ import {
 } from '../../syntax/swift/SwiftHybridObjectRegistration.js'
 import { indent } from '../../utils.js'
 import { SwiftCxxBridgedType } from '../../syntax/swift/SwiftCxxBridgedType.js'
+import {
+  createSwiftViewMeasurer,
+  createSwiftViewMeasurerRegistration,
+} from './createSwiftViewMeasurer.js'
 
 export function createSwiftHybridViewManager(
   spec: HybridObjectSpec
@@ -92,6 +96,8 @@ using namespace ${namespace}::views;
 + (void) load {
   [super load];
   [RCTComponentViewFactory.currentComponentViewFactory registerComponentViewClass:[${component} class]];
+
+  ${indent(createSwiftViewMeasurerRegistration(spec, swiftNamespace), '  ')}
 }
 
 + (react::ComponentDescriptorProvider) componentDescriptorProvider {
@@ -177,5 +183,6 @@ using namespace ${namespace}::views;
       platform: 'ios',
       subdirectory: ['views'],
     },
+    ...createSwiftViewMeasurer(spec),
   ]
 }

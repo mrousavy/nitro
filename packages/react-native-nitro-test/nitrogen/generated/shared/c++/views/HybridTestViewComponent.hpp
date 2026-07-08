@@ -10,11 +10,16 @@
 #include <optional>
 #include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/NitroHash.hpp>
+#include <atomic>
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <react/renderer/core/LayoutConstraints.h>
+#include <react/renderer/core/LayoutContext.h>
 #include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/ShadowNodeTraits.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/graphics/Size.h>
 
 #include "ColorScheme.hpp"
 #include <functional>
@@ -83,12 +88,60 @@ namespace margelo::nitro::test::views {
   };
 
   /**
-   * The Shadow Node for the "TestView" View.
+   * The base Shadow Node for the "TestView" View.
    */
-  using HybridTestViewShadowNode = react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
-                                                                 HybridTestViewProps /* custom props */,
-                                                                 react::ViewEventEmitter /* default */,
-                                                                 HybridTestViewState /* custom state */>;
+  using HybridTestViewShadowNodeBase = react::ConcreteViewShadowNode<HybridTestViewComponentName /* "HybridTestView" */,
+                                                                     HybridTestViewProps /* custom props */,
+                                                                     react::ViewEventEmitter /* default */,
+                                                                     HybridTestViewState /* custom state */>;
+
+  /**
+   * The Shadow Node for the "TestView" View.
+   *
+   * Self-measurement is opt-in: when the native implementation conforms to
+   * `MeasurableView`, the platform layer installs `measureFunction` once during
+   * view registration and this becomes a measurable Yoga leaf that sizes itself
+   * from its props. Otherwise it stays a normal container whose React children
+   * are laid out by flexbox.
+   */
+  class HybridTestViewShadowNode final: public HybridTestViewShadowNodeBase {
+  public:
+    // Inherit both the create- and clone-constructors.
+    using HybridTestViewShadowNodeBase::HybridTestViewShadowNodeBase;
+
+    /**
+     * A pure (props + constraints) -> size function, run on the Yoga/shadow thread.
+     */
+    using MeasureFunction = react::Size (*)(const react::ViewProps& props,
+                                            const react::LayoutContext& layoutContext,
+                                            const react::LayoutConstraints& layoutConstraints);
+
+    /**
+     * Installed exactly once during view registration (before the first layout
+     * pass), iff the native implementation conforms to `MeasurableView`. Read
+     * lock-free on the shadow thread - no map lookup, locking or allocation on
+     * the measure hot-path.
+     */
+    inline static std::atomic<MeasureFunction> measureFunction{nullptr};
+
+    static react::ShadowNodeTraits BaseTraits() {
+      auto traits = HybridTestViewShadowNodeBase::BaseTraits();
+      if (measureFunction.load(std::memory_order_acquire) != nullptr) {
+        traits.set(react::ShadowNodeTraits::Trait::LeafYogaNode);
+        traits.set(react::ShadowNodeTraits::Trait::MeasurableYogaNode);
+      }
+      return traits;
+    }
+
+    react::Size measureContent(const react::LayoutContext& layoutContext,
+                               const react::LayoutConstraints& layoutConstraints) const override {
+      const MeasureFunction measure = measureFunction.load(std::memory_order_acquire);
+      if (measure == nullptr) [[unlikely]] {
+        return react::Size{0, 0};
+      }
+      return measure(getConcreteProps(), layoutContext, layoutConstraints);
+    }
+  };
 
   /**
    * The Component Descriptor for the "TestView" View.

@@ -1,0 +1,11 @@
+{
+  "uiViewClassName": "MeasuredView",
+  "supportsRawText": false,
+  "bubblingEventTypes": {},
+  "directEventTypes": {},
+  "validAttributes": {
+    "text": true,
+    "fontSize": true,
+    "hybridRef": true
+  }
+}
