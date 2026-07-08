@@ -61,9 +61,39 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
+        return CachedProp<std::function<void()>>::fromRawValue(*runtime, (value.isNull() || value.isUndefined()) ? jsi::Value::undefined() : value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+      }
+    }()),
+    optionalString([&]() -> CachedProp<std::optional<std::string>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("optionalString", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.optionalString;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<std::string>>::fromRawValue(*runtime, value, sourceProps.optionalString);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.optionalString: ") + exc.what());
+      }
+    }()),
+    nullableString([&]() -> CachedProp<std::optional<std::variant<nitro::NullType, std::string>>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("nullableString", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.nullableString;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<std::variant<nitro::NullType, std::string>>>::fromRawValue(*runtime, value, sourceProps.nullableString);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.nullableString: ") + exc.what());
+      }
+    }()),
+    optionalCallback([&]() -> CachedProp<std::optional<std::function<void()>>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("optionalCallback", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.optionalCallback;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        return CachedProp<std::optional<std::function<void()>>>::fromRawValue(*runtime, (value.isNull() || value.isUndefined()) ? jsi::Value::undefined() : value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.optionalCallback);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.optionalCallback: ") + exc.what());
       }
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> {
@@ -71,7 +101,7 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
+        return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, (value.isNull() || value.isUndefined()) ? jsi::Value::undefined() : value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
       }
@@ -83,6 +113,9 @@ namespace margelo::nitro::test::views {
       case hashString("hasBeenCalled"): return true;
       case hashString("colorScheme"): return true;
       case hashString("someCallback"): return true;
+      case hashString("optionalString"): return true;
+      case hashString("nullableString"): return true;
+      case hashString("optionalCallback"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }
