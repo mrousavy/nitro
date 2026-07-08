@@ -172,6 +172,105 @@ open class HybridTestViewSpec_cxx {
       }()
     }
   }
+  
+  public final var optionalString: bridge.std__optional_std__string_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = self.__implementation.optionalString {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalString = { () -> String? in
+        if bridge.has_value_std__optional_std__string_(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__string_(newValue)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
+  public final var nullableString: bridge.std__optional_std__variant_nitro__NullType__std__string__ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
+        if let __unwrappedValue = self.__implementation.nullableString {
+          return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            }
+          }().variant)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.nullableString = { () -> Variant_NullType_String? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(newValue)
+          return { () -> Variant_NullType_String in
+            let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(String(__actual))
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
+  
+  public final var optionalCallback: bridge.std__optional_std__function_void____ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_std__function_void____ in
+        if let __unwrappedValue = self.__implementation.optionalCallback {
+          return bridge.create_std__optional_std__function_void____({ () -> bridge.Func_void in
+            let __closureWrapper = Func_void(__unwrappedValue)
+            return bridge.create_Func_void(__closureWrapper.toUnsafe())
+          }())
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.optionalCallback = { () -> (() -> Void)? in
+        if bridge.has_value_std__optional_std__function_void____(newValue) {
+          let __unwrapped = bridge.get_std__optional_std__function_void____(newValue)
+          return { () -> () -> Void in
+            let __wrappedFunction = bridge.wrap_Func_void(__unwrapped)
+            return { () -> Void in
+              __wrappedFunction.call()
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
 
   // Methods
   @inline(__always)

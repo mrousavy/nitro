@@ -15,6 +15,12 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 #include <functional>
 #include "JFunc_void.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include <string>
+#include <optional>
+#include <NitroModules/Null.hpp>
+#include <variant>
+#include "JVariant_NullType_String.hpp"
+#include <NitroModules/JNull.hpp>
 
 namespace margelo::nitro::test {
 
@@ -89,6 +95,41 @@ namespace margelo::nitro::test {
   void JHybridTestViewSpec::setSomeCallback(const std::function<void()>& someCallback) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
+  }
+  std::optional<std::string> JHybridTestViewSpec::getOptionalString() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOptionalString");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setOptionalString(const std::optional<std::string>& optionalString) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* optionalString */)>("setOptionalString");
+    method(_javaPart, optionalString.has_value() ? jni::make_jstring(optionalString.value()) : nullptr);
+  }
+  std::optional<std::variant<nitro::NullType, std::string>> JHybridTestViewSpec::getNullableString() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JVariant_NullType_String>()>("getNullableString");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toCpp()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setNullableString(const std::optional<std::variant<nitro::NullType, std::string>>& nullableString) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JVariant_NullType_String> /* nullableString */)>("setNullableString");
+    method(_javaPart, nullableString.has_value() ? JVariant_NullType_String::fromCpp(nullableString.value()) : nullptr);
+  }
+  std::optional<std::function<void()>> JHybridTestViewSpec::getOptionalCallback() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getOptionalCallback_cxx");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() -> std::function<void()> {
+      if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return JNICallable<JFunc_void, void()>(std::move(__resultRef));
+      }
+    }()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
+    method(_javaPart, optionalCallback.has_value() ? JFunc_void_cxx::fromCpp(optionalCallback.value()) : nullptr);
   }
 
   // Methods
