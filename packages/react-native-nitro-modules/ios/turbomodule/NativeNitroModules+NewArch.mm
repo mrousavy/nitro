@@ -34,7 +34,19 @@ using namespace margelo;
 }
 RCT_EXPORT_MODULE(NitroModules)
 
+// React Native >= 0.87+ .
+- (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime
+                          callInvoker:(const std::shared_ptr<react::CallInvoker>&)callInvoker {
+  _callInvoker = callInvoker;
+  [self installNitroInRuntime:runtime];
+}
+
+// React Native < 0.87 // Todo Delete the when 0.87 is spread widely
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
+  [self installNitroInRuntime:runtime];
+}
+
+- (void)installNitroInRuntime:(jsi::Runtime&)runtime {
   // 1. Get CallInvoker we cached statically
   std::shared_ptr<react::CallInvoker> callInvoker = _callInvoker.lock();
   if (callInvoker == nullptr) {
