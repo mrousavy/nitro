@@ -17,6 +17,8 @@
 
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridIssue1439Spec.hpp"
+#include "JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridRecyclableTestViewSpec.hpp"
 #include "views/JHybridRecyclableTestViewStateUpdater.hpp"
@@ -95,6 +97,14 @@ struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclabl
     return javaPart->getJHybridRecyclableTestViewSpec();
   }
 };
+struct JHybridIssue1439SpecImpl: public jni::JavaClass<JHybridIssue1439SpecImpl, JHybridIssue1439Spec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridIssue1439;";
+  static std::shared_ptr<JHybridIssue1439Spec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridIssue1439SpecImpl::javaobject()>();
+    jni::local_ref<JHybridIssue1439Spec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridIssue1439Spec();
+  }
+};
 
 void registerAllNatives() {
   using namespace margelo::nitro;
@@ -103,6 +113,8 @@ void registerAllNatives() {
   // Register native JNI methods
   margelo::nitro::test::JHybridBaseSpec::CxxPart::registerNatives();
   margelo::nitro::test::JHybridChildSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridIssue1439Spec::CxxPart::registerNatives();
+  margelo::nitro::test::JFunc_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput_cxx::registerNatives();
   margelo::nitro::test::JHybridPlatformObjectSpec::CxxPart::registerNatives();
   margelo::nitro::test::JHybridRecyclableTestViewSpec::CxxPart::registerNatives();
   margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
@@ -167,6 +179,12 @@ void registerAllNatives() {
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridRecyclableTestViewSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "Issue1439",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridIssue1439SpecImpl::create();
     }
   );
 }

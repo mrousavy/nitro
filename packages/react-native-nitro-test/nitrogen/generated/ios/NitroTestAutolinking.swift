@@ -83,4 +83,16 @@ public final class NitroTestAutolinking {
   public static func isRecyclableTestViewRecyclable() -> Bool {
     return HybridRecyclableTestView.self is any RecyclableView.Type
   }
+  
+  public static func createIssue1439() -> bridge.std__shared_ptr_HybridIssue1439Spec_ {
+    let hybridObject = HybridIssue1439()
+    return { () -> bridge.std__shared_ptr_HybridIssue1439Spec_ in
+      let __cxxWrapped = hybridObject.getCxxWrapper()
+      return __cxxWrapped.getCxxPart()
+    }()
+  }
+  
+  public static func isIssue1439Recyclable() -> Bool {
+    return HybridIssue1439.self is any RecyclableView.Type
+  }
 }

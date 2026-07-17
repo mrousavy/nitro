@@ -1,0 +1,36 @@
+--------- beginning of crash
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: FATAL EXCEPTION: main
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: Process: com.margelo.nitroexample, PID: 9295
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: com.facebook.soloader.SoLoaderDSONotFoundError: couldn't find DSO to load: libreactnative.so
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	existing SO sources: 
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 		SoSource 0: ApplicationSoSource[DirectorySoSource[root = /data/app/~~ltrc45ffcQoMl_alJJueQw==/com.margelo.nitroexample--0m3_FOd2upKxHOUO5Z-Sg==/lib/arm64 flags = 0]]
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 		SoSource 1: DirectApkSoSource[root = [/data/app/~~ltrc45ffcQoMl_alJJueQw==/com.margelo.nitroexample--0m3_FOd2upKxHOUO5Z-Sg==/base.apk!/lib/x86_64]]
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 		SoSource 2: DirectorySoSource[root = /system/lib64 flags = 3]
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 		SoSource 3: DirectorySoSource[root = /vendor/lib64 flags = 3]
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	Native lib dir: /data/app/~~ltrc45ffcQoMl_alJJueQw==/com.margelo.nitroexample--0m3_FOd2upKxHOUO5Z-Sg==/lib/arm64
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.doLoadLibraryBySoName(SoLoader.java:1216)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.loadLibraryBySoNameImpl(SoLoader.java:1078)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.loadLibraryBySoName(SoLoader.java:943)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.loadLibraryOnAndroid(SoLoader.java:859)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.loadLibrary(SoLoader.java:842)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.soloader.SoLoader.loadLibrary(SoLoader.java:812)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.internal.featureflags.ReactNativeFeatureFlagsCxxInterop.<clinit>(ReactNativeFeatureFlagsCxxInterop.kt:28)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.internal.featureflags.ReactNativeFeatureFlagsCxxAccessor.override(ReactNativeFeatureFlagsCxxAccessor.kt:925)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.internal.featureflags.ReactNativeFeatureFlags.override(ReactNativeFeatureFlags.kt:588)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load(DefaultNewArchitectureEntryPoint.kt:101)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load(DefaultNewArchitectureEntryPoint.kt:43)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative(ReactNativeApplicationEntryPoint.java:31)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.margelo.nitroexample.MainApplication.onCreate(MainApplication.kt:29)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.app.Instrumentation.callApplicationOnCreate(Instrumentation.java:1396)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:8365)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.app.ActivityThread.-$$Nest$mhandleBindApplication(ActivityThread.java:0)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2776)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.os.Handler.dispatchMessageImpl(Handler.java:142)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.os.Handler.dispatchMessage(Handler.java:126)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.os.Looper.loopOnce(Looper.java:295)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.os.Looper.loop(Looper.java:398)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at android.app.ActivityThread.main(ActivityThread.java:9572)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at java.lang.reflect.Method.invoke(Native Method)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:575)
+07-17 16:50:54.323  9295  9295 E AndroidRuntime: 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:842)

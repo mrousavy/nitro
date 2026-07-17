@@ -18,6 +18,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridIssue1439Spec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridIssue1439Spec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
 // Forward declaration of `HybridRecyclableTestViewSpec` to properly resolve imports.
@@ -28,6 +30,8 @@ namespace margelo::nitro::test::external { class HybridSomeExternalObjectSpec; }
 namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
+// Forward declaration of `Issue1439CallInput` to properly resolve imports.
+namespace margelo::nitro::test { struct Issue1439CallInput; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
 // Forward declaration of `OldEnum` to properly resolve imports.
@@ -56,6 +60,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridIssue1439Spec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridIssue1439Spec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 // Forward declaration of `HybridRecyclableTestViewSpec_cxx` to properly resolve imports.
@@ -72,10 +78,12 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridIssue1439Spec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
+#include "Issue1439CallInput.hpp"
 #include "JsStyleStruct.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
@@ -287,6 +295,140 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
   
+  // pragma MARK: std::shared_ptr<Promise<std::string>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::string>>`.
+   */
+  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
+  inline std::shared_ptr<Promise<std::string>> create_std__shared_ptr_Promise_std__string__() noexcept {
+    return Promise<std::string>::create();
+  }
+  inline PromiseHolder<std::string> wrap_std__shared_ptr_Promise_std__string__(std::shared_ptr<Promise<std::string>> promise) noexcept {
+    return PromiseHolder<std::string>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::string& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::string&)>`.
+   */
+  using Func_void_std__string = std::function<void(const std::string& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::string& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__string_Wrapper final {
+  public:
+    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::string& /* result */)>>(std::move(func))) {}
+    inline void call(std::string result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::string& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
+    return Func_void_std__string_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
+  /**
+   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
+   */
+  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__exception_ptr_Wrapper final {
+  public:
+    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
+    inline void call(std::exception_ptr error) const noexcept {
+      _function->operator()(error);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
+    return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& /* input */)>
+  /**
+   * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput&)>`.
+   */
+  using Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput = std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& /* input */)>;
+  /**
+   * Wrapper class for a `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& / * input * /)>`, this can be used from Swift.
+   */
+  class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput_Wrapper final {
+  public:
+    explicit Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput_Wrapper(std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& /* input */)>&& func): _function(std::make_unique<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& /* input */)>>(std::move(func))) {}
+    inline std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>> call(Issue1439CallInput input) const noexcept {
+      auto __result = _function->operator()(input);
+      return __result;
+    }
+  private:
+    std::unique_ptr<std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>(const Issue1439CallInput& /* input */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput create_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput_Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput value) noexcept {
+    return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string_____Issue1439CallInput_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>`.
+   */
+  using std__shared_ptr_Promise_std__shared_ptr_Promise_std__string____ = std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>>;
+  inline std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>> create_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string____() noexcept {
+    return Promise<std::shared_ptr<Promise<std::string>>>::create();
+  }
+  inline PromiseHolder<std::shared_ptr<Promise<std::string>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__string____(std::shared_ptr<Promise<std::shared_ptr<Promise<std::string>>>> promise) noexcept {
+    return PromiseHolder<std::shared_ptr<Promise<std::string>>>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const std::shared_ptr<Promise<std::string>>& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const std::shared_ptr<Promise<std::string>>&)>`.
+   */
+  using Func_void_std__shared_ptr_Promise_std__string__ = std::function<void(const std::shared_ptr<Promise<std::string>>& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const std::shared_ptr<Promise<std::string>>& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_std__shared_ptr_Promise_std__string___Wrapper final {
+  public:
+    explicit Func_void_std__shared_ptr_Promise_std__string___Wrapper(std::function<void(const std::shared_ptr<Promise<std::string>>& /* result */)>&& func): _function(std::make_unique<std::function<void(const std::shared_ptr<Promise<std::string>>& /* result */)>>(std::move(func))) {}
+    inline void call(std::shared_ptr<Promise<std::string>> result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const std::shared_ptr<Promise<std::string>>& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_std__shared_ptr_Promise_std__string__ create_Func_void_std__shared_ptr_Promise_std__string__(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_std__shared_ptr_Promise_std__string___Wrapper wrap_Func_void_std__shared_ptr_Promise_std__string__(Func_void_std__shared_ptr_Promise_std__string__ value) noexcept {
+    return Func_void_std__shared_ptr_Promise_std__string___Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::shared_ptr<HybridIssue1439Spec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridIssue1439Spec>`.
+   */
+  using std__shared_ptr_HybridIssue1439Spec_ = std::shared_ptr<HybridIssue1439Spec>;
+  std::shared_ptr<HybridIssue1439Spec> create_std__shared_ptr_HybridIssue1439Spec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridIssue1439Spec_(std__shared_ptr_HybridIssue1439Spec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridIssue1439Spec>
+  using std__weak_ptr_HybridIssue1439Spec_ = std::weak_ptr<HybridIssue1439Spec>;
+  inline std__weak_ptr_HybridIssue1439Spec_ weakify_std__shared_ptr_HybridIssue1439Spec_(const std::shared_ptr<HybridIssue1439Spec>& strong) noexcept { return strong; }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<std::string>>>
+  using Result_std__shared_ptr_Promise_std__string___ = Result<std::shared_ptr<Promise<std::string>>>;
+  inline Result_std__shared_ptr_Promise_std__string___ create_Result_std__shared_ptr_Promise_std__string___(const std::shared_ptr<Promise<std::string>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<std::string>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_std__string___ create_Result_std__shared_ptr_Promise_std__string___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<std::string>>>::withError(error);
+  }
+  
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlatformObjectSpec>`.
@@ -364,28 +506,6 @@ namespace margelo::nitro::test::bridge::swift {
   Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ create_Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper wrap_Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ value) noexcept {
     return Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
-  /**
-   * Specialized version of `std::function<void(const std::exception_ptr&)>`.
-   */
-  using Func_void_std__exception_ptr = std::function<void(const std::exception_ptr& /* error */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::exception_ptr& / * error * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__exception_ptr_Wrapper final {
-  public:
-    explicit Func_void_std__exception_ptr_Wrapper(std::function<void(const std::exception_ptr& /* error */)>&& func): _function(std::make_unique<std::function<void(const std::exception_ptr& /* error */)>>(std::move(func))) {}
-    inline void call(std::exception_ptr error) const noexcept {
-      _function->operator()(error);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::exception_ptr& /* error */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
-    return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
@@ -1174,28 +1294,6 @@ namespace margelo::nitro::test::bridge::swift {
     return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::function<void(const std::string& /* value */)>
-  /**
-   * Specialized version of `std::function<void(const std::string&)>`.
-   */
-  using Func_void_std__string = std::function<void(const std::string& /* value */)>;
-  /**
-   * Wrapper class for a `std::function<void(const std::string& / * value * /)>`, this can be used from Swift.
-   */
-  class Func_void_std__string_Wrapper final {
-  public:
-    explicit Func_void_std__string_Wrapper(std::function<void(const std::string& /* value */)>&& func): _function(std::make_unique<std::function<void(const std::string& /* value */)>>(std::move(func))) {}
-    inline void call(std::string value) const noexcept {
-      _function->operator()(value);
-    }
-  private:
-    std::unique_ptr<std::function<void(const std::string& /* value */)>> _function;
-  } SWIFT_NONCOPYABLE;
-  Func_void_std__string create_Func_void_std__string(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
-    return Func_void_std__string_Wrapper(std::move(value));
-  }
-  
   // pragma MARK: std::optional<std::function<void(const std::string& /* value */)>>
   /**
    * Specialized version of `std::optional<std::function<void(const std::string& / * value * /)>>`.
@@ -1232,18 +1330,6 @@ namespace margelo::nitro::test::bridge::swift {
   Func_std__shared_ptr_Promise_std__string__ create_Func_std__shared_ptr_Promise_std__string__(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_std__shared_ptr_Promise_std__string___Wrapper wrap_Func_std__shared_ptr_Promise_std__string__(Func_std__shared_ptr_Promise_std__string__ value) noexcept {
     return Func_std__shared_ptr_Promise_std__string___Wrapper(std::move(value));
-  }
-  
-  // pragma MARK: std::shared_ptr<Promise<std::string>>
-  /**
-   * Specialized version of `std::shared_ptr<Promise<std::string>>`.
-   */
-  using std__shared_ptr_Promise_std__string__ = std::shared_ptr<Promise<std::string>>;
-  inline std::shared_ptr<Promise<std::string>> create_std__shared_ptr_Promise_std__string__() noexcept {
-    return Promise<std::string>::create();
-  }
-  inline PromiseHolder<std::string> wrap_std__shared_ptr_Promise_std__string__(std::shared_ptr<Promise<std::string>> promise) noexcept {
-    return PromiseHolder<std::string>(std::move(promise));
   }
   
   // pragma MARK: std::vector<JsStyleStruct>
