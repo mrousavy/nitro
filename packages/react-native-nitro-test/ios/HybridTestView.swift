@@ -21,6 +21,9 @@ class HybridTestView: HybridTestViewSpec {
   var hasBeenCalled: Bool = false
   var colorScheme: ColorScheme = .light
   var someCallback: () -> Void = {}
+  var optionalString: String? = nil
+  var nullableString: Variant_NullType_String? = nil
+  var optionalCallback: (() -> Void)? = nil
 
   // Methods
   func someMethod() throws {
