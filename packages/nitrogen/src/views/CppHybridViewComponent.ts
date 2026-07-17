@@ -202,7 +202,8 @@ namespace ${namespace} {
       // Due to a React limitation, functions cannot be passed to native directly,
       // because RN converts them to booleans (`true`). Nitro knows this and just
       // wraps functions as objects - the original function is stored in `f`.
-      valueConversion = `value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"))`
+      // React encodes "prop was removed" as `null`, so only unwrap actual objects.
+      valueConversion = `(value.isNull() || value.isUndefined()) ? jsi::Value::undefined() : value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"))`
     }
 
     propInitializers.push(

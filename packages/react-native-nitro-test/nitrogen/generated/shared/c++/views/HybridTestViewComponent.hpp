@@ -18,9 +18,12 @@
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
+#include <NitroModules/Null.hpp>
+#include <variant>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
-#include <optional>
 
 namespace margelo::nitro::test::views {
 
@@ -46,6 +49,9 @@ namespace margelo::nitro::test::views {
     CachedProp<bool> hasBeenCalled;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
+    CachedProp<std::optional<std::string>> optionalString;
+    CachedProp<std::optional<std::variant<nitro::NullType, std::string>>> nullableString;
+    CachedProp<std::optional<std::function<void()>>> optionalCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:

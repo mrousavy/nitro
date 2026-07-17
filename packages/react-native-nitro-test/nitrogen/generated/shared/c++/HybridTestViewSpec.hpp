@@ -18,6 +18,10 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
+#include <NitroModules/Null.hpp>
+#include <variant>
 
 namespace margelo::nitro::test {
 
@@ -54,6 +58,12 @@ namespace margelo::nitro::test {
       virtual void setColorScheme(ColorScheme colorScheme) = 0;
       virtual std::function<void()> getSomeCallback() = 0;
       virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual std::optional<std::string> getOptionalString() = 0;
+      virtual void setOptionalString(const std::optional<std::string>& optionalString) = 0;
+      virtual std::optional<std::variant<nitro::NullType, std::string>> getNullableString() = 0;
+      virtual void setNullableString(const std::optional<std::variant<nitro::NullType, std::string>>& nullableString) = 0;
+      virtual std::optional<std::function<void()>> getOptionalCallback() = 0;
+      virtual void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) = 0;
 
     public:
       // Methods

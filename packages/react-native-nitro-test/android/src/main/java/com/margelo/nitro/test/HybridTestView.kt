@@ -24,6 +24,9 @@ class HybridTestView(
   override var hasBeenCalled: Boolean = false
   override var colorScheme: ColorScheme = ColorScheme.LIGHT
   override var someCallback: () -> Unit = {}
+  override var optionalString: String? = null
+  override var nullableString: Variant_NullType_String? = null
+  override var optionalCallback: (() -> Unit)? = null
 
   // Methods
   override fun someMethod() {
