@@ -7,9 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import kotlin.coroutines.intrinsics.COROUTINE_SUSPENDED
+import kotlin.coroutines.intrinsics.intercepted
+import kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn
 
 /**
  * Represents a Promise that can be passed to JS.
@@ -86,12 +86,19 @@ class Promise<T> {
    * If the Promise is already resolved/rejected, this will continue immediately,
    * otherwise it will asynchronously wait for a result or throw on a rejection.
    * This function can only be used from a coroutine context.
+   *
+   * Uses [suspendCoroutineUninterceptedOrReturn] with [intercepted] to ensure
+   * [kotlin.coroutines.Continuation.resumeWith] is always called on the underlying
+   * continuation — including when called from Java with a raw [kotlin.coroutines.Continuation]
+   * (e.g. `CustomContinuation`) where [kotlin.coroutines.intrinsics.SafeContinuation]'s
+   * synchronous fast-path would otherwise skip [kotlin.coroutines.Continuation.resumeWith]
+   * entirely, leaving any `CompletableFuture.get()` blocked forever.
    */
-  suspend fun await(): T {
-    return suspendCoroutine { continuation ->
-      then { result -> continuation.resume(result) }
-      catch { error -> continuation.resumeWithException(error) }
-    }
+  suspend fun await(): T = suspendCoroutineUninterceptedOrReturn { uCont ->
+    val cont = uCont.intercepted()
+    then { result -> cont.resumeWith(Result.success(result)) }
+    catch { error -> cont.resumeWith(Result.failure(error)) }
+    COROUTINE_SUSPENDED
   }
 
   // C++ functions
