@@ -6,12 +6,10 @@ import {
 import { type PlatformObject } from './specs/PlatformObject.nitro'
 import type { Base } from './specs/Base.nitro'
 import type { Child } from './specs/Child.nitro'
-import type { Issue1439 } from './specs/Issue1439.nitro'
 
 // Export all Hybrid Object types
 export * from './specs/Base.nitro'
 export * from './specs/Child.nitro'
-export * from './specs/Issue1439.nitro'
 export * from './specs/PlatformObject.nitro'
 export * from './specs/TestObject.nitro'
 export * from './specs/TestView.nitro'
@@ -27,9 +25,6 @@ export const HybridBase = NitroModules.createHybridObject<Base>('Base')
 export const HybridChild = NitroModules.createHybridObject<Child>('Child')
 export const HybridPlatformObject =
   NitroModules.createHybridObject<PlatformObject>('PlatformObject')
-
-export const HybridIssue1439 =
-  NitroModules.createHybridObject<Issue1439>('Issue1439')
 
 // Export View (+ its ref type)
 export { TestView, type TestViewRef } from './views/TestView'

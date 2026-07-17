@@ -15,7 +15,7 @@ import {
   HybridChild,
   HybridBase,
 } from 'react-native-nitro-test'
-import { getTests, getIssue1439Tests, type TestRunner } from '../getTests'
+import { getTests, type TestRunner } from '../getTests'
 import { logPrototypeChain } from '../logPrototypeChain'
 import SegmentedControl from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
@@ -53,10 +53,7 @@ export function HybridObjectTestsScreen() {
   ]
   console.log(`Showing Tests for HybridObject "${selectedObject?.name}"`)
   const allTests = React.useMemo(
-    () => [
-      ...getTests(selectedObject ?? HybridTestObjectCpp),
-      ...getIssue1439Tests(),
-    ],
+    () => [...getTests(selectedObject ?? HybridTestObjectCpp)],
     [selectedObject]
   )
   const [unfilteredTests, setTests] = React.useState<TestState[]>(() =>
