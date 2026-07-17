@@ -13,6 +13,7 @@ import {
   Base,
   HybridPlatformObject,
   HybridChild,
+  HybridIssue1439,
 } from 'react-native-nitro-test'
 import {
   type AssertionBackend,
@@ -2441,6 +2442,68 @@ export function getTests(
       })
         .didNotThrow()
         .equals(true)
+    ),
+  ]
+}
+
+/**
+ * Tests reproducing https://github.com/mrousavy/nitro/issues/1439
+ *
+ * A JS async function is passed inside a struct to native code.
+ * Native calls it twice from a background thread — first call throws, second should succeed.
+ */
+export function getIssue1439Tests(options: GetTestsOptions = {}): TestRunner[] {
+  const backend = options.backend ?? throwingBackend
+  const { it } = createTestRunner(backend)
+  const createTest = createCreateTest()
+
+  return [
+    createTest(
+      '[Issue #1439] Second fn invocation succeeds when first threw',
+      async () =>
+        (
+          await it(async () => {
+            let callCount = 0
+            const result = await HybridIssue1439.callFnTwiceFirstThrows({
+              fn: async (input) => {
+                callCount++
+                if (input.value === 'first') {
+                  throw new Error('Expected error on first call')
+                }
+                return input.value
+              },
+            })
+            if (callCount !== 2) {
+              throw new Error(
+                `Expected fn to be called twice, got ${callCount}`
+              )
+            }
+            return result
+          })
+        )
+          .didNotThrow()
+          .equals('second')
+    ),
+    createTest(
+      '[Issue #1439] fn in struct can be called multiple times without error',
+      async () =>
+        (
+          await it(async () => {
+            const results: string[] = []
+            await HybridIssue1439.callFnTwiceFirstThrows({
+              fn: async (input) => {
+                if (input.value === 'first') {
+                  throw new Error('Expected error on first call')
+                }
+                results.push(input.value)
+                return input.value
+              },
+            })
+            return results.join(',')
+          })
+        )
+          .didNotThrow()
+          .equals('second')
     ),
   ]
 }

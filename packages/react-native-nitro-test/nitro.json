@@ -74,6 +74,16 @@
         "language": "kotlin",
         "implementationClassName": "HybridRecyclableTestView"
       }
+    },
+    "Issue1439": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridIssue1439"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridIssue1439"
+      }
     }
   },
   "ignorePaths": [
