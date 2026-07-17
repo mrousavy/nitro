@@ -40,7 +40,8 @@ RCT_EXPORT_MODULE(NitroModules)
   [self installNitroInRuntime:runtime];
 }
 
-// React Native < 0.87 // Todo Delete the when 0.87 is spread widely
+// TODO: Delete this old overload when we drop support for RN 0.86
+// React Native < 0.87
 - (void)installJSIBindingsWithRuntime:(jsi::Runtime&)runtime {
   [self installNitroInRuntime:runtime];
 }
