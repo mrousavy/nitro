@@ -32,4 +32,3 @@ const testObjectSwiftKotlin =
 
 describe('TestObject (C++)', createTestRunner(testObjectCpp))
 describe('TestObject (Swift/Kotlin)', createTestRunner(testObjectSwiftKotlin))
-
