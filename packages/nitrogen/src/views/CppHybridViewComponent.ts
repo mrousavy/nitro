@@ -209,7 +209,7 @@ namespace ${namespace} {
       `
 ${name}([&]() -> CachedProp<${type}> {
   try {
-    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
+    const react::RawValue* rawValue = NITRO_RAWPROPS_AT(rawProps, "${prop.name}");
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
     return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
@@ -238,6 +238,16 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include <react/renderer/core/ShadowNode.h>
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <cxxreact/ReactNativeVersion.h>
+
+// react-native 0.87 removed the \`at(name, prefix, suffix)\` overload of
+// \`react::RawProps\` in favor of a single-argument \`at(name)\`. Keep supporting
+// older versions (<= 0.86) that still require the 3-argument form.
+#if REACT_NATIVE_VERSION_MAJOR > 0 || REACT_NATIVE_VERSION_MINOR > 86
+#define NITRO_RAWPROPS_AT(rawProps, name) (rawProps).at(name)
+#else
+#define NITRO_RAWPROPS_AT(rawProps, name) (rawProps).at(name, nullptr, nullptr)
+#endif
 
 namespace ${namespace} {
 
@@ -281,6 +291,8 @@ namespace ${namespace} {
 #endif
 
 } // namespace ${namespace}
+
+#undef NITRO_RAWPROPS_AT
 `.trim()
 
   const files: SourceFile[] = [
