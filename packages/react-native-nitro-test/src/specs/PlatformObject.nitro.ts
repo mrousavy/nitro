@@ -6,4 +6,7 @@ export interface PlatformObject extends HybridObject<{
   android: 'kotlin'
 }> {
   getOSVersion(): string
+  // Repro: can a HybridObject reach a React Native native module (here "BlobModule")?
+  // Android can (via NitroModules.applicationContext); iOS has no equivalent.
+  getReactContextInfo(): string
 }

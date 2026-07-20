@@ -55,6 +55,7 @@ namespace margelo::nitro::test {
   public:
     // Methods
     std::string getOSVersion() override;
+    std::string getReactContextInfo() override;
 
   private:
     jni::global_ref<JHybridPlatformObjectSpec::JavaPart> _javaPart;
