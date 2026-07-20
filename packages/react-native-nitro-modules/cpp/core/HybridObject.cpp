@@ -68,11 +68,8 @@ void HybridObject::loadHybridMethods() {
 jsi::Value HybridObject::toObject(jsi::Runtime& runtime) {
   // 1. Check if we have a jsi::WeakObject in cache that we can use to avoid re-creating the object each time
   auto cachedObject = _objectCache.find(&runtime);
-  if (cachedObject != _objectCache.end()) {
+  if (cachedObject != _objectCache.end() && cachedObject->second != nullptr) {
     // 1.1. We have a WeakObject, try to see if it is still alive
-    if (cachedObject->second == nullptr) [[unlikely]] {
-      throw std::runtime_error("HybridObject \"" + getName() + "\" was cached, but the reference got destroyed!");
-    }
     jsi::Value value = cachedObject->second->lock(runtime);
     if (!value.isUndefined()) {
       // 1.2. It is still alive - we can use it instead of creating a new one! But first, let's update memory-size
