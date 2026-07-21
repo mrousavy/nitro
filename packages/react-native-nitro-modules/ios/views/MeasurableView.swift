@@ -31,12 +31,14 @@ public protocol MeasurableView: HybridView {
   ) -> Size
 }
 
-public extension MeasurableView {
-  static func measureContent<Props, LayoutContext, LayoutConstraints, Size>(
+extension MeasurableView {
+  public static func measureContent<Props, LayoutContext, LayoutConstraints, Size>(
     props: Props,
     layoutContext: LayoutContext,
     layoutConstraints: LayoutConstraints
   ) -> Size {
-    fatalError("\(Self.self) conforms to MeasurableView but does not implement the generated measureContent(props:layoutContext:layoutConstraints:) signature.")
+    fatalError(
+      "\(Self.self) conforms to MeasurableView but does not implement the generated measureContent(props:layoutContext:layoutConstraints:) signature."
+    )
   }
 }

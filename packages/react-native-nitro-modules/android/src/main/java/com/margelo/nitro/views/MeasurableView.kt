@@ -1,14 +1,20 @@
 package com.margelo.nitro.views
 
 /** A size returned from [MeasurableView.measureContent]. */
-data class Size(val width: Double, val height: Double) {
+data class Size(
+  val width: Double,
+  val height: Double,
+) {
   companion object {
     val ZERO = Size(0.0, 0.0)
   }
 }
 
 /** The layout context a measure pass runs in. */
-data class LayoutContext(val pointScaleFactor: Double, val isRTL: Boolean)
+data class LayoutContext(
+  val pointScaleFactor: Double,
+  val isRTL: Boolean,
+)
 
 /**
  * The size constraints a measure pass must resolve within.
@@ -16,7 +22,10 @@ data class LayoutContext(val pointScaleFactor: Double, val isRTL: Boolean)
  * A dimension is "at most" when its [maximumSize] component is finite, and
  * "undefined" (intrinsic) when it is [Double.POSITIVE_INFINITY].
  */
-data class LayoutConstraints(val minimumSize: Size, val maximumSize: Size)
+data class LayoutConstraints(
+  val minimumSize: Size,
+  val maximumSize: Size,
+)
 
 /**
  * Opt-in for a `HybridView` that computes its own intrinsic size (Text-like
@@ -46,5 +55,9 @@ data class LayoutConstraints(val minimumSize: Size, val maximumSize: Size)
  * - Note: A measurable view is a Yoga **leaf** and cannot host React children.
  */
 interface MeasurableView<P> {
-  fun measureContent(props: P, layoutContext: LayoutContext, layoutConstraints: LayoutConstraints): Size
+  fun measureContent(
+    props: P,
+    layoutContext: LayoutContext,
+    layoutConstraints: LayoutConstraints,
+  ): Size
 }

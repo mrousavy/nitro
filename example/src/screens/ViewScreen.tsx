@@ -15,7 +15,6 @@ import { useIsFocused } from '@react-navigation/native'
 const VIEWS_X = 15
 const VIEWS_Y = 15
 
-
 const MeasuredViewImpl = () => {
   const [longText, setLongText] = React.useState(false)
   const measuredText = longText

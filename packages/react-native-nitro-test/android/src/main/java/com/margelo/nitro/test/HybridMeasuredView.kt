@@ -12,9 +12,10 @@ import com.margelo.nitro.views.MeasurableView
 import com.margelo.nitro.views.Size
 import kotlin.math.ceil
 
-
 @DoNotStrip
-class HybridMeasuredView(context: Context) : HybridMeasuredViewSpec() {
+class HybridMeasuredView(
+  context: Context,
+) : HybridMeasuredViewSpec() {
   override val view: TextView = TextView(context)
 
   override var text: String = ""
@@ -36,19 +37,21 @@ class HybridMeasuredView(context: Context) : HybridMeasuredViewSpec() {
       layoutConstraints: LayoutConstraints,
     ): Size {
       val density = layoutContext.pointScaleFactor.toFloat()
-      val paint = TextPaint().apply {
-        isAntiAlias = true
-        textSize = props.fontSize.toFloat() * density
-      }
+      val paint =
+        TextPaint().apply {
+          isAntiAlias = true
+          textSize = props.fontSize.toFloat() * density
+        }
       val maxWidthPx =
         if (layoutConstraints.maximumSize.width.isFinite()) {
           (layoutConstraints.maximumSize.width * density).toInt()
         } else {
           Int.MAX_VALUE
         }
-      val layout = StaticLayout.Builder
-        .obtain(props.text, 0, props.text.length, paint, maxWidthPx)
-        .build()
+      val layout =
+        StaticLayout.Builder
+          .obtain(props.text, 0, props.text.length, paint, maxWidthPx)
+          .build()
       var widthPx = 0f
       for (i in 0 until layout.lineCount) {
         widthPx = maxOf(widthPx, layout.getLineWidth(i))

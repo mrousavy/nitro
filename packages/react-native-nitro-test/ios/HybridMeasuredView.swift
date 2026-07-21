@@ -23,13 +23,19 @@ final class HybridMeasuredView: HybridMeasuredViewSpec, MeasurableView {
     didSet { view.font = .systemFont(ofSize: fontSize) }
   }
 
-  static func measureContent(props: MeasuredViewProps, layoutContext: LayoutContext, layoutConstraints: LayoutConstraints) -> Size {
-    let maxWidth = layoutConstraints.maximumSize.width.isFinite ? layoutConstraints.maximumSize.width : Double.greatestFiniteMagnitude
+  static func measureContent(
+    props: MeasuredViewProps, layoutContext: LayoutContext, layoutConstraints: LayoutConstraints
+  ) -> Size {
+    let maxWidth =
+      layoutConstraints.maximumSize.width.isFinite
+      ? layoutConstraints.maximumSize.width : Double.greatestFiniteMagnitude
 
-    let attributed = NSAttributedString(string: props.text, attributes: [.font: UIFont.systemFont(ofSize: props.fontSize)])
+    let attributed = NSAttributedString(
+      string: props.text, attributes: [.font: UIFont.systemFont(ofSize: props.fontSize)])
 
-    let rect = attributed.boundingRect(with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
-                                       options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
+    let rect = attributed.boundingRect(
+      with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+      options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
 
     return Size(width: ceil(rect.width), height: ceil(rect.height))
   }
