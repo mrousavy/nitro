@@ -5,7 +5,14 @@
  */
 
 import * as React from 'react'
-import { StyleSheet, View, Text, Button, ScrollView, TouchableOpacity, FlatList, Animated } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native'
 import { callback } from 'react-native-nitro-modules'
 import { TestView } from 'react-native-nitro-test'
 
@@ -13,7 +20,6 @@ export function ChildrenTestScreen() {
   const [showTest, setShowTest] = React.useState(false)
   const [pressCount, setPressCount] = React.useState(0)
   const [dynamicVisible, setDynamicVisible] = React.useState(true)
-  const animatedValue = React.useRef(new Animated.Value(0)).current
 
   return (
     <ScrollView style={styles.container}>
@@ -93,9 +99,9 @@ export function ChildrenTestScreen() {
             colorScheme="light"
             someCallback={callback(() => console.log('callback'))}
           >
-            <Text style={[styles.childText, { color: '#FF0000', fontSize: 18 }]}>Red Large</Text>
-            <Text style={[styles.childText, { color: '#00AA00', fontSize: 12 }]}>Green Small</Text>
-            <Text style={[styles.childText, { color: '#0000FF', fontWeight: 'bold' }]}>Blue Bold</Text>
+            <Text style={styles.styledRed}>Red Large</Text>
+            <Text style={styles.styledGreen}>Green Small</Text>
+            <Text style={styles.styledBlueBold}>Blue Bold</Text>
           </TestView>
         )}
       </View>
@@ -103,7 +109,8 @@ export function ChildrenTestScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Test 5: Interactive Children</Text>
         <Text style={styles.description}>
-          Expected: Pressable button inside that increments counter. Current: {pressCount}
+          Expected: Pressable button inside that increments counter. Current:{' '}
+          {pressCount}
         </Text>
         {showTest && (
           <TestView
@@ -130,7 +137,7 @@ export function ChildrenTestScreen() {
         </Text>
         {showTest && (
           <TestView
-            style={[styles.testView, { height: 150 }]}
+            style={styles.testViewMedium}
             isBlue={true}
             hasBeenCalled={false}
             colorScheme="light"
@@ -139,7 +146,7 @@ export function ChildrenTestScreen() {
             <Text style={styles.childText}>Plain Text</Text>
             <View style={styles.divider} />
             <TouchableOpacity style={styles.smallButton}>
-              <Text style={[styles.buttonText, { fontSize: 12 }]}>Tap</Text>
+              <Text style={styles.smallButtonText}>Tap</Text>
             </TouchableOpacity>
             <View style={styles.coloredBox} />
           </TestView>
@@ -165,22 +172,24 @@ export function ChildrenTestScreen() {
             someCallback={callback(() => console.log('callback'))}
           >
             {dynamicVisible ? (
-              <Text style={[styles.childText, { color: '#FF0000' }]}>I am visible!</Text>
+              <Text style={styles.visibleText}>I am visible!</Text>
             ) : (
-              <Text style={[styles.childText, { color: '#999' }]}>I am hidden</Text>
+              <Text style={styles.hiddenText}>I am hidden</Text>
             )}
           </TestView>
         )}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Test 8: Complex Nested Structure</Text>
+        <Text style={styles.sectionTitle}>
+          Test 8: Complex Nested Structure
+        </Text>
         <Text style={styles.description}>
           Expected: Multiple nested levels with mixed content types
         </Text>
         {showTest && (
           <TestView
-            style={[styles.testView, { height: 180 }]}
+            style={styles.testViewLarge}
             isBlue={true}
             hasBeenCalled={false}
             colorScheme="dark"
@@ -191,11 +200,11 @@ export function ChildrenTestScreen() {
                 <Text style={styles.label}>Left</Text>
                 <Text style={styles.label}>Right</Text>
               </View>
-              <View style={[styles.row, { marginTop: 8 }]}>
+              <View style={styles.rowSpaced}>
                 <View style={styles.box} />
-                <View style={[styles.box, { backgroundColor: '#FF00FF' }]} />
+                <View style={styles.boxMagenta} />
               </View>
-              <Text style={[styles.childText, { marginTop: 8 }]}>Bottom Text</Text>
+              <Text style={styles.bottomText}>Bottom Text</Text>
             </View>
           </TestView>
         )}
@@ -208,14 +217,14 @@ export function ChildrenTestScreen() {
         </Text>
         {showTest && (
           <TestView
-            style={[styles.testView, { height: 200, justifyContent: 'flex-start' }]}
+            style={styles.testViewXLarge}
             isBlue={false}
             hasBeenCalled={false}
             colorScheme="light"
             someCallback={callback(() => console.log('callback'))}
           >
             {Array.from({ length: 12 }).map((_, i) => (
-              <Text key={i} style={[styles.childText, { fontSize: 11, marginVertical: 2 }]}>
+              <Text key={i} style={styles.smallItemText}>
                 Item {i + 1}
               </Text>
             ))}
@@ -386,5 +395,84 @@ const styles = StyleSheet.create({
     height: 35,
     backgroundColor: '#00AA00',
     borderRadius: 2,
+  },
+  testViewMedium: {
+    height: 150,
+    marginVertical: 10,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  testViewLarge: {
+    height: 180,
+    marginVertical: 10,
+    borderRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  testViewXLarge: {
+    height: 200,
+    marginVertical: 10,
+    borderRadius: 4,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  styledRed: {
+    color: '#FF0000',
+    fontSize: 18,
+    fontWeight: '500',
+  },
+  styledGreen: {
+    color: '#00AA00',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  styledBlueBold: {
+    color: '#0000FF',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  smallButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  visibleText: {
+    color: '#FF0000',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  hiddenText: {
+    color: '#999',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  rowSpaced: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  boxMagenta: {
+    width: 35,
+    height: 35,
+    backgroundColor: '#FF00FF',
+    borderRadius: 2,
+  },
+  bottomText: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: '500',
+    marginTop: 8,
+  },
+  smallItemText: {
+    color: '#333',
+    fontSize: 11,
+    fontWeight: '500',
+    marginVertical: 2,
   },
 })
