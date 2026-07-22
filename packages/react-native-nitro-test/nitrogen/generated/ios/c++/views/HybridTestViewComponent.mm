@@ -78,18 +78,19 @@ using namespace margelo::nitro::test::views;
 
 - (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
                           index:(NSInteger)index {
-  // Add child directly to the content view (not to self)
+  // 1. Check if contentView exists
   if (_contentView != nil) {
+    // 2. Add child to contentView
     [_contentView insertSubview:childComponentView atIndex:index];
   } else {
-    // Fallback if contentView not yet set
+    // 3. Fallback to self if contentView not yet set
     [self insertSubview:childComponentView atIndex:index];
   }
 }
 
 - (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
                              index:(NSInteger)index {
-  // Remove child from view hierarchy
+  // 1. Remove child from view hierarchy
   [childComponentView removeFromSuperview];
 }
 
