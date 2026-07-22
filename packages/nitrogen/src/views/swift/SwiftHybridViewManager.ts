@@ -80,6 +80,7 @@ using namespace ${namespace}::views;
 
 /**
  * Represents the React Native View holder for the Nitro "${spec.name}" HybridView.
+ * Supports rendering children by extending RCTViewComponentView with child handling.
  */
 @interface ${component}: RCTViewComponentView
 + (BOOL)shouldBeRecycled;
@@ -87,6 +88,7 @@ using namespace ${namespace}::views;
 
 @implementation ${component} {
   std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+  UIView* _contentView;
 }
 
 + (void) load {
@@ -115,8 +117,30 @@ using namespace ${namespace}::views;
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
-  // 3. Update RCTViewComponentView's [contentView]
+  // 3. Store reference for children management
+  _contentView = view;
+
+  // 4. Set the view as contentView
   [self setContentView:view];
+}
+
+// ===== CHILDREN SUPPORT - NEW CODE ADDED =====
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
+                          index:(NSInteger)index {
+  // Add child directly to the content view (not to self)
+  if (_contentView != nil) {
+    [_contentView insertSubview:childComponentView atIndex:index];
+  } else {
+    // Fallback if contentView not yet set
+    [self insertSubview:childComponentView atIndex:index];
+  }
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
+                             index:(NSInteger)index {
+  // Remove child from view hierarchy
+  [childComponentView removeFromSuperview];
 }
 
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
