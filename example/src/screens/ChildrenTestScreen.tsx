@@ -5,12 +5,15 @@
  */
 
 import * as React from 'react'
-import { StyleSheet, View, Text, Button, ScrollView } from 'react-native'
+import { StyleSheet, View, Text, Button, ScrollView, TouchableOpacity, FlatList, Animated } from 'react-native'
 import { callback } from 'react-native-nitro-modules'
 import { TestView } from 'react-native-nitro-test'
 
 export function ChildrenTestScreen() {
   const [showTest, setShowTest] = React.useState(false)
+  const [pressCount, setPressCount] = React.useState(0)
+  const [dynamicVisible, setDynamicVisible] = React.useState(true)
+  const animatedValue = React.useRef(new Animated.Value(0)).current
 
   return (
     <ScrollView style={styles.container}>
@@ -73,6 +76,149 @@ export function ChildrenTestScreen() {
                 <Text style={styles.childText}>Nested level</Text>
               </View>
             </View>
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 4: Styled Children</Text>
+        <Text style={styles.description}>
+          Expected: Text with different colors and sizes inside view
+        </Text>
+        {showTest && (
+          <TestView
+            style={styles.testView}
+            isBlue={true}
+            hasBeenCalled={false}
+            colorScheme="light"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            <Text style={[styles.childText, { color: '#FF0000', fontSize: 18 }]}>Red Large</Text>
+            <Text style={[styles.childText, { color: '#00AA00', fontSize: 12 }]}>Green Small</Text>
+            <Text style={[styles.childText, { color: '#0000FF', fontWeight: 'bold' }]}>Blue Bold</Text>
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 5: Interactive Children</Text>
+        <Text style={styles.description}>
+          Expected: Pressable button inside that increments counter. Current: {pressCount}
+        </Text>
+        {showTest && (
+          <TestView
+            style={styles.testView}
+            isBlue={false}
+            hasBeenCalled={false}
+            colorScheme="dark"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            <TouchableOpacity
+              style={styles.interactiveButton}
+              onPress={() => setPressCount(pressCount + 1)}
+            >
+              <Text style={styles.buttonText}>Press me ({pressCount})</Text>
+            </TouchableOpacity>
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 6: Mixed Content Types</Text>
+        <Text style={styles.description}>
+          Expected: Text, button, and styled view all inside one NitroView
+        </Text>
+        {showTest && (
+          <TestView
+            style={[styles.testView, { height: 150 }]}
+            isBlue={true}
+            hasBeenCalled={false}
+            colorScheme="light"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            <Text style={styles.childText}>Plain Text</Text>
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.smallButton}>
+              <Text style={[styles.buttonText, { fontSize: 12 }]}>Tap</Text>
+            </TouchableOpacity>
+            <View style={styles.coloredBox} />
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 7: Dynamic Visibility</Text>
+        <Text style={styles.description}>
+          Expected: Text appears/disappears when you toggle below
+        </Text>
+        <Button
+          title={dynamicVisible ? 'Hide Child' : 'Show Child'}
+          onPress={() => setDynamicVisible(!dynamicVisible)}
+          color="#FF9500"
+        />
+        {showTest && (
+          <TestView
+            style={styles.testView}
+            isBlue={false}
+            hasBeenCalled={false}
+            colorScheme="light"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            {dynamicVisible ? (
+              <Text style={[styles.childText, { color: '#FF0000' }]}>I am visible!</Text>
+            ) : (
+              <Text style={[styles.childText, { color: '#999' }]}>I am hidden</Text>
+            )}
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 8: Complex Nested Structure</Text>
+        <Text style={styles.description}>
+          Expected: Multiple nested levels with mixed content types
+        </Text>
+        {showTest && (
+          <TestView
+            style={[styles.testView, { height: 180 }]}
+            isBlue={true}
+            hasBeenCalled={false}
+            colorScheme="dark"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            <View style={styles.complexContainer}>
+              <View style={styles.row}>
+                <Text style={styles.label}>Left</Text>
+                <Text style={styles.label}>Right</Text>
+              </View>
+              <View style={[styles.row, { marginTop: 8 }]}>
+                <View style={styles.box} />
+                <View style={[styles.box, { backgroundColor: '#FF00FF' }]} />
+              </View>
+              <Text style={[styles.childText, { marginTop: 8 }]}>Bottom Text</Text>
+            </View>
+          </TestView>
+        )}
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Test 9: Many Children (10+)</Text>
+        <Text style={styles.description}>
+          Expected: Many text items rendered inside one view
+        </Text>
+        {showTest && (
+          <TestView
+            style={[styles.testView, { height: 200, justifyContent: 'flex-start' }]}
+            isBlue={false}
+            hasBeenCalled={false}
+            colorScheme="light"
+            someCallback={callback(() => console.log('callback'))}
+          >
+            {Array.from({ length: 12 }).map((_, i) => (
+              <Text key={i} style={[styles.childText, { fontSize: 11, marginVertical: 2 }]}>
+                Item {i + 1}
+              </Text>
+            ))}
           </TestView>
         )}
       </View>
@@ -187,5 +333,58 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 13,
     color: '#666',
+  },
+  interactiveButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 8,
+  },
+  smallButton: {
+    backgroundColor: '#34C759',
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    alignSelf: 'center',
+  },
+  coloredBox: {
+    width: 40,
+    height: 40,
+    backgroundColor: '#FF3B30',
+    borderRadius: 4,
+    marginTop: 8,
+    alignSelf: 'center',
+  },
+  complexContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  label: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  box: {
+    width: 35,
+    height: 35,
+    backgroundColor: '#00AA00',
+    borderRadius: 2,
   },
 })
