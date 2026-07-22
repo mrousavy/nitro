@@ -15,8 +15,35 @@ size_t JHardwareBufferUtils::getHardwareBufferSize([[maybe_unused]] AHardwareBuf
 #if __ANDROID_API__ >= 26
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(hardwareBuffer, &description);
-  size_t sourceSize = description.height * description.stride;
-  return sourceSize;
+  // AHardwareBuffer_Desc.stride is in PIXELS, not bytes - height * stride
+  // under-reports e.g. RGBA_8888 buffers 4x. Multiply by the format's
+  // bytes-per-pixel. Unknown/planar formats (YUV etc.) keep the legacy
+  // height * stride value: their stride semantics are format-specific
+  // and nothing here reads them as tightly-packed bytes.
+  size_t bytesPerPixel;
+  switch (description.format) {
+    case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
+      bytesPerPixel = 4;
+      break;
+    case AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM:
+      bytesPerPixel = 3;
+      break;
+    case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
+      bytesPerPixel = 2;
+      break;
+    case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
+      bytesPerPixel = 8;
+      break;
+    case AHARDWAREBUFFER_FORMAT_BLOB:
+      // BLOB buffers: width IS the size in bytes (height == 1, stride N/A).
+      return description.width;
+    default:
+      bytesPerPixel = 1;
+      break;
+  }
+  return static_cast<size_t>(description.height) * description.stride * bytesPerPixel;
 #else
   throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
@@ -67,7 +94,7 @@ void JHardwareBufferUtils::copyHardwareBuffer([[maybe_unused]] AHardwareBuffer* 
 
   // 2. Get info about the destination buffer
 #ifdef NITRO_DEBUG
-  size_t destinationSize = getHardwareBufferSize(sourceHardwareBuffer);
+  size_t destinationSize = getHardwareBufferSize(destinationHardwareBuffer);
   if (sourceSize != destinationSize) {
     throw std::runtime_error("Source HardwareBuffer (" + std::to_string(sourceSize) + " bytes) and destination HardwareBuffer (" +
                              std::to_string(destinationSize) + " bytes) are not the same size!");
