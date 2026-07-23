@@ -41,8 +41,8 @@ size_t JHardwareBufferUtils::getHardwareBufferSize([[maybe_unused]] AHardwareBuf
       return description.width;
     default:
       size_t bytesPerPixel = getHardwareBufferBytesPerPixel(description.format);
-      return static_cast<size_t>(description.height) * static_cast < size_t < (description.stride) * static_cast < size_t <
-             (description.layers) * bytesPerPixel;
+      return static_cast<size_t>(description.height) * static_cast<size_t>(description.stride) * static_cast<size_t>(description.layers) *
+             bytesPerPixel;
   }
 #else
   throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
