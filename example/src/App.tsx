@@ -8,6 +8,7 @@ import { Image } from 'react-native'
 import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
+import { ChildrenTestScreen } from './screens/ChildrenTestScreen'
 
 const dna = require('./img/dna.png')
 const rocket = require('./img/rocket.png')
@@ -60,6 +61,20 @@ export default function App() {
           component={ViewScreen}
           options={{
             tabBarLabel: 'View',
+            tabBarIcon: ({ size, color }) => (
+              <Image
+                source={map}
+                tintColor={color}
+                style={{ width: size, height: size }}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Children"
+          component={ChildrenTestScreen}
+          options={{
+            tabBarLabel: 'Children',
             tabBarIcon: ({ size, color }) => (
               <Image
                 source={map}
