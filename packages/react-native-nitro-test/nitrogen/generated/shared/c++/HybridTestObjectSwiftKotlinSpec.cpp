@@ -127,6 +127,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceOptionalEnumStruct", &HybridTestObjectSwiftKotlinSpec::bounceOptionalEnumStruct);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer);
+      prototype.registerHybridMethod("createHardwareBuffer", &HybridTestObjectSwiftKotlinSpec::createHardwareBuffer);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectSwiftKotlinSpec::copyBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectSwiftKotlinSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectSwiftKotlinSpec::setAllValuesTo);

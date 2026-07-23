@@ -129,6 +129,14 @@ type CoreTypesVariant =
 // Prefer `interface` + `extends` over `type` so TS doesn't flatten it
 interface PartialPerson extends Partial<Person> {}
 
+// A string union becomes an `enum` in C++/Swift/Kotlin.
+// These map 1:1 to Android `HardwareBuffer` formats.
+export type HardwareBufferFormat =
+  | 'rgba-8888'
+  | 'rgb-565'
+  | 'rgba-fp16'
+  | 'blob'
+
 // This is an `interface` we're going to use as a base in both of our `HybridObject`s later.
 // In this case, the `HybridObject`s will just flatten out and copy over all properties here.
 // There is no separate type for `SharedTestObjectProps` on the native side.
@@ -279,6 +287,14 @@ interface SharedTestObjectProps {
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
   createArrayBufferFromNativeBuffer(copy: boolean): ArrayBuffer
+  // On Android this creates an actual `HardwareBuffer` and wraps it,
+  // on iOS/C++ it creates a normal `ArrayBuffer` of the same byte size.
+  createHardwareBuffer(
+    width: number,
+    height: number,
+    layers: number,
+    format: HardwareBufferFormat
+  ): ArrayBuffer
   copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void

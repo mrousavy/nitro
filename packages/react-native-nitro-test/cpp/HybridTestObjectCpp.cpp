@@ -663,6 +663,30 @@ std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createArrayBuffer() {
   return std::make_shared<NativeArrayBuffer>(buffer, size, [=]() { delete[] buffer; });
 }
 
+std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::createHardwareBuffer(double width, double height, double layers,
+                                                                       HardwareBufferFormat format) {
+  // C++ doesn't have HardwareBuffers - create a normal ArrayBuffer of the same byte size instead.
+  size_t size;
+  switch (format) {
+    case HardwareBufferFormat::BLOB:
+      // BLOB buffers hold `width` bytes flat.
+      size = static_cast<size_t>(width);
+      break;
+    case HardwareBufferFormat::RGB_565:
+      size = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(layers) * 2;
+      break;
+    case HardwareBufferFormat::RGBA_8888:
+      size = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(layers) * 4;
+      break;
+    case HardwareBufferFormat::RGBA_FP16:
+      size = static_cast<size_t>(width) * static_cast<size_t>(height) * static_cast<size_t>(layers) * 8;
+      break;
+    default:
+      throw std::runtime_error("Unknown HardwareBufferFormat!");
+  }
+  return ArrayBuffer::allocate(size);
+}
+
 std::shared_ptr<ArrayBuffer> HybridTestObjectCpp::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
   return ArrayBuffer::copy(buffer);
 }

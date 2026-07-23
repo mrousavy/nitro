@@ -490,6 +490,31 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
+  private fun HardwareBufferFormat.toAndroidFormat(): Int =
+    when (this) {
+      HardwareBufferFormat.RGBA_8888 -> HardwareBuffer.RGBA_8888
+      HardwareBufferFormat.RGB_565 -> HardwareBuffer.RGB_565
+      HardwareBufferFormat.RGBA_FP16 -> HardwareBuffer.RGBA_FP16
+      HardwareBufferFormat.BLOB -> HardwareBuffer.BLOB
+    }
+
+  override fun createHardwareBuffer(
+    width: Double,
+    height: Double,
+    layers: Double,
+    format: HardwareBufferFormat,
+  ): ArrayBuffer {
+    val hardwareBuffer =
+      HardwareBuffer.create(
+        width.toInt(),
+        height.toInt(),
+        format.toAndroidFormat(),
+        layers.toInt(),
+        HardwareBuffer.USAGE_CPU_WRITE_OFTEN or HardwareBuffer.USAGE_CPU_READ_OFTEN,
+      )
+    return ArrayBuffer.wrap(hardwareBuffer)
+  }
+
   override fun createArrayBuffer(): ArrayBuffer {
     return ArrayBuffer.allocate(1024 * 1024 * 10) // 10 MB
   }
