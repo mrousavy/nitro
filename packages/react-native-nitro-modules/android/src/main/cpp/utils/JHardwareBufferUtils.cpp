@@ -11,39 +11,39 @@
 
 namespace margelo::nitro {
 
+size_t getHardwareBufferBytesPerPixel(size_t hardwareBufferFormat) {
+  switch (hardwareBufferFormat) {
+    case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
+      return 4;
+    case AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM:
+      return 3;
+    case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
+      return 2;
+    case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
+      return 8;
+    case AHARDWAREBUFFER_FORMAT_BLOB:
+      throw std::runtime_error("Cannot get bytes per pixel: Blob-HardwareBuffers don't have pixels!");
+    default:
+      throw std::runtime_error("Cannot get bytes per pixel: Unknown HardwareBuffer format!");
+  }
+}
+
 size_t JHardwareBufferUtils::getHardwareBufferSize([[maybe_unused]] AHardwareBuffer* hardwareBuffer) {
 #if __ANDROID_API__ >= 26
   AHardwareBuffer_Desc description;
   AHardwareBuffer_describe(hardwareBuffer, &description);
-  // AHardwareBuffer_Desc.stride is in PIXELS, not bytes - height * stride
-  // under-reports e.g. RGBA_8888 buffers 4x. Multiply by the format's
-  // bytes-per-pixel. Unknown/planar formats (YUV etc.) keep the legacy
-  // height * stride value: their stride semantics are format-specific
-  // and nothing here reads them as tightly-packed bytes.
-  size_t bytesPerPixel;
+
   switch (description.format) {
-    case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
-    case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
-    case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
-      bytesPerPixel = 4;
-      break;
-    case AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM:
-      bytesPerPixel = 3;
-      break;
-    case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
-      bytesPerPixel = 2;
-      break;
-    case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
-      bytesPerPixel = 8;
-      break;
     case AHARDWAREBUFFER_FORMAT_BLOB:
-      // BLOB buffers: width IS the size in bytes (height == 1, stride N/A).
+      // Blob HardwareBuffers hold bytes flat:
       return description.width;
     default:
-      bytesPerPixel = 1;
-      break;
+      size_t bytesPerPixel = getHardwareBufferBytesPerPixel(description.format);
+      return static_cast<size_t>(description.height) * static_cast < size_t < (description.stride) * static_cast < size_t <
+             (description.layers) * bytesPerPixel;
   }
-  return static_cast<size_t>(description.height) * description.stride * bytesPerPixel;
 #else
   throw std::runtime_error("ArrayBuffer(HardwareBuffer) requires NDK API 26 or above! (minSdk >= 26)");
 #endif
