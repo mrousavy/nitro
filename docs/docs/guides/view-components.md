@@ -158,6 +158,70 @@ function App() {
 }
 ```
 
+## Self-measurement (`MeasurableView`)
+
+By default a `HybridView` is sized by its children or by explicit style props. To instead size a view to its **own content** - a `<Text>` that grows to fit its string, a chart that derives a height from its data - conform your native implementation to `MeasurableView`. Nitro then makes the view a measurable Yoga **leaf**: Yoga calls your `measureContent` during layout and uses the returned `Size` as the intrinsic size, so no explicit `height` is needed. Like [`RecyclableView`](#recycling) it's a native opt-in, so **your `.nitro.ts` spec is unchanged**:
+
+```ts title="NitroTextView.nitro.ts"
+export interface NitroTextViewProps extends HybridViewProps {
+  text: string
+  fontSize: number
+}
+export type NitroTextView = HybridView<NitroTextViewProps>
+```
+
+<Tabs groupId="native-view-language">
+  <TabItem value="swift" label="Swift" default>
+    ```swift title="HybridNitroTextView.swift"
+    class HybridNitroTextView: HybridNitroTextViewSpec, MeasurableView {
+      let view = UILabel()
+      var text: String = "" { didSet { view.text = text } }
+      var fontSize: Double = 17 { didSet { view.font = .systemFont(ofSize: fontSize) } }
+
+      // `static` - no view instance needed.
+      // highlight-next-line
+      static func measureContent(props: NitroTextViewProps, layoutContext: LayoutContext, layoutConstraints: LayoutConstraints) -> Size {
+        // Measure `props.text` within `layoutConstraints.maximumSize` (off-thread, e.g. NSAttributedString.boundingRect).
+        return Size(width: measuredWidth, height: measuredHeight)
+      }
+    }
+    ```
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    ```kotlin title="HybridNitroTextView.kt"
+    class HybridNitroTextView(context: Context) : HybridNitroTextViewSpec() {
+      override val view = TextView(context)
+      override var text: String = "" /* set { view.text = … } */
+      override var fontSize: Double = 17.0 /* set { view.textSize = … } */
+
+      // Kotlin interfaces can't require statics, so measureContent lives on the companion.
+      companion object : MeasurableView<NitroTextViewProps> {
+        override fun measureContent(props: NitroTextViewProps, layoutContext: LayoutContext, layoutConstraints: LayoutConstraints): Size {
+          // Measure `props.text` within `layoutConstraints.maximumSize` (off-thread, e.g. StaticLayout).
+          return Size(measuredWidth, measuredHeight)
+        }
+      }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+Now `<NitroTextView text="…" fontSize={17} />` grows to fit its text - no `height` in its style:
+
+```jsx
+<NitroTextView text="A long string that wraps onto several lines…" fontSize={17} />
+```
+
+Because Yoga runs `measureContent` on the shadow thread during layout, it has a few hard rules:
+
+- **No view, pure function.** Never touch your native view inside it (it may not exist yet, and runs on another thread). Compute the size from `props` only - Yoga caches the result keyed on `props` + constraints. Use whatever measurement fits your content and is safe off the main thread (text → `boundingRect`/`StaticLayout`, an image → its source dimensions, …).
+- **It's a Yoga leaf**, so a measurable view **can't also host React children** - the two are mutually exclusive (like RN's `<Text>`).
+- `maximumSize.width`/`.height` is `.infinity` on an unconstrained axis (return your intrinsic size) and finite when bounded (measure within it, e.g. to wrap text).
+
+:::caution Not every view can self-measure
+The size must be derivable from `props`, off the main thread, with no mounted view. Content that can only be sized on the main thread or via a live view's layout pass (UIKit `systemLayoutSizeFitting`, Android `View.measure()`) doesn't fit - use flexbox + explicit sizing, or precompute the size and pass it in as props.
+:::
+
 ## Props
 
 Since every `HybridView` is also a `HybridObject`, you can use any type that Nitro supports as a property - including custom types (`interface`), `ArrayBuffer`, and even other `HybridObject`s!

@@ -17,6 +17,8 @@
 
 #include "JHybridBaseSpec.hpp"
 #include "JHybridChildSpec.hpp"
+#include "JHybridMeasuredViewSpec.hpp"
+#include "views/JHybridMeasuredViewStateUpdater.hpp"
 #include "JHybridPlatformObjectSpec.hpp"
 #include "JHybridRecyclableTestViewSpec.hpp"
 #include "views/JHybridRecyclableTestViewStateUpdater.hpp"
@@ -95,6 +97,14 @@ struct JHybridRecyclableTestViewSpecImpl: public jni::JavaClass<JHybridRecyclabl
     return javaPart->getJHybridRecyclableTestViewSpec();
   }
 };
+struct JHybridMeasuredViewSpecImpl: public jni::JavaClass<JHybridMeasuredViewSpecImpl, JHybridMeasuredViewSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/test/HybridMeasuredView;";
+  static std::shared_ptr<JHybridMeasuredViewSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridMeasuredViewSpecImpl::javaobject()>();
+    jni::local_ref<JHybridMeasuredViewSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridMeasuredViewSpec();
+  }
+};
 
 void registerAllNatives() {
   using namespace margelo::nitro;
@@ -103,6 +113,8 @@ void registerAllNatives() {
   // Register native JNI methods
   margelo::nitro::test::JHybridBaseSpec::CxxPart::registerNatives();
   margelo::nitro::test::JHybridChildSpec::CxxPart::registerNatives();
+  margelo::nitro::test::JHybridMeasuredViewSpec::CxxPart::registerNatives();
+  margelo::nitro::test::views::JHybridMeasuredViewStateUpdater::registerNatives();
   margelo::nitro::test::JHybridPlatformObjectSpec::CxxPart::registerNatives();
   margelo::nitro::test::JHybridRecyclableTestViewSpec::CxxPart::registerNatives();
   margelo::nitro::test::views::JHybridRecyclableTestViewStateUpdater::registerNatives();
@@ -167,6 +179,12 @@ void registerAllNatives() {
     "RecyclableTestView",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridRecyclableTestViewSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "MeasuredView",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridMeasuredViewSpecImpl::create();
     }
   );
 }

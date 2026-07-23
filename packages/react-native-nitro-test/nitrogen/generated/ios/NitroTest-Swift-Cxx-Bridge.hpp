@@ -18,6 +18,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridMeasuredViewSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridMeasuredViewSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
 // Forward declaration of `HybridRecyclableTestViewSpec` to properly resolve imports.
@@ -56,6 +58,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridMeasuredViewSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridMeasuredViewSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 // Forward declaration of `HybridRecyclableTestViewSpec_cxx` to properly resolve imports.
@@ -72,6 +76,7 @@ namespace NitroTest { class HybridTestViewSpec_cxx; }
 #include "ExternalObjectStruct.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridMeasuredViewSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
@@ -286,6 +291,18 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
+  
+  // pragma MARK: std::shared_ptr<HybridMeasuredViewSpec>
+  /**
+   * Specialized version of `std::shared_ptr<HybridMeasuredViewSpec>`.
+   */
+  using std__shared_ptr_HybridMeasuredViewSpec_ = std::shared_ptr<HybridMeasuredViewSpec>;
+  std::shared_ptr<HybridMeasuredViewSpec> create_std__shared_ptr_HybridMeasuredViewSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridMeasuredViewSpec_(std__shared_ptr_HybridMeasuredViewSpec_ cppType);
+  
+  // pragma MARK: std::weak_ptr<HybridMeasuredViewSpec>
+  using std__weak_ptr_HybridMeasuredViewSpec_ = std::weak_ptr<HybridMeasuredViewSpec>;
+  inline std__weak_ptr_HybridMeasuredViewSpec_ weakify_std__shared_ptr_HybridMeasuredViewSpec_(const std::shared_ptr<HybridMeasuredViewSpec>& strong) noexcept { return strong; }
   
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   /**

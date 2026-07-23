@@ -20,6 +20,8 @@ namespace margelo::nitro::test { enum class HardwareBufferFormat; }
 namespace margelo::nitro::test { class HybridBaseSpec; }
 // Forward declaration of `HybridChildSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridChildSpec; }
+// Forward declaration of `HybridMeasuredViewSpec` to properly resolve imports.
+namespace margelo::nitro::test { class HybridMeasuredViewSpec; }
 // Forward declaration of `HybridPlatformObjectSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridPlatformObjectSpec; }
 // Forward declaration of `HybridRecyclableTestViewSpec` to properly resolve imports.
@@ -32,8 +34,14 @@ namespace margelo::nitro::test { class HybridTestObjectSwiftKotlinSpec; }
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 // Forward declaration of `JsStyleStruct` to properly resolve imports.
 namespace margelo::nitro::test { struct JsStyleStruct; }
+// Forward declaration of `LayoutConstraints` to properly resolve imports.
+namespace margelo::nitro::test { struct LayoutConstraints; }
+// Forward declaration of `LayoutContext` to properly resolve imports.
+namespace margelo::nitro::test { struct LayoutContext; }
 // Forward declaration of `MapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct MapWrapper; }
+// Forward declaration of `MeasuredViewProps` to properly resolve imports.
+namespace margelo::nitro::test { struct MeasuredViewProps; }
 // Forward declaration of `OldEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class OldEnum; }
 // Forward declaration of `OptionalCallback` to properly resolve imports.
@@ -48,8 +56,14 @@ namespace margelo::nitro::test { struct PartialPerson; }
 namespace margelo::nitro::test { struct Person; }
 // Forward declaration of `Powertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class Powertrain; }
+// Forward declaration of `RecyclableTestViewProps` to properly resolve imports.
+namespace margelo::nitro::test { struct RecyclableTestViewProps; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `Size` to properly resolve imports.
+namespace margelo::nitro::test { struct Size; }
+// Forward declaration of `TestViewProps` to properly resolve imports.
+namespace margelo::nitro::test { struct TestViewProps; }
 // Forward declaration of `TruckPowertrain` to properly resolve imports.
 namespace margelo::nitro::test { enum class TruckPowertrain; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
@@ -64,12 +78,16 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "HardwareBufferFormat.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridChildSpec.hpp"
+#include "HybridMeasuredViewSpec.hpp"
 #include "HybridPlatformObjectSpec.hpp"
 #include "HybridRecyclableTestViewSpec.hpp"
 #include "HybridTestObjectSwiftKotlinSpec.hpp"
 #include "HybridTestViewSpec.hpp"
 #include "JsStyleStruct.hpp"
+#include "LayoutConstraints.hpp"
+#include "LayoutContext.hpp"
 #include "MapWrapper.hpp"
+#include "MeasuredViewProps.hpp"
 #include "OldEnum.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalEnumWrapper.hpp"
@@ -77,7 +95,10 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 #include "PartialPerson.hpp"
 #include "Person.hpp"
 #include "Powertrain.hpp"
+#include "RecyclableTestViewProps.hpp"
 #include "SecondMapWrapper.hpp"
+#include "Size.hpp"
+#include "TestViewProps.hpp"
 #include "TruckPowertrain.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "WrappedJsStruct.hpp"
@@ -111,6 +132,8 @@ namespace margelo::nitro::test { struct WrappedJsStruct; }
 namespace NitroTest { class HybridBaseSpec_cxx; }
 // Forward declaration of `HybridChildSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridChildSpec_cxx; }
+// Forward declaration of `HybridMeasuredViewSpec_cxx` to properly resolve imports.
+namespace NitroTest { class HybridMeasuredViewSpec_cxx; }
 // Forward declaration of `HybridPlatformObjectSpec_cxx` to properly resolve imports.
 namespace NitroTest { class HybridPlatformObjectSpec_cxx; }
 // Forward declaration of `HybridRecyclableTestViewSpec_cxx` to properly resolve imports.
