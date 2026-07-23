@@ -540,6 +540,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun createHardwareBuffer(width: Double, height: Double, layers: Double, format: HardwareBufferFormat): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
   abstract fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   
   @DoNotStrip

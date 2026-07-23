@@ -517,6 +517,28 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     }
   }
 
+  func createHardwareBuffer(
+    width: Double, height: Double, layers: Double, format: HardwareBufferFormat
+  ) throws -> ArrayBuffer {
+    // iOS doesn't have HardwareBuffers - create a `Data` of the same byte size instead.
+    let bytesPerPixel: Int
+    switch format {
+    case .rgb565:
+      bytesPerPixel = 2
+    case .rgba8888:
+      bytesPerPixel = 4
+    case .rgbaFp16:
+      bytesPerPixel = 8
+    case .blob:
+      // BLOB buffers hold `width` bytes flat.
+      let data = Data(count: Int(width))
+      return try ArrayBuffer.copy(data: data)
+    }
+    let size = Int(width) * Int(height) * Int(layers) * bytesPerPixel
+    let data = Data(count: size)
+    return try ArrayBuffer.copy(data: data)
+  }
+
   func createArrayBuffer() throws -> ArrayBuffer {
     return ArrayBuffer.allocate(size: 1024 * 1024 * 10)  // 10 MB
   }
