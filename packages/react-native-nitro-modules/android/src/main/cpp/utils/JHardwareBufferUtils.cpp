@@ -13,14 +13,24 @@ namespace margelo::nitro {
 
 size_t getHardwareBufferBytesPerPixel(size_t hardwareBufferFormat) {
   switch (hardwareBufferFormat) {
+    case AHARDWAREBUFFER_FORMAT_R8_UNORM:
+    case AHARDWAREBUFFER_FORMAT_S8_UINT:
+      return 1;
+
+    case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R16_UINT:
+    case AHARDWAREBUFFER_FORMAT_D16_UNORM:
+      return 2;
+
+    case AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM:
+      return 3;
+
     case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
     case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
     case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
+    case AHARDWAREBUFFER_FORMAT_D32_FLOAT:
       return 4;
-    case AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM:
-      return 3;
-    case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
-      return 2;
+
     case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
       return 8;
     case AHARDWAREBUFFER_FORMAT_BLOB:
