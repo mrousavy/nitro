@@ -8,6 +8,7 @@
 #include "JHardwareBufferUtils.hpp"
 #include "NitroDefines.hpp"
 #include <android/hardware_buffer_jni.h>
+#include <android/ndk-version.h>
 
 namespace margelo::nitro {
 
@@ -28,11 +29,25 @@ size_t getHardwareBufferBytesPerPixel(size_t hardwareBufferFormat) {
     case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
     case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
     case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
+    case AHARDWAREBUFFER_FORMAT_R16G16_UINT:
+    case AHARDWAREBUFFER_FORMAT_D24_UNORM:
+    case AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT:
     case AHARDWAREBUFFER_FORMAT_D32_FLOAT:
       return 4;
 
     case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
+    case AHARDWAREBUFFER_FORMAT_R10G10B10A10_UNORM:
+    // D32_FLOAT_S8_UINT is 32-bit depth + 8-bit stencil, padded to 64 bits (GL_DEPTH32F_STENCIL8)
+    case AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT:
       return 8;
+
+    case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
+    case AHARDWAREBUFFER_FORMAT_YCbCr_P010:
+#if defined(__NDK_MAJOR__) && __NDK_MAJOR__ >= 28
+    case AHARDWAREBUFFER_FORMAT_YCbCr_P210:
+#endif
+      throw std::runtime_error("Cannot get bytes per pixel: YUV-HardwareBuffers are multi-planar "
+                               "and don't have a single bytes-per-pixel value!");
     case AHARDWAREBUFFER_FORMAT_BLOB:
       throw std::runtime_error("Cannot get bytes per pixel: Blob-HardwareBuffers don't have pixels!");
     default:
