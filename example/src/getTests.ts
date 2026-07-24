@@ -1798,6 +1798,36 @@ export function getTests(
           })
         ).didThrow()
     ),
+    ...('callCallbackSequentiallyFirstThrows' in testObject
+      ? [
+          createTest(
+            'Sequential async callback: second call succeeds when first threw',
+            async () =>
+              (
+                await it(async () => {
+                  let callCount = 0
+                  const result = await (
+                    testObject as TestObjectSwiftKotlin
+                  ).callCallbackSequentiallyFirstThrows(async (input) => {
+                    callCount++
+                    if (input.value === 'first') {
+                      throw new Error('Expected error on first call')
+                    }
+                    return input.value
+                  })
+                  if (callCount !== 2) {
+                    throw new Error(
+                      `Expected callback to be called twice, got ${callCount}`
+                    )
+                  }
+                  return result
+                })
+              )
+                .didNotThrow()
+                .equals('second')
+          ),
+        ]
+      : []),
     createTest('Getting complex callback from native returns a function', () =>
       it(() => testObject.getComplexCallback())
         .didNotThrow()

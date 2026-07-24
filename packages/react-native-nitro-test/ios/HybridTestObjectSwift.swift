@@ -647,4 +647,24 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   private func stringify(_ value: Double) -> String {
     return formatter.string(for: value) ?? "\(value)"
   }
+
+  func callCallbackSequentiallyFirstThrows(
+    fn: @escaping ((SequentialCallbackInput) -> Promise<Promise<String>>)
+  ) throws -> Promise<String> {
+    return Promise.async {
+      // First invocation — expected to throw.
+      do {
+        let innerPromise1 = try await fn(SequentialCallbackInput(value: "first")).await()
+        let result1 = try await innerPromise1.await()
+        print("[HybridTestObjectSwift] First call unexpectedly succeeded with: \(result1)")
+      } catch {
+        print("[HybridTestObjectSwift] First call threw as expected: \(error)")
+      }
+
+      // Second invocation — must not hang.
+      let innerPromise2 = try await fn(SequentialCallbackInput(value: "second")).await()
+      let result2 = try await innerPromise2.await()
+      return result2
+    }
+  }
 }

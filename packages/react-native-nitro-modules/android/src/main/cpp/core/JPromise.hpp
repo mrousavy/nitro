@@ -74,7 +74,10 @@ public:
     std::unique_lock lock(_mutex);
     jni::global_ref<jni::JObject> globalResult = jni::make_global(result);
     _state = globalResult;
-    for (const auto& onResolved : _onResolvedListeners) {
+    auto listeners = std::move(_onResolvedListeners);
+    _onRejectedListeners.clear(); // will never fire now
+    lock.unlock();
+    for (const auto& onResolved : listeners) {
       onResolved(result);
     }
   }
@@ -82,7 +85,10 @@ public:
     std::unique_lock lock(_mutex);
     jni::global_ref<jni::JThrowable> globalError = jni::make_global(error);
     _state = globalError;
-    for (const auto& onRejected : _onRejectedListeners) {
+    auto listeners = std::move(_onRejectedListeners);
+    _onResolvedListeners.clear(); // will never fire now
+    lock.unlock();
+    for (const auto& onRejected : listeners) {
       onRejected(error);
     }
   }
@@ -91,20 +97,24 @@ public:
   void addOnResolvedListener(OnResolvedFunc&& onResolved) {
     std::unique_lock lock(_mutex);
     if (auto result = std::get_if<ResultType>(&_state)) {
-      // Promise is already resolved! Call the callback immediately
+      // Promise is already resolved — call immediately.
       onResolved(*result);
+    } else if (std::holds_alternative<ErrorType>(_state)) {
+      // Promise is already rejected — listener will never fire; discard it.
     } else {
-      // Promise is not yet resolved, put the listener in our queue.
+      // Promise is pending — queue the listener.
       _onResolvedListeners.push_back(std::move(onResolved));
     }
   }
   void addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::unique_lock lock(_mutex);
     if (auto error = std::get_if<ErrorType>(&_state)) {
-      // Promise is already rejected! Call the callback immediately
+      // Promise is already rejected — call immediately.
       onRejected(*error);
+    } else if (std::holds_alternative<ResultType>(_state)) {
+      // Promise is already resolved — listener will never fire; discard it.
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
+      // Promise is pending — queue the listener.
       _onRejectedListeners.push_back(std::move(onRejected));
     }
   }
@@ -113,10 +123,12 @@ private:
   void addOnResolvedListenerJava(jni::alias_ref<JOnResolvedCallback> callback) {
     std::unique_lock lock(_mutex);
     if (auto result = std::get_if<ResultType>(&_state)) {
-      // Promise is already resolved! Call the callback immediately
+      // Promise is already resolved — call immediately.
       callback->onResolved(*result);
+    } else if (std::holds_alternative<ErrorType>(_state)) {
+      // Promise is already rejected — listener will never fire; discard it.
     } else {
-      // Promise is not yet resolved, put the listener in our queue.
+      // Promise is pending — queue the listener.
       auto sharedCallback = jni::make_global(callback);
       _onResolvedListeners.emplace_back(
           [sharedCallback = std::move(sharedCallback)](const auto& result) { sharedCallback->onResolved(result); });
@@ -125,10 +137,12 @@ private:
   void addOnRejectedListenerJava(jni::alias_ref<JOnRejectedCallback> callback) {
     std::unique_lock lock(_mutex);
     if (auto error = std::get_if<ErrorType>(&_state)) {
-      // Promise is already rejected! Call the callback immediately
+      // Promise is already rejected — call immediately.
       callback->onRejected(*error);
+    } else if (std::holds_alternative<ResultType>(_state)) {
+      // Promise is already resolved — listener will never fire; discard it.
     } else {
-      // Promise is not yet rejected, put the listener in our queue.
+      // Promise is pending — queue the listener.
       auto sharedCallback = jni::make_global(callback);
       _onRejectedListeners.emplace_back(
           [sharedCallback = std::move(sharedCallback)](const auto& error) { sharedCallback->onRejected(error); });

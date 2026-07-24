@@ -112,6 +112,10 @@ interface MapWrapper {
   map: Record<string, string>
   secondMap: SecondMapWrapper
 }
+export type SequentialCallbackInput = {
+  value: string
+}
+
 export type CustomString = CustomType<
   string,
   'CustomString',
@@ -391,4 +395,11 @@ export interface TestObjectSwiftKotlin
   getVariantHybrid(
     variant: TestObjectSwiftKotlin | Person
   ): TestObjectSwiftKotlin | Person
+
+  // Reproduces https://github.com/mrousavy/nitro/issues/1439:
+  // Calls fn twice sequentially from a background thread.
+  // The first invocation throws; the second must not hang.
+  callCallbackSequentiallyFirstThrows(
+    fn: (input: SequentialCallbackInput) => Promise<string>
+  ): Promise<string>
 }
