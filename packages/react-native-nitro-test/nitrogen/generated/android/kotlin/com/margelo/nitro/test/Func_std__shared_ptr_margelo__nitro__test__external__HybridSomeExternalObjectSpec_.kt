@@ -59,7 +59,7 @@ class Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObj
   override fun invoke(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
     = invoke_cxx()
 
-  @FastNative
+  
   private external fun invoke_cxx(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 }
 

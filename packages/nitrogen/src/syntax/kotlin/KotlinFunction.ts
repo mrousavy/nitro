@@ -24,6 +24,12 @@ export function createKotlinFunction(functionType: FunctionType): SourceFile[] {
     .getRequiredImports('kotlin')
     .map((i) => `import ${i.name}`)
     .filter(isNotDuplicate)
+  const funcAnnotations: string[] = []
+  if (!functionType.isSync) {
+    // Async functions immediately schedule calls on a Dispatcher,
+    // we can make those @FastNative as they are not doing any JNI allocations
+    funcAnnotations.push('@FastNative')
+  }
 
   const kotlinCode = `
 ${createFileMetadataString(`${name}.kt`)}
@@ -82,7 +88,7 @@ class ${name}_cxx: ${name} {
   override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
     = invoke_cxx(${kotlinParamsForward.join(',')})
 
-  @FastNative
+  ${funcAnnotations.join('\n')}
   private external fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
 
