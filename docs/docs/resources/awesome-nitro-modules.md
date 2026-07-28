@@ -71,6 +71,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | **react-native-ble-nitro** | Bluetooth Low Energy | [GitHub](https://github.com/zykeco/react-native-ble-nitro) |
 | **react-native-nitro-haptics** | Low-latency haptic feedback | [GitHub](https://github.com/oblador/react-native-nitro-haptics) |
 | **@renegades/react-native-tickle** | Haptic pattern editor and player | [GitHub](https://github.com/Renegades-Studio/react-native-tickle) |
+| **@iternio/react-native-auto-play** | Android Auto and Apple CarPlay support for React Native apps. | [GitHub](https://github.com/Iternio-Planning-AB/react-native-auto-play)|
 
 ### File System & Storage
 
