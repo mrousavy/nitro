@@ -18,6 +18,13 @@
 #include <react/renderer/core/ComponentDescriptor.h>
 #include <react/renderer/components/view/ViewProps.h>
 
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#if REACT_NATIVE_VERSION_MINOR >= 82
+#define RAW_PROPS_JSI_VALUE_ENABLED_BY_DEFAULT
+#endif
+#endif
+
 namespace margelo::nitro::test::views {
 
   extern const char HybridRecyclableTestViewComponentName[] = "RecyclableTestView";
@@ -57,7 +64,15 @@ namespace margelo::nitro::test::views {
 
   HybridRecyclableTestViewComponentDescriptor::HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
     : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser()) {}
+#ifdef RAW_PROPS_JSI_VALUE_ENABLED_BY_DEFAULT
+                                  react::RawPropsParser()
+#else
+                                  // RN < 0.82 defaults the `useRawPropsJsiValue` flag to false, but the
+                                  // props constructor above reads every RawValue as a `jsi::Value` - so
+                                  // opt in. The `bool` overload is deprecated (ignored) on RN >= 0.85.
+                                  react::RawPropsParser(/* enableJsiParser */ true)
+#endif
+                                  ) {}
 
   std::shared_ptr<const react::Props> HybridRecyclableTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
                                                                                               const std::shared_ptr<const react::Props>& props,
