@@ -59,7 +59,6 @@ class Func_void_double_cxx: Func_void_double {
   override fun invoke(value: Double): Unit
     = invoke_cxx(value)
 
-  @FastNative
   private external fun invoke_cxx(value: Double): Unit
 }
 
