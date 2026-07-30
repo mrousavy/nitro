@@ -1597,7 +1597,7 @@ export function getTests(
         lotsOfCallbacks = []
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let someNumberWeWillCapture = 0
-        for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
+        for (let i = 0; i < 10_000; i++) {
           const cb = testObject.createNativeCallback((num) => {
             someNumberWeWillCapture += num
           })
@@ -1607,10 +1607,10 @@ export function getTests(
         return lotsOfCallbacks.length
       })
         .didNotThrow()
-        .equals(MEMORY_LEAK_TEST_ALLOCATION_COUNT)
+        .equals(10_000)
     ),
     createTest(
-      'HybridObjects dont leak memory with automatic YoungGen GC',
+      'HybridObjects do not leak memory when automatically reclaimed by JS GC',
       () =>
         it(() => {
           const baselineAllocations =
