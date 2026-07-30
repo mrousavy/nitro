@@ -116,6 +116,7 @@ class AnyMap {
   @FastNative
   external fun getInt64(key: String): Long
 
+  @FastNative
   external fun getString(key: String): String
 
   external fun getAnyArray(key: String): AnyArray

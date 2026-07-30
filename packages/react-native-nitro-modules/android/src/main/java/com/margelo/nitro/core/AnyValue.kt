@@ -146,6 +146,7 @@ class AnyValue {
    * Get the [String] value this [AnyValue] is holding.
    * @throws Error if this [AnyValue] is not holding a [String] (see [isString]`()`)
    */
+  @FastNative
   external fun asString(): String
 
   /**

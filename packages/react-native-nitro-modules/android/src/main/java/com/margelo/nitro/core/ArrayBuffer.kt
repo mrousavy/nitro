@@ -186,6 +186,7 @@ class ArrayBuffer {
 
   private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
 
+  @FastNative
   private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
 
   @FastNative
