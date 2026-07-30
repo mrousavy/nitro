@@ -186,7 +186,6 @@ class ArrayBuffer {
 
   private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
 
-  @FastNative
   private external fun getIsOwner(): Boolean
 
   @FastNative
@@ -195,7 +194,6 @@ class ArrayBuffer {
   @FastNative
   private external fun getIsHardwareBuffer(): Boolean
 
-  @FastNative
   private external fun getBufferSize(): Int
 
   companion object {
