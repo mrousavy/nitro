@@ -45,7 +45,7 @@ export interface TestRunner {
 
 // 55k allocations verify that there are no memory leaks for two reasons;
 // 1) It's a lot of allocations and any VM (JS, JVM) will likely trigger GC
-// 2) In JVM, a maximum of 51_200 JNI objects are allowed, then the app crashes.
+// 2) In JVM, 51_200 is the limit for `jni::global_ref`s, then the app crashes - this intentionally exhausts that
 const MEMORY_LEAK_TEST_ALLOCATION_COUNT = 55_000
 
 /**
