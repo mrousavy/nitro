@@ -59,7 +59,6 @@ class Func_void_std__string_cxx: Func_void_std__string {
   override fun invoke(value: String): Unit
     = invoke_cxx(value)
 
-  @FastNative
   private external fun invoke_cxx(value: String): Unit
 }
 

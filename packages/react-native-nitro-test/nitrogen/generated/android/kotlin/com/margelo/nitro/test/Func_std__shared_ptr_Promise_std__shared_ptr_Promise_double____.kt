@@ -59,7 +59,6 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____cxx: Func_
   override fun invoke(): Promise<Promise<Double>>
     = invoke_cxx()
 
-  @FastNative
   private external fun invoke_cxx(): Promise<Promise<Double>>
 }
 

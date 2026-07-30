@@ -59,7 +59,6 @@ class Func_void_std__exception_ptr_cxx: Func_void_std__exception_ptr {
   override fun invoke(error: Throwable): Unit
     = invoke_cxx(error)
 
-  @FastNative
   private external fun invoke_cxx(error: Throwable): Unit
 }
 
