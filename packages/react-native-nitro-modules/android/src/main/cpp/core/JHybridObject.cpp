@@ -14,24 +14,26 @@ namespace margelo::nitro {
 using namespace facebook;
 
 std::shared_ptr<JHybridObject> JHybridObject::JavaPart::getJHybridObject() {
+  jni::local_ref<JHybridObject::JavaPart> javaPart = jni::make_local(self());
+  // dispose() takes the same Java monitor. Hold it until after cthis() so HybridData
+  // cannot be reset between retrieving the CxxPart and accessing its native instance.
+  auto javaPartLock = javaPart->lock();
+
   static const auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-  jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-  std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
+  jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(javaPart);
+  std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject(javaPart);
   return hybridObject;
 }
 
-JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart) : _cxxJavaPart(jni::make_global(cxxJavaPart)) {}
+// Generated subclasses inherit this constructor and still pass their Java CxxPart.
+// Java owns that reference now, so native code intentionally does not retain it.
+JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject>) {}
 
-jni::local_ref<JHybridObject::JavaPart> JHybridObject::CxxPart::getJavaPart() {
-  static const auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
-  return _cxxJavaPart->getFieldValue(javaPartField);
-}
-
-std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject() {
+std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
+  std::lock_guard<std::mutex> lock(_hybridObjectMutex);
   if (auto cached = _hybridObject.lock()) {
     return cached;
   }
-  auto javaPart = getJavaPart();
   auto hybridObject = createHybridObject(javaPart);
   _hybridObject = hybridObject;
   return hybridObject;

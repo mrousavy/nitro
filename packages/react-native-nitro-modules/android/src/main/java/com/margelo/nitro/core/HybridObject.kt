@@ -5,7 +5,6 @@ import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
 import dalvik.annotation.optimization.FastNative
-import java.lang.ref.WeakReference
 
 /**
  * A base class for all Kotlin-based HybridObjects.
@@ -49,8 +48,10 @@ abstract class HybridObject {
   @Keep
   @CallSuper
   open fun dispose() {
-    cxxPartCache?.get()?.destroy()
-    cxxPartCache = null
+    synchronized(this) {
+      cxxPartCache?.destroy()
+      cxxPartCache = null
+    }
   }
 
   /**
@@ -71,19 +72,19 @@ abstract class HybridObject {
     return CxxPart(this)
   }
 
-  private var cxxPartCache: WeakReference<CxxPart>? = null
+  // Java owns the CxxPart. Native code must not retain a JNI global reference back to it,
+  // otherwise HybridData's phantom-reference cleanup can never run.
+  private var cxxPartCache: CxxPart? = null
 
   @Suppress("unused")
   @DoNotStrip
   @Keep
   private fun getCxxPart(): CxxPart {
-    cxxPartCache?.get()?.let {
-      // It's still in strong cache!
-      return it
+    return synchronized(this) {
+      cxxPartCache ?: createCxxPart().also {
+        cxxPartCache = it
+      }
     }
-    val cxxPart = createCxxPart()
-    cxxPartCache = WeakReference(cxxPart)
-    return cxxPart
   }
 
   @Keep

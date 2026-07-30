@@ -9,6 +9,7 @@
 
 #include "HybridObject.hpp"
 #include <fbjni/fbjni.h>
+#include <mutex>
 
 namespace margelo::nitro {
 
@@ -30,18 +31,17 @@ public:
     static jni::local_ref<jhybriddata> initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart);
     static void registerNatives();
     explicit CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart);
-    std::shared_ptr<JHybridObject> getOrCreateHybridObject();
+    std::shared_ptr<JHybridObject> getOrCreateHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart);
 
   protected:
-    jni::local_ref<JHybridObject::JavaPart> getJavaPart();
     /**
      * Override this method in your Class' CxxPart to allow type-erased inheritance.
      */
     virtual std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart);
 
   private:
+    std::mutex _hybridObjectMutex;
     std::weak_ptr<JHybridObject> _hybridObject;
-    jni::global_ref<CxxPart::jhybridobject> _cxxJavaPart;
   };
 
 public:
