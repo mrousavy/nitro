@@ -4,6 +4,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 import java.lang.ref.WeakReference
 
 /**
@@ -105,6 +106,7 @@ abstract class HybridObject {
       mHybridData.resetNative()
     }
 
+    @FastNative
     protected open external fun initHybrid(): HybridData
   }
 }

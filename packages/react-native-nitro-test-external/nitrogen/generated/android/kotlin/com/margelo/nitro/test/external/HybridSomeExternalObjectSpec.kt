@@ -10,6 +10,7 @@ package com.margelo.nitro.test.external
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 import com.margelo.nitro.core.HybridObject
 
 /**
@@ -51,6 +52,7 @@ abstract class HybridSomeExternalObjectSpec: HybridObject() {
   @Keep
   protected open class CxxPart(javaPart: HybridSomeExternalObjectSpec): HybridObject.CxxPart(javaPart) {
     // C++ JHybridSomeExternalObjectSpec::CxxPart::initHybrid(...)
+    @FastNative
     external override fun initHybrid(): HybridData
   }
   override fun createCxxPart(): CxxPart {

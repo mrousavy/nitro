@@ -177,15 +177,18 @@ class ArrayBuffer {
     mHybridData = hybridData
   }
 
+  @FastNative
   private external fun initHybrid(buffer: ByteBuffer): HybridData
 
   @RequiresApi(Build.VERSION_CODES.O)
+  @FastNative
   private external fun initHybridBoxedHardwareBuffer(hardwareBufferBoxed: BoxedHardwareBuffer): HybridData
 
   private external fun getByteBuffer(copyIfNeeded: Boolean): ByteBuffer
 
   private external fun getHardwareBufferBoxed(): BoxedHardwareBuffer
 
+  @FastNative
   private external fun getIsOwner(): Boolean
 
   @FastNative
@@ -194,6 +197,7 @@ class ArrayBuffer {
   @FastNative
   private external fun getIsHardwareBuffer(): Boolean
 
+  @FastNative
   private external fun getBufferSize(): Int
 
   companion object {
