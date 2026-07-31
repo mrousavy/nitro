@@ -9,7 +9,6 @@
 
 #include "HybridObject.hpp"
 #include <fbjni/fbjni.h>
-#include <mutex>
 
 namespace margelo::nitro {
 
@@ -40,7 +39,6 @@ public:
     virtual std::shared_ptr<JHybridObject> createHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart);
 
   private:
-    std::mutex _hybridObjectMutex;
     std::weak_ptr<JHybridObject> _hybridObject;
   };
 

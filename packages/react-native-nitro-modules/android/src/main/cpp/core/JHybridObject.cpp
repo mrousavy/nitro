@@ -15,8 +15,7 @@ using namespace facebook;
 
 std::shared_ptr<JHybridObject> JHybridObject::JavaPart::getJHybridObject() {
   jni::local_ref<JHybridObject::JavaPart> javaPart = jni::make_local(self());
-  // dispose() takes the same Java monitor. Hold it until after cthis() so HybridData
-  // cannot be reset between retrieving the CxxPart and accessing its native instance.
+  // C++ equivalent of Java's synchronized(javaPart)
   auto javaPartLock = javaPart->lock();
 
   static const auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
@@ -25,12 +24,9 @@ std::shared_ptr<JHybridObject> JHybridObject::JavaPart::getJHybridObject() {
   return hybridObject;
 }
 
-// Generated subclasses inherit this constructor and still pass their Java CxxPart.
-// Java owns that reference now, so native code intentionally does not retain it.
 JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject>) {}
 
 std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
-  std::lock_guard<std::mutex> lock(_hybridObjectMutex);
   if (auto cached = _hybridObject.lock()) {
     return cached;
   }
@@ -43,8 +39,8 @@ std::shared_ptr<JHybridObject> JHybridObject::CxxPart::createHybridObject(const 
   return std::make_shared<JHybridObject>(javaPart);
 }
 
-jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart) {
-  return makeCxxInstance(cxxJavaPart);
+jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> javaPart) {
+  return makeCxxInstance(javaPart);
 }
 
 void JHybridObject::CxxPart::registerNatives() {
