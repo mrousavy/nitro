@@ -49,8 +49,11 @@ abstract class HybridObject {
   @CallSuper
   open fun dispose() {
     synchronized(this) {
-      cxxPartCache?.destroy()
-      cxxPartCache = null
+      if (isDisposed) return
+      isDisposed = true
+      if (cxxPart.isInitialized()) {
+        cxxPart.value.destroy()
+      }
     }
   }
 
@@ -72,18 +75,24 @@ abstract class HybridObject {
     return CxxPart(this)
   }
 
-  // Java owns the CxxPart. Native code must not retain a JNI global reference back to it,
-  // otherwise HybridData's phantom-reference cleanup can never run.
-  private var cxxPartCache: CxxPart? = null
+  // Java `HybridObject` owns Java `CxxPart`.
+  // To break the retain cycle, C++ `CxxPart` does NOT have
+  // a strong reference back to Java `CxxPart`.
+  private val cxxPart =
+    lazy(LazyThreadSafetyMode.NONE) {
+      createCxxPart()
+    }
+  private var isDisposed = false
 
   @Suppress("unused")
   @DoNotStrip
   @Keep
   private fun getCxxPart(): CxxPart {
-    return synchronized(this) {
-      cxxPartCache ?: createCxxPart().also {
-        cxxPartCache = it
+    synchronized(this) {
+      if (isDisposed) {
+        throw Error("Cannot access an already disposed HybridObject!")
       }
+      return cxxPart.value
     }
   }
 
