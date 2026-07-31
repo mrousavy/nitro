@@ -1,6 +1,6 @@
 {
   "name": "react-native-nitro-modules",
-  "version": "0.36.4",
+  "version": "0.36.5",
   "description": "Fast, type-safe native modules for React Native with statically compiled JSI bindings.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
