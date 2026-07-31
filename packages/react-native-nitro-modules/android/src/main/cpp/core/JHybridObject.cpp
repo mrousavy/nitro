@@ -14,24 +14,22 @@ namespace margelo::nitro {
 using namespace facebook;
 
 std::shared_ptr<JHybridObject> JHybridObject::JavaPart::getJHybridObject() {
+  jni::local_ref<JHybridObject::JavaPart> javaPart = jni::make_local(self());
+  // C++ equivalent of Java's synchronized(javaPart)
+  auto javaPartLock = javaPart->lock();
+
   static const auto method = javaClassStatic()->getMethod<JHybridObject::CxxPart::javaobject()>("getCxxPart");
-  jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(self());
-  std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject();
+  jni::local_ref<JHybridObject::CxxPart::javaobject> cxxPart = method(javaPart);
+  std::shared_ptr<JHybridObject> hybridObject = cxxPart->cthis()->getOrCreateHybridObject(javaPart);
   return hybridObject;
 }
 
-JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject> cxxJavaPart) : _cxxJavaPart(jni::make_global(cxxJavaPart)) {}
+JHybridObject::CxxPart::CxxPart(jni::alias_ref<jhybridobject>) {}
 
-jni::local_ref<JHybridObject::JavaPart> JHybridObject::CxxPart::getJavaPart() {
-  static const auto javaPartField = javaClassStatic()->getField<JHybridObject::JavaPart>("javaPart");
-  return _cxxJavaPart->getFieldValue(javaPartField);
-}
-
-std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject() {
+std::shared_ptr<JHybridObject> JHybridObject::CxxPart::getOrCreateHybridObject(const jni::local_ref<JHybridObject::JavaPart>& javaPart) {
   if (auto cached = _hybridObject.lock()) {
     return cached;
   }
-  auto javaPart = getJavaPart();
   auto hybridObject = createHybridObject(javaPart);
   _hybridObject = hybridObject;
   return hybridObject;

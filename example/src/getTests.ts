@@ -43,6 +43,11 @@ export interface TestRunner {
   run: () => Promise<TestResult>
 }
 
+// 55k allocations verify that there are no memory leaks for two reasons;
+// 1) It's a lot of allocations and any VM (JS, JVM) will likely trigger GC
+// 2) In JVM, 51_200 is the limit for `jni::global_ref`s, then the app crashes - this intentionally exhausts that
+const MEMORY_LEAK_TEST_ALLOCATION_COUNT = 55_000
+
 /**
  * Options for getTests function
  */
@@ -1605,16 +1610,15 @@ export function getTests(
         .equals(10_000)
     ),
     createTest(
-      'HybridObjects dont leak memory with automatic YoungGen GC',
+      'HybridObjects do not leak memory when automatically reclaimed by JS GC',
       () =>
         it(() => {
           const baselineAllocations =
             NitroModules.debug_getTotalAllocatedHybridObjects()
-          const TOTAL_ALLOCATIONS = 10_000
           const BATCH_SIZE = 1000
 
           const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
-          for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+          for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
             const object = testObject.newTestObject()
             object.numberValue = i
             objects.push(object)
@@ -1635,7 +1639,7 @@ export function getTests(
           const remainingAllocations = currentAllocations - baselineAllocations
           // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
           const didDeleteMostObjects =
-            remainingAllocations < TOTAL_ALLOCATIONS * 0.1
+            remainingAllocations < MEMORY_LEAK_TEST_ALLOCATION_COUNT * 0.1
           const result: {
             baselineAllocations: number
             currentAllocations: number
@@ -1655,14 +1659,9 @@ export function getTests(
     ),
     createTest('HybridObjects dont leak memory with manual dispose()', () =>
       it(() => {
-        // We test 55_000 allocations, because JNI's max global_ref count
-        // is 51200, so if this test goes green, it properly deletes
-        // jni::global_refs. If there would be a memory leak, this test
-        // will likely crash in C++.
-        const TOTAL_ALLOCATIONS = 55_000
         const BATCH_SIZE = 1000
 
-        for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+        for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
           const object = testObject.newTestObject()
           object.dispose()
 
@@ -1672,7 +1671,6 @@ export function getTests(
         }
 
         gc()
-        return TOTAL_ALLOCATIONS
       }).didNotThrow()
     ),
     createTest('callWithOptional(undefined)', async () =>
