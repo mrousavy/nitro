@@ -49,11 +49,8 @@ abstract class HybridObject {
   @CallSuper
   open fun dispose() {
     synchronized(this) {
-      if (isDisposed) return
-      isDisposed = true
-      if (cxxPart.isInitialized()) {
-        cxxPart.value.destroy()
-      }
+      cxxPart?.destroy()
+      cxxPart = null
     }
   }
 
@@ -78,21 +75,21 @@ abstract class HybridObject {
   // Java `HybridObject` owns Java `CxxPart`.
   // To break the retain cycle, C++ `CxxPart` does NOT have
   // a strong reference back to Java `CxxPart`.
-  private val cxxPart =
-    lazy(LazyThreadSafetyMode.NONE) {
-      createCxxPart()
-    }
-  private var isDisposed = false
+  private var cxxPart: CxxPart? = null
 
   @Suppress("unused")
   @DoNotStrip
   @Keep
   private fun getCxxPart(): CxxPart {
     synchronized(this) {
-      if (isDisposed) {
-        throw Error("Cannot access an already disposed HybridObject!")
+      val currentCxxPart = this.cxxPart
+      if (currentCxxPart != null) {
+        return currentCxxPart
+      } else {
+        val newCxxPart = createCxxPart()
+        this.cxxPart = newCxxPart
+        return newCxxPart
       }
-      return cxxPart.value
     }
   }
 
