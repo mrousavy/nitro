@@ -39,8 +39,8 @@ std::shared_ptr<JHybridObject> JHybridObject::CxxPart::createHybridObject(const 
   return std::make_shared<JHybridObject>(javaPart);
 }
 
-jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> javaPart) {
-  return makeCxxInstance(javaPart);
+jni::local_ref<JHybridObject::CxxPart::jhybriddata> JHybridObject::CxxPart::initHybrid(jni::alias_ref<jhybridobject> cxxJavaPart) {
+  return makeCxxInstance(cxxJavaPart);
 }
 
 void JHybridObject::CxxPart::registerNatives() {
