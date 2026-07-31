@@ -72,9 +72,12 @@ abstract class HybridObject {
     return CxxPart(this)
   }
 
-  // Java `HybridObject` owns Java `CxxPart`.
-  // To break the retain cycle, C++ `CxxPart` does NOT have
-  // a strong reference back to Java `CxxPart`.
+  /**
+   * Java `HybridObject` owns a (lazy) reference to Java `CxxPart`,
+   * which itself owns the C++ `CxxPart`.
+   * The C++ `CxxPart` must NOT have a reference back to Java,
+   * otherwise a cyclic reference outside of JVM is created (= mem leak)
+   */
   private var cxxPart: CxxPart? = null
 
   @Suppress("unused")
