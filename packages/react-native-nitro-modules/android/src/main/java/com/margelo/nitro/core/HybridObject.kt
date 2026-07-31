@@ -112,6 +112,13 @@ abstract class HybridObject {
       mHybridData = initHybrid()
     }
 
+    /**
+     * Eagerly destroy the `CxxPart` and it's backing
+     * C++ class.
+     * If this is not called manually, the Java Garbage Collector
+     * will eventually destroy the object (and it's backing C++
+     * class) automatically.
+     */
     fun destroy() {
       mHybridData.resetNative()
     }
