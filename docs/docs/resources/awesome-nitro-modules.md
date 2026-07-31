@@ -105,6 +105,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-google-maps-plus** | Google Maps SDK wrapper for Android & iOS | [GitHub](https://github.com/pinpong/react-native-google-maps-plus) |
+| **react-native-google-places** | Google Places SDK wrapper for Android & iOS | [GitHub](https://github.com/kore-koi/react-native-google-places) |
 
 ### UI & Styling
 
