@@ -27,12 +27,14 @@ JSICache::~JSICache() {
   Logger::log(LogLevel::Info, TAG, "Destroying JSICache...");
   std::unique_lock lock(_mutex);
 
-  destroyReferences(_valueCache);
-  destroyReferences(_objectCache);
-  destroyReferences(_functionCache);
-  destroyReferences(_weakObjectCache);
-  destroyReferences(_propNameIDCache);
-  destroyReferences(_arrayBufferCache);
+  // `.references()` - the caches self-compact dead slots as they grow (see `JSICache::WeakCache`), so this only
+  // ever walks slots that were still live at the last compaction.
+  destroyReferences(_valueCache.references());
+  destroyReferences(_objectCache.references());
+  destroyReferences(_functionCache.references());
+  destroyReferences(_weakObjectCache.references());
+  destroyReferences(_propNameIDCache.references());
+  destroyReferences(_arrayBufferCache.references());
 }
 
 JSICacheReference JSICache::getOrCreateCache(jsi::Runtime& runtime) {
