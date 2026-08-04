@@ -51,7 +51,11 @@ struct ReferenceState {
     return false;
   }
 
-  explicit ReferenceState() : strongRefCount(1), weakRefCount(0), isDeleted(false) {}
+  // `weakRefCount` starts at 1: the strong cohort collectively owns one implicit weak reference, released by
+  // whichever strong reference performs the final strong release (after it destroyed the value). The state is
+  // freed by whoever brings `weakRefCount` to zero, decided by `fetch_sub`'s return value alone - the same
+  // shape as `shared_ptr`'s control block.
+  explicit ReferenceState() : strongRefCount(1), weakRefCount(1), isDeleted(false) {}
 };
 
 } // namespace margelo::nitro
