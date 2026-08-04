@@ -137,8 +137,7 @@ jobs:
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }} -PnitroSanitizer=${{ matrix.sanitizer.gradle_property }}
 
       - name: Run Harness E2E tests
-        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
-        uses: callstackincubator/react-native-harness@v1.2.0
+        uses: callstackincubator/react-native-harness@v1.4.1
         with:
           runner: android
           projectRoot: example

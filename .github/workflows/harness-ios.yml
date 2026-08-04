@@ -173,8 +173,7 @@ jobs:
         run: brew install watchman
 
       - name: Run Harness E2E tests
-        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
-        uses: callstackincubator/react-native-harness@v1.2.0
+        uses: callstackincubator/react-native-harness@v1.4.1
         with:
           runner: ios
           projectRoot: example
