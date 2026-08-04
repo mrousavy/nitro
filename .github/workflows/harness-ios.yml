@@ -78,6 +78,7 @@ env:
   DEVICE_MODEL: ${{ github.event.inputs.device_model || 'iPhone 17 Pro' }}
   IOS_VERSION: ${{ github.event.inputs.ios_version || '26.5' }}
   XCODE_VERSION: ${{ github.event.inputs.xcode_version || '26.5' }}
+  IOS_APP_PATH: example/ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
   USE_CCACHE: 1
   DEVELOPER_DIR: /Applications/Xcode_${{ github.event.inputs.xcode_version || '26.5' }}.app/Contents/Developer
   HARNESS_DEBUG: 1
@@ -129,6 +130,43 @@ jobs:
       - name: Select Xcode ${{ env.XCODE_VERSION }}
         run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
 
+      - name: Start iOS simulator
+        run: |
+          set -euo pipefail
+
+          SIMULATOR_UDID="$(
+            xcrun simctl list devices available --json | node -e '
+              const fs = require("fs");
+              const data = JSON.parse(fs.readFileSync(0, "utf8"));
+              const deviceModel = process.env.DEVICE_MODEL;
+              const iosVersion = process.env.IOS_VERSION;
+              const runtimeSuffix = `iOS-${iosVersion.replace(/\./g, "-")}`;
+              const candidates = Object.entries(data.devices ?? {}).flatMap(([runtime, devices]) =>
+                (devices ?? []).map((device) => ({ runtime, device }))
+              );
+              const match =
+                candidates.find(({ runtime, device }) =>
+                  runtime.includes(runtimeSuffix) &&
+                  device.name === deviceModel &&
+                  device.isAvailable !== false
+                ) ??
+                candidates.find(({ device }) =>
+                  device.name === deviceModel &&
+                  device.isAvailable !== false
+                );
+
+              if (!match) {
+                console.error(`No available simulator found for ${deviceModel} / iOS ${iosVersion}`);
+                process.exit(1);
+              }
+
+              process.stdout.write(match.device.udid);
+            '
+          )"
+
+          echo "SIMULATOR_UDID=${SIMULATOR_UDID}" >> "$GITHUB_ENV"
+          xcrun simctl boot "$SIMULATOR_UDID" || true
+
       - name: Restore Pods cache
         uses: actions/cache@v6
         with:
@@ -169,14 +207,48 @@ jobs:
             build \
             CODE_SIGNING_ALLOWED=NO | xcbeautify --renderer github-actions
 
-      - name: Install Watchman
-        run: brew install watchman
+      - name: Prepare Harness iOS runtime
+        run: |
+          set -uo pipefail
+
+          watchman_pid=""
+          watchman_status=0
+          if command -v watchman >/dev/null 2>&1; then
+            watchman --version
+          else
+            HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_INSTALL_CLEANUP=1 brew install watchman &
+            watchman_pid=$!
+          fi
+
+          set +e
+          xcrun simctl bootstatus "$SIMULATOR_UDID" -b
+          boot_status=$?
+
+          install_status=0
+          if [ "$boot_status" -eq 0 ]; then
+            xcrun simctl install "$SIMULATOR_UDID" "$IOS_APP_PATH"
+            install_status=$?
+          fi
+
+          if [ -n "$watchman_pid" ]; then
+            wait "$watchman_pid"
+            watchman_status=$?
+          fi
+          set -e
+
+          if [ "$boot_status" -ne 0 ] || [ "$install_status" -ne 0 ] || [ "$watchman_status" -ne 0 ]; then
+            exit 1
+          fi
 
       - name: Run Harness E2E tests
-        # TODO: switch to @v1.3.0 once upstream publishes the GitHub Action tag.
+        # TODO: switch to @v1.4.0-rc.1 once upstream publishes the GitHub Action tag.
         uses: callstackincubator/react-native-harness@v1.2.0
         with:
           runner: ios
           projectRoot: example
           app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
           packageManager: bun
+
+      - name: Shutdown iOS simulator
+        if: always()
+        run: xcrun simctl shutdown "$SIMULATOR_UDID" || true
