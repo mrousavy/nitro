@@ -91,6 +91,18 @@ public:
   [[nodiscard]]
   BorrowingReference<T> lock() const;
 
+  /**
+   * Returns whether the referenced value has already been deleted.
+   *
+   * Unlike `lock()`, this never materializes a strong reference, so it is safe to call while the value's final
+   * release may be running concurrently on another Thread. During such a race it may still report a dying value
+   * as alive ("maybe alive"), never the reverse.
+   */
+  [[nodiscard]]
+  bool isDeleted() const {
+    return _state == nullptr || _state->isDeleted.load();
+  }
+
 public:
   friend class BorrowingReference<T>;
 
