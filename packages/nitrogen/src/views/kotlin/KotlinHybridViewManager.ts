@@ -11,6 +11,10 @@ import {
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { addJNINativeRegistration } from '../../syntax/kotlin/JNINativeRegistrations.js'
 import { indent } from '../../utils.js'
+import {
+  createKotlinViewMeasurer,
+  getKotlinMeasurerName,
+} from './createKotlinViewMeasurer.js'
 
 export function createKotlinHybridViewManager(
   spec: HybridObjectSpec
@@ -37,6 +41,8 @@ export function createKotlinHybridViewManager(
     )
   }
   const viewImplementation = implementation.implementationClassName
+  const measurerName = getKotlinMeasurerName(spec)
+  const measurerFiles = createKotlinViewMeasurer(spec)
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -159,6 +165,7 @@ ${createFileMetadataString(`J${stateUpdaterName}.hpp`)}
 #include <NitroModules/JStateWrapper.hpp>
 #include "${JHybridTSpec}.hpp"
 #include "views/${component}.hpp"
+#include "views/J${measurerName}.hpp"
 
 namespace ${cxxNamespace} {
 
@@ -183,6 +190,8 @@ public:
     auto provider = react::concreteComponentDescriptorProvider<${descriptorClassName}>();
     auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
     providerRegistry->add(provider);
+    // Install lock-free self-measurement (no-op unless the impl conforms to MeasurableView)
+    J${measurerName}::install();
   }
 };
 
@@ -290,5 +299,6 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
       platform: 'android',
       subdirectory: ['views'],
     },
+    ...measurerFiles,
   ]
 }

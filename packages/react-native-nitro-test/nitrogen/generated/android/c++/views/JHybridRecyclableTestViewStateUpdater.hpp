@@ -19,6 +19,7 @@
 #include <NitroModules/JStateWrapper.hpp>
 #include "JHybridRecyclableTestViewSpec.hpp"
 #include "views/HybridRecyclableTestViewComponent.hpp"
+#include "views/JHybridRecyclableTestViewMeasurer.hpp"
 
 namespace margelo::nitro::test::views {
 
@@ -43,6 +44,8 @@ public:
     auto provider = react::concreteComponentDescriptorProvider<HybridRecyclableTestViewComponentDescriptor>();
     auto providerRegistry = react::CoreComponentsRegistry::sharedProviderRegistry();
     providerRegistry->add(provider);
+    // Install lock-free self-measurement (no-op unless the impl conforms to MeasurableView)
+    JHybridRecyclableTestViewMeasurer::install();
   }
 };
 
