@@ -14,6 +14,7 @@ public protocol HybridPlatformObjectSpec_protocol: HybridObject {
 
   // Methods
   func getOSVersion() throws -> String
+  func getReactContextInfo() throws -> String
 }
 
 public extension HybridPlatformObjectSpec_protocol {

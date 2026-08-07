@@ -49,6 +49,7 @@ namespace margelo::nitro::test {
     public:
       // Methods
       virtual std::string getOSVersion() = 0;
+      virtual std::string getReactContextInfo() = 0;
 
     protected:
       // Hybrid Setup
