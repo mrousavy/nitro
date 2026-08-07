@@ -73,7 +73,7 @@ def enableProguardInReleaseBuilds = true
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 def isNewArchitectureEnabled() {
-  return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+  return project.hasProperty("newArchEnabled") && project.getProperty("newArchEnabled") == "true"
 }
 logger.warn("Building with newArchEnabled = ${isNewArchitectureEnabled()}...")
 
