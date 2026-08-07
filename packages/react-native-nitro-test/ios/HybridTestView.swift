@@ -10,7 +10,11 @@ import UIKit
 
 class HybridTestView: HybridTestViewSpec {
   // UIView
-  var view: UIView = UIView()
+  var view: UIView = {
+    let v = UIView()
+    v.clipsToBounds = true
+    return v
+  }()
 
   // Props
   var isBlue: Bool = false {
