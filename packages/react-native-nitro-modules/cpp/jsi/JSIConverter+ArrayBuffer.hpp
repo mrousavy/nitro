@@ -18,6 +18,7 @@ struct JSIConverter;
 #include "ArrayBuffer.hpp"
 #include "IsSharedPtrTo.hpp"
 #include "JSICache.hpp"
+#include "MutableBufferNativeState.hpp"
 #include "NitroDefines.hpp"
 #include <jsi/jsi.h>
 #include <memory>
@@ -26,12 +27,6 @@ struct JSIConverter;
 namespace margelo::nitro {
 
 using namespace facebook;
-
-struct MutableBufferNativeState final : public jsi::NativeState {
-public:
-  explicit MutableBufferNativeState(const std::shared_ptr<jsi::MutableBuffer>& buffer) : buffer(buffer) {}
-  std::shared_ptr<jsi::MutableBuffer> buffer;
-};
 
 // MutableBuffer <> ArrayBuffer
 template <typename T>
@@ -53,11 +48,10 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
                                   "Are you maybe passing a TypedArray (e.g. Uint8Array)? Try to pass its `.buffer` value.");
     }
 #endif
-    if (object.hasNativeState<MutableBufferNativeState>(runtime)) {
-      // It already is a NativeBuffer! Let's get the jsi::MutableBuffer from the jsi::NativeState...
-      auto mutableBufferHolder = object.getNativeState<MutableBufferNativeState>(runtime);
-      auto mutableBuffer = mutableBufferHolder->buffer;
-      if (auto arrayBuffer = std::dynamic_pointer_cast<ArrayBuffer>(mutableBuffer)) [[likely]] {
+    if (object.hasNativeState(runtime)) {
+      // Unwrap inside libNitroModules — do not dynamic_cast MutableBufferNativeState
+      // here (fails across Android .so / RTLD_LOCAL boundaries).
+      if (auto arrayBuffer = tryGetArrayBufferFromNativeState(object.getNativeState(runtime))) {
         return arrayBuffer;
       }
     }
