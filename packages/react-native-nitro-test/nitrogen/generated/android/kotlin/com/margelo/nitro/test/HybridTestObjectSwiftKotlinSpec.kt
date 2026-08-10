@@ -541,7 +541,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun createHardwareBuffer(width: Double, height: Double, layers: Double, format: HardwareBufferFormat): ArrayBuffer
+  abstract fun createGpuBuffer(width: Double, height: Double, layers: Double, format: GpuBufferFormat): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
+  abstract fun isGpuBuffer(buffer: ArrayBuffer): Boolean
+  
+  @DoNotStrip
+  @Keep
+  abstract fun testGpuBufferIdentity(): Boolean
   
   @DoNotStrip
   @Keep

@@ -9,7 +9,10 @@
 
 #include "ArrayBuffer.hpp"
 #include "NitroDefines.hpp"
+#include "PixelBufferArrayBuffer.hpp"
+#include "PixelBufferUtils.hpp"
 #include "SwiftClosure.hpp"
+#include <exception>
 #include <memory>
 
 namespace margelo::nitro {
@@ -41,6 +44,49 @@ public:
     return ArrayBufferHolder(arrayBuffer);
   }
 
+  /**
+   * Create a new owning `ArrayBuffer` that wraps the given `CVPixelBuffer` without copying
+   * pixel data. `pixelBuffer` is passed as an opaque pointer (`CVPixelBufferRef`).
+   * Calls `CVPixelBufferRetain` so the buffer outlives this call; requires CPU-readable access.
+   *
+   * On failure, sets `*outError` and returns a holder with a null buffer.
+   * On success, clears `*outError`.
+   */
+  static ArrayBufferHolder wrapPixelBuffer(void* _Nonnull pixelBuffer, std::exception_ptr* _Nonnull outError) {
+    try {
+      *outError = nullptr;
+      auto* buffer = static_cast<CVPixelBufferRef>(pixelBuffer);
+      auto arrayBuffer = std::make_shared<PixelBufferArrayBuffer>(buffer);
+      return ArrayBufferHolder(arrayBuffer);
+    } catch (...) {
+      *outError = std::current_exception();
+      return ArrayBufferHolder(std::shared_ptr<ArrayBuffer>{});
+    }
+  }
+
+  /**
+   * Deep-copy the given `CVPixelBuffer` into a new owning pixel-buffer-backed `ArrayBuffer`.
+   * `pixelBuffer` is passed as an opaque pointer (`CVPixelBufferRef`).
+   *
+   * On failure, sets `*outError` and returns a holder with a null buffer.
+   * On success, clears `*outError`.
+   */
+  static ArrayBufferHolder copyPixelBuffer(void* _Nonnull pixelBuffer, std::exception_ptr* _Nonnull outError) {
+    try {
+      *outError = nullptr;
+      auto* source = static_cast<CVPixelBufferRef>(pixelBuffer);
+      // copyPixelBuffer gives us ownership; PixelBufferArrayBuffer retains again,
+      // so release our copy ownership and leave the ArrayBuffer as the sole owner.
+      CVPixelBufferRef copy = PixelBufferUtils::copyPixelBuffer(source);
+      auto arrayBuffer = std::make_shared<PixelBufferArrayBuffer>(copy);
+      CVPixelBufferRelease(copy);
+      return ArrayBufferHolder(arrayBuffer);
+    } catch (...) {
+      *outError = std::current_exception();
+      return ArrayBufferHolder(std::shared_ptr<ArrayBuffer>{});
+    }
+  }
+
 public:
   /**
    * Gets the raw bytes the underlying `ArrayBuffer` points to.
@@ -68,7 +114,27 @@ public:
     return _arrayBuffer->isOwner();
   }
 
+  /**
+   * Whether this `ArrayBuffer` is holding a `CVPixelBuffer`.
+   */
+  bool getIsPixelBuffer() const SWIFT_COMPUTED_PROPERTY {
+    return std::dynamic_pointer_cast<PixelBufferArrayBuffer>(_arrayBuffer) != nullptr;
+  }
+
 public:
+  /**
+   * Get the underlying `CVPixelBuffer` as an opaque pointer.
+   * Precondition: `isPixelBuffer == true` (check in Swift first).
+   * The returned buffer is not additionally retained - lifetime follows this `ArrayBuffer`.
+   */
+  void* _Nonnull getPixelBufferPointer() const SWIFT_COMPUTED_PROPERTY {
+    auto pixelBufferArrayBuffer = std::dynamic_pointer_cast<PixelBufferArrayBuffer>(_arrayBuffer);
+    if (pixelBufferArrayBuffer == nullptr) [[unlikely]] {
+      throw std::runtime_error("The underlying buffer is not a CVPixelBuffer!");
+    }
+    return pixelBufferArrayBuffer->getBuffer();
+  }
+
   inline std::shared_ptr<ArrayBuffer> getArrayBuffer() const {
     return _arrayBuffer;
   }

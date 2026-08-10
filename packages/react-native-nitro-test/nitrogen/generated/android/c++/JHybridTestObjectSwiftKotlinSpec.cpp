@@ -45,8 +45,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
-// Forward declaration of `HardwareBufferFormat` to properly resolve imports.
-namespace margelo::nitro::test { enum class HardwareBufferFormat; }
+// Forward declaration of `GpuBufferFormat` to properly resolve imports.
+namespace margelo::nitro::test { enum class GpuBufferFormat; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
@@ -132,8 +132,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
-#include "HardwareBufferFormat.hpp"
-#include "JHardwareBufferFormat.hpp"
+#include "GpuBufferFormat.hpp"
+#include "JGpuBufferFormat.hpp"
 #include "JVariant_Boolean_DoubleArray_Array_String__Double_String.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -1255,10 +1255,20 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart, copy);
     return __result->cthis()->getArrayBuffer();
   }
-  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createHardwareBuffer(double width, double height, double layers, HardwareBufferFormat format) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(double /* width */, double /* height */, double /* layers */, jni::alias_ref<JHardwareBufferFormat> /* format */)>("createHardwareBuffer");
-    auto __result = method(_javaPart, width, height, layers, JHardwareBufferFormat::fromCpp(format));
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createGpuBuffer(double width, double height, double layers, GpuBufferFormat format) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(double /* width */, double /* height */, double /* layers */, jni::alias_ref<JGpuBufferFormat> /* format */)>("createGpuBuffer");
+    auto __result = method(_javaPart, width, height, layers, JGpuBufferFormat::fromCpp(format));
     return __result->cthis()->getArrayBuffer();
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::isGpuBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("isGpuBuffer");
+    auto __result = method(_javaPart, JArrayBuffer::wrap(buffer));
+    return static_cast<bool>(__result);
+  }
+  bool JHybridTestObjectSwiftKotlinSpec::testGpuBufferIdentity() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jboolean()>("testGpuBufferIdentity");
+    auto __result = method(_javaPart);
+    return static_cast<bool>(__result);
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jni::alias_ref<JArrayBuffer::javaobject> /* buffer */)>("copyBuffer");

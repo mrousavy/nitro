@@ -8,7 +8,7 @@ import {
   type WrappedJsStruct,
   type OptionalWrapper,
   type OptionalEnumWrapper,
-  type HardwareBufferFormat,
+  type GpuBufferFormat,
   WeirdNumbersEnum,
   CustomString,
   Base,
@@ -27,6 +27,7 @@ import {
   NitroModules,
 } from 'react-native-nitro-modules'
 import { HybridSomeExternalObject } from 'react-native-nitro-test-external'
+import { Platform } from 'react-native'
 
 type TestResult =
   | {
@@ -101,13 +102,14 @@ const TEST_MAP: Record<string, number | boolean> = {
   another_bool: false,
 }
 
-// All pixel-based HardwareBuffer formats and their bytes-per-pixel
-const HARDWARE_BUFFER_FORMATS: {
-  format: HardwareBufferFormat
+// Pixel-based GPU buffer formats and their bytes-per-pixel.
+const GPU_BUFFER_FORMATS: {
+  format: GpuBufferFormat
   bytesPerPixel: number
 }[] = [
   { format: 'rgb-565', bytesPerPixel: 2 },
   { format: 'rgba-8888', bytesPerPixel: 4 },
+  { format: 'bgra-8888', bytesPerPixel: 4 },
   { format: 'rgba-fp16', bytesPerPixel: 8 },
 ]
 
@@ -231,6 +233,23 @@ export function getTests(
   const backend = options.backend ?? throwingBackend
   const { it } = createTestRunner(backend)
   const createTest = createCreateTest()
+
+  // Native GPU pixel format for this platform + HybridObject backend.
+  const nativeGpuPixelFormat: GpuBufferFormat =
+    testObject.name === 'TestObjectCpp' || Platform.OS !== 'ios'
+      ? 'rgba-8888'
+      : 'bgra-8888'
+
+  const isGpuBufferFormatSupported = (format: GpuBufferFormat): boolean => {
+    if (testObject.name === 'TestObjectCpp') {
+      // C++ only allocates by size — all format tags are accepted.
+      return true
+    }
+    if (Platform.OS === 'ios') {
+      return format === 'bgra-8888'
+    }
+    return format !== 'bgra-8888'
+  }
 
   return [
     // Basic prototype tests
@@ -2084,35 +2103,45 @@ export function getTests(
         .equals(true)
     ),
 
-    // HardwareBuffers
-    ...HARDWARE_BUFFER_FORMATS.map(({ format, bytesPerPixel }) =>
-      createTest(`createHardwareBuffer(${format}) size is in bytes`, () =>
-        it(() => {
-          const buffer = testObject.createHardwareBuffer(100, 100, 1, format)
+    // GPU buffers (Android HardwareBuffer / iOS CVPixelBuffer)
+    ...GPU_BUFFER_FORMATS.map(({ format, bytesPerPixel }) =>
+      createTest(`createGpuBuffer(${format}) size is in bytes`, () => {
+        if (!isGpuBufferFormatSupported(format)) {
+          return it(() =>
+            testObject.createGpuBuffer(100, 100, 1, format)
+          ).didThrow()
+        }
+        return it(() => {
+          const buffer = testObject.createGpuBuffer(100, 100, 1, format)
           // On Android the row stride may be padded, so the size can be larger -
           // but if the size was computed in pixels instead of bytes, it'd be smaller.
           return buffer.byteLength >= 100 * 100 * bytesPerPixel
         })
           .didNotThrow()
           .equals(true)
-      )
+      })
     ),
-    createTest('createHardwareBuffer(blob) size is exactly `width` bytes', () =>
-      it(() => {
-        // BLOB HardwareBuffers hold exactly `width` bytes flat.
-        const buffer = testObject.createHardwareBuffer(12345, 1, 1, 'blob')
+    createTest('createGpuBuffer(blob) size is exactly `width` bytes', () => {
+      if (!isGpuBufferFormatSupported('blob')) {
+        return it(() =>
+          testObject.createGpuBuffer(12345, 1, 1, 'blob')
+        ).didThrow()
+      }
+      return it(() => {
+        // BLOB buffers hold exactly `width` bytes flat.
+        const buffer = testObject.createGpuBuffer(12345, 1, 1, 'blob')
         return buffer.byteLength
       })
         .didNotThrow()
         .equals(12345)
-    ),
-    createTest('copyBuffer(createHardwareBuffer(..)) keeps size and data', () =>
+    }),
+    createTest('copyBuffer(createGpuBuffer(..)) keeps size and data', () =>
       it(() => {
-        const original = testObject.createHardwareBuffer(
+        const original = testObject.createGpuBuffer(
           100,
           100,
           1,
-          'rgba-8888'
+          nativeGpuPixelFormat
         )
         const originalArray = new Uint8Array(original)
         originalArray[originalArray.length - 1] = 42
@@ -2125,6 +2154,31 @@ export function getTests(
       })
         .didNotThrow()
         .equals(true)
+    ),
+    createTest('isGpuBuffer(createGpuBuffer) after JS bounce', () =>
+      it(() => {
+        const buffer = testObject.createGpuBuffer(
+          32,
+          32,
+          1,
+          nativeGpuPixelFormat
+        )
+        const bounced = testObject.bounceArrayBuffer(buffer)
+        return testObject.isGpuBuffer(bounced)
+      })
+        .didNotThrow()
+        // C++ has no GPU buffer backend; Swift/Kotlin wrap HardwareBuffer / CVPixelBuffer.
+        .equals(testObject.name !== 'TestObjectCpp')
+    ),
+    createTest('isGpuBuffer(cpu ArrayBuffer) is false', () =>
+      it(() => testObject.isGpuBuffer(testObject.createArrayBuffer()))
+        .didNotThrow()
+        .equals(false)
+    ),
+    createTest('testGpuBufferIdentity()', () =>
+      it(() => testObject.testGpuBufferIdentity())
+        .didNotThrow()
+        .equals(testObject.name !== 'TestObjectCpp')
     ),
 
     // Base HybridObject inherited methods

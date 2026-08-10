@@ -2044,14 +2044,38 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func createHardwareBuffer(width: Double, height: Double, layers: Double, format: Int32) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+  public final func createGpuBuffer(width: Double, height: Double, layers: Double, format: Int32) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
-      let __result = try self.__implementation.createHardwareBuffer(width: width, height: height, layers: layers, format: margelo.nitro.test.HardwareBufferFormat(rawValue: format)!)
+      let __result = try self.__implementation.createGpuBuffer(width: width, height: height, layers: layers, format: margelo.nitro.test.GpuBufferFormat(rawValue: format)!)
       let __resultCpp = __result.getArrayBuffer()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func isGpuBuffer(buffer: ArrayBuffer) -> bridge.Result_bool_ {
+    do {
+      let __result = try self.__implementation.isGpuBuffer(buffer: buffer)
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func testGpuBufferIdentity() -> bridge.Result_bool_ {
+    do {
+      let __result = try self.__implementation.testGpuBufferIdentity()
+      let __resultCpp = __result
+      return bridge.create_Result_bool_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_bool_(__exceptionPtr)
     }
   }
   

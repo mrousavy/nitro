@@ -108,7 +108,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceOptionalEnumStruct(value: OptionalEnumWrapper?) throws -> OptionalEnumWrapper?
   func createArrayBuffer() throws -> ArrayBuffer
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer
-  func createHardwareBuffer(width: Double, height: Double, layers: Double, format: HardwareBufferFormat) throws -> ArrayBuffer
+  func createGpuBuffer(width: Double, height: Double, layers: Double, format: GpuBufferFormat) throws -> ArrayBuffer
+  func isGpuBuffer(buffer: ArrayBuffer) throws -> Bool
+  func testGpuBufferIdentity() throws -> Bool
   func copyBuffer(buffer: ArrayBuffer) throws -> ArrayBuffer
   func getBufferLastItem(buffer: ArrayBuffer) throws -> Double
   func setAllValuesTo(buffer: ArrayBuffer, value: Double) throws -> Void

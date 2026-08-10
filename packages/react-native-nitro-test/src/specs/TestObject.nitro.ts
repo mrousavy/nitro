@@ -130,9 +130,13 @@ type CoreTypesVariant =
 interface PartialPerson extends Partial<Person> {}
 
 // A string union becomes an `enum` in C++/Swift/Kotlin.
-// These map 1:1 to Android `HardwareBuffer` formats.
-export type HardwareBufferFormat =
+// Format tags for `createGpuBuffer` — each platform accepts a subset:
+// - Android: `rgba-8888`, `rgb-565`, `rgba-fp16`, `blob` (multi-layer ok)
+// - iOS: only `bgra-8888`, and only with `layers == 1`
+// Passing an unsupported format/layers combo on that platform throws.
+export type GpuBufferFormat =
   | 'rgba-8888'
+  | 'bgra-8888'
   | 'rgb-565'
   | 'rgba-fp16'
   | 'blob'
@@ -287,14 +291,24 @@ interface SharedTestObjectProps {
   // ArrayBuffers
   createArrayBuffer(): ArrayBuffer
   createArrayBufferFromNativeBuffer(copy: boolean): ArrayBuffer
-  // On Android this creates an actual `HardwareBuffer` and wraps it,
-  // on iOS/C++ it creates a normal `ArrayBuffer` of the same byte size.
-  createHardwareBuffer(
+  // Creates a platform GPU pixel buffer when the format is supported:
+  // - Android: `HardwareBuffer` for `rgba-8888` / `rgb-565` / `rgba-fp16` / `blob`
+  //   (including multi-layer)
+  // - iOS: `CVPixelBuffer` for `bgra-8888` only (single-layer)
+  // - C++: normal `ArrayBuffer` of the matching byte size (no GPU backend)
+  // Unsupported platform/format combinations throw.
+  createGpuBuffer(
     width: number,
     height: number,
     layers: number,
-    format: HardwareBufferFormat
+    format: GpuBufferFormat
   ): ArrayBuffer
+  // True if the buffer holds a platform GPU pixel buffer
+  // (Android `HardwareBuffer` / iOS `CVPixelBuffer`).
+  isGpuBuffer(buffer: ArrayBuffer): boolean
+  // Native self-test: wrap → get → same handle, plus JS-style bounce.
+  // Returns true on Android/iOS when GPU buffers are available; false on C++.
+  testGpuBufferIdentity(): boolean
   copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   getBufferLastItem(buffer: ArrayBuffer): number
   setAllValuesTo(buffer: ArrayBuffer, value: number): void

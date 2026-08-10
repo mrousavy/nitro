@@ -135,7 +135,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bounceOptionalEnumStruct", &HybridTestObjectCppSpec::bounceOptionalEnumStruct);
       prototype.registerHybridMethod("createArrayBuffer", &HybridTestObjectCppSpec::createArrayBuffer);
       prototype.registerHybridMethod("createArrayBufferFromNativeBuffer", &HybridTestObjectCppSpec::createArrayBufferFromNativeBuffer);
-      prototype.registerHybridMethod("createHardwareBuffer", &HybridTestObjectCppSpec::createHardwareBuffer);
+      prototype.registerHybridMethod("createGpuBuffer", &HybridTestObjectCppSpec::createGpuBuffer);
+      prototype.registerHybridMethod("isGpuBuffer", &HybridTestObjectCppSpec::isGpuBuffer);
+      prototype.registerHybridMethod("testGpuBufferIdentity", &HybridTestObjectCppSpec::testGpuBufferIdentity);
       prototype.registerHybridMethod("copyBuffer", &HybridTestObjectCppSpec::copyBuffer);
       prototype.registerHybridMethod("getBufferLastItem", &HybridTestObjectCppSpec::getBufferLastItem);
       prototype.registerHybridMethod("setAllValuesTo", &HybridTestObjectCppSpec::setAllValuesTo);

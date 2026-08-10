@@ -207,6 +207,63 @@ ArrayBuffers also provide helper and conversion methods for the language-native 
   </TabItem>
 </Tabs>
 
+#### GPU / hardware pixel buffers
+
+Same idea as the language-native helpers above (`Data` / `ByteBuffer`), but for GPU frames: wrap a platform pixel buffer as an **owning** `ArrayBuffer` (**zero-copy**).
+
+Use this to pass a Camera or ML frame through JS into another Nitro module without copying pixels. JS only sees a normal `ArrayBuffer`; the receiver unwraps the original native handle on its side.
+
+<Tabs groupId="native-language">
+  <TabItem value="swift" label="Swift">
+    On iOS, wrap a [`CVPixelBuffer`](https://developer.apple.com/documentation/corevideo/cvpixelbuffer-q2e) (often IOSurface-backed):
+
+    ```swift
+    // Camera / Vision frame → ArrayBuffer (zero-copy, owning)
+    let buffer = try ArrayBuffer.wrap(pixelBuffer)
+    print(buffer.isPixelBuffer) // true
+    let same = try buffer.getPixelBuffer() // same CVPixelBuffer
+
+    // Deep copy (new CVPixelBuffer)
+    let copy = try ArrayBuffer.copy(pixelBuffer)
+
+    // Pass through JS to another Nitro module - same native handle
+    return buffer
+    ```
+
+    :::warning
+    Wrap only works if the `CVPixelBuffer` is **CPU-readable** (a read lock must succeed).
+
+    For **single-plane** formats (e.g. `BGRA`), `data` locks the buffer and returns a contiguous pointer. `size` is `bytesPerRow * height` (includes row padding).
+
+    For **planar** formats (e.g. camera `420YpCbCr8BiPlanar`), `data` **throws**, because there is no single contiguous pointer. Use `getPixelBuffer()` instead and read planes / pass the handle to the GPU.
+    :::
+  </TabItem>
+  <TabItem value="kotlin" label="Kotlin">
+    On Android, wrap a [`HardwareBuffer`](https://developer.android.com/reference/android/hardware/HardwareBuffer) (`AHardwareBuffer*` in C++):
+
+    ```kotlin
+    // Camera / Media frame → ArrayBuffer (zero-copy, owning)
+    val buffer = ArrayBuffer.wrap(hardwareBuffer)
+    println(buffer.isHardwareBuffer) // true
+    val same = buffer.getHardwareBuffer() // same HardwareBuffer
+
+    // Deep copy (new HardwareBuffer)
+    val copy = ArrayBuffer.copy(hardwareBuffer)
+
+    // Pass through JS to another Nitro module - same native handle
+    return buffer
+    ```
+
+    :::warning
+    Wrap only works if the `HardwareBuffer` was created with a **CPU read** usage flag (`USAGE_CPU_READ_*`). GPU-only buffers are rejected.
+
+    For **single-plane** formats (e.g. RGBA), `getBuffer` / native `data` lock the buffer and expose CPU bytes. `size` is derived from width, stride, and bytes-per-pixel.
+
+    For **YUV / multi-planar** camera formats, `size` **throws** (no single bytes-per-pixel). Keep using `getHardwareBuffer()` and pass that handle to Camera/Media/GPU APIs instead of reading raw bytes.
+    :::
+  </TabItem>
+</Tabs>
+
 ### From JS
 
 From JS, a **non-owning** `ArrayBuffer` can be created via the [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer) web APIs, and viewed or edited using the typed array APIs (e.g. [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)).

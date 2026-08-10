@@ -53,13 +53,17 @@ Pod::Spec.new do |s|
     "cpp/views/CachedProp.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
     "ios/core/ArrayBufferHolder.hpp",
+    "ios/core/PixelBufferArrayBuffer.hpp",
     "ios/core/PromiseHolder.hpp",
     "ios/utils/AnyMapUtils.hpp",
+    "ios/utils/PixelBufferUtils.hpp",
     "ios/utils/Result.hpp",
     "ios/utils/DateToChronoDate.hpp",
     "ios/utils/RuntimeError.hpp",
     "ios/utils/SwiftClosure.hpp",
   ]
+
+  s.frameworks = "CoreVideo"
 
   xcconfig = {
     # Use C++ 20

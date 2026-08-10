@@ -5,6 +5,7 @@
 //  Created by Marc Rousavy on 17.07.24.
 //
 
+import CoreVideo
 import Foundation
 
 /// Holds instances of `std::shared_ptr<ArrayBuffer>`, which can be passed
@@ -48,6 +49,24 @@ extension ArrayBuffer {
       dataWithoutCopy: data.assumingMemoryBound(to: UInt8.self),
       size: size,
       onDelete: delete)
+  }
+
+  /**
+   * Wrap the given `CVPixelBuffer` in a new **owning** `ArrayBuffer` without copying
+   * pixel data. The buffer is retained for the lifetime of the `ArrayBuffer`.
+   *
+   * The `CVPixelBuffer` must be CPU-readable: an `ArrayBuffer` must always be able to
+   * expose contiguous bytes via `data`, so buffers that cannot be locked for CPU
+   * access are rejected at wrap-time.
+   */
+  public static func wrap(_ pixelBuffer: CVPixelBuffer) throws -> ArrayBuffer {
+    let pointer = Unmanaged.passUnretained(pixelBuffer).toOpaque()
+    var error = std.exception_ptr()
+    let buffer = ArrayBuffer.wrapPixelBuffer(pointer, &error)
+    guard buffer.isPixelBuffer else {
+      throw RuntimeError.from(cppError: error)
+    }
+    return buffer
   }
 }
 
@@ -93,8 +112,18 @@ extension ArrayBuffer {
 
   /**
    * Copy the given `ArrayBuffer` into a new **owning** `ArrayBuffer`.
+   * If `other` is pixel-buffer-backed, the copy stays pixel-buffer-backed.
    */
   public static func copy(of other: ArrayBuffer) -> ArrayBuffer {
+    if other.isPixelBuffer {
+      // Keep the copy pixel-buffer-backed instead of flattening to raw bytes.
+      do {
+        let pixelBuffer = try other.getPixelBuffer()
+        return try ArrayBuffer.copy(pixelBuffer)
+      } catch {
+        // Pixel-buffer copy failed - fall through to raw byte copy below.
+      }
+    }
     return ArrayBuffer.copy(of: other.data, size: other.size)
   }
 
@@ -113,6 +142,37 @@ extension ArrayBuffer {
       memcpy(arrayBuffer.data, baseAddress, size)
     }
     return arrayBuffer
+  }
+
+  /**
+   * Deep-copy the given `CVPixelBuffer` into a new **owning** `ArrayBuffer`.
+   * The result stays pixel-buffer-backed (a new `CVPixelBuffer`, not raw bytes).
+   */
+  public static func copy(_ pixelBuffer: CVPixelBuffer) throws -> ArrayBuffer {
+    let pointer = Unmanaged.passUnretained(pixelBuffer).toOpaque()
+    var error = std.exception_ptr()
+    let buffer = ArrayBuffer.copyPixelBuffer(pointer, &error)
+    guard buffer.isPixelBuffer else {
+      throw RuntimeError.from(cppError: error)
+    }
+    return buffer
+  }
+}
+
+// pragma MARK: PixelBuffer
+
+extension ArrayBuffer {
+  /**
+   * Returns the underlying `CVPixelBuffer` without copying.
+   * - Throws if this `ArrayBuffer` is not pixel-buffer-backed (`isPixelBuffer == false`).
+   * - The `CVPixelBuffer` stays alive as long as this `ArrayBuffer` is alive.
+   */
+  public func getPixelBuffer() throws -> CVPixelBuffer {
+    guard isPixelBuffer else {
+      throw RuntimeError.error(withMessage: "The underlying buffer is not a CVPixelBuffer!")
+    }
+    let pointer = pixelBufferPointer
+    return Unmanaged<CVPixelBuffer>.fromOpaque(pointer).takeUnretainedValue()
   }
 }
 

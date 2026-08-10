@@ -490,19 +490,34 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     }
   }
 
-  private fun HardwareBufferFormat.toAndroidFormat(): Int =
+  private fun GpuBufferFormat.toAndroidFormat(): Int =
     when (this) {
-      HardwareBufferFormat.RGBA_8888 -> HardwareBuffer.RGBA_8888
-      HardwareBufferFormat.RGB_565 -> HardwareBuffer.RGB_565
-      HardwareBufferFormat.RGBA_FP16 -> HardwareBuffer.RGBA_FP16
-      HardwareBufferFormat.BLOB -> HardwareBuffer.BLOB
+      GpuBufferFormat.RGBA_8888 -> {
+        HardwareBuffer.RGBA_8888
+      }
+
+      GpuBufferFormat.RGB_565 -> {
+        HardwareBuffer.RGB_565
+      }
+
+      GpuBufferFormat.RGBA_FP16 -> {
+        HardwareBuffer.RGBA_FP16
+      }
+
+      GpuBufferFormat.BLOB -> {
+        HardwareBuffer.BLOB
+      }
+
+      GpuBufferFormat.BGRA_8888 -> {
+        throw Error("createGpuBuffer(format: \"bgra-8888\") is not supported on Android.")
+      }
     }
 
-  override fun createHardwareBuffer(
+  override fun createGpuBuffer(
     width: Double,
     height: Double,
     layers: Double,
-    format: HardwareBufferFormat,
+    format: GpuBufferFormat,
   ): ArrayBuffer {
     val hardwareBuffer =
       HardwareBuffer.create(
@@ -513,6 +528,37 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
         HardwareBuffer.USAGE_CPU_WRITE_OFTEN or HardwareBuffer.USAGE_CPU_READ_OFTEN,
       )
     return ArrayBuffer.wrap(hardwareBuffer)
+  }
+
+  override fun isGpuBuffer(buffer: ArrayBuffer): Boolean {
+    return buffer.isHardwareBuffer
+  }
+
+  override fun testGpuBufferIdentity(): Boolean {
+    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+      throw Error("HardwareBuffer requires Android API 26 or above!")
+    }
+    val hardwareBuffer =
+      HardwareBuffer.create(
+        64,
+        64,
+        HardwareBuffer.RGBA_8888,
+        1,
+        HardwareBuffer.USAGE_CPU_WRITE_OFTEN or HardwareBuffer.USAGE_CPU_READ_OFTEN,
+      )
+    val wrapped = ArrayBuffer.wrap(hardwareBuffer)
+    if (!wrapped.isHardwareBuffer) return false
+    // getHardwareBuffer must succeed without copy/throw.
+    wrapped.getHardwareBuffer()
+    val copied = ArrayBuffer.copy(hardwareBuffer)
+    if (!copied.isHardwareBuffer) return false
+    if (copied.size != wrapped.size) return false
+    // Bounce must keep the HardwareBuffer backend.
+    val bounced = bounceArrayBuffer(wrapped)
+    if (!bounced.isHardwareBuffer) return false
+    val cpu = ArrayBuffer.allocate(16)
+    if (cpu.isHardwareBuffer) return false
+    return true
   }
 
   override fun createArrayBuffer(): ArrayBuffer {

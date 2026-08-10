@@ -5,6 +5,7 @@
 //  Created by Marc Rousavy on 11.08.24.
 //
 
+import CoreVideo
 import NitroModules
 import NitroTestExternal
 
@@ -508,35 +509,87 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func createArrayBufferFromNativeBuffer(copy: Bool) throws -> ArrayBuffer {
-    let data = Data(count: 1024 * 1024 * 10)  // 10 MB
+    // Create a CVPixelBuffer, then wrap or deep-copy it into an ArrayBuffer.
+    var pixelBuffer: CVPixelBuffer?
+    let status = CVPixelBufferCreate(
+      kCFAllocatorDefault,
+      1024,
+      1024,
+      kCVPixelFormatType_32BGRA,
+      nil,
+      &pixelBuffer
+    )
+    guard status == kCVReturnSuccess, let pixelBuffer else {
+      throw RuntimeError.error(
+        withMessage: "Failed to create CVPixelBuffer! CVReturn: \(status)")
+    }
     if copy {
-      return try ArrayBuffer.copy(data: data)
+      return try ArrayBuffer.copy(pixelBuffer)
     } else {
-      // TODO: `Data` cannot be safely wrapped yet on iOS.
-      return try ArrayBuffer.copy(data: data)
+      return try ArrayBuffer.wrap(pixelBuffer)
     }
   }
 
-  func createHardwareBuffer(
-    width: Double, height: Double, layers: Double, format: HardwareBufferFormat
+  func createGpuBuffer(
+    width: Double, height: Double, layers: Double, format: GpuBufferFormat
   ) throws -> ArrayBuffer {
-    // iOS doesn't have HardwareBuffers - create a `Data` of the same byte size instead.
-    let bytesPerPixel: Int
-    switch format {
-    case .rgb565:
-      bytesPerPixel = 2
-    case .rgba8888:
-      bytesPerPixel = 4
-    case .rgbaFp16:
-      bytesPerPixel = 8
-    case .blob:
-      // BLOB buffers hold `width` bytes flat.
-      let data = Data(count: Int(width))
-      return try ArrayBuffer.copy(data: data)
+    guard Int(layers) == 1 else {
+      throw RuntimeError.error(
+        withMessage: "createGpuBuffer(layers > 1) is not supported on iOS.")
     }
-    let size = Int(width) * Int(height) * Int(layers) * bytesPerPixel
-    let data = Data(count: size)
-    return try ArrayBuffer.copy(data: data)
+    guard format == .bgra8888 else {
+      throw RuntimeError.error(
+        withMessage:
+          "createGpuBuffer(format: \"\(format.stringValue)\") is not supported on iOS.")
+    }
+    var pixelBuffer: CVPixelBuffer?
+    let status = CVPixelBufferCreate(
+      kCFAllocatorDefault,
+      Int(width),
+      Int(height),
+      kCVPixelFormatType_32BGRA,
+      nil,
+      &pixelBuffer
+    )
+    guard status == kCVReturnSuccess, let pixelBuffer else {
+      throw RuntimeError.error(
+        withMessage: "Failed to create CVPixelBuffer! CVReturn: \(status)")
+    }
+    return try ArrayBuffer.wrap(pixelBuffer)
+  }
+
+  func isGpuBuffer(buffer: ArrayBuffer) throws -> Bool {
+    return buffer.isPixelBuffer
+  }
+
+  func testGpuBufferIdentity() throws -> Bool {
+    var pixelBuffer: CVPixelBuffer?
+    let status = CVPixelBufferCreate(
+      kCFAllocatorDefault,
+      64,
+      64,
+      kCVPixelFormatType_32BGRA,
+      nil,
+      &pixelBuffer
+    )
+    guard status == kCVReturnSuccess, let pixelBuffer else {
+      return false
+    }
+    let wrapped = try ArrayBuffer.wrap(pixelBuffer)
+    guard wrapped.isPixelBuffer else { return false }
+    let unwrapped = try wrapped.getPixelBuffer()
+    // Same native handle (zero-copy wrap).
+    guard CFEqual(unwrapped, pixelBuffer) else { return false }
+    // Deep copy must produce a different CVPixelBuffer of equal size.
+    let copied = try ArrayBuffer.copy(pixelBuffer)
+    guard copied.isPixelBuffer else { return false }
+    let copiedPixelBuffer = try copied.getPixelBuffer()
+    guard !CFEqual(copiedPixelBuffer, pixelBuffer) else { return false }
+    guard copied.size == wrapped.size else { return false }
+    // Non-pixel-buffer ArrayBuffer must report false / throw on get.
+    let cpu = ArrayBuffer.allocate(size: 16)
+    guard cpu.isPixelBuffer == false else { return false }
+    return true
   }
 
   func createArrayBuffer() throws -> ArrayBuffer {
