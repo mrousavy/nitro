@@ -8,6 +8,7 @@ import {
   type WrappedJsStruct,
   type OptionalWrapper,
   type OptionalEnumWrapper,
+  type Gallery,
   type HardwareBufferFormat,
   WeirdNumbersEnum,
   CustomString,
@@ -167,6 +168,47 @@ const TEST_OPTIONAL_ENUM_WRAPPER: OptionalEnumWrapper = {
   stage: 'hybrid',
   tone: 'electric',
 }
+// A `Gallery` whose structs reference the same shared types (`MediaInfo`,
+// `UserInfo`, `EntityInfo`) from many different paths - see #1079.
+const TEST_MEDIA_INFO = {
+  title: 'Sunset',
+  description: 'Over the harbour',
+  tags: ['sky', 'water'],
+  coverUrl: 'https://example.com/cover.jpg',
+}
+const TEST_ENTITY_INFO = {
+  entityId: 42,
+  title: 'Harbour',
+  media: TEST_MEDIA_INFO,
+}
+const TEST_USER_INFO = {
+  userId: 1,
+  name: 'Marc',
+  avatar: TEST_MEDIA_INFO,
+  entity: TEST_ENTITY_INFO,
+}
+const TEST_GALLERY_ITEM = {
+  mediaId: 7,
+  uri: 'https://example.com/7.jpg',
+  media: TEST_MEDIA_INFO,
+  tags: [{ x: 0.25, y: 0.75, entity: TEST_ENTITY_INFO, user: TEST_USER_INFO }],
+  owner: TEST_USER_INFO,
+  entity: TEST_ENTITY_INFO,
+}
+const TEST_GALLERY: Gallery = {
+  albums: [
+    {
+      albumId: 3,
+      name: 'Holiday',
+      cover: TEST_MEDIA_INFO,
+      items: [TEST_GALLERY_ITEM],
+      owner: TEST_USER_INFO,
+    },
+  ],
+  featured: TEST_GALLERY_ITEM,
+  owner: TEST_USER_INFO,
+}
+
 const TEST_CUSTOM_TYPE: CustomString = 'hello world!'
 
 const BASE_DATE = new Date()
@@ -692,6 +734,12 @@ export function getTests(
       it(() => testObject.bounceOptionalEnumStruct(undefined))
         .didNotThrow()
         .equals(undefined)
+    ),
+    createTest('bounceGallery(...) equals', () =>
+      it(() => testObject.bounceGallery(TEST_GALLERY))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(TEST_GALLERY)
     ),
     createTest('bounceOptionalCallback(...) works for function', () =>
       it(
