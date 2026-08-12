@@ -8,6 +8,7 @@ import {
   type WrappedJsStruct,
   type OptionalWrapper,
   type OptionalEnumWrapper,
+  type HardwareBufferFormat,
   WeirdNumbersEnum,
   CustomString,
   Base,
@@ -41,6 +42,11 @@ export interface TestRunner {
   name: string
   run: () => Promise<TestResult>
 }
+
+// 55k allocations verify that there are no memory leaks for two reasons;
+// 1) It's a lot of allocations and any VM (JS, JVM) will likely trigger GC
+// 2) In JVM, 51_200 is the limit for `jni::global_ref`s, then the app crashes - this intentionally exhausts that
+const MEMORY_LEAK_TEST_ALLOCATION_COUNT = 55_000
 
 /**
  * Options for getTests function
@@ -94,6 +100,16 @@ const TEST_MAP: Record<string, number | boolean> = {
   a_bool: true,
   another_bool: false,
 }
+
+// All pixel-based HardwareBuffer formats and their bytes-per-pixel
+const HARDWARE_BUFFER_FORMATS: {
+  format: HardwareBufferFormat
+  bytesPerPixel: number
+}[] = [
+  { format: 'rgb-565', bytesPerPixel: 2 },
+  { format: 'rgba-8888', bytesPerPixel: 4 },
+  { format: 'rgba-fp16', bytesPerPixel: 8 },
+]
 
 const TEST_MAP_2: Record<string, string> = {
   'someKey': 'someValue',
@@ -1594,16 +1610,15 @@ export function getTests(
         .equals(10_000)
     ),
     createTest(
-      'HybridObjects dont leak memory with automatic YoungGen GC',
+      'HybridObjects do not leak memory when automatically reclaimed by JS GC',
       () =>
         it(() => {
           const baselineAllocations =
             NitroModules.debug_getTotalAllocatedHybridObjects()
-          const TOTAL_ALLOCATIONS = 10_000
           const BATCH_SIZE = 1000
 
           const objects: Array<TestObjectCpp | TestObjectSwiftKotlin> = []
-          for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+          for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
             const object = testObject.newTestObject()
             object.numberValue = i
             objects.push(object)
@@ -1624,7 +1639,7 @@ export function getTests(
           const remainingAllocations = currentAllocations - baselineAllocations
           // make sure that less than 10% of the total allocations are remaining, indicating GC ran for most of it.
           const didDeleteMostObjects =
-            remainingAllocations < TOTAL_ALLOCATIONS * 0.1
+            remainingAllocations < MEMORY_LEAK_TEST_ALLOCATION_COUNT * 0.1
           const result: {
             baselineAllocations: number
             currentAllocations: number
@@ -1644,14 +1659,9 @@ export function getTests(
     ),
     createTest('HybridObjects dont leak memory with manual dispose()', () =>
       it(() => {
-        // We test 55_000 allocations, because JNI's max global_ref count
-        // is 51200, so if this test goes green, it properly deletes
-        // jni::global_refs. If there would be a memory leak, this test
-        // will likely crash in C++.
-        const TOTAL_ALLOCATIONS = 55_000
         const BATCH_SIZE = 1000
 
-        for (let i = 0; i < TOTAL_ALLOCATIONS; i++) {
+        for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
           const object = testObject.newTestObject()
           object.dispose()
 
@@ -1661,7 +1671,6 @@ export function getTests(
         }
 
         gc()
-        return TOTAL_ALLOCATIONS
       }).didNotThrow()
     ),
     createTest('callWithOptional(undefined)', async () =>
@@ -2070,6 +2079,49 @@ export function getTests(
         const bouncedArray = new Uint8Array(bouncedBuffer)
         // 3. Compare if the value at [73] is still equal
         return bouncedArray.buffer === originalArray.buffer
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+
+    // HardwareBuffers
+    ...HARDWARE_BUFFER_FORMATS.map(({ format, bytesPerPixel }) =>
+      createTest(`createHardwareBuffer(${format}) size is in bytes`, () =>
+        it(() => {
+          const buffer = testObject.createHardwareBuffer(100, 100, 1, format)
+          // On Android the row stride may be padded, so the size can be larger -
+          // but if the size was computed in pixels instead of bytes, it'd be smaller.
+          return buffer.byteLength >= 100 * 100 * bytesPerPixel
+        })
+          .didNotThrow()
+          .equals(true)
+      )
+    ),
+    createTest('createHardwareBuffer(blob) size is exactly `width` bytes', () =>
+      it(() => {
+        // BLOB HardwareBuffers hold exactly `width` bytes flat.
+        const buffer = testObject.createHardwareBuffer(12345, 1, 1, 'blob')
+        return buffer.byteLength
+      })
+        .didNotThrow()
+        .equals(12345)
+    ),
+    createTest('copyBuffer(createHardwareBuffer(..)) keeps size and data', () =>
+      it(() => {
+        const original = testObject.createHardwareBuffer(
+          100,
+          100,
+          1,
+          'rgba-8888'
+        )
+        const originalArray = new Uint8Array(original)
+        originalArray[originalArray.length - 1] = 42
+        const copy = testObject.copyBuffer(original)
+        const copyArray = new Uint8Array(copy)
+        return (
+          copy.byteLength === original.byteLength &&
+          copyArray[copyArray.length - 1] === 42
+        )
       })
         .didNotThrow()
         .equals(true)

@@ -10,7 +10,6 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 import com.margelo.nitro.core.ArrayBuffer
 import com.margelo.nitro.core.Promise
 
@@ -60,7 +59,6 @@ class Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_Array
   override fun invoke(): Promise<Promise<ArrayBuffer>>
     = invoke_cxx()
 
-  @FastNative
   private external fun invoke_cxx(): Promise<Promise<ArrayBuffer>>
 }
 

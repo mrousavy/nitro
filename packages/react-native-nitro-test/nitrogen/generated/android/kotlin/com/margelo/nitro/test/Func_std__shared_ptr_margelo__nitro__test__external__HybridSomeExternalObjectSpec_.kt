@@ -10,7 +10,6 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 
 /**
@@ -59,7 +58,6 @@ class Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObj
   override fun invoke(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
     = invoke_cxx()
 
-  @FastNative
   private external fun invoke_cxx(): com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 }
 

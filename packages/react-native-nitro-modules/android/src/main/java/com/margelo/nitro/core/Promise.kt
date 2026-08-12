@@ -3,6 +3,7 @@ package com.margelo.nitro.core
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -103,6 +104,7 @@ class Promise<T> {
 
   private external fun addOnRejectedListener(callback: OnRejectedCallback)
 
+  @FastNative
   private external fun initHybrid(): HybridData
 
   // Nested callbacks - need to be JavaClasses so we can access them with JNI

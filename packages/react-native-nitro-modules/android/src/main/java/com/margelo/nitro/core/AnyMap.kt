@@ -116,6 +116,7 @@ class AnyMap {
   @FastNative
   external fun getInt64(key: String): Long
 
+  @FastNative
   external fun getString(key: String): String
 
   external fun getAnyArray(key: String): AnyArray
@@ -168,6 +169,7 @@ class AnyMap {
 
   external fun merge(other: AnyMap)
 
+  @FastNative
   private external fun initHybrid(): HybridData
 
   private external fun initHybrid(preallocatedSize: Int): HybridData

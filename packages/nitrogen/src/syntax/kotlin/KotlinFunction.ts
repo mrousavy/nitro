@@ -33,7 +33,6 @@ package ${packageName}
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import dalvik.annotation.optimization.FastNative
 ${extraImports.join('\n')}
 
 /**
@@ -82,7 +81,6 @@ class ${name}_cxx: ${name} {
   override fun invoke(${kotlinParams.join(', ')}): ${kotlinReturnType}
     = invoke_cxx(${kotlinParamsForward.join(',')})
 
-  @FastNative
   private external fun invoke_cxx(${kotlinParams.join(', ')}): ${kotlinReturnType}
 }
 

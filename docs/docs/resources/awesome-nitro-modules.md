@@ -47,6 +47,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 |--------|-------------|-------|
 | **@rive-app/react-native** | Rive animations built with Nitro | [GitHub](https://github.com/rive-app/rive-nitro-react-native) |
 | **react-native-nitro-palette** | Dominant color palette extraction | [GitHub](https://github.com/Ucekay/nitro-palette) |
+| **react-native-nitro-theme-transition** | GPU-driven theme-change transitions, sixteen effects | [GitHub](https://github.com/saleh2001k/react-native-nitro-theme-transition) |
 
 ### Cryptography & Security
 
@@ -71,6 +72,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | **react-native-ble-nitro** | Bluetooth Low Energy | [GitHub](https://github.com/zykeco/react-native-ble-nitro) |
 | **react-native-nitro-haptics** | Low-latency haptic feedback | [GitHub](https://github.com/oblador/react-native-nitro-haptics) |
 | **@renegades/react-native-tickle** | Haptic pattern editor and player | [GitHub](https://github.com/Renegades-Studio/react-native-tickle) |
+| **@iternio/react-native-auto-play** | Android Auto and Apple CarPlay support for React Native apps. | [GitHub](https://github.com/Iternio-Planning-AB/react-native-auto-play)|
 
 ### File System & Storage
 
@@ -104,6 +106,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | Module | Description | Links |
 |--------|-------------|-------|
 | **react-native-google-maps-plus** | Google Maps SDK wrapper for Android & iOS | [GitHub](https://github.com/pinpong/react-native-google-maps-plus) |
+| **react-native-google-places** | Google Places SDK wrapper for Android & iOS | [GitHub](https://github.com/kore-koi/react-native-google-places) |
 
 ### UI & Styling
 

@@ -22,7 +22,7 @@ ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxT
   }
 }
 
-void ThreadPool::addThread(std::unique_lock<std::mutex>& queueMutexLock) {
+void ThreadPool::addThread(std::unique_lock<std::mutex>&) {
   if (!_isAlive) {
     return;
   }

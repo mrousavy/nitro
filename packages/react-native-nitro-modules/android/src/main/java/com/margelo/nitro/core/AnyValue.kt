@@ -146,6 +146,7 @@ class AnyValue {
    * Get the [String] value this [AnyValue] is holding.
    * @throws Error if this [AnyValue] is not holding a [String] (see [isString]`()`)
    */
+  @FastNative
   external fun asString(): String
 
   /**
@@ -160,14 +161,19 @@ class AnyValue {
    */
   external fun asAnyObject(): AnyObject
 
+  @FastNative
   private external fun initHybrid(): HybridData
 
+  @FastNative
   private external fun initHybrid(value: Double): HybridData
 
+  @FastNative
   private external fun initHybrid(value: Boolean): HybridData
 
+  @FastNative
   private external fun initHybrid(value: Long): HybridData
 
+  @FastNative
   private external fun initHybrid(value: String): HybridData
 
   private external fun initHybrid(value: AnyArray): HybridData

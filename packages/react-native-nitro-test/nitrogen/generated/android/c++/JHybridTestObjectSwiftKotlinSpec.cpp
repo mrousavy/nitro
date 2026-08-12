@@ -45,6 +45,8 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 namespace margelo::nitro::test { struct MapWrapper; }
 // Forward declaration of `SecondMapWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct SecondMapWrapper; }
+// Forward declaration of `HardwareBufferFormat` to properly resolve imports.
+namespace margelo::nitro::test { enum class HardwareBufferFormat; }
 // Forward declaration of `HybridTestViewSpec` to properly resolve imports.
 namespace margelo::nitro::test { class HybridTestViewSpec; }
 
@@ -130,6 +132,8 @@ namespace margelo::nitro::test { class HybridTestViewSpec; }
 #include "JFunc_void_std__string.hpp"
 #include "JFunc_void_std__exception_ptr.hpp"
 #include "JFunc_std__shared_ptr_Promise_std__string__.hpp"
+#include "HardwareBufferFormat.hpp"
+#include "JHardwareBufferFormat.hpp"
 #include "JVariant_Boolean_DoubleArray_Array_String__Double_String.hpp"
 #include "JFunc_double.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -1249,6 +1253,11 @@ namespace margelo::nitro::test {
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createArrayBufferFromNativeBuffer(bool copy) {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(jboolean /* copy */)>("createArrayBufferFromNativeBuffer");
     auto __result = method(_javaPart, copy);
+    return __result->cthis()->getArrayBuffer();
+  }
+  std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::createHardwareBuffer(double width, double height, double layers, HardwareBufferFormat format) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JArrayBuffer::javaobject>(double /* width */, double /* height */, double /* layers */, jni::alias_ref<JHardwareBufferFormat> /* format */)>("createHardwareBuffer");
+    auto __result = method(_javaPart, width, height, layers, JHardwareBufferFormat::fromCpp(format));
     return __result->cthis()->getArrayBuffer();
   }
   std::shared_ptr<ArrayBuffer> JHybridTestObjectSwiftKotlinSpec::copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) {

@@ -43,6 +43,8 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalEnumWrapper; }
+// Forward declaration of `HardwareBufferFormat` to properly resolve imports.
+namespace margelo::nitro::test { enum class HardwareBufferFormat; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -84,6 +86,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalEnumWrapper.hpp"
+#include "HardwareBufferFormat.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -241,6 +244,7 @@ namespace margelo::nitro::test {
       virtual std::optional<OptionalEnumWrapper> bounceOptionalEnumStruct(const std::optional<OptionalEnumWrapper>& value) = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBuffer() = 0;
       virtual std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) = 0;
+      virtual std::shared_ptr<ArrayBuffer> createHardwareBuffer(double width, double height, double layers, HardwareBufferFormat format) = 0;
       virtual std::shared_ptr<ArrayBuffer> copyBuffer(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual double getBufferLastItem(const std::shared_ptr<ArrayBuffer>& buffer) = 0;
       virtual void setAllValuesTo(const std::shared_ptr<ArrayBuffer>& buffer, double value) = 0;

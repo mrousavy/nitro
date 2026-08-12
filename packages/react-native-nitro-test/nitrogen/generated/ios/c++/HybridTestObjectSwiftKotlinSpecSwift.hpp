@@ -44,6 +44,8 @@ namespace margelo::nitro::test { struct OptionalWrapper; }
 namespace margelo::nitro::test { struct OptionalCallback; }
 // Forward declaration of `OptionalEnumWrapper` to properly resolve imports.
 namespace margelo::nitro::test { struct OptionalEnumWrapper; }
+// Forward declaration of `HardwareBufferFormat` to properly resolve imports.
+namespace margelo::nitro::test { enum class HardwareBufferFormat; }
 // Forward declaration of `WeirdNumbersEnum` to properly resolve imports.
 namespace margelo::nitro::test { enum class WeirdNumbersEnum; }
 // Forward declaration of `HybridBaseSpec` to properly resolve imports.
@@ -84,6 +86,7 @@ namespace margelo::nitro::test { struct ExternalObjectStruct; }
 #include "OptionalWrapper.hpp"
 #include "OptionalCallback.hpp"
 #include "OptionalEnumWrapper.hpp"
+#include "HardwareBufferFormat.hpp"
 #include "WeirdNumbersEnum.hpp"
 #include "HybridBaseSpec.hpp"
 #include "HybridTestViewSpec.hpp"
@@ -835,6 +838,14 @@ namespace margelo::nitro::test {
     }
     inline std::shared_ptr<ArrayBuffer> createArrayBufferFromNativeBuffer(bool copy) override {
       auto __result = _swiftPart.createArrayBufferFromNativeBuffer(std::forward<decltype(copy)>(copy));
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<ArrayBuffer> createHardwareBuffer(double width, double height, double layers, HardwareBufferFormat format) override {
+      auto __result = _swiftPart.createHardwareBuffer(std::forward<decltype(width)>(width), std::forward<decltype(height)>(height), std::forward<decltype(layers)>(layers), static_cast<int>(format));
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

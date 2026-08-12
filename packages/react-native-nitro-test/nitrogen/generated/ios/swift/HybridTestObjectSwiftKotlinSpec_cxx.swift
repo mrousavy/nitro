@@ -2044,6 +2044,18 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func createHardwareBuffer(width: Double, height: Double, layers: Double, format: Int32) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
+    do {
+      let __result = try self.__implementation.createHardwareBuffer(width: width, height: height, layers: layers, format: margelo.nitro.test.HardwareBufferFormat(rawValue: format)!)
+      let __resultCpp = __result.getArrayBuffer()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_ArrayBuffer__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func copyBuffer(buffer: ArrayBuffer) -> bridge.Result_std__shared_ptr_ArrayBuffer__ {
     do {
       let __result = try self.__implementation.copyBuffer(buffer: buffer)

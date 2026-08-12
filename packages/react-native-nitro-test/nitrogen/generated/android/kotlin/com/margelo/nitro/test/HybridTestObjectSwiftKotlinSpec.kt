@@ -10,6 +10,7 @@ package com.margelo.nitro.test
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
+import dalvik.annotation.optimization.FastNative
 import com.margelo.nitro.core.NullType
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.core.AnyMap
@@ -540,6 +541,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun createHardwareBuffer(width: Double, height: Double, layers: Double, format: HardwareBufferFormat): ArrayBuffer
+  
+  @DoNotStrip
+  @Keep
   abstract fun copyBuffer(buffer: ArrayBuffer): ArrayBuffer
   
   @DoNotStrip
@@ -666,6 +671,7 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @Keep
   protected open class CxxPart(javaPart: HybridTestObjectSwiftKotlinSpec): HybridObject.CxxPart(javaPart) {
     // C++ JHybridTestObjectSwiftKotlinSpec::CxxPart::initHybrid(...)
+    @FastNative
     external override fun initHybrid(): HybridData
   }
   override fun createCxxPart(): CxxPart {

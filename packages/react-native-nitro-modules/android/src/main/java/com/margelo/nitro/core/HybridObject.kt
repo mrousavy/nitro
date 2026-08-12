@@ -4,7 +4,7 @@ import androidx.annotation.CallSuper
 import androidx.annotation.Keep
 import com.facebook.jni.HybridData
 import com.facebook.proguard.annotations.DoNotStrip
-import java.lang.ref.WeakReference
+import dalvik.annotation.optimization.FastNative
 
 /**
  * A base class for all Kotlin-based HybridObjects.
@@ -48,8 +48,10 @@ abstract class HybridObject {
   @Keep
   @CallSuper
   open fun dispose() {
-    cxxPartCache?.get()?.destroy()
-    cxxPartCache = null
+    synchronized(this) {
+      cxxPart?.destroy()
+      cxxPart = null
+    }
   }
 
   /**
@@ -70,19 +72,28 @@ abstract class HybridObject {
     return CxxPart(this)
   }
 
-  private var cxxPartCache: WeakReference<CxxPart>? = null
+  /**
+   * Java `HybridObject` owns a (lazy) reference to Java `CxxPart`,
+   * which itself owns the C++ `CxxPart`.
+   * The C++ `CxxPart` must NOT have a reference back to Java,
+   * otherwise a cyclic reference outside of JVM is created (= mem leak)
+   */
+  private var cxxPart: CxxPart? = null
 
   @Suppress("unused")
   @DoNotStrip
   @Keep
   private fun getCxxPart(): CxxPart {
-    cxxPartCache?.get()?.let {
-      // It's still in strong cache!
-      return it
+    synchronized(this) {
+      val currentCxxPart = this.cxxPart
+      if (currentCxxPart != null) {
+        return currentCxxPart
+      } else {
+        val newCxxPart = createCxxPart()
+        this.cxxPart = newCxxPart
+        return newCxxPart
+      }
     }
-    val cxxPart = createCxxPart()
-    cxxPartCache = WeakReference(cxxPart)
-    return cxxPart
   }
 
   @Keep
@@ -101,10 +112,18 @@ abstract class HybridObject {
       mHybridData = initHybrid()
     }
 
+    /**
+     * Eagerly destroy the `CxxPart` and it's backing
+     * C++ class.
+     * If this is not called manually, the Java Garbage Collector
+     * will eventually destroy the object (and it's backing C++
+     * class) automatically.
+     */
     fun destroy() {
       mHybridData.resetNative()
     }
 
+    @FastNative
     protected open external fun initHybrid(): HybridData
   }
 }
