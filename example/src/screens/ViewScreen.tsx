@@ -5,6 +5,7 @@ import { callback, NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import {
+  MeasuredView,
   HybridTestObjectSwiftKotlin,
   RecyclableTestView,
   TestView,
@@ -13,6 +14,29 @@ import { useIsFocused } from '@react-navigation/native'
 
 const VIEWS_X = 15
 const VIEWS_Y = 15
+
+const MeasuredViewImpl = () => {
+  const [longText, setLongText] = React.useState(false)
+  const measuredText = longText
+    ? 'MeasuredView sizes its own height from this text a long string that wraps onto several lines, so the bordered box grows to fit it. Tap the button to shrink it.'
+    : 'MeasuredView: tap below to grow.'
+
+  return (
+    <View style={styles.measuredWrapper}>
+      <MeasuredView
+        text={measuredText}
+        fontSize={17}
+        style={styles.measuredView}
+      />
+      <View style={styles.measuredButtonRow}>
+        <Button
+          title={longText ? 'Shrink text' : 'Grow text'}
+          onPress={() => setLongText((v) => !v)}
+        />
+      </View>
+    </View>
+  )
+}
 
 export function ViewScreenImpl() {
   const safeArea = useSafeAreaInsets()
@@ -76,6 +100,8 @@ export function ViewScreenImpl() {
         <Text style={styles.buildTypeText}>{NitroModules.buildType}</Text>
       </View>
 
+      <MeasuredViewImpl />
+
       <View style={styles.resultContainer}>
         <View style={[styles.viewShadow]}>
           <View style={[styles.viewBorder, { borderColor: colors.foreground }]}>
@@ -127,6 +153,23 @@ const styles = StyleSheet.create({
       android: 'monospace',
     }),
     fontWeight: 'bold',
+  },
+  // No fixed height: the box grows to the height MeasuredView measures.
+  measuredWrapper: {
+    marginHorizontal: 15,
+    marginBottom: 15,
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'teal',
+    backgroundColor: 'rgba(0, 128, 128, 0.12)',
+  },
+  measuredView: {
+    width: '100%',
+  },
+  measuredButtonRow: {
+    marginTop: 8,
+    alignItems: 'flex-start',
   },
   segmentedControl: {
     minWidth: 180,

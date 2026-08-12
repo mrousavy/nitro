@@ -74,6 +74,16 @@
         "language": "kotlin",
         "implementationClassName": "HybridRecyclableTestView"
       }
+    },
+    "MeasuredView": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "HybridMeasuredView"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "HybridMeasuredView"
+      }
     }
   },
   "ignorePaths": [
