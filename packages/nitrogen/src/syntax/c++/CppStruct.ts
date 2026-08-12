@@ -1,4 +1,4 @@
-import type { FileWithReferencedTypes } from '../SourceFile.js'
+import type { FileWithReferencedTypes, SourceFile } from '../SourceFile.js'
 import { indent } from '../../utils.js'
 import { createFileMetadataString, isNotDuplicate } from '../helpers.js'
 import type { NamedType } from '../types/Type.js'
@@ -55,7 +55,9 @@ export function createCppStruct(
   let equatableFunc: string
   const isEquatable = properties.every((p) => p.isEquatable)
   if (isEquatable) {
-    equatableFunc = `friend bool operator==(const ${typename}& lhs, const ${typename}& rhs) = default;`
+    // Declared here, defaulted OUT-OF-LINE (C++20) in ${typename}.cpp — see
+    // createCppStructEqualityDefinition for why it cannot stay in-class.
+    equatableFunc = `friend bool operator==(const ${typename}& lhs, const ${typename}& rhs);`
   } else {
     const nonEquatableTypes = properties
       .filter((p) => !p.isEquatable)
@@ -144,6 +146,48 @@ namespace margelo::nitro {
     subdirectory: [],
     language: 'c++',
     referencedTypes: properties,
+    platform: 'shared',
+  }
+}
+
+/**
+ * Creates the companion `.cpp` for an equatable struct, holding the
+ * out-of-line defaulted `operator==` (C++20).
+ *
+ * An in-class `= default` is an INLINE definition, which clang only emits into
+ * translation units that call it from C++. Swift's C++ interop instead
+ * references it as an external symbol without emitting a copy, so when Swift
+ * is the only caller — and Swift and C++ compile into separate archives, as
+ * they do under SwiftPM — nothing emits it:
+ *
+ *     Undefined symbols: "margelo::nitro::…::operator==(Car const&, Car const&)",
+ *       referenced from: …HybridTestObjectSwift.areCarsEqual(a:b:)
+ *
+ * Defining it in a TU is the only fix that guarantees a symbol: marking the
+ * in-class default `[[gnu::used]]` changes nothing, because clang emits no
+ * symbol at all for a defaulted comparison operator (verified: 0 symbols).
+ */
+export function createCppStructEqualityDefinition(
+  typename: string
+): SourceFile {
+  const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const cppCode = `
+${createFileMetadataString(`${typename}.cpp`)}
+
+#include "${typename}.hpp"
+
+namespace ${cxxNamespace} {
+
+  // Out-of-line defaulted comparison (C++20) — see ${typename}.hpp.
+  bool operator==(const ${typename}& lhs, const ${typename}& rhs) = default;
+
+} // namespace ${cxxNamespace}
+  `
+  return {
+    content: cppCode,
+    name: `${typename}.cpp`,
+    subdirectory: [],
+    language: 'c++',
     platform: 'shared',
   }
 }
