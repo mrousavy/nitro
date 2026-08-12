@@ -47,6 +47,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 |--------|-------------|-------|
 | **@rive-app/react-native** | Rive animations built with Nitro | [GitHub](https://github.com/rive-app/rive-nitro-react-native) |
 | **react-native-nitro-palette** | Dominant color palette extraction | [GitHub](https://github.com/Ucekay/nitro-palette) |
+| **react-native-nitro-theme-transition** | GPU-driven theme-change transitions, sixteen effects | [GitHub](https://github.com/saleh2001k/react-native-nitro-theme-transition) |
 
 ### Cryptography & Security
 
