@@ -153,19 +153,6 @@ namespace margelo::nitro {
 /**
  * Creates the companion `.cpp` for an equatable struct, holding the
  * out-of-line defaulted `operator==` (C++20).
- *
- * An in-class `= default` is an INLINE definition, which clang only emits into
- * translation units that call it from C++. Swift's C++ interop instead
- * references it as an external symbol without emitting a copy, so when Swift
- * is the only caller — and Swift and C++ compile into separate archives, as
- * they do under SwiftPM — nothing emits it:
- *
- *     Undefined symbols: "margelo::nitro::…::operator==(Car const&, Car const&)",
- *       referenced from: …HybridTestObjectSwift.areCarsEqual(a:b:)
- *
- * Defining it in a TU is the only fix that guarantees a symbol: marking the
- * in-class default `[[gnu::used]]` changes nothing, because clang emits no
- * symbol at all for a defaulted comparison operator (verified: 0 symbols).
  */
 export function createCppStructEqualityDefinition(
   typename: string

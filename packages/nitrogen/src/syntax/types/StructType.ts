@@ -22,8 +22,6 @@ export class StructType implements Type {
     this.structName = structName
     this.properties = properties
     this.declarationFile = createCppStruct(structName, properties)
-    // Equatable structs get a companion .cpp holding the out-of-line
-    // defaulted operator== (external linkage — required by Swift interop).
     this.equalityDefinitionFile = properties.every((p) => p.isEquatable)
       ? createCppStructEqualityDefinition(structName)
       : undefined
