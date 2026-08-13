@@ -45,7 +45,7 @@ export function createSwiftHybridViewManager(
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.${name}.isDirty) {
+if ((forceUpdate && newViewProps.${name}.hasValue()) || newViewProps.${name}.isDirty) {
   swiftPart.${setter}(${indent(parse, '  ')});
   newViewProps.${name}.isDirty = false;
 }
@@ -87,6 +87,7 @@ using namespace ${namespace}::views;
 
 @implementation ${component} {
   std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+  BOOL _didUpdateProps;
 }
 
 + (void) load {
@@ -126,15 +127,22 @@ using namespace ${namespace}::views;
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop individually
+  // 2. \`isDirty\` only tells us whether a prop changed in the ShadowTree - not whether it has
+  //    ever been applied to *this* View. Fabric can create a new View for a ShadowNode that
+  //    did not change (e.g. when a subtree is hidden and shown again), in which case no prop
+  //    would be dirty at all. A newly created (or recycled) View therefore applies all props once.
+  const bool forceUpdate = !_didUpdateProps;
+  _didUpdateProps = YES;
+
+  // 3. Update each prop individually
   swiftPart.beforeUpdate();
 
   ${indent(propAssignments.join('\n'), '  ')}
 
   swiftPart.afterUpdate();
 
-  // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  // 4. Update hybridRef if it changed
+  if ((forceUpdate && newViewProps.hybridRef.hasValue()) || newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
@@ -143,7 +151,7 @@ using namespace ${namespace}::views;
     newViewProps.hybridRef.isDirty = false;
   }
 
-  // 4. Continue in base class
+  // 5. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 
@@ -153,6 +161,8 @@ using namespace ${namespace}::views;
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
+  // This View will be re-used for a different ShadowNode later on, so it needs all props again.
+  _didUpdateProps = NO;
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }

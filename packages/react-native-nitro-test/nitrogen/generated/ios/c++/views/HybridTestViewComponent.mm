@@ -37,6 +37,7 @@ using namespace margelo::nitro::test::views;
 
 @implementation HybridTestViewComponent {
   std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+  BOOL _didUpdateProps;
 }
 
 + (void) load {
@@ -76,34 +77,41 @@ using namespace margelo::nitro::test::views;
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
   NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop individually
+  // 2. `isDirty` only tells us whether a prop changed in the ShadowTree - not whether it has
+  //    ever been applied to *this* View. Fabric can create a new View for a ShadowNode that
+  //    did not change (e.g. when a subtree is hidden and shown again), in which case no prop
+  //    would be dirty at all. A newly created (or recycled) View therefore applies all props once.
+  const bool forceUpdate = !_didUpdateProps;
+  _didUpdateProps = YES;
+
+  // 3. Update each prop individually
   swiftPart.beforeUpdate();
 
   // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
+  if ((forceUpdate && newViewProps.isBlue.hasValue()) || newViewProps.isBlue.isDirty) {
     swiftPart.setIsBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
-  if (newViewProps.hasBeenCalled.isDirty) {
+  if ((forceUpdate && newViewProps.hasBeenCalled.hasValue()) || newViewProps.hasBeenCalled.isDirty) {
     swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
-  if (newViewProps.colorScheme.isDirty) {
+  if ((forceUpdate && newViewProps.colorScheme.hasValue()) || newViewProps.colorScheme.isDirty) {
     swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
-  if (newViewProps.someCallback.isDirty) {
+  if ((forceUpdate && newViewProps.someCallback.hasValue()) || newViewProps.someCallback.isDirty) {
     swiftPart.setSomeCallback(newViewProps.someCallback.value);
     newViewProps.someCallback.isDirty = false;
   }
 
   swiftPart.afterUpdate();
 
-  // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  // 4. Update hybridRef if it changed
+  if ((forceUpdate && newViewProps.hybridRef.hasValue()) || newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
@@ -112,7 +120,7 @@ using namespace margelo::nitro::test::views;
     newViewProps.hybridRef.isDirty = false;
   }
 
-  // 4. Continue in base class
+  // 5. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 
@@ -122,6 +130,8 @@ using namespace margelo::nitro::test::views;
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
+  // This View will be re-used for a different ShadowNode later on, so it needs all props again.
+  _didUpdateProps = NO;
   NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }

@@ -13,6 +13,7 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import com.margelo.nitro.R.id.associated_hybrid_view_tag
+import com.margelo.nitro.R.id.needs_full_props_update_tag
 import com.margelo.nitro.views.RecyclableView
 import com.margelo.nitro.test.*
 
@@ -35,6 +36,7 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
     val hybridView = HybridRecyclableTestView(reactContext)
     val view = hybridView.view
     view.setTag(associated_hybrid_view_tag, hybridView)
+    view.setTag(needs_full_props_update_tag, true)
     return view
   }
 
@@ -42,12 +44,19 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
     val hybridView = getHybridView(view)
       ?: throw Error("Couldn't find view $view in local views table!")
 
-    // 1. Update each prop individually
+    // 1. `isDirty` only tells us whether a prop changed in the ShadowTree - not whether it has
+    //    ever been applied to this View. Fabric can create a new View for a ShadowNode that did
+    //    not change (e.g. when a subtree is hidden and shown again), in which case no prop would
+    //    be dirty at all. A newly created (or recycled) View therefore applies all props once.
+    val forceUpdate = view.getTag(needs_full_props_update_tag) as? Boolean ?: true
+    view.setTag(needs_full_props_update_tag, false)
+
+    // 2. Update each prop individually
     hybridView.beforeUpdate()
-    HybridRecyclableTestViewStateUpdater.updateViewProps(hybridView, stateWrapper)
+    HybridRecyclableTestViewStateUpdater.updateViewProps(hybridView, stateWrapper, forceUpdate)
     hybridView.afterUpdate()
 
-    // 2. Continue in base View props
+    // 3. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 
@@ -66,6 +75,9 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
     if (hybridView is RecyclableView) {
       // Recycle in it's implementation
       hybridView.prepareForRecycle()
+
+      // This View will be re-used for a different ShadowNode later on, so it needs all props again.
+      hybridView.view.setTag(needs_full_props_update_tag, true)
 
       // Maybe update the view if it changed
       return hybridView.view

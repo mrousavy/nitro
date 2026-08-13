@@ -17,7 +17,8 @@ using ConcreteStateData = react::ConcreteState<HybridRecyclableTestViewState>;
 
 void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> javaView,
-                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
+                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                                           jboolean forceUpdate) {
   std::shared_ptr<JHybridRecyclableTestViewSpec> hybridView = javaView->getJHybridRecyclableTestViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
@@ -37,13 +38,13 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   }
 
   // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
+  if ((forceUpdate && props->isBlue.hasValue()) || props->isBlue.isDirty) {
     hybridView->setIsBlue(props->isBlue.value);
     props->isBlue.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if ((forceUpdate && props->hybridRef.hasValue()) || props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {

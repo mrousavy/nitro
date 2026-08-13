@@ -31,7 +31,8 @@ public:
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> view,
-                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
+                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                              jboolean forceUpdate);
 
 public:
   static void registerNatives() {

@@ -49,6 +49,7 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.StateWrapper
 import com.facebook.react.uimanager.ThemedReactContext
 import com.margelo.nitro.R.id.associated_hybrid_view_tag
+import com.margelo.nitro.R.id.needs_full_props_update_tag
 import com.margelo.nitro.views.RecyclableView
 import ${javaNamespace}.*
 
@@ -71,6 +72,7 @@ public class ${manager}: SimpleViewManager<View>() {
     val hybridView = ${viewImplementation}(reactContext)
     val view = hybridView.view
     view.setTag(associated_hybrid_view_tag, hybridView)
+    view.setTag(needs_full_props_update_tag, true)
     return view
   }
 
@@ -78,12 +80,19 @@ public class ${manager}: SimpleViewManager<View>() {
     val hybridView = getHybridView(view)
       ?: throw Error("Couldn't find view $view in local views table!")
 
-    // 1. Update each prop individually
+    // 1. \`isDirty\` only tells us whether a prop changed in the ShadowTree - not whether it has
+    //    ever been applied to this View. Fabric can create a new View for a ShadowNode that did
+    //    not change (e.g. when a subtree is hidden and shown again), in which case no prop would
+    //    be dirty at all. A newly created (or recycled) View therefore applies all props once.
+    val forceUpdate = view.getTag(needs_full_props_update_tag) as? Boolean ?: true
+    view.setTag(needs_full_props_update_tag, false)
+
+    // 2. Update each prop individually
     hybridView.beforeUpdate()
-    ${stateUpdaterName}.updateViewProps(hybridView, stateWrapper)
+    ${stateUpdaterName}.updateViewProps(hybridView, stateWrapper, forceUpdate)
     hybridView.afterUpdate()
 
-    // 2. Continue in base View props
+    // 3. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 
@@ -102,6 +111,9 @@ public class ${manager}: SimpleViewManager<View>() {
     if (hybridView is RecyclableView) {
       // Recycle in it's implementation
       hybridView.prepareForRecycle()
+
+      // This View will be re-used for a different ShadowNode later on, so it needs all props again.
+      hybridView.view.setTag(needs_full_props_update_tag, true)
 
       // Maybe update the view if it changed
       return hybridView.view
@@ -132,7 +144,7 @@ internal class ${stateUpdaterName} {
      */
     @Suppress("KotlinJniMissingFunction")
     @JvmStatic
-    external fun updateViewProps(view: ${HybridTSpec}, state: StateWrapper)
+    external fun updateViewProps(view: ${HybridTSpec}, state: StateWrapper, forceUpdate: Boolean)
   }
 }
   `.trim()
@@ -171,7 +183,8 @@ public:
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<${JHybridTSpec}::JavaPart> view,
-                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
+                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                              jboolean forceUpdate);
 
 public:
   static void registerNatives() {
@@ -193,7 +206,7 @@ public:
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (props->${name}.isDirty) {
+if ((forceUpdate && props->${name}.hasValue()) || props->${name}.isDirty) {
   hybridView->${setter}(props->${name}.value);
   props->${name}.isDirty = false;
 }
@@ -214,7 +227,8 @@ using ConcreteStateData = react::ConcreteState<${stateClassName}>;
 
 void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<${JHybridTSpec}::JavaPart> javaView,
-                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
+                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                                           jboolean forceUpdate) {
   std::shared_ptr<${JHybridTSpec}> hybridView = javaView->get${JHybridTSpec}();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
@@ -237,7 +251,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if ((forceUpdate && props->hybridRef.hasValue()) || props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {

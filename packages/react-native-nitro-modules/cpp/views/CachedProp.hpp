@@ -33,6 +33,15 @@ private:
   BorrowingReference<jsi::Value> jsiValue;
 
 public:
+  /**
+   * Whether this prop ever received a value from JS.
+   * A prop that was never set by JS still holds a default-constructed `value`,
+   * which must not be applied to the View.
+   */
+  bool hasValue() const noexcept {
+    return jsiValue != nullptr;
+  }
+
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
     if (jsiValue == nullptr) {
       return false;

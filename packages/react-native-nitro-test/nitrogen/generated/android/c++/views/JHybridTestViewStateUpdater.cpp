@@ -17,7 +17,8 @@ using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 
 void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                                            jni::alias_ref<JHybridTestViewSpec::JavaPart> javaView,
-                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
+                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                                           jboolean forceUpdate) {
   std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getJHybridTestViewSpec();
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
@@ -37,25 +38,25 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   }
 
   // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
+  if ((forceUpdate && props->isBlue.hasValue()) || props->isBlue.isDirty) {
     hybridView->setIsBlue(props->isBlue.value);
     props->isBlue.isDirty = false;
   }
-  if (props->hasBeenCalled.isDirty) {
+  if ((forceUpdate && props->hasBeenCalled.hasValue()) || props->hasBeenCalled.isDirty) {
     hybridView->setHasBeenCalled(props->hasBeenCalled.value);
     props->hasBeenCalled.isDirty = false;
   }
-  if (props->colorScheme.isDirty) {
+  if ((forceUpdate && props->colorScheme.hasValue()) || props->colorScheme.isDirty) {
     hybridView->setColorScheme(props->colorScheme.value);
     props->colorScheme.isDirty = false;
   }
-  if (props->someCallback.isDirty) {
+  if ((forceUpdate && props->someCallback.hasValue()) || props->someCallback.isDirty) {
     hybridView->setSomeCallback(props->someCallback.value);
     props->someCallback.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if ((forceUpdate && props->hybridRef.hasValue()) || props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {

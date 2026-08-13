@@ -18,6 +18,6 @@ internal class HybridRecyclableTestViewStateUpdater {
      */
     @Suppress("KotlinJniMissingFunction")
     @JvmStatic
-    external fun updateViewProps(view: HybridRecyclableTestViewSpec, state: StateWrapper)
+    external fun updateViewProps(view: HybridRecyclableTestViewSpec, state: StateWrapper, forceUpdate: Boolean)
   }
 }
