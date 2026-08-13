@@ -264,6 +264,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceOptionals(strings: Array<String?>, arrayBuffers: Array<ArrayBuffer?>, map: Map<String, String?>): Array<String?>
+  
+  @DoNotStrip
+  @Keep
   abstract fun createMap(): AnyMap
   
   @DoNotStrip

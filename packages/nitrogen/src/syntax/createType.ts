@@ -269,7 +269,11 @@ export function createType(
       return new VoidType()
     } else if (type.isArray()) {
       const arrayElementType = type.getArrayElementTypeOrThrow()
-      const elementType = createType(language, arrayElementType, false)
+      const elementType = createType(
+        language,
+        arrayElementType,
+        arrayElementType.isNullable()
+      )
       return new ArrayType(elementType)
     } else if (type.isTuple()) {
       const itemTypes = type
@@ -308,7 +312,11 @@ export function createType(
       // Record<K, V> -> unordered_map<K, V>
       const [keyTypeT, valueTypeT] = getArguments(type, 'Record', 2)
       const keyType = createType(language, keyTypeT, false)
-      const valueType = createType(language, valueTypeT, false)
+      const valueType = createType(
+        language,
+        valueTypeT,
+        valueTypeT.isNullable()
+      )
       return new RecordType(keyType, valueType)
     } else if (isArrayBuffer(type)) {
       // ArrayBuffer

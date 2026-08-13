@@ -227,6 +227,12 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return arrayBuffers
   }
 
+  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?], map: [String: String?])
+    throws -> [String?]
+  {
+    return strings
+  }
+
   func createMap() throws -> AnyMap {
     let map = AnyMap()
     map.setDouble(key: "number", value: numberValue)
