@@ -30,6 +30,7 @@ using namespace margelo::nitro::test::views;
 
 /**
  * Represents the React Native View holder for the Nitro "TestView" HybridView.
+ * Supports rendering children by extending RCTViewComponentView with child handling.
  */
 @interface HybridTestViewComponent: RCTViewComponentView
 + (BOOL)shouldBeRecycled;
@@ -37,6 +38,7 @@ using namespace margelo::nitro::test::views;
 
 @implementation HybridTestViewComponent {
   std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+  UIView* _contentView;
 }
 
 + (void) load {
@@ -65,8 +67,31 @@ using namespace margelo::nitro::test::views;
   void* viewUnsafe = swiftPart.getView();
   UIView* view = (__bridge_transfer UIView*) viewUnsafe;
 
-  // 3. Update RCTViewComponentView's [contentView]
+  // 3. Store reference for children management
+  _contentView = view;
+
+  // 4. Set the view as contentView
   [self setContentView:view];
+}
+
+// ===== CHILDREN SUPPORT - NEW CODE ADDED =====
+
+- (void)mountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
+                          index:(NSInteger)index {
+  // 1. Check if contentView exists
+  if (_contentView != nil) {
+    // 2. Add child to contentView
+    [_contentView insertSubview:childComponentView atIndex:index];
+  } else {
+    // 3. Fallback to self if contentView not yet set
+    [self insertSubview:childComponentView atIndex:index];
+  }
+}
+
+- (void)unmountChildComponentView:(UIView<RCTComponentViewProtocol> *)childComponentView
+                             index:(NSInteger)index {
+  // 1. Remove child from view hierarchy
+  [childComponentView removeFromSuperview];
 }
 
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
