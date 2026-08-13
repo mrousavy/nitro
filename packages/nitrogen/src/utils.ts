@@ -154,7 +154,7 @@ export function getHybridObjectNitroModuleConfig(
     const hasNitroJson = fs.existsSync(nitroJsonPath)
     if (hasNitroJson) {
       const config = readUserConfig(nitroJsonPath)
-      return new NitroConfig(config)
+      return new NitroConfig(config, filePath)
     }
   }
 }

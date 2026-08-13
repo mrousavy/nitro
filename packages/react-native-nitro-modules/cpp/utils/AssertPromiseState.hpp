@@ -11,11 +11,6 @@ namespace margelo::nitro {
 template <typename TResult>
 class Promise;
 
-// Declared up here, next to the `Promise` forward declaration, because
-// Promise.hpp (included below) uses PromiseTask and includes this header back.
-// Whichever of the two is entered first must therefore have PromiseTask
-// already visible — as happens when a build system compiles the module's
-// public headers as a clang module and enters this one first.
 enum PromiseTask { WANTS_TO_RESOLVE, WANTS_TO_REJECT };
 } // namespace margelo::nitro
 

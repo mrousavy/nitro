@@ -22,7 +22,9 @@
     "app.plugin.js",
     "*.podspec",
     "nitro_pod_utils.rb",
-    "README.md"
+    "README.md",
+    "Package.swift",
+    "scripts/rn-spm-autolinking-plugin.cjs"
   ],
   "keywords": [
     "react-native",

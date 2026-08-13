@@ -198,7 +198,7 @@ export async function runNitrogen({
   const autolinkingFiles: Autolinking[] = []
 
   if (usedPlatforms.includes('ios')) {
-    autolinkingFiles.push(createIOSAutolinking())
+    autolinkingFiles.push(createIOSAutolinking(outputDirectory))
   }
   if (usedPlatforms.includes('android')) {
     autolinkingFiles.push(createAndroidAutolinking(writtenFiles))
