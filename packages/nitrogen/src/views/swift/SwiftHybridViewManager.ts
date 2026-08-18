@@ -45,7 +45,7 @@ export function createSwiftHybridViewManager(
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.${name}.isDirty) {
+if (force || newViewProps.${name}.isDirty) {
   swiftPart.${setter}(${indent(parse, '  ')});
   newViewProps.${name}.isDirty = false;
 }
@@ -87,6 +87,15 @@ using namespace ${namespace}::views;
 
 @implementation ${component} {
   std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+  // Fabric can mount this component view with a Props object whose isDirty
+  // flags were already consumed by a different view instance:
+  // - a view recreated from an unchanged ShadowNode (e.g. react-freeze /
+  //   Suspense re-inserting a previously hidden screen), or
+  // - a recycled view being remounted for another ShadowNode.
+  // In both cases updateProps would apply nothing and the fresh HybridView
+  // would stay unconfigured (and hybridRef would never fire).
+  // Force-apply every prop on this instance's first updateProps.
+  BOOL _didApplyInitialProps;
 }
 
 + (void) load {
@@ -126,6 +135,11 @@ using namespace ${namespace}::views;
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
+  // Force-apply all props the first time this view instance updates
+  // (see _didApplyInitialProps above).
+  BOOL force = !_didApplyInitialProps;
+  _didApplyInitialProps = YES;
+
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
@@ -134,7 +148,7 @@ using namespace ${namespace}::views;
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (force || newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
@@ -153,6 +167,9 @@ using namespace ${namespace}::views;
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
+  // The next mount serves a different ShadowNode whose props' isDirty flags
+  // may already be consumed - force-apply them again.
+  _didApplyInitialProps = NO;
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }

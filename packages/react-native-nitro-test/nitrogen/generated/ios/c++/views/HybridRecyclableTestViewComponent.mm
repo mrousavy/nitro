@@ -37,6 +37,15 @@ using namespace margelo::nitro::test::views;
 
 @implementation HybridRecyclableTestViewComponent {
   std::shared_ptr<HybridRecyclableTestViewSpecSwift> _hybridView;
+  // Fabric can mount this component view with a Props object whose isDirty
+  // flags were already consumed by a different view instance:
+  // - a view recreated from an unchanged ShadowNode (e.g. react-freeze /
+  //   Suspense re-inserting a previously hidden screen), or
+  // - a recycled view being remounted for another ShadowNode.
+  // In both cases updateProps would apply nothing and the fresh HybridView
+  // would stay unconfigured (and hybridRef would never fire).
+  // Force-apply every prop on this instance's first updateProps.
+  BOOL _didApplyInitialProps;
 }
 
 + (void) load {
@@ -76,11 +85,16 @@ using namespace margelo::nitro::test::views;
   auto& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
+  // Force-apply all props the first time this view instance updates
+  // (see _didApplyInitialProps above).
+  BOOL force = !_didApplyInitialProps;
+  _didApplyInitialProps = YES;
+
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
   // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
+  if (force || newViewProps.isBlue.isDirty) {
     swiftPart.setIsBlue(newViewProps.isBlue.value);
     newViewProps.isBlue.isDirty = false;
   }
@@ -88,7 +102,7 @@ using namespace margelo::nitro::test::views;
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (force || newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
@@ -107,6 +121,9 @@ using namespace margelo::nitro::test::views;
 
 - (void)prepareForRecycle {
   [super prepareForRecycle];
+  // The next mount serves a different ShadowNode whose props' isDirty flags
+  // may already be consumed - force-apply them again.
+  _didApplyInitialProps = NO;
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
 }
