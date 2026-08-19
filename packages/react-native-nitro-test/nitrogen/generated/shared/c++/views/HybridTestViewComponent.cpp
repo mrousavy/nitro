@@ -88,29 +88,4 @@ namespace margelo::nitro::test::views {
     }
   }
 
-  HybridTestViewComponentDescriptor::HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-    : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser()) {}
-
-  std::shared_ptr<const react::Props> HybridTestViewComponentDescriptor::cloneProps(const react::PropsParserContext& context,
-                                                                                    const std::shared_ptr<const react::Props>& props,
-                                                                                    react::RawProps rawProps) const {
-    // 1. Prepare raw props parser
-    rawProps.parse(rawPropsParser_);
-    // 2. Copy props with Nitro's cached copy constructor
-    return HybridTestViewShadowNode::Props(context, /* & */ rawProps, props);
-  }
-
-#ifdef ANDROID
-  void HybridTestViewComponentDescriptor::adopt(react::ShadowNode& shadowNode) const {
-    // This is called immediately after `ShadowNode` is created, cloned or in progress.
-    // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<HybridTestViewShadowNode&>(shadowNode);
-    const std::shared_ptr<const HybridTestViewProps>& constProps = concreteShadowNode.getConcreteSharedProps();
-    const std::shared_ptr<HybridTestViewProps>& props = std::const_pointer_cast<HybridTestViewProps>(constProps);
-    HybridTestViewState state{props};
-    concreteShadowNode.setStateData(std::move(state));
-  }
-#endif
-
 } // namespace margelo::nitro::test::views
