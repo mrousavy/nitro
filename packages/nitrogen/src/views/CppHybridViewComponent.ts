@@ -86,6 +86,13 @@ export function createViewComponentShadowNodeFiles(
     const name = escapeCppName(prop.name)
     return `${name}.isProvided()`
   })
+  const setterCases = props.map((prop) => {
+    const name = escapeCppName(prop.name)
+    const type = prop.type.getCode('c++')
+    return `case CONSTEXPR_RAW_PROPS_KEY_HASH("${prop.name}"):
+  ${name} = nitro::CachedProp<${type}>::fromRawValue("${spec.name}", "${prop.name}", value, ${name});
+  return;`
+  })
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -102,6 +109,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <NitroModules/CachedProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <cxxreact/ReactNativeVersion.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 #include <react/renderer/core/PropsParserContext.h>
@@ -129,6 +137,20 @@ namespace ${namespace} {
     ${propsClassName}(const react::PropsParserContext& context,
   ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
   ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
+
+#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87
+    void setProp(const react::PropsParserContext& context,
+                 react::RawPropsPropNameHash hash,
+                 const char* propName,
+                 const react::RawValue& value);
+#endif
+
+#if defined(RN_SERIALIZABLE_STATE) && (REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87)
+    void initializeDynamicProps(const ${propsClassName}& sourceProps,
+                                const react::RawProps& rawProps) {
+      react::ViewProps::initializeDynamicProps(sourceProps, rawProps, filterObjectKeys);
+    }
+#endif
 
   public:
     ${indent(properties.join('\n'), '    ')}
@@ -179,6 +201,7 @@ namespace ${namespace} {
     }),
   ]
   const ctorIndent = createIndentation(propsClassName.length * 2)
+  const setterIndent = createIndentation(propsClassName.length + 17)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
@@ -186,6 +209,7 @@ ${createFileMetadataString(`${component}.cpp`)}
 
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
+#include <react/renderer/core/PropsMacros.h>
 
 namespace ${namespace} {
 
@@ -197,6 +221,21 @@ namespace ${namespace} {
   ${ctorIndent}   const ${propsClassName}& sourceProps,
   ${ctorIndent}   const react::RawProps& rawProps):
     ${indent(propInitializers.join(',\n'), '    ')} { }
+
+#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87
+  void ${propsClassName}::setProp(const react::PropsParserContext& context,
+${setterIndent}react::RawPropsPropNameHash hash,
+${setterIndent}const char* propName,
+${setterIndent}const react::RawValue& value) {
+    react::ViewProps::setProp(context, hash, propName, value);
+
+    using react::RawPropsPropNameHash;
+    switch (hash) {
+      ${indent(setterCases.join('\n'), '      ')}
+      default: return;
+    }
+  }
+#endif
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

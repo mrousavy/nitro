@@ -9,6 +9,7 @@
 
 #include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
+#include <react/renderer/core/PropsMacros.h>
 
 namespace margelo::nitro::test::views {
 
@@ -26,6 +27,38 @@ namespace margelo::nitro::test::views {
     someCallback(nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
     nativeDefaultValue(nitro::CachedProp<std::optional<double>>::fromRawValue("TestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
     hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
+
+#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87
+  void HybridTestViewProps::setProp(const react::PropsParserContext& context,
+                                    react::RawPropsPropNameHash hash,
+                                    const char* propName,
+                                    const react::RawValue& value) {
+    react::ViewProps::setProp(context, hash, propName, value);
+
+    using react::RawPropsPropNameHash;
+    switch (hash) {
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("isBlue"):
+        isBlue = nitro::CachedProp<bool>::fromRawValue("TestView", "isBlue", value, isBlue);
+        return;
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("hasBeenCalled"):
+        hasBeenCalled = nitro::CachedProp<bool>::fromRawValue("TestView", "hasBeenCalled", value, hasBeenCalled);
+        return;
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("colorScheme"):
+        colorScheme = nitro::CachedProp<ColorScheme>::fromRawValue("TestView", "colorScheme", value, colorScheme);
+        return;
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("someCallback"):
+        someCallback = nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", value, someCallback);
+        return;
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("nativeDefaultValue"):
+        nativeDefaultValue = nitro::CachedProp<std::optional<double>>::fromRawValue("TestView", "nativeDefaultValue", value, nativeDefaultValue);
+        return;
+      case CONSTEXPR_RAW_PROPS_KEY_HASH("hybridRef"):
+        hybridRef = nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", value, hybridRef);
+        return;
+      default: return;
+    }
+  }
+#endif
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

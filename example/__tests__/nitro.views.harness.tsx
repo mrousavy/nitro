@@ -212,15 +212,20 @@ describe('TestView', () => {
   it('updates every prop, changes pixels, and resizes the same native view', async () => {
     const initialRef = deferred<TestViewRef>()
     const initialCallback = fn()
+    const initialHybridRefCallback = fn((view: TestViewRef) =>
+      initialRef.resolve(view)
+    )
+    const initialHybridRef = callback(initialHybridRefCallback)
+    const initialSomeCallback = callback(initialCallback)
     const renderResult = await render(
       <TestView
         testID="test-view-updates"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => initialRef.resolve(view))}
+        hybridRef={initialHybridRef}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
-        someCallback={callback(initialCallback)}
+        someCallback={initialSomeCallback}
       />,
       { timeout: RENDER_TIMEOUT }
     )
@@ -229,6 +234,34 @@ describe('TestView', () => {
     const blueCapture = await captureView('test-view-updates')
     expectRenderedSize(blueCapture.size, INITIAL_SIZE)
     expectBlue(blueCapture.pixelCoverage)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-updates"
+        style={INITIAL_SIZE}
+        isBlue={true}
+        hasBeenCalled={true}
+        colorScheme="dark"
+        someCallback={initialSomeCallback}
+      />
+    )
+
+    expect(firstView.hasBeenCalled).toBe(true)
+    expect(initialHybridRefCallback).toHaveBeenCalledTimes(1)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-updates"
+        style={INITIAL_SIZE}
+        hybridRef={initialHybridRef}
+        isBlue={true}
+        hasBeenCalled={true}
+        colorScheme="dark"
+        someCallback={initialSomeCallback}
+      />
+    )
+
+    expect(initialHybridRefCallback).toHaveBeenCalledTimes(2)
 
     const updatedRef = deferred<TestViewRef>()
     const updatedCallbackFinished = deferred<void>()
