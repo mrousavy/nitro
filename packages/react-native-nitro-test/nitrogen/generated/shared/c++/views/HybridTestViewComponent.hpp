@@ -7,14 +7,8 @@
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/HybridViewProps.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
 
@@ -31,28 +25,18 @@ namespace margelo::nitro::test::views {
   /**
    * The name of the actual native View.
    */
-  extern const char HybridTestViewComponentName[];
+  inline constexpr char HybridTestViewComponentName[] = "TestView";
 
   /**
    * Props for the "TestView" View.
    */
-  class HybridTestViewProps final: public react::ViewProps {
-  public:
-    HybridTestViewProps() = default;
-    HybridTestViewProps(const react::PropsParserContext& context,
-                        const HybridTestViewProps& sourceProps,
-                        const react::RawProps& rawProps);
-
-  public:
-    CachedProp<bool> isBlue;
-    CachedProp<bool> hasBeenCalled;
-    CachedProp<ColorScheme> colorScheme;
-    CachedProp<std::function<void()>> someCallback;
-    CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
-
-  private:
-    static bool filterObjectKeys(const std::string& propName);
-  };
+  using HybridTestViewProps = nitro::HybridViewProps<
+      "TestView",
+      nitro::ViewProp<"isBlue", bool>,
+      nitro::ViewProp<"hasBeenCalled", bool>,
+      nitro::ViewProp<"colorScheme", ColorScheme>,
+      nitro::ViewProp<"someCallback", std::function<void()>>,
+      nitro::ViewProp<"hybridRef", std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>>;
 
   /**
    * State for the "TestView" View.

@@ -4,10 +4,7 @@ import {
   createViewComponentShadowNodeFiles,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
-import {
-  createFileMetadataString,
-  escapeCppName,
-} from '../../syntax/helpers.js'
+import { createFileMetadataString } from '../../syntax/helpers.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import {
@@ -36,18 +33,17 @@ export function createSwiftHybridViewManager(
   }
 
   const propAssignments = spec.properties.map((p) => {
-    const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
     const bridge = new SwiftCxxBridgedType(p.type, false)
     const parse = bridge.parseFromCppToSwift(
-      `newViewProps.${name}.value`,
+      `newViewProps.get<"${p.name}">().value`,
       'c++'
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.${name}.isDirty) {
+if (newViewProps.get<"${p.name}">().isDirty) {
   swiftPart.${setter}(${indent(parse, '  ')});
-  newViewProps.${name}.isDirty = false;
+  newViewProps.get<"${p.name}">().isDirty = false;
 }
 `.trim()
   })
@@ -148,13 +144,13 @@ using namespace ${namespace}::views;
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (newViewProps.get<"hybridRef">().isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.get<"hybridRef">().value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.hybridRef.isDirty = false;
+    newViewProps.get<"hybridRef">().isDirty = false;
   }
 
   // 4. Continue in base class

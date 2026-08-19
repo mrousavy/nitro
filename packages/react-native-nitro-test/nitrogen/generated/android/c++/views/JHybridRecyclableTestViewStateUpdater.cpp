@@ -37,19 +37,19 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   }
 
   // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
-    hybridView->setIsBlue(props->isBlue.value);
-    props->isBlue.isDirty = false;
+  if (props->get<"isBlue">().isDirty) {
+    hybridView->setIsBlue(props->get<"isBlue">().value);
+    props->get<"isBlue">().isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if (props->get<"hybridRef">().isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->get<"hybridRef">().value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->hybridRef.isDirty = false;
+    props->get<"hybridRef">().isDirty = false;
   }
 }
 

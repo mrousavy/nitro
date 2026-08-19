@@ -1,12 +1,7 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
 import { createIndentation, indent } from '../utils.js'
-import {
-  createFileMetadataString,
-  escapeCppName,
-  isFunction,
-  isNotDuplicate,
-} from '../syntax/helpers.js'
+import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
@@ -72,10 +67,9 @@ export function createViewComponentShadowNodeFiles(
   const namespace = spec.config.getCxxNamespace('c++', 'views')
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
-  const properties = props.map(
-    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
+  const propSchemas = props.map(
+    (p) => `nitro::ViewProp<"${p.name}", ${p.type.getCode('c++')}>`
   )
-  const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -89,14 +83,8 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/HybridViewProps.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
 
@@ -109,24 +97,14 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  extern const char ${nameVariable}[];
+  inline constexpr char ${nameVariable}[] = "${T}";
 
   /**
    * Props for the "${spec.name}" View.
    */
-  class ${propsClassName} final: public react::ViewProps {
-  public:
-    ${propsClassName}() = default;
-    ${propsClassName}(const react::PropsParserContext& context,
-  ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
-  ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
-
-  public:
-    ${indent(properties.join('\n'), '    ')}
-
-  private:
-    static bool filterObjectKeys(const std::string& propName);
-  };
+  using ${propsClassName} = nitro::HybridViewProps<
+      "${spec.name}",
+      ${indent(propSchemas.join(',\n'), '      ')}>;
 
   /**
    * State for the "${spec.name}" View.
@@ -151,86 +129,10 @@ namespace ${namespace} {
 } // namespace ${namespace}
 `.trim()
 
-  // .cpp code
-  const propInitializers = [
-    'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
-  ]
-  const propCopyInitializers = ['react::ViewProps()']
-  for (const prop of props) {
-    const name = escapeCppName(prop.name)
-    const type = prop.type.getCode('c++')
-
-    let valueConversion = `value`
-    if (isFunction(prop.type)) {
-      // Due to a React limitation, functions cannot be passed to native directly,
-      // because RN converts them to booleans (`true`). Nitro knows this and just
-      // wraps functions as objects - the original function is stored in `f`.
-      valueConversion = `value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"))`
-    }
-
-    propInitializers.push(
-      `
-${name}([&]() -> CachedProp<${type}> {
-  try {
-    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-    if (rawValue == nullptr) return sourceProps.${name};
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-    return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
-  } catch (const std::exception& exc) {
-    throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
-  }
-}())`.trim()
-    )
-    propCopyInitializers.push(`${name}(other.${name})`)
-  }
-
-  const ctorIndent = createIndentation(propsClassName.length * 2)
-  const componentCode = `
-${createFileMetadataString(`${component}.cpp`)}
-
-#include "${component}.hpp"
-
-#include <string>
-#include <exception>
-#include <utility>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/PropNameIDCache.hpp>
-#include <react/renderer/core/RawValue.h>
-#include <react/renderer/core/ShadowNode.h>
-#include <react/renderer/core/ComponentDescriptor.h>
-#include <react/renderer/components/view/ViewProps.h>
-
-namespace ${namespace} {
-
-  extern const char ${nameVariable}[] = "${T}";
-
-  ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
-  ${ctorIndent}   const ${propsClassName}& sourceProps,
-  ${ctorIndent}   const react::RawProps& rawProps):
-    ${indent(propInitializers.join(',\n'), '    ')} { }
-
-  bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
-    switch (hashString(propName)) {
-      ${indent(cases.join('\n'), '      ')}
-      default: return false;
-    }
-  }
-
-} // namespace ${namespace}
-`.trim()
-
   const files: SourceFile[] = [
     {
       name: `${component}.hpp`,
       content: componentHeaderCode,
-      language: 'c++',
-      platform: 'shared',
-      subdirectory: ['views'],
-    },
-    {
-      name: `${component}.cpp`,
-      content: componentCode,
       language: 'c++',
       platform: 'shared',
       subdirectory: ['views'],

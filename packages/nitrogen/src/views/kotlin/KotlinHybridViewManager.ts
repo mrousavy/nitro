@@ -4,10 +4,7 @@ import {
   createViewComponentShadowNodeFiles,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
-import {
-  createFileMetadataString,
-  escapeCppName,
-} from '../../syntax/helpers.js'
+import { createFileMetadataString } from '../../syntax/helpers.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { addJNINativeRegistration } from '../../syntax/kotlin/JNINativeRegistrations.js'
 import { indent } from '../../utils.js'
@@ -191,12 +188,11 @@ public:
   `.trim()
 
   const propsUpdaterCalls = spec.properties.map((p) => {
-    const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (props->${name}.isDirty) {
-  hybridView->${setter}(props->${name}.value);
-  props->${name}.isDirty = false;
+if (props->get<"${p.name}">().isDirty) {
+  hybridView->${setter}(props->get<"${p.name}">().value);
+  props->get<"${p.name}">().isDirty = false;
 }
     `.trim()
   })
@@ -238,13 +234,13 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if (props->get<"hybridRef">().isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->get<"hybridRef">().value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->hybridRef.isDirty = false;
+    props->get<"hybridRef">().isDirty = false;
   }
 }
 

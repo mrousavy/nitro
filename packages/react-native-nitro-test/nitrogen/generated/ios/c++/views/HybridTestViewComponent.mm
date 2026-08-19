@@ -94,36 +94,36 @@ using namespace margelo::nitro::test::views;
   swiftPart.beforeUpdate();
 
   // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
-    newViewProps.isBlue.isDirty = false;
+  if (newViewProps.get<"isBlue">().isDirty) {
+    swiftPart.setIsBlue(newViewProps.get<"isBlue">().value);
+    newViewProps.get<"isBlue">().isDirty = false;
   }
   // hasBeenCalled: boolean
-  if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
-    newViewProps.hasBeenCalled.isDirty = false;
+  if (newViewProps.get<"hasBeenCalled">().isDirty) {
+    swiftPart.setHasBeenCalled(newViewProps.get<"hasBeenCalled">().value);
+    newViewProps.get<"hasBeenCalled">().isDirty = false;
   }
   // colorScheme: enum
-  if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
-    newViewProps.colorScheme.isDirty = false;
+  if (newViewProps.get<"colorScheme">().isDirty) {
+    swiftPart.setColorScheme(static_cast<int>(newViewProps.get<"colorScheme">().value));
+    newViewProps.get<"colorScheme">().isDirty = false;
   }
   // someCallback: function
-  if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
-    newViewProps.someCallback.isDirty = false;
+  if (newViewProps.get<"someCallback">().isDirty) {
+    swiftPart.setSomeCallback(newViewProps.get<"someCallback">().value);
+    newViewProps.get<"someCallback">().isDirty = false;
   }
 
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (newViewProps.get<"hybridRef">().isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.get<"hybridRef">().value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.hybridRef.isDirty = false;
+    newViewProps.get<"hybridRef">().isDirty = false;
   }
 
   // 4. Continue in base class

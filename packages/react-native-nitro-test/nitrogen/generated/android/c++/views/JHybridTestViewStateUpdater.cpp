@@ -37,31 +37,31 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   }
 
   // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
-    hybridView->setIsBlue(props->isBlue.value);
-    props->isBlue.isDirty = false;
+  if (props->get<"isBlue">().isDirty) {
+    hybridView->setIsBlue(props->get<"isBlue">().value);
+    props->get<"isBlue">().isDirty = false;
   }
-  if (props->hasBeenCalled.isDirty) {
-    hybridView->setHasBeenCalled(props->hasBeenCalled.value);
-    props->hasBeenCalled.isDirty = false;
+  if (props->get<"hasBeenCalled">().isDirty) {
+    hybridView->setHasBeenCalled(props->get<"hasBeenCalled">().value);
+    props->get<"hasBeenCalled">().isDirty = false;
   }
-  if (props->colorScheme.isDirty) {
-    hybridView->setColorScheme(props->colorScheme.value);
-    props->colorScheme.isDirty = false;
+  if (props->get<"colorScheme">().isDirty) {
+    hybridView->setColorScheme(props->get<"colorScheme">().value);
+    props->get<"colorScheme">().isDirty = false;
   }
-  if (props->someCallback.isDirty) {
-    hybridView->setSomeCallback(props->someCallback.value);
-    props->someCallback.isDirty = false;
+  if (props->get<"someCallback">().isDirty) {
+    hybridView->setSomeCallback(props->get<"someCallback">().value);
+    props->get<"someCallback">().isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if (props->get<"hybridRef">().isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->get<"hybridRef">().value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->hybridRef.isDirty = false;
+    props->get<"hybridRef">().isDirty = false;
   }
 }
 
