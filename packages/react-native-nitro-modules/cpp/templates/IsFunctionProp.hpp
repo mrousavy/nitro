@@ -11,8 +11,6 @@
 
 namespace margelo::nitro {
 
-using namespace facebook;
-
 template <typename T>
 struct IsFunctionProp : std::false_type {};
 
