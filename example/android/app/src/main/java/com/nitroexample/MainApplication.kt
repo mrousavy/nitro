@@ -8,7 +8,25 @@ import com.facebook.react.ReactNativeApplicationEntryPoint.loadReactNative
 import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
+import com.facebook.react.internal.featureflags.ReactNativeFeatureFlags
+import com.facebook.react.internal.featureflags.ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android
+import com.facebook.react.internal.featureflags.ReactNativeFeatureFlagsProvider
 import com.nitroexample.exampleturbomodule.ExampleTurboModulePackage
+
+private val stableFlagsWithNitroViewRecycling: ReactNativeFeatureFlagsProvider =
+  object : ReactNativeFeatureFlagsProvider by ReactNativeFeatureFlagsOverrides_RNOSS_Stable_Android() {
+    override fun enablePreparedTextLayout(): Boolean = false
+
+    override fun enableViewRecycling(): Boolean = true
+
+    override fun enableViewRecyclingForImage(): Boolean = false
+
+    override fun enableViewRecyclingForScrollView(): Boolean = false
+
+    override fun enableViewRecyclingForText(): Boolean = false
+
+    override fun enableViewRecyclingForView(): Boolean = false
+  }
 
 class MainApplication : Application(), ReactApplication {
 
@@ -27,5 +45,14 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     super.onCreate()
     loadReactNative(this)
+    // RN 0.85 installs its Stable provider above. Replace it before reactHost is
+    // accessed, and re-audit these internal flags whenever RN or releaseLevel changes.
+    val previouslyAccessedFlags =
+      ReactNativeFeatureFlags.dangerouslyForceOverride(
+        stableFlagsWithNitroViewRecycling,
+      )
+    check(previouslyAccessedFlags == null) {
+      "Feature flags were accessed before enabling View recycling: $previouslyAccessedFlags"
+    }
   }
 }
