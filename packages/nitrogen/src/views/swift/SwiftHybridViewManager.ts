@@ -2,7 +2,6 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
-  getHybridRefProperty,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
 import {
@@ -35,10 +34,6 @@ export function createSwiftHybridViewManager(
       `Cannot create Swift HybridView ViewManager for ${spec.name} - it must be autolinked with a Swift iOS implementation in nitro.json!`
     )
   }
-
-  const hybridRef = getHybridRefProperty(spec)
-  const hybridRefName = escapeCppName(hybridRef.name)
-  const hybridRefType = hybridRef.type.getCode('c++')
 
   const propAssignments = spec.properties.map((p) => {
     const name = escapeCppName(p.name)
@@ -153,13 +148,13 @@ using namespace ${namespace}::views;
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.${hybridRefName}.isDirty) {
+  if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const ${hybridRefType}& maybeFunc = newViewProps.${hybridRefName}.value;
+    const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.${hybridRefName}.isDirty = false;
+    newViewProps.hybridRef.isDirty = false;
   }
 
   // 4. Continue in base class

@@ -41,7 +41,7 @@ export function getViewComponentNames(
   }
 }
 
-export function getHybridRefProperty(spec: HybridObjectSpec): Property {
+function getHybridRefProperty(spec: HybridObjectSpec): Property {
   const hybrid = new HybridObjectType(spec)
   const type = new FunctionType(new VoidType(), [
     new NamedWrappingType('ref', hybrid),

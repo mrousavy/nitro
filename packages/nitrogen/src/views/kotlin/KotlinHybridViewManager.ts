@@ -2,7 +2,6 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
-  getHybridRefProperty,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
 import {
@@ -38,9 +37,6 @@ export function createKotlinHybridViewManager(
     )
   }
   const viewImplementation = implementation.implementationClassName
-  const hybridRef = getHybridRefProperty(spec)
-  const hybridRefName = escapeCppName(hybridRef.name)
-  const hybridRefType = hybridRef.type.getCode('c++')
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -227,10 +223,11 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
-  jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper{
-            static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
+  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+    static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)
+  };
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  std::shared_ptr<const ConcreteStateData> concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
+  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const ${stateClassName}& data = concreteState->getData();
   const std::shared_ptr<${propsClassName}>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
@@ -242,13 +239,13 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props->${hybridRefName}.isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const ${hybridRefType}& maybeFunc = props->${hybridRefName}.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->${hybridRefName}.isDirty = false;
+    props->hybridRef.isDirty = false;
   }
 }
 

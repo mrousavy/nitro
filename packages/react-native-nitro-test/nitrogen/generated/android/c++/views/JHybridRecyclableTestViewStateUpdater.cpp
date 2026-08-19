@@ -25,10 +25,11 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
-  jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper{
-            static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
+  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+    static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)
+  };
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  std::shared_ptr<const ConcreteStateData> concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
+  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRecyclableTestViewState& data = concreteState->getData();
   const std::shared_ptr<HybridRecyclableTestViewProps>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
@@ -45,7 +46,7 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   // Update hybridRef if it changed
   if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }

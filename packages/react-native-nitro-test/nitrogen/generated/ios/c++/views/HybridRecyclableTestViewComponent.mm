@@ -104,7 +104,7 @@ using namespace margelo::nitro::test::views;
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
