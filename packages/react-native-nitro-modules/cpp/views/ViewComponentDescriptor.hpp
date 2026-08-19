@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <concepts>
 #include <cxxreact/ReactNativeVersion.h>
 #include <memory>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
@@ -31,6 +32,12 @@ class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<
   using Base = react::ConcreteComponentDescriptor<TShadowNode>;
   using Props = typename TShadowNode::ConcreteProps;
   using State = typename TShadowNode::ConcreteStateData;
+
+#ifdef ANDROID
+  static_assert(std::constructible_from<State, const std::shared_ptr<Props>&>,
+                "TShadowNode::ConcreteStateData must be constructible from "
+                "const std::shared_ptr<TShadowNode::ConcreteProps>& on Android.");
+#endif
 
 public:
 #ifdef RAW_PROPS_PARSER_USES_JSI_BY_DEFAULT
