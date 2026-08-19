@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-
 namespace margelo::nitro {
 
 using namespace facebook;
