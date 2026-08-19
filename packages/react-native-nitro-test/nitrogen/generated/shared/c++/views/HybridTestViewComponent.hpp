@@ -15,14 +15,14 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/ViewComponentDescriptor.hpp>
+#include <NitroModules/ViewPropsHolderState.hpp>
 
 #include "ColorScheme.hpp"
 #include <functional>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
 #include <optional>
-
-#include <NitroModules/ViewComponentDescriptor.hpp>
 
 namespace margelo::nitro::test::views {
 
@@ -57,32 +57,7 @@ namespace margelo::nitro::test::views {
   /**
    * State for the "TestView" View.
    */
-  class HybridTestViewState final {
-  public:
-    HybridTestViewState() = default;
-    explicit HybridTestViewState(const std::shared_ptr<HybridTestViewProps>& props):
-      _props(props) {}
-
-  public:
-    [[nodiscard]]
-    const std::shared_ptr<HybridTestViewProps>& getProps() const {
-      return _props;
-    }
-
-  public:
-#ifdef ANDROID
-  HybridTestViewState(const HybridTestViewState& /* previousState */, folly::dynamic /* data */) {}
-  folly::dynamic getDynamic() const {
-    throw std::runtime_error("HybridTestViewState does not support folly!");
-  }
-  react::MapBuffer getMapBuffer() const {
-    throw std::runtime_error("HybridTestViewState does not support MapBuffer!");
-  };
-#endif
-
-  private:
-    std::shared_ptr<HybridTestViewProps> _props;
-  };
+  using HybridTestViewState = nitro::ViewPropsHolderState<HybridTestViewProps>;
 
   /**
    * The Shadow Node for the "TestView" View.
@@ -92,6 +67,9 @@ namespace margelo::nitro::test::views {
                                                                  react::ViewEventEmitter /* default */,
                                                                  HybridTestViewState /* custom state */>;
 
+  /**
+   * The Component Descriptor for the "TestView" View.
+   */
   using HybridTestViewComponentDescriptor = nitro::ViewComponentDescriptor<HybridTestViewShadowNode>;
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */
