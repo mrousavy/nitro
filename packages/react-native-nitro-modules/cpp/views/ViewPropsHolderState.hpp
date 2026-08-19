@@ -4,7 +4,14 @@
 
 #pragma once
 
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include "NitroDefines.hpp"
+#include <memory>
+#include <stdexcept>
+
+#ifdef ANDROID
+#include <folly/dynamic.h>
+#include <react/renderer/mapbuffer/MapBuffer.h>
+#endif
 
 namespace margelo::nitro {
 
@@ -22,27 +29,29 @@ template <typename TProps>
 struct ViewPropsHolderState final {
 public:
   ViewPropsHolderState() = default;
-  explicit ViewPropsHolderState(const std::shared_ptr<TProps>& props) : _props(props) {}
+  explicit ViewPropsHolderState(const std::shared_ptr<const TProps>& props) : _props(props) {}
 
 public:
   [[nodiscard]]
-  const std::shared_ptr<TProps>& getProps() const {
+  const std::shared_ptr<const TProps>& getProps() const {
     return _props;
   }
 
 public:
 #ifdef ANDROID
-  ViewPropsHolderState(const ViewPropsHolderState& /* previousState */, folly::dynamic /* data */) {}
+  ViewPropsHolderState(const ViewPropsHolderState& /* previousState */, folly::dynamic /* data */) {
+    throw std::runtime_error("ViewPropsHolderState<T> does not support folly::dynamic updates!");
+  }
   folly::dynamic getDynamic() const {
-    throw std::runtime_error("ViewPropsHolderState<T> does not support folly!");
+    throw std::runtime_error("ViewPropsHolderState<T> does not support folly::dynamic serialization!");
   }
   react::MapBuffer getMapBuffer() const {
-    throw std::runtime_error("ViewPropsHolderState<T> does not support MapBuffer!");
+    throw std::runtime_error("ViewPropsHolderState<T> does not support MapBuffer serialization!");
   };
 #endif
 
 private:
-  std::shared_ptr<TProps> _props;
+  std::shared_ptr<const TProps> _props;
 };
 
 } // namespace margelo::nitro

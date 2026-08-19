@@ -118,11 +118,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridBaseSpec_ = std::shared_ptr<HybridBaseSpec>;
   std::shared_ptr<HybridBaseSpec> create_std__shared_ptr_HybridBaseSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridBaseSpec_(std__shared_ptr_HybridBaseSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridBaseSpec>
   using std__weak_ptr_HybridBaseSpec_ = std::weak_ptr<HybridBaseSpec>;
   inline std__weak_ptr_HybridBaseSpec_ weakify_std__shared_ptr_HybridBaseSpec_(const std::shared_ptr<HybridBaseSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::optional<Person>
   /**
    * Specialized version of `std::optional<Person>`.
@@ -137,7 +137,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Person get_std__optional_Person_(const std::optional<Person>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::vector<Person>
   /**
    * Specialized version of `std::vector<Person>`.
@@ -148,7 +148,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::optional<bool>
   /**
    * Specialized version of `std::optional<bool>`.
@@ -163,7 +163,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline bool get_std__optional_bool_(const std::optional<bool>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::optional<std::string>
   /**
    * Specialized version of `std::optional<std::string>`.
@@ -178,7 +178,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::vector<double>
   /**
    * Specialized version of `std::vector<double>`.
@@ -189,7 +189,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::variant<double, std::string>
   /**
    * Wrapper struct for `std::variant<double, std::string>`.
@@ -218,7 +218,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_double__std__string_ create_std__variant_double__std__string_(const std::string& value) noexcept {
     return std__variant_double__std__string_(value);
   }
-  
+
   // pragma MARK: std::optional<std::variant<double, std::string>>
   /**
    * Specialized version of `std::optional<std::variant<double, std::string>>`.
@@ -233,7 +233,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::variant<double, std::string> get_std__optional_std__variant_double__std__string__(const std::optional<std::variant<double, std::string>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::variant<std::string, Car>
   /**
    * Wrapper struct for `std::variant<std::string, Car>`.
@@ -262,7 +262,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__string__Car_ create_std__variant_std__string__Car_(const Car& value) noexcept {
     return std__variant_std__string__Car_(value);
   }
-  
+
   // pragma MARK: std::shared_ptr<HybridChildSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridChildSpec>`.
@@ -270,14 +270,14 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridChildSpec_ = std::shared_ptr<HybridChildSpec>;
   std::shared_ptr<HybridChildSpec> create_std__shared_ptr_HybridChildSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridChildSpec_(std__shared_ptr_HybridChildSpec_ cppType);
-  
+
   // pragma MARK: std::shared_ptr<HybridBaseSpec>
   inline std::shared_ptr<HybridBaseSpec> upcast_Child_to_Base(std::shared_ptr<HybridChildSpec> child) noexcept { return child; }
-  
+
   // pragma MARK: std::weak_ptr<HybridChildSpec>
   using std__weak_ptr_HybridChildSpec_ = std::weak_ptr<HybridChildSpec>;
   inline std__weak_ptr_HybridChildSpec_ weakify_std__shared_ptr_HybridChildSpec_(const std::shared_ptr<HybridChildSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: Result<std::variant<std::string, Car>>
   using Result_std__variant_std__string__Car__ = Result<std::variant<std::string, Car>>;
   inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::variant<std::string, Car>& value) noexcept {
@@ -286,7 +286,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_std__string__Car__ create_Result_std__variant_std__string__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::string, Car>>::withError(error);
   }
-  
+
   // pragma MARK: std::shared_ptr<HybridPlatformObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlatformObjectSpec>`.
@@ -294,11 +294,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridPlatformObjectSpec_ = std::shared_ptr<HybridPlatformObjectSpec>;
   std::shared_ptr<HybridPlatformObjectSpec> create_std__shared_ptr_HybridPlatformObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridPlatformObjectSpec_(std__shared_ptr_HybridPlatformObjectSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridPlatformObjectSpec>
   using std__weak_ptr_HybridPlatformObjectSpec_ = std::weak_ptr<HybridPlatformObjectSpec>;
   inline std__weak_ptr_HybridPlatformObjectSpec_ weakify_std__shared_ptr_HybridPlatformObjectSpec_(const std::shared_ptr<HybridPlatformObjectSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: Result<std::string>
   using Result_std__string_ = Result<std::string>;
   inline Result_std__string_ create_Result_std__string_(const std::string& value) noexcept {
@@ -307,7 +307,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__string_ create_Result_std__string_(const std::exception_ptr& error) noexcept {
     return Result<std::string>::withError(error);
   }
-  
+
   // pragma MARK: std::shared_ptr<HybridRecyclableTestViewSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridRecyclableTestViewSpec>`.
@@ -315,11 +315,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridRecyclableTestViewSpec_ = std::shared_ptr<HybridRecyclableTestViewSpec>;
   std::shared_ptr<HybridRecyclableTestViewSpec> create_std__shared_ptr_HybridRecyclableTestViewSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridRecyclableTestViewSpec_(std__shared_ptr_HybridRecyclableTestViewSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridRecyclableTestViewSpec>
   using std__weak_ptr_HybridRecyclableTestViewSpec_ = std::weak_ptr<HybridRecyclableTestViewSpec>;
   inline std__weak_ptr_HybridRecyclableTestViewSpec_ weakify_std__shared_ptr_HybridRecyclableTestViewSpec_(const std::shared_ptr<HybridRecyclableTestViewSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::shared_ptr<HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`.
@@ -327,11 +327,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ = std::shared_ptr<HybridTestObjectSwiftKotlinSpec>;
   std::shared_ptr<HybridTestObjectSwiftKotlinSpec> create_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridTestObjectSwiftKotlinSpec>
   using std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ = std::weak_ptr<HybridTestObjectSwiftKotlinSpec>;
   inline std__weak_ptr_HybridTestObjectSwiftKotlinSpec_ weakify_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>`.
@@ -343,7 +343,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>> wrap_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___(std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>> promise) noexcept {
     return PromiseHolder<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& /* result */)>
   /**
    * Specialized version of `std::function<void(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>&)>`.
@@ -365,7 +365,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper wrap_Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_(Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec_ value) noexcept {
     return Func_void_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
   /**
    * Specialized version of `std::function<void(const std::exception_ptr&)>`.
@@ -387,7 +387,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>`.
@@ -402,7 +402,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::shared_ptr<HybridTestObjectSwiftKotlinSpec> get_std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::optional<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>
   /**
    * Wrapper struct for `std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>`.
@@ -431,7 +431,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_ create_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(const Person& value) noexcept {
     return std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person_(value);
   }
-  
+
   // pragma MARK: std::variant<nitro::NullType, std::string>
   /**
    * Wrapper struct for `std::variant<nitro::NullType, std::string>`.
@@ -460,7 +460,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_nitro__NullType__std__string_ create_std__variant_nitro__NullType__std__string_(const std::string& value) noexcept {
     return std__variant_nitro__NullType__std__string_(value);
   }
-  
+
   // pragma MARK: std::vector<std::string>
   /**
    * Specialized version of `std::vector<std::string>`.
@@ -471,7 +471,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::optional<std::vector<std::string>>
   /**
    * Specialized version of `std::optional<std::vector<std::string>>`.
@@ -486,7 +486,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::vector<std::string> get_std__optional_std__vector_std__string__(const std::optional<std::vector<std::string>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::optional<Powertrain>
   /**
    * Specialized version of `std::optional<Powertrain>`.
@@ -501,7 +501,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Powertrain get_std__optional_Powertrain_(const std::optional<Powertrain>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::optional<OldEnum>
   /**
    * Specialized version of `std::optional<OldEnum>`.
@@ -516,7 +516,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline OldEnum get_std__optional_OldEnum_(const std::optional<OldEnum>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::optional<TruckPowertrain>
   /**
    * Specialized version of `std::optional<TruckPowertrain>`.
@@ -531,7 +531,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline TruckPowertrain get_std__optional_TruckPowertrain_(const std::optional<TruckPowertrain>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::function<void(double /* value */)>
   /**
    * Specialized version of `std::function<void(double)>`.
@@ -553,7 +553,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_double_Wrapper wrap_Func_void_double(Func_void_double value) noexcept {
     return Func_void_double_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::optional<std::function<void(double /* value */)>>
   /**
    * Specialized version of `std::optional<std::function<void(double / * value * /)>>`.
@@ -568,7 +568,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::function<void(double /* value */)> get_std__optional_std__function_void_double____value______(const std::optional<std::function<void(double /* value */)>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::vector<std::vector<Person>>
   /**
    * Specialized version of `std::vector<std::vector<Person>>`.
@@ -579,7 +579,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::optional<double>
   /**
    * Specialized version of `std::optional<double>`.
@@ -594,7 +594,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::vector<Car>
   /**
    * Specialized version of `std::vector<Car>`.
@@ -605,7 +605,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::vector<Powertrain>
   /**
    * Specialized version of `std::vector<Powertrain>`.
@@ -616,7 +616,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::function<void(const std::vector<Powertrain>& /* array */)>
   /**
    * Specialized version of `std::function<void(const std::vector<Powertrain>&)>`.
@@ -638,7 +638,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__vector_Powertrain__Wrapper wrap_Func_void_std__vector_Powertrain_(Func_void_std__vector_Powertrain_ value) noexcept {
     return Func_void_std__vector_Powertrain__Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::vector<std::shared_ptr<HybridChildSpec>>
   /**
    * Specialized version of `std::vector<std::shared_ptr<HybridChildSpec>>`.
@@ -649,7 +649,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::function<void()>
   /**
    * Specialized version of `std::function<void()>`.
@@ -671,7 +671,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_Wrapper wrap_Func_void(Func_void value) noexcept {
     return Func_void_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::vector<std::function<void()>>
   /**
    * Specialized version of `std::vector<std::function<void()>>`.
@@ -682,7 +682,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::vector<std::shared_ptr<AnyMap>>
   /**
    * Specialized version of `std::vector<std::shared_ptr<AnyMap>>`.
@@ -693,7 +693,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<double>>
   /**
    * Specialized version of `std::shared_ptr<Promise<double>>`.
@@ -705,7 +705,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<double> wrap_std__shared_ptr_Promise_double__(std::shared_ptr<Promise<double>> promise) noexcept {
     return PromiseHolder<double>(std::move(promise));
   }
-  
+
   // pragma MARK: std::vector<std::shared_ptr<Promise<double>>>
   /**
    * Specialized version of `std::vector<std::shared_ptr<Promise<double>>>`.
@@ -716,7 +716,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::vector<std::shared_ptr<ArrayBuffer>>
   /**
    * Specialized version of `std::vector<std::shared_ptr<ArrayBuffer>>`.
@@ -727,7 +727,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::variant<bool, double>
   /**
    * Wrapper struct for `std::variant<bool, double>`.
@@ -756,7 +756,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_bool__double_ create_std__variant_bool__double_(double value) noexcept {
     return std__variant_bool__double_(value);
   }
-  
+
   // pragma MARK: std::unordered_map<std::string, std::variant<bool, double>>
   /**
    * Specialized version of `std::unordered_map<std::string, std::variant<bool, double>>`.
@@ -781,7 +781,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline void emplace_std__unordered_map_std__string__std__variant_bool__double__(std__unordered_map_std__string__std__variant_bool__double__& map, const std::string& key, const std::variant<bool, double>& value) noexcept {
     map.emplace(key, value);
   }
-  
+
   // pragma MARK: std::unordered_map<std::string, double>
   /**
    * Specialized version of `std::unordered_map<std::string, double>`.
@@ -806,7 +806,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline void emplace_std__unordered_map_std__string__double_(std__unordered_map_std__string__double_& map, const std::string& key, const double& value) noexcept {
     map.emplace(key, value);
   }
-  
+
   // pragma MARK: std::unordered_map<std::string, std::string>
   /**
    * Specialized version of `std::unordered_map<std::string, std::string>`.
@@ -831,7 +831,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline void emplace_std__unordered_map_std__string__std__string_(std__unordered_map_std__string__std__string_& map, const std::string& key, const std::string& value) noexcept {
     map.emplace(key, value);
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<void>>
   /**
    * Specialized version of `std::shared_ptr<Promise<void>>`.
@@ -843,7 +843,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<void> wrap_std__shared_ptr_Promise_void__(std::shared_ptr<Promise<void>> promise) noexcept {
     return PromiseHolder<void>(std::move(promise));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<int64_t>>
   /**
    * Specialized version of `std::shared_ptr<Promise<int64_t>>`.
@@ -855,7 +855,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<int64_t> wrap_std__shared_ptr_Promise_int64_t__(std::shared_ptr<Promise<int64_t>> promise) noexcept {
     return PromiseHolder<int64_t>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(int64_t /* result */)>
   /**
    * Specialized version of `std::function<void(int64_t)>`.
@@ -877,7 +877,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_int64_t_Wrapper wrap_Func_void_int64_t(Func_void_int64_t value) noexcept {
     return Func_void_int64_t_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::optional<double>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::optional<double>>>`.
@@ -889,7 +889,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::optional<double>> wrap_std__shared_ptr_Promise_std__optional_double___(std::shared_ptr<Promise<std::optional<double>>> promise) noexcept {
     return PromiseHolder<std::optional<double>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(std::optional<double> /* result */)>
   /**
    * Specialized version of `std::function<void(std::optional<double>)>`.
@@ -911,7 +911,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__optional_double__Wrapper wrap_Func_void_std__optional_double_(Func_void_std__optional_double_ value) noexcept {
     return Func_void_std__optional_double__Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<Car>>
   /**
    * Specialized version of `std::shared_ptr<Promise<Car>>`.
@@ -923,7 +923,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<Car> wrap_std__shared_ptr_Promise_Car__(std::shared_ptr<Promise<Car>> promise) noexcept {
     return PromiseHolder<Car>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const Car& /* result */)>
   /**
    * Specialized version of `std::function<void(const Car&)>`.
@@ -945,7 +945,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_Car_Wrapper wrap_Func_void_Car(Func_void_Car value) noexcept {
     return Func_void_Car_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>()>`.
@@ -968,7 +968,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void____ value) noexcept {
     return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_void_____Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>>`.
@@ -980,7 +980,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::shared_ptr<Promise<void>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_void____(std::shared_ptr<Promise<std::shared_ptr<Promise<void>>>> promise) noexcept {
     return PromiseHolder<std::shared_ptr<Promise<void>>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<void>>& /* result */)>
   /**
    * Specialized version of `std::function<void(const std::shared_ptr<Promise<void>>&)>`.
@@ -1002,7 +1002,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__shared_ptr_Promise_void___Wrapper wrap_Func_void_std__shared_ptr_Promise_void__(Func_void_std__shared_ptr_Promise_void__ value) noexcept {
     return Func_void_std__shared_ptr_Promise_void___Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<Promise<double>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<double>>()>`.
@@ -1025,7 +1025,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_Promise_double___Wrapper wrap_Func_std__shared_ptr_Promise_double__(Func_std__shared_ptr_Promise_double__ value) noexcept {
     return Func_std__shared_ptr_Promise_double___Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>()>`.
@@ -1048,7 +1048,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double____ value) noexcept {
     return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_double_____Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>>`.
@@ -1060,7 +1060,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::shared_ptr<Promise<double>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_double____(std::shared_ptr<Promise<std::shared_ptr<Promise<double>>>> promise) noexcept {
     return PromiseHolder<std::shared_ptr<Promise<double>>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<double>>& /* result */)>
   /**
    * Specialized version of `std::function<void(const std::shared_ptr<Promise<double>>&)>`.
@@ -1082,7 +1082,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__shared_ptr_Promise_double___Wrapper wrap_Func_void_std__shared_ptr_Promise_double__(Func_void_std__shared_ptr_Promise_double__ value) noexcept {
     return Func_void_std__shared_ptr_Promise_double___Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>`.
@@ -1094,7 +1094,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::shared_ptr<ArrayBuffer>> wrap_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>> promise) noexcept {
     return PromiseHolder<std::shared_ptr<ArrayBuffer>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const std::shared_ptr<ArrayBuffer>& /* result */)>
   /**
    * Specialized version of `std::function<void(const std::shared_ptr<ArrayBuffer>&)>`.
@@ -1116,7 +1116,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__shared_ptr_ArrayBuffer__Wrapper wrap_Func_void_std__shared_ptr_ArrayBuffer_(Func_void_std__shared_ptr_ArrayBuffer_ value) noexcept {
     return Func_void_std__shared_ptr_ArrayBuffer__Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>()>`.
@@ -1139,7 +1139,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper wrap_Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____ value) noexcept {
     return Func_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer______Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>>`.
@@ -1151,7 +1151,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>> wrap_std__shared_ptr_Promise_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer_____(std::shared_ptr<Promise<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>> promise) noexcept {
     return PromiseHolder<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>(std::move(promise));
   }
-  
+
   // pragma MARK: std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& /* result */)>
   /**
    * Specialized version of `std::function<void(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>&)>`.
@@ -1173,7 +1173,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper wrap_Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___(Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer___ value) noexcept {
     return Func_void_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::function<void(const std::string& /* value */)>
   /**
    * Specialized version of `std::function<void(const std::string&)>`.
@@ -1195,7 +1195,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_void_std__string_Wrapper wrap_Func_void_std__string(Func_void_std__string value) noexcept {
     return Func_void_std__string_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::optional<std::function<void(const std::string& /* value */)>>
   /**
    * Specialized version of `std::optional<std::function<void(const std::string& / * value * /)>>`.
@@ -1210,7 +1210,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::function<void(const std::string& /* value */)> get_std__optional_std__function_void_const_std__string_____value______(const std::optional<std::function<void(const std::string& /* value */)>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<Promise<std::string>>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<Promise<std::string>>()>`.
@@ -1233,7 +1233,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_Promise_std__string___Wrapper wrap_Func_std__shared_ptr_Promise_std__string__(Func_std__shared_ptr_Promise_std__string__ value) noexcept {
     return Func_std__shared_ptr_Promise_std__string___Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<Promise<std::string>>
   /**
    * Specialized version of `std::shared_ptr<Promise<std::string>>`.
@@ -1245,7 +1245,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline PromiseHolder<std::string> wrap_std__shared_ptr_Promise_std__string__(std::shared_ptr<Promise<std::string>> promise) noexcept {
     return PromiseHolder<std::string>(std::move(promise));
   }
-  
+
   // pragma MARK: std::vector<JsStyleStruct>
   /**
    * Specialized version of `std::vector<JsStyleStruct>`.
@@ -1256,7 +1256,7 @@ namespace margelo::nitro::test::bridge::swift {
     vector.reserve(size);
     return vector;
   }
-  
+
   // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
   /**
    * Specialized version of `std::optional<std::shared_ptr<ArrayBuffer>>`.
@@ -1271,7 +1271,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::shared_ptr<ArrayBuffer> get_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::variant<std::function<void()>, double>
   /**
    * Wrapper struct for `std::variant<std::function<void()>, double>`.
@@ -1300,7 +1300,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__function_void_____double_ create_std__variant_std__function_void_____double_(double value) noexcept {
     return std__variant_std__function_void_____double_(value);
   }
-  
+
   // pragma MARK: std::optional<std::variant<std::function<void()>, double>>
   /**
    * Specialized version of `std::optional<std::variant<std::function<void()>, double>>`.
@@ -1315,7 +1315,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std::variant<std::function<void()>, double> get_std__optional_std__variant_std__function_void_____double__(const std::optional<std::variant<std::function<void()>, double>>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::optional<OptionalEnumWrapper>
   /**
    * Specialized version of `std::optional<OptionalEnumWrapper>`.
@@ -1330,7 +1330,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline OptionalEnumWrapper get_std__optional_OptionalEnumWrapper_(const std::optional<OptionalEnumWrapper>& optional) noexcept {
     return optional.value();
   }
-  
+
   // pragma MARK: std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>
   /**
    * Wrapper struct for `std::variant<bool, std::vector<double>, std::vector<std::string>, double, std::string>`.
@@ -1377,7 +1377,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_bool__std__vector_double___std__vector_std__string___double__std__string_ create_std__variant_bool__std__vector_double___std__vector_std__string___double__std__string_(const std::string& value) noexcept {
     return std__variant_bool__std__vector_double___std__vector_std__string___double__std__string_(value);
   }
-  
+
   // pragma MARK: std::variant<OldEnum, bool>
   /**
    * Wrapper struct for `std::variant<OldEnum, bool>`.
@@ -1406,7 +1406,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_OldEnum__bool_ create_std__variant_OldEnum__bool_(bool value) noexcept {
     return std__variant_OldEnum__bool_(value);
   }
-  
+
   // pragma MARK: std::variant<Powertrain, Car>
   /**
    * Wrapper struct for `std::variant<Powertrain, Car>`.
@@ -1435,7 +1435,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_Powertrain__Car_ create_std__variant_Powertrain__Car_(const Car& value) noexcept {
     return std__variant_Powertrain__Car_(value);
   }
-  
+
   // pragma MARK: std::variant<WeirdNumbersEnum, bool>
   /**
    * Wrapper struct for `std::variant<WeirdNumbersEnum, bool>`.
@@ -1464,7 +1464,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_WeirdNumbersEnum__bool_ create_std__variant_WeirdNumbersEnum__bool_(bool value) noexcept {
     return std__variant_WeirdNumbersEnum__bool_(value);
   }
-  
+
   // pragma MARK: std::variant<Person, Car>
   /**
    * Wrapper struct for `std::variant<Person, Car>`.
@@ -1493,7 +1493,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_Person__Car_ create_std__variant_Person__Car_(const Car& value) noexcept {
     return std__variant_Person__Car_(value);
   }
-  
+
   // pragma MARK: std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>
   /**
    * Wrapper struct for `std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>`.
@@ -1522,7 +1522,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_ create_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(const OptionalWrapper& value) noexcept {
     return std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper_(value);
   }
-  
+
   // pragma MARK: std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>
   /**
    * Wrapper struct for `std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double / * value * /)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>`.
@@ -1575,7 +1575,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__ create_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
     return std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap__(value);
   }
-  
+
   // pragma MARK: std::function<double()>
   /**
    * Specialized version of `std::function<double()>`.
@@ -1598,7 +1598,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_double_Wrapper wrap_Func_double(Func_double value) noexcept {
     return Func_double_Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: std::shared_ptr<HybridTestViewSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridTestViewSpec>`.
@@ -1606,11 +1606,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_HybridTestViewSpec_ = std::shared_ptr<HybridTestViewSpec>;
   std::shared_ptr<HybridTestViewSpec> create_std__shared_ptr_HybridTestViewSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_HybridTestViewSpec_(std__shared_ptr_HybridTestViewSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<HybridTestViewSpec>
   using std__weak_ptr_HybridTestViewSpec_ = std::weak_ptr<HybridTestViewSpec>;
   inline std__weak_ptr_HybridTestViewSpec_ weakify_std__shared_ptr_HybridTestViewSpec_(const std::shared_ptr<HybridTestViewSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   /**
    * Specialized version of `std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>`.
@@ -1618,11 +1618,11 @@ namespace margelo::nitro::test::bridge::swift {
   using std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ = std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>;
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> create_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
   void* NON_NULL get_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ cppType);
-  
+
   // pragma MARK: std::weak_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   using std__weak_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ = std::weak_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>;
   inline std__weak_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ weakify_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& strong) noexcept { return strong; }
-  
+
   // pragma MARK: std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>
   /**
    * Wrapper struct for `std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>`.
@@ -1651,7 +1651,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_ create_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_(const std::string& value) noexcept {
     return std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string_(value);
   }
-  
+
   // pragma MARK: std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>
   /**
    * Specialized version of `std::function<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>()>`.
@@ -1674,7 +1674,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper wrap_Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_(Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec_ value) noexcept {
     return Func_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__Wrapper(std::move(value));
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>
   using Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ = Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>;
   inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::shared_ptr<HybridTestObjectSwiftKotlinSpec>& value) noexcept {
@@ -1683,7 +1683,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ create_Result_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>
   using Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ = Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>;
   inline Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ create_Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____(const std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>& value) noexcept {
@@ -1692,7 +1692,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____ create_Result_std__shared_ptr_Promise_std__shared_ptr_HybridTestObjectSwiftKotlinSpec____(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>
   using Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ = Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>;
   inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>& value) noexcept {
@@ -1701,7 +1701,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__ create_Result_std__variant_std__shared_ptr_HybridTestObjectSwiftKotlinSpec___Person__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::shared_ptr<HybridTestObjectSwiftKotlinSpec>, Person>>::withError(error);
   }
-  
+
   // pragma MARK: Result<void>
   using Result_void_ = Result<void>;
   inline Result_void_ create_Result_void_() noexcept {
@@ -1710,7 +1710,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
     return Result<void>::withError(error);
   }
-  
+
   // pragma MARK: Result<double>
   using Result_double_ = Result<double>;
   inline Result_double_ create_Result_double_(double value) noexcept {
@@ -1719,7 +1719,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
     return Result<double>::withError(error);
   }
-  
+
   // pragma MARK: Result<nitro::NullType>
   using Result_nitro__NullType_ = Result<nitro::NullType>;
   inline Result_nitro__NullType_ create_Result_nitro__NullType_(nitro::NullType value) noexcept {
@@ -1728,7 +1728,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_nitro__NullType_ create_Result_nitro__NullType_(const std::exception_ptr& error) noexcept {
     return Result<nitro::NullType>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::string>>
   using Result_std__vector_std__string__ = Result<std::vector<std::string>>;
   inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::vector<std::string>& value) noexcept {
@@ -1737,7 +1737,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__string__ create_Result_std__vector_std__string__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::string>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<double>>
   using Result_std__vector_double__ = Result<std::vector<double>>;
   inline Result_std__vector_double__ create_Result_std__vector_double__(const std::vector<double>& value) noexcept {
@@ -1746,7 +1746,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_double__ create_Result_std__vector_double__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<double>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<Person>>
   using Result_std__vector_Person__ = Result<std::vector<Person>>;
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::vector<Person>& value) noexcept {
@@ -1755,7 +1755,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_Person__ create_Result_std__vector_Person__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Person>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::vector<Person>>>
   using Result_std__vector_std__vector_Person___ = Result<std::vector<std::vector<Person>>>;
   inline Result_std__vector_std__vector_Person___ create_Result_std__vector_std__vector_Person___(const std::vector<std::vector<Person>>& value) noexcept {
@@ -1764,7 +1764,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__vector_Person___ create_Result_std__vector_std__vector_Person___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::vector<Person>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<PartialPerson>
   using Result_PartialPerson_ = Result<PartialPerson>;
   inline Result_PartialPerson_ create_Result_PartialPerson_(const PartialPerson& value) noexcept {
@@ -1773,7 +1773,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_PartialPerson_ create_Result_PartialPerson_(const std::exception_ptr& error) noexcept {
     return Result<PartialPerson>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<Powertrain>>
   using Result_std__vector_Powertrain__ = Result<std::vector<Powertrain>>;
   inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::vector<Powertrain>& value) noexcept {
@@ -1782,7 +1782,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_Powertrain__ create_Result_std__vector_Powertrain__(const std::exception_ptr& error) noexcept {
     return Result<std::vector<Powertrain>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::shared_ptr<HybridChildSpec>>>
   using Result_std__vector_std__shared_ptr_HybridChildSpec___ = Result<std::vector<std::shared_ptr<HybridChildSpec>>>;
   inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::vector<std::shared_ptr<HybridChildSpec>>& value) noexcept {
@@ -1791,7 +1791,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__shared_ptr_HybridChildSpec___ create_Result_std__vector_std__shared_ptr_HybridChildSpec___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<HybridChildSpec>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::function<void()>>>
   using Result_std__vector_std__function_void_____ = Result<std::vector<std::function<void()>>>;
   inline Result_std__vector_std__function_void_____ create_Result_std__vector_std__function_void_____(const std::vector<std::function<void()>>& value) noexcept {
@@ -1800,7 +1800,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__function_void_____ create_Result_std__vector_std__function_void_____(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::function<void()>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::shared_ptr<AnyMap>>>
   using Result_std__vector_std__shared_ptr_AnyMap___ = Result<std::vector<std::shared_ptr<AnyMap>>>;
   inline Result_std__vector_std__shared_ptr_AnyMap___ create_Result_std__vector_std__shared_ptr_AnyMap___(const std::vector<std::shared_ptr<AnyMap>>& value) noexcept {
@@ -1809,7 +1809,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__shared_ptr_AnyMap___ create_Result_std__vector_std__shared_ptr_AnyMap___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<AnyMap>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::shared_ptr<Promise<double>>>>
   using Result_std__vector_std__shared_ptr_Promise_double____ = Result<std::vector<std::shared_ptr<Promise<double>>>>;
   inline Result_std__vector_std__shared_ptr_Promise_double____ create_Result_std__vector_std__shared_ptr_Promise_double____(const std::vector<std::shared_ptr<Promise<double>>>& value) noexcept {
@@ -1818,7 +1818,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__shared_ptr_Promise_double____ create_Result_std__vector_std__shared_ptr_Promise_double____(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<Promise<double>>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::vector<std::shared_ptr<ArrayBuffer>>>
   using Result_std__vector_std__shared_ptr_ArrayBuffer___ = Result<std::vector<std::shared_ptr<ArrayBuffer>>>;
   inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::vector<std::shared_ptr<ArrayBuffer>>& value) noexcept {
@@ -1827,7 +1827,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<AnyMap>>
   using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
   inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
@@ -1836,7 +1836,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<AnyMap>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::unordered_map<std::string, std::variant<bool, double>>>
   using Result_std__unordered_map_std__string__std__variant_bool__double___ = Result<std::unordered_map<std::string, std::variant<bool, double>>>;
   inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::unordered_map<std::string, std::variant<bool, double>>& value) noexcept {
@@ -1845,7 +1845,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__unordered_map_std__string__std__variant_bool__double___ create_Result_std__unordered_map_std__string__std__variant_bool__double___(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, std::variant<bool, double>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::unordered_map<std::string, double>>
   using Result_std__unordered_map_std__string__double__ = Result<std::unordered_map<std::string, double>>;
   inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::unordered_map<std::string, double>& value) noexcept {
@@ -1854,7 +1854,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, double>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::unordered_map<std::string, std::string>>
   using Result_std__unordered_map_std__string__std__string__ = Result<std::unordered_map<std::string, std::string>>;
   inline Result_std__unordered_map_std__string__std__string__ create_Result_std__unordered_map_std__string__std__string__(const std::unordered_map<std::string, std::string>& value) noexcept {
@@ -1863,7 +1863,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__unordered_map_std__string__std__string__ create_Result_std__unordered_map_std__string__std__string__(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, std::string>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<void>>>
   using Result_std__shared_ptr_Promise_void___ = Result<std::shared_ptr<Promise<void>>>;
   inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::shared_ptr<Promise<void>>& value) noexcept {
@@ -1872,7 +1872,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_void___ create_Result_std__shared_ptr_Promise_void___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<void>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::optional<Powertrain>>
   using Result_std__optional_Powertrain__ = Result<std::optional<Powertrain>>;
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(std::optional<Powertrain> value) noexcept {
@@ -1881,7 +1881,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__optional_Powertrain__ create_Result_std__optional_Powertrain__(const std::exception_ptr& error) noexcept {
     return Result<std::optional<Powertrain>>::withError(error);
   }
-  
+
   // pragma MARK: Result<bool>
   using Result_bool_ = Result<bool>;
   inline Result_bool_ create_Result_bool_(bool value) noexcept {
@@ -1890,7 +1890,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_bool_ create_Result_bool_(const std::exception_ptr& error) noexcept {
     return Result<bool>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::chrono::system_clock::time_point>
   using Result_std__chrono__system_clock__time_point_ = Result<std::chrono::system_clock::time_point>;
   inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(std::chrono::system_clock::time_point value) noexcept {
@@ -1899,7 +1899,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__chrono__system_clock__time_point_ create_Result_std__chrono__system_clock__time_point_(const std::exception_ptr& error) noexcept {
     return Result<std::chrono::system_clock::time_point>::withError(error);
   }
-  
+
   // pragma MARK: Result<int64_t>
   using Result_int64_t_ = Result<int64_t>;
   inline Result_int64_t_ create_Result_int64_t_(int64_t value) noexcept {
@@ -1908,7 +1908,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_int64_t_ create_Result_int64_t_(const std::exception_ptr& error) noexcept {
     return Result<int64_t>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<int64_t>>>
   using Result_std__shared_ptr_Promise_int64_t___ = Result<std::shared_ptr<Promise<int64_t>>>;
   inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::shared_ptr<Promise<int64_t>>& value) noexcept {
@@ -1917,7 +1917,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_int64_t___ create_Result_std__shared_ptr_Promise_int64_t___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<int64_t>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<double>>>
   using Result_std__shared_ptr_Promise_double___ = Result<std::shared_ptr<Promise<double>>>;
   inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::shared_ptr<Promise<double>>& value) noexcept {
@@ -1926,7 +1926,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_double___ create_Result_std__shared_ptr_Promise_double___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<double>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<std::optional<double>>>>
   using Result_std__shared_ptr_Promise_std__optional_double____ = Result<std::shared_ptr<Promise<std::optional<double>>>>;
   inline Result_std__shared_ptr_Promise_std__optional_double____ create_Result_std__shared_ptr_Promise_std__optional_double____(const std::shared_ptr<Promise<std::optional<double>>>& value) noexcept {
@@ -1935,7 +1935,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_std__optional_double____ create_Result_std__shared_ptr_Promise_std__optional_double____(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<std::optional<double>>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<Car>>>
   using Result_std__shared_ptr_Promise_Car___ = Result<std::shared_ptr<Promise<Car>>>;
   inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::shared_ptr<Promise<Car>>& value) noexcept {
@@ -1944,7 +1944,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_Car___ create_Result_std__shared_ptr_Promise_Car___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<Car>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>
   using Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ = Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>;
   inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>& value) noexcept {
@@ -1953,7 +1953,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____ create_Result_std__shared_ptr_Promise_std__shared_ptr_ArrayBuffer____(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<std::shared_ptr<ArrayBuffer>>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::function<void(double /* value */)>>
   using Result_std__function_void_double____value______ = Result<std::function<void(double /* value */)>>;
   inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::function<void(double /* value */)>& value) noexcept {
@@ -1962,7 +1962,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__function_void_double____value______ create_Result_std__function_void_double____value______(const std::exception_ptr& error) noexcept {
     return Result<std::function<void(double /* value */)>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::function<void(double /* num */)>>
   using Result_std__function_void_double____num______ = Result<std::function<void(double /* num */)>>;
   inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::function<void(double /* num */)>& value) noexcept {
@@ -1971,7 +1971,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__function_void_double____num______ create_Result_std__function_void_double____num______(const std::exception_ptr& error) noexcept {
     return Result<std::function<void(double /* num */)>>::withError(error);
   }
-  
+
   // pragma MARK: Result<Car>
   using Result_Car_ = Result<Car>;
   inline Result_Car_ create_Result_Car_(const Car& value) noexcept {
@@ -1980,7 +1980,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_Car_ create_Result_Car_(const std::exception_ptr& error) noexcept {
     return Result<Car>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::optional<Person>>
   using Result_std__optional_Person__ = Result<std::optional<Person>>;
   inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::optional<Person>& value) noexcept {
@@ -1989,7 +1989,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__optional_Person__ create_Result_std__optional_Person__(const std::exception_ptr& error) noexcept {
     return Result<std::optional<Person>>::withError(error);
   }
-  
+
   // pragma MARK: Result<WrappedJsStruct>
   using Result_WrappedJsStruct_ = Result<WrappedJsStruct>;
   inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const WrappedJsStruct& value) noexcept {
@@ -1998,7 +1998,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_WrappedJsStruct_ create_Result_WrappedJsStruct_(const std::exception_ptr& error) noexcept {
     return Result<WrappedJsStruct>::withError(error);
   }
-  
+
   // pragma MARK: Result<OptionalWrapper>
   using Result_OptionalWrapper_ = Result<OptionalWrapper>;
   inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const OptionalWrapper& value) noexcept {
@@ -2007,7 +2007,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_OptionalWrapper_ create_Result_OptionalWrapper_(const std::exception_ptr& error) noexcept {
     return Result<OptionalWrapper>::withError(error);
   }
-  
+
   // pragma MARK: Result<OptionalCallback>
   using Result_OptionalCallback_ = Result<OptionalCallback>;
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const OptionalCallback& value) noexcept {
@@ -2016,7 +2016,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_OptionalCallback_ create_Result_OptionalCallback_(const std::exception_ptr& error) noexcept {
     return Result<OptionalCallback>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::optional<OptionalEnumWrapper>>
   using Result_std__optional_OptionalEnumWrapper__ = Result<std::optional<OptionalEnumWrapper>>;
   inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::optional<OptionalEnumWrapper>& value) noexcept {
@@ -2025,7 +2025,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__optional_OptionalEnumWrapper__ create_Result_std__optional_OptionalEnumWrapper__(const std::exception_ptr& error) noexcept {
     return Result<std::optional<OptionalEnumWrapper>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<ArrayBuffer>>
   using Result_std__shared_ptr_ArrayBuffer__ = Result<std::shared_ptr<ArrayBuffer>>;
   inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
@@ -2034,7 +2034,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_ArrayBuffer__ create_Result_std__shared_ptr_ArrayBuffer__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<ArrayBuffer>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<double, std::string>>
   using Result_std__variant_double__std__string__ = Result<std::variant<double, std::string>>;
   inline Result_std__variant_double__std__string__ create_Result_std__variant_double__std__string__(const std::variant<double, std::string>& value) noexcept {
@@ -2043,7 +2043,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_double__std__string__ create_Result_std__variant_double__std__string__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<double, std::string>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<OldEnum, bool>>
   using Result_std__variant_OldEnum__bool__ = Result<std::variant<OldEnum, bool>>;
   inline Result_std__variant_OldEnum__bool__ create_Result_std__variant_OldEnum__bool__(const std::variant<OldEnum, bool>& value) noexcept {
@@ -2052,7 +2052,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_OldEnum__bool__ create_Result_std__variant_OldEnum__bool__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<OldEnum, bool>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<Powertrain, Car>>
   using Result_std__variant_Powertrain__Car__ = Result<std::variant<Powertrain, Car>>;
   inline Result_std__variant_Powertrain__Car__ create_Result_std__variant_Powertrain__Car__(const std::variant<Powertrain, Car>& value) noexcept {
@@ -2061,7 +2061,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_Powertrain__Car__ create_Result_std__variant_Powertrain__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<Powertrain, Car>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<WeirdNumbersEnum, bool>>
   using Result_std__variant_WeirdNumbersEnum__bool__ = Result<std::variant<WeirdNumbersEnum, bool>>;
   inline Result_std__variant_WeirdNumbersEnum__bool__ create_Result_std__variant_WeirdNumbersEnum__bool__(const std::variant<WeirdNumbersEnum, bool>& value) noexcept {
@@ -2070,7 +2070,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_WeirdNumbersEnum__bool__ create_Result_std__variant_WeirdNumbersEnum__bool__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<WeirdNumbersEnum, bool>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<Person, Car>>
   using Result_std__variant_Person__Car__ = Result<std::variant<Person, Car>>;
   inline Result_std__variant_Person__Car__ create_Result_std__variant_Person__Car__(const std::variant<Person, Car>& value) noexcept {
@@ -2079,7 +2079,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_Person__Car__ create_Result_std__variant_Person__Car__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<Person, Car>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>
   using Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ = Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>;
   inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>& value) noexcept {
@@ -2088,7 +2088,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__ create_Result_std__variant_std__shared_ptr_HybridBaseSpec___OptionalWrapper__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::shared_ptr<HybridBaseSpec>, OptionalWrapper>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>
   using Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ = Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>;
   inline Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(const std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>& value) noexcept {
@@ -2097,7 +2097,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___ create_Result_std__variant_std__shared_ptr_ArrayBuffer___std__function_void_double____value_______WrappedJsStruct__std__shared_ptr_Promise_double____std__chrono__system_clock__time_point__std__shared_ptr_AnyMap___(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::shared_ptr<ArrayBuffer>, std::function<void(double /* value */)>, WrappedJsStruct, std::shared_ptr<Promise<double>>, std::chrono::system_clock::time_point, std::shared_ptr<AnyMap>>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<HybridChildSpec>>
   using Result_std__shared_ptr_HybridChildSpec__ = Result<std::shared_ptr<HybridChildSpec>>;
   inline Result_std__shared_ptr_HybridChildSpec__ create_Result_std__shared_ptr_HybridChildSpec__(const std::shared_ptr<HybridChildSpec>& value) noexcept {
@@ -2106,7 +2106,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_HybridChildSpec__ create_Result_std__shared_ptr_HybridChildSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<HybridChildSpec>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<HybridBaseSpec>>
   using Result_std__shared_ptr_HybridBaseSpec__ = Result<std::shared_ptr<HybridBaseSpec>>;
   inline Result_std__shared_ptr_HybridBaseSpec__ create_Result_std__shared_ptr_HybridBaseSpec__(const std::shared_ptr<HybridBaseSpec>& value) noexcept {
@@ -2115,7 +2115,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_HybridBaseSpec__ create_Result_std__shared_ptr_HybridBaseSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<HybridBaseSpec>>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>
   using Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ = Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>;
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& value) noexcept {
@@ -2124,7 +2124,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>::withError(error);
   }
-  
+
   // pragma MARK: Result<ExternalObjectStruct>
   using Result_ExternalObjectStruct_ = Result<ExternalObjectStruct>;
   inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const ExternalObjectStruct& value) noexcept {
@@ -2133,7 +2133,7 @@ namespace margelo::nitro::test::bridge::swift {
   inline Result_ExternalObjectStruct_ create_Result_ExternalObjectStruct_(const std::exception_ptr& error) noexcept {
     return Result<ExternalObjectStruct>::withError(error);
   }
-  
+
   // pragma MARK: Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>
   using Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ = Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>;
   inline Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(const std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>& value) noexcept {
@@ -2141,6 +2141,21 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__ create_Result_std__variant_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec___std__string__(const std::exception_ptr& error) noexcept {
     return Result<std::variant<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>, std::string>>::withError(error);
+  }
+
+  // pragma MARK: std::optional<std::function<void()>>
+  /**
+   * Specialized version of `std::optional<std::function<void()>>`.
+   */
+  using std__optional_std__function_void____ = std::optional<std::function<void()>>;
+  inline std::optional<std::function<void()>> create_std__optional_std__function_void____(const std::function<void()>& value) noexcept {
+    return std::optional<std::function<void()>>(value);
+  }
+  inline bool has_value_std__optional_std__function_void____(const std::optional<std::function<void()>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::function<void()> get_std__optional_std__function_void____(const std::optional<std::function<void()>>& optional) noexcept {
+    return optional.value();
   }
 
 } // namespace margelo::nitro::test::bridge::swift

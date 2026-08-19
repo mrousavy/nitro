@@ -18,6 +18,8 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -54,10 +56,15 @@ namespace margelo::nitro::test {
       virtual void setColorScheme(ColorScheme colorScheme) = 0;
       virtual std::function<void()> getSomeCallback() = 0;
       virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual std::optional<std::string> getOptionalLabel() = 0;
+      virtual void setOptionalLabel(const std::optional<std::string>& optionalLabel) = 0;
+      virtual std::optional<std::function<void()>> getOptionalCallback() = 0;
+      virtual void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) = 0;
 
     public:
       // Methods
       virtual void someMethod() = 0;
+      virtual double getIsBlueUpdateCount() = 0;
 
     protected:
       // Hybrid Setup

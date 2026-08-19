@@ -13,16 +13,24 @@
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/StateData.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 #include <NitroModules/ViewComponentDescriptor.hpp>
+#ifdef ANDROID
 #include <NitroModules/ViewPropsHolderState.hpp>
+#endif
+
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#endif
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
 #include <memory>
 #include "HybridTestViewSpec.hpp"
-#include <optional>
 
 namespace margelo::nitro::test::views {
 
@@ -48,7 +56,26 @@ namespace margelo::nitro::test::views {
     CachedProp<bool> hasBeenCalled;
     CachedProp<ColorScheme> colorScheme;
     CachedProp<std::function<void()>> someCallback;
+    CachedProp<std::optional<std::string>> optionalLabel;
+    CachedProp<std::optional<std::function<void()>>> optionalCallback;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
+
+    [[nodiscard]]
+    bool hasSameProps(const HybridTestViewProps& other) const noexcept {
+      return isBlue.hasSameValue(other.isBlue) &&
+             hasBeenCalled.hasSameValue(other.hasBeenCalled) &&
+             colorScheme.hasSameValue(other.colorScheme) &&
+             someCallback.hasSameValue(other.someCallback) &&
+             optionalLabel.hasSameValue(other.optionalLabel) &&
+             optionalCallback.hasSameValue(other.optionalCallback) &&
+             hybridRef.hasSameValue(other.hybridRef);
+    }
+
+#if defined(RN_SERIALIZABLE_STATE) && defined(REACT_NATIVE_VERSION_MINOR) && REACT_NATIVE_VERSION_MINOR >= 84
+    void initializeDynamicProps(const HybridTestViewProps& sourceProps, const react::RawProps& rawProps) {
+      react::ViewProps::initializeDynamicProps(sourceProps, rawProps, filterObjectKeys);
+    }
+#endif
 
   private:
     static bool filterObjectKeys(const std::string& propName);
@@ -57,7 +84,11 @@ namespace margelo::nitro::test::views {
   /**
    * State for the "TestView" View.
    */
+#ifdef ANDROID
   using HybridTestViewState = nitro::ViewPropsHolderState<HybridTestViewProps>;
+#else
+  using HybridTestViewState = react::StateData;
+#endif
 
   /**
    * The Shadow Node for the "TestView" View.

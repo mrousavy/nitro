@@ -40,17 +40,24 @@ export function createSwiftHybridViewManager(
     const setter = p.getSetterName('swift')
     const bridge = new SwiftCxxBridgedType(p.type, false)
     const parse = bridge.parseFromCppToSwift(
-      `newViewProps.${name}.value`,
+      `newViewProps.${name}.get()`,
       'c++'
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.${name}.isDirty) {
+if (oldViewProps == nullptr || !newViewProps.${name}.hasSameValue(oldViewProps->${name})) {
   swiftPart.${setter}(${indent(parse, '  ')});
-  newViewProps.${name}.isDirty = false;
 }
 `.trim()
   })
+  const nativePropComparisons = spec.properties.map((p) => {
+    const name = escapeCppName(p.name)
+    return `newViewProps.${name}.hasSameValue(oldViewProps->${name})`
+  })
+  const hasNativePropChanges =
+    nativePropComparisons.length === 0
+      ? 'false'
+      : `oldViewProps == nullptr || !(${nativePropComparisons.join(' &&\n      ')})`
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -100,6 +107,7 @@ using namespace ${namespace}::views;
 
 - (instancetype) init {
   if (self = [super init]) {
+    _props = ${component.replace('Component', 'ShadowNode')}::defaultSharedProps();
     std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
     _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
     [self updateView];
@@ -122,25 +130,29 @@ using namespace ${namespace}::views;
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
             oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
-  auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
+  const auto& newViewProps = *std::static_pointer_cast<const ${propsClassName}>(props);
+  const ${propsClassName}* oldViewProps = oldProps == nullptr
+      ? nullptr
+      : std::static_pointer_cast<const ${propsClassName}>(oldProps).get();
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  // 2. Update only props that differ from the last Props applied to this native View.
+  const bool hasNativePropChanges = ${hasNativePropChanges};
+  if (hasNativePropChanges) {
+    swiftPart.beforeUpdate();
 
-  ${indent(propAssignments.join('\n'), '  ')}
+    ${indent(propAssignments.join('\n'), '    ')}
 
-  swiftPart.afterUpdate();
+    swiftPart.afterUpdate();
+  }
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.hybridRef.isDirty = false;
   }
 
   // 4. Continue in base class

@@ -14,9 +14,12 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   var hasBeenCalled: Bool { get set }
   var colorScheme: ColorScheme { get set }
   var someCallback: () -> Void { get set }
+  var optionalLabel: String? { get set }
+  var optionalCallback: (() -> Void)? { get set }
 
   // Methods
   func someMethod() throws -> Void
+  func getIsBlueUpdateCount() throws -> Double
 }
 
 public extension HybridTestViewSpec_protocol {

@@ -11,11 +11,11 @@
 #error NitroTest was compiled without the 'RN_SERIALIZABLE_STATE' flag. This flag is required for Nitro Views - set it in your CMakeLists!
 #endif
 
+#include <NitroModules/NitroDefines.hpp>
 #include <fbjni/fbjni.h>
 #include <react/fabric/CoreComponentsRegistry.h>
 #include <react/fabric/StateWrapperImpl.h>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <NitroModules/NitroDefines.hpp>
 #include <NitroModules/JStateWrapper.hpp>
 #include "JHybridTestViewSpec.hpp"
 #include "views/HybridTestViewComponent.hpp"
@@ -31,7 +31,8 @@ public:
 public:
   static void updateViewProps(jni::alias_ref<jni::JClass> /* class */,
                               jni::alias_ref<JHybridTestViewSpec::JavaPart> view,
-                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface);
+                              jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                              jni::alias_ref<JStateWrapper::javaobject> previousStateWrapperInterface);
 
 public:
   static void registerNatives() {

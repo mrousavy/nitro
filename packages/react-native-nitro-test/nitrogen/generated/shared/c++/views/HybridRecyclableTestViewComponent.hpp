@@ -13,10 +13,17 @@
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/StateData.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 #include <NitroModules/ViewComponentDescriptor.hpp>
+#ifdef ANDROID
 #include <NitroModules/ViewPropsHolderState.hpp>
+#endif
+
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#endif
 
 #include <memory>
 #include "HybridRecyclableTestViewSpec.hpp"
@@ -46,6 +53,18 @@ namespace margelo::nitro::test::views {
     CachedProp<bool> isBlue;
     CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
 
+    [[nodiscard]]
+    bool hasSameProps(const HybridRecyclableTestViewProps& other) const noexcept {
+      return isBlue.hasSameValue(other.isBlue) &&
+             hybridRef.hasSameValue(other.hybridRef);
+    }
+
+#if defined(RN_SERIALIZABLE_STATE) && defined(REACT_NATIVE_VERSION_MINOR) && REACT_NATIVE_VERSION_MINOR >= 84
+    void initializeDynamicProps(const HybridRecyclableTestViewProps& sourceProps, const react::RawProps& rawProps) {
+      react::ViewProps::initializeDynamicProps(sourceProps, rawProps, filterObjectKeys);
+    }
+#endif
+
   private:
     static bool filterObjectKeys(const std::string& propName);
   };
@@ -53,7 +72,11 @@ namespace margelo::nitro::test::views {
   /**
    * State for the "RecyclableTestView" View.
    */
+#ifdef ANDROID
   using HybridRecyclableTestViewState = nitro::ViewPropsHolderState<HybridRecyclableTestViewProps>;
+#else
+  using HybridRecyclableTestViewState = react::StateData;
+#endif
 
   /**
    * The Shadow Node for the "RecyclableTestView" View.

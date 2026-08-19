@@ -31,6 +31,9 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.isBlue;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          throw std::runtime_error("Required view prop cannot be removed/reset.");
+        }
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
@@ -41,6 +44,9 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("hasBeenCalled", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.hasBeenCalled;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          throw std::runtime_error("Required view prop cannot be removed/reset.");
+        }
         return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.hasBeenCalled);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.hasBeenCalled: ") + exc.what());
@@ -51,6 +57,9 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("colorScheme", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.colorScheme;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          throw std::runtime_error("Required view prop cannot be removed/reset.");
+        }
         return CachedProp<ColorScheme>::fromRawValue(*runtime, value, sourceProps.colorScheme);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.colorScheme: ") + exc.what());
@@ -61,9 +70,38 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.someCallback;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          throw std::runtime_error("Required view prop cannot be removed/reset.");
+        }
         return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
+      }
+    }()),
+    optionalLabel([&]() -> CachedProp<std::optional<std::string>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("optionalLabel", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.optionalLabel;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          return CachedProp<std::optional<std::string>>::fromRawValue(*runtime, jsi::Value::undefined(), sourceProps.optionalLabel);
+        }
+        return CachedProp<std::optional<std::string>>::fromRawValue(*runtime, value, sourceProps.optionalLabel);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.optionalLabel: ") + exc.what());
+      }
+    }()),
+    optionalCallback([&]() -> CachedProp<std::optional<std::function<void()>>> {
+      try {
+        const react::RawValue* rawValue = rawProps.at("optionalCallback", nullptr, nullptr);
+        if (rawValue == nullptr) return sourceProps.optionalCallback;
+        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          return CachedProp<std::optional<std::function<void()>>>::fromRawValue(*runtime, jsi::Value::undefined(), sourceProps.optionalCallback);
+        }
+        return CachedProp<std::optional<std::function<void()>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.optionalCallback);
+      } catch (const std::exception& exc) {
+        throw std::runtime_error(std::string("TestView.optionalCallback: ") + exc.what());
       }
     }()),
     hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> {
@@ -71,6 +109,9 @@ namespace margelo::nitro::test::views {
         const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
         if (rawValue == nullptr) return sourceProps.hybridRef;
         const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+        if (value.isNull() || value.isUndefined()) {
+          return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, jsi::Value::undefined(), sourceProps.hybridRef);
+        }
         return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
       } catch (const std::exception& exc) {
         throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
@@ -83,6 +124,8 @@ namespace margelo::nitro::test::views {
       case hashString("hasBeenCalled"): return true;
       case hashString("colorScheme"): return true;
       case hashString("someCallback"): return true;
+      case hashString("optionalLabel"): return true;
+      case hashString("optionalCallback"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

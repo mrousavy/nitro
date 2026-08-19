@@ -8,6 +8,8 @@
     "hasBeenCalled": true,
     "colorScheme": true,
     "someCallback": true,
+    "optionalLabel": true,
+    "optionalCallback": true,
     "hybridRef": true
   }
 }

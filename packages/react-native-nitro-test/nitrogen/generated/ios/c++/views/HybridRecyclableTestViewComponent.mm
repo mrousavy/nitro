@@ -50,6 +50,7 @@ using namespace margelo::nitro::test::views;
 
 - (instancetype) init {
   if (self = [super init]) {
+    _props = HybridRecyclableTestViewShadowNode::defaultSharedProps();
     std::shared_ptr<HybridRecyclableTestViewSpec> hybridView = NitroTest::NitroTestAutolinking::createRecyclableTestView();
     _hybridView = std::dynamic_pointer_cast<HybridRecyclableTestViewSpecSwift>(hybridView);
     [self updateView];
@@ -72,29 +73,32 @@ using namespace margelo::nitro::test::views;
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
             oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<HybridRecyclableTestViewProps const>(props);
-  auto& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
+  const auto& newViewProps = *std::static_pointer_cast<const HybridRecyclableTestViewProps>(props);
+  const HybridRecyclableTestViewProps* oldViewProps = oldProps == nullptr
+      ? nullptr
+      : std::static_pointer_cast<const HybridRecyclableTestViewProps>(oldProps).get();
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  // 2. Update only props that differ from the last Props applied to this native View.
+  const bool hasNativePropChanges = oldViewProps == nullptr || !(newViewProps.isBlue.hasSameValue(oldViewProps->isBlue));
+  if (hasNativePropChanges) {
+    swiftPart.beforeUpdate();
 
-  // isBlue: boolean
-  if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
-    newViewProps.isBlue.isDirty = false;
+    // isBlue: boolean
+    if (oldViewProps == nullptr || !newViewProps.isBlue.hasSameValue(oldViewProps->isBlue)) {
+      swiftPart.setIsBlue(newViewProps.isBlue.get());
+    }
+
+    swiftPart.afterUpdate();
   }
 
-  swiftPart.afterUpdate();
-
   // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
+  if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.hybridRef.isDirty = false;
   }
 
   // 4. Continue in base class

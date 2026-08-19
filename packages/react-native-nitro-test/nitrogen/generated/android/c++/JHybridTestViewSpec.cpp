@@ -15,6 +15,8 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 #include <functional>
 #include "JFunc_void.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include <string>
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -90,11 +92,42 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
   }
+  std::optional<std::string> JHybridTestViewSpec::getOptionalLabel() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JString>()>("getOptionalLabel");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->toStdString()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setOptionalLabel(const std::optional<std::string>& optionalLabel) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JString> /* optionalLabel */)>("setOptionalLabel");
+    method(_javaPart, optionalLabel.has_value() ? jni::make_jstring(optionalLabel.value()) : nullptr);
+  }
+  std::optional<std::function<void()>> JHybridTestViewSpec::getOptionalCallback() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JFunc_void::javaobject>()>("getOptionalCallback_cxx");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional([&]() -> std::function<void()> {
+      if (__result->isInstanceOf(JFunc_void_cxx::javaClassStatic())) [[likely]] {
+        auto downcast = jni::static_ref_cast<JFunc_void_cxx::javaobject>(__result);
+        return downcast->cthis()->getFunction();
+      } else {
+        auto __resultRef = jni::make_global(__result);
+        return JNICallable<JFunc_void, void()>(std::move(__resultRef));
+      }
+    }()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* optionalCallback */)>("setOptionalCallback_cxx");
+    method(_javaPart, optionalCallback.has_value() ? JFunc_void_cxx::fromCpp(optionalCallback.value()) : nullptr);
+  }
 
   // Methods
   void JHybridTestViewSpec::someMethod() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("someMethod");
     method(_javaPart);
+  }
+  double JHybridTestViewSpec::getIsBlueUpdateCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getIsBlueUpdateCount");
+    auto __result = method(_javaPart);
+    return __result;
   }
 
 } // namespace margelo::nitro::test

@@ -58,10 +58,15 @@ namespace margelo::nitro::test {
     void setColorScheme(ColorScheme colorScheme) override;
     std::function<void()> getSomeCallback() override;
     void setSomeCallback(const std::function<void()>& someCallback) override;
+    std::optional<std::string> getOptionalLabel() override;
+    void setOptionalLabel(const std::optional<std::string>& optionalLabel) override;
+    std::optional<std::function<void()>> getOptionalCallback() override;
+    void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) override;
 
   public:
     // Methods
     void someMethod() override;
+    double getIsBlueUpdateCount() override;
 
   private:
     jni::global_ref<JHybridTestViewSpec::JavaPart> _javaPart;

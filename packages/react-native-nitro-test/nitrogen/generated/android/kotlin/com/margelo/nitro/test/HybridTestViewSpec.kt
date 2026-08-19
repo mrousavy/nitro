@@ -32,21 +32,21 @@ abstract class HybridTestViewSpec: HybridView() {
   @set:DoNotStrip
   @set:Keep
   abstract var isBlue: Boolean
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var hasBeenCalled: Boolean
-  
+
   @get:DoNotStrip
   @get:Keep
   @set:DoNotStrip
   @set:Keep
   abstract var colorScheme: ColorScheme
-  
+
   abstract var someCallback: () -> Unit
-  
+
   private var someCallback_cxx: Func_void
     @Keep
     @DoNotStrip
@@ -59,10 +59,34 @@ abstract class HybridTestViewSpec: HybridView() {
       someCallback = value
     }
 
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var optionalLabel: String?
+
+  abstract var optionalCallback: (() -> Unit)?
+
+  private var optionalCallback_cxx: Func_void?
+    @Keep
+    @DoNotStrip
+    get() {
+      return optionalCallback?.let { Func_void_java(it) }
+    }
+    @Keep
+    @DoNotStrip
+    set(value) {
+      optionalCallback = value?.let { it }
+    }
+
   // Methods
   @DoNotStrip
   @Keep
   abstract fun someMethod(): Unit
+
+  @DoNotStrip
+  @Keep
+  abstract fun getIsBlueUpdateCount(): Double
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

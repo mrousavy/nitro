@@ -76,6 +76,10 @@ export function createViewComponentShadowNodeFiles(
     (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
+  const comparisons = props.map((p) => {
+    const name = escapeCppName(p.name)
+    return `${name}.hasSameValue(other.${name})`
+  })
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -95,10 +99,17 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <NitroModules/CachedProp.hpp>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/StateData.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 #include <NitroModules/ViewComponentDescriptor.hpp>
+#ifdef ANDROID
 #include <NitroModules/ViewPropsHolderState.hpp>
+#endif
+
+#if __has_include(<cxxreact/ReactNativeVersion.h>)
+#include <cxxreact/ReactNativeVersion.h>
+#endif
 
 ${includes.join('\n')}
 
@@ -124,6 +135,17 @@ namespace ${namespace} {
   public:
     ${indent(properties.join('\n'), '    ')}
 
+    [[nodiscard]]
+    bool hasSameProps(const ${propsClassName}& other) const noexcept {
+      return ${comparisons.join(' &&\n             ')};
+    }
+
+#if defined(RN_SERIALIZABLE_STATE) && defined(REACT_NATIVE_VERSION_MINOR) && REACT_NATIVE_VERSION_MINOR >= 84
+    void initializeDynamicProps(const ${propsClassName}& sourceProps, const react::RawProps& rawProps) {
+      react::ViewProps::initializeDynamicProps(sourceProps, rawProps, filterObjectKeys);
+    }
+#endif
+
   private:
     static bool filterObjectKeys(const std::string& propName);
   };
@@ -131,7 +153,11 @@ namespace ${namespace} {
   /**
    * State for the "${spec.name}" View.
    */
+#ifdef ANDROID
   using ${stateClassName} = nitro::ViewPropsHolderState<${propsClassName}>;
+#else
+  using ${stateClassName} = react::StateData;
+#endif
 
   /**
    * The Shadow Node for the "${spec.name}" View.
@@ -155,12 +181,12 @@ namespace ${namespace} {
   const propInitializers = [
     'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
   ]
-  const propCopyInitializers = ['react::ViewProps()']
   for (const prop of props) {
     const name = escapeCppName(prop.name)
     const type = prop.type.getCode('c++')
 
     let valueConversion = `value`
+    const isOptional = prop.type instanceof OptionalType
     if (isFunction(prop.type)) {
       // Due to a React limitation, functions cannot be passed to native directly,
       // because RN converts them to booleans (`true`). Nitro knows this and just
@@ -175,13 +201,19 @@ ${name}([&]() -> CachedProp<${type}> {
     const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
     if (rawValue == nullptr) return sourceProps.${name};
     const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
+    if (value.isNull() || value.isUndefined()) {
+      ${
+        isOptional
+          ? `return CachedProp<${type}>::fromRawValue(*runtime, jsi::Value::undefined(), sourceProps.${name});`
+          : `throw std::runtime_error("Required view prop cannot be removed/reset.");`
+      }
+    }
     return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
   } catch (const std::exception& exc) {
     throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
   }
 }())`.trim()
     )
-    propCopyInitializers.push(`${name}(other.${name})`)
   }
 
   const ctorIndent = createIndentation(propsClassName.length * 2)

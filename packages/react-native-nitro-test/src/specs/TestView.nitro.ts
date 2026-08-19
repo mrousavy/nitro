@@ -11,9 +11,12 @@ export interface TestViewProps extends HybridViewProps {
   hasBeenCalled: boolean
   colorScheme: ColorScheme
   someCallback: () => void
+  optionalLabel?: string
+  optionalCallback?: () => void
 }
 export interface TestViewMethods extends HybridViewMethods {
   someMethod(): void
+  getIsBlueUpdateCount(): number
 }
 
 export type TestView = HybridView<TestViewProps, TestViewMethods>

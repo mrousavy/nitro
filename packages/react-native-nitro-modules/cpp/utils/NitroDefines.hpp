@@ -11,6 +11,21 @@
 // Sets the version of the native Nitro core library
 #define NITRO_VERSION "0.36.5"
 
+// React Android's prefab does not ship the generated folly-config.h file that
+// its public Fabric headers otherwise try to include. FOLLY_MOBILE must also
+// match the React Native binary because it changes folly::dynamic's object-map
+// implementation and therefore its ABI. Keep both compatibility details out
+// of generated CMake flags.
+#if defined(ANDROID) && defined(RN_SERIALIZABLE_STATE) && !defined(FOLLY_NO_CONFIG)
+#define FOLLY_NO_CONFIG 1
+#endif
+#if defined(ANDROID) && defined(RN_SERIALIZABLE_STATE) && defined(FOLLY_MOBILE) && FOLLY_MOBILE == 0
+#error Nitro Views require FOLLY_MOBILE=1 to match React Native's folly::dynamic ABI.
+#endif
+#if defined(ANDROID) && defined(RN_SERIALIZABLE_STATE) && !defined(FOLLY_MOBILE)
+#define FOLLY_MOBILE 1
+#endif
+
 // Sets whether to use debug or optimized production build flags
 #ifdef DEBUG
 #define NITRO_DEBUG

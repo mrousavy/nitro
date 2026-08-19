@@ -20,6 +20,11 @@ import com.margelo.nitro.test.*
  * Represents the React Native `ViewManager` for the "RecyclableTestView" Nitro HybridView.
  */
 public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
+  private class HybridViewHolder(
+    val hybridView: HybridRecyclableTestView,
+    var stateWrapper: StateWrapper? = null,
+  )
+
   init {
     if (RecyclableView::class.java.isAssignableFrom(HybridRecyclableTestView::class.java)) {
       // Enable view recycling
@@ -34,47 +39,51 @@ public class HybridRecyclableTestViewManager: SimpleViewManager<View>() {
   override fun createViewInstance(reactContext: ThemedReactContext): View {
     val hybridView = HybridRecyclableTestView(reactContext)
     val view = hybridView.view
-    view.setTag(associated_hybrid_view_tag, hybridView)
+    view.setTag(associated_hybrid_view_tag, HybridViewHolder(hybridView))
     return view
   }
 
   override fun updateState(view: View, props: ReactStylesDiffMap, stateWrapper: StateWrapper): Any? {
-    val hybridView = getHybridView(view)
+    val holder = getHybridViewHolder(view)
       ?: throw Error("Couldn't find view $view in local views table!")
+    val hybridView = holder.hybridView
 
     // 1. Update each prop individually
     hybridView.beforeUpdate()
-    HybridRecyclableTestViewStateUpdater.updateViewProps(hybridView, stateWrapper)
+    HybridRecyclableTestViewStateUpdater.updateViewProps(hybridView, stateWrapper, holder.stateWrapper)
     hybridView.afterUpdate()
+    holder.stateWrapper = stateWrapper
 
     // 2. Continue in base View props
     return super.updateState(view, props, stateWrapper)
   }
 
   override fun onDropViewInstance(view: View) {
-    val hybridView = getHybridView(view)
-    hybridView?.onDropView()
+    val holder = getHybridViewHolder(view)
+    holder?.stateWrapper = null
+    holder?.hybridView?.onDropView()
     return super.onDropViewInstance(view)
   }
 
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
-    super.prepareToRecycleView(reactContext, view)
-    val hybridView = getHybridView(view)
+    val recyclableView = super.prepareToRecycleView(reactContext, view)
       ?: return null
+    val holder = getHybridViewHolder(recyclableView)
+      ?: return null
+    val hybridView = holder.hybridView
+    holder.stateWrapper = null
 
     @Suppress("USELESS_IS_CHECK")
     if (hybridView is RecyclableView) {
-      // Recycle in it's implementation
+      // Reset the HybridView implementation before it is reused.
       hybridView.prepareForRecycle()
-
-      // Maybe update the view if it changed
-      return hybridView.view
+      return recyclableView
     } else {
       return null
     }
   }
 
-  private fun getHybridView(view: View): HybridRecyclableTestView? {
-    return view.getTag(associated_hybrid_view_tag) as? HybridRecyclableTestView
+  private fun getHybridViewHolder(view: View): HybridViewHolder? {
+    return view.getTag(associated_hybrid_view_tag) as? HybridViewHolder
   }
 }

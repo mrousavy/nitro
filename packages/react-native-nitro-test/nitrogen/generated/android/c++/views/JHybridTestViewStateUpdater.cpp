@@ -15,53 +15,66 @@ namespace margelo::nitro::test::views {
 using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridTestViewState>;
 
-void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridTestViewSpec::JavaPart> javaView,
-                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getJHybridTestViewSpec();
+namespace {
+std::shared_ptr<const HybridTestViewProps> getPropsFromStateWrapper(
+    jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
+  if (stateWrapperInterface.get() == nullptr) {
+    return nullptr;
+  }
 
   // Get concrete StateWrapperImpl from passed StateWrapper interface object
   jobject rawStateWrapper = stateWrapperInterface.get();
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
-      throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
+    throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
   auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
-            static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
+      static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridTestViewState& data = concreteState->getData();
-  const std::shared_ptr<HybridTestViewProps>& props = data.getProps();
+  const std::shared_ptr<const HybridTestViewProps>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
-    // Props aren't set yet!
     throw std::runtime_error("HybridTestViewState's data doesn't contain any props!");
   }
+  return props;
+}
+} // namespace
 
-  // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
-    hybridView->setIsBlue(props->isBlue.value);
-    props->isBlue.isDirty = false;
+void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
+                                           jni::alias_ref<JHybridTestViewSpec::JavaPart> javaView,
+                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface,
+                                           jni::alias_ref<JStateWrapper::javaobject> previousStateWrapperInterface) {
+  std::shared_ptr<JHybridTestViewSpec> hybridView = javaView->getJHybridTestViewSpec();
+  std::shared_ptr<const HybridTestViewProps> props = getPropsFromStateWrapper(stateWrapperInterface);
+  std::shared_ptr<const HybridTestViewProps> previousProps = getPropsFromStateWrapper(previousStateWrapperInterface);
+
+  // Update only props that differ from the last State applied to this native View.
+  if (previousProps == nullptr || !props->isBlue.hasSameValue(previousProps->isBlue)) {
+    hybridView->setIsBlue(props->isBlue.get());
   }
-  if (props->hasBeenCalled.isDirty) {
-    hybridView->setHasBeenCalled(props->hasBeenCalled.value);
-    props->hasBeenCalled.isDirty = false;
+  if (previousProps == nullptr || !props->hasBeenCalled.hasSameValue(previousProps->hasBeenCalled)) {
+    hybridView->setHasBeenCalled(props->hasBeenCalled.get());
   }
-  if (props->colorScheme.isDirty) {
-    hybridView->setColorScheme(props->colorScheme.value);
-    props->colorScheme.isDirty = false;
+  if (previousProps == nullptr || !props->colorScheme.hasSameValue(previousProps->colorScheme)) {
+    hybridView->setColorScheme(props->colorScheme.get());
   }
-  if (props->someCallback.isDirty) {
-    hybridView->setSomeCallback(props->someCallback.value);
-    props->someCallback.isDirty = false;
+  if (previousProps == nullptr || !props->someCallback.hasSameValue(previousProps->someCallback)) {
+    hybridView->setSomeCallback(props->someCallback.get());
+  }
+  if (previousProps == nullptr || !props->optionalLabel.hasSameValue(previousProps->optionalLabel)) {
+    hybridView->setOptionalLabel(props->optionalLabel.get());
+  }
+  if (previousProps == nullptr || !props->optionalCallback.hasSameValue(previousProps->optionalCallback)) {
+    hybridView->setOptionalCallback(props->optionalCallback.get());
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if (previousProps == nullptr || !props->hybridRef.hasSameValue(previousProps->hybridRef)) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->hybridRef.isDirty = false;
   }
 }
 

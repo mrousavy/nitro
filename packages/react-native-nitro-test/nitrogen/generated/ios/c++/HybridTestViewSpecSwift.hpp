@@ -17,6 +17,8 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <string>
+#include <optional>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -90,6 +92,20 @@ namespace margelo::nitro::test {
     inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
       _swiftPart.setSomeCallback(someCallback);
     }
+    inline std::optional<std::string> getOptionalLabel() noexcept override {
+      auto __result = _swiftPart.getOptionalLabel();
+      return __result;
+    }
+    inline void setOptionalLabel(const std::optional<std::string>& optionalLabel) noexcept override {
+      _swiftPart.setOptionalLabel(optionalLabel);
+    }
+    inline std::optional<std::function<void()>> getOptionalCallback() noexcept override {
+      auto __result = _swiftPart.getOptionalCallback();
+      return __result;
+    }
+    inline void setOptionalCallback(const std::optional<std::function<void()>>& optionalCallback) noexcept override {
+      _swiftPart.setOptionalCallback(optionalCallback);
+    }
 
   public:
     // Methods
@@ -98,6 +114,14 @@ namespace margelo::nitro::test {
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
+    }
+    inline double getIsBlueUpdateCount() override {
+      auto __result = _swiftPart.getIsBlueUpdateCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
     }
 
   private:

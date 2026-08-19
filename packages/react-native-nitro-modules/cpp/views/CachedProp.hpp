@@ -8,41 +8,65 @@
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include <jsi/jsi.h>
+#include <memory>
+#include <utility>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 /**
- * A React prop (via `RawProps`) that can be cached against its previous
- * JS value (via `jsi::Value::strictEquals(...)`) and stores an `isDirty`
- * flag for incremental updates.
+ * A React prop (via `RawProps`) that caches its converted value against the
+ * original JS value (via `jsi::Value::strictEquals(...)`).
+ *
+ * `CachedProp` is immutable after construction. Copies of an unchanged prop
+ * share the same entry, which acts as a stable identity for comparing two
+ * Fabric Props snapshots without comparing `T` itself.
  */
 template <typename T>
-struct CachedProp {
-public:
-  T value;
-  bool isDirty = false;
+class CachedProp final {
+private:
+  struct Entry final {
+    T value{};
+    BorrowingReference<jsi::Value> jsiValue;
 
+    Entry() = default;
+    Entry(T&& value, BorrowingReference<jsi::Value>&& jsiValue) : value(std::move(value)), jsiValue(std::move(jsiValue)) {}
+  };
+
+public:
   // Default constructor
-  CachedProp() = default;
-  // Constructor with value
-  CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
-      : value(std::move(value)), isDirty(true), jsiValue(std::move(jsiValue)) {}
+  CachedProp() : _entry(std::make_shared<const Entry>()) {}
   // Copy/Move/Destruct
   CachedProp(const CachedProp&) = default;
   CachedProp(CachedProp&&) = default;
   ~CachedProp() = default;
 
 private:
-  BorrowingReference<jsi::Value> jsiValue;
+  // Constructor with value
+  CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
+      : _entry(std::make_shared<const Entry>(std::move(value), std::move(jsiValue))) {}
 
 public:
+  [[nodiscard]]
+  const T& get() const noexcept {
+    return _entry->value;
+  }
+
+  /**
+   * Returns whether this prop and `other` originate from the same conversion.
+   */
+  [[nodiscard]]
+  bool hasSameValue(const CachedProp<T>& other) const noexcept {
+    return _entry == other._entry;
+  }
+
+private:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
-    if (jsiValue == nullptr) {
+    if (_entry->jsiValue == nullptr) {
       return false;
     }
-    return jsi::Value::strictEquals(runtime, *jsiValue, other);
+    return jsi::Value::strictEquals(runtime, *_entry->jsiValue, other);
   }
 
 public:
@@ -59,6 +83,9 @@ public:
     }
     return CachedProp<T>(std::move(converted), std::move(cached));
   }
+
+private:
+  std::shared_ptr<const Entry> _entry;
 };
 
 } // namespace margelo::nitro
