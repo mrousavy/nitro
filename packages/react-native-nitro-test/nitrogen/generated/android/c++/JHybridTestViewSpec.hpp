@@ -61,6 +61,7 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
+    double getOnDropViewCount() override;
     void someMethod() override;
 
   private:

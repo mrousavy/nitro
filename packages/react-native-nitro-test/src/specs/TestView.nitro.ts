@@ -13,6 +13,7 @@ export interface TestViewProps extends HybridViewProps {
   someCallback: () => void
 }
 export interface TestViewMethods extends HybridViewMethods {
+  getOnDropViewCount(): number
   someMethod(): void
 }
 

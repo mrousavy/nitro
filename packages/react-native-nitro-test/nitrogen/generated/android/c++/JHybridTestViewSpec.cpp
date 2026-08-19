@@ -92,6 +92,11 @@ namespace margelo::nitro::test {
   }
 
   // Methods
+  double JHybridTestViewSpec::getOnDropViewCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getOnDropViewCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
   void JHybridTestViewSpec::someMethod() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("someMethod");
     method(_javaPart);

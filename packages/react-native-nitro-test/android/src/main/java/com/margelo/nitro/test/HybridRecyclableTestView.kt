@@ -17,6 +17,9 @@ class HybridRecyclableTestView(
   // View
   override val view: View = View(context)
   private var isRecycled = false
+  private var invalidLifecycleOrderCount = 0.0
+  private var onDropViewCount = 0.0
+  private var prepareForRecycleCount = 0.0
 
   // Props
   override var isBlue: Boolean = false
@@ -29,11 +32,22 @@ class HybridRecyclableTestView(
     }
 
   override fun onDropView() {
+    onDropViewCount += 1
     Log.i(TAG, "View dropped!")
   }
 
+  override fun getOnDropViewCount(): Double = onDropViewCount
+
+  override fun getInvalidLifecycleOrderCount(): Double = invalidLifecycleOrderCount
+
+  override fun getPrepareForRecycleCount(): Double = prepareForRecycleCount
+
   // Recycling conformance
   override fun prepareForRecycle() {
+    if (onDropViewCount != prepareForRecycleCount + 1) {
+      invalidLifecycleOrderCount += 1
+    }
+    prepareForRecycleCount += 1
     view.setBackgroundColor(Color.YELLOW)
     isRecycled = true
   }

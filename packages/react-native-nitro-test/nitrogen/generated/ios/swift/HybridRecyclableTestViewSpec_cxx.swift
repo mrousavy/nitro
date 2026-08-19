@@ -133,6 +133,42 @@ open class HybridRecyclableTestViewSpec_cxx {
   }
 
   // Methods
+  @inline(__always)
+  public final func getInvalidLifecycleOrderCount() -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.getInvalidLifecycleOrderCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getOnDropViewCount() -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.getOnDropViewCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getPrepareForRecycleCount() -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.getPrepareForRecycleCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
   public final func getView() -> UnsafeMutableRawPointer {
     return Unmanaged.passRetained(__implementation.view).toOpaque()
   }

@@ -13,6 +13,7 @@ class HybridTestView(
 ) : HybridTestViewSpec() {
   // View
   override val view: View = View(context)
+  private var onDropViewCount = 0.0
 
   // Props
   override var isBlue: Boolean = false
@@ -26,8 +27,14 @@ class HybridTestView(
   override var someCallback: () -> Unit = {}
 
   // Methods
+  override fun getOnDropViewCount(): Double = onDropViewCount
+
   override fun someMethod() {
     hasBeenCalled = true
     someCallback()
+  }
+
+  override fun onDropView() {
+    onDropViewCount += 1
   }
 }

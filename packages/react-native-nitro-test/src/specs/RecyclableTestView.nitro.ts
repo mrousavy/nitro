@@ -7,7 +7,11 @@ import type {
 export interface RecyclableTestViewProps extends HybridViewProps {
   isBlue: boolean
 }
-export interface RecyclableTestViewMethods extends HybridViewMethods {}
+export interface RecyclableTestViewMethods extends HybridViewMethods {
+  getInvalidLifecycleOrderCount(): number
+  getOnDropViewCount(): number
+  getPrepareForRecycleCount(): number
+}
 
 export type RecyclableTestView = HybridView<
   RecyclableTestViewProps,

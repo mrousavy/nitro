@@ -58,6 +58,7 @@ export default [
   {
     ignores: [
       '**/node_modules/**',
+      '**/.harness/**',
       '**/lib/**',
       '**/.eslintrc.*',
       '**/.prettierrc.*',

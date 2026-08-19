@@ -13,7 +13,9 @@ public protocol HybridRecyclableTestViewSpec_protocol: HybridObject, HybridView 
   var isBlue: Bool { get set }
 
   // Methods
-  
+  func getInvalidLifecycleOrderCount() throws -> Double
+  func getOnDropViewCount() throws -> Double
+  func getPrepareForRecycleCount() throws -> Double
 }
 
 public extension HybridRecyclableTestViewSpec_protocol {

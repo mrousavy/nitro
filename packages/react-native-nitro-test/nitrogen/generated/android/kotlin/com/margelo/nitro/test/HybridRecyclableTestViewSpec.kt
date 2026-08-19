@@ -34,7 +34,17 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
   abstract var isBlue: Boolean
 
   // Methods
+  @DoNotStrip
+  @Keep
+  abstract fun getInvalidLifecycleOrderCount(): Double
   
+  @DoNotStrip
+  @Keep
+  abstract fun getOnDropViewCount(): Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getPrepareForRecycleCount(): Double
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

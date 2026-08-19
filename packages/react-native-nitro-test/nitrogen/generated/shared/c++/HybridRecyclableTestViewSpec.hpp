@@ -49,7 +49,9 @@ namespace margelo::nitro::test {
 
     public:
       // Methods
-      
+      virtual double getInvalidLifecycleOrderCount() = 0;
+      virtual double getOnDropViewCount() = 0;
+      virtual double getPrepareForRecycleCount() = 0;
 
     protected:
       // Hybrid Setup

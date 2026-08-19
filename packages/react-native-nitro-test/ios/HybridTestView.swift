@@ -11,6 +11,7 @@ import UIKit
 class HybridTestView: HybridTestViewSpec {
   // UIView
   var view: UIView = UIView()
+  private var onDropViewCount: Double = 0
 
   // Props
   var isBlue: Bool = false {
@@ -23,8 +24,16 @@ class HybridTestView: HybridTestViewSpec {
   var someCallback: () -> Void = {}
 
   // Methods
+  func getOnDropViewCount() throws -> Double {
+    return onDropViewCount
+  }
+
   func someMethod() throws {
     hasBeenCalled = true
     someCallback()
+  }
+
+  func onDropView() {
+    onDropViewCount += 1
   }
 }

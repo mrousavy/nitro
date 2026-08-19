@@ -62,6 +62,10 @@ abstract class HybridTestViewSpec: HybridView() {
   // Methods
   @DoNotStrip
   @Keep
+  abstract fun getOnDropViewCount(): Double
+  
+  @DoNotStrip
+  @Keep
   abstract fun someMethod(): Unit
 
   // Default implementation of `HybridObject.toString()`
