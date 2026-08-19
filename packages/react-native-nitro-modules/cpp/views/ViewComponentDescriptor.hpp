@@ -4,20 +4,8 @@
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
-
-#include "ColorScheme.hpp"
-#include <functional>
 #include <memory>
-#include "HybridTestViewSpec.hpp"
-#include <optional>
+#include <utility>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 
 namespace margelo::nitro {
