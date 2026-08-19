@@ -5,36 +5,34 @@
 #pragma once
 
 #include <memory>
-#include <utility>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <utility>
 
 namespace margelo::nitro {
 
 using namespace facebook;
 
 template <typename TShadowNode>
-class ViewComponentDescriptor final: public react::ConcreteComponentDescriptor<TShadowNode> {
+class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<TShadowNode> {
   using Base = react::ConcreteComponentDescriptor<TShadowNode>;
   using Props = typename TShadowNode::ConcreteProps;
   using State = typename TShadowNode::ConcreteStateData;
-  
+
 public:
-  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-  : Base(parameters, react::RawPropsParser()) {}
+  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters) : Base(parameters, react::RawPropsParser()) {}
 
 public:
   /**
    * A faster path for cloning props - reuses the caching logic from the `Props`.
    */
-  std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
-                                                 const std::shared_ptr<const react::Props>& props,
+  std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context, const std::shared_ptr<const react::Props>& props,
                                                  react::RawProps rawProps) const override {
     // 1. Prepare raw props parser
     rawProps.parse(this->rawPropsParser_);
     // 2. Copy props with Nitro's cached copy constructor
-    return Props(context, /* & */ rawProps, props);
+    return TShadowNode::Props(context, /* & */ rawProps, props);
   }
-  
+
 #ifdef ANDROID
   void adopt(react::ShadowNode& shadowNode) const override {
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
@@ -47,7 +45,5 @@ public:
   }
 #endif
 };
-
-
 
 } // namespace margelo::nitro
