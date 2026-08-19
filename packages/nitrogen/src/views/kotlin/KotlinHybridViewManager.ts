@@ -195,7 +195,7 @@ public:
     const setter = p.getSetterName('other')
     return `
 if (props->${name}.isDirty) {
-  hybridView->${setter}(props->${name}.value);
+  hybridView->${setter}(props->${name}.get());
   props->${name}.isDirty = false;
 }
     `.trim()
@@ -241,7 +241,7 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   // Update hybridRef if it changed
   if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.value;
+    const auto& maybeFunc = props->hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }

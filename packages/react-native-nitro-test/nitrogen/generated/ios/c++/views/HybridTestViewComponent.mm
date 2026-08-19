@@ -95,22 +95,22 @@ using namespace margelo::nitro::test::views;
 
   // isBlue: boolean
   if (newViewProps.isBlue.isDirty) {
-    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    swiftPart.setIsBlue(newViewProps.isBlue.get());
     newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
   if (newViewProps.hasBeenCalled.isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
+    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.get());
     newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
   if (newViewProps.colorScheme.isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.get()));
     newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
   if (newViewProps.someCallback.isDirty) {
-    swiftPart.setSomeCallback(newViewProps.someCallback.value);
+    swiftPart.setSomeCallback(newViewProps.someCallback.get());
     newViewProps.someCallback.isDirty = false;
   }
 
@@ -119,7 +119,7 @@ using namespace margelo::nitro::test::views;
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }

@@ -40,7 +40,7 @@ export function createSwiftHybridViewManager(
     const setter = p.getSetterName('swift')
     const bridge = new SwiftCxxBridgedType(p.type, false)
     const parse = bridge.parseFromCppToSwift(
-      `newViewProps.${name}.value`,
+      `newViewProps.${name}.get()`,
       'c++'
     )
     return `
@@ -150,7 +150,7 @@ using namespace ${namespace}::views;
   // 3. Update hybridRef if it changed
   if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.value;
+    const auto& maybeFunc = newViewProps.hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
