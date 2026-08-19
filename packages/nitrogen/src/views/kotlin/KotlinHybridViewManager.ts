@@ -2,9 +2,13 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
+  getHybridRefProperty,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
-import { createFileMetadataString } from '../../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+} from '../../syntax/helpers.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import { addJNINativeRegistration } from '../../syntax/kotlin/JNINativeRegistrations.js'
 import { indent } from '../../utils.js'
@@ -34,6 +38,9 @@ export function createKotlinHybridViewManager(
     )
   }
   const viewImplementation = implementation.implementationClassName
+  const hybridRef = getHybridRefProperty(spec)
+  const hybridRefName = escapeCppName(hybridRef.name)
+  const hybridRefType = hybridRef.type.getCode('c++')
 
   const viewManagerCode = `
 ${createFileMetadataString(`${manager}.kt`)}
@@ -188,11 +195,12 @@ public:
   `.trim()
 
   const propsUpdaterCalls = spec.properties.map((p) => {
+    const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (props->get<"${p.name}">().isDirty) {
-  hybridView->${setter}(props->get<"${p.name}">().value);
-  props->get<"${p.name}">().isDirty = false;
+if (props->${name}.isDirty) {
+  hybridView->${setter}(props->${name}.value);
+  props->${name}.isDirty = false;
 }
     `.trim()
   })
@@ -219,10 +227,10 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
-  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+  jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
+  std::shared_ptr<const ConcreteStateData> concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const ${stateClassName}& data = concreteState->getData();
   const std::shared_ptr<${propsClassName}>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
@@ -234,13 +242,13 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (props->get<"hybridRef">().isDirty) {
+  if (props->${hybridRefName}.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->get<"hybridRef">().value;
+    const ${hybridRefType}& maybeFunc = props->${hybridRefName}.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->get<"hybridRef">().isDirty = false;
+    props->${hybridRefName}.isDirty = false;
   }
 }
 

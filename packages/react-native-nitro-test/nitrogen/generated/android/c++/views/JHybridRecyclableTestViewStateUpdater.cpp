@@ -25,10 +25,10 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
       throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
   }
-  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+  jni::alias_ref<react::StateWrapperImpl::javaobject> stateWrapper{
             static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)};
   std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
-  auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
+  std::shared_ptr<const ConcreteStateData> concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRecyclableTestViewState& data = concreteState->getData();
   const std::shared_ptr<HybridRecyclableTestViewProps>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
@@ -37,19 +37,19 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   }
 
   // Update all props if they are dirty
-  if (props->get<"isBlue">().isDirty) {
-    hybridView->setIsBlue(props->get<"isBlue">().value);
-    props->get<"isBlue">().isDirty = false;
+  if (props->isBlue.isDirty) {
+    hybridView->setIsBlue(props->isBlue.value);
+    props->isBlue.isDirty = false;
   }
 
   // Update hybridRef if it changed
-  if (props->get<"hybridRef">().isDirty) {
+  if (props->hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->get<"hybridRef">().value;
+    const std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>& maybeFunc = props->hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->get<"hybridRef">().isDirty = false;
+    props->hybridRef.isDirty = false;
   }
 }
 

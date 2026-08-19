@@ -7,10 +7,15 @@
 
 #pragma once
 
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <NitroModules/HybridViewProps.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/RawProps.h>
+
+#include <string>
 
 #include <memory>
 #include "HybridRecyclableTestViewSpec.hpp"
@@ -24,15 +29,25 @@ namespace margelo::nitro::test::views {
   /**
    * The name of the actual native View.
    */
-  inline constexpr char HybridRecyclableTestViewComponentName[] = "RecyclableTestView";
+  extern const char HybridRecyclableTestViewComponentName[];
 
   /**
    * Props for the "RecyclableTestView" View.
    */
-  using HybridRecyclableTestViewProps = nitro::HybridViewProps<
-      "RecyclableTestView",
-      nitro::ViewProp<"isBlue", bool>,
-      nitro::ViewProp<"hybridRef", std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>>;
+  class HybridRecyclableTestViewProps final: public react::ViewProps {
+  public:
+    HybridRecyclableTestViewProps() = default;
+    HybridRecyclableTestViewProps(const react::PropsParserContext& context,
+                                  const HybridRecyclableTestViewProps& sourceProps,
+                                  const react::RawProps& rawProps);
+
+  public:
+    nitro::CachedProp<bool> isBlue;
+    nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
+
+  private:
+    static bool filterObjectKeys(const std::string& propName);
+  };
 
   /**
    * State for the "RecyclableTestView" View.

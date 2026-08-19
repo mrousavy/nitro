@@ -86,29 +86,29 @@ using namespace margelo::nitro::test::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<HybridRecyclableTestViewProps const>(props);
-  auto& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
+  const HybridRecyclableTestViewProps& newViewPropsConst = *std::static_pointer_cast<HybridRecyclableTestViewProps const>(props);
+  HybridRecyclableTestViewProps& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
   // isBlue: boolean
-  if (newViewProps.get<"isBlue">().isDirty) {
-    swiftPart.setIsBlue(newViewProps.get<"isBlue">().value);
-    newViewProps.get<"isBlue">().isDirty = false;
+  if (newViewProps.isBlue.isDirty) {
+    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    newViewProps.isBlue.isDirty = false;
   }
 
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.get<"hybridRef">().isDirty) {
+  if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.get<"hybridRef">().value;
+    const std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.get<"hybridRef">().isDirty = false;
+    newViewProps.hybridRef.isDirty = false;
   }
 
   // 4. Continue in base class

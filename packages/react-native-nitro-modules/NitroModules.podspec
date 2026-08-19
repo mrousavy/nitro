@@ -51,7 +51,7 @@ Pod::Spec.new do |s|
     "cpp/utils/NitroDefines.hpp",
     "cpp/utils/PropNameIDCache.hpp",
     "cpp/views/CachedProp.hpp",
-    "cpp/views/HybridViewProps.hpp",
+    "cpp/views/ViewPropParser.hpp",
     "cpp/views/ViewComponentDescriptor.hpp",
     "cpp/views/ViewPropsHolderState.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)

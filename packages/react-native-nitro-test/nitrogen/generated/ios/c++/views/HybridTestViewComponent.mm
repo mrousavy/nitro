@@ -86,44 +86,44 @@ using namespace margelo::nitro::test::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
-  auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
+  const HybridTestViewProps& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
+  HybridTestViewProps& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
   NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
   swiftPart.beforeUpdate();
 
   // isBlue: boolean
-  if (newViewProps.get<"isBlue">().isDirty) {
-    swiftPart.setIsBlue(newViewProps.get<"isBlue">().value);
-    newViewProps.get<"isBlue">().isDirty = false;
+  if (newViewProps.isBlue.isDirty) {
+    swiftPart.setIsBlue(newViewProps.isBlue.value);
+    newViewProps.isBlue.isDirty = false;
   }
   // hasBeenCalled: boolean
-  if (newViewProps.get<"hasBeenCalled">().isDirty) {
-    swiftPart.setHasBeenCalled(newViewProps.get<"hasBeenCalled">().value);
-    newViewProps.get<"hasBeenCalled">().isDirty = false;
+  if (newViewProps.hasBeenCalled.isDirty) {
+    swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.value);
+    newViewProps.hasBeenCalled.isDirty = false;
   }
   // colorScheme: enum
-  if (newViewProps.get<"colorScheme">().isDirty) {
-    swiftPart.setColorScheme(static_cast<int>(newViewProps.get<"colorScheme">().value));
-    newViewProps.get<"colorScheme">().isDirty = false;
+  if (newViewProps.colorScheme.isDirty) {
+    swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.value));
+    newViewProps.colorScheme.isDirty = false;
   }
   // someCallback: function
-  if (newViewProps.get<"someCallback">().isDirty) {
-    swiftPart.setSomeCallback(newViewProps.get<"someCallback">().value);
-    newViewProps.get<"someCallback">().isDirty = false;
+  if (newViewProps.someCallback.isDirty) {
+    swiftPart.setSomeCallback(newViewProps.someCallback.value);
+    newViewProps.someCallback.isDirty = false;
   }
 
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.get<"hybridRef">().isDirty) {
+  if (newViewProps.hybridRef.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.get<"hybridRef">().value;
+    const std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>& maybeFunc = newViewProps.hybridRef.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.get<"hybridRef">().isDirty = false;
+    newViewProps.hybridRef.isDirty = false;
   }
 
   // 4. Continue in base class

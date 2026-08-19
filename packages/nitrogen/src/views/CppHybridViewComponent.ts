@@ -1,7 +1,11 @@
 import type { SourceFile } from '../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../syntax/HybridObjectSpec.js'
 import { createIndentation, indent } from '../utils.js'
-import { createFileMetadataString, isNotDuplicate } from '../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+  isNotDuplicate,
+} from '../syntax/helpers.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
 import { includeHeader } from '../syntax/c++/includeNitroHeader.js'
 import { createHostComponentJs } from './createHostComponentJs.js'
@@ -37,7 +41,7 @@ export function getViewComponentNames(
   }
 }
 
-function getHybridRefProperty(spec: HybridObjectSpec): Property {
+export function getHybridRefProperty(spec: HybridObjectSpec): Property {
   const hybrid = new HybridObjectType(spec)
   const type = new FunctionType(new VoidType(), [
     new NamedWrappingType('ref', hybrid),
@@ -67,8 +71,12 @@ export function createViewComponentShadowNodeFiles(
   const namespace = spec.config.getCxxNamespace('c++', 'views')
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
-  const propSchemas = props.map(
-    (p) => `nitro::ViewProp<"${p.name}", ${p.type.getCode('c++')}>`
+  const properties = props.map(
+    (p) =>
+      `nitro::CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
+  )
+  const filterCases = props.map(
+    (prop) => `case hashString("${prop.name}"): return true;`
   )
   const includes = props
     .flatMap((p) =>
@@ -83,10 +91,15 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <NitroModules/HybridViewProps.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/RawProps.h>
+
+#include <string>
 
 ${includes.join('\n')}
 
@@ -97,14 +110,24 @@ namespace ${namespace} {
   /**
    * The name of the actual native View.
    */
-  inline constexpr char ${nameVariable}[] = "${T}";
+  extern const char ${nameVariable}[];
 
   /**
    * Props for the "${spec.name}" View.
    */
-  using ${propsClassName} = nitro::HybridViewProps<
-      "${spec.name}",
-      ${indent(propSchemas.join(',\n'), '      ')}>;
+  class ${propsClassName} final: public react::ViewProps {
+  public:
+    ${propsClassName}() = default;
+    ${propsClassName}(const react::PropsParserContext& context,
+  ${createIndentation(propsClassName.length)}   const ${propsClassName}& sourceProps,
+  ${createIndentation(propsClassName.length)}   const react::RawProps& rawProps);
+
+  public:
+    ${indent(properties.join('\n'), '    ')}
+
+  private:
+    static bool filterObjectKeys(const std::string& propName);
+  };
 
   /**
    * State for the "${spec.name}" View.
@@ -129,10 +152,55 @@ namespace ${namespace} {
 } // namespace ${namespace}
 `.trim()
 
+  const propInitializers = [
+    'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
+    ...props.map((prop) => {
+      const name = escapeCppName(prop.name)
+      const type = prop.type.getCode('c++')
+      return `${name}(nitro::parseViewProp<${type}>("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
+    }),
+  ]
+  const ctorIndent = createIndentation(propsClassName.length * 2)
+  const componentCode = `
+${createFileMetadataString(`${component}.cpp`)}
+
+#include "${component}.hpp"
+
+#include <NitroModules/NitroHash.hpp>
+#include <NitroModules/ViewPropParser.hpp>
+
+namespace ${namespace} {
+
+  using namespace facebook;
+
+  extern const char ${nameVariable}[] = "${T}";
+
+  ${propsClassName}::${propsClassName}(const react::PropsParserContext& context,
+  ${ctorIndent}   const ${propsClassName}& sourceProps,
+  ${ctorIndent}   const react::RawProps& rawProps):
+    ${indent(propInitializers.join(',\n'), '    ')} { }
+
+  bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
+    switch (hashString(propName)) {
+      ${indent(filterCases.join('\n'), '      ')}
+      default: return false;
+    }
+  }
+
+} // namespace ${namespace}
+`.trim()
+
   const files: SourceFile[] = [
     {
       name: `${component}.hpp`,
       content: componentHeaderCode,
+      language: 'c++',
+      platform: 'shared',
+      subdirectory: ['views'],
+    },
+    {
+      name: `${component}.cpp`,
+      content: componentCode,
       language: 'c++',
       platform: 'shared',
       subdirectory: ['views'],

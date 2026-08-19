@@ -7,10 +7,15 @@
 
 #pragma once
 
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <NitroModules/HybridViewProps.hpp>
+#include <NitroModules/CachedProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/RawProps.h>
+
+#include <string>
 
 #include "ColorScheme.hpp"
 #include <functional>
@@ -25,18 +30,28 @@ namespace margelo::nitro::test::views {
   /**
    * The name of the actual native View.
    */
-  inline constexpr char HybridTestViewComponentName[] = "TestView";
+  extern const char HybridTestViewComponentName[];
 
   /**
    * Props for the "TestView" View.
    */
-  using HybridTestViewProps = nitro::HybridViewProps<
-      "TestView",
-      nitro::ViewProp<"isBlue", bool>,
-      nitro::ViewProp<"hasBeenCalled", bool>,
-      nitro::ViewProp<"colorScheme", ColorScheme>,
-      nitro::ViewProp<"someCallback", std::function<void()>>,
-      nitro::ViewProp<"hybridRef", std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>>;
+  class HybridTestViewProps final: public react::ViewProps {
+  public:
+    HybridTestViewProps() = default;
+    HybridTestViewProps(const react::PropsParserContext& context,
+                        const HybridTestViewProps& sourceProps,
+                        const react::RawProps& rawProps);
+
+  public:
+    nitro::CachedProp<bool> isBlue;
+    nitro::CachedProp<bool> hasBeenCalled;
+    nitro::CachedProp<ColorScheme> colorScheme;
+    nitro::CachedProp<std::function<void()>> someCallback;
+    nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
+
+  private:
+    static bool filterObjectKeys(const std::string& propName);
+  };
 
   /**
    * State for the "TestView" View.

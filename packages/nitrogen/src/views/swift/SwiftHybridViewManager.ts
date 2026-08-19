@@ -2,9 +2,13 @@ import type { SourceFile } from '../../syntax/SourceFile.js'
 import type { HybridObjectSpec } from '../../syntax/HybridObjectSpec.js'
 import {
   createViewComponentShadowNodeFiles,
+  getHybridRefProperty,
   getViewComponentNames,
 } from '../CppHybridViewComponent.js'
-import { createFileMetadataString } from '../../syntax/helpers.js'
+import {
+  createFileMetadataString,
+  escapeCppName,
+} from '../../syntax/helpers.js'
 import { getUmbrellaHeaderName } from '../../autolinking/ios/createSwiftUmbrellaHeader.js'
 import { getHybridObjectName } from '../../syntax/getHybridObjectName.js'
 import {
@@ -32,18 +36,23 @@ export function createSwiftHybridViewManager(
     )
   }
 
+  const hybridRef = getHybridRefProperty(spec)
+  const hybridRefName = escapeCppName(hybridRef.name)
+  const hybridRefType = hybridRef.type.getCode('c++')
+
   const propAssignments = spec.properties.map((p) => {
+    const name = escapeCppName(p.name)
     const setter = p.getSetterName('swift')
     const bridge = new SwiftCxxBridgedType(p.type, false)
     const parse = bridge.parseFromCppToSwift(
-      `newViewProps.get<"${p.name}">().value`,
+      `newViewProps.${name}.value`,
       'c++'
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.get<"${p.name}">().isDirty) {
+if (newViewProps.${name}.isDirty) {
   swiftPart.${setter}(${indent(parse, '  ')});
-  newViewProps.get<"${p.name}">().isDirty = false;
+  newViewProps.${name}.isDirty = false;
 }
 `.trim()
   })
@@ -132,8 +141,8 @@ using namespace ${namespace}::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
-  auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
+  const ${propsClassName}& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
+  ${propsClassName}& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually
@@ -144,13 +153,13 @@ using namespace ${namespace}::views;
   swiftPart.afterUpdate();
 
   // 3. Update hybridRef if it changed
-  if (newViewProps.get<"hybridRef">().isDirty) {
+  if (newViewProps.${hybridRefName}.isDirty) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.get<"hybridRef">().value;
+    const ${hybridRefType}& maybeFunc = newViewProps.${hybridRefName}.value;
     if (maybeFunc.has_value()) {
       maybeFunc.value()(_hybridView);
     }
-    newViewProps.get<"hybridRef">().isDirty = false;
+    newViewProps.${hybridRefName}.isDirty = false;
   }
 
   // 4. Continue in base class
