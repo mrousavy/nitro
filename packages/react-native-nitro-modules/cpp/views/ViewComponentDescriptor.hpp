@@ -32,7 +32,7 @@ public:
     // 1. Prepare raw props parser
     rawProps.parse(this->rawPropsParser_);
     // 2. Copy props with Nitro's cached copy constructor
-    return TShadowNode::Props(context, /* & */ rawProps, props);
+    return Props(context, /* & */ rawProps, props);
   }
   
 #ifdef ANDROID
@@ -40,9 +40,9 @@ public:
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<TShadowNode&>(shadowNode);
-    const std::shared_ptr<const TShadowNode::Props>& constProps = concreteShadowNode.getConcreteSharedProps();
-    const std::shared_ptr<TShadowNode::Props>& props = std::const_pointer_cast<TShadowNode::Props>(constProps);
-    TShadowNode::State state{props};
+    const std::shared_ptr<const Props>& constProps = concreteShadowNode.getConcreteSharedProps();
+    const std::shared_ptr<Props>& props = std::const_pointer_cast<Props>(constProps);
+    State state{props};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif
