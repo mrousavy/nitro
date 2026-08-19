@@ -51,20 +51,6 @@ public:
   }
 
 public:
-  static CachedProp<T> fromJSIValue(jsi::Runtime& runtime, const jsi::Value& value, const CachedProp<T>& oldProp) {
-    if (oldProp.equals(runtime, value)) {
-      // jsi::Value hasn't changed - no need to convert it again!
-      return oldProp;
-    }
-    T converted = JSIConverter<T>::fromJSI(runtime, value);
-    BorrowingReference<jsi::Value> cached;
-    {
-      JSICacheReference cache = JSICache::getOrCreateCache(runtime);
-      cached = cache.makeShared(jsi::Value(runtime, value));
-    }
-    return CachedProp<T>(std::move(converted), std::move(cached));
-  }
-
   static CachedProp<T> fromRawValue(const char* viewName, const char* propName, const react::RawProps& rawProps,
                                     const CachedProp<T>& previousProp) {
     try {
@@ -81,9 +67,9 @@ public:
         // wraps them as `{ f: function }`, so we unwrap `f` before converting
         // and caching the JSI value.
         jsi::Value function = value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"));
-        return CachedProp<T>::fromRawValue(*runtime, function, previousProp);
+        return CachedProp<T>::fromJSIValue(*runtime, std::move(function), previousProp);
       } else {
-        return CachedProp<T>::fromRawValue(*runtime, value, previousProp);
+        return CachedProp<T>::fromJSIValue(*runtime, std::move(value), previousProp);
       }
     } catch (const std::exception& exception) {
       throw std::runtime_error(std::string(viewName) + "." + propName + ": " + exception.what());
@@ -92,7 +78,27 @@ public:
 
   [[deprecated("Update nitrogen and re-generate specs.")]]
   static CachedProp<T> fromRawValue(jsi::Runtime& runtime, const jsi::Value& value, const CachedProp<T>& oldProp) {
-    return fromJSIValue(runtime, value, oldProp);
+    if (oldProp.equals(runtime, value)) {
+      return oldProp;
+    }
+
+    return convertAndCacheJSIValue(runtime, jsi::Value(runtime, value));
+  }
+
+private:
+  static CachedProp<T> fromJSIValue(jsi::Runtime& runtime, jsi::Value&& value, const CachedProp<T>& previousProp) {
+    if (previousProp.equals(runtime, value)) {
+      // jsi::Value hasn't changed - no need to convert it again!
+      return previousProp;
+    }
+    // The new `value` differs from our previous value, so let's convert it using JSIConverter and cache it
+    return convertAndCacheJSIValue(runtime, std::move(value));
+  }
+  static CachedProp<T> convertAndCacheJSIValue(jsi::Runtime& runtime, jsi::Value&& value) {
+    T converted = JSIConverter<T>::fromJSI(runtime, value);
+    JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+    BorrowingReference<jsi::Value> cached = cache.makeShared(std::move(value));
+    return CachedProp<T>(std::move(converted), std::move(cached));
   }
 };
 
