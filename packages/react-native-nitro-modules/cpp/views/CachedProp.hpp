@@ -43,13 +43,11 @@ private:
   std::shared_ptr<const Entry> _entry;
 
 public:
-  bool isDirty = false;
-
   // Default constructor
   CachedProp() : _entry(std::make_shared<const Entry>()) {}
   // Constructor with value
   CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
-      : _entry(std::make_shared<const Entry>(std::move(value), std::move(jsiValue))), isDirty(true) {}
+      : _entry(std::make_shared<const Entry>(std::move(value), std::move(jsiValue))) {}
   // Copy/Move/Destruct
   CachedProp(const CachedProp&) = default;
   CachedProp(CachedProp&&) = default;

@@ -26,8 +26,12 @@ export function createSwiftHybridViewManager(
   const { HybridTSpec, HybridTSpecSwift, HybridTSpecCxx } = getHybridObjectName(
     spec.name
   )
-  const { component, descriptorClassName, propsClassName } =
-    getViewComponentNames(spec)
+  const {
+    component,
+    descriptorClassName,
+    propsClassName,
+    shadowNodeClassName,
+  } = getViewComponentNames(spec)
   const implementation = spec.config.getIosAutolinkedImplementation(spec.name)
   if (implementation?.language !== 'swift') {
     throw new Error(
@@ -45,12 +49,13 @@ export function createSwiftHybridViewManager(
     )
     return `
 // ${p.jsSignature}
-if (newViewProps.${name}.isDirty) {
+if (oldViewProps == nullptr || !newViewProps.${name}.hasSameValue(oldViewProps->${name})) {
   swiftPart.${setter}(${indent(parse, '  ')});
-  newViewProps.${name}.isDirty = false;
 }
 `.trim()
   })
+  const hasTransactionPropChanges =
+    'oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps)'
 
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
@@ -101,6 +106,7 @@ using namespace ${namespace}::views;
 
 - (instancetype) init {
   if (self = [super init]) {
+    _props = ${shadowNodeClassName}::defaultSharedProps();
     std::shared_ptr<${HybridTSpec}> hybridView = ${getHybridObjectConstructorCall(spec.name)}
     _hybridView = std::dynamic_pointer_cast<${HybridTSpecSwift}>(hybridView);
     [self updateView];
@@ -136,28 +142,30 @@ using namespace ${namespace}::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const ${propsClassName}& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
-  ${propsClassName}& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
+  const auto& newViewProps = *std::static_pointer_cast<const ${propsClassName}>(props);
+  const auto* oldViewProps = static_cast<const ${propsClassName}*>(oldProps.get());
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
-  // 2. Update each prop individually
-  swiftPart.beforeUpdate();
+  // 2. Update only props that differ from the previous Props snapshot.
+  const bool hasTransactionPropChanges = ${hasTransactionPropChanges};
+  if (hasTransactionPropChanges) {
+    swiftPart.beforeUpdate();
 
-  ${indent(propAssignments.join('\n'), '  ')}
+    ${indent(propAssignments.join('\n'), '    ')}
 
-  swiftPart.afterUpdate();
-
-  // 3. Update hybridRef if it changed
-  if (newViewProps.hybridRef.isDirty) {
-    // hybridRef changed - call it with new this
-    const auto& maybeFunc = newViewProps.hybridRef.get();
-    if (maybeFunc.has_value()) {
-      maybeFunc.value()(_hybridView);
+    // Update hybridRef if it changed
+    if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
+      // hybridRef changed - call it with new this
+      const auto& maybeFunc = newViewProps.hybridRef.get();
+      if (maybeFunc.has_value()) {
+        maybeFunc.value()(_hybridView);
+      }
     }
-    newViewProps.hybridRef.isDirty = false;
+
+    swiftPart.afterUpdate();
   }
 
-  // 4. Continue in base class
+  // 3. Continue in base class
   [super updateProps:props oldProps:oldProps];
 }
 

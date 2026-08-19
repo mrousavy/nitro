@@ -45,6 +45,12 @@ namespace margelo::nitro::test::views {
     nitro::CachedProp<bool> isBlue;
     nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
 
+    [[nodiscard]]
+    bool hasSameProps(const HybridRecyclableTestViewProps& other) const noexcept {
+      return isBlue.hasSameValue(other.isBlue) &&
+             hybridRef.hasSameValue(other.hybridRef);
+    }
+
   private:
     static bool filterObjectKeys(const std::string& propName);
   };
