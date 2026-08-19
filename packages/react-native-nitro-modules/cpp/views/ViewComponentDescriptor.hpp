@@ -12,6 +12,13 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+/**
+ * A `react::ConcreteComponentDescriptor` implementation for a Nitro View.
+ *
+ * Requires the `TShadowNode` to be a `react::ShadowNode` composited of `Props`
+ * which support Raw Props Parsing, and `State` which supports holding `Props`
+ * for direct transfer to JNI on Android.
+ */
 template <typename TShadowNode>
 class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<TShadowNode> {
   using Base = react::ConcreteComponentDescriptor<TShadowNode>;
