@@ -167,7 +167,7 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include "${component}.hpp"
 
 #include <NitroModules/NitroHash.hpp>
-#include <NitroModules/ViewPropParser.hpp>
+#include <NitroModules/CachedProp.hpp>
 
 namespace ${namespace} {
 

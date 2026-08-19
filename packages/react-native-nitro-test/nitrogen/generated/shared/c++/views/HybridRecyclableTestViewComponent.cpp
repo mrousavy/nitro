@@ -8,7 +8,7 @@
 #include "HybridRecyclableTestViewComponent.hpp"
 
 #include <NitroModules/NitroHash.hpp>
-#include <NitroModules/ViewPropParser.hpp>
+#include <NitroModules/CachedProp.hpp>
 
 namespace margelo::nitro::test::views {
 
