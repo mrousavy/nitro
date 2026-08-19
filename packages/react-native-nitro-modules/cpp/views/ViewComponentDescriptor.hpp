@@ -68,7 +68,9 @@ public:
     auto& concreteShadowNode = static_cast<TShadowNode&>(shadowNode);
     // Start from the stable shared pointer stored by ShadowNode. Some React Native versions implement
     // `getConcreteSharedProps()` by returning a reference to a temporary cast result.
-    std::shared_ptr<Props> props = std::const_pointer_cast<Props>(std::static_pointer_cast<const Props>(concreteShadowNode.getProps()));
+    auto constBaseProps = concreteShadowNode.getProps();
+    auto constProps = std::static_pointer_cast<const Props>(constBaseProps);
+    auto props = std::const_pointer_cast<Props>(std::move(constProps));
     State state{std::move(props)};
     concreteShadowNode.setStateData(std::move(state));
   }
