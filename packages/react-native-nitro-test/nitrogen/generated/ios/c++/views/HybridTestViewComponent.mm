@@ -37,6 +37,7 @@ using namespace margelo::nitro::test::views;
 
 @implementation HybridTestViewComponent {
   std::shared_ptr<HybridTestViewSpecSwift> _hybridView;
+  BOOL _didDropView;
 }
 
 + (void) load {
@@ -69,8 +70,21 @@ using namespace margelo::nitro::test::views;
   [self setContentView:view];
 }
 
+- (void) notifyOnDropView {
+  // A recycled component can later be invalidated. Notify only once per mount.
+  if (_didDropView) {
+    return;
+  }
+  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  _didDropView = YES;
+}
+
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
             oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
+  // A props update marks a newly mounted or still-active component.
+  _didDropView = NO;
+
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<HybridTestViewProps const>(props);
   auto& newViewProps = const_cast<HybridTestViewProps&>(newViewPropsConst);
@@ -121,6 +135,7 @@ using namespace margelo::nitro::test::views;
 }
 
 - (void)prepareForRecycle {
+  [self notifyOnDropView];
   [super prepareForRecycle];
   NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
@@ -128,8 +143,7 @@ using namespace margelo::nitro::test::views;
 
 #ifdef ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
 - (void)invalidate {
-  NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
-  swiftPart.onDropView();
+  [self notifyOnDropView];
   [super invalidate];
 }
 #endif
