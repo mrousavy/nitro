@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include <memory>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <utility>
 
 namespace margelo::nitro {
 
@@ -22,7 +24,7 @@ template <typename TProps>
 struct ViewPropsHolderState final {
 public:
   ViewPropsHolderState() = default;
-  explicit ViewPropsHolderState(const std::shared_ptr<TProps>& props) : _props(props) {}
+  explicit ViewPropsHolderState(std::shared_ptr<TProps> props) : _props(std::move(props)) {}
 
 public:
   [[nodiscard]]
