@@ -22,8 +22,7 @@ template <typename TProps>
 struct ViewPropsHolderState final {
 public:
   ViewPropsHolderState() = default;
-  explicit ViewPropsHolderState(const std::shared_ptr<TProps>& props):
-    _props(props) {}
+  explicit ViewPropsHolderState(const std::shared_ptr<TProps>& props) : _props(props) {}
 
 public:
   [[nodiscard]]
@@ -32,15 +31,15 @@ public:
   }
 
 public:
-  #ifdef ANDROID
+#ifdef ANDROID
   ViewPropsHolderState(const ViewPropsHolderState& /* previousState */, folly::dynamic /* data */) {}
   folly::dynamic getDynamic() const {
-    throw std::runtime_error("HybridTestViewState does not support folly!");
+    throw std::runtime_error("ViewPropsHolderState<T> does not support folly!");
   }
   react::MapBuffer getMapBuffer() const {
-    throw std::runtime_error("HybridTestViewState does not support MapBuffer!");
+    throw std::runtime_error("ViewPropsHolderState<T> does not support MapBuffer!");
   };
-  #endif
+#endif
 
 private:
   std::shared_ptr<TProps> _props;
