@@ -87,6 +87,7 @@ using namespace ${namespace}::views;
 
 @implementation ${component} {
   std::shared_ptr<${HybridTSpecSwift}> _hybridView;
+  BOOL _didDropView;
 }
 
 + (void) load {
@@ -119,8 +120,21 @@ using namespace ${namespace}::views;
   [self setContentView:view];
 }
 
+- (void) notifyOnDropView {
+  // A recycled component can later be invalidated. Notify only once per mount.
+  if (_didDropView) {
+    return;
+  }
+  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
+  swiftPart.onDropView();
+  _didDropView = YES;
+}
+
 - (void) updateProps:(const std::shared_ptr<const react::Props>&)props
             oldProps:(const std::shared_ptr<const react::Props>&)oldProps {
+  // A props update marks a newly mounted or still-active component.
+  _didDropView = NO;
+
   // 1. Downcast props
   const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
   auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
@@ -152,6 +166,7 @@ using namespace ${namespace}::views;
 }
 
 - (void)prepareForRecycle {
+  [self notifyOnDropView];
   [super prepareForRecycle];
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
   swiftPart.maybePrepareForRecycle();
@@ -159,8 +174,7 @@ using namespace ${namespace}::views;
 
 #ifdef ENABLE_RCT_COMPONENT_VIEW_INVALIDATE
 - (void)invalidate {
-  ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
-  swiftPart.onDropView();
+  [self notifyOnDropView];
   [super invalidate];
 }
 #endif
