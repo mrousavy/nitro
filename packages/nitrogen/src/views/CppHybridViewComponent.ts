@@ -157,7 +157,7 @@ namespace ${namespace} {
     ...props.map((prop) => {
       const name = escapeCppName(prop.name)
       const type = prop.type.getCode('c++')
-      return `${name}(nitro::parseViewProp<${type}>("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
+      return `${name}(nitro::CachedProp<${type}>::fromRawValue("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
     }),
   ]
   const ctorIndent = createIndentation(propsClassName.length * 2)

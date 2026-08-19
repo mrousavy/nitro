@@ -20,8 +20,8 @@ namespace margelo::nitro::test::views {
                                                                const HybridRecyclableTestViewProps& sourceProps,
                                                                const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue(nitro::parseViewProp<bool>("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
-    hybridRef(nitro::parseViewProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
+    isBlue(nitro::CachedProp<bool>::fromRawValue("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
+    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridRecyclableTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

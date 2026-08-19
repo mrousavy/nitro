@@ -20,11 +20,11 @@ namespace margelo::nitro::test::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue(nitro::parseViewProp<bool>("TestView", "isBlue", rawProps, sourceProps.isBlue)),
-    hasBeenCalled(nitro::parseViewProp<bool>("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
-    colorScheme(nitro::parseViewProp<ColorScheme>("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
-    someCallback(nitro::parseViewProp<std::function<void()>>("TestView", "someCallback", rawProps, sourceProps.someCallback)),
-    hybridRef(nitro::parseViewProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
+    isBlue(nitro::CachedProp<bool>::fromRawValue("TestView", "isBlue", rawProps, sourceProps.isBlue)),
+    hasBeenCalled(nitro::CachedProp<bool>::fromRawValue("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
+    colorScheme(nitro::CachedProp<ColorScheme>::fromRawValue("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
+    someCallback(nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
+    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
