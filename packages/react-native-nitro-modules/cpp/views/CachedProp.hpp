@@ -9,6 +9,7 @@
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "PropNameIDCache.hpp"
+#include "RawPropsCompat.hpp"
 #include <jsi/jsi.h>
 
 #include <react/renderer/core/RawProps.h>
@@ -79,7 +80,7 @@ public:
   static CachedProp<T> fromRawValue(const char* viewName, const char* propName, const react::RawProps& rawProps,
                                     const CachedProp<T>& previousProp) {
     try {
-      const react::RawValue* rawValue = rawProps.at(propName, nullptr, nullptr);
+      const react::RawValue* rawValue = RawPropsCompat::at(rawProps, propName);
       if (rawValue == nullptr) {
         // This RawValue pack does not contain our prop, so skip it - it's still the same from before
         return previousProp;
