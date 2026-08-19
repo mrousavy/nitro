@@ -42,6 +42,10 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
     return prepareForRecycleCount
   }
 
+  func beforeUpdate() {
+    isRecycled = false
+  }
+
   // Recycling conformance
   func prepareForRecycle() {
     if onDropViewCount != prepareForRecycleCount + 1 {
