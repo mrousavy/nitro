@@ -22,6 +22,8 @@
 #include "HybridTestViewSpec.hpp"
 #include <optional>
 
+#include <NitroModules/ViewComponentDescriptor.hpp>
+
 namespace margelo::nitro::test::views {
 
   using namespace facebook;
@@ -90,24 +92,7 @@ namespace margelo::nitro::test::views {
                                                                  react::ViewEventEmitter /* default */,
                                                                  HybridTestViewState /* custom state */>;
 
-  /**
-   * The Component Descriptor for the "TestView" View.
-   */
-  class HybridTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridTestViewShadowNode> {
-  public:
-    explicit HybridTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
-
-  public:
-    /**
-     * A faster path for cloning props - reuses the caching logic from `HybridTestViewProps`.
-     */
-    std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
-                                                   const std::shared_ptr<const react::Props>& props,
-                                                   react::RawProps rawProps) const override;
-#ifdef ANDROID
-    void adopt(react::ShadowNode& shadowNode) const override;
-#endif
-  };
+  using HybridTestViewComponentDescriptor = nitro::ViewComponentDescriptor<HybridTestViewShadowNode>;
 
   /* The actual view for "TestView" needs to be implemented in platform-specific code. */
 
