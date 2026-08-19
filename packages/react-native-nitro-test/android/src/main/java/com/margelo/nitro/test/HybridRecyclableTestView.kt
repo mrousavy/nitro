@@ -42,6 +42,10 @@ class HybridRecyclableTestView(
 
   override fun getPrepareForRecycleCount(): Double = prepareForRecycleCount
 
+  override fun beforeUpdate() {
+    isRecycled = false
+  }
+
   // Recycling conformance
   override fun prepareForRecycle() {
     if (onDropViewCount != prepareForRecycleCount + 1) {
