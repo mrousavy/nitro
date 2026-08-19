@@ -8,6 +8,7 @@
 #include <cxxreact/ReactNativeVersion.h>
 #include <memory>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
+#include <string_view>
 #include <utility>
 
 #if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 85
@@ -53,9 +54,34 @@ public:
    */
   std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context, const std::shared_ptr<const react::Props>& props,
                                                  react::RawProps rawProps) const override {
-    // 1. Prepare raw props parser
+    if (!props && rawProps.isEmpty()) {
+      return TShadowNode::defaultSharedProps();
+    }
+
+    if constexpr (react::RawPropsFilterable<TShadowNode>) {
+      TShadowNode::filterRawProps(rawProps);
+    }
+
+#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87
+    if constexpr (react::HasIteratorSetterCtor<Props>) {
+      // Copy the previous immutable snapshot, then apply only the keys present
+      // in this RawProps patch. This keeps Nitro's JSI-backed RawValues intact.
+      auto shadowNodeProps = TShadowNode::Props(props);
+
+#ifdef RN_SERIALIZABLE_STATE
+      TShadowNode::initializeDynamicProps(shadowNodeProps, rawProps, props);
+#endif
+
+      rawProps.forEachItem([&](std::string_view name, const react::RawValue& value) {
+        shadowNodeProps->setProp(context, RAW_PROPS_KEY_HASH(name), name.data(), value);
+      });
+      return shadowNodeProps;
+    }
+#endif
+
+    // React Native 0.79 through 0.86, and generated Props without an iterator
+    // setter, keep using Nitro's JSI-backed three-argument constructor.
     rawProps.parse(this->rawPropsParser_);
-    // 2. Copy props with Nitro's cached copy constructor
     return TShadowNode::Props(context, /* & */ rawProps, props);
   }
 
