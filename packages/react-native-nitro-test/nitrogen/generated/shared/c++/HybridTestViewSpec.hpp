@@ -57,6 +57,7 @@ namespace margelo::nitro::test {
 
     public:
       // Methods
+      virtual double getOnDropViewCount() = 0;
       virtual void someMethod() = 0;
 
     protected:

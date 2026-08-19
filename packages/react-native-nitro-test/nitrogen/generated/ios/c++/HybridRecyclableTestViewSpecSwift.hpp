@@ -71,7 +71,30 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    
+    inline double getInvalidLifecycleOrderCount() override {
+      auto __result = _swiftPart.getInvalidLifecycleOrderCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getOnDropViewCount() override {
+      auto __result = _swiftPart.getOnDropViewCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getPrepareForRecycleCount() override {
+      auto __result = _swiftPart.getPrepareForRecycleCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
 
   private:
     NitroTest::HybridRecyclableTestViewSpec_cxx _swiftPart;

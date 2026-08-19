@@ -320,6 +320,15 @@ namespace margelo::nitro::test::bridge::swift {
   using std__weak_ptr_HybridRecyclableTestViewSpec_ = std::weak_ptr<HybridRecyclableTestViewSpec>;
   inline std__weak_ptr_HybridRecyclableTestViewSpec_ weakify_std__shared_ptr_HybridRecyclableTestViewSpec_(const std::shared_ptr<HybridRecyclableTestViewSpec>& strong) noexcept { return strong; }
   
+  // pragma MARK: Result<double>
+  using Result_double_ = Result<double>;
+  inline Result_double_ create_Result_double_(double value) noexcept {
+    return Result<double>::withValue(std::move(value));
+  }
+  inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
+    return Result<double>::withError(error);
+  }
+  
   // pragma MARK: std::shared_ptr<HybridTestObjectSwiftKotlinSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridTestObjectSwiftKotlinSpec>`.
@@ -1709,15 +1718,6 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
     return Result<void>::withError(error);
-  }
-  
-  // pragma MARK: Result<double>
-  using Result_double_ = Result<double>;
-  inline Result_double_ create_Result_double_(double value) noexcept {
-    return Result<double>::withValue(std::move(value));
-  }
-  inline Result_double_ create_Result_double_(const std::exception_ptr& error) noexcept {
-    return Result<double>::withError(error);
   }
   
   // pragma MARK: Result<nitro::NullType>

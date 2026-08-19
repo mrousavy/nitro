@@ -55,7 +55,9 @@ namespace margelo::nitro::test {
 
   public:
     // Methods
-    
+    double getInvalidLifecycleOrderCount() override;
+    double getOnDropViewCount() override;
+    double getPrepareForRecycleCount() override;
 
   private:
     jni::global_ref<JHybridRecyclableTestViewSpec::JavaPart> _javaPart;

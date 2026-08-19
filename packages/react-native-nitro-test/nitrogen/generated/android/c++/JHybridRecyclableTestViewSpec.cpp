@@ -52,6 +52,20 @@ namespace margelo::nitro::test {
   }
 
   // Methods
-  
+  double JHybridRecyclableTestViewSpec::getInvalidLifecycleOrderCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getInvalidLifecycleOrderCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridRecyclableTestViewSpec::getOnDropViewCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getOnDropViewCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridRecyclableTestViewSpec::getPrepareForRecycleCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getPrepareForRecycleCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
 
 } // namespace margelo::nitro::test
