@@ -94,8 +94,9 @@ public class ${manager}: SimpleViewManager<View>() {
   }
 
   protected override fun prepareToRecycleView(reactContext: ThemedReactContext, view: View): View? {
-    super.prepareToRecycleView(reactContext, view)
-    val hybridView = getHybridView(view)
+    val preparedView = super.prepareToRecycleView(reactContext, view)
+      ?: return null
+    val hybridView = getHybridView(preparedView)
       ?: return null
 
     @Suppress("USELESS_IS_CHECK")
