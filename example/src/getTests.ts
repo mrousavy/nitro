@@ -1720,6 +1720,54 @@ export function getTests(
         gc()
       }).didNotThrow()
     ),
+    // Repro for the JSICache leak: https://github.com/mrousavy/nitro/pull/1464
+    // (split into #1467 lock() resurrection, #1468 ReferenceState double-free,
+    // #1469 the actual JSICache compaction fix). Passing a plain (non-native-backed)
+    // ArrayBuffer into a native call registers it in JSICache's `_arrayBufferCache`;
+    // unpatched, that slot is never freed until the Runtime itself dies, so this
+    // count only ever goes up. Patched, old slots get compacted away and it stays
+    // bounded, same shape as the HybridObject leak test above.
+    createTest('JSICache does not leak memory (nitro#1464)', () =>
+      it(() => {
+        const baselineSize = NitroModules.debug_getTotalJSICacheSize()
+        const BATCH_SIZE = 1000
+
+        for (let i = 0; i < MEMORY_LEAK_TEST_ALLOCATION_COUNT; i++) {
+          // A fresh ArrayBuffer each time - has no NativeState, so it takes the
+          // makeShared(...) path instead of the "already native" fast path.
+          testObject.bounceArrayBuffers([new ArrayBuffer(8)])
+
+          if ((i + 1) % BATCH_SIZE === 0) {
+            gc()
+          }
+        }
+
+        gc()
+        gc()
+        gc()
+
+        const currentSize = NitroModules.debug_getTotalJSICacheSize()
+        const remaining = currentSize - baselineSize
+        // Same 10% threshold as the HybridObject leak test above.
+        const didCompactMost =
+          remaining < MEMORY_LEAK_TEST_ALLOCATION_COUNT * 0.1
+        const result: {
+          baselineSize: number
+          currentSize: number
+          isEqual?: boolean
+        } = {
+          baselineSize: baselineSize,
+          currentSize: currentSize,
+          isEqual: didCompactMost,
+        }
+        if (!didCompactMost) {
+          delete result.isEqual
+        }
+        return result
+      })
+        .didNotThrow()
+        .toContain('isEqual')
+    ),
     createTest('callWithOptional(undefined)', async () =>
       (
         await it<number | undefined>(() => {

@@ -7,6 +7,7 @@
 
 #include "HybridNitroModulesProxy.hpp"
 #include "HybridObjectRegistry.hpp"
+#include "JSICache.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 
@@ -31,6 +32,7 @@ void HybridNitroModulesProxy::loadHybridMethods() {
     prototype.registerHybridGetter("version", &HybridNitroModulesProxy::getVersion);
 
     prototype.registerHybridMethod("debug_getTotalAllocatedHybridObjects", &HybridNitroModulesProxy::debug_getTotalAllocatedHybridObjects);
+    prototype.registerRawHybridMethod("debug_getTotalJSICacheSize", 0, &HybridNitroModulesProxy::debug_getTotalJSICacheSize);
   });
 }
 
@@ -109,6 +111,12 @@ void HybridNitroModulesProxy::debug_notifyHybridObjectAllocated() {
 
 void HybridNitroModulesProxy::debug_notifyHybridObjectDeallocated() {
   _hybridObjectInstancesCount.fetch_sub(1, std::memory_order_relaxed);
+}
+
+// JSICache leak repro (#1464 / #1467 / #1468 / #1469)
+jsi::Value HybridNitroModulesProxy::debug_getTotalJSICacheSize(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value*, size_t) {
+  JSICacheReference cache = JSICache::getOrCreateCache(runtime);
+  return jsi::Value(static_cast<double>(cache.getTotalSize()));
 }
 
 } // namespace margelo::nitro

@@ -115,6 +115,13 @@ public:
     return owning;
   }
 
+  // Total slots across all six caches. Debug-only, for the #1464 leak repro test:
+  // unpatched, this number only ever grows, even once the values it points to are gone.
+  size_t getTotalSize() const {
+    return _strongCache->_valueCache.size() + _strongCache->_objectCache.size() + _strongCache->_functionCache.size() +
+           _strongCache->_weakObjectCache.size() + _strongCache->_propNameIDCache.size() + _strongCache->_arrayBufferCache.size();
+  }
+
 private:
   explicit JSICacheReference(const std::shared_ptr<JSICache>& cache) : _strongCache(cache) {
     _strongCache->_mutex.lock();
