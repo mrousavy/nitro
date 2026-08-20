@@ -24,6 +24,7 @@ namespace margelo::nitro::test::views {
     hasBeenCalled(nitro::CachedProp<bool>::fromRawValue("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
     colorScheme(nitro::CachedProp<ColorScheme>::fromRawValue("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
     someCallback(nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
+    nativeDefaultValue(nitro::CachedProp<std::optional<double>>::fromRawValue("TestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
     hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
@@ -32,6 +33,7 @@ namespace margelo::nitro::test::views {
       case hashString("hasBeenCalled"): return true;
       case hashString("colorScheme"): return true;
       case hashString("someCallback"): return true;
+      case hashString("nativeDefaultValue"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

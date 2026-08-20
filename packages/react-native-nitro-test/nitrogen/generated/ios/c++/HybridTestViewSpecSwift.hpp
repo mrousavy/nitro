@@ -17,6 +17,7 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <optional>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -90,11 +91,34 @@ namespace margelo::nitro::test {
     inline void setSomeCallback(const std::function<void()>& someCallback) noexcept override {
       _swiftPart.setSomeCallback(someCallback);
     }
+    inline std::optional<double> getNativeDefaultValue() noexcept override {
+      auto __result = _swiftPart.getNativeDefaultValue();
+      return __result;
+    }
+    inline void setNativeDefaultValue(std::optional<double> nativeDefaultValue) noexcept override {
+      _swiftPart.setNativeDefaultValue(nativeDefaultValue);
+    }
 
   public:
     // Methods
     inline double getOnDropViewCount() override {
       auto __result = _swiftPart.getOnDropViewCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getIsBlueSetterCallCount() override {
+      auto __result = _swiftPart.getIsBlueSetterCallCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getNativeDefaultValueSetterCallCount() override {
+      auto __result = _swiftPart.getNativeDefaultValueSetterCallCount();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

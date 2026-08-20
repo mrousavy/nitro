@@ -14,9 +14,12 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   var hasBeenCalled: Bool { get set }
   var colorScheme: ColorScheme { get set }
   var someCallback: () -> Void { get set }
+  var nativeDefaultValue: Double? { get set }
 
   // Methods
   func getOnDropViewCount() throws -> Double
+  func getIsBlueSetterCallCount() throws -> Double
+  func getNativeDefaultValueSetterCallCount() throws -> Double
   func someMethod() throws -> Void
 }
 

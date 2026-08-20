@@ -112,6 +112,10 @@ using namespace margelo::nitro::test::views;
     if (oldViewProps == nullptr || !newViewProps.someCallback.hasSameValue(oldViewProps->someCallback)) {
       swiftPart.setSomeCallback(newViewProps.someCallback.get());
     }
+    // nativeDefaultValue: optional
+    if (oldViewProps == nullptr || !newViewProps.nativeDefaultValue.hasSameValue(oldViewProps->nativeDefaultValue)) {
+      swiftPart.setNativeDefaultValue(newViewProps.nativeDefaultValue.get());
+    }
 
     // Update hybridRef if it changed
     if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
