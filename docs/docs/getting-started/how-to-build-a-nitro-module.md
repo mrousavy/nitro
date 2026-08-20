@@ -44,6 +44,25 @@ First, you need to create a [Nitro Module](../concepts/nitro-modules) - either b
     npm install nitrogen --save-dev
     ```
 
+    Also declare `react-native-nitro-modules` as an **optional peer dependency**, so the app using your library is the one that decides which Nitro version gets installed:
+
+    ```json title="package.json"
+    {
+      "peerDependencies": {
+        "react-native-nitro-modules": "*"
+      },
+      "peerDependenciesMeta": {
+        "react-native-nitro-modules": {
+          "optional": true
+        }
+      }
+    }
+    ```
+
+    :::warning
+    The `optional` flag matters. Without it, package managers try to satisfy the peer range themselves - and since semver ranges never match pre-releases, `"*"` does **not** match a version like `0.37.0-beta.0`. A user testing a Nitro beta would then get a second, stable copy of `react-native-nitro-modules` installed next to yours, and Nitro throws [`Nitro was installed twice`](../guides/troubleshooting#nitro-was-installed-twice) at runtime. Marking the peer optional stops the package manager from installing Nitro on your behalf.
+    :::
+
     Then, you need to decide if you want to use Nitro's C++ library directly, or use [nitrogen](../concepts/nitrogen) to generate specs:
 
     <Tabs>

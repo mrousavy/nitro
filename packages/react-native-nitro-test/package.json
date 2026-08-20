@@ -72,6 +72,11 @@
     "react-native-nitro-modules": "*",
     "react-native-nitro-test-external": "*"
   },
+  "peerDependenciesMeta": {
+    "react-native-nitro-modules": {
+      "optional": true
+    }
+  },
   "jest": {
     "preset": "@react-native/jest-preset",
     "modulePathIgnorePatterns": [

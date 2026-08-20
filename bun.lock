@@ -147,6 +147,9 @@
         "react-native-nitro-modules": "*",
         "react-native-nitro-test-external": "*",
       },
+      "optionalPeers": [
+        "react-native-nitro-modules",
+      ],
     },
     "packages/react-native-nitro-test-external": {
       "name": "react-native-nitro-test-external",
@@ -170,6 +173,9 @@
         "react-native": "*",
         "react-native-nitro-modules": "*",
       },
+      "optionalPeers": [
+        "react-native-nitro-modules",
+      ],
     },
   },
   "packages": {
