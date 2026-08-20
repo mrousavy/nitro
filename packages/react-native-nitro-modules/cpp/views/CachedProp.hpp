@@ -14,40 +14,65 @@
 #include <react/renderer/core/RawProps.h>
 #include <react/renderer/core/RawValue.h>
 
+#include <memory>
+#include <utility>
+
 namespace margelo::nitro {
 
 using namespace facebook;
 
 /**
- * A React prop (via `RawProps`) that can be cached against its previous
- * JS value (via `jsi::Value::strictEquals(...)`) and stores an `isDirty`
- * flag for incremental updates.
+ * A React prop (via `RawProps`) that caches its converted value against the
+ * original JS value (via `jsi::Value::strictEquals(...)`).
+ *
+ * Copies of an unchanged prop share the same immutable entry, which provides
+ * a stable identity for comparing two Fabric Props snapshots.
  */
 template <typename T>
-struct CachedProp {
+class CachedProp final {
+private:
+  struct Entry final {
+    T value{};
+    BorrowingReference<jsi::Value> jsiValue;
+
+    Entry() = default;
+    Entry(T&& value, BorrowingReference<jsi::Value>&& jsiValue) : value(std::move(value)), jsiValue(std::move(jsiValue)) {}
+  };
+
+  std::shared_ptr<const Entry> _entry;
+
 public:
-  T value;
   bool isDirty = false;
 
   // Default constructor
-  CachedProp() = default;
+  CachedProp() : _entry(std::make_shared<const Entry>()) {}
   // Constructor with value
   CachedProp(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
-      : value(std::move(value)), isDirty(true), jsiValue(std::move(jsiValue)) {}
+      : _entry(std::make_shared<const Entry>(std::move(value), std::move(jsiValue))), isDirty(true) {}
   // Copy/Move/Destruct
   CachedProp(const CachedProp&) = default;
   CachedProp(CachedProp&&) = default;
+  CachedProp& operator=(const CachedProp&) = default;
+  CachedProp& operator=(CachedProp&&) = default;
   ~CachedProp() = default;
 
-private:
-  BorrowingReference<jsi::Value> jsiValue;
-
 public:
+  [[nodiscard]]
+  const T& get() const noexcept {
+    return _entry->value;
+  }
+
+  [[nodiscard]]
+  bool hasSameValue(const CachedProp<T>& other) const noexcept {
+    return _entry == other._entry;
+  }
+
+private:
   bool equals(jsi::Runtime& runtime, const jsi::Value& other) const {
-    if (jsiValue == nullptr) {
+    if (_entry->jsiValue == nullptr) {
       return false;
     }
-    return jsi::Value::strictEquals(runtime, *jsiValue, other);
+    return jsi::Value::strictEquals(runtime, *_entry->jsiValue, other);
   }
 
 public:
