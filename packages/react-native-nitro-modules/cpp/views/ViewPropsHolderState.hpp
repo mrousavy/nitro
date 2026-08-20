@@ -24,11 +24,11 @@ template <typename TProps>
 struct ViewPropsHolderState final {
 public:
   ViewPropsHolderState() = default;
-  explicit ViewPropsHolderState(std::shared_ptr<TProps> props) : _props(std::move(props)) {}
+  explicit ViewPropsHolderState(std::shared_ptr<const TProps> props) : _props(std::move(props)) {}
 
 public:
   [[nodiscard]]
-  const std::shared_ptr<TProps>& getProps() const {
+  const std::shared_ptr<const TProps>& getProps() const {
     return _props;
   }
 
@@ -44,7 +44,7 @@ public:
 #endif
 
 private:
-  std::shared_ptr<TProps> _props;
+  std::shared_ptr<const TProps> _props;
 };
 
 } // namespace margelo::nitro

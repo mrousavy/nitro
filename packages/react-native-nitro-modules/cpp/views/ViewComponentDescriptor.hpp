@@ -34,9 +34,9 @@ class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<
   using State = typename TShadowNode::ConcreteStateData;
 
 #ifdef ANDROID
-  static_assert(std::constructible_from<State, const std::shared_ptr<Props>&>,
+  static_assert(std::constructible_from<State, const std::shared_ptr<const Props>&>,
                 "TShadowNode::ConcreteStateData must be constructible from "
-                "const std::shared_ptr<TShadowNode::ConcreteProps>& on Android.");
+                "const std::shared_ptr<const TShadowNode::ConcreteProps>& on Android.");
 #endif
 
 public:
@@ -70,8 +70,14 @@ public:
     // `getConcreteSharedProps()` by returning a reference to a temporary cast result.
     auto constBaseProps = concreteShadowNode.getProps();
     auto constProps = std::static_pointer_cast<const Props>(constBaseProps);
-    auto props = std::const_pointer_cast<Props>(std::move(constProps));
-    State state{std::move(props)};
+    const std::shared_ptr<const Props>& previousProps = concreteShadowNode.getStateData().getProps();
+    if (previousProps != nullptr && constProps->hasSameProps(*previousProps)) {
+      // None of the Nitro props changed. Keep the existing State identity so
+      // Fabric does not schedule an Android State update for base View props.
+      return;
+    }
+
+    State state{std::move(constProps)};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif

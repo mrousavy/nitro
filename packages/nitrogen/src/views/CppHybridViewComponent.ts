@@ -78,6 +78,10 @@ export function createViewComponentShadowNodeFiles(
   const filterCases = props.map(
     (prop) => `case hashString("${prop.name}"): return true;`
   )
+  const comparisons = props.map((prop) => {
+    const name = escapeCppName(prop.name)
+    return `${name}.hasSameValue(other.${name})`
+  })
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -124,6 +128,11 @@ namespace ${namespace} {
 
   public:
     ${indent(properties.join('\n'), '    ')}
+
+    [[nodiscard]]
+    bool hasSameProps(const ${propsClassName}& other) const noexcept {
+      return ${comparisons.join(' &&\n             ')};
+    }
 
   private:
     static bool filterObjectKeys(const std::string& propName);

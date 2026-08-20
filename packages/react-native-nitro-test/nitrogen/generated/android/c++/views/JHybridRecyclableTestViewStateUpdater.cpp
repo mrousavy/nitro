@@ -15,42 +15,55 @@ namespace margelo::nitro::test::views {
 using namespace facebook;
 using ConcreteStateData = react::ConcreteState<HybridRecyclableTestViewState>;
 
-void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
-                                           jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> javaView,
-                                           jni::alias_ref<JStateWrapper::javaobject> stateWrapperInterface) {
-  std::shared_ptr<JHybridRecyclableTestViewSpec> hybridView = javaView->getJHybridRecyclableTestViewSpec();
-
-  // Get concrete StateWrapperImpl from passed StateWrapper interface object
-  jobject rawStateWrapper = stateWrapperInterface.get();
-  if (!stateWrapperInterface->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
-      throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
+std::shared_ptr<const HybridRecyclableTestViewProps> JHybridRecyclableTestViewStateUpdater::getPropsFromStateWrapper(
+    jni::alias_ref<JStateWrapper::javaobject> stateWrapper) {
+  if (stateWrapper.get() == nullptr) {
+    return nullptr;
   }
-  auto stateWrapper = jni::alias_ref<react::StateWrapperImpl::javaobject>{
+  // Get concrete StateWrapperImpl from passed StateWrapper interface object
+  jobject rawStateWrapper = stateWrapper.get();
+  if (!stateWrapper->isInstanceOf(react::StateWrapperImpl::javaClassStatic())) [[unlikely]] {
+    throw std::runtime_error("StateWrapper is not a StateWrapperImpl");
+  }
+  auto stateWrapperImpl = jni::alias_ref<react::StateWrapperImpl::javaobject>{
     static_cast<react::StateWrapperImpl::javaobject>(rawStateWrapper)
   };
-  std::shared_ptr<const react::State> state = stateWrapper->cthis()->getState();
+  std::shared_ptr<const react::State> state = stateWrapperImpl->cthis()->getState();
+  if (state == nullptr) {
+    return nullptr;
+  }
   auto concreteState = std::static_pointer_cast<const ConcreteStateData>(state);
   const HybridRecyclableTestViewState& data = concreteState->getData();
-  const std::shared_ptr<HybridRecyclableTestViewProps>& props = data.getProps();
+  const std::shared_ptr<const HybridRecyclableTestViewProps>& props = data.getProps();
   if (props == nullptr) [[unlikely]] {
-    // Props aren't set yet!
     throw std::runtime_error("HybridRecyclableTestViewState's data doesn't contain any props!");
   }
+  return props;
+}
 
-  // Update all props if they are dirty
-  if (props->isBlue.isDirty) {
-    hybridView->setIsBlue(props->isBlue.get());
-    props->isBlue.isDirty = false;
+void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /* class */,
+                                           jni::alias_ref<JHybridRecyclableTestViewSpec::JavaPart> javaView,
+                                           jni::alias_ref<JStateWrapper::javaobject> newState,
+                                           jni::alias_ref<JStateWrapper::javaobject> oldState) {
+  std::shared_ptr<JHybridRecyclableTestViewSpec> hybridView = javaView->getJHybridRecyclableTestViewSpec();
+  std::shared_ptr<const HybridRecyclableTestViewProps> newProps = getPropsFromStateWrapper(newState);
+  std::shared_ptr<const HybridRecyclableTestViewProps> oldProps = getPropsFromStateWrapper(oldState);
+  if (newProps == nullptr) [[unlikely]] {
+    throw std::runtime_error("Current StateWrapper doesn't contain any props!");
+  }
+
+  // Update only props that differ from the previous State snapshot.
+  if (oldProps == nullptr || !newProps->isBlue.hasSameValue(oldProps->isBlue)) {
+    hybridView->setIsBlue(newProps->isBlue.get());
   }
 
   // Update hybridRef if it changed
-  if (props->hybridRef.isDirty) {
+  if (oldProps == nullptr || !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
     // hybridRef changed - call it with new this
-    const auto& maybeFunc = props->hybridRef.get();
+    const auto& maybeFunc = newProps->hybridRef.get();
     if (maybeFunc.has_value()) {
       maybeFunc.value()(hybridView);
     }
-    props->hybridRef.isDirty = false;
   }
 }
 
