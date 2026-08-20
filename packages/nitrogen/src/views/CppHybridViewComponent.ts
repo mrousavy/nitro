@@ -73,7 +73,7 @@ export function createViewComponentShadowNodeFiles(
   const props = [...spec.properties, getHybridRefProperty(spec)]
   const properties = props.map(
     (p) =>
-      `nitro::CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
+      `nitro::ReactProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
   const filterCases = props.map(
     (prop) => `case hashString("${prop.name}"): return true;`
@@ -99,7 +99,7 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <NitroModules/CachedProp.hpp>
+#include <NitroModules/ReactProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -175,7 +175,7 @@ namespace ${namespace} {
     ...props.map((prop) => {
       const name = escapeCppName(prop.name)
       const type = prop.type.getCode('c++')
-      return `${name}(nitro::CachedProp<${type}>::fromRawValue("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
+      return `${name}(nitro::ReactProp<${type}>::fromRawValue("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
     }),
   ]
   const ctorIndent = createIndentation(propsClassName.length * 2)
@@ -185,7 +185,7 @@ ${createFileMetadataString(`${component}.cpp`)}
 #include "${component}.hpp"
 
 #include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
+#include <NitroModules/ReactProp.hpp>
 
 namespace ${namespace} {
 

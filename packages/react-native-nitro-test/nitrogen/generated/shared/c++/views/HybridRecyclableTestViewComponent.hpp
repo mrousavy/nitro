@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <NitroModules/CachedProp.hpp>
+#include <NitroModules/ReactProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
@@ -42,9 +42,9 @@ namespace margelo::nitro::test::views {
                                   const react::RawProps& rawProps);
 
   public:
-    nitro::CachedProp<bool> isBlue;
-    nitro::CachedProp<std::optional<double>> nativeDefaultValue;
-    nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
+    nitro::ReactProp<bool> isBlue;
+    nitro::ReactProp<std::optional<double>> nativeDefaultValue;
+    nitro::ReactProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
 
     [[nodiscard]]
     bool hasSameProps(const HybridRecyclableTestViewProps& other) const noexcept {
