@@ -58,7 +58,7 @@
     },
     "example": {
       "name": "react-native-nitro-example",
-      "version": "0.36.5",
+      "version": "0.37.0-beta.0",
       "dependencies": {
         "@react-native-segmented-control/segmented-control": "^2.5.7",
         "@react-navigation/bottom-tabs": "^7.16.2",
@@ -96,7 +96,7 @@
     },
     "packages/nitrogen": {
       "name": "nitrogen",
-      "version": "0.36.5",
+      "version": "0.37.0-beta.0",
       "bin": "./lib/index.js",
       "dependencies": {
         "chalk": "^5.3.0",
@@ -111,7 +111,7 @@
     },
     "packages/react-native-nitro-modules": {
       "name": "react-native-nitro-modules",
-      "version": "0.36.5",
+      "version": "0.37.0-beta.0",
       "devDependencies": {
         "@react-native/jest-preset": "0.85.3",
         "@types/jest": "*",
@@ -129,7 +129,7 @@
     },
     "packages/react-native-nitro-test": {
       "name": "react-native-nitro-test",
-      "version": "0.36.5",
+      "version": "0.37.0-beta.0",
       "devDependencies": {
         "@react-native/jest-preset": "0.85.3",
         "@types/jest": "*",
@@ -150,7 +150,7 @@
     },
     "packages/react-native-nitro-test-external": {
       "name": "react-native-nitro-test-external",
-      "version": "0.36.5",
+      "version": "0.37.0-beta.0",
       "devDependencies": {
         "@react-native/eslint-config": "0.85.3",
         "@types/jest": "^29.5.12",
