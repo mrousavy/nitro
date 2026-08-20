@@ -308,6 +308,21 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::string>::withError(error);
   }
   
+  // pragma MARK: std::optional<double>
+  /**
+   * Specialized version of `std::optional<double>`.
+   */
+  using std__optional_double_ = std::optional<double>;
+  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
+    return std::optional<double>(value);
+  }
+  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridRecyclableTestViewSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridRecyclableTestViewSpec>`.
@@ -587,21 +602,6 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<std::vector<Person>> vector;
     vector.reserve(size);
     return vector;
-  }
-  
-  // pragma MARK: std::optional<double>
-  /**
-   * Specialized version of `std::optional<double>`.
-   */
-  using std__optional_double_ = std::optional<double>;
-  inline std::optional<double> create_std__optional_double_(const double& value) noexcept {
-    return std::optional<double>(value);
-  }
-  inline bool has_value_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline double get_std__optional_double_(const std::optional<double>& optional) noexcept {
-    return optional.value();
   }
   
   // pragma MARK: std::vector<Car>

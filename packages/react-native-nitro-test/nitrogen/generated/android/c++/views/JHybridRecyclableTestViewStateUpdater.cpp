@@ -53,12 +53,21 @@ void JHybridRecyclableTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::
   }
 
   // Update only props that differ from the previous State snapshot.
-  if (oldProps == nullptr || !newProps->isBlue.hasSameValue(oldProps->isBlue)) {
+  if (oldProps == nullptr
+        ? newProps->isBlue.isProvided()
+        : !newProps->isBlue.hasSameValue(oldProps->isBlue)) {
     hybridView->setIsBlue(newProps->isBlue.get());
+  }
+  if (oldProps == nullptr
+        ? newProps->nativeDefaultValue.isProvided()
+        : !newProps->nativeDefaultValue.hasSameValue(oldProps->nativeDefaultValue)) {
+    hybridView->setNativeDefaultValue(newProps->nativeDefaultValue.get());
   }
 
   // Update hybridRef if it changed
-  if (oldProps == nullptr || !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
+  if (oldProps == nullptr
+        ? newProps->hybridRef.isProvided()
+        : !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newProps->hybridRef.get();
     if (maybeFunc.has_value()) {

@@ -14,7 +14,7 @@ namespace NitroTest { class HybridRecyclableTestViewSpec_cxx; }
 
 
 
-
+#include <optional>
 
 #include "NitroTest-Swift-Cxx-Umbrella.hpp"
 
@@ -68,6 +68,13 @@ namespace margelo::nitro::test {
     inline void setIsBlue(bool isBlue) noexcept override {
       _swiftPart.setIsBlue(std::forward<decltype(isBlue)>(isBlue));
     }
+    inline std::optional<double> getNativeDefaultValue() noexcept override {
+      auto __result = _swiftPart.getNativeDefaultValue();
+      return __result;
+    }
+    inline void setNativeDefaultValue(std::optional<double> nativeDefaultValue) noexcept override {
+      _swiftPart.setNativeDefaultValue(nativeDefaultValue);
+    }
 
   public:
     // Methods
@@ -89,6 +96,14 @@ namespace margelo::nitro::test {
     }
     inline double getPrepareForRecycleCount() override {
       auto __result = _swiftPart.getPrepareForRecycleCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getNativeDefaultValueSetterCallCount() override {
+      auto __result = _swiftPart.getNativeDefaultValueSetterCallCount();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

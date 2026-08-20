@@ -11,11 +11,13 @@ import NitroModules
 public protocol HybridRecyclableTestViewSpec_protocol: HybridObject, HybridView {
   // Properties
   var isBlue: Bool { get set }
+  var nativeDefaultValue: Double? { get set }
 
   // Methods
   func getInvalidLifecycleOrderCount() throws -> Double
   func getOnDropViewCount() throws -> Double
   func getPrepareForRecycleCount() throws -> Double
+  func getNativeDefaultValueSetterCallCount() throws -> Double
 }
 
 public extension HybridRecyclableTestViewSpec_protocol {

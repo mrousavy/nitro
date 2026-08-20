@@ -5,6 +5,7 @@
   "directEventTypes": {},
   "validAttributes": {
     "isBlue": true,
+    "nativeDefaultValue": true,
     "hybridRef": true
   }
 }

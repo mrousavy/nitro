@@ -82,6 +82,10 @@ export function createViewComponentShadowNodeFiles(
     const name = escapeCppName(prop.name)
     return `${name}.hasSameValue(other.${name})`
   })
+  const providedChecks = props.map((prop) => {
+    const name = escapeCppName(prop.name)
+    return `${name}.isProvided()`
+  })
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -132,6 +136,11 @@ namespace ${namespace} {
     [[nodiscard]]
     bool hasSameProps(const ${propsClassName}& other) const noexcept {
       return ${comparisons.join(' &&\n             ')};
+    }
+
+    [[nodiscard]]
+    bool hasAnyProvidedProps() const noexcept {
+      return ${providedChecks.join(' ||\n             ')};
     }
 
   private:

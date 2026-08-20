@@ -20,6 +20,8 @@ class HybridRecyclableTestView(
   private var invalidLifecycleOrderCount = 0.0
   private var onDropViewCount = 0.0
   private var prepareForRecycleCount = 0.0
+  private var nativeDefaultValueSetterCallCount = 0.0
+  private var nativeDefaultValueStorage: Double? = 42.0
 
   // Props
   override var isBlue: Boolean = false
@@ -29,6 +31,12 @@ class HybridRecyclableTestView(
         val color = if (value) Color.BLUE else Color.RED
         view.setBackgroundColor(color)
       }
+    }
+  override var nativeDefaultValue: Double?
+    get() = nativeDefaultValueStorage
+    set(value) {
+      nativeDefaultValueStorage = value
+      nativeDefaultValueSetterCallCount += 1
     }
 
   override fun onDropView() {
@@ -42,6 +50,8 @@ class HybridRecyclableTestView(
 
   override fun getPrepareForRecycleCount(): Double = prepareForRecycleCount
 
+  override fun getNativeDefaultValueSetterCallCount(): Double = nativeDefaultValueSetterCallCount
+
   override fun beforeUpdate() {
     isRecycled = false
   }
@@ -52,6 +62,8 @@ class HybridRecyclableTestView(
       invalidLifecycleOrderCount += 1
     }
     prepareForRecycleCount += 1
+    nativeDefaultValueStorage = 42.0
+    nativeDefaultValueSetterCallCount = 0.0
     view.setBackgroundColor(Color.YELLOW)
     isRecycled = true
   }

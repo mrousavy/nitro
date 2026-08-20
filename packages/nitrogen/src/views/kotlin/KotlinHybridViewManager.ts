@@ -214,7 +214,9 @@ public:
     const name = escapeCppName(p.name)
     const setter = p.getSetterName('other')
     return `
-if (oldProps == nullptr || !newProps->${name}.hasSameValue(oldProps->${name})) {
+if (oldProps == nullptr
+      ? newProps->${name}.isProvided()
+      : !newProps->${name}.hasSameValue(oldProps->${name})) {
   hybridView->${setter}(newProps->${name}.get());
 }
     `.trim()
@@ -273,7 +275,9 @@ void J${stateUpdaterName}::updateViewProps(jni::alias_ref<jni::JClass> /* class 
   ${indent(propsUpdaterCalls.join('\n'), '  ')}
 
   // Update hybridRef if it changed
-  if (oldProps == nullptr || !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
+  if (oldProps == nullptr
+        ? newProps->hybridRef.isProvided()
+        : !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newProps->hybridRef.get();
     if (maybeFunc.has_value()) {

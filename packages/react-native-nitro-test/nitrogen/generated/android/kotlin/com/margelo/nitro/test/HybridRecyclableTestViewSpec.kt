@@ -32,6 +32,12 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
   @set:DoNotStrip
   @set:Keep
   abstract var isBlue: Boolean
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var nativeDefaultValue: Double?
 
   // Methods
   @DoNotStrip
@@ -45,6 +51,10 @@ abstract class HybridRecyclableTestViewSpec: HybridView() {
   @DoNotStrip
   @Keep
   abstract fun getPrepareForRecycleCount(): Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getNativeDefaultValueSetterCallCount(): Double
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

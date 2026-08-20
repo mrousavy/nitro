@@ -60,6 +60,16 @@ namespace margelo::nitro::test::views {
              hybridRef.hasSameValue(other.hybridRef);
     }
 
+    [[nodiscard]]
+    bool hasAnyProvidedProps() const noexcept {
+      return isBlue.isProvided() ||
+             hasBeenCalled.isProvided() ||
+             colorScheme.isProvided() ||
+             someCallback.isProvided() ||
+             nativeDefaultValue.isProvided() ||
+             hybridRef.isProvided();
+    }
+
   private:
     static bool filterObjectKeys(const std::string& propName);
   };

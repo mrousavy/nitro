@@ -92,17 +92,29 @@ using namespace margelo::nitro::test::views;
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update only props that differ from the previous Props snapshot.
-  const bool hasTransactionPropChanges = oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps);
+  const bool hasTransactionPropChanges = oldViewProps == nullptr
+      ? newViewProps.hasAnyProvidedProps()
+      : !newViewProps.hasSameProps(*oldViewProps);
   if (hasTransactionPropChanges) {
     swiftPart.beforeUpdate();
 
     // isBlue: boolean
-    if (oldViewProps == nullptr || !newViewProps.isBlue.hasSameValue(oldViewProps->isBlue)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.isBlue.isProvided()
+          : !newViewProps.isBlue.hasSameValue(oldViewProps->isBlue)) {
       swiftPart.setIsBlue(newViewProps.isBlue.get());
+    }
+    // nativeDefaultValue: optional
+    if (oldViewProps == nullptr
+          ? newViewProps.nativeDefaultValue.isProvided()
+          : !newViewProps.nativeDefaultValue.hasSameValue(oldViewProps->nativeDefaultValue)) {
+      swiftPart.setNativeDefaultValue(newViewProps.nativeDefaultValue.get());
     }
 
     // Update hybridRef if it changed
-    if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.hybridRef.isProvided()
+          : !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
       // hybridRef changed - call it with new this
       const auto& maybeFunc = newViewProps.hybridRef.get();
       if (maybeFunc.has_value()) {
