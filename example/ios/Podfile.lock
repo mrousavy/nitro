@@ -2254,7 +2254,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 24e62c765683b8d89006a88a2c8f5cf019f0074d
   HarnessUI: bb94ae23e70e83983e4e914a8d7573969e33b930
   hermes-engine: 411df881c1affac35ba53c66e3317eca368c0678
-  NitroModules: 6b173a14405398cc5db9568ee4b1ac091aebc20a
+  NitroModules: 5c461cbf5430bad604085c10e2f53db3a86767cf
   NitroTest: 2a3782d92038bd74d662df5695b8d1bc1fe95312
   NitroTestExternal: 8fb0015c12194e0e7a95ec22ee6d864e27b51f18
   RCTDeprecation: a4c521821fab57cbb125b36effe84d897d0dfa12
