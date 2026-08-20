@@ -66,9 +66,12 @@ public:
     // This is called immediately after `ShadowNode` is created, cloned or in progress.
     // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
     auto& concreteShadowNode = static_cast<TShadowNode&>(shadowNode);
-    const std::shared_ptr<const Props>& constProps = concreteShadowNode.getConcreteSharedProps();
-    const std::shared_ptr<Props>& props = std::const_pointer_cast<Props>(constProps);
-    State state{props};
+    // Start from the stable shared pointer stored by ShadowNode. Some React Native versions implement
+    // `getConcreteSharedProps()` by returning a reference to a temporary cast result.
+    auto constBaseProps = concreteShadowNode.getProps();
+    auto constProps = std::static_pointer_cast<const Props>(constBaseProps);
+    auto props = std::const_pointer_cast<Props>(std::move(constProps));
+    State state{std::move(props)};
     concreteShadowNode.setStateData(std::move(state));
   }
 #endif
