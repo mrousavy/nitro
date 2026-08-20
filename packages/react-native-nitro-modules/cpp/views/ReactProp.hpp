@@ -5,6 +5,7 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
+#include "CountTrailingOptionals.hpp"
 #include "IsFunctionProp.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
@@ -97,6 +98,15 @@ public:
       }
 
       auto [runtime, value] = static_cast<std::pair<jsi::Runtime*, jsi::Value>>(*rawValue);
+
+      if constexpr (is_optional<T>::value) {
+        // React turns a removed prop into `null`.
+        // If our type is nullable, we set it to `undefined` (unless `null` is a valid value for it).
+        // Otherwise this will throw, since we don't know a desired default value.
+        if (value.isNull() && !JSIConverter<T>::canConvert(*runtime, value)) [[unlikely]] {
+          value = jsi::Value::undefined();
+        }
+      }
 
       if constexpr (IsFunctionProp<std::remove_cv_t<T>>::value) {
         // React Native cannot transport functions as regular props. Nitrogen
