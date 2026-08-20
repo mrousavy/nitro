@@ -92,3 +92,15 @@ example/.harness/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# React Native SwiftPM
+# Build-time symlink to Xcode's generated Swift interop headers
+.spm-derived-headers
+.build/
+.swiftpm/
+**/*.xcodeproj/.spm-injected.json
+# Public-header trees staged (as symlinks) by the autolinking plugin at
+# `react-native spm add` time — machine-generated, never committed
+**/nitrogen/generated/include/
+**/nitrogen/generated/include-bridge/
+packages/react-native-nitro-modules/include/
