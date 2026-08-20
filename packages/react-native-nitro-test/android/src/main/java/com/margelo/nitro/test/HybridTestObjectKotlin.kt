@@ -14,6 +14,9 @@ import com.margelo.nitro.test.external.HybridSomeExternalObjectSpec
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.time.Instant
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 @Keep
 @DoNotStrip
@@ -675,5 +678,39 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
       .valueOf(value)
       .stripTrailingZeros()
       .toPlainString()
+  }
+
+  // Single-threaded executor that reproduces the background-thread call pattern
+  // from real-world Java callers of Nitro (see issue #1439).
+  private val sequentialCallbackExecutor = Executors.newSingleThreadExecutor { r ->
+    Thread(r, "sequential-callback-thread").also { it.isDaemon = true }
+  }
+
+  override fun callCallbackSequentiallyFirstThrows(
+    fn: (input: SequentialCallbackInput) -> Promise<Promise<String>>,
+  ): Promise<String> {
+    val outerPromise = Promise<String>()
+    sequentialCallbackExecutor.submit {
+      try {
+        // First invocation — expected to throw.
+        try {
+          JavaCallHelper.awaitFnBlocking(fn(SequentialCallbackInput("first")), 3L, TimeUnit.SECONDS)
+          Log.w("HybridTestObjectKotlin", "First call unexpectedly succeeded")
+        } catch (_: TimeoutException) {
+          throw RuntimeException("callCallbackSequentiallyFirstThrows: first invocation timed out")
+        } catch (e: Exception) {
+          Log.d("HybridTestObjectKotlin", "First call threw as expected: ${e.message}")
+        }
+
+        // Second invocation — must not hang even though the inner Promise may already be resolved.
+        val result = JavaCallHelper.awaitFnBlocking(fn(SequentialCallbackInput("second")), 3L, TimeUnit.SECONDS)
+        outerPromise.resolve(result)
+      } catch (e: TimeoutException) {
+        outerPromise.reject(RuntimeException("callCallbackSequentiallyFirstThrows: second invocation timed out — SafeContinuation swallowed the resume", e))
+      } catch (e: Exception) {
+        outerPromise.reject(e)
+      }
+    }
+    return outerPromise
   }
 }
