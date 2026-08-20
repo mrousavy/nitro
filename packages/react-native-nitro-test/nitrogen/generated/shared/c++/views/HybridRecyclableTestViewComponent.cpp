@@ -8,7 +8,7 @@
 #include "HybridRecyclableTestViewComponent.hpp"
 
 #include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
+#include <NitroModules/ReactProp.hpp>
 
 namespace margelo::nitro::test::views {
 
@@ -20,9 +20,9 @@ namespace margelo::nitro::test::views {
                                                                const HybridRecyclableTestViewProps& sourceProps,
                                                                const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue(nitro::CachedProp<bool>::fromRawValue("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
-    nativeDefaultValue(nitro::CachedProp<std::optional<double>>::fromRawValue("RecyclableTestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
-    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
+    isBlue(nitro::ReactProp<bool>::fromRawValue("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
+    nativeDefaultValue(nitro::ReactProp<std::optional<double>>::fromRawValue("RecyclableTestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
+    hybridRef(nitro::ReactProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridRecyclableTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

@@ -8,7 +8,7 @@
 #include "HybridTestViewComponent.hpp"
 
 #include <NitroModules/NitroHash.hpp>
-#include <NitroModules/CachedProp.hpp>
+#include <NitroModules/ReactProp.hpp>
 
 namespace margelo::nitro::test::views {
 
@@ -20,12 +20,12 @@ namespace margelo::nitro::test::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue(nitro::CachedProp<bool>::fromRawValue("TestView", "isBlue", rawProps, sourceProps.isBlue)),
-    hasBeenCalled(nitro::CachedProp<bool>::fromRawValue("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
-    colorScheme(nitro::CachedProp<ColorScheme>::fromRawValue("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
-    someCallback(nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
-    nativeDefaultValue(nitro::CachedProp<std::optional<double>>::fromRawValue("TestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
-    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
+    isBlue(nitro::ReactProp<bool>::fromRawValue("TestView", "isBlue", rawProps, sourceProps.isBlue)),
+    hasBeenCalled(nitro::ReactProp<bool>::fromRawValue("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
+    colorScheme(nitro::ReactProp<ColorScheme>::fromRawValue("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
+    someCallback(nitro::ReactProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
+    nativeDefaultValue(nitro::ReactProp<std::optional<double>>::fromRawValue("TestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
+    hybridRef(nitro::ReactProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

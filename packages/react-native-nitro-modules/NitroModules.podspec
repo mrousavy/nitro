@@ -52,6 +52,7 @@ Pod::Spec.new do |s|
     "cpp/utils/PropNameIDCache.hpp",
     "cpp/views/CachedProp.hpp",
     "cpp/views/RawPropsCompat.hpp",
+    "cpp/views/ReactProp.hpp",
     "cpp/views/ViewComponentDescriptor.hpp",
     "cpp/views/ViewPropsHolderState.hpp",
     # Public iOS-specific headers that will be exposed in modulemap (for Swift)
