@@ -10,6 +10,7 @@
 #include <NitroModules/CachedProp.hpp>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <cxxreact/ReactNativeVersion.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
 #include <react/renderer/core/PropsParserContext.h>
@@ -41,6 +42,20 @@ namespace margelo::nitro::test::views {
     HybridTestViewProps(const react::PropsParserContext& context,
                         const HybridTestViewProps& sourceProps,
                         const react::RawProps& rawProps);
+
+#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87
+    void setProp(const react::PropsParserContext& context,
+                 react::RawPropsPropNameHash hash,
+                 const char* propName,
+                 const react::RawValue& value);
+#endif
+
+#if defined(RN_SERIALIZABLE_STATE) && (REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 87)
+    void initializeDynamicProps(const HybridTestViewProps& sourceProps,
+                                const react::RawProps& rawProps) {
+      react::ViewProps::initializeDynamicProps(sourceProps, rawProps, filterObjectKeys);
+    }
+#endif
 
   public:
     nitro::CachedProp<bool> isBlue;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "BorrowingReference.hpp"
+#include "CountTrailingOptionals.hpp"
 #include "IsFunctionProp.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
@@ -89,14 +90,29 @@ private:
 public:
   static CachedProp<T> fromRawValue(const char* viewName, const char* propName, const react::RawProps& rawProps,
                                     const CachedProp<T>& previousProp) {
+    const react::RawValue* rawValue = RawPropsCompat::at(rawProps, propName);
+    if (rawValue == nullptr) {
+      // This RawValue pack does not contain our prop, so skip it - it's still the same from before
+      return previousProp;
+    }
+    return fromRawValue(viewName, propName, *rawValue, previousProp);
+  }
+
+  static CachedProp<T> fromRawValue(const char* viewName, const char* propName, const react::RawValue& rawValue,
+                                    const CachedProp<T>& previousProp) {
     try {
-      const react::RawValue* rawValue = RawPropsCompat::at(rawProps, propName);
-      if (rawValue == nullptr) {
-        // This RawValue pack does not contain our prop, so skip it - it's still the same from before
-        return previousProp;
+      if (!rawValue.hasValue()) {
+        if constexpr (is_optional<std::remove_cvref_t<T>>::value) {
+          if (!previousProp.get().has_value()) {
+            return previousProp;
+          }
+          return CachedProp<T>{};
+        } else {
+          throw std::runtime_error("Required view prop cannot be removed/reset.");
+        }
       }
 
-      auto [runtime, value] = static_cast<std::pair<jsi::Runtime*, jsi::Value>>(*rawValue);
+      auto [runtime, value] = static_cast<std::pair<jsi::Runtime*, jsi::Value>>(rawValue);
 
       if constexpr (IsFunctionProp<std::remove_cv_t<T>>::value) {
         // React Native cannot transport functions as regular props. Nitrogen
