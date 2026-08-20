@@ -469,6 +469,13 @@ export class KotlinCxxBridgedType implements BridgedType<'kotlin', 'c++'> {
 
   dereferenceToJObject(parameterName: string): string {
     switch (this.type.kind) {
+      // an optional bridges to a (possibly `nullptr`) ref of its wrapping type,
+      // so it needs to be dereferenced the same way as the type it wraps.
+      case 'optional': {
+        const optional = getTypeAs(this.type, OptionalType)
+        const bridge = new KotlinCxxBridgedType(optional.wrappingType)
+        return bridge.dereferenceToJObject(parameterName)
+      }
       // any jni::HybridClass needs to be dereferenced to jobject with .get()
       case 'array-buffer':
       case 'function':

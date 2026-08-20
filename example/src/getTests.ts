@@ -601,6 +601,18 @@ export function getTests(
         .didReturn('object')
         .equals(['✨', '🔥', `🥳🥷🏼🥳`])
     ),
+    createTest('bounceOptionals(...) keeps undefined elements', () =>
+      it(() =>
+        testObject.bounceOptionals(
+          ['hello', undefined, 'world'],
+          [new ArrayBuffer(16), undefined],
+          { a: 'b', c: undefined }
+        )
+      )
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['hello', undefined, 'world'])
+    ),
     createTest('bounceEnums(...) equals', () =>
       it(() => testObject.bounceEnums(['gas', 'hybrid']))
         .didNotThrow()

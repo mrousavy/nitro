@@ -55,6 +55,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceMaps(maps: [AnyMap]) throws -> [AnyMap]
   func bouncePromises(promises: [Promise<Double>]) throws -> [Promise<Double>]
   func bounceArrayBuffers(arrayBuffers: [ArrayBuffer]) throws -> [ArrayBuffer]
+  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?], map: Dictionary<String, String?>) throws -> [String?]
   func createMap() throws -> AnyMap
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]

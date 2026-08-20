@@ -134,6 +134,14 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return arrayBuffers
   }
 
+  override fun bounceOptionals(
+    strings: Array<String?>,
+    arrayBuffers: Array<ArrayBuffer?>,
+    map: Map<String, String?>,
+  ): Array<String?> {
+    return strings
+  }
+
   override fun currentDate(): java.time.Instant {
     return Instant.now()
   }
