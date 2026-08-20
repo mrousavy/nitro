@@ -88,3 +88,8 @@ func saveToFile(image: HybridImage) -> Promise<Void> {
   }
 }
 ```
+
+## Microtask
+
+Unlike [Callbacks](callbacks), a Promise's resolver and rejecter functions are **microtasks**.
+This means they will run _before_ a [Callback](callbacks), hence chaining `.then`/`.catch` takes priority over asynchronous callbacks.
