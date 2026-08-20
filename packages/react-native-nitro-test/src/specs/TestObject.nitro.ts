@@ -191,9 +191,12 @@ interface SharedTestObjectProps {
   bounceArrayBuffers(arrayBuffers: ArrayBuffer[]): ArrayBuffer[]
   bounceOptionals(
     strings: (string | undefined)[],
-    arrayBuffers: (ArrayBuffer | undefined)[],
-    map: Record<string, string | undefined>
+    arrayBuffers: (ArrayBuffer | undefined)[]
   ): (string | undefined)[]
+  bounceNulls(strings: (string | null)[]): (string | null)[]
+  bounceOptionalNulls(
+    strings: (string | null | undefined)[]
+  ): (string | null | undefined)[]
 
   // Maps
   createMap(): AnyMap
@@ -207,6 +210,15 @@ interface SharedTestObjectProps {
     map: Record<string, number | boolean>
   ): Record<string, number | boolean>
   bounceSimpleMap(map: Record<string, number>): Record<string, number>
+  bounceOptionalMap(
+    map: Record<string, string | undefined>
+  ): Record<string, string | undefined>
+  bounceNullMap(
+    map: Record<string, string | null>
+  ): Record<string, string | null>
+  bounceOptionalNullMap(
+    map: Record<string, string | null | undefined>
+  ): Record<string, string | null | undefined>
   extractMap(mapWrapper: MapWrapper): MapWrapper['map']
 
   // Errors

@@ -191,7 +191,9 @@ namespace margelo::nitro::test {
       virtual std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) = 0;
       virtual std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) = 0;
       virtual std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) = 0;
-      virtual std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers, const std::unordered_map<std::string, std::optional<std::string>>& map) = 0;
+      virtual std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers) = 0;
+      virtual std::vector<std::variant<nitro::NullType, std::string>> bounceNulls(const std::vector<std::variant<nitro::NullType, std::string>>& strings) = 0;
+      virtual std::vector<std::optional<std::variant<nitro::NullType, std::string>>> bounceOptionalNulls(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& strings) = 0;
       virtual std::shared_ptr<AnyMap> createMap() = 0;
       virtual std::shared_ptr<AnyMap> mapRoundtrip(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::vector<std::string> getMapKeys(const std::shared_ptr<AnyMap>& map) = 0;
@@ -199,6 +201,9 @@ namespace margelo::nitro::test {
       virtual std::shared_ptr<AnyMap> copyAnyMap(const std::shared_ptr<AnyMap>& map) = 0;
       virtual std::unordered_map<std::string, std::variant<bool, double>> bounceMap(const std::unordered_map<std::string, std::variant<bool, double>>& map) = 0;
       virtual std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) = 0;
+      virtual std::unordered_map<std::string, std::optional<std::string>> bounceOptionalMap(const std::unordered_map<std::string, std::optional<std::string>>& map) = 0;
+      virtual std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> bounceNullMap(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& map) = 0;
+      virtual std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> bounceOptionalNullMap(const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& map) = 0;
       virtual std::unordered_map<std::string, std::string> extractMap(const MapWrapper& mapWrapper) = 0;
       virtual double funcThatThrows() = 0;
       virtual std::shared_ptr<Promise<void>> funcThatThrowsBeforePromise() = 0;

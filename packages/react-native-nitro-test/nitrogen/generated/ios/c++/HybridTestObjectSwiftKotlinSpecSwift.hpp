@@ -434,8 +434,24 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers, const std::unordered_map<std::string, std::optional<std::string>>& map) override {
-      auto __result = _swiftPart.bounceOptionals(strings, arrayBuffers, map);
+    inline std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers) override {
+      auto __result = _swiftPart.bounceOptionals(strings, arrayBuffers);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::variant<nitro::NullType, std::string>> bounceNulls(const std::vector<std::variant<nitro::NullType, std::string>>& strings) override {
+      auto __result = _swiftPart.bounceNulls(strings);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::vector<std::optional<std::variant<nitro::NullType, std::string>>> bounceOptionalNulls(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& strings) override {
+      auto __result = _swiftPart.bounceOptionalNulls(strings);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -492,6 +508,30 @@ namespace margelo::nitro::test {
     }
     inline std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override {
       auto __result = _swiftPart.bounceSimpleMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, std::optional<std::string>> bounceOptionalMap(const std::unordered_map<std::string, std::optional<std::string>>& map) override {
+      auto __result = _swiftPart.bounceOptionalMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> bounceNullMap(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& map) override {
+      auto __result = _swiftPart.bounceNullMap(map);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> bounceOptionalNullMap(const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& map) override {
+      auto __result = _swiftPart.bounceOptionalNullMap(map);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

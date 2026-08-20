@@ -774,29 +774,41 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
-  // pragma MARK: std::unordered_map<std::string, std::optional<std::string>>
+  // pragma MARK: std::vector<std::variant<nitro::NullType, std::string>>
   /**
-   * Specialized version of `std::unordered_map<std::string, std::optional<std::string>>`.
+   * Specialized version of `std::vector<std::variant<nitro::NullType, std::string>>`.
    */
-  using std__unordered_map_std__string__std__optional_std__string__ = std::unordered_map<std::string, std::optional<std::string>>;
-  inline std::unordered_map<std::string, std::optional<std::string>> create_std__unordered_map_std__string__std__optional_std__string__(size_t size) noexcept {
-    std::unordered_map<std::string, std::optional<std::string>> map;
-    map.reserve(size);
-    return map;
+  using std__vector_std__variant_nitro__NullType__std__string__ = std::vector<std::variant<nitro::NullType, std::string>>;
+  inline std::vector<std::variant<nitro::NullType, std::string>> create_std__vector_std__variant_nitro__NullType__std__string__(size_t size) noexcept {
+    std::vector<std::variant<nitro::NullType, std::string>> vector;
+    vector.reserve(size);
+    return vector;
   }
-  inline std::vector<std::string> get_std__unordered_map_std__string__std__optional_std__string___keys(const std__unordered_map_std__string__std__optional_std__string__& map) noexcept {
-    std::vector<std::string> keys;
-    keys.reserve(map.size());
-    for (const auto& entry : map) {
-      keys.push_back(entry.first);
-    }
-    return keys;
+  
+  // pragma MARK: std::optional<std::variant<nitro::NullType, std::string>>
+  /**
+   * Specialized version of `std::optional<std::variant<nitro::NullType, std::string>>`.
+   */
+  using std__optional_std__variant_nitro__NullType__std__string__ = std::optional<std::variant<nitro::NullType, std::string>>;
+  inline std::optional<std::variant<nitro::NullType, std::string>> create_std__optional_std__variant_nitro__NullType__std__string__(const std::variant<nitro::NullType, std::string>& value) noexcept {
+    return std::optional<std::variant<nitro::NullType, std::string>>(value);
   }
-  inline std::optional<std::string> get_std__unordered_map_std__string__std__optional_std__string___value(const std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key) noexcept {
-    return map.find(key)->second;
+  inline bool has_value_std__optional_std__variant_nitro__NullType__std__string__(const std::optional<std::variant<nitro::NullType, std::string>>& optional) noexcept {
+    return optional.has_value();
   }
-  inline void emplace_std__unordered_map_std__string__std__optional_std__string__(std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key, const std::optional<std::string>& value) noexcept {
-    map.emplace(key, value);
+  inline std::variant<nitro::NullType, std::string> get_std__optional_std__variant_nitro__NullType__std__string__(const std::optional<std::variant<nitro::NullType, std::string>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<std::optional<std::variant<nitro::NullType, std::string>>>
+  /**
+   * Specialized version of `std::vector<std::optional<std::variant<nitro::NullType, std::string>>>`.
+   */
+  using std__vector_std__optional_std__variant_nitro__NullType__std__string___ = std::vector<std::optional<std::variant<nitro::NullType, std::string>>>;
+  inline std::vector<std::optional<std::variant<nitro::NullType, std::string>>> create_std__vector_std__optional_std__variant_nitro__NullType__std__string___(size_t size) noexcept {
+    std::vector<std::optional<std::variant<nitro::NullType, std::string>>> vector;
+    vector.reserve(size);
+    return vector;
   }
   
   // pragma MARK: std::variant<bool, double>
@@ -875,6 +887,81 @@ namespace margelo::nitro::test::bridge::swift {
     return map.find(key)->second;
   }
   inline void emplace_std__unordered_map_std__string__double_(std__unordered_map_std__string__double_& map, const std::string& key, const double& value) noexcept {
+    map.emplace(key, value);
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, std::optional<std::string>>
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::optional<std::string>>`.
+   */
+  using std__unordered_map_std__string__std__optional_std__string__ = std::unordered_map<std::string, std::optional<std::string>>;
+  inline std::unordered_map<std::string, std::optional<std::string>> create_std__unordered_map_std__string__std__optional_std__string__(size_t size) noexcept {
+    std::unordered_map<std::string, std::optional<std::string>> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__optional_std__string___keys(const std__unordered_map_std__string__std__optional_std__string__& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline std::optional<std::string> get_std__unordered_map_std__string__std__optional_std__string___value(const std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__std__optional_std__string__(std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key, const std::optional<std::string>& value) noexcept {
+    map.emplace(key, value);
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>`.
+   */
+  using std__unordered_map_std__string__std__variant_nitro__NullType__std__string__ = std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>;
+  inline std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> create_std__unordered_map_std__string__std__variant_nitro__NullType__std__string__(size_t size) noexcept {
+    std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___keys(const std__unordered_map_std__string__std__variant_nitro__NullType__std__string__& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline std::variant<nitro::NullType, std::string> get_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___value(const std__unordered_map_std__string__std__variant_nitro__NullType__std__string__& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__std__variant_nitro__NullType__std__string__(std__unordered_map_std__string__std__variant_nitro__NullType__std__string__& map, const std::string& key, const std::variant<nitro::NullType, std::string>& value) noexcept {
+    map.emplace(key, value);
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>`.
+   */
+  using std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___ = std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>;
+  inline std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> create_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___(size_t size) noexcept {
+    std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____keys(const std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline std::optional<std::variant<nitro::NullType, std::string>> get_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____value(const std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___(std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___& map, const std::string& key, const std::optional<std::variant<nitro::NullType, std::string>>& value) noexcept {
     map.emplace(key, value);
   }
   
@@ -1884,6 +1971,24 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::vector<std::optional<std::string>>>::withError(error);
   }
   
+  // pragma MARK: Result<std::vector<std::variant<nitro::NullType, std::string>>>
+  using Result_std__vector_std__variant_nitro__NullType__std__string___ = Result<std::vector<std::variant<nitro::NullType, std::string>>>;
+  inline Result_std__vector_std__variant_nitro__NullType__std__string___ create_Result_std__vector_std__variant_nitro__NullType__std__string___(const std::vector<std::variant<nitro::NullType, std::string>>& value) noexcept {
+    return Result<std::vector<std::variant<nitro::NullType, std::string>>>::withValue(value);
+  }
+  inline Result_std__vector_std__variant_nitro__NullType__std__string___ create_Result_std__vector_std__variant_nitro__NullType__std__string___(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::variant<nitro::NullType, std::string>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::optional<std::variant<nitro::NullType, std::string>>>>
+  using Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____ = Result<std::vector<std::optional<std::variant<nitro::NullType, std::string>>>>;
+  inline Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____ create_Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& value) noexcept {
+    return Result<std::vector<std::optional<std::variant<nitro::NullType, std::string>>>>::withValue(value);
+  }
+  inline Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____ create_Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::optional<std::variant<nitro::NullType, std::string>>>>::withError(error);
+  }
+  
   // pragma MARK: Result<std::shared_ptr<AnyMap>>
   using Result_std__shared_ptr_AnyMap__ = Result<std::shared_ptr<AnyMap>>;
   inline Result_std__shared_ptr_AnyMap__ create_Result_std__shared_ptr_AnyMap__(const std::shared_ptr<AnyMap>& value) noexcept {
@@ -1909,6 +2014,33 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__unordered_map_std__string__double__ create_Result_std__unordered_map_std__string__double__(const std::exception_ptr& error) noexcept {
     return Result<std::unordered_map<std::string, double>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, std::optional<std::string>>>
+  using Result_std__unordered_map_std__string__std__optional_std__string___ = Result<std::unordered_map<std::string, std::optional<std::string>>>;
+  inline Result_std__unordered_map_std__string__std__optional_std__string___ create_Result_std__unordered_map_std__string__std__optional_std__string___(const std::unordered_map<std::string, std::optional<std::string>>& value) noexcept {
+    return Result<std::unordered_map<std::string, std::optional<std::string>>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__std__optional_std__string___ create_Result_std__unordered_map_std__string__std__optional_std__string___(const std::exception_ptr& error) noexcept {
+    return Result<std::unordered_map<std::string, std::optional<std::string>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>>
+  using Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___ = Result<std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>>;
+  inline Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___ create_Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& value) noexcept {
+    return Result<std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___ create_Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___(const std::exception_ptr& error) noexcept {
+    return Result<std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>>
+  using Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____ = Result<std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>>;
+  inline Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____ create_Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____(const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& value) noexcept {
+    return Result<std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>>::withValue(value);
+  }
+  inline Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____ create_Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____(const std::exception_ptr& error) noexcept {
+    return Result<std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>>::withError(error);
   }
   
   // pragma MARK: Result<std::unordered_map<std::string, std::string>>

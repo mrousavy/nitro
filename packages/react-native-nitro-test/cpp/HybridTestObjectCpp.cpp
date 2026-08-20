@@ -284,9 +284,33 @@ HybridTestObjectCpp::bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayB
 
 std::vector<std::optional<std::string>>
 HybridTestObjectCpp::bounceOptionals(const std::vector<std::optional<std::string>>& strings,
-                                     const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& /* arrayBuffers */,
-                                     const std::unordered_map<std::string, std::optional<std::string>>& /* map */) {
+                                     const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& /* arrayBuffers */) {
   return strings;
+}
+
+std::vector<std::variant<nitro::NullType, std::string>>
+HybridTestObjectCpp::bounceNulls(const std::vector<std::variant<nitro::NullType, std::string>>& strings) {
+  return strings;
+}
+
+std::vector<std::optional<std::variant<nitro::NullType, std::string>>>
+HybridTestObjectCpp::bounceOptionalNulls(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& strings) {
+  return strings;
+}
+
+std::unordered_map<std::string, std::optional<std::string>>
+HybridTestObjectCpp::bounceOptionalMap(const std::unordered_map<std::string, std::optional<std::string>>& map) {
+  return map;
+}
+
+std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>
+HybridTestObjectCpp::bounceNullMap(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& map) {
+  return map;
+}
+
+std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> HybridTestObjectCpp::bounceOptionalNullMap(
+    const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& map) {
+  return map;
 }
 
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {

@@ -137,8 +137,15 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override fun bounceOptionals(
     strings: Array<String?>,
     arrayBuffers: Array<ArrayBuffer?>,
-    map: Map<String, String?>,
   ): Array<String?> {
+    return strings
+  }
+
+  override fun bounceNulls(strings: Array<Variant_NullType_String>): Array<Variant_NullType_String> {
+    return strings
+  }
+
+  override fun bounceOptionalNulls(strings: Array<Variant_NullType_String?>): Array<Variant_NullType_String?> {
     return strings
   }
 
@@ -249,6 +256,18 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   }
 
   override fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double> {
+    return map
+  }
+
+  override fun bounceOptionalMap(map: Map<String, String?>): Map<String, String?> {
+    return map
+  }
+
+  override fun bounceNullMap(map: Map<String, Variant_NullType_String>): Map<String, Variant_NullType_String> {
+    return map
+  }
+
+  override fun bounceOptionalNullMap(map: Map<String, Variant_NullType_String?>): Map<String, Variant_NullType_String?> {
     return map
   }
 

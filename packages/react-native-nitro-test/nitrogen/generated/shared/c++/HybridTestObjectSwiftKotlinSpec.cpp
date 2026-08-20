@@ -75,6 +75,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bouncePromises", &HybridTestObjectSwiftKotlinSpec::bouncePromises);
       prototype.registerHybridMethod("bounceArrayBuffers", &HybridTestObjectSwiftKotlinSpec::bounceArrayBuffers);
       prototype.registerHybridMethod("bounceOptionals", &HybridTestObjectSwiftKotlinSpec::bounceOptionals);
+      prototype.registerHybridMethod("bounceNulls", &HybridTestObjectSwiftKotlinSpec::bounceNulls);
+      prototype.registerHybridMethod("bounceOptionalNulls", &HybridTestObjectSwiftKotlinSpec::bounceOptionalNulls);
       prototype.registerHybridMethod("createMap", &HybridTestObjectSwiftKotlinSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectSwiftKotlinSpec::mapRoundtrip);
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectSwiftKotlinSpec::getMapKeys);
@@ -82,6 +84,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("copyAnyMap", &HybridTestObjectSwiftKotlinSpec::copyAnyMap);
       prototype.registerHybridMethod("bounceMap", &HybridTestObjectSwiftKotlinSpec::bounceMap);
       prototype.registerHybridMethod("bounceSimpleMap", &HybridTestObjectSwiftKotlinSpec::bounceSimpleMap);
+      prototype.registerHybridMethod("bounceOptionalMap", &HybridTestObjectSwiftKotlinSpec::bounceOptionalMap);
+      prototype.registerHybridMethod("bounceNullMap", &HybridTestObjectSwiftKotlinSpec::bounceNullMap);
+      prototype.registerHybridMethod("bounceOptionalNullMap", &HybridTestObjectSwiftKotlinSpec::bounceOptionalNullMap);
       prototype.registerHybridMethod("extractMap", &HybridTestObjectSwiftKotlinSpec::extractMap);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectSwiftKotlinSpec::funcThatThrows);
       prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectSwiftKotlinSpec::funcThatThrowsBeforePromise);

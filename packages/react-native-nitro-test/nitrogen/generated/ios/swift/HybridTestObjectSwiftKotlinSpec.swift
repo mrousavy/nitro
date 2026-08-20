@@ -55,7 +55,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceMaps(maps: [AnyMap]) throws -> [AnyMap]
   func bouncePromises(promises: [Promise<Double>]) throws -> [Promise<Double>]
   func bounceArrayBuffers(arrayBuffers: [ArrayBuffer]) throws -> [ArrayBuffer]
-  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?], map: Dictionary<String, String?>) throws -> [String?]
+  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?]) throws -> [String?]
+  func bounceNulls(strings: [Variant_NullType_String]) throws -> [Variant_NullType_String]
+  func bounceOptionalNulls(strings: [Variant_NullType_String?]) throws -> [Variant_NullType_String?]
   func createMap() throws -> AnyMap
   func mapRoundtrip(map: AnyMap) throws -> AnyMap
   func getMapKeys(map: AnyMap) throws -> [String]
@@ -63,6 +65,9 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func copyAnyMap(map: AnyMap) throws -> AnyMap
   func bounceMap(map: Dictionary<String, Variant_Bool_Double>) throws -> Dictionary<String, Variant_Bool_Double>
   func bounceSimpleMap(map: Dictionary<String, Double>) throws -> Dictionary<String, Double>
+  func bounceOptionalMap(map: Dictionary<String, String?>) throws -> Dictionary<String, String?>
+  func bounceNullMap(map: Dictionary<String, Variant_NullType_String>) throws -> Dictionary<String, Variant_NullType_String>
+  func bounceOptionalNullMap(map: Dictionary<String, Variant_NullType_String?>) throws -> Dictionary<String, Variant_NullType_String?>
   func extractMap(mapWrapper: MapWrapper) throws -> Dictionary<String, String>
   func funcThatThrows() throws -> Double
   func funcThatThrowsBeforePromise() throws -> Promise<Void>
