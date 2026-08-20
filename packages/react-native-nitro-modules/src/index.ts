@@ -12,5 +12,6 @@ export * from './Int64'
 
 export * from './views/HybridView'
 export * from './views/getHostComponent'
+export * from './views/callback'
 
 installWorkletsSupport()
