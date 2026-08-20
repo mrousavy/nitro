@@ -895,6 +895,59 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func bounceOptionals(strings: bridge.std__vector_std__optional_std__string__, arrayBuffers: bridge.std__vector_std__optional_std__shared_ptr_ArrayBuffer___, map: bridge.std__unordered_map_std__string__std__optional_std__string__) -> bridge.Result_std__vector_std__optional_std__string___ {
+    do {
+      let __result = try self.__implementation.bounceOptionals(strings: strings.map({ __item in { () -> String? in
+        if bridge.has_value_std__optional_std__string_(__item) {
+          let __unwrapped = bridge.get_std__optional_std__string_(__item)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }() }), arrayBuffers: arrayBuffers.map({ __item in { () -> ArrayBuffer? in
+        if bridge.has_value_std__optional_std__shared_ptr_ArrayBuffer__(__item) {
+          let __unwrapped = bridge.get_std__optional_std__shared_ptr_ArrayBuffer__(__item)
+          return ArrayBuffer(__unwrapped)
+        } else {
+          return nil
+        }
+      }() }), map: { () -> Dictionary<String, String?> in
+        var __dictionary = Dictionary<String, String?>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__optional_std__string___keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__std__optional_std__string___value(map, __key)
+          __dictionary[String(__key)] = { () -> String? in
+            if bridge.has_value_std__optional_std__string_(__value) {
+              let __unwrapped = bridge.get_std__optional_std__string_(__value)
+              return String(__unwrapped)
+            } else {
+              return nil
+            }
+          }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__vector_std__optional_std__string__ in
+        var __vector = bridge.create_std__vector_std__optional_std__string__(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.std__optional_std__string_ in
+            if let __unwrappedValue = __item {
+              return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+            } else {
+              return .init()
+            }
+          }())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__optional_std__string___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__optional_std__string___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func createMap() -> bridge.Result_std__shared_ptr_AnyMap__ {
     do {
       let __result = try self.__implementation.createMap()

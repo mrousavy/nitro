@@ -142,6 +142,9 @@ public:
   std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;
   std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override;
   std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override;
+  std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings,
+                                                          const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers,
+                                                          const std::unordered_map<std::string, std::optional<std::string>>& map) override;
 
   std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) override;
   std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) override;

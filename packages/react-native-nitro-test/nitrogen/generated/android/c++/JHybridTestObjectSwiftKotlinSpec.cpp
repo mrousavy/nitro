@@ -726,6 +726,44 @@ namespace margelo::nitro::test {
       return __vector;
     }(__result);
   }
+  std::vector<std::optional<std::string>> JHybridTestObjectSwiftKotlinSpec::bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers, const std::unordered_map<std::string, std::optional<std::string>>& map) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<jni::JArrayClass<jni::JString>> /* strings */, jni::alias_ref<jni::JArrayClass<JArrayBuffer::javaobject>> /* arrayBuffers */, jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* map */)>("bounceOptionals");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = __element.has_value() ? jni::make_jstring(__element.value()) : nullptr;
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(strings), [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JArrayBuffer::javaobject>> __array = jni::JArrayClass<JArrayBuffer::javaobject>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = __element.has_value() ? JArrayBuffer::wrap(__element.value()) : nullptr;
+        __array->setElement(__i, __elementJni.get());
+      }
+      return __array;
+    }(arrayBuffers), [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
+      auto __map = jni::JHashMap<jni::JString, jni::JString>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), __entry.second.has_value() ? jni::make_jstring(__entry.second.value()) : nullptr);
+      }
+      return __map;
+    }());
+    return [&](auto&& __input) {
+      size_t __size = __input->size();
+      std::vector<std::optional<std::string>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __input->getElement(__i);
+        __vector.push_back(__element != nullptr ? std::make_optional(__element->toStdString()) : std::nullopt);
+      }
+      return __vector;
+    }(__result);
+  }
   std::shared_ptr<AnyMap> JHybridTestObjectSwiftKotlinSpec::createMap() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JAnyMap::javaobject>()>("createMap");
     auto __result = method(_javaPart);

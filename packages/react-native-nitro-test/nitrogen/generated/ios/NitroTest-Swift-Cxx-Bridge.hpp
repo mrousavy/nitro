@@ -737,6 +737,68 @@ namespace margelo::nitro::test::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::vector<std::optional<std::string>>
+  /**
+   * Specialized version of `std::vector<std::optional<std::string>>`.
+   */
+  using std__vector_std__optional_std__string__ = std::vector<std::optional<std::string>>;
+  inline std::vector<std::optional<std::string>> create_std__vector_std__optional_std__string__(size_t size) noexcept {
+    std::vector<std::optional<std::string>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
+  /**
+   * Specialized version of `std::optional<std::shared_ptr<ArrayBuffer>>`.
+   */
+  using std__optional_std__shared_ptr_ArrayBuffer__ = std::optional<std::shared_ptr<ArrayBuffer>>;
+  inline std::optional<std::shared_ptr<ArrayBuffer>> create_std__optional_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
+    return std::optional<std::shared_ptr<ArrayBuffer>>(value);
+  }
+  inline bool has_value_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline std::shared_ptr<ArrayBuffer> get_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>
+  /**
+   * Specialized version of `std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>`.
+   */
+  using std__vector_std__optional_std__shared_ptr_ArrayBuffer___ = std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>;
+  inline std::vector<std::optional<std::shared_ptr<ArrayBuffer>>> create_std__vector_std__optional_std__shared_ptr_ArrayBuffer___(size_t size) noexcept {
+    std::vector<std::optional<std::shared_ptr<ArrayBuffer>>> vector;
+    vector.reserve(size);
+    return vector;
+  }
+  
+  // pragma MARK: std::unordered_map<std::string, std::optional<std::string>>
+  /**
+   * Specialized version of `std::unordered_map<std::string, std::optional<std::string>>`.
+   */
+  using std__unordered_map_std__string__std__optional_std__string__ = std::unordered_map<std::string, std::optional<std::string>>;
+  inline std::unordered_map<std::string, std::optional<std::string>> create_std__unordered_map_std__string__std__optional_std__string__(size_t size) noexcept {
+    std::unordered_map<std::string, std::optional<std::string>> map;
+    map.reserve(size);
+    return map;
+  }
+  inline std::vector<std::string> get_std__unordered_map_std__string__std__optional_std__string___keys(const std__unordered_map_std__string__std__optional_std__string__& map) noexcept {
+    std::vector<std::string> keys;
+    keys.reserve(map.size());
+    for (const auto& entry : map) {
+      keys.push_back(entry.first);
+    }
+    return keys;
+  }
+  inline std::optional<std::string> get_std__unordered_map_std__string__std__optional_std__string___value(const std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key) noexcept {
+    return map.find(key)->second;
+  }
+  inline void emplace_std__unordered_map_std__string__std__optional_std__string__(std__unordered_map_std__string__std__optional_std__string__& map, const std::string& key, const std::optional<std::string>& value) noexcept {
+    map.emplace(key, value);
+  }
+  
   // pragma MARK: std::variant<bool, double>
   /**
    * Wrapper struct for `std::variant<bool, double>`.
@@ -1264,21 +1326,6 @@ namespace margelo::nitro::test::bridge::swift {
     std::vector<JsStyleStruct> vector;
     vector.reserve(size);
     return vector;
-  }
-  
-  // pragma MARK: std::optional<std::shared_ptr<ArrayBuffer>>
-  /**
-   * Specialized version of `std::optional<std::shared_ptr<ArrayBuffer>>`.
-   */
-  using std__optional_std__shared_ptr_ArrayBuffer__ = std::optional<std::shared_ptr<ArrayBuffer>>;
-  inline std::optional<std::shared_ptr<ArrayBuffer>> create_std__optional_std__shared_ptr_ArrayBuffer__(const std::shared_ptr<ArrayBuffer>& value) noexcept {
-    return std::optional<std::shared_ptr<ArrayBuffer>>(value);
-  }
-  inline bool has_value_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
-    return optional.has_value();
-  }
-  inline std::shared_ptr<ArrayBuffer> get_std__optional_std__shared_ptr_ArrayBuffer__(const std::optional<std::shared_ptr<ArrayBuffer>>& optional) noexcept {
-    return optional.value();
   }
   
   // pragma MARK: std::variant<std::function<void()>, double>
@@ -1826,6 +1873,15 @@ namespace margelo::nitro::test::bridge::swift {
   }
   inline Result_std__vector_std__shared_ptr_ArrayBuffer___ create_Result_std__vector_std__shared_ptr_ArrayBuffer___(const std::exception_ptr& error) noexcept {
     return Result<std::vector<std::shared_ptr<ArrayBuffer>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::vector<std::optional<std::string>>>
+  using Result_std__vector_std__optional_std__string___ = Result<std::vector<std::optional<std::string>>>;
+  inline Result_std__vector_std__optional_std__string___ create_Result_std__vector_std__optional_std__string___(const std::vector<std::optional<std::string>>& value) noexcept {
+    return Result<std::vector<std::optional<std::string>>>::withValue(value);
+  }
+  inline Result_std__vector_std__optional_std__string___ create_Result_std__vector_std__optional_std__string___(const std::exception_ptr& error) noexcept {
+    return Result<std::vector<std::optional<std::string>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<AnyMap>>

@@ -189,6 +189,11 @@ interface SharedTestObjectProps {
   bounceMaps(maps: AnyMap[]): AnyMap[]
   bouncePromises(promises: Promise<number>[]): Promise<number>[]
   bounceArrayBuffers(arrayBuffers: ArrayBuffer[]): ArrayBuffer[]
+  bounceOptionals(
+    strings: (string | undefined)[],
+    arrayBuffers: (ArrayBuffer | undefined)[],
+    map: Record<string, string | undefined>
+  ): (string | undefined)[]
 
   // Maps
   createMap(): AnyMap

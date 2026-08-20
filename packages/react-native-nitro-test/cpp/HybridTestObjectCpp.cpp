@@ -282,6 +282,13 @@ HybridTestObjectCpp::bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayB
   return arrayBuffers;
 }
 
+std::vector<std::optional<std::string>>
+HybridTestObjectCpp::bounceOptionals(const std::vector<std::optional<std::string>>& strings,
+                                     const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& /* arrayBuffers */,
+                                     const std::unordered_map<std::string, std::optional<std::string>>& /* map */) {
+  return strings;
+}
+
 std::shared_ptr<AnyMap> HybridTestObjectCpp::createMap() {
   auto map = AnyMap::make();
   map->setDouble("number", getNumberValue());
