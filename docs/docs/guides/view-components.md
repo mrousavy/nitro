@@ -13,6 +13,7 @@ The key difference to a Fabric view is that it uses Nitro for prop parsing, whic
 
 :::note
 Nitro Views require **react-native 0.78.0** or higher, and require the new architecture.
+On **react-native 0.81.0** or higher, callbacks can be passed to Nitro Views directly (see ["Callbacks"](#callbacks)).
 :::
 
 ## Create a Nitro View
@@ -235,12 +236,9 @@ To batch prop changes, you can override `beforeUpdate()` and `afterUpdate()` in 
   </TabItem>
 </Tabs>
 
-### Callbacks have to be wrapped
+### Callbacks
 
-Whereas Nitro allows passing JS functions to native code directly, React Native core doesn't allow that. Instead, functions are wrapped in an event listener registry, and a simple boolean is passed to the native side.
-Unfortunately React Native's renderer does not yet allow changing this behaviour, so functions cannot be passed directly to Nitro Views. As a workaround, Nitro requires you to wrap each function in an object, which bypasses React Native's conversion.
-
-To simplify this, Nitro exposes the `callback(...)` method:
+Nitro passes JS functions to native code directly, so callbacks are just regular props:
 
 ```tsx
 export interface CameraProps extends HybridViewProps {
@@ -249,15 +247,25 @@ export interface CameraProps extends HybridViewProps {
 export type CameraView = HybridView<CameraProps>
 
 function App() {
-  // diff-remove
   return <Camera onCaptured={(i) => console.log(i)} />
-  // diff-add
+}
+```
+
+#### react-native 0.78 - 0.80: `callback(...)`
+
+Historically, React Native core did not allow this. Instead, functions were wrapped in an event listener registry, and a simple boolean was passed to the native side.
+Since [react-native 0.81](https://github.com/facebook/react-native/pull/48777) a View Config can opt out of that conversion, which Nitro does - so functions arrive on the native side unchanged.
+
+On **react-native 0.78 - 0.80** you still need to wrap every function in an object to bypass React Native's conversion. Nitro exposes the `callback(...)` method for this:
+
+```tsx
+function App() {
   return <Camera onCaptured={callback((i) => console.log(i))} />
 }
 ```
 
-:::info
-We are working on a fix here: [facebook/react #32119](https://github.com/facebook/react/pull/32119)
+:::warning
+`callback(...)` is deprecated. On react-native 0.81 and above it is a no-op, so upgrade to react-native 0.81 or newer and remove all `callback(...)` calls.
 :::
 
 ### Recycling
@@ -325,14 +333,14 @@ To call the function, you would need to get a reference to the `HybridObject` fi
 function App() {
   return (
     <Camera
-      hybridRef={callback((ref) => {
+      hybridRef={(ref) => {
         const image = ref.takePhoto()
-      })}
+      }}
     />
   )
 }
 ```
 
-> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](#callbacks-have-to-be-wrapped).
+> Note: On react-native 0.78 - 0.80, this has to be wrapped in `callback(...)`, see ["Callbacks"](#callbacks).
 
 The `ref` from within `hybridRef`'s callback is pointing to the `HybridObject` directly - you can also pass this around freely.

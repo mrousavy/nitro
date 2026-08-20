@@ -9,6 +9,24 @@
 #endif
 #include <react/renderer/core/RawProps.h>
 
+/**
+ * `NITRO_RAW_FUNCTION_PROPS` is `1` if React Native transports JS functions to
+ * native as raw JSI functions, and `0` if they have to be wrapped in objects.
+ *
+ * Before React Native 0.81, every function prop was converted to `true` before
+ * it reached native - Nitro works around that by wrapping functions in a
+ * `{ f: function }` object (see `callback(...)`).
+ * Since React Native 0.81, a View Config can opt out of that conversion by
+ * declaring a `process` function for the prop (which Nitro always does - see
+ * `getHostComponent.ts`), so functions arrive as raw `jsi::Function`s.
+ * @see https://github.com/facebook/react-native/pull/48777
+ */
+#if defined(REACT_NATIVE_VERSION_MAJOR) && (REACT_NATIVE_VERSION_MAJOR > 0 || REACT_NATIVE_VERSION_MINOR >= 81)
+#define NITRO_RAW_FUNCTION_PROPS 1
+#else
+#define NITRO_RAW_FUNCTION_PROPS 0
+#endif
+
 namespace margelo::nitro::RawPropsCompat {
 
 /**

@@ -46,15 +46,16 @@ interface DefaultHybridViewProps<RefType> {
    * function App() {
    *   return (
    *     <HybridScrollView
-   *       hybridRef={callback((ref) => {
+   *       hybridRef={(ref) => {
    *         ref.current.scrollTo(400)
-   *       })}
+   *       }}
    *     />
    *   )
    * }
    * ```
-   * @note If you're wondering about the `callback(...)` syntax, see
-   * ["Callbacks have to be wrapped"](https://nitro.margelo.com/docs/guides/view-components#callbacks-have-to-be-wrapped).
+   * @note On react-native 0.78 - 0.80, this has to be wrapped in
+   * {@linkcode callback | callback(...)}. See
+   * ["Callbacks"](https://nitro.margelo.com/docs/guides/view-components#callbacks).
    */
   hybridRef?: (ref: RefType) => void
 }
@@ -62,25 +63,28 @@ interface DefaultHybridViewProps<RefType> {
 /**
  * Wraps a callback function in a Nitro-compatible object format.
  *
- * @note Due to a React limitation, functions cannot be passed to native directly
- * because RN converts them to booleans (`true`). As a workaround,
- * Nitro requires you to wrap each function using `callback(...)`,
- * which bypasses React Native's conversion.
- * Please see the [Callbacks have to be wrapped](https://nitro.margelo.com/docs/guides/view-components#callbacks-have-to-be-wrapped) section for more information.
+ * @note Before react-native 0.81, functions could not be passed to native
+ * directly because react-native converted them to booleans (`true`).
+ * As a workaround, Nitro required you to wrap each function using `callback(...)`,
+ * which bypassed react-native's conversion.
+ * Since react-native 0.81, functions can be passed to Nitro Views directly, so
+ * this type is only relevant on react-native 0.78 - 0.80.
+ * Please see the [Callbacks](https://nitro.margelo.com/docs/guides/view-components#callbacks) section for more information.
  *
  * @type {Object} NitroViewWrappedCallback
  * @property {T} f - The wrapped callback function
  */
 export type NitroViewWrappedCallback<T extends Function | undefined> = { f: T }
 
-// Due to a React limitation, functions cannot be passed to native directly
-// because RN converts them to booleans (`true`). Nitro knows this and just
-// wraps functions as objects - the original function is stored in `f`.
-type WrapFunctionsInObjects<Props> = {
+// Since react-native 0.81, functions can be passed to native directly.
+// On react-native 0.78 - 0.80 they were converted to booleans (`true`), so
+// Nitro also accepts functions wrapped in objects via `callback(...)` - the
+// original function is then stored in `f`.
+type AllowWrappedFunctions<Props> = {
   [K in keyof Props]: Props[K] extends Function
-    ? NitroViewWrappedCallback<Props[K]>
+    ? Props[K] | NitroViewWrappedCallback<Props[K]>
     : Props[K] extends Function | undefined
-      ? NitroViewWrappedCallback<Props[K]>
+      ? Props[K] | NitroViewWrappedCallback<Props[K]>
       : Props[K]
 }
 
@@ -89,14 +93,15 @@ type WrapFunctionsInObjects<Props> = {
  *
  * @note Every React Native view has a {@linkcode DefaultHybridViewProps.hybridRef hybridRef} which can be used to gain access
  *       to the underlying Nitro {@linkcode HybridView}.
- * @note Every function/callback is wrapped as a `{ f: … }` object. Use {@linkcode callback | callback(...)} for this.
+ * @note On react-native 0.78 - 0.80, every function/callback has to be wrapped as a `{ f: … }` object.
+ *       Use {@linkcode callback | callback(...)} for this.
  * @note Every method can be called on the Ref. Including setting properties directly.
  */
 export type ReactNativeView<
   Props extends HybridViewProps,
   Methods extends HybridViewMethods,
 > = HostComponent<
-  WrapFunctionsInObjects<
+  AllowWrappedFunctions<
     DefaultHybridViewProps<HybridView<Props, Methods>> & Props
   > &
     ViewProps
@@ -106,6 +111,11 @@ type ValidAttributes<Props> = ViewConfig<Props>['validAttributes']
 /**
  * Wraps all valid attributes of {@linkcode TProps} using Nitro's
  * default `diff` and `process` functions.
+ *
+ * Both are required for Nitro to receive props unchanged:
+ * - `diff` opts out of react-native's deep-differ, which ignores functions.
+ * - `process` opts out of react-native converting function props to `true`
+ *   (react-native 0.81 and above).
  */
 function wrapValidAttributes<TProps>(
   attributes: ValidAttributes<TProps>

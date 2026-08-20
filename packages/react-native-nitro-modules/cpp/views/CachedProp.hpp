@@ -98,15 +98,20 @@ public:
 
       auto [runtime, value] = static_cast<std::pair<jsi::Runtime*, jsi::Value>>(*rawValue);
 
+#if NITRO_RAW_FUNCTION_PROPS
+      // Every prop - including functions - arrives as the raw JSI value it was
+      // in JS, so there is nothing to unwrap here.
+      return CachedProp<T>::fromJSIValue(*runtime, std::move(value), previousProp);
+#else
       if constexpr (IsFunctionProp<std::remove_cv_t<T>>::value) {
-        // React Native cannot transport functions as regular props. Nitrogen
-        // wraps them as `{ f: function }`, so we unwrap `f` before converting
-        // and caching the JSI value.
-        jsi::Value function = value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"));
-        return CachedProp<T>::fromJSIValue(*runtime, std::move(function), previousProp);
+        // This version of React Native cannot transport functions as props, so
+        // `callback(...)` wraps them as `{ f: function }` - unwrap `f` before
+        // converting and caching the JSI value.
+        return CachedProp<T>::fromJSIValue(*runtime, unwrapWrappedCallback(*runtime, std::move(value)), previousProp);
       } else {
         return CachedProp<T>::fromJSIValue(*runtime, std::move(value), previousProp);
       }
+#endif
     } catch (const std::exception& exception) {
       throw std::runtime_error(std::string(viewName) + "." + propName + ": " + exception.what());
     }
@@ -122,6 +127,26 @@ public:
   }
 
 private:
+#if !NITRO_RAW_FUNCTION_PROPS
+  /**
+   * Unwraps the actual JS function from a `{ f: function }` object created by
+   * `callback(...)`, which is how functions are passed to Nitro Views before
+   * React Native 0.81.
+   */
+  static jsi::Value unwrapWrappedCallback(jsi::Runtime& runtime, jsi::Value&& value) {
+    if (value.isNull() || value.isUndefined()) {
+      // The function prop has been removed - there is nothing to unwrap.
+      return std::move(value);
+    }
+    if (!value.isObject()) {
+      throw std::runtime_error("Expected a function wrapped via `callback(...)`, but got `" + value.toString(runtime).utf8(runtime) +
+                               "`! On react-native 0.78 - 0.80, function props have to be wrapped in `callback(...)`. "
+                               "Alternatively, upgrade to react-native 0.81 or newer where Nitro passes functions to native directly.");
+    }
+    return value.asObject(runtime).getProperty(runtime, PropNameIDCache::get(runtime, "f"));
+  }
+#endif
+
   static CachedProp<T> fromJSIValue(jsi::Runtime& runtime, jsi::Value&& value, const CachedProp<T>& previousProp) {
     if (previousProp.equals(runtime, value)) {
       // jsi::Value hasn't changed - no need to convert it again!
