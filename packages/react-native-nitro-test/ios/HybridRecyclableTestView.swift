@@ -15,6 +15,8 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   private var invalidLifecycleOrderCount: Double = 0
   private var onDropViewCount: Double = 0
   private var prepareForRecycleCount: Double = 0
+  private var nativeDefaultValueSetterCallCount: Double = 0
+  private var nativeDefaultValueStorage: Double? = 42
 
   // Props
   var isBlue: Bool = false {
@@ -22,6 +24,15 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
       if !isRecycled {
         view.backgroundColor = isBlue ? .systemBlue : .systemRed
       }
+    }
+  }
+  var nativeDefaultValue: Double? {
+    get {
+      return nativeDefaultValueStorage
+    }
+    set {
+      nativeDefaultValueStorage = newValue
+      nativeDefaultValueSetterCallCount += 1
     }
   }
 
@@ -42,6 +53,10 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
     return prepareForRecycleCount
   }
 
+  func getNativeDefaultValueSetterCallCount() throws -> Double {
+    return nativeDefaultValueSetterCallCount
+  }
+
   func beforeUpdate() {
     isRecycled = false
   }
@@ -52,6 +67,8 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
       invalidLifecycleOrderCount += 1
     }
     prepareForRecycleCount += 1
+    nativeDefaultValueStorage = 42
+    nativeDefaultValueSetterCallCount = 0
     view.backgroundColor = .yellow
     isRecycled = true
   }

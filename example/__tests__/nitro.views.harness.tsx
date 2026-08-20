@@ -739,6 +739,9 @@ describe('RecyclableTestView', () => {
       { timeout: RENDER_TIMEOUT }
     )
     const firstView = await firstRef.promise
+    expect(firstView.isBlue).toBe(true)
+    expect(firstView.nativeDefaultValue).toBe(42)
+    expect(firstView.getNativeDefaultValueSetterCallCount()).toBe(0)
     const initialOnDropViewCount = firstView.getOnDropViewCount()
     const initialPrepareForRecycleCount = firstView.getPrepareForRecycleCount()
 
@@ -753,6 +756,9 @@ describe('RecyclableTestView', () => {
       initialPrepareForRecycleCount + (SUPPORTS_NATIVE_VIEW_RECYCLING ? 1 : 0)
     )
     expect(firstView.getInvalidLifecycleOrderCount()).toBe(0)
+    const firstNativeDefaultSetterCountAfterRecycle =
+      firstView.getNativeDefaultValueSetterCallCount()
+    expect(firstNativeDefaultSetterCountAfterRecycle).toBe(0)
 
     const secondRef = deferred<RecyclableTestViewRef>()
     const secondLayout = deferred<LayoutRectangle>()
@@ -762,6 +768,7 @@ describe('RecyclableTestView', () => {
         style={RESIZED_SIZE}
         hybridRef={callback((view) => secondRef.resolve(view))}
         isBlue={false}
+        nativeDefaultValue={0}
         onLayout={({ nativeEvent }) => secondLayout.resolve(nativeEvent.layout)}
       />
     )
@@ -777,6 +784,8 @@ describe('RecyclableTestView', () => {
     )
     expect(secondView.getInvalidLifecycleOrderCount()).toBe(0)
     expect(secondView.isBlue).toBe(false)
+    expect(secondView.nativeDefaultValue).toBe(0)
+    expect(secondView.getNativeDefaultValueSetterCallCount()).toBe(1)
     expect(reportedSecondLayout.width).toBeCloseTo(RESIZED_SIZE.width, 0)
     expect(reportedSecondLayout.height).toBeCloseTo(RESIZED_SIZE.height, 0)
 
@@ -794,6 +803,11 @@ describe('RecyclableTestView', () => {
         (SUPPORTS_NATIVE_VIEW_RECYCLING ? 1 : 0)
     )
     expect(secondView.getInvalidLifecycleOrderCount()).toBe(0)
+    const secondNativeDefaultSetterCountAfterRecycle =
+      secondView.getNativeDefaultValueSetterCallCount()
+    expect(secondNativeDefaultSetterCountAfterRecycle).toBe(
+      SUPPORTS_NATIVE_VIEW_RECYCLING ? 0 : 1
+    )
 
     const thirdRef = deferred<RecyclableTestViewRef>()
     const thirdLayout = deferred<LayoutRectangle>()
@@ -819,6 +833,8 @@ describe('RecyclableTestView', () => {
     )
     expect(thirdView.getInvalidLifecycleOrderCount()).toBe(0)
     expect(thirdView.isBlue).toBe(true)
+    expect(thirdView.nativeDefaultValue).toBe(42)
+    expect(thirdView.getNativeDefaultValueSetterCallCount()).toBe(0)
     expect(reportedThirdLayout.width).toBeCloseTo(INITIAL_SIZE.width, 0)
     expect(reportedThirdLayout.height).toBeCloseTo(INITIAL_SIZE.height, 0)
 

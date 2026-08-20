@@ -17,10 +17,10 @@
 
 #include <string>
 
+#include <optional>
 #include <memory>
 #include "HybridRecyclableTestViewSpec.hpp"
 #include <functional>
-#include <optional>
 
 namespace margelo::nitro::test::views {
 
@@ -43,12 +43,21 @@ namespace margelo::nitro::test::views {
 
   public:
     nitro::CachedProp<bool> isBlue;
+    nitro::CachedProp<std::optional<double>> nativeDefaultValue;
     nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> hybridRef;
 
     [[nodiscard]]
     bool hasSameProps(const HybridRecyclableTestViewProps& other) const noexcept {
       return isBlue.hasSameValue(other.isBlue) &&
+             nativeDefaultValue.hasSameValue(other.nativeDefaultValue) &&
              hybridRef.hasSameValue(other.hybridRef);
+    }
+
+    [[nodiscard]]
+    bool hasAnyProvidedProps() const noexcept {
+      return isBlue.isProvided() ||
+             nativeDefaultValue.isProvided() ||
+             hybridRef.isProvided();
     }
 
   private:

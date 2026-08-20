@@ -16,9 +16,12 @@ namespace margelo::nitro::test {
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridGetter("isBlue", &HybridRecyclableTestViewSpec::getIsBlue);
       prototype.registerHybridSetter("isBlue", &HybridRecyclableTestViewSpec::setIsBlue);
+      prototype.registerHybridGetter("nativeDefaultValue", &HybridRecyclableTestViewSpec::getNativeDefaultValue);
+      prototype.registerHybridSetter("nativeDefaultValue", &HybridRecyclableTestViewSpec::setNativeDefaultValue);
       prototype.registerHybridMethod("getInvalidLifecycleOrderCount", &HybridRecyclableTestViewSpec::getInvalidLifecycleOrderCount);
       prototype.registerHybridMethod("getOnDropViewCount", &HybridRecyclableTestViewSpec::getOnDropViewCount);
       prototype.registerHybridMethod("getPrepareForRecycleCount", &HybridRecyclableTestViewSpec::getPrepareForRecycleCount);
+      prototype.registerHybridMethod("getNativeDefaultValueSetterCallCount", &HybridRecyclableTestViewSpec::getNativeDefaultValueSetterCallCount);
     });
   }
 

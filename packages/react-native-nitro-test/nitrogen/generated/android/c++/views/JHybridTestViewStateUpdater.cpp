@@ -53,24 +53,36 @@ void JHybridTestViewStateUpdater::updateViewProps(jni::alias_ref<jni::JClass> /*
   }
 
   // Update only props that differ from the previous State snapshot.
-  if (oldProps == nullptr || !newProps->isBlue.hasSameValue(oldProps->isBlue)) {
+  if (oldProps == nullptr
+        ? newProps->isBlue.isProvided()
+        : !newProps->isBlue.hasSameValue(oldProps->isBlue)) {
     hybridView->setIsBlue(newProps->isBlue.get());
   }
-  if (oldProps == nullptr || !newProps->hasBeenCalled.hasSameValue(oldProps->hasBeenCalled)) {
+  if (oldProps == nullptr
+        ? newProps->hasBeenCalled.isProvided()
+        : !newProps->hasBeenCalled.hasSameValue(oldProps->hasBeenCalled)) {
     hybridView->setHasBeenCalled(newProps->hasBeenCalled.get());
   }
-  if (oldProps == nullptr || !newProps->colorScheme.hasSameValue(oldProps->colorScheme)) {
+  if (oldProps == nullptr
+        ? newProps->colorScheme.isProvided()
+        : !newProps->colorScheme.hasSameValue(oldProps->colorScheme)) {
     hybridView->setColorScheme(newProps->colorScheme.get());
   }
-  if (oldProps == nullptr || !newProps->someCallback.hasSameValue(oldProps->someCallback)) {
+  if (oldProps == nullptr
+        ? newProps->someCallback.isProvided()
+        : !newProps->someCallback.hasSameValue(oldProps->someCallback)) {
     hybridView->setSomeCallback(newProps->someCallback.get());
   }
-  if (oldProps == nullptr || !newProps->nativeDefaultValue.hasSameValue(oldProps->nativeDefaultValue)) {
+  if (oldProps == nullptr
+        ? newProps->nativeDefaultValue.isProvided()
+        : !newProps->nativeDefaultValue.hasSameValue(oldProps->nativeDefaultValue)) {
     hybridView->setNativeDefaultValue(newProps->nativeDefaultValue.get());
   }
 
   // Update hybridRef if it changed
-  if (oldProps == nullptr || !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
+  if (oldProps == nullptr
+        ? newProps->hybridRef.isProvided()
+        : !newProps->hybridRef.hasSameValue(oldProps->hybridRef)) {
     // hybridRef changed - call it with new this
     const auto& maybeFunc = newProps->hybridRef.get();
     if (maybeFunc.has_value()) {

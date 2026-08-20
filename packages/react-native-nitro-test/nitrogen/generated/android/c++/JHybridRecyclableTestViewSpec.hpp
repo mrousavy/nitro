@@ -52,12 +52,15 @@ namespace margelo::nitro::test {
     // Properties
     bool getIsBlue() override;
     void setIsBlue(bool isBlue) override;
+    std::optional<double> getNativeDefaultValue() override;
+    void setNativeDefaultValue(std::optional<double> nativeDefaultValue) override;
 
   public:
     // Methods
     double getInvalidLifecycleOrderCount() override;
     double getOnDropViewCount() override;
     double getPrepareForRecycleCount() override;
+    double getNativeDefaultValueSetterCallCount() override;
 
   private:
     jni::global_ref<JHybridRecyclableTestViewSpec::JavaPart> _javaPart;

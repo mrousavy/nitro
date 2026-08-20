@@ -49,7 +49,9 @@ export function createSwiftHybridViewManager(
     )
     return `
 // ${p.jsSignature}
-if (oldViewProps == nullptr || !newViewProps.${name}.hasSameValue(oldViewProps->${name})) {
+if (oldViewProps == nullptr
+      ? newViewProps.${name}.isProvided()
+      : !newViewProps.${name}.hasSameValue(oldViewProps->${name})) {
   swiftPart.${setter}(${indent(parse, '  ')});
 }
 `.trim()
@@ -144,14 +146,18 @@ using namespace ${namespace}::views;
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update only props that differ from the previous Props snapshot.
-  const bool hasTransactionPropChanges = oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps);
+  const bool hasTransactionPropChanges = oldViewProps == nullptr
+      ? newViewProps.hasAnyProvidedProps()
+      : !newViewProps.hasSameProps(*oldViewProps);
   if (hasTransactionPropChanges) {
     swiftPart.beforeUpdate();
 
     ${indent(propAssignments.join('\n'), '    ')}
 
     // Update hybridRef if it changed
-    if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.hybridRef.isProvided()
+          : !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
       // hybridRef changed - call it with new this
       const auto& maybeFunc = newViewProps.hybridRef.get();
       if (maybeFunc.has_value()) {

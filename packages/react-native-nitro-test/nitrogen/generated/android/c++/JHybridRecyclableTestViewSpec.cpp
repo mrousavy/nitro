@@ -9,7 +9,7 @@
 
 
 
-
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -50,6 +50,15 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jboolean /* isBlue */)>("setBlue");
     method(_javaPart, isBlue);
   }
+  std::optional<double> JHybridRecyclableTestViewSpec::getNativeDefaultValue() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getNativeDefaultValue");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
+  }
+  void JHybridRecyclableTestViewSpec::setNativeDefaultValue(std::optional<double> nativeDefaultValue) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* nativeDefaultValue */)>("setNativeDefaultValue");
+    method(_javaPart, nativeDefaultValue.has_value() ? jni::JDouble::valueOf(nativeDefaultValue.value()) : nullptr);
+  }
 
   // Methods
   double JHybridRecyclableTestViewSpec::getInvalidLifecycleOrderCount() {
@@ -64,6 +73,11 @@ namespace margelo::nitro::test {
   }
   double JHybridRecyclableTestViewSpec::getPrepareForRecycleCount() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getPrepareForRecycleCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridRecyclableTestViewSpec::getNativeDefaultValueSetterCallCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getNativeDefaultValueSetterCallCount");
     auto __result = method(_javaPart);
     return __result;
   }

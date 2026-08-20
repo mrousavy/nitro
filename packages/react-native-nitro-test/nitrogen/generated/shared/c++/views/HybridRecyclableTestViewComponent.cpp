@@ -21,11 +21,13 @@ namespace margelo::nitro::test::views {
                                                                const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
     isBlue(nitro::CachedProp<bool>::fromRawValue("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
+    nativeDefaultValue(nitro::CachedProp<std::optional<double>>::fromRawValue("RecyclableTestView", "nativeDefaultValue", rawProps, sourceProps.nativeDefaultValue)),
     hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridRecyclableTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
       case hashString("isBlue"): return true;
+      case hashString("nativeDefaultValue"): return true;
       case hashString("hybridRef"): return true;
       default: return false;
     }

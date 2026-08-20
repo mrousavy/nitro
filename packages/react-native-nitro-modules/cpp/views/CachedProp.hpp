@@ -35,9 +35,11 @@ private:
   struct Entry final {
     T value{};
     BorrowingReference<jsi::Value> jsiValue;
+    bool isProvided{false};
 
     Entry() = default;
-    Entry(T&& value, BorrowingReference<jsi::Value>&& jsiValue) : value(std::move(value)), jsiValue(std::move(jsiValue)) {}
+    Entry(T&& value, BorrowingReference<jsi::Value>&& jsiValue)
+        : value(std::move(value)), jsiValue(std::move(jsiValue)), isProvided(true) {}
   };
 
   std::shared_ptr<const Entry> _entry;
@@ -64,6 +66,16 @@ public:
   [[nodiscard]]
   bool hasSameValue(const CachedProp<T>& other) const noexcept {
     return _entry == other._entry;
+  }
+
+  /**
+   * Returns whether this prop has an explicit value in the current Fabric
+   * Props snapshot. Omitted props inherit this immutable state from the
+   * previous snapshot.
+   */
+  [[nodiscard]]
+  bool isProvided() const noexcept {
+    return _entry->isProvided;
   }
 
 private:

@@ -15,7 +15,7 @@
 
 
 
-
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -46,12 +46,15 @@ namespace margelo::nitro::test {
       // Properties
       virtual bool getIsBlue() = 0;
       virtual void setIsBlue(bool isBlue) = 0;
+      virtual std::optional<double> getNativeDefaultValue() = 0;
+      virtual void setNativeDefaultValue(std::optional<double> nativeDefaultValue) = 0;
 
     public:
       // Methods
       virtual double getInvalidLifecycleOrderCount() = 0;
       virtual double getOnDropViewCount() = 0;
       virtual double getPrepareForRecycleCount() = 0;
+      virtual double getNativeDefaultValueSetterCallCount() = 0;
 
     protected:
       // Hybrid Setup

@@ -92,33 +92,47 @@ using namespace margelo::nitro::test::views;
   NitroTest::HybridTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update only props that differ from the previous Props snapshot.
-  const bool hasTransactionPropChanges = oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps);
+  const bool hasTransactionPropChanges = oldViewProps == nullptr
+      ? newViewProps.hasAnyProvidedProps()
+      : !newViewProps.hasSameProps(*oldViewProps);
   if (hasTransactionPropChanges) {
     swiftPart.beforeUpdate();
 
     // isBlue: boolean
-    if (oldViewProps == nullptr || !newViewProps.isBlue.hasSameValue(oldViewProps->isBlue)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.isBlue.isProvided()
+          : !newViewProps.isBlue.hasSameValue(oldViewProps->isBlue)) {
       swiftPart.setIsBlue(newViewProps.isBlue.get());
     }
     // hasBeenCalled: boolean
-    if (oldViewProps == nullptr || !newViewProps.hasBeenCalled.hasSameValue(oldViewProps->hasBeenCalled)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.hasBeenCalled.isProvided()
+          : !newViewProps.hasBeenCalled.hasSameValue(oldViewProps->hasBeenCalled)) {
       swiftPart.setHasBeenCalled(newViewProps.hasBeenCalled.get());
     }
     // colorScheme: enum
-    if (oldViewProps == nullptr || !newViewProps.colorScheme.hasSameValue(oldViewProps->colorScheme)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.colorScheme.isProvided()
+          : !newViewProps.colorScheme.hasSameValue(oldViewProps->colorScheme)) {
       swiftPart.setColorScheme(static_cast<int>(newViewProps.colorScheme.get()));
     }
     // someCallback: function
-    if (oldViewProps == nullptr || !newViewProps.someCallback.hasSameValue(oldViewProps->someCallback)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.someCallback.isProvided()
+          : !newViewProps.someCallback.hasSameValue(oldViewProps->someCallback)) {
       swiftPart.setSomeCallback(newViewProps.someCallback.get());
     }
     // nativeDefaultValue: optional
-    if (oldViewProps == nullptr || !newViewProps.nativeDefaultValue.hasSameValue(oldViewProps->nativeDefaultValue)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.nativeDefaultValue.isProvided()
+          : !newViewProps.nativeDefaultValue.hasSameValue(oldViewProps->nativeDefaultValue)) {
       swiftPart.setNativeDefaultValue(newViewProps.nativeDefaultValue.get());
     }
 
     // Update hybridRef if it changed
-    if (oldViewProps == nullptr || !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
+    if (oldViewProps == nullptr
+          ? newViewProps.hybridRef.isProvided()
+          : !newViewProps.hybridRef.hasSameValue(oldViewProps->hybridRef)) {
       // hybridRef changed - call it with new this
       const auto& maybeFunc = newViewProps.hybridRef.get();
       if (maybeFunc.has_value()) {
