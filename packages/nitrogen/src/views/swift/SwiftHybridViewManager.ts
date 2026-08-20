@@ -136,8 +136,8 @@ using namespace ${namespace}::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
-  auto& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
+  const ${propsClassName}& newViewPropsConst = *std::static_pointer_cast<${propsClassName} const>(props);
+  ${propsClassName}& newViewProps = const_cast<${propsClassName}&>(newViewPropsConst);
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually

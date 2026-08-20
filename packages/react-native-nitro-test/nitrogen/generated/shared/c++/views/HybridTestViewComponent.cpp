@@ -7,18 +7,12 @@
 
 #include "HybridTestViewComponent.hpp"
 
-#include <string>
-#include <exception>
-#include <utility>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/PropNameIDCache.hpp>
-#include <react/renderer/core/RawValue.h>
-#include <react/renderer/core/ShadowNode.h>
-#include <react/renderer/core/ComponentDescriptor.h>
-#include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 
 namespace margelo::nitro::test::views {
+
+  using namespace facebook;
 
   extern const char HybridTestViewComponentName[] = "TestView";
 
@@ -26,56 +20,11 @@ namespace margelo::nitro::test::views {
                                            const HybridTestViewProps& sourceProps,
                                            const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue([&]() -> CachedProp<bool> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.isBlue;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.isBlue: ") + exc.what());
-      }
-    }()),
-    hasBeenCalled([&]() -> CachedProp<bool> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("hasBeenCalled", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.hasBeenCalled;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.hasBeenCalled);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.hasBeenCalled: ") + exc.what());
-      }
-    }()),
-    colorScheme([&]() -> CachedProp<ColorScheme> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("colorScheme", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.colorScheme;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<ColorScheme>::fromRawValue(*runtime, value, sourceProps.colorScheme);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.colorScheme: ") + exc.what());
-      }
-    }()),
-    someCallback([&]() -> CachedProp<std::function<void()>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("someCallback", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.someCallback;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::function<void()>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.someCallback);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.someCallback: ") + exc.what());
-      }
-    }()),
-    hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.hybridRef;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("TestView.hybridRef: ") + exc.what());
-      }
-    }()) { }
+    isBlue(nitro::CachedProp<bool>::fromRawValue("TestView", "isBlue", rawProps, sourceProps.isBlue)),
+    hasBeenCalled(nitro::CachedProp<bool>::fromRawValue("TestView", "hasBeenCalled", rawProps, sourceProps.hasBeenCalled)),
+    colorScheme(nitro::CachedProp<ColorScheme>::fromRawValue("TestView", "colorScheme", rawProps, sourceProps.colorScheme)),
+    someCallback(nitro::CachedProp<std::function<void()>>::fromRawValue("TestView", "someCallback", rawProps, sourceProps.someCallback)),
+    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>>::fromRawValue("TestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

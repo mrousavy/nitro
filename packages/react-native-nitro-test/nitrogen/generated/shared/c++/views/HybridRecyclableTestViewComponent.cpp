@@ -7,18 +7,12 @@
 
 #include "HybridRecyclableTestViewComponent.hpp"
 
-#include <string>
-#include <exception>
-#include <utility>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/PropNameIDCache.hpp>
-#include <react/renderer/core/RawValue.h>
-#include <react/renderer/core/ShadowNode.h>
-#include <react/renderer/core/ComponentDescriptor.h>
-#include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 
 namespace margelo::nitro::test::views {
+
+  using namespace facebook;
 
   extern const char HybridRecyclableTestViewComponentName[] = "RecyclableTestView";
 
@@ -26,26 +20,8 @@ namespace margelo::nitro::test::views {
                                                                const HybridRecyclableTestViewProps& sourceProps,
                                                                const react::RawProps& rawProps):
     react::ViewProps(context, sourceProps, rawProps, filterObjectKeys),
-    isBlue([&]() -> CachedProp<bool> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("isBlue", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.isBlue;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<bool>::fromRawValue(*runtime, value, sourceProps.isBlue);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("RecyclableTestView.isBlue: ") + exc.what());
-      }
-    }()),
-    hybridRef([&]() -> CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>> {
-      try {
-        const react::RawValue* rawValue = rawProps.at("hybridRef", nullptr, nullptr);
-        if (rawValue == nullptr) return sourceProps.hybridRef;
-        const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-        return CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue(*runtime, value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f")), sourceProps.hybridRef);
-      } catch (const std::exception& exc) {
-        throw std::runtime_error(std::string("RecyclableTestView.hybridRef: ") + exc.what());
-      }
-    }()) { }
+    isBlue(nitro::CachedProp<bool>::fromRawValue("RecyclableTestView", "isBlue", rawProps, sourceProps.isBlue)),
+    hybridRef(nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridRecyclableTestViewSpec>& /* ref */)>>>::fromRawValue("RecyclableTestView", "hybridRef", rawProps, sourceProps.hybridRef)) { }
 
   bool HybridRecyclableTestViewProps::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {

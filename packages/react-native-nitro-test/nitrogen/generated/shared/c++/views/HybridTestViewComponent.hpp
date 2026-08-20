@@ -7,16 +7,15 @@
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/RawProps.h>
+
+#include <string>
 
 #include "ColorScheme.hpp"
 #include <functional>
@@ -44,11 +43,11 @@ namespace margelo::nitro::test::views {
                         const react::RawProps& rawProps);
 
   public:
-    CachedProp<bool> isBlue;
-    CachedProp<bool> hasBeenCalled;
-    CachedProp<ColorScheme> colorScheme;
-    CachedProp<std::function<void()>> someCallback;
-    CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
+    nitro::CachedProp<bool> isBlue;
+    nitro::CachedProp<bool> hasBeenCalled;
+    nitro::CachedProp<ColorScheme> colorScheme;
+    nitro::CachedProp<std::function<void()>> someCallback;
+    nitro::CachedProp<std::optional<std::function<void(const std::shared_ptr<HybridTestViewSpec>& /* ref */)>>> hybridRef;
 
   private:
     static bool filterObjectKeys(const std::string& propName);

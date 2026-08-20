@@ -86,8 +86,8 @@ using namespace margelo::nitro::test::views;
   _didDropView = NO;
 
   // 1. Downcast props
-  const auto& newViewPropsConst = *std::static_pointer_cast<HybridRecyclableTestViewProps const>(props);
-  auto& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
+  const HybridRecyclableTestViewProps& newViewPropsConst = *std::static_pointer_cast<HybridRecyclableTestViewProps const>(props);
+  HybridRecyclableTestViewProps& newViewProps = const_cast<HybridRecyclableTestViewProps&>(newViewPropsConst);
   NitroTest::HybridRecyclableTestViewSpec_cxx& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update each prop individually

@@ -4,7 +4,6 @@ import { createIndentation, indent } from '../utils.js'
 import {
   createFileMetadataString,
   escapeCppName,
-  isFunction,
   isNotDuplicate,
 } from '../syntax/helpers.js'
 import { getHybridObjectName } from '../syntax/getHybridObjectName.js'
@@ -73,9 +72,12 @@ export function createViewComponentShadowNodeFiles(
 
   const props = [...spec.properties, getHybridRefProperty(spec)]
   const properties = props.map(
-    (p) => `CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
+    (p) =>
+      `nitro::CachedProp<${p.type.getCode('c++')}> ${escapeCppName(p.name)};`
   )
-  const cases = props.map((p) => `case hashString("${p.name}"): return true;`)
+  const filterCases = props.map(
+    (prop) => `case hashString("${prop.name}"): return true;`
+  )
   const includes = props
     .flatMap((p) =>
       p.getRequiredImports('c++').map((i) => includeHeader(i, true))
@@ -89,16 +91,15 @@ ${createFileMetadataString(`${component}.hpp`)}
 
 #pragma once
 
-#include <optional>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/NitroHash.hpp>
 #include <NitroModules/CachedProp.hpp>
-#include <react/renderer/core/ConcreteComponentDescriptor.h>
-#include <react/renderer/core/PropsParserContext.h>
-#include <react/renderer/components/view/ConcreteViewShadowNode.h>
-#include <react/renderer/components/view/ViewProps.h>
 #include <NitroModules/ViewComponentDescriptor.hpp>
 #include <NitroModules/ViewPropsHolderState.hpp>
+#include <react/renderer/components/view/ConcreteViewShadowNode.h>
+#include <react/renderer/components/view/ViewProps.h>
+#include <react/renderer/core/PropsParserContext.h>
+#include <react/renderer/core/RawProps.h>
+
+#include <string>
 
 ${includes.join('\n')}
 
@@ -151,57 +152,26 @@ namespace ${namespace} {
 } // namespace ${namespace}
 `.trim()
 
-  // .cpp code
   const propInitializers = [
     'react::ViewProps(context, sourceProps, rawProps, filterObjectKeys)',
+    ...props.map((prop) => {
+      const name = escapeCppName(prop.name)
+      const type = prop.type.getCode('c++')
+      return `${name}(nitro::CachedProp<${type}>::fromRawValue("${spec.name}", "${prop.name}", rawProps, sourceProps.${name}))`
+    }),
   ]
-  const propCopyInitializers = ['react::ViewProps()']
-  for (const prop of props) {
-    const name = escapeCppName(prop.name)
-    const type = prop.type.getCode('c++')
-
-    let valueConversion = `value`
-    if (isFunction(prop.type)) {
-      // Due to a React limitation, functions cannot be passed to native directly,
-      // because RN converts them to booleans (`true`). Nitro knows this and just
-      // wraps functions as objects - the original function is stored in `f`.
-      valueConversion = `value.asObject(*runtime).getProperty(*runtime, PropNameIDCache::get(*runtime, "f"))`
-    }
-
-    propInitializers.push(
-      `
-${name}([&]() -> CachedProp<${type}> {
-  try {
-    const react::RawValue* rawValue = rawProps.at("${prop.name}", nullptr, nullptr);
-    if (rawValue == nullptr) return sourceProps.${name};
-    const auto& [runtime, value] = (std::pair<jsi::Runtime*, jsi::Value>)*rawValue;
-    return CachedProp<${type}>::fromRawValue(*runtime, ${valueConversion}, sourceProps.${name});
-  } catch (const std::exception& exc) {
-    throw std::runtime_error(std::string("${spec.name}.${prop.name}: ") + exc.what());
-  }
-}())`.trim()
-    )
-    propCopyInitializers.push(`${name}(other.${name})`)
-  }
-
   const ctorIndent = createIndentation(propsClassName.length * 2)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
 #include "${component}.hpp"
 
-#include <string>
-#include <exception>
-#include <utility>
-#include <NitroModules/NitroDefines.hpp>
-#include <NitroModules/JSIConverter.hpp>
-#include <NitroModules/PropNameIDCache.hpp>
-#include <react/renderer/core/RawValue.h>
-#include <react/renderer/core/ShadowNode.h>
-#include <react/renderer/core/ComponentDescriptor.h>
-#include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/NitroHash.hpp>
+#include <NitroModules/CachedProp.hpp>
 
 namespace ${namespace} {
+
+  using namespace facebook;
 
   extern const char ${nameVariable}[] = "${T}";
 
@@ -212,7 +182,7 @@ namespace ${namespace} {
 
   bool ${propsClassName}::filterObjectKeys(const std::string& propName) {
     switch (hashString(propName)) {
-      ${indent(cases.join('\n'), '      ')}
+      ${indent(filterCases.join('\n'), '      ')}
       default: return false;
     }
   }
