@@ -69,6 +69,16 @@ function getFunctionCallSignature(func: TSMorphType): Signature {
   return callSignature
 }
 
+/**
+ * Whether the given type is optional (`T | undefined`) or not.
+ *
+ * Note that `null` is a separate type in Nitro (`NullType`) - only `undefined`
+ * (or a `?`) makes a type optional.
+ */
+function isOptionalType(type: TSMorphType): boolean {
+  return type.getUnionTypes().some((t) => t.isUndefined())
+}
+
 function removeDuplicates(types: Type[]): Type[] {
   return types.filter((t1, index, array) => {
     const firstIndexOfType = array.findIndex(
@@ -272,7 +282,7 @@ export function createType(
       const elementType = createType(
         language,
         arrayElementType,
-        arrayElementType.isNullable()
+        isOptionalType(arrayElementType)
       )
       return new ArrayType(elementType)
     } else if (type.isTuple()) {
@@ -284,10 +294,11 @@ export function createType(
       // It's a function!
       const callSignature = getFunctionCallSignature(type)
       const funcReturnType = callSignature.getReturnType()
-      const isReturnOptional = funcReturnType
-        .getUnionTypes()
-        .some((t) => t.isUndefined())
-      const returnType = createType(language, funcReturnType, isReturnOptional)
+      const returnType = createType(
+        language,
+        funcReturnType,
+        isOptionalType(funcReturnType)
+      )
       const parameters = callSignature.getParameters().map((p) => {
         const declaration = p.getValueDeclarationOrThrow()
         const parameterType = p.getTypeAtLocation(declaration)
@@ -299,13 +310,10 @@ export function createType(
     } else if (isPromise(type)) {
       // It's a Promise!
       const [promiseResolvingType] = getArguments(type, 'Promise', 1)
-      const isResolvingOptional = promiseResolvingType
-        .getUnionTypes()
-        .some((t) => t.isUndefined())
       const resolvingType = createType(
         language,
         promiseResolvingType,
-        isResolvingOptional
+        isOptionalType(promiseResolvingType)
       )
       return new PromiseType(resolvingType)
     } else if (isRecord(type)) {
@@ -315,7 +323,7 @@ export function createType(
       const valueType = createType(
         language,
         valueTypeT,
-        valueTypeT.isNullable()
+        isOptionalType(valueTypeT)
       )
       return new RecordType(keyType, valueType)
     } else if (isArrayBuffer(type)) {
