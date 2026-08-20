@@ -20,6 +20,8 @@ public protocol HybridTestViewSpec_protocol: HybridObject, HybridView {
   func getOnDropViewCount() throws -> Double
   func getIsBlueSetterCallCount() throws -> Double
   func getNativeDefaultValueSetterCallCount() throws -> Double
+  func getBeforeUpdateCount() throws -> Double
+  func getAfterUpdateCount() throws -> Double
   func someMethod() throws -> Void
 }
 

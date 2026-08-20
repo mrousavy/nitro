@@ -14,6 +14,8 @@ class HybridTestView: HybridTestViewSpec {
   private var onDropViewCount: Double = 0
   private var isBlueSetterCallCount: Double = 0
   private var nativeDefaultValueSetterCallCount: Double = 0
+  private var beforeUpdateCount: Double = 0
+  private var afterUpdateCount: Double = 0
 
   // Props
   var isBlue: Bool = false {
@@ -42,6 +44,22 @@ class HybridTestView: HybridTestViewSpec {
 
   func getNativeDefaultValueSetterCallCount() throws -> Double {
     return nativeDefaultValueSetterCallCount
+  }
+
+  func getBeforeUpdateCount() throws -> Double {
+    return beforeUpdateCount
+  }
+
+  func getAfterUpdateCount() throws -> Double {
+    return afterUpdateCount
+  }
+
+  func beforeUpdate() {
+    beforeUpdateCount += 1
+  }
+
+  func afterUpdate() {
+    afterUpdateCount += 1
   }
 
   func someMethod() throws {
