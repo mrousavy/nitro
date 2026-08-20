@@ -54,9 +54,6 @@ if (oldViewProps == nullptr || !newViewProps.${name}.hasSameValue(oldViewProps->
 }
 `.trim()
   })
-  const hasTransactionPropChanges =
-    'oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps)'
-
   const mmFile = `
 ${createFileMetadataString(`${component}.mm`)}
 
@@ -147,7 +144,7 @@ using namespace ${namespace}::views;
   ${swiftNamespace}::${HybridTSpecCxx}& swiftPart = _hybridView->getSwiftPart();
 
   // 2. Update only props that differ from the previous Props snapshot.
-  const bool hasTransactionPropChanges = ${hasTransactionPropChanges};
+  const bool hasTransactionPropChanges = oldViewProps == nullptr || !newViewProps.hasSameProps(*oldViewProps);
   if (hasTransactionPropChanges) {
     swiftPart.beforeUpdate();
 
