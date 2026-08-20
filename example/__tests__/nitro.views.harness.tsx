@@ -296,6 +296,133 @@ describe('TestView', () => {
     expectRed(resizedCapture.pixelCoverage)
   })
 
+  it('preserves an omitted native default while applying another prop', async () => {
+    const viewRef = deferred<TestViewRef>()
+    const stableHybridRef = callback((view: TestViewRef) =>
+      viewRef.resolve(view)
+    )
+    const stableSomeCallback = callback(fn())
+    const renderResult = await render(
+      <TestView
+        testID="test-view-native-default"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+      />,
+      { timeout: RENDER_TIMEOUT }
+    )
+
+    const view = await viewRef.promise
+    expect(view.isBlue).toBe(false)
+    expect(view.getIsBlueSetterCallCount()).toBe(1)
+    expect(view.nativeDefaultValue).toBe(42)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(0)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-native-default"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+      />
+    )
+
+    expect(view.isBlue).toBe(true)
+    expect(view.getIsBlueSetterCallCount()).toBe(2)
+    expect(view.nativeDefaultValue).toBe(42)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(0)
+  })
+
+  it('only calls native setters for changed Nitro props', async () => {
+    const viewRef = deferred<TestViewRef>()
+    const stableHybridRef = callback((view: TestViewRef) =>
+      viewRef.resolve(view)
+    )
+    const stableSomeCallback = callback(fn())
+    const renderResult = await render(
+      <TestView
+        testID="test-view-setter-counts"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+        nativeDefaultValue={1}
+      />,
+      { timeout: RENDER_TIMEOUT }
+    )
+
+    const view = await viewRef.promise
+    expect(view.getIsBlueSetterCallCount()).toBe(1)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(1)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-setter-counts"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+        nativeDefaultValue={2}
+      />
+    )
+
+    expect(view.isBlue).toBe(false)
+    expect(view.nativeDefaultValue).toBe(2)
+    expect(view.getIsBlueSetterCallCount()).toBe(1)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(2)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-setter-counts"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+        nativeDefaultValue={2}
+      />
+    )
+
+    expect(view.isBlue).toBe(true)
+    expect(view.nativeDefaultValue).toBe(2)
+    expect(view.getIsBlueSetterCallCount()).toBe(2)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(2)
+
+    const resizedLayout = deferred<LayoutRectangle>()
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-setter-counts"
+        style={RESIZED_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+        nativeDefaultValue={2}
+        onLayout={({ nativeEvent }) =>
+          resizedLayout.resolve(nativeEvent.layout)
+        }
+      />
+    )
+
+    const reportedResizedLayout = await resizedLayout.promise
+    expect(reportedResizedLayout.width).toBeCloseTo(RESIZED_SIZE.width, 0)
+    expect(reportedResizedLayout.height).toBeCloseTo(RESIZED_SIZE.height, 0)
+    expect(view.getIsBlueSetterCallCount()).toBe(2)
+    expect(view.getNativeDefaultValueSetterCallCount()).toBe(2)
+  })
+
   it('unmounts and creates a fresh native view when remounted', async () => {
     const firstRef = deferred<TestViewRef>()
     const renderResult = await render(

@@ -58,11 +58,25 @@ abstract class HybridTestViewSpec: HybridView() {
     set(value) {
       someCallback = value
     }
+  
+  @get:DoNotStrip
+  @get:Keep
+  @set:DoNotStrip
+  @set:Keep
+  abstract var nativeDefaultValue: Double?
 
   // Methods
   @DoNotStrip
   @Keep
   abstract fun getOnDropViewCount(): Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getIsBlueSetterCallCount(): Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getNativeDefaultValueSetterCallCount(): Double
   
   @DoNotStrip
   @Keep

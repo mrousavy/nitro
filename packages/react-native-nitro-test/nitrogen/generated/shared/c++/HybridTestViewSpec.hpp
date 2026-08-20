@@ -18,6 +18,7 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 
 #include "ColorScheme.hpp"
 #include <functional>
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -54,10 +55,14 @@ namespace margelo::nitro::test {
       virtual void setColorScheme(ColorScheme colorScheme) = 0;
       virtual std::function<void()> getSomeCallback() = 0;
       virtual void setSomeCallback(const std::function<void()>& someCallback) = 0;
+      virtual std::optional<double> getNativeDefaultValue() = 0;
+      virtual void setNativeDefaultValue(std::optional<double> nativeDefaultValue) = 0;
 
     public:
       // Methods
       virtual double getOnDropViewCount() = 0;
+      virtual double getIsBlueSetterCallCount() = 0;
+      virtual double getNativeDefaultValueSetterCallCount() = 0;
       virtual void someMethod() = 0;
 
     protected:

@@ -15,6 +15,7 @@ namespace margelo::nitro::test { enum class ColorScheme; }
 #include <functional>
 #include "JFunc_void.hpp"
 #include <NitroModules/JNICallable.hpp>
+#include <optional>
 
 namespace margelo::nitro::test {
 
@@ -90,10 +91,29 @@ namespace margelo::nitro::test {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JFunc_void::javaobject> /* someCallback */)>("setSomeCallback_cxx");
     method(_javaPart, JFunc_void_cxx::fromCpp(someCallback));
   }
+  std::optional<double> JHybridTestViewSpec::getNativeDefaultValue() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JDouble>()>("getNativeDefaultValue");
+    auto __result = method(_javaPart);
+    return __result != nullptr ? std::make_optional(__result->value()) : std::nullopt;
+  }
+  void JHybridTestViewSpec::setNativeDefaultValue(std::optional<double> nativeDefaultValue) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<jni::JDouble> /* nativeDefaultValue */)>("setNativeDefaultValue");
+    method(_javaPart, nativeDefaultValue.has_value() ? jni::JDouble::valueOf(nativeDefaultValue.value()) : nullptr);
+  }
 
   // Methods
   double JHybridTestViewSpec::getOnDropViewCount() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getOnDropViewCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridTestViewSpec::getIsBlueSetterCallCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getIsBlueSetterCallCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridTestViewSpec::getNativeDefaultValueSetterCallCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getNativeDefaultValueSetterCallCount");
     auto __result = method(_javaPart);
     return __result;
   }

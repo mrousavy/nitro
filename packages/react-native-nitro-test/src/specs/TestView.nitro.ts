@@ -11,9 +11,12 @@ export interface TestViewProps extends HybridViewProps {
   hasBeenCalled: boolean
   colorScheme: ColorScheme
   someCallback: () => void
+  nativeDefaultValue?: number
 }
 export interface TestViewMethods extends HybridViewMethods {
   getOnDropViewCount(): number
+  getIsBlueSetterCallCount(): number
+  getNativeDefaultValueSetterCallCount(): number
   someMethod(): void
 }
 

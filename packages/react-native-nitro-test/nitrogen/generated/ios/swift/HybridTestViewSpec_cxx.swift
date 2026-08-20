@@ -172,12 +172,60 @@ open class HybridTestViewSpec_cxx {
       }()
     }
   }
+  
+  public final var nativeDefaultValue: bridge.std__optional_double_ {
+    @inline(__always)
+    get {
+      return { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = self.__implementation.nativeDefaultValue {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__implementation.nativeDefaultValue = { () -> Double? in
+        if bridge.has_value_std__optional_double_(newValue) {
+          let __unwrapped = bridge.get_std__optional_double_(newValue)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }()
+    }
+  }
 
   // Methods
   @inline(__always)
   public final func getOnDropViewCount() -> bridge.Result_double_ {
     do {
       let __result = try self.__implementation.getOnDropViewCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getIsBlueSetterCallCount() -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.getIsBlueSetterCallCount()
+      let __resultCpp = __result
+      return bridge.create_Result_double_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_double_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getNativeDefaultValueSetterCallCount() -> bridge.Result_double_ {
+    do {
+      let __result = try self.__implementation.getNativeDefaultValueSetterCallCount()
       let __resultCpp = __result
       return bridge.create_Result_double_(__resultCpp)
     } catch (let __error) {
