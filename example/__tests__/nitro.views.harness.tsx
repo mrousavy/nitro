@@ -177,11 +177,11 @@ describe('TestView', () => {
       <TestView
         testID="test-view-initial"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => viewRef.resolve(view))}
+        hybridRef={(view) => viewRef.resolve(view)}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
-        someCallback={callback(onSomeCallback)}
+        someCallback={onSomeCallback}
         onLayout={({ nativeEvent }) => layout.resolve(nativeEvent.layout)}
       />,
       { timeout: RENDER_TIMEOUT }
@@ -209,6 +209,31 @@ describe('TestView', () => {
     expect(onSomeCallback).toHaveBeenCalledTimes(1)
   })
 
+  it('still accepts callbacks wrapped in the deprecated `callback(...)`', async () => {
+    const viewRef = deferred<TestViewRef>()
+    const callbackFinished = deferred<void>()
+    const onSomeCallback = fn(() => callbackFinished.resolve(undefined))
+
+    await render(
+      <TestView
+        testID="test-view-wrapped-callback"
+        style={INITIAL_SIZE}
+        hybridRef={callback((view: TestViewRef) => viewRef.resolve(view))}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={callback(onSomeCallback)}
+      />,
+      { timeout: RENDER_TIMEOUT }
+    )
+
+    const mountedView = await viewRef.promise
+    mountedView.someMethod()
+    await callbackFinished.promise
+    expect(mountedView.hasBeenCalled).toBe(true)
+    expect(onSomeCallback).toHaveBeenCalledTimes(1)
+  })
+
   it('updates every prop, changes pixels, and resizes the same native view', async () => {
     const initialRef = deferred<TestViewRef>()
     const initialCallback = fn()
@@ -216,11 +241,11 @@ describe('TestView', () => {
       <TestView
         testID="test-view-updates"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => initialRef.resolve(view))}
+        hybridRef={(view) => initialRef.resolve(view)}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
-        someCallback={callback(initialCallback)}
+        someCallback={initialCallback}
       />,
       { timeout: RENDER_TIMEOUT }
     )
@@ -233,10 +258,7 @@ describe('TestView', () => {
     const updatedRef = deferred<TestViewRef>()
     const updatedCallbackFinished = deferred<void>()
     const updatedCallback = fn(() => updatedCallbackFinished.resolve(undefined))
-    const updatedHybridRef = callback((view: TestViewRef) =>
-      updatedRef.resolve(view)
-    )
-    const updatedSomeCallback = callback(updatedCallback)
+    const updatedHybridRef = (view: TestViewRef) => updatedRef.resolve(view)
 
     await renderResult.rerender(
       <TestView
@@ -246,7 +268,7 @@ describe('TestView', () => {
         isBlue={false}
         hasBeenCalled={true}
         colorScheme="light"
-        someCallback={updatedSomeCallback}
+        someCallback={updatedCallback}
       />
     )
 
@@ -277,7 +299,7 @@ describe('TestView', () => {
         isBlue={false}
         hasBeenCalled={true}
         colorScheme="light"
-        someCallback={updatedSomeCallback}
+        someCallback={updatedCallback}
         onLayout={({ nativeEvent }) =>
           resizedLayout.resolve(nativeEvent.layout)
         }
@@ -296,12 +318,45 @@ describe('TestView', () => {
     expectRed(resizedCapture.pixelCoverage)
   })
 
+  it('keeps updating props after an optional callback prop is removed', async () => {
+    const viewRef = deferred<TestViewRef>()
+    const stableSomeCallback = fn()
+    const renderResult = await render(
+      <TestView
+        testID="test-view-removed-callback"
+        style={INITIAL_SIZE}
+        hybridRef={(view) => viewRef.resolve(view)}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+      />,
+      { timeout: RENDER_TIMEOUT }
+    )
+
+    const view = await viewRef.promise
+    expect(view.isBlue).toBe(true)
+
+    // `hybridRef` is now `null` in the props payload - it must not throw.
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-removed-callback"
+        style={INITIAL_SIZE}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="light"
+        someCallback={stableSomeCallback}
+      />
+    )
+
+    expect(view.isBlue).toBe(false)
+    expect(view.colorScheme).toBe('light')
+  })
+
   it('preserves an omitted native default while applying another prop', async () => {
     const viewRef = deferred<TestViewRef>()
-    const stableHybridRef = callback((view: TestViewRef) =>
-      viewRef.resolve(view)
-    )
-    const stableSomeCallback = callback(fn())
+    const stableHybridRef = (view: TestViewRef) => viewRef.resolve(view)
+    const stableSomeCallback = fn()
     const renderResult = await render(
       <TestView
         testID="test-view-native-default"
@@ -341,10 +396,8 @@ describe('TestView', () => {
 
   it('only calls native setters for changed Nitro props', async () => {
     const viewRef = deferred<TestViewRef>()
-    const stableHybridRef = callback((view: TestViewRef) =>
-      viewRef.resolve(view)
-    )
-    const stableSomeCallback = callback(fn())
+    const stableHybridRef = (view: TestViewRef) => viewRef.resolve(view)
+    const stableSomeCallback = fn()
     const renderResult = await render(
       <TestView
         testID="test-view-setter-counts"
@@ -429,11 +482,11 @@ describe('TestView', () => {
       <TestView
         testID="test-view-lifecycle"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => firstRef.resolve(view))}
+        hybridRef={(view) => firstRef.resolve(view)}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
-        someCallback={callback(fn())}
+        someCallback={fn(() => {})}
       />,
       { timeout: RENDER_TIMEOUT }
     )
@@ -453,11 +506,11 @@ describe('TestView', () => {
       <TestView
         testID="test-view-lifecycle"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => secondRef.resolve(view))}
+        hybridRef={(view) => secondRef.resolve(view)}
         isBlue={false}
         hasBeenCalled={true}
         colorScheme="light"
-        someCallback={callback(fn())}
+        someCallback={fn(() => {})}
       />,
       { timeout: RENDER_TIMEOUT }
     )
@@ -478,12 +531,10 @@ describe('multiple RecyclableTestViews', () => {
   it('keeps instances isolated while one is updated and recycled', async () => {
     const firstRef = deferred<RecyclableTestViewRef>()
     const secondRef = deferred<RecyclableTestViewRef>()
-    const firstHybridRef = callback((view: RecyclableTestViewRef) =>
+    const firstHybridRef = (view: RecyclableTestViewRef) =>
       firstRef.resolve(view)
-    )
-    const secondHybridRef = callback((view: RecyclableTestViewRef) =>
+    const secondHybridRef = (view: RecyclableTestViewRef) =>
       secondRef.resolve(view)
-    )
 
     const renderResult = await render(
       <View style={{ flexDirection: 'row' }}>
@@ -603,7 +654,7 @@ describe('multiple RecyclableTestViews', () => {
           key="first"
           testID="isolated-recyclable-view-first"
           style={INITIAL_SIZE}
-          hybridRef={callback((view) => remountedFirstRef.resolve(view))}
+          hybridRef={(view) => remountedFirstRef.resolve(view)}
           isBlue={true}
         />
         <RecyclableTestView
@@ -654,7 +705,7 @@ describe('RecyclableTestView', () => {
       <RecyclableTestView
         testID="recyclable-view-updates"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => initialRef.resolve(view))}
+        hybridRef={(view) => initialRef.resolve(view)}
         isBlue={false}
         onLayout={({ nativeEvent }) =>
           initialLayout.resolve(nativeEvent.layout)
@@ -677,9 +728,9 @@ describe('RecyclableTestView', () => {
     expectRed(redCapture.pixelCoverage)
 
     const updatedRef = deferred<RecyclableTestViewRef>()
-    const updatedHybridRef = callback((view: RecyclableTestViewRef) =>
+    const updatedHybridRef = (view: RecyclableTestViewRef) =>
       updatedRef.resolve(view)
-    )
+
     await renderResult.rerender(
       <RecyclableTestView
         testID="recyclable-view-updates"
@@ -733,7 +784,7 @@ describe('RecyclableTestView', () => {
       <RecyclableTestView
         testID="recyclable-view-lifecycle"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => firstRef.resolve(view))}
+        hybridRef={(view) => firstRef.resolve(view)}
         isBlue={true}
       />,
       { timeout: RENDER_TIMEOUT }
@@ -766,7 +817,7 @@ describe('RecyclableTestView', () => {
       <RecyclableTestView
         testID="recyclable-view-lifecycle"
         style={RESIZED_SIZE}
-        hybridRef={callback((view) => secondRef.resolve(view))}
+        hybridRef={(view) => secondRef.resolve(view)}
         isBlue={false}
         nativeDefaultValue={0}
         onLayout={({ nativeEvent }) => secondLayout.resolve(nativeEvent.layout)}
@@ -815,7 +866,7 @@ describe('RecyclableTestView', () => {
       <RecyclableTestView
         testID="recyclable-view-lifecycle"
         style={INITIAL_SIZE}
-        hybridRef={callback((view) => thirdRef.resolve(view))}
+        hybridRef={(view) => thirdRef.resolve(view)}
         isBlue={true}
         onLayout={({ nativeEvent }) => thirdLayout.resolve(nativeEvent.layout)}
       />

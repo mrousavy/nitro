@@ -70,16 +70,16 @@ To access the actual underlying object, you can use the `hybridRef`:
 function App() {
   return (
     <Camera
-      hybridRef={callback((ref) => {
+      hybridRef={(ref) => {
         console.log(ref.name) // <-- HybridCamera
         const image = ref.takePhoto()
-      })}
+      }}
     />
   )
 }
 ```
 
-> Note: If you're wondering about the `callback(...)` syntax, see ["Callbacks have to be wrapped"](../guides/view-components#callbacks-have-to-be-wrapped).
+> Note: On react-native 0.78 - 0.80, this has to be wrapped in `callback(...)`, see ["Callbacks"](../guides/view-components#callbacks).
 
 ## Full Guides
 
