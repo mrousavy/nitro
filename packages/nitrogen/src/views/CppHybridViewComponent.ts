@@ -97,6 +97,8 @@ ${createFileMetadataString(`${component}.hpp`)}
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/ViewComponentDescriptor.hpp>
+#include <NitroModules/ViewPropsHolderState.hpp>
 
 ${includes.join('\n')}
 
@@ -129,32 +131,7 @@ namespace ${namespace} {
   /**
    * State for the "${spec.name}" View.
    */
-  class ${stateClassName} final {
-  public:
-    ${stateClassName}() = default;
-    explicit ${stateClassName}(const std::shared_ptr<${propsClassName}>& props):
-      _props(props) {}
-
-  public:
-    [[nodiscard]]
-    const std::shared_ptr<${propsClassName}>& getProps() const {
-      return _props;
-    }
-
-  public:
-#ifdef ANDROID
-  ${stateClassName}(const ${stateClassName}& /* previousState */, folly::dynamic /* data */) {}
-  folly::dynamic getDynamic() const {
-    throw std::runtime_error("${stateClassName} does not support folly!");
-  }
-  react::MapBuffer getMapBuffer() const {
-    throw std::runtime_error("${stateClassName} does not support MapBuffer!");
-  };
-#endif
-
-  private:
-    std::shared_ptr<${propsClassName}> _props;
-  };
+  using ${stateClassName} = nitro::ViewPropsHolderState<${propsClassName}>;
 
   /**
    * The Shadow Node for the "${spec.name}" View.
@@ -167,21 +144,7 @@ namespace ${namespace} {
   /**
    * The Component Descriptor for the "${spec.name}" View.
    */
-  class ${descriptorClassName} final: public react::ConcreteComponentDescriptor<${shadowNodeClassName}> {
-  public:
-    explicit ${descriptorClassName}(const react::ComponentDescriptorParameters& parameters);
-
-  public:
-    /**
-     * A faster path for cloning props - reuses the caching logic from \`${propsClassName}\`.
-     */
-    std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
-                                                   const std::shared_ptr<const react::Props>& props,
-                                                   react::RawProps rawProps) const override;
-#ifdef ANDROID
-    void adopt(react::ShadowNode& shadowNode) const override;
-#endif
-  };
+  using ${descriptorClassName} = nitro::ViewComponentDescriptor<${shadowNodeClassName}>;
 
   /* The actual view for "${spec.name}" needs to be implemented in platform-specific code. */
 
@@ -222,7 +185,6 @@ ${name}([&]() -> CachedProp<${type}> {
   }
 
   const ctorIndent = createIndentation(propsClassName.length * 2)
-  const descriptorIndent = createIndentation(descriptorClassName.length)
   const componentCode = `
 ${createFileMetadataString(`${component}.cpp`)}
 
@@ -254,31 +216,6 @@ namespace ${namespace} {
       default: return false;
     }
   }
-
-  ${descriptorClassName}::${descriptorClassName}(const react::ComponentDescriptorParameters& parameters)
-    : ConcreteComponentDescriptor(parameters,
-                                  react::RawPropsParser()) {}
-
-  std::shared_ptr<const react::Props> ${descriptorClassName}::cloneProps(const react::PropsParserContext& context,
-                                      ${descriptorIndent}             const std::shared_ptr<const react::Props>& props,
-                                      ${descriptorIndent}             react::RawProps rawProps) const {
-    // 1. Prepare raw props parser
-    rawProps.parse(rawPropsParser_);
-    // 2. Copy props with Nitro's cached copy constructor
-    return ${shadowNodeClassName}::Props(context, /* & */ rawProps, props);
-  }
-
-#ifdef ANDROID
-  void ${descriptorClassName}::adopt(react::ShadowNode& shadowNode) const {
-    // This is called immediately after \`ShadowNode\` is created, cloned or in progress.
-    // On Android, we need to wrap props in our state, which gets routed through Java and later unwrapped in JNI/C++.
-    auto& concreteShadowNode = static_cast<${shadowNodeClassName}&>(shadowNode);
-    const std::shared_ptr<const ${propsClassName}>& constProps = concreteShadowNode.getConcreteSharedProps();
-    const std::shared_ptr<${propsClassName}>& props = std::const_pointer_cast<${propsClassName}>(constProps);
-    ${stateClassName} state{props};
-    concreteShadowNode.setStateData(std::move(state));
-  }
-#endif
 
 } // namespace ${namespace}
 `.trim()

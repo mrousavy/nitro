@@ -15,6 +15,8 @@
 #include <react/renderer/core/PropsParserContext.h>
 #include <react/renderer/components/view/ConcreteViewShadowNode.h>
 #include <react/renderer/components/view/ViewProps.h>
+#include <NitroModules/ViewComponentDescriptor.hpp>
+#include <NitroModules/ViewPropsHolderState.hpp>
 
 #include <memory>
 #include "HybridRecyclableTestViewSpec.hpp"
@@ -51,32 +53,7 @@ namespace margelo::nitro::test::views {
   /**
    * State for the "RecyclableTestView" View.
    */
-  class HybridRecyclableTestViewState final {
-  public:
-    HybridRecyclableTestViewState() = default;
-    explicit HybridRecyclableTestViewState(const std::shared_ptr<HybridRecyclableTestViewProps>& props):
-      _props(props) {}
-
-  public:
-    [[nodiscard]]
-    const std::shared_ptr<HybridRecyclableTestViewProps>& getProps() const {
-      return _props;
-    }
-
-  public:
-#ifdef ANDROID
-  HybridRecyclableTestViewState(const HybridRecyclableTestViewState& /* previousState */, folly::dynamic /* data */) {}
-  folly::dynamic getDynamic() const {
-    throw std::runtime_error("HybridRecyclableTestViewState does not support folly!");
-  }
-  react::MapBuffer getMapBuffer() const {
-    throw std::runtime_error("HybridRecyclableTestViewState does not support MapBuffer!");
-  };
-#endif
-
-  private:
-    std::shared_ptr<HybridRecyclableTestViewProps> _props;
-  };
+  using HybridRecyclableTestViewState = nitro::ViewPropsHolderState<HybridRecyclableTestViewProps>;
 
   /**
    * The Shadow Node for the "RecyclableTestView" View.
@@ -89,21 +66,7 @@ namespace margelo::nitro::test::views {
   /**
    * The Component Descriptor for the "RecyclableTestView" View.
    */
-  class HybridRecyclableTestViewComponentDescriptor final: public react::ConcreteComponentDescriptor<HybridRecyclableTestViewShadowNode> {
-  public:
-    explicit HybridRecyclableTestViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters);
-
-  public:
-    /**
-     * A faster path for cloning props - reuses the caching logic from `HybridRecyclableTestViewProps`.
-     */
-    std::shared_ptr<const react::Props> cloneProps(const react::PropsParserContext& context,
-                                                   const std::shared_ptr<const react::Props>& props,
-                                                   react::RawProps rawProps) const override;
-#ifdef ANDROID
-    void adopt(react::ShadowNode& shadowNode) const override;
-#endif
-  };
+  using HybridRecyclableTestViewComponentDescriptor = nitro::ViewComponentDescriptor<HybridRecyclableTestViewShadowNode>;
 
   /* The actual view for "RecyclableTestView" needs to be implemented in platform-specific code. */
 

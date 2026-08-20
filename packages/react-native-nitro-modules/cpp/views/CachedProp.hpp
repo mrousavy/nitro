@@ -13,6 +13,11 @@ namespace margelo::nitro {
 
 using namespace facebook;
 
+/**
+ * A React prop (via `RawProps`) that can be cached against its previous
+ * JS value (via `jsi::Value::strictEquals(...)`) and stores an `isDirty`
+ * flag for incremental updates.
+ */
 template <typename T>
 struct CachedProp {
 public:
