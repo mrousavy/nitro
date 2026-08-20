@@ -605,13 +605,26 @@ export function getTests(
       it(() =>
         testObject.bounceOptionals(
           ['hello', undefined, 'world'],
-          [new ArrayBuffer(16), undefined],
-          { a: 'b', c: undefined }
+          [new ArrayBuffer(16), undefined]
         )
       )
         .didNotThrow()
         .didReturn('object')
         .equals(['hello', undefined, 'world'])
+    ),
+    createTest('bounceNulls(...) keeps null elements', () =>
+      it(() => testObject.bounceNulls(['hello', null, 'world']))
+        .didNotThrow()
+        .didReturn('object')
+        .equals(['hello', null, 'world'])
+    ),
+    createTest(
+      'bounceOptionalNulls(...) keeps null and undefined elements',
+      () =>
+        it(() => testObject.bounceOptionalNulls(['hello', null, undefined]))
+          .didNotThrow()
+          .didReturn('object')
+          .equals(['hello', null, undefined])
     ),
     createTest('bounceEnums(...) equals', () =>
       it(() => testObject.bounceEnums(['gas', 'hybrid']))
@@ -1423,6 +1436,28 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP_3)
+    ),
+    createTest('bounceOptionalMap(map) keeps undefined values', () =>
+      it(() => testObject.bounceOptionalMap({ a: 'b', c: undefined }))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({ a: 'b', c: undefined })
+    ),
+    createTest('bounceNullMap(map) keeps null values', () =>
+      it(() => testObject.bounceNullMap({ a: 'b', c: null }))
+        .didNotThrow()
+        .didReturn('object')
+        .equals({ a: 'b', c: null })
+    ),
+    createTest(
+      'bounceOptionalNullMap(map) keeps null and undefined values',
+      () =>
+        it(() =>
+          testObject.bounceOptionalNullMap({ a: 'b', b: null, c: undefined })
+        )
+          .didNotThrow()
+          .didReturn('object')
+          .equals({ a: 'b', b: null, c: undefined })
     ),
     createTest('extractMap(mapWrapper) === mapWrapper.map', () =>
       it(() =>

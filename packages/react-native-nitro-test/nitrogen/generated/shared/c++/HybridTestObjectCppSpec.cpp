@@ -83,6 +83,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("bouncePromises", &HybridTestObjectCppSpec::bouncePromises);
       prototype.registerHybridMethod("bounceArrayBuffers", &HybridTestObjectCppSpec::bounceArrayBuffers);
       prototype.registerHybridMethod("bounceOptionals", &HybridTestObjectCppSpec::bounceOptionals);
+      prototype.registerHybridMethod("bounceNulls", &HybridTestObjectCppSpec::bounceNulls);
+      prototype.registerHybridMethod("bounceOptionalNulls", &HybridTestObjectCppSpec::bounceOptionalNulls);
       prototype.registerHybridMethod("createMap", &HybridTestObjectCppSpec::createMap);
       prototype.registerHybridMethod("mapRoundtrip", &HybridTestObjectCppSpec::mapRoundtrip);
       prototype.registerHybridMethod("getMapKeys", &HybridTestObjectCppSpec::getMapKeys);
@@ -90,6 +92,9 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("copyAnyMap", &HybridTestObjectCppSpec::copyAnyMap);
       prototype.registerHybridMethod("bounceMap", &HybridTestObjectCppSpec::bounceMap);
       prototype.registerHybridMethod("bounceSimpleMap", &HybridTestObjectCppSpec::bounceSimpleMap);
+      prototype.registerHybridMethod("bounceOptionalMap", &HybridTestObjectCppSpec::bounceOptionalMap);
+      prototype.registerHybridMethod("bounceNullMap", &HybridTestObjectCppSpec::bounceNullMap);
+      prototype.registerHybridMethod("bounceOptionalNullMap", &HybridTestObjectCppSpec::bounceOptionalNullMap);
       prototype.registerHybridMethod("extractMap", &HybridTestObjectCppSpec::extractMap);
       prototype.registerHybridMethod("funcThatThrows", &HybridTestObjectCppSpec::funcThatThrows);
       prototype.registerHybridMethod("funcThatThrowsBeforePromise", &HybridTestObjectCppSpec::funcThatThrowsBeforePromise);

@@ -726,8 +726,8 @@ namespace margelo::nitro::test {
       return __vector;
     }(__result);
   }
-  std::vector<std::optional<std::string>> JHybridTestObjectSwiftKotlinSpec::bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers, const std::unordered_map<std::string, std::optional<std::string>>& map) {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<jni::JArrayClass<jni::JString>> /* strings */, jni::alias_ref<jni::JArrayClass<JArrayBuffer::javaobject>> /* arrayBuffers */, jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* map */)>("bounceOptionals");
+  std::vector<std::optional<std::string>> JHybridTestObjectSwiftKotlinSpec::bounceOptionals(const std::vector<std::optional<std::string>>& strings, const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<jni::JString>>(jni::alias_ref<jni::JArrayClass<jni::JString>> /* strings */, jni::alias_ref<jni::JArrayClass<JArrayBuffer::javaobject>> /* arrayBuffers */)>("bounceOptionals");
     auto __result = method(_javaPart, [&](auto&& __input) {
       size_t __size = __input.size();
       jni::local_ref<jni::JArrayClass<jni::JString>> __array = jni::JArrayClass<jni::JString>::newArray(__size);
@@ -746,13 +746,7 @@ namespace margelo::nitro::test {
         __array->setElement(__i, __elementJni.get());
       }
       return __array;
-    }(arrayBuffers), [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
-      auto __map = jni::JHashMap<jni::JString, jni::JString>::create(map.size());
-      for (const auto& __entry : map) {
-        __map->put(jni::make_jstring(__entry.first), __entry.second.has_value() ? jni::make_jstring(__entry.second.value()) : nullptr);
-      }
-      return __map;
-    }());
+    }(arrayBuffers));
     return [&](auto&& __input) {
       size_t __size = __input->size();
       std::vector<std::optional<std::string>> __vector;
@@ -760,6 +754,52 @@ namespace margelo::nitro::test {
       for (size_t __i = 0; __i < __size; __i++) {
         auto __element = __input->getElement(__i);
         __vector.push_back(__element != nullptr ? std::make_optional(__element->toStdString()) : std::nullopt);
+      }
+      return __vector;
+    }(__result);
+  }
+  std::vector<std::variant<nitro::NullType, std::string>> JHybridTestObjectSwiftKotlinSpec::bounceNulls(const std::vector<std::variant<nitro::NullType, std::string>>& strings) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JVariant_NullType_String>>(jni::alias_ref<jni::JArrayClass<JVariant_NullType_String>> /* strings */)>("bounceNulls");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JVariant_NullType_String>> __array = jni::JArrayClass<JVariant_NullType_String>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = JVariant_NullType_String::fromCpp(__element);
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(strings));
+    return [&](auto&& __input) {
+      size_t __size = __input->size();
+      std::vector<std::variant<nitro::NullType, std::string>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __input->getElement(__i);
+        __vector.push_back(__element->toCpp());
+      }
+      return __vector;
+    }(__result);
+  }
+  std::vector<std::optional<std::variant<nitro::NullType, std::string>>> JHybridTestObjectSwiftKotlinSpec::bounceOptionalNulls(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& strings) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JArrayClass<JVariant_NullType_String>>(jni::alias_ref<jni::JArrayClass<JVariant_NullType_String>> /* strings */)>("bounceOptionalNulls");
+    auto __result = method(_javaPart, [&](auto&& __input) {
+      size_t __size = __input.size();
+      jni::local_ref<jni::JArrayClass<JVariant_NullType_String>> __array = jni::JArrayClass<JVariant_NullType_String>::newArray(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        const auto& __element = __input[__i];
+        auto __elementJni = __element.has_value() ? JVariant_NullType_String::fromCpp(__element.value()) : nullptr;
+        __array->setElement(__i, *__elementJni);
+      }
+      return __array;
+    }(strings));
+    return [&](auto&& __input) {
+      size_t __size = __input->size();
+      std::vector<std::optional<std::variant<nitro::NullType, std::string>>> __vector;
+      __vector.reserve(__size);
+      for (size_t __i = 0; __i < __size; __i++) {
+        auto __element = __input->getElement(__i);
+        __vector.push_back(__element != nullptr ? std::make_optional(__element->toCpp()) : std::nullopt);
       }
       return __vector;
     }(__result);
@@ -830,6 +870,60 @@ namespace margelo::nitro::test {
       __map.reserve(__result->size());
       for (const auto& __entry : *__result) {
         __map.emplace(__entry.first->toStdString(), __entry.second->value());
+      }
+      return __map;
+    }();
+  }
+  std::unordered_map<std::string, std::optional<std::string>> JHybridTestObjectSwiftKotlinSpec::bounceOptionalMap(const std::unordered_map<std::string, std::optional<std::string>>& map) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, jni::JString>>(jni::alias_ref<jni::JMap<jni::JString, jni::JString>> /* map */)>("bounceOptionalMap");
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, jni::JString>> {
+      auto __map = jni::JHashMap<jni::JString, jni::JString>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), __entry.second.has_value() ? jni::make_jstring(__entry.second.value()) : nullptr);
+      }
+      return __map;
+    }());
+    return [&]() {
+      std::unordered_map<std::string, std::optional<std::string>> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second != nullptr ? std::make_optional(__entry.second->toStdString()) : std::nullopt);
+      }
+      return __map;
+    }();
+  }
+  std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> JHybridTestObjectSwiftKotlinSpec::bounceNullMap(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& map) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_NullType_String>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_NullType_String>> /* map */)>("bounceNullMap");
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_NullType_String>> {
+      auto __map = jni::JHashMap<jni::JString, JVariant_NullType_String>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), JVariant_NullType_String::fromCpp(__entry.second));
+      }
+      return __map;
+    }());
+    return [&]() {
+      std::unordered_map<std::string, std::variant<nitro::NullType, std::string>> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second->toCpp());
+      }
+      return __map;
+    }();
+  }
+  std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> JHybridTestObjectSwiftKotlinSpec::bounceOptionalNullMap(const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& map) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<jni::JMap<jni::JString, JVariant_NullType_String>>(jni::alias_ref<jni::JMap<jni::JString, JVariant_NullType_String>> /* map */)>("bounceOptionalNullMap");
+    auto __result = method(_javaPart, [&]() -> jni::local_ref<jni::JMap<jni::JString, JVariant_NullType_String>> {
+      auto __map = jni::JHashMap<jni::JString, JVariant_NullType_String>::create(map.size());
+      for (const auto& __entry : map) {
+        __map->put(jni::make_jstring(__entry.first), __entry.second.has_value() ? JVariant_NullType_String::fromCpp(__entry.second.value()) : nullptr);
+      }
+      return __map;
+    }());
+    return [&]() {
+      std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>> __map;
+      __map.reserve(__result->size());
+      for (const auto& __entry : *__result) {
+        __map.emplace(__entry.first->toStdString(), __entry.second != nullptr ? std::make_optional(__entry.second->toCpp()) : std::nullopt);
       }
       return __map;
     }();

@@ -140,11 +140,21 @@ public:
   std::vector<std::function<void()>> bounceFunctions(const std::vector<std::function<void()>>& functions) override;
   std::vector<std::shared_ptr<AnyMap>> bounceMaps(const std::vector<std::shared_ptr<AnyMap>>& maps) override;
   std::unordered_map<std::string, double> bounceSimpleMap(const std::unordered_map<std::string, double>& map) override;
+  std::unordered_map<std::string, std::optional<std::string>>
+  bounceOptionalMap(const std::unordered_map<std::string, std::optional<std::string>>& map) override;
+  std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>
+  bounceNullMap(const std::unordered_map<std::string, std::variant<nitro::NullType, std::string>>& map) override;
+  std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>
+  bounceOptionalNullMap(const std::unordered_map<std::string, std::optional<std::variant<nitro::NullType, std::string>>>& map) override;
   std::vector<std::shared_ptr<Promise<double>>> bouncePromises(const std::vector<std::shared_ptr<Promise<double>>>& promises) override;
   std::vector<std::shared_ptr<ArrayBuffer>> bounceArrayBuffers(const std::vector<std::shared_ptr<ArrayBuffer>>& arrayBuffers) override;
-  std::vector<std::optional<std::string>> bounceOptionals(const std::vector<std::optional<std::string>>& strings,
-                                                          const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers,
-                                                          const std::unordered_map<std::string, std::optional<std::string>>& map) override;
+  std::vector<std::optional<std::string>>
+  bounceOptionals(const std::vector<std::optional<std::string>>& strings,
+                  const std::vector<std::optional<std::shared_ptr<ArrayBuffer>>>& arrayBuffers) override;
+  std::vector<std::variant<nitro::NullType, std::string>>
+  bounceNulls(const std::vector<std::variant<nitro::NullType, std::string>>& strings) override;
+  std::vector<std::optional<std::variant<nitro::NullType, std::string>>>
+  bounceOptionalNulls(const std::vector<std::optional<std::variant<nitro::NullType, std::string>>>& strings) override;
 
   std::variant<OldEnum, bool> getVariantEnum(const std::variant<OldEnum, bool>& variant) override;
   std::variant<Powertrain, Car> bounceVariantUnionEnum(const std::variant<Powertrain, Car>& variant) override;

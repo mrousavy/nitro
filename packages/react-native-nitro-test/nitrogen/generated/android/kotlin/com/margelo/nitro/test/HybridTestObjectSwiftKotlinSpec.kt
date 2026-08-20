@@ -264,7 +264,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun bounceOptionals(strings: Array<String?>, arrayBuffers: Array<ArrayBuffer?>, map: Map<String, String?>): Array<String?>
+  abstract fun bounceOptionals(strings: Array<String?>, arrayBuffers: Array<ArrayBuffer?>): Array<String?>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceNulls(strings: Array<Variant_NullType_String>): Array<Variant_NullType_String>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceOptionalNulls(strings: Array<Variant_NullType_String?>): Array<Variant_NullType_String?>
   
   @DoNotStrip
   @Keep
@@ -293,6 +301,18 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun bounceSimpleMap(map: Map<String, Double>): Map<String, Double>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceOptionalMap(map: Map<String, String?>): Map<String, String?>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceNullMap(map: Map<String, Variant_NullType_String>): Map<String, Variant_NullType_String>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun bounceOptionalNullMap(map: Map<String, Variant_NullType_String?>): Map<String, Variant_NullType_String?>
   
   @DoNotStrip
   @Keep

@@ -895,7 +895,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
-  public final func bounceOptionals(strings: bridge.std__vector_std__optional_std__string__, arrayBuffers: bridge.std__vector_std__optional_std__shared_ptr_ArrayBuffer___, map: bridge.std__unordered_map_std__string__std__optional_std__string__) -> bridge.Result_std__vector_std__optional_std__string___ {
+  public final func bounceOptionals(strings: bridge.std__vector_std__optional_std__string__, arrayBuffers: bridge.std__vector_std__optional_std__shared_ptr_ArrayBuffer___) -> bridge.Result_std__vector_std__optional_std__string___ {
     do {
       let __result = try self.__implementation.bounceOptionals(strings: strings.map({ __item in { () -> String? in
         if bridge.has_value_std__optional_std__string_(__item) {
@@ -911,22 +911,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
         } else {
           return nil
         }
-      }() }), map: { () -> Dictionary<String, String?> in
-        var __dictionary = Dictionary<String, String?>(minimumCapacity: map.size())
-        let __keys = bridge.get_std__unordered_map_std__string__std__optional_std__string___keys(map)
-        for __key in __keys {
-          let __value = bridge.get_std__unordered_map_std__string__std__optional_std__string___value(map, __key)
-          __dictionary[String(__key)] = { () -> String? in
-            if bridge.has_value_std__optional_std__string_(__value) {
-              let __unwrapped = bridge.get_std__optional_std__string_(__value)
-              return String(__unwrapped)
-            } else {
-              return nil
-            }
-          }()
-        }
-        return __dictionary
-      }())
+      }() }))
       let __resultCpp = { () -> bridge.std__vector_std__optional_std__string__ in
         var __vector = bridge.create_std__vector_std__optional_std__string__(__result.count)
         for __item in __result {
@@ -944,6 +929,93 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__vector_std__optional_std__string___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceNulls(strings: bridge.std__vector_std__variant_nitro__NullType__std__string__) -> bridge.Result_std__vector_std__variant_nitro__NullType__std__string___ {
+    do {
+      let __result = try self.__implementation.bounceNulls(strings: strings.map({ __item in { () -> Variant_NullType_String in
+        let __variant = bridge.std__variant_nitro__NullType__std__string_(__item)
+        switch __variant.index() {
+          case 0:
+            let __actual = __variant.get_0()
+            return .first(NullType.null)
+          case 1:
+            let __actual = __variant.get_1()
+            return .second(String(__actual))
+          default:
+            fatalError("Variant can never have index \(__variant.index())!")
+        }
+      }() }))
+      let __resultCpp = { () -> bridge.std__vector_std__variant_nitro__NullType__std__string__ in
+        var __vector = bridge.create_std__vector_std__variant_nitro__NullType__std__string__(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+            switch __item {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            }
+          }().variant)
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__variant_nitro__NullType__std__string___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__variant_nitro__NullType__std__string___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceOptionalNulls(strings: bridge.std__vector_std__optional_std__variant_nitro__NullType__std__string___) -> bridge.Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____ {
+    do {
+      let __result = try self.__implementation.bounceOptionalNulls(strings: strings.map({ __item in { () -> Variant_NullType_String? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(__item) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(__item)
+          return { () -> Variant_NullType_String in
+            let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(String(__actual))
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }() }))
+      let __resultCpp = { () -> bridge.std__vector_std__optional_std__variant_nitro__NullType__std__string___ in
+        var __vector = bridge.create_std__vector_std__optional_std__variant_nitro__NullType__std__string___(__result.count)
+        for __item in __result {
+          __vector.push_back({ () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
+            if let __unwrappedValue = __item {
+              return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+                switch __unwrappedValue {
+                  case .first(let __value):
+                    return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+                  case .second(let __value):
+                    return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+                }
+              }().variant)
+            } else {
+              return .init()
+            }
+          }())
+        }
+        return __vector
+      }()
+      return bridge.create_Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__vector_std__optional_std__variant_nitro__NullType__std__string____(__exceptionPtr)
     }
   }
   
@@ -1081,6 +1153,148 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__unordered_map_std__string__double__(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceOptionalMap(map: bridge.std__unordered_map_std__string__std__optional_std__string__) -> bridge.Result_std__unordered_map_std__string__std__optional_std__string___ {
+    do {
+      let __result = try self.__implementation.bounceOptionalMap(map: { () -> Dictionary<String, String?> in
+        var __dictionary = Dictionary<String, String?>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__optional_std__string___keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__std__optional_std__string___value(map, __key)
+          __dictionary[String(__key)] = { () -> String? in
+            if bridge.has_value_std__optional_std__string_(__value) {
+              let __unwrapped = bridge.get_std__optional_std__string_(__value)
+              return String(__unwrapped)
+            } else {
+              return nil
+            }
+          }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__optional_std__string__ in
+        var __map = bridge.create_std__unordered_map_std__string__std__optional_std__string__(__result.count)
+        for (__k, __v) in __result {
+          bridge.emplace_std__unordered_map_std__string__std__optional_std__string__(&__map, std.string(__k), { () -> bridge.std__optional_std__string_ in
+            if let __unwrappedValue = __v {
+              return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+            } else {
+              return .init()
+            }
+          }())
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__optional_std__string___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__optional_std__string___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceNullMap(map: bridge.std__unordered_map_std__string__std__variant_nitro__NullType__std__string__) -> bridge.Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___ {
+    do {
+      let __result = try self.__implementation.bounceNullMap(map: { () -> Dictionary<String, Variant_NullType_String> in
+        var __dictionary = Dictionary<String, Variant_NullType_String>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___value(map, __key)
+          __dictionary[String(__key)] = { () -> Variant_NullType_String in
+            let __variant = bridge.std__variant_nitro__NullType__std__string_(__value)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(String(__actual))
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__variant_nitro__NullType__std__string__ in
+        var __map = bridge.create_std__unordered_map_std__string__std__variant_nitro__NullType__std__string__(__result.count)
+        for (__k, __v) in __result {
+          bridge.emplace_std__unordered_map_std__string__std__variant_nitro__NullType__std__string__(&__map, std.string(__k), { () -> bridge.std__variant_nitro__NullType__std__string_ in
+            switch __v {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            }
+          }().variant)
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__variant_nitro__NullType__std__string___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func bounceOptionalNullMap(map: bridge.std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___) -> bridge.Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____ {
+    do {
+      let __result = try self.__implementation.bounceOptionalNullMap(map: { () -> Dictionary<String, Variant_NullType_String?> in
+        var __dictionary = Dictionary<String, Variant_NullType_String?>(minimumCapacity: map.size())
+        let __keys = bridge.get_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____keys(map)
+        for __key in __keys {
+          let __value = bridge.get_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____value(map, __key)
+          __dictionary[String(__key)] = { () -> Variant_NullType_String? in
+            if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(__value) {
+              let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(__value)
+              return { () -> Variant_NullType_String in
+                let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+                switch __variant.index() {
+                  case 0:
+                    let __actual = __variant.get_0()
+                    return .first(NullType.null)
+                  case 1:
+                    let __actual = __variant.get_1()
+                    return .second(String(__actual))
+                  default:
+                    fatalError("Variant can never have index \(__variant.index())!")
+                }
+              }()
+            } else {
+              return nil
+            }
+          }()
+        }
+        return __dictionary
+      }())
+      let __resultCpp = { () -> bridge.std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___ in
+        var __map = bridge.create_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___(__result.count)
+        for (__k, __v) in __result {
+          bridge.emplace_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string___(&__map, std.string(__k), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
+            if let __unwrappedValue = __v {
+              return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+                switch __unwrappedValue {
+                  case .first(let __value):
+                    return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+                  case .second(let __value):
+                    return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+                }
+              }().variant)
+            } else {
+              return .init()
+            }
+          }())
+        }
+        return __map
+      }()
+      return bridge.create_Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__unordered_map_std__string__std__optional_std__variant_nitro__NullType__std__string____(__exceptionPtr)
     }
   }
   

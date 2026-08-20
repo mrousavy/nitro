@@ -227,8 +227,16 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return arrayBuffers
   }
 
-  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?], map: [String: String?])
-    throws -> [String?]
+  func bounceOptionals(strings: [String?], arrayBuffers: [ArrayBuffer?]) throws -> [String?] {
+    return strings
+  }
+
+  func bounceNulls(strings: [Variant_NullType_String]) throws -> [Variant_NullType_String] {
+    return strings
+  }
+
+  func bounceOptionalNulls(strings: [Variant_NullType_String?]) throws
+    -> [Variant_NullType_String?]
   {
     return strings
   }
@@ -333,6 +341,22 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   }
 
   func bounceSimpleMap(map: [String: Double]) throws -> [String: Double] {
+    return map
+  }
+
+  func bounceOptionalMap(map: [String: String?]) throws -> [String: String?] {
+    return map
+  }
+
+  func bounceNullMap(map: [String: Variant_NullType_String]) throws -> [String:
+    Variant_NullType_String]
+  {
+    return map
+  }
+
+  func bounceOptionalNullMap(map: [String: Variant_NullType_String?]) throws -> [String:
+    Variant_NullType_String?]
+  {
     return map
   }
 
