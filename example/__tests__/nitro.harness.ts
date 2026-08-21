@@ -1,4 +1,4 @@
-import { describe, it } from 'react-native-harness'
+import { describe, expect, it } from 'react-native-harness'
 import { NitroModules } from 'react-native-nitro-modules'
 import type {
   TestObjectCpp,
@@ -32,3 +32,28 @@ const testObjectSwiftKotlin =
 
 describe('TestObject (C++)', createTestRunner(testObjectCpp))
 describe('TestObject (Swift/Kotlin)', createTestRunner(testObjectSwiftKotlin))
+
+describe('ArrayBuffer external memory', () => {
+  it('reports native buffer memory pressure to Hermes', () => {
+    type HermesInternal = {
+      getInstrumentedStats(): { js_externalBytes: number }
+    }
+    const hermesInternal = (
+      globalThis as typeof globalThis & { HermesInternal?: HermesInternal }
+    ).HermesInternal
+
+    if (hermesInternal == null) {
+      return
+    }
+
+    const size = 1024 * 1024
+    const externalBytesBefore =
+      hermesInternal.getInstrumentedStats().js_externalBytes
+    const buffer = NitroModules.createNativeArrayBuffer(size)
+    const externalBytesAfter =
+      hermesInternal.getInstrumentedStats().js_externalBytes
+
+    expect(buffer.byteLength).toBe(size)
+    expect(externalBytesAfter - externalBytesBefore).toBe(size)
+  })
+})

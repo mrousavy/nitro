@@ -84,7 +84,14 @@ struct JSIConverter<T, std::enable_if_t<is_shared_ptr_to_v<T, jsi::MutableBuffer
     // 2. Wrap jsi::MutableBuffer in jsi::NativeState holder & attach it
     auto mutableBufferHolder = std::make_shared<MutableBufferNativeState>(buffer);
     arrayBuffer.setNativeState(runtime, mutableBufferHolder);
-    // 3. Return jsi::ArrayBuffer (with jsi::NativeState) to JS
+    // 3. Notify the JS VM about memory retained outside of its heap
+    if (auto nitroBuffer = std::dynamic_pointer_cast<ArrayBuffer>(buffer)) {
+      size_t externalMemorySize = nitroBuffer->getExternalMemorySize();
+      if (externalMemorySize > 0) {
+        arrayBuffer.setExternalMemoryPressure(runtime, externalMemorySize);
+      }
+    }
+    // 4. Return jsi::ArrayBuffer (with jsi::NativeState) to JS
     return arrayBuffer;
   }
   static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {

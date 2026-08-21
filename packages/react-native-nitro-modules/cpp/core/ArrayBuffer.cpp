@@ -69,6 +69,10 @@ bool NativeArrayBuffer::isOwner() const noexcept {
   return _deleteFunc != nullptr;
 }
 
+size_t NativeArrayBuffer::getExternalMemorySize() const {
+  return isOwner() ? _size : 0;
+}
+
 // 3. JSArrayBuffer
 
 JSArrayBuffer::JSArrayBuffer(jsi::Runtime& runtime, BorrowingReference<jsi::ArrayBuffer> jsReference)

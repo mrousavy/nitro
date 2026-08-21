@@ -39,6 +39,9 @@ public:
   [[nodiscard]] bool isOwner() const noexcept override {
     return _byteBuffer != nullptr && _byteBuffer->isDirect();
   }
+  [[nodiscard]] size_t getExternalMemorySize() const override {
+    return isOwner() ? size() : 0;
+  }
 
 public:
   [[nodiscard]] const jni::global_ref<jni::JByteBuffer>& getBuffer() const {

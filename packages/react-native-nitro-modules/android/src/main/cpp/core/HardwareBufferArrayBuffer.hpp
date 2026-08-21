@@ -88,6 +88,9 @@ public:
   [[nodiscard]] bool isOwner() const noexcept override {
     return true;
   }
+  [[nodiscard]] size_t getExternalMemorySize() const override {
+    return size();
+  }
 
 public:
   [[nodiscard]] AHardwareBuffer* getBuffer() const {

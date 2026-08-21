@@ -48,6 +48,17 @@ public:
    * memory that we didn't allocate, or from JS - which can be deleted at any point).
    */
   virtual bool isOwner() const noexcept = 0;
+  /**
+   * Gets the size of any external memory retained by this `ArrayBuffer`, in bytes.
+   * This is reported to the JS VM when the buffer is converted to a `jsi::ArrayBuffer`
+   * so it can account for memory that is not allocated by the VM itself.
+   *
+   * JS-backed and borrowed buffers return `0` because their memory is either already
+   * tracked by the JS VM or is not retained by this `ArrayBuffer`.
+   */
+  virtual size_t getExternalMemorySize() const {
+    return 0;
+  }
 
 public:
   /**
@@ -106,6 +117,7 @@ public:
   uint8_t* NON_NULL data() override;
   size_t size() const override;
   bool isOwner() const noexcept override;
+  size_t getExternalMemorySize() const override;
 
 private:
   uint8_t* NON_NULL _data;
