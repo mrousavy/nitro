@@ -423,6 +423,77 @@ describe('TestView', () => {
     expect(view.getNativeDefaultValueSetterCallCount()).toBe(2)
   })
 
+  it('only brackets transactions that deliver Nitro props with beforeUpdate/afterUpdate', async () => {
+    const viewRef = deferred<TestViewRef>()
+    const stableHybridRef = callback((view: TestViewRef) =>
+      viewRef.resolve(view)
+    )
+    const stableSomeCallback = callback(fn())
+    const renderResult = await render(
+      // @ts-expect-error TypeScript requires TestView's props, but plain-JS
+      // consumers can omit them all at runtime - no Nitro props are delivered.
+      <TestView testID="test-view-update-brackets" style={INITIAL_SIZE} />,
+      { timeout: RENDER_TIMEOUT }
+    )
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-update-brackets"
+        style={INITIAL_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+      />
+    )
+
+    const view = await viewRef.promise
+    // The empty mount delivered no Nitro props, so only the second render
+    // was a props transaction.
+    expect(view.getBeforeUpdateCount()).toBe(1)
+    expect(view.getAfterUpdateCount()).toBe(1)
+
+    const resizedLayout = deferred<LayoutRectangle>()
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-update-brackets"
+        style={RESIZED_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={false}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+        onLayout={({ nativeEvent }) =>
+          resizedLayout.resolve(nativeEvent.layout)
+        }
+      />
+    )
+
+    const reportedResizedLayout = await resizedLayout.promise
+    expect(reportedResizedLayout.width).toBeCloseTo(RESIZED_SIZE.width, 0)
+    expect(reportedResizedLayout.height).toBeCloseTo(RESIZED_SIZE.height, 0)
+    // A style-only resize changes no Nitro props - not a props transaction.
+    expect(view.getBeforeUpdateCount()).toBe(1)
+    expect(view.getAfterUpdateCount()).toBe(1)
+
+    await renderResult.rerender(
+      <TestView
+        testID="test-view-update-brackets"
+        style={RESIZED_SIZE}
+        hybridRef={stableHybridRef}
+        isBlue={true}
+        hasBeenCalled={false}
+        colorScheme="dark"
+        someCallback={stableSomeCallback}
+      />
+    )
+
+    expect(view.isBlue).toBe(true)
+    expect(view.getBeforeUpdateCount()).toBe(2)
+    expect(view.getAfterUpdateCount()).toBe(2)
+  })
+
   it('unmounts and creates a fresh native view when remounted', async () => {
     const firstRef = deferred<TestViewRef>()
     const renderResult = await render(

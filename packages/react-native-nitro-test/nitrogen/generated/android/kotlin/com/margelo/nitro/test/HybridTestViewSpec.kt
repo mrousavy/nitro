@@ -80,6 +80,14 @@ abstract class HybridTestViewSpec: HybridView() {
   
   @DoNotStrip
   @Keep
+  abstract fun getBeforeUpdateCount(): Double
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getAfterUpdateCount(): Double
+  
+  @DoNotStrip
+  @Keep
   abstract fun someMethod(): Unit
 
   // Default implementation of `HybridObject.toString()`

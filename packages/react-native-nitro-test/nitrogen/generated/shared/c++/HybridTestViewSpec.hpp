@@ -63,6 +63,8 @@ namespace margelo::nitro::test {
       virtual double getOnDropViewCount() = 0;
       virtual double getIsBlueSetterCallCount() = 0;
       virtual double getNativeDefaultValueSetterCallCount() = 0;
+      virtual double getBeforeUpdateCount() = 0;
+      virtual double getAfterUpdateCount() = 0;
       virtual void someMethod() = 0;
 
     protected:

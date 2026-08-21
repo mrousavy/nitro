@@ -66,6 +66,8 @@ namespace margelo::nitro::test {
     double getOnDropViewCount() override;
     double getIsBlueSetterCallCount() override;
     double getNativeDefaultValueSetterCallCount() override;
+    double getBeforeUpdateCount() override;
+    double getAfterUpdateCount() override;
     void someMethod() override;
 
   private:

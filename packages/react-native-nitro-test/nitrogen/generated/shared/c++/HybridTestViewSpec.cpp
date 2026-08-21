@@ -27,6 +27,8 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("getOnDropViewCount", &HybridTestViewSpec::getOnDropViewCount);
       prototype.registerHybridMethod("getIsBlueSetterCallCount", &HybridTestViewSpec::getIsBlueSetterCallCount);
       prototype.registerHybridMethod("getNativeDefaultValueSetterCallCount", &HybridTestViewSpec::getNativeDefaultValueSetterCallCount);
+      prototype.registerHybridMethod("getBeforeUpdateCount", &HybridTestViewSpec::getBeforeUpdateCount);
+      prototype.registerHybridMethod("getAfterUpdateCount", &HybridTestViewSpec::getAfterUpdateCount);
       prototype.registerHybridMethod("someMethod", &HybridTestViewSpec::someMethod);
     });
   }
