@@ -21,6 +21,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override var numberValue: Double = 0.0
   override var boolValue: Boolean = false
   override var stringValue: String = ""
+  override val memorySize: Long
+    get() = stringValue.length.toLong()
   override var int64Value: Long = 0L
   override var uint64Value: ULong = 0u
   override var optionalString: String? = null

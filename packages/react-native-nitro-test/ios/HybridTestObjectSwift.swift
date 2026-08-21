@@ -19,6 +19,10 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
 
   var stringValue: String = ""
 
+  var memorySize: Int {
+    return stringValue.utf8.count
+  }
+
   var int64Value: Int64 = 0
 
   var uint64Value: UInt64 = 0
