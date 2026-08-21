@@ -4,17 +4,12 @@
 
 #pragma once
 
+#include "RawPropsCompat.hpp"
+
 #include <concepts>
-#include <cxxreact/ReactNativeVersion.h>
 #include <memory>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <utility>
-
-#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 85
-// Since React Native 0.85, the RawPropsParser has JSI Parsing always enabled
-// by default, and the boolean argument has been removed.
-#define RAW_PROPS_PARSER_USES_JSI_BY_DEFAULT
-#endif
 
 namespace margelo::nitro {
 
@@ -40,12 +35,8 @@ class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<
 #endif
 
 public:
-#ifdef RAW_PROPS_PARSER_USES_JSI_BY_DEFAULT
-  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters) : Base(parameters, react::RawPropsParser()) {}
-#else
   explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-      : Base(parameters, react::RawPropsParser(true)) {}
-#endif
+      : Base(parameters, RawPropsCompat::makePropsParser()) {}
 
 public:
   /**
