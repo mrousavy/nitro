@@ -101,4 +101,11 @@ export interface NitroModulesProxy extends HybridObject<{
    * @internal
    */
   debug_getTotalAllocatedHybridObjects(): number
+
+  /**
+   * Gets the current Runtime's `JSICache` slot count. Used by the leak repro
+   * test for https://github.com/mrousavy/nitro/pull/1464.
+   * @internal
+   */
+  debug_getTotalJSICacheSize(): number
 }
