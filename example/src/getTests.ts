@@ -2465,6 +2465,11 @@ export function getTests(
         .didNotThrow()
         .didReturn('string')
     ),
+    createTest('PlatformObject getReactContextInfo() can reach an RN module', () =>
+      it(() => HybridPlatformObject.getReactContextInfo())
+        .didNotThrow()
+        .didReturn('string')
+    ),
     createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
       it(() => {
         NitroModules.updateMemorySize(testObject)

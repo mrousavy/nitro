@@ -74,6 +74,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::string getReactContextInfo() override {
+      auto __result = _swiftPart.getReactContextInfo();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
 
   private:
     NitroTest::HybridPlatformObjectSpec_cxx _swiftPart;

@@ -15,6 +15,7 @@ namespace margelo::nitro::test {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("getOSVersion", &HybridPlatformObjectSpec::getOSVersion);
+      prototype.registerHybridMethod("getReactContextInfo", &HybridPlatformObjectSpec::getReactContextInfo);
     });
   }
 
