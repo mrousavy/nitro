@@ -5,20 +5,41 @@
 #pragma once
 
 #include <concepts>
-#include <cxxreact/ReactNativeVersion.h>
 #include <memory>
 #include <react/renderer/core/ConcreteComponentDescriptor.h>
 #include <utility>
 
-#if REACT_NATIVE_VERSION_MAJOR != 0 || REACT_NATIVE_VERSION_MINOR >= 85
-// Since React Native 0.85, the RawPropsParser has JSI Parsing always enabled
-// by default, and the boolean argument has been removed.
-#define RAW_PROPS_PARSER_USES_JSI_BY_DEFAULT
-#endif
-
 namespace margelo::nitro {
 
 using namespace facebook;
+
+/**
+ * Creates a `react::RawPropsParser` with JSI parsing enabled.
+ *
+ * On React Native < 0.85, JSI parsing had to be explicitly enabled through a
+ * boolean constructor argument. Since React Native 0.85, JSI parsing is always
+ * enabled - the boolean constructor was first deprecated (its argument is
+ * ignored) and will eventually be removed.
+ *
+ * The available constructor is detected at compile-time instead of reading
+ * `<cxxreact/ReactNativeVersion.h>` - see `RawPropsCompat.hpp` for why that
+ * header must not be imported here.
+ */
+template <typename TRawPropsParser = react::RawPropsParser>
+TRawPropsParser makeJsiRawPropsParser() {
+  if constexpr (std::constructible_from<TRawPropsParser, bool>) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    // React Native < 0.87: enable JSI parsing. On 0.85 and 0.86 the argument
+    // is an ignored no-op because JSI parsing is already always enabled.
+    return TRawPropsParser(true);
+#pragma clang diagnostic pop
+  } else {
+    // React Native 0.87+: the boolean constructor is gone, JSI parsing is
+    // always enabled.
+    return TRawPropsParser();
+  }
+}
 
 /**
  * A `react::ConcreteComponentDescriptor` implementation for a Nitro View.
@@ -40,12 +61,7 @@ class ViewComponentDescriptor final : public react::ConcreteComponentDescriptor<
 #endif
 
 public:
-#ifdef RAW_PROPS_PARSER_USES_JSI_BY_DEFAULT
-  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters) : Base(parameters, react::RawPropsParser()) {}
-#else
-  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters)
-      : Base(parameters, react::RawPropsParser(true)) {}
-#endif
+  explicit ViewComponentDescriptor(const react::ComponentDescriptorParameters& parameters) : Base(parameters, makeJsiRawPropsParser()) {}
 
 public:
   /**
