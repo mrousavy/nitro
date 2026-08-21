@@ -2481,6 +2481,42 @@ export function getTests(
         .didReturn('number')
         .equals(13)
     ),
+    createTest(
+      'NitroModules.createNativeArrayBuffer(...) reports external memory pressure',
+      () =>
+        it(() => {
+          type HermesInternal = {
+            getInstrumentedStats?: () => { js_externalBytes: number }
+          }
+          const hermesInternal = (
+            globalThis as typeof globalThis & {
+              HermesInternal?: HermesInternal
+            }
+          ).HermesInternal
+
+          if (hermesInternal?.getInstrumentedStats == null) {
+            throw new Error('Hermes instrumentation is unavailable!')
+          }
+
+          const size = 1024 * 1024
+          const externalBytesBefore =
+            hermesInternal.getInstrumentedStats().js_externalBytes
+          const buffer = NitroModules.createNativeArrayBuffer(size)
+          const externalBytesAfter =
+            hermesInternal.getInstrumentedStats().js_externalBytes
+
+          if (buffer.byteLength !== size) {
+            throw new Error(
+              `Expected a ${size}-byte ArrayBuffer, but received ${buffer.byteLength} bytes!`
+            )
+          }
+
+          return externalBytesAfter - externalBytesBefore
+        })
+          .didNotThrow()
+          .didReturn('number')
+          .equals(1024 * 1024)
+    ),
     createTest('NitroModules.buildType holds a string', () =>
       it(() => {
         return NitroModules.buildType
