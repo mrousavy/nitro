@@ -18,6 +18,10 @@
 
 namespace margelo::nitro::test {
 
+size_t HybridTestObjectCpp::getExternalMemorySize() noexcept {
+  return _string.size();
+}
+
 // Properties
 double HybridTestObjectCpp::getNumberValue() {
   return _number;
