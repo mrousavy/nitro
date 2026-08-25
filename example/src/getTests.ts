@@ -47,6 +47,23 @@ export interface TestRunner {
 // 1) It's a lot of allocations and any VM (JS, JVM) will likely trigger GC
 // 2) In JVM, 51_200 is the limit for `jni::global_ref`s, then the app crashes - this intentionally exhausts that
 const MEMORY_LEAK_TEST_ALLOCATION_COUNT = 55_000
+const EXTERNAL_MEMORY_TEST_SIZE = 1024 * 1024
+
+type HermesInternal = {
+  getInstrumentedStats?: () => { js_externalBytes: number }
+}
+
+function getHermesExternalMemorySize(): number {
+  const hermesInternal = (
+    globalThis as typeof globalThis & { HermesInternal?: HermesInternal }
+  ).HermesInternal
+
+  if (hermesInternal?.getInstrumentedStats == null) {
+    throw new Error('Hermes instrumentation is unavailable!')
+  }
+
+  return hermesInternal.getInstrumentedStats().js_externalBytes
+}
 
 /**
  * Options for getTests function
@@ -2465,10 +2482,30 @@ export function getTests(
         .didNotThrow()
         .didReturn('string')
     ),
-    createTest('NitroModules.updateMemorySize(obj) works (roundtrip)', () =>
-      it(() => {
-        NitroModules.updateMemorySize(testObject)
-      }).didNotThrow()
+    createTest(
+      'NitroModules.updateMemorySize(obj) updates external memory pressure',
+      () =>
+        it(() => {
+          const originalString = testObject.stringValue
+
+          try {
+            testObject.stringValue = ''
+            NitroModules.updateMemorySize(testObject)
+
+            testObject.stringValue = 'x'.repeat(EXTERNAL_MEMORY_TEST_SIZE)
+            const externalBytesBefore = getHermesExternalMemorySize()
+            NitroModules.updateMemorySize(testObject)
+            const externalBytesAfter = getHermesExternalMemorySize()
+
+            return externalBytesAfter - externalBytesBefore
+          } finally {
+            testObject.stringValue = originalString
+            NitroModules.updateMemorySize(testObject)
+          }
+        })
+          .didNotThrow()
+          .didReturn('number')
+          .equals(EXTERNAL_MEMORY_TEST_SIZE)
     ),
     createTest('NitroModules.createNativeArrayBuffer(...) works', () =>
       it(() => {
@@ -2485,25 +2522,10 @@ export function getTests(
       'NitroModules.createNativeArrayBuffer(...) reports external memory pressure',
       () =>
         it(() => {
-          type HermesInternal = {
-            getInstrumentedStats?: () => { js_externalBytes: number }
-          }
-          const hermesInternal = (
-            globalThis as typeof globalThis & {
-              HermesInternal?: HermesInternal
-            }
-          ).HermesInternal
-
-          if (hermesInternal?.getInstrumentedStats == null) {
-            throw new Error('Hermes instrumentation is unavailable!')
-          }
-
-          const size = 1024 * 1024
-          const externalBytesBefore =
-            hermesInternal.getInstrumentedStats().js_externalBytes
+          const size = EXTERNAL_MEMORY_TEST_SIZE
+          const externalBytesBefore = getHermesExternalMemorySize()
           const buffer = NitroModules.createNativeArrayBuffer(size)
-          const externalBytesAfter =
-            hermesInternal.getInstrumentedStats().js_externalBytes
+          const externalBytesAfter = getHermesExternalMemorySize()
 
           if (buffer.byteLength !== size) {
             throw new Error(
@@ -2515,7 +2537,7 @@ export function getTests(
         })
           .didNotThrow()
           .didReturn('number')
-          .equals(1024 * 1024)
+          .equals(EXTERNAL_MEMORY_TEST_SIZE)
     ),
     createTest('NitroModules.buildType holds a string', () =>
       it(() => {

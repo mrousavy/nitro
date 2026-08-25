@@ -23,6 +23,9 @@ class HybridTestObjectCpp : public HybridTestObjectCppSpec {
 public:
   HybridTestObjectCpp() : HybridObject(TAG) {}
 
+protected:
+  size_t getExternalMemorySize() noexcept override;
+
 private:
   double _number;
   bool _bool;
