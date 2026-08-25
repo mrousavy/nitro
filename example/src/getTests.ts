@@ -48,12 +48,21 @@ export interface TestRunner {
 // 2) In JVM, 51_200 is the limit for `jni::global_ref`s, then the app crashes - this intentionally exhausts that
 const MEMORY_LEAK_TEST_ALLOCATION_COUNT = 55_000
 const EXTERNAL_MEMORY_TEST_SIZE = 1024 * 1024
+const EXTERNAL_MEMORY_MEASUREMENT_ATTEMPTS = 5
 
 type HermesInternal = {
-  getInstrumentedStats?: () => { js_externalBytes: number }
+  getInstrumentedStats?: () => {
+    js_externalBytes?: number
+    js_numGCs?: number
+  }
 }
 
-function getHermesExternalMemorySize(): number {
+type HermesInstrumentedStats = {
+  externalMemorySize: number
+  garbageCollectionCount: number
+}
+
+function getHermesInstrumentedStats(): HermesInstrumentedStats {
   const hermesInternal = (
     globalThis as typeof globalThis & { HermesInternal?: HermesInternal }
   ).HermesInternal
@@ -62,7 +71,58 @@ function getHermesExternalMemorySize(): number {
     throw new Error('Hermes instrumentation is unavailable!')
   }
 
-  return hermesInternal.getInstrumentedStats().js_externalBytes
+  const stats = hermesInternal.getInstrumentedStats()
+  if (
+    typeof stats.js_externalBytes !== 'number' ||
+    typeof stats.js_numGCs !== 'number'
+  ) {
+    throw new Error(
+      'Hermes external-memory or garbage-collection instrumentation is unavailable!'
+    )
+  }
+
+  return {
+    externalMemorySize: stats.js_externalBytes,
+    garbageCollectionCount: stats.js_numGCs,
+  }
+}
+
+function measureHermesExternalMemoryPressure(
+  expectedSize: number,
+  prepare: () => void,
+  reportMemoryPressure: () => void
+): number {
+  const samples: Array<string> = []
+
+  // This is a process-wide counter, so a GC may subtract unrelated external
+  // memory between our snapshots. Repeat the isolated measurement instead of
+  // treating that unrelated collection as a Nitro accounting failure.
+  for (
+    let attempt = 0;
+    attempt < EXTERNAL_MEMORY_MEASUREMENT_ATTEMPTS;
+    attempt++
+  ) {
+    prepare()
+    const before = getHermesInstrumentedStats()
+    reportMemoryPressure()
+    const after = getHermesInstrumentedStats()
+    const externalMemoryDelta =
+      after.externalMemorySize - before.externalMemorySize
+    const garbageCollections =
+      after.garbageCollectionCount - before.garbageCollectionCount
+
+    if (externalMemoryDelta === expectedSize) {
+      return externalMemoryDelta
+    }
+
+    samples.push(
+      `${externalMemoryDelta} bytes with ${garbageCollections} garbage collections`
+    )
+  }
+
+  throw new Error(
+    `Hermes did not report the expected ${expectedSize} bytes of external memory pressure after ${EXTERNAL_MEMORY_MEASUREMENT_ATTEMPTS} attempts. Samples: ${samples.join(', ')}`
+  )
 }
 
 /**
@@ -2487,17 +2547,18 @@ export function getTests(
       () =>
         it(() => {
           const originalString = testObject.stringValue
+          const externalString = 'x'.repeat(EXTERNAL_MEMORY_TEST_SIZE)
 
           try {
-            testObject.stringValue = ''
-            NitroModules.updateMemorySize(testObject)
-
-            testObject.stringValue = 'x'.repeat(EXTERNAL_MEMORY_TEST_SIZE)
-            const externalBytesBefore = getHermesExternalMemorySize()
-            NitroModules.updateMemorySize(testObject)
-            const externalBytesAfter = getHermesExternalMemorySize()
-
-            return externalBytesAfter - externalBytesBefore
+            return measureHermesExternalMemoryPressure(
+              EXTERNAL_MEMORY_TEST_SIZE,
+              () => {
+                testObject.stringValue = ''
+                NitroModules.updateMemorySize(testObject)
+                testObject.stringValue = externalString
+              },
+              () => NitroModules.updateMemorySize(testObject)
+            )
           } finally {
             testObject.stringValue = originalString
             NitroModules.updateMemorySize(testObject)
@@ -2523,17 +2584,22 @@ export function getTests(
       () =>
         it(() => {
           const size = EXTERNAL_MEMORY_TEST_SIZE
-          const externalBytesBefore = getHermesExternalMemorySize()
-          const buffer = NitroModules.createNativeArrayBuffer(size)
-          const externalBytesAfter = getHermesExternalMemorySize()
+          const retainedBuffers: Array<ArrayBuffer> = []
 
-          if (buffer.byteLength !== size) {
-            throw new Error(
-              `Expected a ${size}-byte ArrayBuffer, but received ${buffer.byteLength} bytes!`
-            )
-          }
+          return measureHermesExternalMemoryPressure(
+            size,
+            () => {},
+            () => {
+              const buffer = NitroModules.createNativeArrayBuffer(size)
+              retainedBuffers.push(buffer)
 
-          return externalBytesAfter - externalBytesBefore
+              if (buffer.byteLength !== size) {
+                throw new Error(
+                  `Expected a ${size}-byte ArrayBuffer, but received ${buffer.byteLength} bytes!`
+                )
+              }
+            }
+          )
         })
           .didNotThrow()
           .didReturn('number')
