@@ -11,6 +11,7 @@ import UIKit
 class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   // UIView
   var view: UIView = UIView()
+  private let lifecycleLock = NSLock()
   private var isRecycled = false
   private var invalidLifecycleOrderCount: Double = 0
   private var onDropViewCount: Double = 0
@@ -37,20 +38,22 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
   }
 
   func onDropView() {
-    onDropViewCount += 1
     print("View dropped!")
+    withLifecycleLock {
+      onDropViewCount += 1
+    }
   }
 
   func getOnDropViewCount() throws -> Double {
-    return onDropViewCount
+    return withLifecycleLock { onDropViewCount }
   }
 
   func getInvalidLifecycleOrderCount() throws -> Double {
-    return invalidLifecycleOrderCount
+    return withLifecycleLock { invalidLifecycleOrderCount }
   }
 
   func getPrepareForRecycleCount() throws -> Double {
-    return prepareForRecycleCount
+    return withLifecycleLock { prepareForRecycleCount }
   }
 
   func getNativeDefaultValueSetterCallCount() throws -> Double {
@@ -63,13 +66,22 @@ class HybridRecyclableTestView: HybridRecyclableTestViewSpec, RecyclableView {
 
   // Recycling conformance
   func prepareForRecycle() {
-    if onDropViewCount != prepareForRecycleCount + 1 {
-      invalidLifecycleOrderCount += 1
-    }
-    prepareForRecycleCount += 1
     nativeDefaultValueStorage = 42
     nativeDefaultValueSetterCallCount = 0
     view.backgroundColor = .yellow
     isRecycled = true
+
+    withLifecycleLock {
+      if onDropViewCount != prepareForRecycleCount + 1 {
+        invalidLifecycleOrderCount += 1
+      }
+      prepareForRecycleCount += 1
+    }
+  }
+
+  private func withLifecycleLock<Result>(_ operation: () throws -> Result) rethrows -> Result {
+    lifecycleLock.lock()
+    defer { lifecycleLock.unlock() }
+    return try operation()
   }
 }

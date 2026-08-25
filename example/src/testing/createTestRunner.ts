@@ -32,21 +32,24 @@ function timeoutedPromise<T>(
 }
 
 export interface TestRunner {
-  it<T>(action: () => Promise<T>): Promise<State<T>>
-  it<T>(action: () => T): State<T>
+  it<T>(action: () => Promise<T>, timeout?: number): Promise<State<T>>
+  it<T>(action: () => T, timeout?: number): State<T>
 }
 
 /**
  * Creates a test runner with the provided assertion backend.
  */
 export function createTestRunner(backend: AssertionBackend): TestRunner {
-  function it<T>(action: () => Promise<T>): Promise<State<T>>
-  function it<T>(action: () => T): State<T>
-  function it<T>(action: () => T | Promise<T>): State<T> | Promise<State<T>> {
+  function it<T>(action: () => Promise<T>, timeout?: number): Promise<State<T>>
+  function it<T>(action: () => T, timeout?: number): State<T>
+  function it<T>(
+    action: () => T | Promise<T>,
+    timeout?: number
+  ): State<T> | Promise<State<T>> {
     try {
       const syncResult = action()
       if (syncResult instanceof Promise) {
-        const wrapped = timeoutedPromise<T>(syncResult)
+        const wrapped = timeoutedPromise<T>(syncResult, timeout)
         return wrapped
           .then((asyncResult) => new State<T>(asyncResult, undefined, backend))
           .catch((error) => new State<T>(undefined, error, backend))

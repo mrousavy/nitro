@@ -8,9 +8,8 @@ on:
   workflow_dispatch:
     inputs:
       device_api_level:
-        description: "Android API level for the emulator"
+        description: "Override the Android API level for both jobs"
         required: false
-        default: "36"
         type: string
       device_profile:
         description: "Device profile"
@@ -18,9 +17,8 @@ on:
         default: "pixel_7"
         type: string
       avd_name:
-        description: "AVD name"
+        description: "Override the AVD name for both jobs"
         required: false
-        default: "Pixel_7_API_36"
         type: string
   push:
     branches:
@@ -70,11 +68,8 @@ on:
       - "example/rn-harness.config.mjs"
 
 env:
-  # Device configuration - can be overridden by workflow_dispatch inputs
-  DEVICE_API_LEVEL: ${{ github.event.inputs.device_api_level || '36' }}
   DEVICE_ARCH: x86_64
   DEVICE_PROFILE: ${{ github.event.inputs.device_profile || 'pixel_7' }}
-  AVD_NAME: ${{ github.event.inputs.avd_name || 'Pixel_7_API_36' }}
   AVD_DISK_SIZE: 1G
   AVD_HEAP_SIZE: 1G
 
@@ -90,8 +85,18 @@ jobs:
         sanitizer:
           - name: Default
             gradle_property: ""
+            device_api_level: "36"
+            avd_name: Pixel_7_API_36
           - name: ASan
             gradle_property: "address"
+            # API 33 and NDK r29 contain both sides of the legacy x86_64 ASan
+            # seccomp fix. Later Android versions have flaky app_process startup.
+            device_api_level: "33"
+            avd_name: Pixel_7_API_33
+    env:
+      DEVICE_API_LEVEL: ${{ github.event.inputs.device_api_level || matrix.sanitizer.device_api_level }}
+      AVD_NAME: ${{ github.event.inputs.avd_name || matrix.sanitizer.avd_name }}
+      HARNESS_TEST_TIMEOUT: 150000
     steps:
       - uses: actions/checkout@v7
         with:

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.uimanager.ThemedReactContext
+import java.util.concurrent.atomic.AtomicInteger
 
 @Keep
 @DoNotStrip
@@ -13,7 +14,7 @@ class HybridTestView(
 ) : HybridTestViewSpec() {
   // View
   override val view: View = View(context)
-  private var onDropViewCount = 0.0
+  private val onDropViewCount = AtomicInteger()
   private var isBlueSetterCallCount = 0.0
   private var nativeDefaultValueSetterCallCount = 0.0
 
@@ -35,7 +36,7 @@ class HybridTestView(
     }
 
   // Methods
-  override fun getOnDropViewCount(): Double = onDropViewCount
+  override fun getOnDropViewCount(): Double = onDropViewCount.get().toDouble()
 
   override fun getIsBlueSetterCallCount(): Double = isBlueSetterCallCount
 
@@ -47,6 +48,6 @@ class HybridTestView(
   }
 
   override fun onDropView() {
-    onDropViewCount += 1
+    onDropViewCount.incrementAndGet()
   }
 }
