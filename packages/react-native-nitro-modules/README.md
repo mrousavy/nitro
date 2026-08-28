@@ -154,7 +154,7 @@ The following C++ / JS types are supported out of the box:
   <tr>
     <td><code>[A, B, C, ...]</code></td>
     <td><code>std::tuple&lt;A, B, C, ...&gt;</code></td>
-    <td><code>(A, B, C)</code> 🟡  (<a href="https://github.com/mrousavy/nitro/issues/38">#38</a>)</td>
+    <td><code>(A, B, C)</code> 🟡  (<a href="https://github.com/margelo/nitro/issues/38">#38</a>)</td>
     <td>❌</td>
   </tr>
   <tr>

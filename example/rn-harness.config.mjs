@@ -28,7 +28,7 @@ const config = {
     applePlatform({
       name: 'ios',
       device: appleSimulator(process.env.DEVICE_MODEL, process.env.IOS_VERSION),
-      bundleId: 'com.mrousavy.nitro.example',
+      bundleId: 'com.margelo.nitro.example',
     }),
   ],
   defaultRunner: 'android',

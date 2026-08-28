@@ -37,9 +37,9 @@ A curated collection of community-built Nitro Modules, including production Reac
 
 | Module | Description | Links |
 |--------|-------------|-------|
-| **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/mrousavy/react-native-vision-camera) |
+| **react-native-vision-camera** | High-performance camera library | [GitHub](https://github.com/margelo/react-native-vision-camera) |
 | **react-native-data-scanner** | One-shot QR/barcode/data scanning | [GitHub](https://github.com/mrousavy/react-native-data-scanner) |
-| **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/mrousavy/react-native-fast-tflite) |
+| **react-native-fast-tflite** | Fast TensorFlow Lite bindings | [GitHub](https://github.com/margelo/react-native-fast-tflite) |
 
 ### Animation & Graphics
 
@@ -81,7 +81,7 @@ A curated collection of community-built Nitro Modules, including production Reac
 | **react-native-nitro-fs** | High-performance file system operations | [GitHub](https://github.com/patrickkabwe/react-native-nitro-fs) |
 | **react-native-nitro-file-system** | Node.js-compatible `fs` with zero-copy binary data | [GitHub](https://github.com/iwater/react-native-nitro-file-system) |
 | **react-native-nitro-sqlite** | Fast SQLite database | [GitHub](https://github.com/margelo/react-native-nitro-sqlite) |
-| **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/mrousavy/react-native-mmkv) |
+| **react-native-mmkv** | Fast key-value storage (MMKV) | [GitHub](https://github.com/margelo/react-native-mmkv) |
 | **react-native-superconfig** | Superfast typesafe config library | [GitHub](https://github.com/riteshshukla04/react-native-superconfig) |
 
 ### Networking
