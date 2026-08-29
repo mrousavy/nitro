@@ -22,7 +22,9 @@
     "ios/**/*.swift",
     "app.plugin.js",
     "*.podspec",
-    "README.md"
+    "README.md",
+    "Package.swift",
+    "nitrogen/"
   ],
   "keywords": [
     "react-native",
@@ -60,9 +62,9 @@
     "@types/react": "^19.2.15",
     "jest": "*",
     "nitrogen": "*",
-    "@react-native/jest-preset": "0.85.3",
+    "@react-native/jest-preset": "0.87.0",
     "react": "19.2.3",
-    "react-native": "0.85.3",
+    "react-native": "0.87.0",
     "react-native-nitro-modules": "*",
     "react-native-nitro-test-external": "*"
   },

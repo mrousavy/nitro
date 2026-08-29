@@ -15,10 +15,20 @@ const ANDROID_BASE_NAMESPACE = ['com', 'margelo', 'nitro']
  */
 export class NitroConfig {
   private readonly config: NitroUserConfig
+  private readonly packageRoot: string
   private static singleton: NitroConfig | undefined
 
-  constructor(config: NitroUserConfig) {
+  constructor(config: NitroUserConfig, packageRoot: string = process.cwd()) {
     this.config = config
+    this.packageRoot = packageRoot
+  }
+
+  /**
+   * The directory this config's `nitro.json` lives in — i.e. the module's
+   * package root. Used to resolve sibling modules' `package.json`.
+   */
+  getPackageRoot(): string {
+    return this.packageRoot
   }
 
   static get current(): NitroConfig {

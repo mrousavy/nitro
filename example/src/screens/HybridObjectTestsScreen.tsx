@@ -17,12 +17,21 @@ import {
 } from 'react-native-nitro-test'
 import { getTests, type TestRunner } from '../getTests'
 import { logPrototypeChain } from '../logPrototypeChain'
-import SegmentedControl from '@react-native-segmented-control/segmented-control'
+import SegmentedControlNative, {
+  type SegmentedControlProps,
+} from '@react-native-segmented-control/segmented-control'
 import { NitroModules } from 'react-native-nitro-modules'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useColors } from '../useColors'
 import { TestCase, TestState } from '../components/TestCase'
 import { KeyboardDismissBackground } from '../components/KeyboardDismissBackground'
+
+// react-native 0.87 dropped `NativeMethods` from its public types, which breaks
+// this (unmaintained) package's `Constructor<NativeMethods> & typeof Component`
+// intersection — the resulting class loses its `props`. Its own props type is
+// unaffected, so re-type the default export as a plain component.
+const SegmentedControl =
+  SegmentedControlNative as unknown as React.ComponentType<SegmentedControlProps>
 
 logPrototypeChain(HybridChild)
 console.log(HybridBase.baseValue)
