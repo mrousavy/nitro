@@ -17,6 +17,8 @@ export interface TestViewMethods extends HybridViewMethods {
   getOnDropViewCount(): number
   getIsBlueSetterCallCount(): number
   getNativeDefaultValueSetterCallCount(): number
+  getBeforeUpdateCount(): number
+  getAfterUpdateCount(): number
   someMethod(): void
 }
 

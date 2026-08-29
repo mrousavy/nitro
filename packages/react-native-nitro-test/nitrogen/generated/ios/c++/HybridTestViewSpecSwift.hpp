@@ -125,6 +125,22 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline double getBeforeUpdateCount() override {
+      auto __result = _swiftPart.getBeforeUpdateCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline double getAfterUpdateCount() override {
+      auto __result = _swiftPart.getAfterUpdateCount();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline void someMethod() override {
       auto __result = _swiftPart.someMethod();
       if (__result.hasError()) [[unlikely]] {

@@ -117,6 +117,16 @@ namespace margelo::nitro::test {
     auto __result = method(_javaPart);
     return __result;
   }
+  double JHybridTestViewSpec::getBeforeUpdateCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getBeforeUpdateCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
+  double JHybridTestViewSpec::getAfterUpdateCount() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<double()>("getAfterUpdateCount");
+    auto __result = method(_javaPart);
+    return __result;
+  }
   void JHybridTestViewSpec::someMethod() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<void()>("someMethod");
     method(_javaPart);

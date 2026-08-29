@@ -16,6 +16,8 @@ class HybridTestView(
   private var onDropViewCount = 0.0
   private var isBlueSetterCallCount = 0.0
   private var nativeDefaultValueSetterCallCount = 0.0
+  private var beforeUpdateCount = 0.0
+  private var afterUpdateCount = 0.0
 
   // Props
   override var isBlue: Boolean = false
@@ -40,6 +42,18 @@ class HybridTestView(
   override fun getIsBlueSetterCallCount(): Double = isBlueSetterCallCount
 
   override fun getNativeDefaultValueSetterCallCount(): Double = nativeDefaultValueSetterCallCount
+
+  override fun getBeforeUpdateCount(): Double = beforeUpdateCount
+
+  override fun getAfterUpdateCount(): Double = afterUpdateCount
+
+  override fun beforeUpdate() {
+    beforeUpdateCount += 1
+  }
+
+  override fun afterUpdate() {
+    afterUpdateCount += 1
+  }
 
   override fun someMethod() {
     hasBeenCalled = true
