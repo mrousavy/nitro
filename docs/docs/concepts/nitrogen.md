@@ -165,7 +165,7 @@ All the generated sources (`./nitrogen/generated/`) need to be part of your libr
 <Tabs>
   <TabItem value="template" label="With the Nitro template">
 
-  If you created a library using the [Nitro Module template](https://github.com/mrousavy/nitro/tree/main/packages/template), your library already includes nitrogen's generated sources.
+  If you created a library using the [Nitro Module template](https://github.com/margelo/nitro/tree/main/packages/template), your library already includes nitrogen's generated sources.
 
   </TabItem>
   <TabItem value="manually" label="Manually">
@@ -295,7 +295,7 @@ Make sure `HybridMath` is default-constructible and scoped inside the correct na
 <Tabs>
   <TabItem value="template" label="With the Nitro template">
 
-  If you created a library using the [Nitro Module template](https://github.com/mrousavy/nitro/tree/main/packages/template), your library already initializes the C++ autolinking process from your `*Package.kt` and `OnLoad.cpp` files.
+  If you created a library using the [Nitro Module template](https://github.com/margelo/nitro/tree/main/packages/template), your library already initializes the C++ autolinking process from your `*Package.kt` and `OnLoad.cpp` files.
 
   </TabItem>
   <TabItem value="manually" label="Manually">
