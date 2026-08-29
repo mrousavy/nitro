@@ -21,12 +21,28 @@ class CallInvokerDispatcher final : public Dispatcher {
 public:
   explicit CallInvokerDispatcher(std::shared_ptr<react::CallInvoker> callInvoker) : _callInvoker(callInvoker) {}
 
-  void runAsync(std::function<void()>&& function) override {
-    _callInvoker->invokeAsync(std::move(function));
+  void runAsync(Priority priority, std::function<void()>&& function) override {
+    _callInvoker->invokeAsync(nitroPriorityToReactPriority(priority), [function = std::move(function)](jsi::Runtime&) { function(); });
   }
 
   void runSync(std::function<void()>&& function) override {
-    _callInvoker->invokeSync(std::move(function));
+    _callInvoker->invokeSync([function = std::move(function)](jsi::Runtime&) { function(); });
+  }
+
+private:
+  static react::SchedulerPriority nitroPriorityToReactPriority(Dispatcher::Priority priority) {
+    switch (priority) {
+      case Dispatcher::Priority::ImmediatePriority:
+        return react::SchedulerPriority::ImmediatePriority;
+      case Dispatcher::Priority::UserBlockingPriority:
+        return react::SchedulerPriority::UserBlockingPriority;
+      case Dispatcher::Priority::NormalPriority:
+        return react::SchedulerPriority::NormalPriority;
+      case Dispatcher::Priority::LowPriority:
+        return react::SchedulerPriority::LowPriority;
+      case Dispatcher::Priority::IdlePriority:
+        return react::SchedulerPriority::IdlePriority;
+    }
   }
 
 private:

@@ -13,6 +13,7 @@ struct JSIConverter;
 } // namespace margelo::nitro
 
 #include "BorrowingReference.hpp"
+#include "Dispatcher.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
@@ -74,8 +75,8 @@ class AsyncJSCallback;
 template <typename R, typename... Args>
 class AsyncJSCallback<R(Args...)> final {
 public:
-  AsyncJSCallback(SyncJSCallback<R(Args...)>&& callback, const std::weak_ptr<Dispatcher>& dispatcher)
-      : _callback(std::move(callback)), _dispatcher(dispatcher) {}
+  AsyncJSCallback(SyncJSCallback<R(Args...)>&& callback, const std::weak_ptr<Dispatcher>& dispatcher, Dispatcher::Priority priority)
+      : _callback(std::move(callback)), _dispatcher(dispatcher), _priority(priority) {}
 
 public:
   /**
@@ -91,7 +92,7 @@ public:
       std::string typeName = TypeInfo::getFriendlyTypename<AsyncJSCallback<R(Args...)>>(true);
       throw std::runtime_error("Failed to call " + typeName + " - the Dispatcher has already been destroyed!");
     }
-    return dispatcher->runAsyncAwaitable<R>([callback = _callback, ... args = std::forward<Args>(args)]() mutable {
+    return dispatcher->runAsyncAwaitable<R>(_priority, [callback = _callback, ... args = std::forward<Args>(args)]() mutable {
       // Call actual JS callback, synchronously now.
       return callback.call(std::forward<Args>(args)...);
     });
@@ -109,7 +110,7 @@ public:
       Logger::log(LogLevel::Error, "AsyncJSCallback", "Failed to call %s - the Dispatcher has already been destroyed!", typeName.c_str());
       return;
     }
-    dispatcher->runAsync([callback = _callback, ... args = std::forward<Args>(args)]() mutable {
+    dispatcher->runAsync(_priority, [callback = _callback, ... args = std::forward<Args>(args)]() mutable {
       // Call actual JS callback, synchronously now.
       return callback.call(std::forward<Args>(args)...);
     });
@@ -127,6 +128,7 @@ public:
 private:
   SyncJSCallback<R(Args...)> _callback;
   std::weak_ptr<Dispatcher> _dispatcher;
+  Dispatcher::Priority _priority;
 };
 
 } // namespace margelo::nitro
