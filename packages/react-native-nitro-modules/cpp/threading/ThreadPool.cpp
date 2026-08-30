@@ -8,11 +8,19 @@
 #include "ThreadPool.hpp"
 #include "NitroLogger.hpp"
 #include "ThreadUtils.hpp"
+#include <stdexcept>
 
 namespace margelo::nitro {
 
 ThreadPool::ThreadPool(const char* name, size_t initialThreadsCount, size_t maxThreadsCount)
     : _isAlive(true), _threadCountLimit(maxThreadsCount), _name(name) {
+  if (maxThreadsCount == 0) [[unlikely]] {
+    throw std::invalid_argument("ThreadPool must allow at least one worker!");
+  }
+  if (initialThreadsCount > maxThreadsCount) [[unlikely]] {
+    throw std::invalid_argument("ThreadPool initial worker count cannot exceed its maximum worker count!");
+  }
+
   Logger::log(LogLevel::Info, TAG, "Creating ThreadPool \"%s\" with %i initial threads (max: %i)...", name, initialThreadsCount,
               maxThreadsCount);
 
@@ -63,8 +71,8 @@ void ThreadPool::run(std::function<void()>&& task) {
     if (!_isAlive) {
       throw std::runtime_error("Cannot queue the given task - the ThreadPool has already been stopped!");
     }
-    // If there are tasks still waiting to be finished, just start a new Thread.
-    if (!_tasks.empty() && _threadCount < _threadCountLimit) {
+    // Start the first worker lazily, or expand when tasks are already waiting.
+    if ((_threadCount == 0 || !_tasks.empty()) && _threadCount < _threadCountLimit) {
       addThread(lock);
     }
     _tasks.push(std::move(task));

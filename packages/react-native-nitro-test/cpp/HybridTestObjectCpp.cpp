@@ -8,6 +8,7 @@
 #include "HybridTestObjectCpp.hpp"
 #include <NitroModules/AnyMap.hpp>
 #include <NitroModules/NitroLogger.hpp>
+#include <NitroModules/ThreadPool.hpp>
 #include <chrono>
 #include <sstream>
 #include <thread>
@@ -771,6 +772,31 @@ std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> HybridTestObj
   // keeps the resolve()-vs-toJSI window wide so the C++ Promise `_state` race surfaces under TSan.
   return Promise<std::shared_ptr<HybridTestObjectCppSpec>>::async(
       []() -> std::shared_ptr<HybridTestObjectCppSpec> { return std::make_shared<HybridTestObjectCpp>(); });
+}
+
+bool HybridTestObjectCpp::zeroWorkerThreadPoolRunsTasks() {
+  bool didRun = false;
+  {
+    ThreadPool threadPool("zero-worker-test", 0, 1);
+    threadPool.run([&didRun] { didRun = true; });
+  }
+  return didRun;
+}
+
+bool HybridTestObjectCpp::invalidThreadPoolSizesThrow() {
+  try {
+    ThreadPool noCapacity("no-capacity-test", 0, 0);
+    return false;
+  } catch (const std::invalid_argument&) {
+    // Expected.
+  }
+
+  try {
+    ThreadPool tooManyInitialWorkers("too-many-workers-test", 2, 1);
+    return false;
+  } catch (const std::invalid_argument&) {
+    return true;
+  }
 }
 
 jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t count) {

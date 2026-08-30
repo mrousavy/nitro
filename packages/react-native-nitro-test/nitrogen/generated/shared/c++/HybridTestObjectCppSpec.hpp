@@ -169,6 +169,8 @@ namespace margelo::nitro::test {
       virtual std::tuple<double, std::string, bool> passTuple(const std::tuple<double, std::string, bool>& tuple) = 0;
       virtual std::shared_ptr<HybridTestObjectCppSpec> newTestObject() = 0;
       virtual std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> newTestObjectAsync() = 0;
+      virtual bool zeroWorkerThreadPoolRunsTasks() = 0;
+      virtual bool invalidThreadPoolSizesThrow() = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person> getVariantHybrid(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Person>& variant) = 0;
       virtual std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain> getVariantHybridEnum(const std::variant<std::shared_ptr<HybridTestObjectCppSpec>, Powertrain>& variant) = 0;
       virtual std::shared_ptr<HybridObject> bounceAnyHybrid(const std::shared_ptr<HybridObject>& object) = 0;

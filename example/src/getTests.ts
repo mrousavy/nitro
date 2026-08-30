@@ -1554,6 +1554,24 @@ export function getTests(
           .didNotThrow()
           .equals(true)
     ),
+    ...(testObject.name === 'TestObjectCpp'
+      ? [
+          createTest('ThreadPool starts a worker for its first task', () =>
+            it(() =>
+              (testObject as TestObjectCpp).zeroWorkerThreadPoolRunsTasks()
+            )
+              .didNotThrow()
+              .equals(true)
+          ),
+          createTest('ThreadPool rejects invalid worker limits', () =>
+            it(() =>
+              (testObject as TestObjectCpp).invalidThreadPoolSizesThrow()
+            )
+              .didNotThrow()
+              .equals(true)
+          ),
+        ]
+      : []),
     createTest('promiseThatResolvesVoidInstantly() works', async () =>
       (await it(() => testObject.promiseThatResolvesVoidInstantly()))
         .didNotThrow()
