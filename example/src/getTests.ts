@@ -1737,6 +1737,18 @@ export function getTests(
         gc()
       }).didNotThrow()
     ),
+    createTest('HybridObject methods throw after dispose()', () =>
+      it(() => {
+        const object = testObject.newTestObject()
+        object.dispose()
+        object.toString()
+      }).didThrow('did you accidentally call `dispose()` on this object?')
+    ),
+    createTest('HybridObject methods reject the wrong receiver', () =>
+      it(() => testObject.simpleFunc.call(HybridPlatformObject)).didThrow(
+        "`this` has a NativeState, but it's the wrong type!"
+      )
+    ),
     createTest('callWithOptional(undefined)', async () =>
       (
         await it<number | undefined>(() => {
