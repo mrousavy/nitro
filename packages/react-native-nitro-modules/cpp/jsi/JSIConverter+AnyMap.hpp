@@ -58,9 +58,8 @@ struct JSIConverter<std::shared_ptr<AnyMap>> final {
   static inline jsi::Value toJSI(jsi::Runtime& runtime, std::shared_ptr<AnyMap> map) {
     jsi::Object object(runtime);
     for (const auto& item : map->getMap()) {
-      jsi::String key = jsi::String::createFromUtf8(runtime, item.first);
       jsi::Value value = JSIConverter<AnyValue>::toJSI(runtime, item.second);
-      object.setProperty(runtime, std::move(key), std::move(value));
+      setRecordProperty(runtime, object, item.first, std::move(value));
     }
     return object;
   }

@@ -960,6 +960,19 @@ export function getTests(
         .didNotThrow()
         .equals(TEST_MAP_4)
     ),
+    createTest('copyAnyMap(...) preserves __proto__ keys', () =>
+      it(() => {
+        const map = { ['__proto__']: { value: 'kept' } }
+        const copy = testObject.copyAnyMap(map)
+        return [
+          Object.prototype.hasOwnProperty.call(copy, '__proto__'),
+          Reflect.get(copy, '__proto__'),
+          Object.getPrototypeOf(copy) === Object.prototype,
+        ]
+      })
+        .didNotThrow()
+        .equals([true, { value: 'kept' }, true])
+    ),
 
     // Test errors
     createTest('funcThatThrows() throws', () =>
@@ -1453,6 +1466,19 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
         .equals(TEST_MAP_3)
+    ),
+    createTest('bounceSimpleMap(map) preserves __proto__ keys', () =>
+      it(() => {
+        const map = { ['__proto__']: 42 }
+        const copy = testObject.bounceSimpleMap(map)
+        return [
+          Object.prototype.hasOwnProperty.call(copy, '__proto__'),
+          Reflect.get(copy, '__proto__'),
+          Object.getPrototypeOf(copy) === Object.prototype,
+        ]
+      })
+        .didNotThrow()
+        .equals([true, 42, true])
     ),
     createTest('bounceOptionalMap(map) keeps undefined values', () =>
       it(() => testObject.bounceOptionalMap({ a: 'b', c: undefined }))

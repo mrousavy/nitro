@@ -7,8 +7,12 @@
 
 #pragma once
 
+#include "CommonGlobals.hpp"
+#include "PropNameIDCache.hpp"
 #include "ThreadUtils.hpp"
 #include <jsi/jsi.h>
+#include <string>
+#include <utility>
 
 namespace margelo::nitro {
 
@@ -36,6 +40,20 @@ static inline bool isPlainObject(jsi::Runtime& runtime, const jsi::Object& objec
     return false;
   }
   return true;
+}
+
+/**
+ * Sets an own property while preserving `__proto__` as record data instead of
+ * invoking Object.prototype's legacy prototype setter.
+ */
+static inline void setRecordProperty(jsi::Runtime& runtime, const jsi::Object& object, const std::string& key, jsi::Value&& value) {
+  if (key == "__proto__") [[unlikely]] {
+    CommonGlobals::Object::defineProperty(
+        runtime, object, key.c_str(),
+        PlainPropertyDescriptor{.configurable = true, .enumerable = true, .value = std::move(value), .writable = true});
+  } else {
+    object.setProperty(runtime, PropNameIDCache::get(runtime, key), std::move(value));
+  }
 }
 
 /**
