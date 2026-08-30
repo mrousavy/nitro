@@ -37,6 +37,9 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<margelo::nitro::test::OldEnum> final {
     static inline margelo::nitro::test::OldEnum fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      if (!canConvert(runtime, arg)) [[unlikely]] {
+        throw std::invalid_argument("Cannot convert JS value to OldEnum - expected one of [0, 1, 2]!");
+      }
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<margelo::nitro::test::OldEnum>(enumValue);
     }
@@ -49,6 +52,10 @@ namespace margelo::nitro {
         return false;
       }
       double number = value.getNumber();
+      if (number != number || number < 0 || number > 2) {
+        // Reject NaN and values outside the enum's bounds before converting to int.
+        return false;
+      }
       int integer = static_cast<int>(number);
       if (number != integer) {
         // The integer is not the same value as the double - we truncated floating points.

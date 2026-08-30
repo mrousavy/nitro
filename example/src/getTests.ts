@@ -521,6 +521,22 @@ export function getTests(
         .didReturn(typeof OldEnum.SECOND)
         .equals(OldEnum.SECOND)
     ),
+    createTest('set optionalOldEnum rejects invalid numbers', () =>
+      it(() => {
+        const invalidValues = [9999, 1.5, NaN, Infinity, -Infinity]
+        let rejectedValues = 0
+        for (const value of invalidValues) {
+          try {
+            testObject.optionalOldEnum = value as OldEnum
+          } catch {
+            rejectedValues++
+          }
+        }
+        return rejectedValues
+      })
+        .didNotThrow()
+        .equals(5)
+    ),
     createTest('get hasBoolean', () =>
       it(() => {
         return testObject.hasBoolean

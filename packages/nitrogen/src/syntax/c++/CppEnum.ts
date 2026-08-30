@@ -45,12 +45,13 @@ export function createCppEnum(
     )
     .join('\n')
   const cxxNamespace = NitroConfig.current.getCxxNamespace('c++')
+  const validValues = enumMembers.map((member) => member.value).join(', ')
+  const minValue = getEnumMinValue(enumMembers)
+  const maxValue = getEnumMaxValue(enumMembers)
 
   let isInsideValidValues: string | undefined
   if (isIncrementingEnum(enumMembers)) {
     // It's just incrementing one after another, so we can simplify this to a bounds check
-    const minValue = getEnumMinValue(enumMembers)
-    const maxValue = getEnumMaxValue(enumMembers)
     isInsideValidValues = `
 // Check if we are within the bounds of the enum.
 return integer >= ${minValue} && integer <= ${maxValue};
@@ -93,6 +94,9 @@ namespace margelo::nitro {
   template <>
   struct JSIConverter<${fullyQualifiedTypename}> final {
     static inline ${fullyQualifiedTypename} fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
+      if (!canConvert(runtime, arg)) [[unlikely]] {
+        throw std::invalid_argument("Cannot convert JS value to ${typename} - expected one of [${validValues}]!");
+      }
       int enumValue = JSIConverter<int>::fromJSI(runtime, arg);
       return static_cast<${fullyQualifiedTypename}>(enumValue);
     }
@@ -105,6 +109,10 @@ namespace margelo::nitro {
         return false;
       }
       double number = value.getNumber();
+      if (number != number || number < ${minValue} || number > ${maxValue}) {
+        // Reject NaN and values outside the enum's bounds before converting to int.
+        return false;
+      }
       int integer = static_cast<int>(number);
       if (number != integer) {
         // The integer is not the same value as the double - we truncated floating points.
