@@ -9,6 +9,8 @@
 #include "HybridObjectRegistry.hpp"
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
+#include <cmath>
+#include <limits>
 
 namespace margelo::nitro {
 
@@ -80,6 +82,10 @@ std::shared_ptr<HybridObject> HybridNitroModulesProxy::updateMemorySize(const st
 }
 
 std::shared_ptr<ArrayBuffer> HybridNitroModulesProxy::createNativeArrayBuffer(double size) {
+  if (!std::isfinite(size) || size < 0 || static_cast<long double>(size) > static_cast<long double>(std::numeric_limits<size_t>::max()))
+      [[unlikely]] {
+    throw std::invalid_argument("ArrayBuffer size must be a finite, non-negative number within the platform size limit!");
+  }
   return ArrayBuffer::allocate(static_cast<size_t>(size));
 }
 

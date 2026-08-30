@@ -2539,6 +2539,21 @@ export function getTests(
           .didReturn('number')
           .equals(EXTERNAL_MEMORY_TEST_SIZE)
     ),
+    createTest('createNativeArrayBuffer rejects negative sizes', () =>
+      it(() => NitroModules.createNativeArrayBuffer(-1)).didThrow(
+        'ArrayBuffer size must be a finite, non-negative number'
+      )
+    ),
+    createTest('createNativeArrayBuffer rejects infinite sizes', () =>
+      it(() => NitroModules.createNativeArrayBuffer(Infinity)).didThrow(
+        'ArrayBuffer size must be a finite, non-negative number'
+      )
+    ),
+    createTest('createNativeArrayBuffer rejects oversized values', () =>
+      it(() => NitroModules.createNativeArrayBuffer(Number.MAX_VALUE)).didThrow(
+        'ArrayBuffer size must be a finite, non-negative number'
+      )
+    ),
     createTest('NitroModules.buildType holds a string', () =>
       it(() => {
         return NitroModules.buildType
