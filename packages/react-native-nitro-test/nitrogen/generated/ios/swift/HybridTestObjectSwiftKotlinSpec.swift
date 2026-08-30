@@ -86,6 +86,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func promiseReturnsInstantlyAsync() throws -> Promise<Double>
   func promiseThatResolvesVoidInstantly() throws -> Promise<Void>
   func promiseThatResolvesToUndefined() throws -> Promise<Double?>
+  func awaitNullablePromise() throws -> Promise<Double?>
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double>
   func awaitAndGetComplexPromise(promise: Promise<Car>) throws -> Promise<Car>
   func awaitPromise(promise: Promise<Void>) throws -> Promise<Void>

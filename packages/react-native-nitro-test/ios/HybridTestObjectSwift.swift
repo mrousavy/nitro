@@ -472,6 +472,12 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
     return Promise.resolved(withResult: nil)
   }
 
+  func awaitNullablePromise() throws -> Promise<Double?> {
+    return Promise.async {
+      try await Promise<Double?>.resolved(withResult: nil).await()
+    }
+  }
+
   func awaitAndGetPromise(promise: Promise<Double>) throws -> Promise<Double> {
     return .async {
       let result = try await promise.await()

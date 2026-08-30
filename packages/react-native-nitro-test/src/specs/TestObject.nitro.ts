@@ -248,6 +248,7 @@ interface SharedTestObjectProps {
   promiseReturnsInstantlyAsync(): Promise<number>
   promiseThatResolvesVoidInstantly(): Promise<void>
   promiseThatResolvesToUndefined(): Promise<number | undefined>
+  awaitNullablePromise(): Promise<number | undefined>
 
   // Complex Promises
   awaitAndGetPromise(promise: Promise<number>): Promise<number>

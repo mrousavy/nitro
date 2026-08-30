@@ -324,6 +324,12 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
     return Promise.resolved(null)
   }
 
+  override fun awaitNullablePromise(): Promise<Double?> {
+    return Promise.async {
+      Promise.resolved<Double?>(null).await()
+    }
+  }
+
   override fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double> {
     return Promise.async {
       val result = promise.await()

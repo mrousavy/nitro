@@ -680,6 +680,14 @@ namespace margelo::nitro::test {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<Promise<std::optional<double>>> awaitNullablePromise() override {
+      auto __result = _swiftPart.awaitNullablePromise();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<Promise<double>> awaitAndGetPromise(const std::shared_ptr<Promise<double>>& promise) override {
       auto __result = _swiftPart.awaitAndGetPromise(promise);
       if (__result.hasError()) [[unlikely]] {

@@ -85,7 +85,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
 
-  
+
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -131,7 +131,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-  
+
   public final var optionalHybrid: bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
     @inline(__always)
     get {
@@ -1607,7 +1607,32 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_std__optional_double____(__exceptionPtr)
     }
   }
-  
+
+  @inline(__always)
+  public final func awaitNullablePromise() -> bridge.Result_std__shared_ptr_Promise_std__optional_double____ {
+    do {
+      let __result = try self.__implementation.awaitNullablePromise()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_std__optional_double___ in
+        let __promise = bridge.create_std__shared_ptr_Promise_std__optional_double___()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_std__optional_double___(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve({ () -> bridge.std__optional_double_ in
+              if let __unwrappedValue = __result {
+                return bridge.create_std__optional_double_(__unwrappedValue)
+              } else {
+                return .init()
+              }
+            }()) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_std__optional_double____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_std__optional_double____(__exceptionPtr)
+    }
+  }
+
   @inline(__always)
   public final func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
