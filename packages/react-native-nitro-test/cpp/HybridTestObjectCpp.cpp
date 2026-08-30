@@ -773,6 +773,22 @@ std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> HybridTestObj
       []() -> std::shared_ptr<HybridTestObjectCppSpec> { return std::make_shared<HybridTestObjectCpp>(); });
 }
 
+bool HybridTestObjectCpp::settledPromiseReleasesOppositeListeners() {
+  auto resolved = Promise<double>::resolved(1.0);
+  auto rejectedCapture = std::make_shared<int>(1);
+  std::weak_ptr<int> rejectedWeak = rejectedCapture;
+  resolved->addOnRejectedListener([capture = rejectedCapture](const std::exception_ptr&) { (void)capture; });
+  rejectedCapture.reset();
+
+  auto rejected = Promise<void>::rejected(std::make_exception_ptr(std::runtime_error("rejected")));
+  auto resolvedCapture = std::make_shared<int>(1);
+  std::weak_ptr<int> resolvedWeak = resolvedCapture;
+  rejected->addOnResolvedListener([capture = resolvedCapture]() { (void)capture; });
+  resolvedCapture.reset();
+
+  return rejectedWeak.expired() && resolvedWeak.expired();
+}
+
 jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t count) {
   jsi::Array array(runtime, count);
   for (size_t i = 0; i < count; i++) {

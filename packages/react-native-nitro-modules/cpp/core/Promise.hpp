@@ -168,7 +168,7 @@ public:
       lock.unlock();
       // Promise is already resolved! Call the callback immediately
       onResolved(result);
-    } else {
+    } else if (isPending(lock)) {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(std::move(onResolved));
     }
@@ -180,7 +180,7 @@ public:
       lock.unlock();
       // Promise is already resolved! Call the callback immediately
       onResolved(result);
-    } else {
+    } else if (isPending(lock)) {
       // Promise is not yet resolved, put the listener in our queue.
       _onResolvedListeners.push_back(onResolved);
     }
@@ -197,7 +197,7 @@ public:
       lock.unlock();
       // Promise is already rejected! Call the callback immediately
       onRejected(error);
-    } else {
+    } else if (isPending(lock)) {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(std::move(onRejected));
     }
@@ -209,7 +209,7 @@ public:
       lock.unlock();
       // Promise is already rejected! Call the callback immediately
       onRejected(error);
-    } else {
+    } else if (isPending(lock)) {
       // Promise is not yet rejected, put the listener in our queue.
       _onRejectedListeners.push_back(onRejected);
     }

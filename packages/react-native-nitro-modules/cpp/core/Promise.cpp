@@ -94,7 +94,7 @@ void Promise<void>::addOnResolvedListener(OnResolvedFunc&& onResolved) {
   if (isResolved(lock)) {
     lock.unlock();
     onResolved();
-  } else {
+  } else if (isPending(lock)) {
     _onResolvedListeners.push_back(std::move(onResolved));
   }
 }
@@ -103,7 +103,7 @@ void Promise<void>::addOnResolvedListener(const OnResolvedFunc& onResolved) {
   if (isResolved(lock)) {
     lock.unlock();
     onResolved();
-  } else {
+  } else if (isPending(lock)) {
     _onResolvedListeners.push_back(onResolved);
   }
 }
@@ -113,7 +113,7 @@ void Promise<void>::addOnRejectedListener(OnRejectedFunc&& onRejected) {
     std::exception_ptr error = _error;
     lock.unlock();
     onRejected(error);
-  } else {
+  } else if (isPending(lock)) {
     // Promise is not yet rejected, put the listener in our queue.
     _onRejectedListeners.push_back(std::move(onRejected));
   }
@@ -124,7 +124,7 @@ void Promise<void>::addOnRejectedListener(const OnRejectedFunc& onRejected) {
     std::exception_ptr error = _error;
     lock.unlock();
     onRejected(error);
-  } else {
+  } else if (isPending(lock)) {
     // Promise is not yet rejected, put the listener in our queue.
     _onRejectedListeners.push_back(onRejected);
   }

@@ -60,6 +60,7 @@ namespace margelo::nitro::test {
       prototype.registerHybridMethod("passTuple", &HybridTestObjectCppSpec::passTuple);
       prototype.registerHybridMethod("newTestObject", &HybridTestObjectCppSpec::newTestObject);
       prototype.registerHybridMethod("newTestObjectAsync", &HybridTestObjectCppSpec::newTestObjectAsync);
+      prototype.registerHybridMethod("settledPromiseReleasesOppositeListeners", &HybridTestObjectCppSpec::settledPromiseReleasesOppositeListeners);
       prototype.registerHybridMethod("getVariantHybrid", &HybridTestObjectCppSpec::getVariantHybrid);
       prototype.registerHybridMethod("getVariantHybridEnum", &HybridTestObjectCppSpec::getVariantHybridEnum);
       prototype.registerHybridMethod("bounceAnyHybrid", &HybridTestObjectCppSpec::bounceAnyHybrid);

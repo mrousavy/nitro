@@ -1554,6 +1554,19 @@ export function getTests(
           .didNotThrow()
           .equals(true)
     ),
+    ...(testObject.name === 'TestObjectCpp'
+      ? [
+          createTest('settled Promises release opposite listeners', () =>
+            it(() =>
+              (
+                testObject as TestObjectCpp
+              ).settledPromiseReleasesOppositeListeners()
+            )
+              .didNotThrow()
+              .equals(true)
+          ),
+        ]
+      : []),
     createTest('promiseThatResolvesVoidInstantly() works', async () =>
       (await it(() => testObject.promiseThatResolvesVoidInstantly()))
         .didNotThrow()
