@@ -1,5 +1,5 @@
 import type {
-  HybridView,
+  HybridView as HybridViewAlias,
   HybridViewMethods,
   HybridViewProps,
 } from 'react-native-nitro-modules'
@@ -20,4 +20,4 @@ export interface TestViewMethods extends HybridViewMethods {
   someMethod(): void
 }
 
-export type TestView = HybridView<TestViewProps, TestViewMethods>
+export type TestView = HybridViewAlias<TestViewProps, TestViewMethods>
