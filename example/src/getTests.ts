@@ -2585,6 +2585,24 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest(
+      'NitroModules.createHybridObject(...) error names registerAllNatives()',
+      () =>
+        it(() => {
+          try {
+            NitroModules.createHybridObject('__MissingHybridObjectForTest__')
+            return false
+          } catch (error) {
+            return (
+              error instanceof Error &&
+              error.message.includes('registerAllNatives()') &&
+              !error.message.includes('::registerNatives()')
+            )
+          }
+        })
+          .didNotThrow()
+          .equals(true)
+    ),
     createTest('NitroModules.isHybridObject(testObject) to be true', () =>
       it(() => {
         return NitroModules.isHybridObject(testObject)
