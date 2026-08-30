@@ -21,6 +21,10 @@ export class NitroConfig {
     this.config = config
   }
 
+  static loadFromFile(configPath: string): void {
+    this.singleton = new NitroConfig(readUserConfig(configPath))
+  }
+
   static get current(): NitroConfig {
     if (this.singleton == null) {
       console.log(
