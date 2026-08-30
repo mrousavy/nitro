@@ -380,6 +380,7 @@ export interface TestObjectCpp
   // Returns a HybridObject from a Promise resolved off the JS thread. Used to reproduce the data
   // race between resolve() and JSIConverter::toJSI.
   newTestObjectAsync(): Promise<TestObjectCpp>
+  duplicatePromiseSettlementThrows(): boolean
   optionalHybrid?: TestObjectCpp
   getVariantHybrid(variant: TestObjectCpp | Person): TestObjectCpp | Person
   getVariantHybridEnum(

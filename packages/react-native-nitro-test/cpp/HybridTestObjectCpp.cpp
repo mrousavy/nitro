@@ -773,6 +773,36 @@ std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> HybridTestObj
       []() -> std::shared_ptr<HybridTestObjectCppSpec> { return std::make_shared<HybridTestObjectCpp>(); });
 }
 
+bool HybridTestObjectCpp::duplicatePromiseSettlementThrows() {
+  auto resolved = Promise<double>::resolved(1.0);
+  try {
+    resolved->resolve(2.0);
+    return false;
+  } catch (const std::runtime_error&) {
+    // Expected.
+  }
+  try {
+    resolved->reject(std::make_exception_ptr(std::runtime_error("late rejection")));
+    return false;
+  } catch (const std::runtime_error&) {
+    // Expected.
+  }
+
+  auto rejected = Promise<void>::rejected(std::make_exception_ptr(std::runtime_error("first rejection")));
+  try {
+    rejected->resolve();
+    return false;
+  } catch (const std::runtime_error&) {
+    // Expected.
+  }
+  try {
+    rejected->reject(std::make_exception_ptr(std::runtime_error("second rejection")));
+    return false;
+  } catch (const std::runtime_error&) {
+    return resolved->getResult() == 1.0 && rejected->isRejected();
+  }
+}
+
 jsi::Value HybridTestObjectCpp::rawJsiFunc(jsi::Runtime& runtime, const jsi::Value&, const jsi::Value* args, size_t count) {
   jsi::Array array(runtime, count);
   for (size_t i = 0; i < count; i++) {

@@ -227,6 +227,7 @@ public:
   std::shared_ptr<ArrayBuffer> createHardwareBuffer(double width, double height, double layers, HardwareBufferFormat format) override;
   std::shared_ptr<HybridTestObjectCppSpec> newTestObject() override;
   std::shared_ptr<Promise<std::shared_ptr<HybridTestObjectCppSpec>>> newTestObjectAsync() override;
+  bool duplicatePromiseSettlementThrows() override;
 
   std::shared_ptr<HybridBaseSpec> createBase() override;
   std::shared_ptr<HybridChildSpec> createChild() override;

@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "AssertPromiseState.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
 #include "ThreadPool.hpp"
@@ -98,14 +97,12 @@ public:
    * Resolves this Promise with the given result, and calls any pending listeners.
    */
   void resolve(TResult&& result) {
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
     std::vector<OnResolvedFunc> listeners;
     std::vector<OnRejectedFunc> dropped;
     const TResult* resolvedValue;
     {
       std::unique_lock lock(_mutex);
+      ensurePending(lock, "resolve");
       _state = std::move(result);
       resolvedValue = &std::get<TResult>(_state);
       listeners = std::move(_onResolvedListeners);
@@ -116,13 +113,11 @@ public:
     }
   }
   void resolve(const TResult& result) {
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
     std::vector<OnResolvedFunc> listeners;
     std::vector<OnRejectedFunc> dropped;
     {
       std::unique_lock lock(_mutex);
+      ensurePending(lock, "resolve");
       _state = result;
       listeners = std::move(_onResolvedListeners);
       dropped = std::move(_onRejectedListeners);
@@ -140,13 +135,11 @@ public:
       throw std::runtime_error("Cannot reject Promise<" + typeName + "> with a null exception_ptr!");
     }
 
-#ifdef NITRO_DEBUG
-    assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
     std::vector<OnRejectedFunc> listeners;
     std::vector<OnResolvedFunc> dropped;
     {
       std::unique_lock lock(_mutex);
+      ensurePending(lock, "reject");
       _state = exception;
       listeners = std::move(_onRejectedListeners);
       dropped = std::move(_onResolvedListeners);
@@ -292,6 +285,14 @@ private:
     return std::holds_alternative<std::monostate>(_state);
   }
 
+  inline void ensurePending(const std::unique_lock<std::mutex>& lock, const char* action) const {
+    if (!isPending(lock)) [[unlikely]] {
+      std::string state = isResolved(lock) ? "resolved" : "rejected";
+      throw std::runtime_error("Cannot " + std::string(action) + " Promise<" + TypeInfo::getFriendlyTypename<TResult>() +
+                               "> - it is already " + state + "!");
+    }
+  }
+
 private:
   std::variant<std::monostate, TResult, std::exception_ptr> _state;
   std::vector<OnResolvedFunc> _onResolvedListeners;
@@ -361,6 +362,8 @@ private:
   inline bool isPending(const std::unique_lock<std::mutex>&) const noexcept {
     return !_isResolved && _error == nullptr;
   }
+
+  void ensurePending(const std::unique_lock<std::mutex>& lock, const char* action) const;
 
 private:
   mutable std::mutex _mutex;

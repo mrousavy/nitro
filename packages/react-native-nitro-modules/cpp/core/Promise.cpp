@@ -52,13 +52,11 @@ std::shared_ptr<Promise<void>> Promise<void>::rejected(const std::exception_ptr&
 }
 
 void Promise<void>::resolve() {
-#ifdef NITRO_DEBUG
-  assertPromiseState(*this, PromiseTask::WANTS_TO_RESOLVE);
-#endif
   std::vector<OnResolvedFunc> listeners;
   std::vector<OnRejectedFunc> dropped;
   {
     std::unique_lock lock(_mutex);
+    ensurePending(lock, "resolve");
     _isResolved = true;
     listeners = std::move(_onResolvedListeners);
     dropped = std::move(_onRejectedListeners);
@@ -73,13 +71,11 @@ void Promise<void>::reject(const std::exception_ptr& exception) {
     throw std::runtime_error("Cannot reject Promise<void> with a null exception_ptr!");
   }
 
-#ifdef NITRO_DEBUG
-  assertPromiseState(*this, PromiseTask::WANTS_TO_REJECT);
-#endif
   std::vector<OnRejectedFunc> listeners;
   std::vector<OnResolvedFunc> dropped;
   {
     std::unique_lock lock(_mutex);
+    ensurePending(lock, "reject");
     _error = exception;
     listeners = std::move(_onRejectedListeners);
     dropped = std::move(_onResolvedListeners);
@@ -143,6 +139,13 @@ const std::exception_ptr& Promise<void>::getError() const {
     throw std::runtime_error("Cannot get error when Promise<void> is not yet rejected!");
   }
   return _error;
+}
+
+void Promise<void>::ensurePending(const std::unique_lock<std::mutex>& lock, const char* action) const {
+  if (!isPending(lock)) [[unlikely]] {
+    std::string state = isResolved(lock) ? "resolved" : "rejected";
+    throw std::runtime_error("Cannot " + std::string(action) + " Promise<void> - it is already " + state + "!");
+  }
 }
 
 } // namespace margelo::nitro

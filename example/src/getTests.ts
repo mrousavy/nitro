@@ -1554,6 +1554,17 @@ export function getTests(
           .didNotThrow()
           .equals(true)
     ),
+    ...(testObject.name === 'TestObjectCpp'
+      ? [
+          createTest('Promise settlement is single-shot', () =>
+            it(() =>
+              (testObject as TestObjectCpp).duplicatePromiseSettlementThrows()
+            )
+              .didNotThrow()
+              .equals(true)
+          ),
+        ]
+      : []),
     createTest('promiseThatResolvesVoidInstantly() works', async () =>
       (await it(() => testObject.promiseThatResolvesVoidInstantly()))
         .didNotThrow()
