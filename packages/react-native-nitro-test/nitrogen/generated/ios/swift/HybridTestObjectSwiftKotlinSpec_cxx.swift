@@ -85,7 +85,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
 
-
+  
 
   /**
    * Get the memory size of the Swift class (plus size of any other allocations)
@@ -131,7 +131,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       }()
     }
   }
-
+  
   public final var optionalHybrid: bridge.std__optional_std__shared_ptr_HybridTestObjectSwiftKotlinSpec__ {
     @inline(__always)
     get {
@@ -1607,7 +1607,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_std__optional_double____(__exceptionPtr)
     }
   }
-
+  
   @inline(__always)
   public final func awaitNullablePromise() -> bridge.Result_std__shared_ptr_Promise_std__optional_double____ {
     do {
@@ -1632,7 +1632,7 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_std__optional_double____(__exceptionPtr)
     }
   }
-
+  
   @inline(__always)
   public final func awaitAndGetPromise(promise: bridge.std__shared_ptr_Promise_double__) -> bridge.Result_std__shared_ptr_Promise_double___ {
     do {
