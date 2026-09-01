@@ -82,7 +82,7 @@ ${createFileMetadataString(`${autolinkingClassName}.hpp`)}
 
 namespace ${cxxNamespace} {
 
-  [[deprecated("Use registerNatives() instead.")]]
+  [[deprecated("Use registerAllNatives() instead.")]]
   int initialize(JavaVM* vm);
 
   /**
@@ -94,7 +94,7 @@ namespace ${cxxNamespace} {
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
    *   return facebook::jni::initialize(vm, []() {
    *     // register all ${cppLibName} HybridObjects
-   *     ${cxxNamespace}::registerNatives();
+   *     ${cxxNamespace}::registerAllNatives();
    *     // any other custom registrations go here.
    *   });
    * }

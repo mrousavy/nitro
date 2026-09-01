@@ -11,7 +11,7 @@
 
 namespace margelo::nitro::test::external {
 
-  [[deprecated("Use registerNatives() instead.")]]
+  [[deprecated("Use registerAllNatives() instead.")]]
   int initialize(JavaVM* vm);
 
   /**
@@ -23,7 +23,7 @@ namespace margelo::nitro::test::external {
    * JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void*) {
    *   return facebook::jni::initialize(vm, []() {
    *     // register all NitroTestExternal HybridObjects
-   *     margelo::nitro::test::external::registerNatives();
+   *     margelo::nitro::test::external::registerAllNatives();
    *     // any other custom registrations go here.
    *   });
    * }

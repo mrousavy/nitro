@@ -78,7 +78,7 @@ std::shared_ptr<HybridObject> HybridObjectRegistry::createHybridObject(const std
                    "- If you use Nitrogen, make sure your library (*Package.kt)/app (MainApplication.kt) calls "
                    "`$$androidCxxLibName$$OnLoad.initializeNative()` somewhere on app-startup.\n"
                    "- If you use Nitrogen, make sure your `cpp-adapter.cpp`/`OnLoad.cpp` calls "
-                   "`margelo::nitro::$$cxxNamespace$$::registerNatives()` inside `facebook::jni::initialize(...)`.\n"
+                   "`margelo::nitro::$$cxxNamespace$$::registerAllNatives()` inside `facebook::jni::initialize(...)`.\n"
                    "- If you use Nitrogen, inspect the generated `$$androidCxxLibName$$OnLoad.cpp` file.\n"
                    "- If you don't use Nitrogen, make sure you called `HybridObjectRegistry.registerHybridObject(...)`."
                    "- All registered HybridObjects: [" +
