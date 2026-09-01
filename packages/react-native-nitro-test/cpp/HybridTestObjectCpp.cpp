@@ -619,6 +619,13 @@ std::shared_ptr<Promise<std::optional<double>>> HybridTestObjectCpp::promiseThat
   return Promise<std::optional<double>>::resolved(std::nullopt);
 }
 
+std::shared_ptr<Promise<std::optional<double>>> HybridTestObjectCpp::awaitNullablePromise() {
+  return Promise<std::optional<double>>::async([]() {
+    auto promise = Promise<std::optional<double>>::resolved(std::nullopt);
+    return promise->await().get();
+  });
+}
+
 void HybridTestObjectCpp::callAll(const std::function<void()>& first, const std::function<void()>& second,
                                   const std::function<void()>& third) {
   first();

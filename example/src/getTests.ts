@@ -1564,6 +1564,11 @@ export function getTests(
         .didNotThrow()
         .equals(undefined)
     ),
+    createTest('awaitNullablePromise() works', async () =>
+      (await it(() => testObject.awaitNullablePromise()))
+        .didNotThrow()
+        .equals(undefined)
+    ),
     createTest('twoPromises can run in parallel', async () =>
       (
         await it(async () => {

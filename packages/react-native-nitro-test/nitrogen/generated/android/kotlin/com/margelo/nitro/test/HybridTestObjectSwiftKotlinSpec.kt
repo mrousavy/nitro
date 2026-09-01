@@ -388,6 +388,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun awaitNullablePromise(): Promise<Double?>
+  
+  @DoNotStrip
+  @Keep
   abstract fun awaitAndGetPromise(promise: Promise<Double>): Promise<Double>
   
   @DoNotStrip
