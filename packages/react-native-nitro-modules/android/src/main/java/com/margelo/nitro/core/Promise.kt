@@ -67,7 +67,7 @@ class Promise<T> {
   fun then(listener: (result: T) -> Unit): Promise<T> {
     addOnResolvedListener { boxedResult ->
       @Suppress("UNCHECKED_CAST")
-      val result = boxedResult as T
+      val result = boxedResult as? T ?: throw Error("Failed to cast Object to T!")
       listener(result)
     }
     return this
