@@ -50,6 +50,8 @@ public:
   double debug_getTotalAllocatedHybridObjects();
   static void debug_notifyHybridObjectAllocated();
   static void debug_notifyHybridObjectDeallocated();
+  // JSICache leak repro (#1464 / #1467 / #1468 / #1469): reports its total slot count.
+  jsi::Value debug_getTotalJSICacheSize(jsi::Runtime& runtime, const jsi::Value& thisValue, const jsi::Value* args, size_t count);
 
 private:
   static constexpr auto TAG = "NitroModulesProxy";
