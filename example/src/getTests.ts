@@ -1678,6 +1678,52 @@ export function getTests(
         .didNotThrow()
         .equals(10_000)
     ),
+    createTest('JSICache does not leak temporary JS callbacks', () =>
+      it(() => {
+        const BATCH_SIZE = 1000
+        const initialFunctionCacheSize =
+          NitroModules.debug_getJSICacheFunctionCacheSize()
+        let callbackCalls = 0
+
+        for (
+          let i = 0;
+          i < MEMORY_LEAK_TEST_ALLOCATION_COUNT;
+          i++
+        ) {
+          const callbackResult = testObject.callbackSync(() => {
+            callbackCalls++
+            return i
+          })
+          if (callbackResult !== i) {
+            throw new Error(
+              `callbackSync(...) returned ${callbackResult} instead of ${i}.`
+            )
+          }
+
+          if ((i + 1) % BATCH_SIZE === 0) {
+            gc()
+          }
+        }
+
+        gc()
+        gc()
+        gc()
+
+        const finalFunctionCacheSize =
+          NitroModules.debug_getJSICacheFunctionCacheSize()
+        const functionCacheGrowth =
+          finalFunctionCacheSize - initialFunctionCacheSize
+        if (functionCacheGrowth > BATCH_SIZE) {
+          throw new Error(
+            `JSICache leaked ${functionCacheGrowth} temporary JS callbacks. Initial function-cache size: ${initialFunctionCacheSize}, final function-cache size: ${finalFunctionCacheSize}.`
+          )
+        }
+
+        return callbackCalls
+      })
+        .didNotThrow()
+        .equals(MEMORY_LEAK_TEST_ALLOCATION_COUNT)
+    ),
     createTest(
       'HybridObjects do not leak memory when automatically reclaimed by JS GC',
       () =>
