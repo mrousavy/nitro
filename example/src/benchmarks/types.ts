@@ -1,0 +1,98 @@
+export type BenchmarkImplementation =
+  | 'javascript'
+  | 'turbo-module'
+  | 'nitro-cpp'
+  | 'nitro-platform'
+
+export type BenchmarkFamily =
+  | 'control'
+  | 'primitive'
+  | 'property'
+  | 'string'
+  | 'array'
+  | 'struct'
+  | 'map'
+  | 'optional'
+  | 'variant'
+  | 'hybrid-object'
+  | 'array-buffer'
+  | 'callback'
+  | 'promise'
+
+interface BenchmarkDefinitionBase {
+  id: string
+  version: number
+  family: BenchmarkFamily
+  implementation: BenchmarkImplementation
+  advisory?: boolean
+  initialIterations?: number
+  maxIterations?: number
+  expectedChecksum(iterations: number): number
+}
+
+export interface SyncBenchmarkDefinition extends BenchmarkDefinitionBase {
+  kind: 'sync'
+  run(iterations: number): number
+}
+
+export interface AsyncBenchmarkDefinition extends BenchmarkDefinitionBase {
+  kind: 'async'
+  run(iterations: number): Promise<number>
+}
+
+export type BenchmarkDefinition =
+  | SyncBenchmarkDefinition
+  | AsyncBenchmarkDefinition
+
+export interface BenchmarkRunnerOptions {
+  targetBatchDurationMs: number
+  warmupCount: number
+  sampleCount: number
+  reverse: boolean
+}
+
+export interface BenchmarkMetric {
+  id: string
+  version: number
+  family: BenchmarkFamily
+  implementation: BenchmarkImplementation
+  advisory: boolean
+  iterations: number
+  samplesNsPerOp: number[]
+  medianNsPerOp: number
+  p95NsPerOp: number
+  medianAbsoluteDeviationNsPerOp: number
+  robustCoefficientOfVariationPercent: number
+  medianConfidenceInterval95: [number, number]
+  checksum: number
+}
+
+export interface BenchmarkRunConfiguration {
+  runId: string
+  reverse: boolean
+  commitSha: string
+  suiteHash: string
+  platform: 'android' | 'ios'
+  device: string
+  osVersion: string
+  architecture: string
+  toolchain: string
+}
+
+export interface BenchmarkRunEnvironment {
+  reactNativeVersion: string
+  hermes: boolean
+  dev: boolean
+  nitroBuildType: 'debug' | 'release'
+}
+
+export interface BenchmarkRunResult {
+  schemaVersion: 1
+  suiteVersion: 1
+  configuration: BenchmarkRunConfiguration
+  environment: BenchmarkRunEnvironment
+  runner: Omit<BenchmarkRunnerOptions, 'reverse'>
+  startedAt: string
+  durationMs: number
+  metrics: BenchmarkMetric[]
+}

@@ -2,6 +2,10 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+def isBenchmarkBuild = gradle.startParameter.taskNames.any {
+    it.toLowerCase().contains("benchmark")
+}
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -16,6 +20,10 @@ react {
     codegenDir = file("../../../node_modules/@react-native/codegen")
     //   The cli.js file which is the React Native CLI entrypoint. Default is ../node_modules/react-native/cli.js
     cliFile = file("../../../node_modules/react-native/cli.js")
+
+    if (isBenchmarkBuild) {
+        entryFile = file("../../index.benchmark.js")
+    }
 
     /* Variants */
     //   The list of variants to that are debuggable. For those we're going to
@@ -114,6 +122,14 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+        }
+        benchmark {
+            initWith release
+            signingConfig signingConfigs.debug
+            debuggable false
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            matchingFallbacks = ["release"]
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
