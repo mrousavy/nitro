@@ -456,6 +456,28 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
     }
   }
   
+  public final var isolatedBoolean: Bool {
+    @inline(__always)
+    get {
+      return self.__implementation.isolatedBoolean
+    }
+    @inline(__always)
+    set {
+      self.__implementation.isolatedBoolean = newValue
+    }
+  }
+  
+  public final var isTextValue: std.string {
+    @inline(__always)
+    get {
+      return std.string(self.__implementation.isTextValue)
+    }
+    @inline(__always)
+    set {
+      self.__implementation.isTextValue = String(newValue)
+    }
+  }
+  
   public final var someVariant: bridge.std__variant_double__std__string_ {
     @inline(__always)
     get {

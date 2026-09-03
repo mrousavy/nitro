@@ -87,6 +87,10 @@ namespace margelo::nitro::test {
     void setHasBooleanWritable(bool hasBooleanWritable) override;
     bool getIsBooleanWritable() override;
     void setIsBooleanWritable(bool isBooleanWritable) override;
+    bool getIsolatedBoolean() override;
+    void setIsolatedBoolean(bool isolatedBoolean) override;
+    std::string getIsTextValue() override;
+    void setIsTextValue(const std::string& isTextValue) override;
     std::variant<double, std::string> getSomeVariant() override;
     void setSomeVariant(const std::variant<double, std::string>& someVariant) override;
 

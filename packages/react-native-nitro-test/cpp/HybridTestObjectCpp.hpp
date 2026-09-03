@@ -45,6 +45,8 @@ private:
   std::optional<std::function<void(double)>> _optionalCallback;
   bool _hasBooleanWritable;
   bool _isBooleanWritable;
+  bool _isolatedBoolean;
+  std::string _isTextValue;
 
 private:
   static inline uint64_t calculateFibonacci(int count) noexcept {
@@ -103,6 +105,10 @@ public:
   void setIsBooleanWritable(bool isBooleanWritable) override;
   bool getHasBooleanWritable() override;
   void setHasBooleanWritable(bool hasBooleanWritable) override;
+  bool getIsolatedBoolean() override;
+  void setIsolatedBoolean(bool isolatedBoolean) override;
+  std::string getIsTextValue() override;
+  void setIsTextValue(const std::string& isTextValue) override;
 
 public:
   // Methods

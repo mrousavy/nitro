@@ -551,6 +551,22 @@ export function getTests(
         .didNotThrow()
         .equals(true)
     ),
+    createTest('set + get isolatedBoolean', () =>
+      it(() => {
+        testObject.isolatedBoolean = true
+        return testObject.isolatedBoolean
+      })
+        .didNotThrow()
+        .equals(true)
+    ),
+    createTest('set + get isTextValue', () =>
+      it(() => {
+        testObject.isTextValue = 'hello'
+        return testObject.isTextValue
+      })
+        .didNotThrow()
+        .equals('hello')
+    ),
     createTest('set optionalCallback, then undefined', () =>
       it(() => {
         testObject.optionalCallback = () => {}

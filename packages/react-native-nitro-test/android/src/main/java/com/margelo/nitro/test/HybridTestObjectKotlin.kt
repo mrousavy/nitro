@@ -43,6 +43,8 @@ class HybridTestObjectKotlin : HybridTestObjectSwiftKotlinSpec() {
   override val isBoolean = false
   override var hasBooleanWritable = false
   override var isBooleanWritable = false
+  override var isolatedBoolean = false
+  override var isTextValue = ""
 
   override fun simpleFunc() {
     // do nothing
