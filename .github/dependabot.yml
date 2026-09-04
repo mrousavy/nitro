@@ -14,7 +14,7 @@ updates:
       - "/packages/react-native-nitro-test/android/"
       - "/packages/react-native-nitro-test-external/android/"
       - "/packages/template/android/"
-      - "/example/android/"
+      - "/apps/example/android/"
     schedule:
       interval: "daily"
     labels:
@@ -47,7 +47,7 @@ updates:
       - "/packages/react-native-nitro-test/"
       - "/packages/react-native-nitro-test-external/"
       - "/packages/template/"
-      - "/example/"
+      - "/apps/example/"
     schedule:
       interval: "daily"
     labels:

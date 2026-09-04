@@ -23,16 +23,16 @@ jobs:
         with:
           ruby-version: 2.7.2
           bundler-cache: true
-          working-directory: example
+          working-directory: apps/example
 
       - name: Select Xcode 26.5
         run: sudo xcode-select -s "/Applications/Xcode_26.5.app/Contents/Developer"
       - name: Install Pods
-        working-directory: example
+        working-directory: apps/example
         run: bun pods
 
       - name: Build App (Release, Simulator)
-        working-directory: example/ios
+        working-directory: apps/example/ios
         run: |
           set -o pipefail
           xcodebuild \
@@ -50,7 +50,7 @@ jobs:
 
       - name: Package .app for Simulator
         run: |
-          cd example/ios/build/Build/Products/Release-iphonesimulator
+          cd apps/example/ios/build/Build/Products/Release-iphonesimulator
           zip -r ../../../../../../NitroExample-Release-Simulator.zip NitroExample.app
 
       - name: Upload .app to Release

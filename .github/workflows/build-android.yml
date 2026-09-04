@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/build-android.yml'
-      - 'example/android/**'
+      - 'apps/example/android/**'
       - '**/nitrogen/generated/shared/**'
       - '**/nitrogen/generated/android/**'
       - 'packages/react-native-nitro-test/cpp/**'
@@ -21,7 +21,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/build-android.yml'
-      - 'example/android/**'
+      - 'apps/example/android/**'
       - '**/nitrogen/generated/shared/**'
       - '**/nitrogen/generated/android/**'
       - 'packages/react-native-nitro-test/cpp/**'
@@ -55,7 +55,7 @@ jobs:
         run: bun install
 
       - name: Set minSdk in build.gradle
-        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" example/android/build.gradle
+        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" apps/example/android/build.gradle
 
       - name: Setup JDK 17
         uses: actions/setup-java@v5.7.0
@@ -70,17 +70,17 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            example/android/.gradle
-            example/android/app/.cxx
+            apps/example/android/.gradle
+            apps/example/android/app/.cxx
           key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.TARGET_ANDROID_ARCH }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.TARGET_ANDROID_ARCH }}-
             ${{ runner.os }}-gradle-
-      - name: Run Gradle Build for example/android/
-        working-directory: example/android
+      - name: Run Gradle Build for apps/example/android/
+        working-directory: apps/example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.TARGET_ANDROID_ARCH }}
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
-        working-directory: example/android
+        working-directory: apps/example/android
         run: ./gradlew --stop
