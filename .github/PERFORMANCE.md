@@ -21,6 +21,9 @@ Host-side log lines show each suite's start, completion, measurement duration,
 total wall time (including app installation/launch), and why a repeat pair ran.
 These logs are outside the app's timed regions. Raw JSON, BMF, and comparison
 Markdown are retained in the workflow artifacts for 30 days.
+Both targets have a five-minute boot limit; individual device installation and
+launch commands have a two-minute limit. Android app exits also retain logcat and
+process-exit diagnostics, so native crashes do not disappear at emulator teardown.
 
 The Bencher reporter only becomes active once its `workflow_run` definition is on
 the default branch. It posts the rebuilt paired-comparison table as one updatable

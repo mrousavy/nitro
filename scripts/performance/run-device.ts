@@ -9,6 +9,8 @@ async function command(
   const child = Bun.spawn([executable, ...argumentsList], {
     stdout: 'inherit',
     stderr: 'inherit',
+    timeout: 120_000,
+    killSignal: 'SIGKILL',
   })
   const exitCode = await child.exited
   if (exitCode !== 0 && !allowFailure) {
@@ -25,6 +27,9 @@ async function commandOutput(
   const child = Bun.spawn([executable, ...argumentsList], {
     stdout: 'pipe',
     stderr: 'ignore',
+    timeout: 15_000,
+    killSignal: 'SIGKILL',
+    maxBuffer: 2 * 1024 * 1024,
   })
   const [exitCode, output] = await Promise.all([
     child.exited,

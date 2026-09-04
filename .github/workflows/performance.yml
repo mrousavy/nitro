@@ -303,7 +303,12 @@ jobs:
             'com.apple.CoreSimulator.SimRuntime.iOS-26-5')
           echo "DEVICE_ID=$DEVICE_ID" >> "$GITHUB_ENV"
           xcrun simctl boot "$DEVICE_ID"
-          xcrun simctl bootstatus "$DEVICE_ID" -b
+          DEVICE_ID="$DEVICE_ID" bun -e '
+            const child = Bun.spawn(["xcrun", "simctl", "bootstatus", process.env.DEVICE_ID, "-b"], {
+              stdout: "inherit", stderr: "inherit", timeout: 300_000, killSignal: "SIGKILL",
+            });
+            if (await child.exited !== 0) throw new Error("iOS simulator did not boot successfully within five minutes.");
+          '
           bun "$PERF_CONTROLLER_ROOT/scripts/performance/run-sequence.ts" \
             --platform ios \
             --base-app "$BASE_APP" \
