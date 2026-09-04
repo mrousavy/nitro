@@ -134,7 +134,7 @@ function createObjectBenchmarks(
       family: 'string',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: (iterations) => iterations * 12,
       run(iterations) {
         let checksum = 0
@@ -150,7 +150,7 @@ function createObjectBenchmarks(
       family: 'string',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: (iterations) => iterations * 10,
       run(iterations) {
         let checksum = 0
@@ -168,7 +168,7 @@ function createObjectBenchmarks(
       family: 'struct',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 1_000,
+      maxChunkIterations: 5_000,
       expectedChecksum: (iterations) => iterations * 902,
       run(iterations) {
         let checksum = 0
@@ -185,7 +185,7 @@ function createObjectBenchmarks(
       family: 'map',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 1_000,
+      maxChunkIterations: 5_000,
       expectedChecksum: (iterations) => iterations * 7,
       run(iterations) {
         let checksum = 0
@@ -201,7 +201,7 @@ function createObjectBenchmarks(
       family: 'optional',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: (iterations) =>
         Math.ceil(iterations / 2) * 5 + Math.floor(iterations / 2) * 14,
       run(iterations) {
@@ -223,7 +223,7 @@ function createObjectBenchmarks(
       family: 'variant',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: variantChecksum,
       run(iterations) {
         let checksum = 0
@@ -258,7 +258,7 @@ function createObjectBenchmarks(
       family: 'hybrid-object',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: sumFromOne,
       run(iterations) {
         let checksum = 0
@@ -302,7 +302,7 @@ function createObjectBenchmarks(
       family: 'callback',
       implementation,
       kind: 'sync',
-      maxChunkIterations: 10_000,
+      maxChunkIterations: 50_000,
       expectedChecksum: (iterations) => iterations,
       run(iterations) {
         let checksum = 0
@@ -320,7 +320,7 @@ function createObjectBenchmarks(
       kind: 'async',
       advisory: true,
       // Release fulfilled Promise chains between chunks, outside the timer.
-      maxChunkIterations: 1_000,
+      maxChunkIterations: 5_000,
       expectedChecksum: (iterations) => iterations * 55,
       async run(iterations) {
         let checksum = 0
@@ -375,10 +375,10 @@ function createBufferBenchmark(
     // Bounce does not copy the payload; its chunk bound is independent of size.
     maxChunkIterations:
       operation === 'bounce'
-        ? 10_000
+        ? 50_000
         : input.byteLength >= 1024 * 1024
           ? 50
-          : 1_000,
+          : 5_000,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {

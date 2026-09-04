@@ -164,6 +164,37 @@ describe('benchmark runner', () => {
     expect(result).toEqual({ durationMs: 150, checksum: 6_000 })
   })
 
+  test('drains native cleanup after at most four chunks and after the tail', async () => {
+    let now = 0
+    let pending = 0
+    const groups: number[] = []
+    spyOn(performance, 'now').mockImplementation(() => now)
+    const result = await executeBatch(
+      {
+        ...definition((n) => n * 2),
+        maxChunkIterations: 1_000,
+        run(n) {
+          pending++
+          now += n * 0.015
+          return n * 2
+        },
+      },
+      10_000,
+      {
+        collectGarbage() {
+          now += 1_000
+        },
+        async yieldToRuntime() {
+          groups.push(pending)
+          pending = 0
+          now += 1_000
+        },
+      }
+    )
+    expect(groups).toEqual([4, 4, 2])
+    expect(result).toEqual({ durationMs: 150, checksum: 20_000 })
+  })
+
   test('recalibrates after warmup and freezes iterations for all 20 measured samples', async () => {
     let now = 0
     let calls = 0

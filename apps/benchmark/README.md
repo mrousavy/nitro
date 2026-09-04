@@ -60,7 +60,8 @@ after five warmup batches. That count is then frozen for twenty measured samples
 slow samples are retained, not discarded or adaptively shortened.
 
 Allocation-heavy cases split a sample into bounded chunks, collecting garbage
-and yielding for native cleanup between chunks outside the timer. The sample sums chunk durations and divides by
+after each chunk and yielding for native cleanup at most every four chunks,
+outside the timer. The sample sums chunk durations and divides by
 the total operation count; the memory limit no longer caps the sample duration.
 Hermes `gc()` is required, and calibration fails rather than accepting a tiny
 cap-limited batch. Raw results include `iterations` and `chunkIterations`; each

@@ -29,6 +29,7 @@ export async function executeBatch(
   }
   let durationMs = 0
   let checksum = 0
+  let chunksSinceYield = 0
   runtime.collectGarbage()
   for (
     let remaining = iterations;
@@ -56,9 +57,13 @@ export async function executeBatch(
     durationMs += elapsed
     checksum += result
     runtime.collectGarbage()
-    // Let native autorelease pools/cleaners drain too, not just the JS heap.
-    // This yield is outside the timer, including between allocation chunks.
-    await runtime.yieldToRuntime()
+    // Drain native autorelease pools/cleaners after at most four bounded chunks.
+    // A native timer yield can cost a frame; do not pay it for every tiny chunk.
+    chunksSinceYield++
+    if (chunksSinceYield === 4 || remaining <= chunkIterations) {
+      await runtime.yieldToRuntime()
+      chunksSinceYield = 0
+    }
   }
   return { durationMs, checksum }
 }
