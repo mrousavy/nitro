@@ -46,6 +46,11 @@ async function runOne(
 ): Promise<void> {
   const isBase = revision === 'base'
   const output = path.join(outputDirectory, `${revision}-${sequence}.json`)
+  const runId = `${platform}-${revision}-${sequence}`
+  const startedAt = performance.now()
+  console.info(
+    `[NitroBenchmark] ${new Date().toISOString()} ${runId}: starting (${reverse ? 'reverse' : 'forward'} order)`
+  )
   const command = [
     'bun',
     path.join(import.meta.dir, 'run-device.ts'),
@@ -56,7 +61,7 @@ async function runOne(
     '--output',
     output,
     '--run-id',
-    `${platform}-${revision}-${sequence}`,
+    runId,
     '--reverse',
     String(reverse),
     '--commit-sha',
@@ -77,6 +82,12 @@ async function runOne(
   const child = Bun.spawn(command, { stdout: 'inherit', stderr: 'inherit' })
   const exitCode = await child.exited
   if (exitCode !== 0) throw new Error(`${revision} run ${sequence} failed.`)
+  const result = validateBenchmarkRun(
+    JSON.parse(await readFile(output, 'utf8'))
+  )
+  console.info(
+    `[NitroBenchmark] ${new Date().toISOString()} ${runId}: complete; ${result.metrics.length} metrics, suite ${(result.durationMs / 1_000).toFixed(1)}s, wall ${((performance.now() - startedAt) / 1_000).toFixed(1)}s`
+  )
   if (isBase) {
     baseResults.push(output)
   } else {
@@ -101,6 +112,12 @@ let baseRuns = await load(baseResults)
 let headRuns = await load(headResults)
 let comparison = compareRuns(baseRuns, headRuns, advisoryMode)
 if (comparison.rerunRecommended && comparison.suiteComparable) {
+  const noisyCount = comparison.comparisons.filter(
+    (metric) => metric.verdict === 'inconclusive'
+  ).length
+  console.info(
+    `[NitroBenchmark] ${noisyCount} inconclusive metrics; running the single permitted repeat pair.`
+  )
   await runOne('head', 3, false)
   await runOne('base', 3, true)
   baseRuns = await load(baseResults)

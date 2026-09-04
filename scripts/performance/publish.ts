@@ -55,7 +55,7 @@ const metadata = validateMetadata(
   JSON.parse(await readFile(path.join(directory, 'metadata.json'), 'utf8'))
 )
 const testbeds = {
-  android: 'android-emulator-release-x86-64-api-36-ubuntu-24-04',
+  android: 'android-emulator-release-x86-64-api-36-ubuntu-24-04-kvm',
   ios: 'ios-simulator-release-arm64-xcode-26-5-ios-26-5',
 } as const
 
