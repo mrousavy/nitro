@@ -69,6 +69,9 @@ For paired PR reports, first upload the measured base to `baseline-<full-base-sh
 on each testbed, then upload `pr-<number>` with that exact baseline as its start
 point. This works with an empty Bencher project and with stacked PRs without
 pretending their base is `main`. Pushes/scheduled main runs record main history.
+Both platform baselines are uploaded before either head. The publisher does not
+reset the PR branch for each platform, preserving the other testbed's reports;
+a changed base SHA naturally selects a different start point.
 The Bencher action and downloaded CLI version are both pinned.
 
 ## Promoting performance verdicts to a gate

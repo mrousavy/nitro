@@ -90,11 +90,36 @@ export function bencherArguments(
       '--start-point',
       baselineBranch,
       '--start-point-hash',
-      metadata.baseSha,
-      '--start-point-reset'
+      metadata.baseSha
     )
   }
   return command
+}
+
+export function bencherPublications(
+  metadata: Metadata,
+  directory: string,
+  project: string
+) {
+  const revisions =
+    metadata.pullRequestNumber == null
+      ? (['head'] as const)
+      : (['base', 'head'] as const)
+  // Seed every testbed before creating the PR branch. Never reset that branch
+  // per platform: doing so would discard reports published for earlier testbeds.
+  return revisions.flatMap((revision) =>
+    metadata.platforms.map((platform) => ({
+      platform,
+      revision,
+      command: bencherArguments(
+        metadata,
+        platform,
+        revision,
+        directory,
+        project
+      ),
+    }))
+  )
 }
 
 if (import.meta.main) {
@@ -111,41 +136,32 @@ if (import.meta.main) {
   const metadata = validateMetadata(
     JSON.parse(await readFile(path.join(directory, 'metadata.json'), 'utf8'))
   )
-  for (const platform of metadata.platforms) {
-    const revisions =
-      metadata.pullRequestNumber == null
-        ? (['head'] as const)
-        : (['base', 'head'] as const)
-    for (const revision of revisions) {
-      const command = bencherArguments(
-        metadata,
-        platform,
-        revision,
-        directory,
-        project
+  for (const { platform, revision, command } of bencherPublications(
+    metadata,
+    directory,
+    project
+  )) {
+    if (revision === 'head') {
+      command.push(
+        '--github-actions',
+        githubToken,
+        '--ci-id',
+        `nitro-${platform}-release`,
+        '--ci-public-links'
       )
-      if (revision === 'head') {
-        command.push(
-          '--github-actions',
-          githubToken,
-          '--ci-id',
-          `nitro-${platform}-release`,
-          '--ci-public-links'
-        )
-        if (metadata.pullRequestNumber != null)
-          command.push('--ci-number', String(metadata.pullRequestNumber))
-      }
-      // The Bencher key is environment-only, never an argument or log message.
-      const child = Bun.spawn(command, {
-        env: { ...Bun.env, BENCHER_API_KEY: apiKey },
-        stdout: 'inherit',
-        stderr: 'inherit',
-      })
-      const exitCode = await child.exited
-      if (exitCode !== 0)
-        throw new Error(
-          `Bencher failed for ${platform} ${revision} with exit code ${exitCode}.`
-        )
+      if (metadata.pullRequestNumber != null)
+        command.push('--ci-number', String(metadata.pullRequestNumber))
     }
+    // The Bencher key is environment-only, never an argument or log message.
+    const child = Bun.spawn(command, {
+      env: { ...Bun.env, BENCHER_API_KEY: apiKey },
+      stdout: 'inherit',
+      stderr: 'inherit',
+    })
+    const exitCode = await child.exited
+    if (exitCode !== 0)
+      throw new Error(
+        `Bencher failed for ${platform} ${revision} with exit code ${exitCode}.`
+      )
   }
 }

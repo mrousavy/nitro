@@ -1,5 +1,10 @@
 import { describe, expect, test } from 'bun:test'
-import { bencherArguments, validateMetadata, type Metadata } from './publish'
+import {
+  bencherArguments,
+  bencherPublications,
+  validateMetadata,
+  type Metadata,
+} from './publish'
 
 const metadata: Metadata = {
   repository: 'margelo/nitro',
@@ -43,8 +48,23 @@ describe('Bencher publications', () => {
     expect(option(args, '--start-point')).toBe(`baseline-${metadata.baseSha}`)
     expect(option(args, '--start-point-hash')).toBe(metadata.baseSha)
     expect(option(args, '--file')).toBe('/validated/bencher-android.json')
-    expect(args).toContain('--start-point-reset')
+    expect(args).not.toContain('--start-point-reset')
     expect(args).not.toContain('--key')
+  })
+
+  test('uploads both baselines before either head without resetting earlier testbeds', () => {
+    const publications = bencherPublications(metadata, '/validated', 'nitro')
+    expect(
+      publications.map(({ platform, revision }) => [platform, revision])
+    ).toEqual([
+      ['android', 'base'],
+      ['ios', 'base'],
+      ['android', 'head'],
+      ['ios', 'head'],
+    ])
+    for (const { command } of publications) {
+      expect(command).not.toContain('--start-point-reset')
+    }
   })
 
   test('main runs do not require a pre-existing baseline', () => {
@@ -56,6 +76,11 @@ describe('Bencher publications', () => {
     const args = bencherArguments(main, 'ios', 'head', '/validated', 'nitro')
     expect(option(args, '--branch')).toBe('main')
     expect(args).not.toContain('--start-point')
+    expect(
+      bencherPublications(main, '/validated', 'nitro').map(
+        ({ revision }) => revision
+      )
+    ).toEqual(['head', 'head'])
     expect(() =>
       bencherArguments(main, 'ios', 'base', '/validated', 'nitro')
     ).toThrow()
