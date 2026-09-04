@@ -31,7 +31,10 @@ function isRunConfiguration(
     typeof candidate.device === 'string' &&
     typeof candidate.osVersion === 'string' &&
     typeof candidate.architecture === 'string' &&
-    typeof candidate.toolchain === 'string'
+    typeof candidate.toolchain === 'string' &&
+    (candidate.benchmarkIndex === undefined ||
+      (Number.isInteger(candidate.benchmarkIndex) &&
+        candidate.benchmarkIndex >= 0))
   )
 }
 
@@ -73,7 +76,18 @@ async function run(): Promise<BenchmarkRunResult> {
 
   const startedAt = new Date().toISOString()
   const start = performance.now()
-  const metrics = await runBenchmarkDefinitions(createBenchmarkSuite(), {
+  const suite = createBenchmarkSuite()
+  const ordered = configuration.reverse ? [...suite].reverse() : suite
+  const selected =
+    configuration.benchmarkIndex === undefined
+      ? suite
+      : ordered.slice(
+          configuration.benchmarkIndex,
+          configuration.benchmarkIndex + 1
+        )
+  if (selected.length === 0)
+    throw new Error('Requested benchmark index is outside the suite.')
+  const metrics = await runBenchmarkDefinitions(selected, {
     ...RUNNER_OPTIONS,
     reverse: configuration.reverse,
   })
@@ -87,6 +101,7 @@ async function run(): Promise<BenchmarkRunResult> {
     startedAt,
     durationMs: performance.now() - start,
     metrics,
+    benchmarkCount: suite.length,
   }
 }
 

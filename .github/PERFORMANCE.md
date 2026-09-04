@@ -10,6 +10,10 @@ sum bounded timed chunks with explicit GC and native-cleanup yields between chun
 so memory-safety limits do not shorten the sample. See `iterations` and
 `chunkIterations` in raw results; sample milliseconds are `ns/op * iterations / 1e6`.
 Calibration changes and version-2 benchmark definitions require a new baseline.
+Each binary is installed once per suite run. Each case uses a fresh app process
+so the runtime-scoped JSI reference cache does not accumulate millions of weak
+reference records across unrelated cases. Startup is outside measured work;
+the host validates and combines the per-case results, preserving their raw samples.
 The host computes confidence intervals by resampling whole matched base/head
 process runs, then batches within each selected run. Bencher median bounds use
 the same run-aware approach. Treating all batches from multiple processes as

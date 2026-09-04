@@ -72,6 +72,8 @@ export interface BenchmarkMetric {
 }
 
 export interface BenchmarkRunConfiguration {
+  /** Select one case in suite order for a fresh-process measurement. */
+  benchmarkIndex?: number
   runId: string
   reverse: boolean
   commitSha: string
@@ -99,4 +101,6 @@ export interface BenchmarkRunResult {
   startedAt: string
   durationMs: number
   metrics: BenchmarkMetric[]
+  /** Full suite size, including when this process measured just one case. */
+  benchmarkCount?: number
 }

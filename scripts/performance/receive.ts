@@ -14,6 +14,13 @@ if (platform !== 'android' && platform !== 'ios') {
 }
 
 const configuration: BenchmarkRunConfiguration = {
+  ...(argumentsMap.has('benchmark-index')
+    ? {
+        benchmarkIndex: Number(
+          requiredArgument(argumentsMap, 'benchmark-index')
+        ),
+      }
+    : {}),
   runId: requiredArgument(argumentsMap, 'run-id'),
   reverse: requiredArgument(argumentsMap, 'reverse') === 'true',
   commitSha: requiredArgument(argumentsMap, 'commit-sha'),

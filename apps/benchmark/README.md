@@ -49,6 +49,12 @@ bun scripts/performance/run-device.ts \
 
 Adjust device metadata to match the target. The host starts the receiver,
 installs and launches the app, validates the result, and terminates the app.
+The host installs each binary once, then launches a fresh process for each case
+and assembles their results. This releases Nitro's runtime-scoped JSI reference
+bookkeeping between cases; GC alone cannot clear that cache. Each process posts
+one result only after its timing is complete. Per-case raw results are kept beside
+the combined output in a `*-cases/` directory. Reversing the suite reverses the
+case launch order too. Startup, transport, and process restarts are not timed.
 For iOS, use `--platform ios`, a simulator UDID for `--device-id`, and the built
 `NitroBenchmark.app` for `--app`, with matching simulator/toolchain metadata.
 Local runs do not upload results.

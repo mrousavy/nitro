@@ -68,6 +68,20 @@ function validateConfiguration(value: unknown): BenchmarkRunConfiguration {
     throw new Error('configuration.suiteHash must be a SHA-256 digest.')
   }
   return {
+    ...(value.benchmarkIndex === undefined
+      ? {}
+      : {
+          benchmarkIndex:
+            positiveInteger(
+              finiteNumber(
+                value.benchmarkIndex,
+                'configuration.benchmarkIndex',
+                0,
+                MAX_METRICS - 1
+              ) + 1,
+              'configuration.benchmarkIndex + 1'
+            ) - 1,
+        }),
     runId: stringValue(value.runId, 'configuration.runId'),
     reverse:
       typeof value.reverse === 'boolean'
@@ -240,6 +254,13 @@ export function validateBenchmarkRun(value: unknown): BenchmarkRunResult {
     throw new Error('metrics must be a non-empty bounded array.')
   }
   const validatedMetrics = metrics.map(validateMetric)
+  const benchmarkCount = positiveInteger(
+    value.benchmarkCount ?? metrics.length,
+    'benchmarkCount'
+  )
+  if (benchmarkCount > MAX_METRICS || benchmarkCount < metrics.length) {
+    throw new Error('benchmarkCount is outside the bounded suite size.')
+  }
   if (
     new Set(validatedMetrics.map((metric) => metric.id)).size !== metrics.length
   ) {
@@ -252,6 +273,7 @@ export function validateBenchmarkRun(value: unknown): BenchmarkRunResult {
   return {
     schemaVersion: 1,
     suiteVersion: 1,
+    benchmarkCount,
     configuration: validateConfiguration(value.configuration),
     environment: validateEnvironment(value.environment),
     runner: {
