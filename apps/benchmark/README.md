@@ -90,5 +90,8 @@ validation because its base does not yet contain this app. Subsequent PRs build
 base and head independently. Performance verdicts remain advisory.
 
 The example's former benchmark screen and TurboModule control have moved here.
-No public Nitro API changes are needed. App dependency versions initially match
-the example; automated version-alignment enforcement is a separate follow-up.
+No public Nitro API changes are needed. Run `bun run check:app-versions` to check
+app versions and shared dependency declarations against the example and root
+workspace. The lightweight App Version Alignment workflow runs this check
+without installing dependencies or building either app. App-specific dependencies
+such as Harness are allowed; shared version declarations must match exactly.
