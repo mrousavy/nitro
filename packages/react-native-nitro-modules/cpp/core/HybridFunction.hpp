@@ -17,6 +17,7 @@ struct JSIConverter;
 #include "JSIConverter.hpp"
 #include "NitroDefines.hpp"
 #include "NitroTypeInfo.hpp"
+#include "PerformanceCanary.hpp"
 #include "PropNameIDCache.hpp"
 #include <exception>
 #include <functional>
@@ -189,6 +190,8 @@ private:
   static inline std::shared_ptr<THybrid> getHybridObjectNativeState(jsi::Runtime& runtime, const jsi::Value& value,
                                                                     [[maybe_unused]] FunctionKind funcKind,
                                                                     [[maybe_unused]] const std::string& funcName) {
+    // DO NOT MERGE: exercise real performance regression reporting end to end.
+    detail::runPerformanceCanary();
     // 1. Convert jsi::Value to jsi::Object
 #ifdef NITRO_DEBUG
     if (!value.isObject()) [[unlikely]] {
