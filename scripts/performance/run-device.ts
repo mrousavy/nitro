@@ -146,6 +146,32 @@ try {
   await (platform === 'android'
     ? Promise.race([receiverCompletion, monitorAndroidProcess()])
     : receiverCompletion)
+} catch (error) {
+  if (platform === 'android') {
+    // Capture diagnostics before the emulator action tears down the target.
+    // Nothing is collected during a successful timed batch.
+    const logs = await commandOutput('adb', [
+      '-s',
+      deviceId,
+      'logcat',
+      '-d',
+      '-t',
+      '1000',
+    ])
+    const exits = await commandOutput('adb', [
+      '-s',
+      deviceId,
+      'shell',
+      'dumpsys',
+      'activity',
+      'exit-info',
+      'com.margelo.nitroexample',
+    ])
+    const diagnostics = `${logs.output}\n${exits.output}`
+    await Bun.write(output.replace(/\.json$/, '.failure.log'), diagnostics)
+    console.error(diagnostics)
+  }
+  throw error
 } finally {
   monitorCancelled = true
   if (platform === 'android') {

@@ -54,12 +54,18 @@ jobs:
             --trusted-workflow-event "$GITHUB_EVENT_PATH" \
             "${TRUSTED_PR_ARGUMENTS[@]}"
 
-      - name: Install Bencher CLI
+      - name: Post paired comparison to the PR
         if: steps.download.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun scripts/performance/github-report.ts --directory validated-report
+
+      - name: Install Bencher CLI
+        if: steps.download.outcome == 'success' && vars.NITRO_BENCHER_ENABLED == 'true'
         uses: bencherdev/bencher@8d75325c3bc59403a2186a056b472c4f49d42838 # v0.6.12
 
       - name: Publish to Bencher and GitHub
-        if: steps.download.outcome == 'success'
+        if: steps.download.outcome == 'success' && vars.NITRO_BENCHER_ENABLED == 'true'
         env:
           BENCHER_API_KEY: ${{ secrets.BENCHER_KEY }}
           BENCHER_PROJECT: nitro

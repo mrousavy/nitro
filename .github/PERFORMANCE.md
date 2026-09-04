@@ -23,6 +23,27 @@ These logs are outside the app's timed regions. Raw JSON, BMF, and comparison
 Markdown are retained in the workflow artifacts for 30 days.
 
 The Bencher reporter only becomes active once its `workflow_run` definition is on
-the default branch. Revoke the previously exposed credential and replace the
+the default branch. It posts the rebuilt paired-comparison table as one updatable
+PR comment, independently of Bencher's historical comparison. Stale results do
+not overwrite a newer PR revision, and user-authored comments are never edited.
+Revoke the previously exposed credential and replace the
 repository's `BENCHER_KEY` secret before enabling publishing. PR jobs never receive
-that secret. Verdicts remain advisory during noise calibration.
+that secret. After rotation, set the repository variable `NITRO_BENCHER_ENABLED`
+to `true` to enable Bencher uploads. The paired PR comment does not need that key.
+Verdicts remain advisory during noise calibration.
+
+## Promoting performance verdicts to a gate
+
+This initial workflow always passes `--mode advisory`; merging it does **not**
+enable performance enforcement. Collect at least 30 successful main/no-change
+runs on each unchanged suite and testbed before a separate reviewed promotion.
+Use only same-commit comparisons to estimate noise; ordinary base/head deltas
+may include real code changes and must not inflate the noise allowance.
+
+For each synchronous case, the promotion must set a per-case budget of
+`max(5%, 1.5 × p95(abs(no-change delta)))`. Cases requiring over 10%, Promise
+metrics, and inconclusive comparisons remain advisory. The current 5% table
+threshold is provisional, not a calibrated gate. Do not simply change `--mode`
+to `enforce`: the initial comparator uses that single provisional threshold, and
+the trusted reporter deliberately rejects PR attempts to enable enforcement.
+Promotion needs the reviewed per-case policy and matching reporter support.
