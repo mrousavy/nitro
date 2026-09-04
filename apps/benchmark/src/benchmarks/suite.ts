@@ -5,6 +5,7 @@ import {
   type TestObjectCpp,
   type TestObjectSwiftKotlin,
 } from 'react-native-nitro-test'
+import { Platform } from 'react-native'
 import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
 import type { BenchmarkDefinition, BenchmarkImplementation } from './types'
 
@@ -366,6 +367,11 @@ function createBufferBenchmark(
   input: ArrayBuffer,
   operation: 'bounce' | 'copy'
 ): BenchmarkDefinition {
+  // Android direct ByteBuffers use ART's non-moving heap. Leave room for the
+  // Java/HybridData cleaner stages as well as Hermes GC: at most ~20 MiB of
+  // copied payload across four chunks, even on a 192 MiB Java heap.
+  const javaBuffer =
+    implementation === 'nitro-platform' && Platform.OS === 'android'
   return {
     id: `${implementation}/array-buffer/${name}`,
     version: 2,
@@ -376,9 +382,13 @@ function createBufferBenchmark(
     maxChunkIterations:
       operation === 'bounce'
         ? 50_000
-        : input.byteLength >= 1024 * 1024
-          ? 50
-          : 5_000,
+        : javaBuffer
+          ? input.byteLength >= 1024 * 1024
+            ? 5
+            : 500
+          : input.byteLength >= 1024 * 1024
+            ? 50
+            : 5_000,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {
