@@ -13,6 +13,11 @@ permissions:
 
 jobs:
   publish:
+    # Same-repository PRs publish in a separate job of Nitro Performance, which
+    # also works before this workflow reaches the default branch.
+    if: >-
+      github.event.workflow_run.event != 'pull_request' ||
+      github.event.workflow_run.head_repository.full_name != github.repository
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout trusted reporting code
@@ -63,6 +68,8 @@ jobs:
       - name: Install Bencher CLI
         if: steps.download.outcome == 'success' && vars.NITRO_BENCHER_ENABLED == 'true'
         uses: bencherdev/bencher@8d75325c3bc59403a2186a056b472c4f49d42838 # v0.6.12
+        with:
+          version: '0.6.12'
 
       - name: Publish to Bencher and GitHub
         if: steps.download.outcome == 'success' && vars.NITRO_BENCHER_ENABLED == 'true'

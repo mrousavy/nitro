@@ -47,15 +47,29 @@ Both targets have a five-minute boot limit; individual device installation and
 launch commands have a two-minute limit. Android app exits also retain logcat and
 process-exit diagnostics, so native crashes do not disappear at emulator teardown.
 
-The Bencher reporter only becomes active once its `workflow_run` definition is on
-the default branch. It posts the rebuilt paired-comparison table as one updatable
-PR comment, independently of Bencher's historical comparison. Stale results do
+Same-repository PRs publish from a separate clean job after both device jobs
+finish. This works before merge: it checks out an immutable, reviewed reporting
+commit, downloads only result data, validates it against GitHub API metadata,
+and rebuilds the table/BMF without installing or executing either app checkout.
+Fork PRs never enter this privileged job; their `workflow_run` reporter becomes
+active once its definition reaches the default branch. That reporter skips
+same-repository PRs to avoid duplicate uploads. Both paths post the rebuilt
+paired-comparison table as one updatable PR comment, independently of Bencher's
+historical comparison. Stale results do
 not overwrite a newer PR revision, and user-authored comments are never edited.
 Revoke the previously exposed credential and replace the
 repository's `BENCHER_KEY` secret before enabling publishing. PR jobs never receive
-that secret. After rotation, set the repository variable `NITRO_BENCHER_ENABLED`
+that secret in device/build jobs or any fork job. After rotation, set the repository variable `NITRO_BENCHER_ENABLED`
 to `true` to enable Bencher uploads. The paired PR comment does not need that key.
 Verdicts remain advisory during noise calibration.
+
+The pre-merge publisher requires a real base benchmark app. The infrastructure
+PR's bootstrap A/A runs remain diagnostic artifacts, not Bencher baselines.
+For paired PR reports, first upload the measured base to `baseline-<full-base-sha>`
+on each testbed, then upload `pr-<number>` with that exact baseline as its start
+point. This works with an empty Bencher project and with stacked PRs without
+pretending their base is `main`. Pushes/scheduled main runs record main history.
+The Bencher action and downloaded CLI version are both pinned.
 
 ## Promoting performance verdicts to a gate
 

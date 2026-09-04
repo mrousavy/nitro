@@ -45,3 +45,69 @@ test('Android performance CI requires KVM and cannot fall back to software emula
   expect(emulator?.['emulator-options']).toContain('-no-snapshot')
   expect(emulator?.['script']).toContain('/ KVM')
 })
+
+test('pre-merge publishing uses pinned code on a separate, same-repository-only job', async () => {
+  const workflow = Bun.YAML.parse(
+    await readFile(
+      new URL('../../.github/workflows/performance.yml', import.meta.url),
+      'utf8'
+    )
+  ) as any
+  const job = workflow.jobs['publish-pr']
+  expect(job.needs).toEqual(['prepare', 'nitro-performance'])
+  expect(job.if).toContain("github.event_name == 'pull_request'")
+  expect(job.if).toContain(
+    'github.event.pull_request.head.repo.full_name == github.repository'
+  )
+  expect(job.if).toContain(
+    "needs.prepare.outputs.base_benchmark_available == 'true'"
+  )
+  expect(workflow.permissions).toEqual({ contents: 'read' })
+  expect(job.permissions['checks']).toBe('write')
+  const checkout = job.steps.find(
+    (s: any) => s.name === 'Checkout pinned reporting code'
+  )
+  expect(checkout.with.ref).toMatch(/^[0-9a-f]{40}$/)
+  expect(checkout.with['persist-credentials']).toBe(false)
+  expect(JSON.stringify(job)).not.toContain('pull_request.head.sha')
+  expect(JSON.stringify(job)).not.toContain('bun install')
+  const comment = job.steps.find(
+    (s: any) => s.name === 'Post paired comparison to the PR'
+  )
+  expect(comment.if).toBeUndefined()
+  const bencher = job.steps.find(
+    (s: any) => s.name === 'Install pinned Bencher CLI'
+  )
+  expect(bencher.with.version).toBe('0.6.12')
+  const publish = job.steps.find(
+    (s: any) => s.name === 'Publish to Bencher and GitHub'
+  )
+  expect(publish.env.BENCHER_API_KEY).toBe('${{ secrets.BENCHER_KEY }}')
+  for (const name of ['prepare', 'android', 'ios', 'nitro-performance']) {
+    expect(JSON.stringify(workflow.jobs[name])).not.toContain(
+      'secrets.BENCHER_KEY'
+    )
+  }
+})
+
+test('default-branch reporter handles forks without duplicating same-repository PR reports', async () => {
+  const workflow = Bun.YAML.parse(
+    await readFile(
+      new URL(
+        '../../.github/workflows/performance-report.yml',
+        import.meta.url
+      ),
+      'utf8'
+    )
+  ) as any
+  expect(workflow.jobs.publish.if).toContain(
+    "github.event.workflow_run.event != 'pull_request'"
+  )
+  expect(workflow.jobs.publish.if).toContain(
+    'github.event.workflow_run.head_repository.full_name != github.repository'
+  )
+  const bencher = workflow.jobs.publish.steps.find(
+    (s: any) => s.name === 'Install Bencher CLI'
+  )
+  expect(bencher.with.version).toBe('0.6.12')
+})
