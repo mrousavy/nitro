@@ -16,7 +16,11 @@ function run(
   revision: 'base' | 'head',
   sequence: number
 ): BenchmarkRunResult {
-  const samples = Array.from({ length: 20 }, (_, index) => 99 + (index % 3))
+  const center = revision === 'base' ? 100 : 120
+  const samples = Array.from(
+    { length: 20 },
+    (_, index) => center - 1 + (index % 3)
+  )
   return {
     schemaVersion: 1,
     suiteVersion: 1,
@@ -54,11 +58,11 @@ function run(
         iterations: 10_000,
         chunkIterations: 10_000,
         samplesNsPerOp: samples,
-        medianNsPerOp: 100,
-        p95NsPerOp: 101,
+        medianNsPerOp: center,
+        p95NsPerOp: center + 1,
         medianAbsoluteDeviationNsPerOp: 1,
         robustCoefficientOfVariationPercent: 1.4826,
-        medianConfidenceInterval95: [99, 101],
+        medianConfidenceInterval95: [center - 1, center + 1],
         checksum: 42,
       },
     ],
@@ -168,7 +172,14 @@ describe('trusted performance report validation', () => {
       const bmf = JSON.parse(
         await readFile(path.join(fixture.output, 'bencher-ios.json'), 'utf8')
       )
-      expect(bmf['nitro-cpp/primitive/add-numbers'].latency.value).toBe(100)
+      expect(bmf['nitro-cpp/primitive/add-numbers'].latency.value).toBe(120)
+      const baseBmf = JSON.parse(
+        await readFile(
+          path.join(fixture.output, 'bencher-base-ios.json'),
+          'utf8'
+        )
+      )
+      expect(baseBmf['nitro-cpp/primitive/add-numbers'].latency.value).toBe(100)
     } finally {
       await rm(root, { recursive: true, force: true })
     }

@@ -403,7 +403,7 @@ const rebuiltComparisons = await Promise.all(
       throw new Error('Base and head run counts must match.')
     }
     const comparison = compareRuns(baseRuns, headRuns, true)
-    return { comparison, headRuns }
+    return { comparison, baseRuns, headRuns }
   })
 )
 
@@ -439,10 +439,14 @@ await Bun.write(
   )}\n`
 )
 
-for (const { comparison, headRuns } of rebuiltComparisons) {
-  const bmf = toBencherMetricFormat(headRuns)
-  await Bun.write(
-    path.join(outputDirectory, `bencher-${comparison.platform}.json`),
-    `${JSON.stringify(bmf, null, 2)}\n`
-  )
+for (const { comparison, baseRuns, headRuns } of rebuiltComparisons) {
+  for (const [suffix, runs] of [
+    [`base-${comparison.platform}`, baseRuns],
+    [comparison.platform, headRuns],
+  ] as const) {
+    await Bun.write(
+      path.join(outputDirectory, `bencher-${suffix}.json`),
+      `${JSON.stringify(toBencherMetricFormat(runs), null, 2)}\n`
+    )
+  }
 }

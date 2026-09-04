@@ -3,7 +3,7 @@ import path from 'node:path'
 import { parseArguments, requiredArgument } from './args'
 import { isSafeSha } from './schema'
 
-interface Metadata {
+export interface Metadata {
   repository: string
   eventName: 'pull_request' | 'push' | 'schedule' | 'workflow_dispatch'
   pullRequestNumber: number | null
@@ -12,7 +12,7 @@ interface Metadata {
   platforms: ('android' | 'ios')[]
 }
 
-function validateMetadata(value: unknown): Metadata {
+export function validateMetadata(value: unknown): Metadata {
   if (value == null || typeof value !== 'object') {
     throw new Error('Invalid metadata.')
   }
@@ -31,77 +31,121 @@ function validateMetadata(value: unknown): Metadata {
     !isSafeSha(metadata.baseSha) ||
     !isSafeSha(metadata.headSha) ||
     !Array.isArray(metadata.platforms) ||
+    metadata.platforms.length !== 2 ||
+    new Set(metadata.platforms).size !== 2 ||
     metadata.platforms.some(
       (platform) => platform !== 'android' && platform !== 'ios'
     )
   ) {
     throw new Error('Invalid metadata.')
   }
+  if (
+    (metadata.eventName === 'pull_request') !==
+    (metadata.pullRequestNumber !== null)
+  ) {
+    throw new Error('PR event and number must agree.')
+  }
   return metadata as Metadata
 }
 
-const argumentsMap = parseArguments(Bun.argv.slice(2))
-const directory = requiredArgument(argumentsMap, 'directory')
-const project = process.env.BENCHER_PROJECT
-const apiKey = process.env.BENCHER_API_KEY
-const githubToken = process.env.GITHUB_TOKEN
-if (project == null || apiKey == null || githubToken == null) {
-  throw new Error(
-    'BENCHER_PROJECT, BENCHER_API_KEY, and GITHUB_TOKEN are required.'
-  )
-}
-
-const metadata = validateMetadata(
-  JSON.parse(await readFile(path.join(directory, 'metadata.json'), 'utf8'))
-)
 const testbeds = {
   android: 'nitro-benchmark-android-release-x86-64-api-36-ubuntu-24-04-kvm',
   ios: 'nitro-benchmark-ios-release-arm64-xcode-26-5-ios-26-5',
 } as const
 
-for (const platform of metadata.platforms) {
+export function bencherArguments(
+  metadata: Metadata,
+  platform: 'android' | 'ios',
+  revision: 'base' | 'head',
+  directory: string,
+  project: string
+): string[] {
+  const baselineBranch = `baseline-${metadata.baseSha}`
+  const isBase = revision === 'base'
+  if (isBase && metadata.pullRequestNumber == null) {
+    throw new Error('Only PR reports need a paired baseline upload.')
+  }
   const command = [
     'bencher',
     'run',
     '--project',
     project,
     '--branch',
-    metadata.pullRequestNumber == null
-      ? 'main'
-      : `pr-${metadata.pullRequestNumber}`,
+    isBase
+      ? baselineBranch
+      : metadata.pullRequestNumber == null
+        ? 'main'
+        : `pr-${metadata.pullRequestNumber}`,
     '--hash',
-    metadata.headSha,
+    isBase ? metadata.baseSha : metadata.headSha,
     '--testbed',
     testbeds[platform],
     '--adapter',
     'json',
     '--file',
-    path.join(directory, `bencher-${platform}.json`),
-    '--github-actions',
-    githubToken,
-    '--ci-id',
-    `nitro-${platform}-release`,
-    '--ci-public-links',
+    path.join(directory, `bencher-${isBase ? 'base-' : ''}${platform}.json`),
   ]
-  if (metadata.pullRequestNumber != null) {
+  if (!isBase && metadata.pullRequestNumber != null) {
     command.push(
       '--start-point',
-      'main',
+      baselineBranch,
       '--start-point-hash',
       metadata.baseSha,
-      '--ci-number',
-      String(metadata.pullRequestNumber)
+      '--start-point-reset'
     )
   }
-  const process = Bun.spawn(command, {
-    env: { ...Bun.env, BENCHER_API_KEY: apiKey },
-    stdout: 'inherit',
-    stderr: 'inherit',
-  })
-  const exitCode = await process.exited
-  if (exitCode !== 0) {
+  return command
+}
+
+if (import.meta.main) {
+  const argumentsMap = parseArguments(Bun.argv.slice(2))
+  const directory = requiredArgument(argumentsMap, 'directory')
+  const project = process.env.BENCHER_PROJECT
+  const apiKey = process.env.BENCHER_API_KEY
+  const githubToken = process.env.GITHUB_TOKEN
+  if (!project?.trim() || !apiKey?.trim() || !githubToken?.trim()) {
     throw new Error(
-      `Bencher failed for ${platform} with exit code ${exitCode}.`
+      'BENCHER_PROJECT, BENCHER_API_KEY, and GITHUB_TOKEN are required.'
     )
+  }
+  const metadata = validateMetadata(
+    JSON.parse(await readFile(path.join(directory, 'metadata.json'), 'utf8'))
+  )
+  for (const platform of metadata.platforms) {
+    const revisions =
+      metadata.pullRequestNumber == null
+        ? (['head'] as const)
+        : (['base', 'head'] as const)
+    for (const revision of revisions) {
+      const command = bencherArguments(
+        metadata,
+        platform,
+        revision,
+        directory,
+        project
+      )
+      if (revision === 'head') {
+        command.push(
+          '--github-actions',
+          githubToken,
+          '--ci-id',
+          `nitro-${platform}-release`,
+          '--ci-public-links'
+        )
+        if (metadata.pullRequestNumber != null)
+          command.push('--ci-number', String(metadata.pullRequestNumber))
+      }
+      // The Bencher key is environment-only, never an argument or log message.
+      const child = Bun.spawn(command, {
+        env: { ...Bun.env, BENCHER_API_KEY: apiKey },
+        stdout: 'inherit',
+        stderr: 'inherit',
+      })
+      const exitCode = await child.exited
+      if (exitCode !== 0)
+        throw new Error(
+          `Bencher failed for ${platform} ${revision} with exit code ${exitCode}.`
+        )
+    }
   }
 }
