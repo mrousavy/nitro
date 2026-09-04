@@ -111,3 +111,37 @@ test('default-branch reporter handles forks without duplicating same-repository 
   )
   expect(bencher.with.version).toBe('0.6.12')
 })
+
+test('both publishers verify the reviewed CLI digest before exposing the Bencher key', async () => {
+  for (const [file, jobName] of [
+    ['performance.yml', 'publish-pr'],
+    ['performance-report.yml', 'publish'],
+  ]) {
+    const workflow = Bun.YAML.parse(
+      await readFile(
+        new URL(`../../.github/workflows/${file}`, import.meta.url),
+        'utf8'
+      )
+    ) as any
+    const steps = workflow.jobs[jobName!].steps as {
+      name?: string
+      run?: string
+      if?: string
+      env?: Record<string, string>
+    }[]
+    const verifyIndex = steps.findIndex(
+      (step) => step.name === 'Verify pinned Bencher binary'
+    )
+    const publishIndex = steps.findIndex(
+      (step) => step.name === 'Publish to Bencher and GitHub'
+    )
+    expect(verifyIndex).toBeGreaterThanOrEqual(0)
+    expect(verifyIndex).toBeLessThan(publishIndex)
+    expect(steps[verifyIndex]?.if).toBe(steps[publishIndex]?.if)
+    expect(steps[verifyIndex]?.run).toContain(
+      'c2d3a6a7fae654246134e5ced1408bdb9ba4e198b0ac3b903af17a06574a7e08'
+    )
+    expect(steps[verifyIndex]?.run).toContain('sha256sum --check -')
+    expect(steps[verifyIndex]?.env).toBeUndefined()
+  }
+})

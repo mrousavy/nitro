@@ -72,7 +72,8 @@ pretending their base is `main`. Pushes/scheduled main runs record main history.
 Both platform baselines are uploaded before either head. The publisher does not
 reset the PR branch for each platform, preserving the other testbed's reports;
 a changed base SHA naturally selects a different start point.
-The Bencher action and downloaded CLI version are both pinned.
+The Bencher action and downloaded CLI version are both pinned. Both publishers
+verify the reviewed Linux CLI SHA-256 before the step receiving the API key.
 
 ## Promoting performance verdicts to a gate
 
