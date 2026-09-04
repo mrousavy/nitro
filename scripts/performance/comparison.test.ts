@@ -142,6 +142,28 @@ describe('performance comparison', () => {
     }
   })
 
+  test('does not let high CV hide a change whose paired interval is decisive', () => {
+    const centers = [80, 100, 120]
+    const base = centers.map((center) =>
+      run(BASE_SHA, [center - 1, center, center, center + 1, center])
+    )
+    const head = centers.map((center) =>
+      run(HEAD_SHA, [
+        center * 2 - 2,
+        center * 2,
+        center * 2,
+        center * 2 + 2,
+        center * 2,
+      ])
+    )
+    const comparison = compareRuns(base, head, true)
+    const metric = comparison.comparisons[0]!
+    expect(metric.baseRobustCvPercent).toBeGreaterThan(5)
+    expect(metric.headRobustCvPercent).toBeGreaterThan(5)
+    expect(metric.deltaConfidenceInterval95[0]).toBeGreaterThan(0)
+    expect(metric.verdict).toBe('regression')
+  })
+
   test('marks changed suites for rebaseline', () => {
     const comparison = compareRuns(
       [run(BASE_SHA, [99, 100, 100, 101, 100], 'c'.repeat(64))],

@@ -81,14 +81,14 @@ function verdictFor(
   budgetPercent: number
 ): MetricVerdict {
   if (advisory) return 'advisory'
-  if (baseCv > 5 || headCv > 5) return 'inconclusive'
   if (deltaPercent >= budgetPercent && confidenceInterval[0] > 0) {
     return 'regression'
   }
   if (deltaPercent <= -budgetPercent && confidenceInterval[1] < 0) {
     return 'improvement'
   }
-  if (Math.abs(deltaPercent) >= budgetPercent) return 'inconclusive'
+  if (Math.abs(deltaPercent) >= budgetPercent || baseCv > 5 || headCv > 5)
+    return 'inconclusive'
   return 'unchanged'
 }
 

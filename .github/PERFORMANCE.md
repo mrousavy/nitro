@@ -19,6 +19,9 @@ process runs, then batches within each selected run. Bencher median bounds use
 the same run-aware approach. Treating all batches from multiple processes as
 independent gave a false-positive control result in the initial A/A validation;
 process-level variability must be preserved in the uncertainty estimate.
+Robust CV remains visible and causes a neutral result when uncertainty overlaps
+zero. It is not an unconditional veto: an effect beyond the budget whose full
+run-aware confidence interval excludes zero is still reported in its direction.
 
 The benchmark app is separate from `apps/example`, which keeps the demos and
 Harness correctness tests. It shares the real Nitro test packages, but has no
