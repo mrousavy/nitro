@@ -28,6 +28,13 @@ test('Android performance CI requires KVM and cannot fall back to software emula
   expect(kvmIndex).toBeLessThan(buildIndex)
   expect(steps[kvmIndex]?.run).toContain('test -c /dev/kvm')
   expect(steps[kvmIndex]?.run).toContain('test -r /dev/kvm && test -w /dev/kvm')
+  const kvmScript = steps[kvmIndex]!.run!
+  expect(kvmScript.indexOf('udevadm settle --timeout=30')).toBeGreaterThan(
+    kvmScript.indexOf('udevadm trigger')
+  )
+  expect(kvmScript.indexOf('udevadm settle --timeout=30')).toBeLessThan(
+    kvmScript.indexOf('test -r /dev/kvm')
+  )
 
   const emulator = steps.find(
     (step) => step.name === 'Run paired Android benchmarks'
