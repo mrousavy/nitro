@@ -56,8 +56,9 @@ export async function executeBatch(
     durationMs += elapsed
     checksum += result
     runtime.collectGarbage()
+    // Let native autorelease pools/cleaners drain too, not just the JS heap.
+    // This yield is outside the timer, including between allocation chunks.
+    await runtime.yieldToRuntime()
   }
-  // No scheduler waits are included in the sample's accumulated timed work.
-  await runtime.yieldToRuntime()
   return { durationMs, checksum }
 }

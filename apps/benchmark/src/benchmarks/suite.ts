@@ -242,7 +242,7 @@ function createObjectBenchmarks(
       kind: 'sync',
       // Bound live JVM references; the runner collects between timed chunks
       // and accumulates enough chunks for a full ~150 ms measured sample.
-      maxChunkIterations: 1_000,
+      maxChunkIterations: 5_000,
       expectedChecksum: sumFromOne,
       run(iterations) {
         let checksum = 0
@@ -372,14 +372,13 @@ function createBufferBenchmark(
     family: 'array-buffer',
     implementation,
     kind: 'sync',
+    // Bounce does not copy the payload; its chunk bound is independent of size.
     maxChunkIterations:
-      input.byteLength >= 1024 * 1024
-        ? operation === 'copy'
+      operation === 'bounce'
+        ? 10_000
+        : input.byteLength >= 1024 * 1024
           ? 50
-          : 1_000
-        : operation === 'copy'
-          ? 1_000
-          : 10_000,
+          : 1_000,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {
