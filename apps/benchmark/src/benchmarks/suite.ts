@@ -1,0 +1,449 @@
+import {
+  HybridTestObjectCpp,
+  HybridTestObjectSwiftKotlin,
+  type Car,
+  type TestObjectCpp,
+  type TestObjectSwiftKotlin,
+} from 'react-native-nitro-test'
+import { ExampleTurboModule } from '../turbo-module/ExampleTurboModule'
+import type { BenchmarkDefinition, BenchmarkImplementation } from './types'
+
+type TestObject = TestObjectCpp | TestObjectSwiftKotlin
+
+const smallNumbers = Array.from({ length: 16 }, (_, index) => index + 1)
+const largeNumbers = Array.from({ length: 1024 }, (_, index) => index + 1)
+const smallBuffer = new ArrayBuffer(4 * 1024)
+const largeBuffer = new ArrayBuffer(1024 * 1024)
+
+const car: Car = {
+  year: 2026,
+  make: 'Margelo',
+  model: 'Nitro',
+  power: 900,
+  powertrain: 'electric',
+  driver: { name: 'Marc', age: 30 },
+  passengers: [
+    { name: 'Ada', age: 36 },
+    { name: 'Grace', age: 40 },
+  ],
+  isFast: true,
+  favouriteTrack: 'Spa-Francorchamps',
+  performanceScores: [9.8, 9.9, 10],
+  someVariant: 'fast',
+}
+
+const typedMap: Record<string, number> = {
+  zero: 0,
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+}
+
+function assertNumber(value: number, label: string): number {
+  if (!Number.isFinite(value)) {
+    throw new Error(`${label} returned a non-finite checksum.`)
+  }
+  return value
+}
+
+function sumFromOne(count: number): number {
+  return (count * (count + 1)) / 2
+}
+
+function sumFromZero(count: number): number {
+  return (count * (count - 1)) / 2
+}
+
+function repeatedSequenceSum(iterations: number, length: number): number {
+  const completeSequences = Math.floor(iterations / length)
+  const remainder = iterations % length
+  return completeSequences * sumFromOne(length) + sumFromOne(remainder)
+}
+
+function addNumbersChecksum(iterations: number): number {
+  return repeatedSequenceSum(iterations, 1_000) + iterations * 2
+}
+
+function variantChecksum(iterations: number): number {
+  const evenCount = Math.ceil(iterations / 2)
+  const oddCount = Math.floor(iterations / 2)
+  return evenCount * (evenCount - 1) + oddCount * 'nitro'.length
+}
+
+function createObjectBenchmarks(
+  object: TestObject,
+  implementation: BenchmarkImplementation
+): BenchmarkDefinition[] {
+  const prefix = implementation
+  const synchronousCallback = () => 1
+  return [
+    {
+      id: `${prefix}/primitive/simple-func`,
+      version: 1,
+      family: 'primitive',
+      implementation,
+      kind: 'sync',
+      maxIterations: 1_000_000,
+      expectedChecksum: sumFromOne,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          object.simpleFunc()
+          checksum += index + 1
+        }
+        return assertNumber(checksum, 'simpleFunc')
+      },
+    },
+    {
+      id: `${prefix}/primitive/add-numbers`,
+      version: 1,
+      family: 'primitive',
+      implementation,
+      kind: 'sync',
+      maxIterations: 1_000_000,
+      expectedChecksum: addNumbersChecksum,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.addNumbers(index % 1_000, 3)
+        }
+        return assertNumber(checksum, 'addNumbers')
+      },
+    },
+    {
+      id: `${prefix}/property/number-get-set`,
+      version: 1,
+      family: 'property',
+      implementation,
+      kind: 'sync',
+      maxIterations: 1_000_000,
+      expectedChecksum: sumFromZero,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          object.numberValue = index
+          checksum += object.numberValue
+        }
+        return assertNumber(checksum, 'numberValue')
+      },
+    },
+    {
+      id: `${prefix}/string/ascii-short`,
+      version: 1,
+      family: 'string',
+      implementation,
+      kind: 'sync',
+      maxIterations: 100_000,
+      expectedChecksum: (iterations) => iterations * 12,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.addStrings('Nitro', 'Modules').length
+        }
+        return assertNumber(checksum, 'addStrings ASCII')
+      },
+    },
+    {
+      id: `${prefix}/string/unicode`,
+      version: 1,
+      family: 'string',
+      implementation,
+      kind: 'sync',
+      maxIterations: 100_000,
+      expectedChecksum: (iterations) => iterations * 10,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.addStrings('🚀γειά', '世界🧪').length
+        }
+        return assertNumber(checksum, 'addStrings Unicode')
+      },
+    },
+    createArrayBenchmark(object, implementation, 'small-16', smallNumbers),
+    createArrayBenchmark(object, implementation, 'large-1024', largeNumbers),
+    {
+      id: `${prefix}/struct/nested-car`,
+      version: 1,
+      family: 'struct',
+      implementation,
+      kind: 'sync',
+      maxIterations: 10_000,
+      expectedChecksum: (iterations) => iterations * 902,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          const result = object.bounceCar(car)
+          checksum += result.power + result.passengers.length
+        }
+        return assertNumber(checksum, 'bounceCar')
+      },
+    },
+    {
+      id: `${prefix}/map/typed-eight-entries`,
+      version: 1,
+      family: 'map',
+      implementation,
+      kind: 'sync',
+      maxIterations: 10_000,
+      expectedChecksum: (iterations) => iterations * 7,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.bounceSimpleMap(typedMap).seven ?? 0
+        }
+        return assertNumber(checksum, 'bounceSimpleMap')
+      },
+    },
+    {
+      id: `${prefix}/optional/trailing-string`,
+      version: 1,
+      family: 'optional',
+      implementation,
+      kind: 'sync',
+      maxIterations: 100_000,
+      expectedChecksum: (iterations) =>
+        Math.ceil(iterations / 2) * 5 + Math.floor(iterations / 2) * 14,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          const result = object.tryOptionalParams(
+            index,
+            true,
+            index % 2 === 0 ? 'nitro' : undefined
+          )
+          checksum += result.length
+        }
+        return assertNumber(checksum, 'tryOptionalParams')
+      },
+    },
+    {
+      id: `${prefix}/variant/number-or-string`,
+      version: 1,
+      family: 'variant',
+      implementation,
+      kind: 'sync',
+      maxIterations: 100_000,
+      expectedChecksum: variantChecksum,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          const result = object.passVariant(index % 2 === 0 ? index : 'nitro')
+          checksum += typeof result === 'number' ? result : result.length
+        }
+        return assertNumber(checksum, 'passVariant')
+      },
+    },
+    {
+      id: `${prefix}/hybrid-object/create`,
+      version: 1,
+      family: 'hybrid-object',
+      implementation,
+      kind: 'sync',
+      // A tight JVM allocation loop retains two JNI global refs per object until
+      // Hermes gets a collection opportunity. Stay comfortably below ART's
+      // 51,200-reference process limit; the app is reinstalled between runs.
+      maxIterations: 256,
+      expectedChecksum: sumFromOne,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.newTestObject().addNumbers(index, 1)
+        }
+        return assertNumber(checksum, 'newTestObject')
+      },
+    },
+    {
+      id: `${prefix}/hybrid-object/return-existing`,
+      version: 1,
+      family: 'hybrid-object',
+      implementation,
+      kind: 'sync',
+      maxIterations: 256,
+      expectedChecksum: sumFromOne,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.thisObject.addNumbers(index, 1)
+        }
+        return assertNumber(checksum, 'thisObject')
+      },
+    },
+    createBufferBenchmark(
+      object,
+      implementation,
+      'bounce-4-kib',
+      smallBuffer,
+      'bounce'
+    ),
+    createBufferBenchmark(
+      object,
+      implementation,
+      'bounce-1-mib',
+      largeBuffer,
+      'bounce'
+    ),
+    createBufferBenchmark(
+      object,
+      implementation,
+      'copy-4-kib',
+      smallBuffer,
+      'copy'
+    ),
+    createBufferBenchmark(
+      object,
+      implementation,
+      'copy-1-mib',
+      largeBuffer,
+      'copy'
+    ),
+    {
+      id: `${prefix}/callback/synchronous`,
+      version: 1,
+      family: 'callback',
+      implementation,
+      kind: 'sync',
+      maxIterations: 100_000,
+      expectedChecksum: (iterations) => iterations,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += object.callbackSync(synchronousCallback)
+        }
+        return assertNumber(checksum, 'callbackSync')
+      },
+    },
+    {
+      id: `${prefix}/promise/immediate`,
+      version: 1,
+      family: 'promise',
+      implementation,
+      kind: 'async',
+      advisory: true,
+      // Awaiting a platform Promise retains its boxed JVM result until Hermes
+      // collects the fulfilled Promise chain. Keep a full run below ART's JNI
+      // global-reference ceiling; this metric is advisory by design.
+      maxIterations: implementation === 'nitro-platform' ? 256 : 10_000,
+      expectedChecksum: (iterations) => iterations * 55,
+      async run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += await object.promiseReturnsInstantly()
+        }
+        return assertNumber(checksum, 'promiseReturnsInstantly')
+      },
+    },
+  ]
+}
+
+function createArrayBenchmark(
+  object: TestObject,
+  implementation: BenchmarkImplementation,
+  name: string,
+  input: number[]
+): BenchmarkDefinition {
+  return {
+    id: `${implementation}/array/${name}`,
+    version: 1,
+    family: 'array',
+    implementation,
+    kind: 'sync',
+    maxIterations: input.length >= 1_024 ? 512 : 10_000,
+    expectedChecksum: (iterations) =>
+      repeatedSequenceSum(iterations, input.length),
+    run(iterations) {
+      let checksum = 0
+      for (let index = 0; index < iterations; index++) {
+        const result = object.bounceNumbers(input)
+        checksum += result[index % result.length] ?? 0
+      }
+      return assertNumber(checksum, `bounceNumbers ${name}`)
+    },
+  }
+}
+
+function createBufferBenchmark(
+  object: TestObject,
+  implementation: BenchmarkImplementation,
+  name: string,
+  input: ArrayBuffer,
+  operation: 'bounce' | 'copy'
+): BenchmarkDefinition {
+  return {
+    id: `${implementation}/array-buffer/${name}`,
+    version: 1,
+    family: 'array-buffer',
+    implementation,
+    kind: 'sync',
+    maxIterations:
+      input.byteLength >= 1024 * 1024
+        ? operation === 'copy'
+          ? 32
+          : 1_000
+        : operation === 'copy'
+          ? 10_000
+          : 100_000,
+    expectedChecksum: (iterations) =>
+      input.byteLength * iterations + Math.floor(iterations / 2),
+    run(iterations) {
+      let checksum = 0
+      for (let index = 0; index < iterations; index++) {
+        const result =
+          operation === 'bounce'
+            ? object.bounceArrayBuffer(input)
+            : object.copyBuffer(input)
+        checksum += result.byteLength + (index % 2)
+      }
+      return assertNumber(checksum, `${operation}Buffer ${name}`)
+    },
+  }
+}
+
+export function createBenchmarkSuite(): BenchmarkDefinition[] {
+  const javascript = {
+    addNumbers: (left: number, right: number) => left + right,
+  }
+  const controls: BenchmarkDefinition[] = [
+    {
+      id: 'javascript/control/add-numbers',
+      version: 1,
+      family: 'control',
+      implementation: 'javascript',
+      kind: 'sync',
+      maxIterations: 10_000_000,
+      expectedChecksum: addNumbersChecksum,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += javascript.addNumbers(index % 1_000, 3)
+        }
+        return assertNumber(checksum, 'JavaScript addNumbers')
+      },
+    },
+    {
+      id: 'turbo-module/control/add-numbers',
+      version: 1,
+      family: 'control',
+      implementation: 'turbo-module',
+      kind: 'sync',
+      maxIterations: 1_000_000,
+      expectedChecksum: addNumbersChecksum,
+      run(iterations) {
+        let checksum = 0
+        for (let index = 0; index < iterations; index++) {
+          checksum += ExampleTurboModule.addNumbers(index % 1_000, 3)
+        }
+        return assertNumber(checksum, 'TurboModule addNumbers')
+      },
+    },
+  ]
+
+  return [
+    ...controls,
+    ...createObjectBenchmarks(HybridTestObjectCpp, 'nitro-cpp'),
+    ...createObjectBenchmarks(HybridTestObjectSwiftKotlin, 'nitro-platform'),
+  ]
+}

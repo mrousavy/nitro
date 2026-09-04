@@ -75,4 +75,5 @@ export default [
   packageConfig('packages/react-native-nitro-test'),
   packageConfig('packages/react-native-nitro-test-external'),
   packageConfig('apps/example'),
+  packageConfig('apps/benchmark'),
 ]
