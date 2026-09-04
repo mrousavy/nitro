@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, spyOn, test } from 'bun:test'
 import { runBenchmarkDefinitions } from '../../apps/benchmark/src/benchmarks/runner'
-import { executeBatch } from '../../apps/benchmark/src/benchmarks/batch'
+import {
+  benchmarkRuntime,
+  executeBatch,
+} from '../../apps/benchmark/src/benchmarks/batch'
 import {
   calibrateIterations,
   roundIterations,
@@ -28,6 +31,16 @@ function definition(expectedChecksum: (iterations: number) => number) {
 }
 
 describe('benchmark runner', () => {
+  test('uses a positive-delay native yield, not the immediate timer fast path', async () => {
+    const timer = spyOn(globalThis, 'setTimeout')
+    try {
+      await benchmarkRuntime.yieldToRuntime()
+      expect(timer.mock.calls[0]?.[1]).toBe(1)
+    } finally {
+      timer.mockRestore()
+    }
+  })
+
   test('samples batches with a fake clock', async () => {
     let now = 0
     spyOn(performance, 'now').mockImplementation(() => now++)

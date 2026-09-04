@@ -12,7 +12,9 @@ export const benchmarkRuntime: BenchmarkRuntime = {
     if (gc == null) throw new Error('Benchmark runtime requires Hermes gc().')
     gc()
   },
-  yieldToRuntime: () => new Promise((resolve) => setTimeout(resolve, 0)),
+  // RCTTiming immediately re-enqueues zero-delay timers. A positive delay goes
+  // through its next-frame path, allowing the native run loop/pools to drain.
+  yieldToRuntime: () => new Promise((resolve) => setTimeout(resolve, 1)),
 }
 
 export async function executeBatch(
