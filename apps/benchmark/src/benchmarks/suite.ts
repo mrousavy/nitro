@@ -75,6 +75,11 @@ function variantChecksum(iterations: number): number {
   return evenCount * (evenCount - 1) + oddCount * 'nitro'.length
 }
 
+function collectJavaGarbage(): void {
+  if (!ExampleTurboModule.collectGarbage())
+    throw new Error('Java heap cleanup failed.')
+}
+
 function createObjectBenchmarks(
   object: TestObject,
   implementation: BenchmarkImplementation
@@ -322,6 +327,10 @@ function createObjectBenchmarks(
       advisory: true,
       // Release fulfilled Promise chains between chunks, outside the timer.
       maxChunkIterations: 5_000,
+      collectNativeGarbage:
+        implementation === 'nitro-platform' && Platform.OS === 'android'
+          ? collectJavaGarbage
+          : undefined,
       expectedChecksum: (iterations) => iterations * 55,
       async run(iterations) {
         let checksum = 0
@@ -388,12 +397,7 @@ function createBufferBenchmark(
             : 50
           : 5_000,
     collectNativeGarbage:
-      javaBuffer && operation === 'copy'
-        ? () => {
-            if (!ExampleTurboModule.collectGarbage())
-              throw new Error('Java heap cleanup failed.')
-          }
-        : undefined,
+      javaBuffer && operation === 'copy' ? collectJavaGarbage : undefined,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {

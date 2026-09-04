@@ -67,7 +67,7 @@ slow samples are retained, not discarded or adaptively shortened.
 
 Allocation-heavy cases split a sample into bounded chunks, collecting garbage
 after each chunk and yielding for native cleanup at most every four chunks,
-outside the timer. Kotlin buffer-copy cases also collect Java's heap
+outside the timer. Kotlin buffer-copy and Promise cases also collect Java's heap
 between chunks through a synchronous, benchmark-only TurboModule helper; Hermes
 GC alone cannot reclaim Java-backed direct buffers. Cleanup is excluded from
 timing. Each sample divides its accumulated timed duration by
