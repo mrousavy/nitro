@@ -1,6 +1,4 @@
 import {
-  bootstrapMedianConfidenceInterval,
-  bootstrapPercentChangeConfidenceInterval,
   median,
   robustCoefficientOfVariationPercent,
 } from '../../example/src/benchmarks/statistics'
@@ -8,6 +6,10 @@ import type {
   BenchmarkMetric,
   BenchmarkRunResult,
 } from '../../example/src/benchmarks/types'
+import {
+  bootstrapPairedRunChange,
+  bootstrapRunMedian,
+} from './paired-bootstrap'
 
 export type MetricVerdict =
   | 'improvement'
@@ -86,6 +88,7 @@ function verdictFor(
   if (deltaPercent <= -budgetPercent && confidenceInterval[1] < 0) {
     return 'improvement'
   }
+  if (Math.abs(deltaPercent) >= budgetPercent) return 'inconclusive'
   return 'unchanged'
 }
 
@@ -97,6 +100,9 @@ export function compareRuns(
 ): PlatformComparison {
   if (baseRuns.length === 0 || headRuns.length === 0) {
     throw new Error('At least one base and one head run are required.')
+  }
+  if (baseRuns.length !== headRuns.length) {
+    throw new Error('A matching base run is required for every head run.')
   }
   const platform = baseRuns[0]!.configuration.platform
   const baseSha = baseRuns[0]!.configuration.commitSha
@@ -139,6 +145,9 @@ export function compareRuns(
       const base = baseMetrics.get(id)!
       const head = headMetrics.get(id)!
       const version = base[0]!.version
+      if (base.length !== baseRuns.length || head.length !== headRuns.length) {
+        throw new Error(`Benchmark ${id} is missing from a process run.`)
+      }
       if (
         base.some((metric) => metric.version !== version) ||
         head.some((metric) => metric.version !== version)
@@ -150,14 +159,24 @@ export function compareRuns(
       const baseMedian = median(baseSamples)
       const headMedian = median(headSamples)
       const deltaPercent = (headMedian / baseMedian - 1) * 100
-      const interval = bootstrapPercentChangeConfidenceInterval(
-        baseSamples,
-        headSamples,
+      const interval = bootstrapPairedRunChange(
+        base.map((metric) => metric.samplesNsPerOp),
+        head.map((metric) => metric.samplesNsPerOp),
         10_000,
         `${platform}:${id}:${baseSha}:${headSha}`
       )
-      const baseCv = robustCoefficientOfVariationPercent(baseSamples)
-      const headCv = robustCoefficientOfVariationPercent(headSamples)
+      const baseCv = Math.max(
+        robustCoefficientOfVariationPercent(baseSamples),
+        robustCoefficientOfVariationPercent(
+          base.map((metric) => median(metric.samplesNsPerOp))
+        )
+      )
+      const headCv = Math.max(
+        robustCoefficientOfVariationPercent(headSamples),
+        robustCoefficientOfVariationPercent(
+          head.map((metric) => median(metric.samplesNsPerOp))
+        )
+      )
       const advisory = base[0]!.advisory || head[0]!.advisory
       comparisons.push({
         id,
@@ -210,8 +229,8 @@ export function toBencherMetricFormat(
       .sort(([left], [right]) => left.localeCompare(right))
       .map(([id, entries]) => {
         const values = samples(entries)
-        const interval = bootstrapMedianConfidenceInterval(
-          values,
+        const interval = bootstrapRunMedian(
+          entries.map((metric) => metric.samplesNsPerOp),
           10_000,
           `bencher:${id}`
         )

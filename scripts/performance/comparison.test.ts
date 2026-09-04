@@ -90,6 +90,42 @@ describe('performance comparison', () => {
     expect(improvement.comparisons[0]?.verdict).toBe('improvement')
   })
 
+  test('does not mistake process-level A/A drift for independent evidence', () => {
+    // Rounded run medians from the accelerated Android bootstrap A/A run.
+    const samples = (value: number) =>
+      Array.from({ length: 20 }, (_, index) => value + (index % 3) - 1)
+    const comparison = compareRuns(
+      [540, 527, 523].map((value) => run(BASE_SHA, samples(value))),
+      [529, 579, 556].map((value) => run(HEAD_SHA, samples(value))),
+      true
+    )
+    expect(comparison.hasRegression).toBe(false)
+    expect(comparison.comparisons[0]?.verdict).toBe('inconclusive')
+    expect(
+      comparison.comparisons[0]?.deltaConfidenceInterval95[0]
+    ).toBeLessThan(0)
+    expect(comparison.rerunRecommended).toBe(true)
+  })
+
+  test('detects a consistent 15% change across independent process pairs', () => {
+    for (const scale of [0.85, 1.15]) {
+      const samples = [99, 100, 100, 101, 100]
+      const comparison = compareRuns(
+        [1, 2, 3].map(() => run(BASE_SHA, samples)),
+        [1, 2, 3].map(() =>
+          run(
+            HEAD_SHA,
+            samples.map((n) => n * scale)
+          )
+        ),
+        true
+      )
+      expect(comparison.comparisons[0]?.verdict).toBe(
+        scale > 1 ? 'regression' : 'improvement'
+      )
+    }
+  })
+
   test('marks changed suites for rebaseline', () => {
     const comparison = compareRuns(
       [run(BASE_SHA, [99, 100, 100, 101, 100], 'c'.repeat(64))],
@@ -104,6 +140,21 @@ describe('performance comparison', () => {
     const result = validateBenchmarkRun(run(HEAD_SHA, [99, 100, 100, 101, 100]))
     const bmf = toBencherMetricFormat([result])
     expect(bmf['nitro-cpp/primitive/add-numbers']?.latency.value).toBe(100)
+  })
+
+  test('includes between-run variation in Bencher confidence bounds', () => {
+    const bmf = toBencherMetricFormat(
+      [100, 200, 300].map((value) =>
+        run(
+          HEAD_SHA,
+          Array.from({ length: 20 }, () => value)
+        )
+      )
+    )
+    const latency = bmf['nitro-cpp/primitive/add-numbers']!.latency
+    expect(latency.value).toBe(200)
+    expect(latency.lower_value).toBe(100)
+    expect(latency.upper_value).toBe(300)
   })
 
   test('rejects a non-release result', () => {

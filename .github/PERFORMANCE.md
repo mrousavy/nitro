@@ -4,6 +4,11 @@
 then runs base → head → head → base on one booted target. A noisy comparison can
 run one additional head/base pair. Each suite measures 40 cases with five warmup
 batches and twenty samples, calibrated toward 150 ms per batch.
+The host computes confidence intervals by resampling whole matched base/head
+process runs, then batches within each selected run. Bencher median bounds use
+the same run-aware approach. Treating all batches from multiple processes as
+independent gave a false-positive control result in the initial A/A validation;
+process-level variability must be preserved in the uncertainty estimate.
 
 ## Android host requirements
 
