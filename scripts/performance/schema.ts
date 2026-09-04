@@ -160,16 +160,28 @@ function validateMetric(value: unknown, index: number): BenchmarkMetric {
   if (typeof value.advisory !== 'boolean') {
     throw new Error(`metrics[${index}].advisory must be a boolean.`)
   }
+  const iterations = positiveInteger(
+    value.iterations,
+    `metrics[${index}].iterations`
+  )
+  // Older v1 runs used one uninterrupted chunk per sample.
+  const chunkIterations = positiveInteger(
+    value.chunkIterations ?? iterations,
+    `metrics[${index}].chunkIterations`
+  )
+  if (chunkIterations > iterations) {
+    throw new Error(
+      `metrics[${index}].chunkIterations exceeds its sample size.`
+    )
+  }
   return {
     id,
     version: positiveInteger(value.version, `metrics[${index}].version`),
     family: family as BenchmarkMetric['family'],
     implementation,
     advisory: value.advisory,
-    iterations: positiveInteger(
-      value.iterations,
-      `metrics[${index}].iterations`
-    ),
+    iterations,
+    chunkIterations,
     samplesNsPerOp,
     medianNsPerOp: finiteNumber(
       value.medianNsPerOp,

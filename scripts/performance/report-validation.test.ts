@@ -52,6 +52,7 @@ function run(
         implementation: 'nitro-cpp',
         advisory: false,
         iterations: 10_000,
+        chunkIterations: 10_000,
         samplesNsPerOp: samples,
         medianNsPerOp: 100,
         p95NsPerOp: 101,

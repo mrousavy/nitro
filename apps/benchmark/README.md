@@ -53,10 +53,22 @@ For iOS, use `--platform ios`, a simulator UDID for `--device-id`, and the built
 `NitroBenchmark.app` for `--app`, with matching simulator/toolchain metadata.
 Local runs do not upload results.
 
-Each of the 40 metrics calibrates toward a 150 ms batch, warms up five times,
-then records twenty samples. Allocation-heavy cases have iteration caps.
+Each of the 40 metrics targets 150 ms of timed work per sample (roughly
+100–200 ms), using round iteration counts with two significant digits, such as
+1,500,000 or 24,000. Calibration can grow or shrink the count and is rechecked
+after five warmup batches. That count is then frozen for twenty measured samples;
+slow samples are retained, not discarded or adaptively shortened.
+
+Allocation-heavy cases split a sample into bounded chunks, collecting garbage
+between chunks outside the timer. The sample sums chunk durations and divides by
+the total operation count; the memory limit no longer caps the sample duration.
+Hermes `gc()` is required, and calibration fails rather than accepting a tiny
+cap-limited batch. Raw results include `iterations` and `chunkIterations`; each
+sample's total timed milliseconds is `samplesNsPerOp[i] * iterations / 1e6`.
+These are operation-cost measurements with explicit inter-chunk cleanup excluded,
+not sustained allocation/GC throughput. Natural GC during an operation is timed.
 The measured cost includes the operation, marshaling, and JS loop bookkeeping.
-Input setup, result validation, logging, statistics, and transport are outside
+Input setup, checksum validation, logging, statistics, and transport are outside
 the timed batch. Operation-induced allocations remain inside it.
 
 ## CI and reporting

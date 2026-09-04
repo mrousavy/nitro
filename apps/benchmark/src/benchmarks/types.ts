@@ -27,6 +27,8 @@ interface BenchmarkDefinitionBase {
   advisory?: boolean
   initialIterations?: number
   maxIterations?: number
+  /** Bound live allocations, not the total operations in a measured sample. */
+  maxChunkIterations?: number
   expectedChecksum(iterations: number): number
 }
 
@@ -58,6 +60,8 @@ export interface BenchmarkMetric {
   implementation: BenchmarkImplementation
   advisory: boolean
   iterations: number
+  /** Maximum operations between untimed garbage collections. */
+  chunkIterations: number
   samplesNsPerOp: number[]
   medianNsPerOp: number
   p95NsPerOp: number

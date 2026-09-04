@@ -46,6 +46,7 @@ function run(
         implementation: 'nitro-cpp',
         advisory: false,
         iterations: 10_000,
+        chunkIterations: 10_000,
         samplesNsPerOp: samples,
         medianNsPerOp: samples[2]!,
         p95NsPerOp: Math.max(...samples),
@@ -62,6 +63,21 @@ function run(
 }
 
 describe('performance comparison', () => {
+  test('validates chunk sizes and accepts older single-chunk results', () => {
+    const result = run(BASE_SHA, [99, 100, 100, 101, 100])
+    result.metrics[0]!.chunkIterations = 1_000
+    expect(validateBenchmarkRun(result).metrics[0]!.chunkIterations).toBe(1_000)
+    const legacy = JSON.parse(JSON.stringify(result))
+    delete legacy.metrics[0].chunkIterations
+    expect(validateBenchmarkRun(legacy).metrics[0]!.chunkIterations).toBe(
+      10_000
+    )
+    for (const invalid of [0, -1, 1.5, 10_001]) {
+      result.metrics[0]!.chunkIterations = invalid
+      expect(() => validateBenchmarkRun(result)).toThrow()
+    }
+  })
+
   test('keeps an A/A run unchanged', () => {
     const samples = [99, 100, 100, 101, 100]
     const comparison = compareRuns(

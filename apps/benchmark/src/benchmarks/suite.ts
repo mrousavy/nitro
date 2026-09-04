@@ -83,11 +83,10 @@ function createObjectBenchmarks(
   return [
     {
       id: `${prefix}/primitive/simple-func`,
-      version: 1,
+      version: 2,
       family: 'primitive',
       implementation,
       kind: 'sync',
-      maxIterations: 1_000_000,
       expectedChecksum: sumFromOne,
       run(iterations) {
         let checksum = 0
@@ -100,11 +99,10 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/primitive/add-numbers`,
-      version: 1,
+      version: 2,
       family: 'primitive',
       implementation,
       kind: 'sync',
-      maxIterations: 1_000_000,
       expectedChecksum: addNumbersChecksum,
       run(iterations) {
         let checksum = 0
@@ -116,11 +114,10 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/property/number-get-set`,
-      version: 1,
+      version: 2,
       family: 'property',
       implementation,
       kind: 'sync',
-      maxIterations: 1_000_000,
       expectedChecksum: sumFromZero,
       run(iterations) {
         let checksum = 0
@@ -133,11 +130,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/string/ascii-short`,
-      version: 1,
+      version: 2,
       family: 'string',
       implementation,
       kind: 'sync',
-      maxIterations: 100_000,
+      maxChunkIterations: 10_000,
       expectedChecksum: (iterations) => iterations * 12,
       run(iterations) {
         let checksum = 0
@@ -149,11 +146,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/string/unicode`,
-      version: 1,
+      version: 2,
       family: 'string',
       implementation,
       kind: 'sync',
-      maxIterations: 100_000,
+      maxChunkIterations: 10_000,
       expectedChecksum: (iterations) => iterations * 10,
       run(iterations) {
         let checksum = 0
@@ -167,11 +164,11 @@ function createObjectBenchmarks(
     createArrayBenchmark(object, implementation, 'large-1024', largeNumbers),
     {
       id: `${prefix}/struct/nested-car`,
-      version: 1,
+      version: 2,
       family: 'struct',
       implementation,
       kind: 'sync',
-      maxIterations: 10_000,
+      maxChunkIterations: 1_000,
       expectedChecksum: (iterations) => iterations * 902,
       run(iterations) {
         let checksum = 0
@@ -184,11 +181,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/map/typed-eight-entries`,
-      version: 1,
+      version: 2,
       family: 'map',
       implementation,
       kind: 'sync',
-      maxIterations: 10_000,
+      maxChunkIterations: 1_000,
       expectedChecksum: (iterations) => iterations * 7,
       run(iterations) {
         let checksum = 0
@@ -200,11 +197,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/optional/trailing-string`,
-      version: 1,
+      version: 2,
       family: 'optional',
       implementation,
       kind: 'sync',
-      maxIterations: 100_000,
+      maxChunkIterations: 10_000,
       expectedChecksum: (iterations) =>
         Math.ceil(iterations / 2) * 5 + Math.floor(iterations / 2) * 14,
       run(iterations) {
@@ -222,11 +219,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/variant/number-or-string`,
-      version: 1,
+      version: 2,
       family: 'variant',
       implementation,
       kind: 'sync',
-      maxIterations: 100_000,
+      maxChunkIterations: 10_000,
       expectedChecksum: variantChecksum,
       run(iterations) {
         let checksum = 0
@@ -239,14 +236,13 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/hybrid-object/create`,
-      version: 1,
+      version: 2,
       family: 'hybrid-object',
       implementation,
       kind: 'sync',
-      // A tight JVM allocation loop retains two JNI global refs per object until
-      // Hermes gets a collection opportunity. Stay comfortably below ART's
-      // 51,200-reference process limit; the app is reinstalled between runs.
-      maxIterations: 256,
+      // Bound live JVM references; the runner collects between timed chunks
+      // and accumulates enough chunks for a full ~150 ms measured sample.
+      maxChunkIterations: 1_000,
       expectedChecksum: sumFromOne,
       run(iterations) {
         let checksum = 0
@@ -258,11 +254,11 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/hybrid-object/return-existing`,
-      version: 1,
+      version: 2,
       family: 'hybrid-object',
       implementation,
       kind: 'sync',
-      maxIterations: 256,
+      maxChunkIterations: 10_000,
       expectedChecksum: sumFromOne,
       run(iterations) {
         let checksum = 0
@@ -302,11 +298,11 @@ function createObjectBenchmarks(
     ),
     {
       id: `${prefix}/callback/synchronous`,
-      version: 1,
+      version: 2,
       family: 'callback',
       implementation,
       kind: 'sync',
-      maxIterations: 100_000,
+      maxChunkIterations: 10_000,
       expectedChecksum: (iterations) => iterations,
       run(iterations) {
         let checksum = 0
@@ -318,15 +314,13 @@ function createObjectBenchmarks(
     },
     {
       id: `${prefix}/promise/immediate`,
-      version: 1,
+      version: 2,
       family: 'promise',
       implementation,
       kind: 'async',
       advisory: true,
-      // Awaiting a platform Promise retains its boxed JVM result until Hermes
-      // collects the fulfilled Promise chain. Keep a full run below ART's JNI
-      // global-reference ceiling; this metric is advisory by design.
-      maxIterations: implementation === 'nitro-platform' ? 256 : 10_000,
+      // Release fulfilled Promise chains between chunks, outside the timer.
+      maxChunkIterations: 1_000,
       expectedChecksum: (iterations) => iterations * 55,
       async run(iterations) {
         let checksum = 0
@@ -347,11 +341,11 @@ function createArrayBenchmark(
 ): BenchmarkDefinition {
   return {
     id: `${implementation}/array/${name}`,
-    version: 1,
+    version: 2,
     family: 'array',
     implementation,
     kind: 'sync',
-    maxIterations: input.length >= 1_024 ? 512 : 10_000,
+    maxChunkIterations: input.length >= 1_024 ? 1_000 : 10_000,
     expectedChecksum: (iterations) =>
       repeatedSequenceSum(iterations, input.length),
     run(iterations) {
@@ -374,18 +368,18 @@ function createBufferBenchmark(
 ): BenchmarkDefinition {
   return {
     id: `${implementation}/array-buffer/${name}`,
-    version: 1,
+    version: 2,
     family: 'array-buffer',
     implementation,
     kind: 'sync',
-    maxIterations:
+    maxChunkIterations:
       input.byteLength >= 1024 * 1024
         ? operation === 'copy'
-          ? 32
+          ? 50
           : 1_000
         : operation === 'copy'
-          ? 10_000
-          : 100_000,
+          ? 1_000
+          : 10_000,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {
@@ -409,11 +403,10 @@ export function createBenchmarkSuite(): BenchmarkDefinition[] {
   const controls: BenchmarkDefinition[] = [
     {
       id: 'javascript/control/add-numbers',
-      version: 1,
+      version: 2,
       family: 'control',
       implementation: 'javascript',
       kind: 'sync',
-      maxIterations: 10_000_000,
       expectedChecksum: addNumbersChecksum,
       run(iterations) {
         let checksum = 0
@@ -425,11 +418,10 @@ export function createBenchmarkSuite(): BenchmarkDefinition[] {
     },
     {
       id: 'turbo-module/control/add-numbers',
-      version: 1,
+      version: 2,
       family: 'control',
       implementation: 'turbo-module',
       kind: 'sync',
-      maxIterations: 1_000_000,
       expectedChecksum: addNumbersChecksum,
       run(iterations) {
         let checksum = 0

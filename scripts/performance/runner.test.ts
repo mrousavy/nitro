@@ -1,6 +1,13 @@
 import { afterEach, describe, expect, spyOn, test } from 'bun:test'
 import { runBenchmarkDefinitions } from '../../apps/benchmark/src/benchmarks/runner'
+import { executeBatch } from '../../apps/benchmark/src/benchmarks/batch'
+import {
+  calibrateIterations,
+  roundIterations,
+} from '../../apps/benchmark/src/benchmarks/calibration'
 import type { BenchmarkDefinition } from '../../apps/benchmark/src/benchmarks/types'
+
+const runtime = { collectGarbage() {}, async yieldToRuntime() {} }
 
 afterEach(() => {
   spyOn(performance, 'now').mockRestore()
@@ -32,7 +39,8 @@ describe('benchmark runner', () => {
         warmupCount: 1,
         sampleCount: 2,
         reverse: false,
-      }
+      },
+      runtime
     )
 
     expect(metric?.iterations).toBe(1)
@@ -45,12 +53,171 @@ describe('benchmark runner', () => {
     spyOn(performance, 'now').mockImplementation(() => now++)
 
     await expect(
-      runBenchmarkDefinitions([definition(() => 99)], {
+      runBenchmarkDefinitions(
+        [definition(() => 99)],
+        {
+          targetBatchDurationMs: 1,
+          warmupCount: 1,
+          sampleCount: 1,
+          reverse: false,
+        },
+        runtime
+      )
+    ).rejects.toThrow('returned checksum 2, expected 99')
+  })
+
+  test('rounds counts to two significant digits', () => {
+    expect(roundIterations(1_478_392, 100_000_000)).toBe(1_500_000)
+    expect(roundIterations(243_987, 100_000_000)).toBe(240_000)
+    expect(roundIterations(3_187, 100_000_000)).toBe(3_200)
+    expect(roundIterations(0.5, 100)).toBe(1)
+    expect(roundIterations(1000, 256)).toBe(256)
+  })
+
+  test('calibrates fast and slow methods into 100–200 ms with round counts', async () => {
+    for (const msPerOperation of [0.00002, 0.0001, 0.005, 0.1, 10]) {
+      const iterations = await calibrateIterations(
+        async (n) => n * msPerOperation,
+        150
+      )
+      expect(iterations * msPerOperation).toBeGreaterThanOrEqual(100)
+      expect(iterations * msPerOperation).toBeLessThanOrEqual(200)
+      expect(iterations).toBe(roundIterations(iterations, 100_000_000))
+    }
+  })
+
+  test('shrinks an overshooting calibration instead of accepting it', async () => {
+    const iterations = await calibrateIterations(
+      async (n) => n * 0.01,
+      150,
+      100_000
+    )
+    expect(iterations).toBe(15_000)
+  })
+
+  test('handles a coarse clock without accepting a zero-duration sample', async () => {
+    const iterations = await calibrateIterations(
+      async (n) => Math.floor(n / 1000),
+      150,
+      1
+    )
+    expect(iterations).toBe(150_000)
+  })
+
+  test('fails instead of silently accepting a cap-limited short batch', async () => {
+    await expect(
+      calibrateIterations(async (n) => n * 0.0006, 150, 1, 256)
+    ).rejects.toThrow('Iteration limit')
+  })
+
+  test('accumulates bounded chunks and excludes GC, checks, and yields from timing', async () => {
+    let now = 0
+    let collections = 0
+    const calls: number[] = []
+    spyOn(performance, 'now').mockImplementation(() => now)
+    const result = await executeBatch(
+      {
+        ...definition((n) => {
+          now += 500 // expensive validation must not enter the timer
+          return (n * (n + 1)) / 2
+        }),
+        maxChunkIterations: 1_000,
+        run(n) {
+          calls.push(n)
+          now += n * 0.06
+          return (n * (n + 1)) / 2
+        },
+      },
+      2_500,
+      {
+        collectGarbage() {
+          collections++
+          now += 10_000
+        },
+        async yieldToRuntime() {
+          now += 1_000
+        },
+      }
+    )
+    expect(calls).toEqual([1_000, 1_000, 500])
+    expect(collections).toBe(4)
+    expect(result.durationMs).toBe(150)
+    expect(result.checksum).toBe(2 * 500_500 + 125_250)
+  })
+
+  test('chunks advisory async methods without timing cleanup', async () => {
+    let now = 0
+    spyOn(performance, 'now').mockImplementation(() => now)
+    const result = await executeBatch(
+      {
+        ...definition((n) => n * 2),
+        kind: 'async',
+        maxChunkIterations: 1_000,
+        async run(n) {
+          now += n * 0.05
+          return n * 2
+        },
+      },
+      3_000,
+      runtime
+    )
+    expect(result).toEqual({ durationMs: 150, checksum: 6_000 })
+  })
+
+  test('recalibrates after warmup and freezes iterations for all 20 measured samples', async () => {
+    let now = 0
+    let calls = 0
+    const counts: number[] = []
+    spyOn(performance, 'now').mockImplementation(() => now)
+    const [metric] = await runBenchmarkDefinitions(
+      [
+        {
+          ...definition((n) => n * 2),
+          initialIterations: 1_000,
+          maxIterations: 1_000_000,
+          run(n) {
+            counts.push(n)
+            now += n * (++calls > 2 ? 0.075 : 0.15)
+            return n * 2
+          },
+        },
+      ],
+      {
+        targetBatchDurationMs: 150,
+        warmupCount: 5,
+        sampleCount: 20,
+        reverse: false,
+      },
+      runtime
+    )
+    expect(metric?.iterations).toBe(2_000)
+    expect(metric?.chunkIterations).toBe(2_000)
+    expect(counts.slice(-20)).toEqual(Array(20).fill(2_000))
+    expect(metric?.samplesNsPerOp).toEqual(Array(20).fill(75_000))
+  })
+
+  test('preserves slow measured samples instead of filtering scheduler stalls', async () => {
+    let now = 0
+    let calls = 0
+    spyOn(performance, 'now').mockImplementation(() => now)
+    const [metric] = await runBenchmarkDefinitions(
+      [
+        {
+          ...definition((n) => n * 2),
+          run(n) {
+            now += ++calls === 4 ? 10 : 1
+            return n * 2
+          },
+        },
+      ],
+      {
         targetBatchDurationMs: 1,
         warmupCount: 1,
-        sampleCount: 1,
+        sampleCount: 2,
         reverse: false,
-      })
-    ).rejects.toThrow('returned checksum 2, expected 99')
+      },
+      runtime
+    )
+    expect(metric?.samplesNsPerOp).toEqual([10_000_000, 1_000_000])
   })
 })

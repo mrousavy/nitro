@@ -3,7 +3,13 @@
 `Nitro Performance` builds `apps/benchmark` in its ordinary Release/Hermes configuration,
 then runs base → head → head → base on one booted target. A noisy comparison can
 run one additional head/base pair. Each suite measures 40 cases with five warmup
-batches and twenty samples, calibrated toward 150 ms per batch.
+batches and twenty samples, calibrated toward 150 ms (roughly 100–200 ms) of
+timed work per sample. Iteration counts are rounded to two significant digits
+and frozen after warmup; measured outliers are retained. Allocation-heavy samples
+sum bounded timed chunks with explicit GC between chunks excluded from timing,
+so memory-safety limits do not shorten the sample. See `iterations` and
+`chunkIterations` in raw results; sample milliseconds are `ns/op * iterations / 1e6`.
+Calibration changes and version-2 benchmark definitions require a new baseline.
 The host computes confidence intervals by resampling whole matched base/head
 process runs, then batches within each selected run. Bencher median bounds use
 the same run-aware approach. Treating all batches from multiple processes as
