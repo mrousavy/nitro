@@ -9,6 +9,15 @@ class ExampleTurboModuleModule(reactContext: ReactApplicationContext) : NativeEx
         return a + b
     }
 
+    override fun collectGarbage(): Boolean {
+        // Hermes collection alone cannot reclaim Java-backed direct buffers.
+        // Return a value so React Native codegen makes this call synchronous.
+        System.gc()
+        System.runFinalization()
+        System.gc()
+        return true
+    }
+
     companion object {
         const val NAME = "ExampleTurboModule"
     }

@@ -368,8 +368,8 @@ function createBufferBenchmark(
   operation: 'bounce' | 'copy'
 ): BenchmarkDefinition {
   // Android direct ByteBuffers use ART's non-moving heap. Leave room for the
-  // Java/HybridData cleaner stages as well as Hermes GC: at most ~20 MiB of
-  // copied payload across four chunks, even on a 192 MiB Java heap.
+  // Java/HybridData cleaner stages as well as Hermes GC. Collect both heaps
+  // between bounded copy chunks; cleanup is not part of the copy measurement.
   const javaBuffer =
     implementation === 'nitro-platform' && Platform.OS === 'android'
   return {
@@ -382,13 +382,18 @@ function createBufferBenchmark(
     maxChunkIterations:
       operation === 'bounce'
         ? 50_000
-        : javaBuffer
-          ? input.byteLength >= 1024 * 1024
-            ? 5
-            : 500
-          : input.byteLength >= 1024 * 1024
-            ? 50
-            : 5_000,
+        : input.byteLength >= 1024 * 1024
+          ? javaBuffer
+            ? 10
+            : 50
+          : 5_000,
+    collectNativeGarbage:
+      javaBuffer && operation === 'copy'
+        ? () => {
+            if (!ExampleTurboModule.collectGarbage())
+              throw new Error('Java heap cleanup failed.')
+          }
+        : undefined,
     expectedChecksum: (iterations) =>
       input.byteLength * iterations + Math.floor(iterations / 2),
     run(iterations) {

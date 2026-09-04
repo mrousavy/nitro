@@ -126,6 +126,7 @@ describe('benchmark runner', () => {
   test('accumulates bounded chunks and excludes GC, checks, and yields from timing', async () => {
     let now = 0
     let collections = 0
+    let nativeCollections = 0
     const calls: number[] = []
     spyOn(performance, 'now').mockImplementation(() => now)
     const result = await executeBatch(
@@ -135,6 +136,12 @@ describe('benchmark runner', () => {
           return (n * (n + 1)) / 2
         }),
         maxChunkIterations: 1_000,
+        collectNativeGarbage() {
+          // Native cleanup follows Hermes GC and must also stay untimed.
+          expect(collections).toBe(nativeCollections + 1)
+          nativeCollections++
+          now += 10_000
+        },
         run(n) {
           calls.push(n)
           now += n * 0.06
@@ -154,6 +161,7 @@ describe('benchmark runner', () => {
     )
     expect(calls).toEqual([1_000, 1_000, 500])
     expect(collections).toBe(4)
+    expect(nativeCollections).toBe(4)
     expect(result.durationMs).toBe(150)
     expect(result.checksum).toBe(2 * 500_500 + 125_250)
   })

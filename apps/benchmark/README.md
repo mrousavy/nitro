@@ -67,7 +67,10 @@ slow samples are retained, not discarded or adaptively shortened.
 
 Allocation-heavy cases split a sample into bounded chunks, collecting garbage
 after each chunk and yielding for native cleanup at most every four chunks,
-outside the timer. The sample sums chunk durations and divides by
+outside the timer. Kotlin buffer-copy cases also collect Java's heap
+between chunks through a synchronous, benchmark-only TurboModule helper; Hermes
+GC alone cannot reclaim Java-backed direct buffers. Cleanup is excluded from
+timing. Each sample divides its accumulated timed duration by
 the total operation count; the memory limit no longer caps the sample duration.
 Hermes `gc()` is required, and calibration fails rather than accepting a tiny
 cap-limited batch. Raw results include `iterations` and `chunkIterations`; each

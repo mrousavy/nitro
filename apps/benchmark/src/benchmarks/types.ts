@@ -29,6 +29,8 @@ interface BenchmarkDefinitionBase {
   maxIterations?: number
   /** Bound live allocations, not the total operations in a measured sample. */
   maxChunkIterations?: number
+  /** Additional native-heap cleanup after Hermes GC, outside measured time. */
+  collectNativeGarbage?(): void
   expectedChecksum(iterations: number): number
 }
 
