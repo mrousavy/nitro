@@ -27,7 +27,7 @@ on:
       - main
     paths:
       - ".github/workflows/harness-ios.yml"
-      - "example/ios/**"
+      - "apps/example/ios/**"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/ios/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -42,16 +42,16 @@ on:
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
-      - "example/__tests__/**"
-      - "example/src/getTests.ts"
-      - "example/src/testing/**"
-      - "example/jest.harness.config.mjs"
-      - "example/package.json"
-      - "example/rn-harness.config.mjs"
+      - "apps/example/__tests__/**"
+      - "apps/example/src/getTests.ts"
+      - "apps/example/src/testing/**"
+      - "apps/example/jest.harness.config.mjs"
+      - "apps/example/package.json"
+      - "apps/example/rn-harness.config.mjs"
   pull_request:
     paths:
       - ".github/workflows/harness-ios.yml"
-      - "example/ios/**"
+      - "apps/example/ios/**"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/ios/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -66,12 +66,12 @@ on:
       - "**/*.podspec"
       - "**/react-native.config.js"
       - "**/nitro.json"
-      - "example/__tests__/**"
-      - "example/src/getTests.ts"
-      - "example/src/testing/**"
-      - "example/jest.harness.config.mjs"
-      - "example/package.json"
-      - "example/rn-harness.config.mjs"
+      - "apps/example/__tests__/**"
+      - "apps/example/src/getTests.ts"
+      - "apps/example/src/testing/**"
+      - "apps/example/jest.harness.config.mjs"
+      - "apps/example/package.json"
+      - "apps/example/rn-harness.config.mjs"
 
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
@@ -124,7 +124,7 @@ jobs:
         with:
           ruby-version: 2.7.2
           bundler-cache: true
-          working-directory: example
+          working-directory: apps/example
 
       - name: Select Xcode ${{ env.XCODE_VERSION }}
         run: sudo xcode-select -s "/Applications/Xcode_${{ env.XCODE_VERSION }}.app/Contents/Developer"
@@ -132,24 +132,24 @@ jobs:
       - name: Restore Pods cache
         uses: actions/cache@v6
         with:
-          path: example/ios/Pods
-          key: ${{ runner.os }}-${{ runner.arch }}-pods-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          path: apps/example/ios/Pods
+          key: ${{ runner.os }}-${{ runner.arch }}-pods-${{ hashFiles('bun.lock', 'apps/example/Gemfile.lock', 'apps/example/ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-pods-
       - name: Install Pods
-        working-directory: example
+        working-directory: apps/example
         run: bun pods
 
       - name: Restore DerivedData cache
         uses: actions/cache@v6
         with:
-          path: example/ios/build
-          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-${{ hashFiles('bun.lock', 'example/Gemfile.lock', 'example/ios/Podfile.lock') }}
+          path: apps/example/ios/build
+          key: ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-${{ hashFiles('bun.lock', 'apps/example/Gemfile.lock', 'apps/example/ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-${{ runner.arch }}-xcode${{ env.XCODE_VERSION }}-${{ matrix.sanitizer.name }}-dd-
 
       - name: Build iOS app
-        working-directory: example/ios
+        working-directory: apps/example/ios
         run: |
           set -o pipefail
           CLANG="$(xcrun -f clang)"
@@ -176,6 +176,6 @@ jobs:
         uses: callstackincubator/react-native-harness@v1.4.1
         with:
           runner: ios
-          projectRoot: example
+          projectRoot: apps/example
           app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
           packageManager: bun

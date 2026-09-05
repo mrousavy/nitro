@@ -33,7 +33,7 @@ jobs:
         with:
           ruby-version: 2.7.2
           bundler-cache: true
-          working-directory: example/ios
+          working-directory: apps/example/ios
 
       - name: Select Xcode 26.2
         run: sudo xcode-select -s "/Applications/Xcode_26.2.app/Contents/Developer"
@@ -41,18 +41,18 @@ jobs:
       - run: |
           bun install
 
-          cd example
+          cd apps/example
           bundle install
           bun pods
-          cd ..
+          cd "$GITHUB_WORKSPACE"
 
           cd docs
           bun install
           cd ..
 
           git add bun.lock
-          git add example/ios/Podfile.lock
-          git add example/Gemfile.lock
+          git add apps/example/ios/Podfile.lock
+          git add apps/example/Gemfile.lock
 
           git config --global user.name 'dependabot[bot]'
           git config --global user.email 'dependabot[bot]@users.noreply.github.com'

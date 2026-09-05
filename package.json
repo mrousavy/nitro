@@ -12,13 +12,13 @@
     "packages/nitrogen",
     "packages/react-native-nitro-test",
     "packages/react-native-nitro-test-external",
-    "example",
+    "apps/*",
     "docs"
   ],
   "scripts": {
     "postinstall": "bun run build",
     "build": "bun nitro build && bun nitrogen build && bun nitro-test-external build && bun nitro-test build",
-    "bootstrap": "bun i && bun run build && cd example && bundle install && bun pods",
+    "bootstrap": "bun i && bun run build && cd apps/example && bundle install && bun pods",
     "typecheck": "bun --filter=\"**\" typecheck",
     "lint": "bun nitro lint && bun nitrogen lint && bun nitro-test lint && bun example lint",
     "lint-cpp": "./scripts/clang-format.sh",
@@ -33,7 +33,7 @@
     "nitrogen": "bun --cwd packages/nitrogen",
     "nitro-test": "bun --cwd packages/react-native-nitro-test",
     "nitro-test-external": "bun --cwd packages/react-native-nitro-test-external",
-    "example": "bun --cwd example"
+    "example": "bun --cwd apps/example"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
@@ -86,7 +86,7 @@
             "path": "version"
           },
           {
-            "file": "example/package.json",
+            "file": "apps/example/package.json",
             "path": "version"
           }
         ]

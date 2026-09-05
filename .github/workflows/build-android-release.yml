@@ -26,10 +26,10 @@ jobs:
           java-package: jdk
 
       - name: Set minSdk in build.gradle to 26
-        run: sed -i "s/minSdkVersion = 24/minSdkVersion = 26/g" example/android/build.gradle
+        run: sed -i "s/minSdkVersion = 24/minSdkVersion = 26/g" apps/example/android/build.gradle
 
-      - name: Run Gradle Build for example/android/
-        working-directory: example/android
+      - name: Run Gradle Build for apps/example/android/
+        working-directory: apps/example/android
         run: |
           ./gradlew clean :app:assembleRelease --no-daemon --no-build-cache
 
@@ -39,11 +39,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: example/android/app/build/outputs/apk/release/app-release.apk
+          asset_path: apps/example/android/app/build/outputs/apk/release/app-release.apk
           asset_name: "NitroExample-${{ github.event.release.tag_name }}.apk"
           asset_content_type: application/vnd.android.package-archive
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
-        working-directory: example/android
+        working-directory: apps/example/android
         run: ./gradlew --stop

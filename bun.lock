@@ -28,35 +28,7 @@
         "typescript-eslint": "^8.60.0",
       },
     },
-    "docs": {
-      "name": "nitro",
-      "version": "0.0.0",
-      "dependencies": {
-        "@docusaurus/core": "3.10.2",
-        "@docusaurus/faster": "3.10.2",
-        "@docusaurus/plugin-sitemap": "3.10.2",
-        "@docusaurus/plugin-vercel-analytics": "3.10.2",
-        "@docusaurus/preset-classic": "3.10.2",
-        "@docusaurus/theme-mermaid": "3.10.2",
-        "@mdx-js/react": "^3.1.1",
-        "cheerio": "^1.2.0",
-        "clsx": "^2.1.1",
-        "esbuild-register": "^3.6.0",
-        "prism-react-renderer": "^2.4.1",
-        "react": "19.2.3",
-        "react-dom": "19.2.3",
-        "satori": "^0.33.3",
-        "sharp": "^0.35.4",
-      },
-      "devDependencies": {
-        "@docusaurus/module-type-aliases": "3.10.2",
-        "@docusaurus/tsconfig": "3.10.2",
-        "@docusaurus/types": "3.10.2",
-        "docusaurus-plugin-llms": "^0.6.0",
-        "typescript": "~6.0.3",
-      },
-    },
-    "example": {
+    "apps/example": {
       "name": "react-native-nitro-example",
       "version": "0.37.1",
       "dependencies": {
@@ -92,6 +64,34 @@
         "nitrogen": "*",
         "react-native-harness": "1.4.1",
         "upng-js": "2.1.0",
+      },
+    },
+    "docs": {
+      "name": "nitro",
+      "version": "0.0.0",
+      "dependencies": {
+        "@docusaurus/core": "3.10.2",
+        "@docusaurus/faster": "3.10.2",
+        "@docusaurus/plugin-sitemap": "3.10.2",
+        "@docusaurus/plugin-vercel-analytics": "3.10.2",
+        "@docusaurus/preset-classic": "3.10.2",
+        "@docusaurus/theme-mermaid": "3.10.2",
+        "@mdx-js/react": "^3.1.1",
+        "cheerio": "^1.2.0",
+        "clsx": "^2.1.1",
+        "esbuild-register": "^3.6.0",
+        "prism-react-renderer": "^2.4.1",
+        "react": "19.2.3",
+        "react-dom": "19.2.3",
+        "satori": "^0.33.3",
+        "sharp": "^0.35.4",
+      },
+      "devDependencies": {
+        "@docusaurus/module-type-aliases": "3.10.2",
+        "@docusaurus/tsconfig": "3.10.2",
+        "@docusaurus/types": "3.10.2",
+        "docusaurus-plugin-llms": "^0.6.0",
+        "typescript": "~6.0.3",
       },
     },
     "packages/nitrogen": {
@@ -3635,7 +3635,7 @@
 
     "react-native-monorepo-config": ["react-native-monorepo-config@0.3.5", "", { "dependencies": { "escape-string-regexp": "^5.0.0", "fast-glob": "^3.3.3" } }, "sha512-Xdu7k0s4V2FHn2OGnlr3D22Dgt5ij0ek9yzloPoLkHh3rL/jUQbPrawieKsAbkqoenv/7pfPJwMlPT27bvN1fg=="],
 
-    "react-native-nitro-example": ["react-native-nitro-example@workspace:example"],
+    "react-native-nitro-example": ["react-native-nitro-example@workspace:apps/example"],
 
     "react-native-nitro-modules": ["react-native-nitro-modules@workspace:packages/react-native-nitro-modules"],
 

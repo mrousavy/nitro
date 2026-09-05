@@ -21,7 +21,7 @@ Either is welcome. A clean, deterministic repro is often more valuable than a gu
 
 Nitro is a Bun monorepo:
 
-- [example/](example) — React Native example app that hosts the runtime test harness.
+- [apps/example/](apps/example) — React Native example app that hosts the runtime test harness.
 - [packages/nitrogen/](packages/nitrogen) — the `nitrogen` code generator.
 - [packages/react-native-nitro-modules/](packages/react-native-nitro-modules) — the core Nitro C++ library.
 - [packages/react-native-nitro-test/](packages/react-native-nitro-test) — a Nitro module full of specs used as compile-time and runtime tests.
@@ -47,7 +47,7 @@ bun lint-all        # run all linters (JS/TS, C++, Swift, Kotlin)
 The most useful thing you can contribute for a bug you can't fix yourself is a **PR that makes CI go red**. If you can reproduce your bug inside this repo as:
 
 - a **compile error** — add the minimal spec to [packages/react-native-nitro-test/src/specs/](packages/react-native-nitro-test/src/specs) that causes nitrogen output to fail to build, or
-- a **runtime error** — add the minimal failing assertion to [example/src/getTests.ts](example/src/getTests.ts) so the Harness workflows ([harness-ios.yml](.github/workflows/harness-ios.yml), [harness-android.yml](.github/workflows/harness-android.yml)) catch it,
+- a **runtime error** — add the minimal failing assertion to [apps/example/src/getTests.ts](apps/example/src/getTests.ts) so the Harness workflows ([harness-ios.yml](.github/workflows/harness-ios.yml), [harness-android.yml](.github/workflows/harness-android.yml)) catch it,
 
 then open a PR with just that change. Don't attempt a fix. A red CI run that deterministically pins the bug is often more valuable than a guessed patch — once the repro is in, the actual fix can be taken from there.
 
@@ -59,7 +59,7 @@ The rules from ["Writing good tests"](#writing-good-tests) below still apply to 
 
 ### 1. Runtime test
 
-A runtime test lives in [example/src/getTests.ts](example/src/getTests.ts) and exercises a spec from [packages/react-native-nitro-test/src/specs/](packages/react-native-nitro-test/src/specs). It runs:
+A runtime test lives in [apps/example/src/getTests.ts](apps/example/src/getTests.ts) and exercises a spec from [packages/react-native-nitro-test/src/specs/](packages/react-native-nitro-test/src/specs). It runs:
 
 - locally in the example app via the "Run Tests" screen / `getTests`, and
 - in CI on both iOS and Android via the **Harness** workflows ([harness-ios.yml](.github/workflows/harness-ios.yml), [harness-android.yml](.github/workflows/harness-android.yml)).
