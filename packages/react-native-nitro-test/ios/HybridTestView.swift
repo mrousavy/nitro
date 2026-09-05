@@ -11,6 +11,7 @@ import UIKit
 class HybridTestView: HybridTestViewSpec {
   // UIView
   var view: UIView = UIView()
+  private let lifecycleLock = NSLock()
   private var onDropViewCount: Double = 0
   private var isBlueSetterCallCount: Double = 0
   private var nativeDefaultValueSetterCallCount: Double = 0
@@ -33,7 +34,7 @@ class HybridTestView: HybridTestViewSpec {
 
   // Methods
   func getOnDropViewCount() throws -> Double {
-    return onDropViewCount
+    return lifecycleLock.withLock { onDropViewCount }
   }
 
   func getIsBlueSetterCallCount() throws -> Double {
@@ -50,6 +51,9 @@ class HybridTestView: HybridTestViewSpec {
   }
 
   func onDropView() {
-    onDropViewCount += 1
+    lifecycleLock.withLock {
+      onDropViewCount += 1
+    }
   }
+
 }
