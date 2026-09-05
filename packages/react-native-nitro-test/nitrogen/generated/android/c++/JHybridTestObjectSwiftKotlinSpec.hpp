@@ -195,6 +195,7 @@ namespace margelo::nitro::test {
     std::shared_ptr<HybridBaseSpec> bounceChildBase(const std::shared_ptr<HybridChildSpec>& child) override;
     std::shared_ptr<HybridChildSpec> castBase(const std::shared_ptr<HybridBaseSpec>& base) override;
     double callbackSync(const std::function<double()>& callback) override;
+    std::function<double()> getSyncNumberCallback() override;
     bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;
     std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec> createInternalObject() override;

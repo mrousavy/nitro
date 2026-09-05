@@ -137,6 +137,7 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   func bounceChildBase(child: (any HybridChildSpec)) throws -> (any HybridBaseSpec)
   func castBase(base: (any HybridBaseSpec)) throws -> (any HybridChildSpec)
   func callbackSync(callback: @escaping () -> Double) throws -> Double
+  func getSyncNumberCallback() throws -> () -> Double
   func getIsViewBlue(view: (any HybridTestViewSpec)) throws -> Bool
   func bounceExternalHybrid(externalObject: (any HybridSomeExternalObjectSpec)) throws -> (any HybridSomeExternalObjectSpec)
   func createInternalObject() throws -> (any HybridSomeExternalObjectSpec)
