@@ -27,14 +27,7 @@ export function createCppDiscriminatedUnion(
     )
     .join('\n')
 
-  // toJSI: std::visit dispatch
-  const toJsiVisitors = variants
-    .map(
-      (v) =>
-        `[&](const ${v.type.getCode('c++', { fullyQualified: true })}& v) { return JSIConverter<${v.type.getCode('c++', { fullyQualified: true })}>::toJSI(runtime, v); }`
-    )
-    .join(',\n')
-
+  // toJSI: generic lambda dispatch (same pattern as JSIConverter+Variant.hpp)
   // canConvert: check discriminant is present and is a known value
   const canConvertCases = variants
     .map((v) => `case hashString("${v.discriminantValue}"):`)
@@ -90,8 +83,8 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${cxxVariantType}& arg) {
       return std::visit(
-        margelo::nitro::overloaded {
-          ${indent(toJsiVisitors, '          ')}
+        [&runtime](const auto& val) {
+          return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
         },
         arg
       );

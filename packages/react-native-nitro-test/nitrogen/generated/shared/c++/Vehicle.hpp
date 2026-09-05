@@ -63,9 +63,8 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<margelo::nitro::test::Truck, margelo::nitro::test::Boat>& arg) {
       return std::visit(
-        margelo::nitro::overloaded {
-          [&](const margelo::nitro::test::Truck& v) { return JSIConverter<margelo::nitro::test::Truck>::toJSI(runtime, v); },
-          [&](const margelo::nitro::test::Boat& v) { return JSIConverter<margelo::nitro::test::Boat>::toJSI(runtime, v); }
+        [&runtime](const auto& val) {
+          return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
         },
         arg
       );
