@@ -64,7 +64,16 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const std::variant<margelo::nitro::test::Truck, margelo::nitro::test::Boat>& arg) {
       return std::visit(
         [&runtime](const auto& val) {
-          return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
+          // Serialize the struct, then inject the discriminant key back
+          // so JS receives the full discriminated object (e.g. { kind: 'truck', payload: 1000 })
+          using T = std::decay_t<decltype(val)>;
+          jsi::Value result = JSIConverter<T>::toJSI(runtime, val);
+          jsi::Object obj = result.asObject(runtime);
+          if constexpr (std::is_same_v<T, margelo::nitro::test::Truck>)
+            obj.setProperty(runtime, PropNameIDCache::get(runtime, "kind"), JSIConverter<std::string>::toJSI(runtime, "truck"));
+          else if constexpr (std::is_same_v<T, margelo::nitro::test::Boat>)
+            obj.setProperty(runtime, PropNameIDCache::get(runtime, "kind"), JSIConverter<std::string>::toJSI(runtime, "boat"));
+          return jsi::Value(runtime, obj);
         },
         arg
       );

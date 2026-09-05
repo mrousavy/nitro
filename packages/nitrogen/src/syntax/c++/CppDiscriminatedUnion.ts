@@ -27,7 +27,13 @@ export function createCppDiscriminatedUnion(
     )
     .join('\n')
 
-  // toJSI: generic lambda dispatch (same pattern as JSIConverter+Variant.hpp)
+  // toJSI: generic lambda dispatch — serialize struct then inject discriminant key back
+  const toJsiDiscriminants = variants
+    .map(
+      (v) =>
+        `if constexpr (std::is_same_v<T, ${v.type.getCode('c++', { fullyQualified: true })}>)\n  obj.setProperty(runtime, PropNameIDCache::get(runtime, "${discriminantKey}"), JSIConverter<std::string>::toJSI(runtime, "${v.discriminantValue}"));`
+    )
+    .join('\nelse ')
   // canConvert: check discriminant is present and is a known value
   const canConvertCases = variants
     .map((v) => `case hashString("${v.discriminantValue}"):`)
@@ -84,7 +90,13 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const ${cxxVariantType}& arg) {
       return std::visit(
         [&runtime](const auto& val) {
-          return JSIConverter<std::decay_t<decltype(val)>>::toJSI(runtime, val);
+          // Serialize the struct, then inject the discriminant key back
+          // so JS receives the full discriminated object (e.g. { kind: 'truck', payload: 1000 })
+          using T = std::decay_t<decltype(val)>;
+          jsi::Value result = JSIConverter<T>::toJSI(runtime, val);
+          jsi::Object obj = result.asObject(runtime);
+          ${indent(toJsiDiscriminants, '          ')}
+          return jsi::Value(runtime, obj);
         },
         arg
       );
