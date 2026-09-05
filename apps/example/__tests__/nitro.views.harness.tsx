@@ -161,6 +161,21 @@ const RENDER_TIMEOUT = 4_000
 const SUPPORTS_NATIVE_VIEW_RECYCLING =
   Platform.OS === 'ios' || Number(Platform.Version) >= 28
 
+async function waitForRecyclableViewRemoval(
+  view: RecyclableTestViewRef,
+  testID: string,
+  expectedOnDropViewCount: number,
+  expectedPrepareForRecycleCount: number
+): Promise<void> {
+  await waitUntil(
+    () =>
+      screen.queryByTestId(testID) === null &&
+      view.getOnDropViewCount() === expectedOnDropViewCount &&
+      view.getPrepareForRecycleCount() === expectedPrepareForRecycleCount,
+    { timeout: RENDER_TIMEOUT }
+  )
+}
+
 describe('TestView', () => {
   it('renders with native props, layout, pixels, methods, and callbacks', async () => {
     const viewRef = deferred<TestViewRef>()
@@ -321,11 +336,14 @@ describe('TestView', () => {
     expect(view.nativeDefaultValue).toBe(42)
     expect(view.getNativeDefaultValueSetterCallCount()).toBe(0)
 
+    const updatedViewRef = deferred<TestViewRef>()
     await renderResult.rerender(
       <TestView
         testID="test-view-native-default"
         style={INITIAL_SIZE}
-        hybridRef={stableHybridRef}
+        hybridRef={callback((updatedView) =>
+          updatedViewRef.resolve(updatedView)
+        )}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
@@ -333,6 +351,7 @@ describe('TestView', () => {
       />
     )
 
+    await updatedViewRef.promise
     expect(view.isBlue).toBe(true)
     expect(view.getIsBlueSetterCallCount()).toBe(2)
     expect(view.nativeDefaultValue).toBe(42)
@@ -363,11 +382,14 @@ describe('TestView', () => {
     expect(view.getIsBlueSetterCallCount()).toBe(1)
     expect(view.getNativeDefaultValueSetterCallCount()).toBe(1)
 
+    const nativeDefaultUpdatedRef = deferred<TestViewRef>()
     await renderResult.rerender(
       <TestView
         testID="test-view-setter-counts"
         style={INITIAL_SIZE}
-        hybridRef={stableHybridRef}
+        hybridRef={callback((updatedView) =>
+          nativeDefaultUpdatedRef.resolve(updatedView)
+        )}
         isBlue={false}
         hasBeenCalled={false}
         colorScheme="dark"
@@ -376,6 +398,12 @@ describe('TestView', () => {
       />
     )
 
+    await nativeDefaultUpdatedRef.promise
+
+    const isBlueUpdatedRef = deferred<TestViewRef>()
+    const isBlueUpdatedHybridRef = callback((updatedView: TestViewRef) =>
+      isBlueUpdatedRef.resolve(updatedView)
+    )
     expect(view.isBlue).toBe(false)
     expect(view.nativeDefaultValue).toBe(2)
     expect(view.getIsBlueSetterCallCount()).toBe(1)
@@ -385,7 +413,7 @@ describe('TestView', () => {
       <TestView
         testID="test-view-setter-counts"
         style={INITIAL_SIZE}
-        hybridRef={stableHybridRef}
+        hybridRef={isBlueUpdatedHybridRef}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
@@ -394,6 +422,7 @@ describe('TestView', () => {
       />
     )
 
+    await isBlueUpdatedRef.promise
     expect(view.isBlue).toBe(true)
     expect(view.nativeDefaultValue).toBe(2)
     expect(view.getIsBlueSetterCallCount()).toBe(2)
@@ -404,7 +433,7 @@ describe('TestView', () => {
       <TestView
         testID="test-view-setter-counts"
         style={RESIZED_SIZE}
-        hybridRef={stableHybridRef}
+        hybridRef={isBlueUpdatedHybridRef}
         isBlue={true}
         hasBeenCalled={false}
         colorScheme="dark"
@@ -443,9 +472,12 @@ describe('TestView', () => {
 
     renderResult.unmount()
     await waitUntil(
-      () => screen.queryByTestId('test-view-lifecycle') === null,
+      () =>
+        screen.queryByTestId('test-view-lifecycle') === null &&
+        firstView.getOnDropViewCount() === initialOnDropViewCount + 1,
       { timeout: RENDER_TIMEOUT }
     )
+    expect(screen.queryByTestId('test-view-lifecycle')).toBeNull()
     expect(firstView.getOnDropViewCount()).toBe(initialOnDropViewCount + 1)
 
     const secondRef = deferred<TestViewRef>()
@@ -528,13 +560,17 @@ describe('multiple RecyclableTestViews', () => {
     expectRed(initialFirstCapture.pixelCoverage)
     expectRed(initialSecondCapture.pixelCoverage)
 
+    const updatedFirstRef = deferred<RecyclableTestViewRef>()
+    const updatedFirstHybridRef = callback((view: RecyclableTestViewRef) =>
+      updatedFirstRef.resolve(view)
+    )
     await renderResult.rerender(
       <View style={{ flexDirection: 'row' }}>
         <RecyclableTestView
           key="first"
           testID="isolated-recyclable-view-first"
           style={INITIAL_SIZE}
-          hybridRef={firstHybridRef}
+          hybridRef={updatedFirstHybridRef}
           isBlue={true}
         />
         <RecyclableTestView
@@ -547,6 +583,7 @@ describe('multiple RecyclableTestViews', () => {
       </View>
     )
 
+    await updatedFirstRef.promise
     expect(firstView.isBlue).toBe(true)
     expect(secondView.isBlue).toBe(false)
     expect(firstView.getOnDropViewCount()).toBe(firstOnDropViewCount)
@@ -579,6 +616,12 @@ describe('multiple RecyclableTestViews', () => {
       </View>
     )
 
+    await waitForRecyclableViewRemoval(
+      firstView,
+      'isolated-recyclable-view-first',
+      firstOnDropViewCount + 1,
+      firstPrepareForRecycleCount + (SUPPORTS_NATIVE_VIEW_RECYCLING ? 1 : 0)
+    )
     expect(screen.queryByTestId('isolated-recyclable-view-first')).toBeNull()
     expect(firstView.getOnDropViewCount()).toBe(firstOnDropViewCount + 1)
     expect(firstView.getPrepareForRecycleCount()).toBe(
@@ -597,6 +640,7 @@ describe('multiple RecyclableTestViews', () => {
     expectRed(mountedSiblingCapture.pixelCoverage)
 
     const remountedFirstRef = deferred<RecyclableTestViewRef>()
+    const remountedFirstLayout = deferred<LayoutRectangle>()
     await renderResult.rerender(
       <View style={{ flexDirection: 'row' }}>
         <RecyclableTestView
@@ -605,6 +649,9 @@ describe('multiple RecyclableTestViews', () => {
           style={INITIAL_SIZE}
           hybridRef={callback((view) => remountedFirstRef.resolve(view))}
           isBlue={true}
+          onLayout={({ nativeEvent }) =>
+            remountedFirstLayout.resolve(nativeEvent.layout)
+          }
         />
         <RecyclableTestView
           key="second"
@@ -617,6 +664,7 @@ describe('multiple RecyclableTestViews', () => {
     )
 
     const remountedFirstView = await remountedFirstRef.promise
+    await remountedFirstLayout.promise
     expect(remountedFirstView.equals(firstView)).toBe(
       SUPPORTS_NATIVE_VIEW_RECYCLING
     )
@@ -750,6 +798,12 @@ describe('RecyclableTestView', () => {
     expectBlue(initialCapture.pixelCoverage)
 
     await renderResult.rerender(<View />)
+    await waitForRecyclableViewRemoval(
+      firstView,
+      'recyclable-view-lifecycle',
+      initialOnDropViewCount + 1,
+      initialPrepareForRecycleCount + (SUPPORTS_NATIVE_VIEW_RECYCLING ? 1 : 0)
+    )
     expect(screen.queryByTestId('recyclable-view-lifecycle')).toBeNull()
     expect(firstView.getOnDropViewCount()).toBe(initialOnDropViewCount + 1)
     expect(firstView.getPrepareForRecycleCount()).toBe(
@@ -794,6 +848,12 @@ describe('RecyclableTestView', () => {
     expectRed(secondCapture.pixelCoverage)
 
     await renderResult.rerender(<View />)
+    await waitForRecyclableViewRemoval(
+      secondView,
+      'recyclable-view-lifecycle',
+      SUPPORTS_NATIVE_VIEW_RECYCLING ? initialOnDropViewCount + 2 : 1,
+      SUPPORTS_NATIVE_VIEW_RECYCLING ? initialPrepareForRecycleCount + 2 : 0
+    )
     expect(screen.queryByTestId('recyclable-view-lifecycle')).toBeNull()
     expect(secondView.getOnDropViewCount()).toBe(
       SUPPORTS_NATIVE_VIEW_RECYCLING ? initialOnDropViewCount + 2 : 1
