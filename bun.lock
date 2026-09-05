@@ -14,6 +14,7 @@
         "@release-it/bumper": "^7.0.5",
         "@release-it/conventional-changelog": "^10.0.6",
         "@tsconfig/react-native": "^3.0.9",
+        "@types/bun": "1.4.0",
         "@types/jest": "^29.5.14",
         "@types/react": "^19.2.15",
         "eslint": "^9.39.4",
@@ -26,6 +27,29 @@
         "release-it": "^19.2.4",
         "typescript": "~6.0.3",
         "typescript-eslint": "^8.60.0",
+      },
+    },
+    "apps/benchmark": {
+      "name": "react-native-nitro-benchmark",
+      "version": "0.37.1",
+      "dependencies": {
+        "react": "19.2.3",
+        "react-native": "0.85.3",
+        "react-native-nitro-modules": "*",
+        "react-native-nitro-test": "*",
+        "react-native-nitro-test-external": "*",
+      },
+      "devDependencies": {
+        "@babel/core": "^7.29.7",
+        "@babel/preset-env": "^7.29.7",
+        "@babel/runtime": "^7.29.7",
+        "@react-native-community/cli": "20.1.3",
+        "@react-native-community/cli-platform-android": "20.1.3",
+        "@react-native-community/cli-platform-ios": "20.1.3",
+        "@react-native/babel-preset": "0.85.3",
+        "@react-native/eslint-config": "0.85.3",
+        "@react-native/metro-config": "0.85.3",
+        "@react-native/typescript-config": "0.85.3",
       },
     },
     "apps/example": {
@@ -1359,6 +1383,8 @@
 
     "@types/bonjour": ["@types/bonjour@3.5.13", "", { "dependencies": { "@types/node": "*" } }, "sha512-z9fJ5Im06zvUL548KvYNecEVlA7cVDkGUi6kZusb04mpyEFKCIZJvloCcmpmLaIahDpOQGHaHmG6imtPMmPXGQ=="],
 
+    "@types/bun": ["@types/bun@1.4.0", "", { "dependencies": { "bun-types": "1.4.0" } }, "sha512-K+lZULY23vRgK/CfTjFIV+tyifaNdSMlPh9j+6mQ/cLfpOznLyAuzgV/JQysyECpkBQLVMSyvjlr2fBUSA9wFQ=="],
+
     "@types/chai": ["@types/chai@5.2.3", "", { "dependencies": { "@types/deep-eql": "*", "assertion-error": "^2.0.1" } }, "sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA=="],
 
     "@types/connect": ["@types/connect@3.4.38", "", { "dependencies": { "@types/node": "*" } }, "sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug=="],
@@ -1802,6 +1828,8 @@
     "buffer": ["buffer@5.7.1", "", { "dependencies": { "base64-js": "^1.3.1", "ieee754": "^1.1.13" } }, "sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ=="],
 
     "buffer-from": ["buffer-from@1.1.2", "", {}, "sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ=="],
+
+    "bun-types": ["bun-types@1.4.0", "", { "dependencies": { "@types/node": "*" } }, "sha512-iIKw23BspnQQYd3prITOBxeUsxBHnwzX6YJfGMuNOZzeNcMmVqzIIVGRm1l69ogaPQmb4wB6BN8mA5bE9YuC5Q=="],
 
     "bundle-name": ["bundle-name@4.1.0", "", { "dependencies": { "run-applescript": "^7.0.0" } }, "sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q=="],
 
@@ -3634,6 +3662,8 @@
     "react-native-harness": ["react-native-harness@1.4.1", "", { "dependencies": { "@react-native-harness/babel-preset": "1.4.1", "@react-native-harness/cli": "1.4.1", "@react-native-harness/jest": "1.4.1", "@react-native-harness/metro": "1.4.1", "@react-native-harness/runtime": "1.4.1", "tslib": "^2.3.0" }, "bin": { "react-native-harness": "bin.js", "harness": "bin.js" } }, "sha512-eqIwIIrDvA2vCvRVt/sl5sCfaULXfReLFIe7G94o4mLwwkxADngzaoApuc+hV9JyEaDaPPMPATwUDfmTwIasRA=="],
 
     "react-native-monorepo-config": ["react-native-monorepo-config@0.3.5", "", { "dependencies": { "escape-string-regexp": "^5.0.0", "fast-glob": "^3.3.3" } }, "sha512-Xdu7k0s4V2FHn2OGnlr3D22Dgt5ij0ek9yzloPoLkHh3rL/jUQbPrawieKsAbkqoenv/7pfPJwMlPT27bvN1fg=="],
+
+    "react-native-nitro-benchmark": ["react-native-nitro-benchmark@workspace:apps/benchmark"],
 
     "react-native-nitro-example": ["react-native-nitro-example@workspace:apps/example"],
 

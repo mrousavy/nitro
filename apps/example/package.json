@@ -54,13 +54,5 @@
   },
   "engines": {
     "node": ">=20.19.4"
-  },
-  "codegenConfig": {
-    "name": "ExampleTurboModule",
-    "type": "modules",
-    "jsSrcsDir": "src",
-    "android": {
-      "javaPackageName": "com.nitroexample.exampleturbomodule"
-    }
   }
 }

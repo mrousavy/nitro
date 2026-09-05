@@ -5,12 +5,10 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useColors } from './useColors'
 import { Image } from 'react-native'
-import { BenchmarksScreen } from './screens/BenchmarksScreen'
 import { ViewScreen } from './screens/ViewScreen'
 import { EvalScreen } from './screens/EvalScreen'
 
 const dna = require('./img/dna.png')
-const rocket = require('./img/rocket.png')
 const map = require('./img/map.png')
 const terminal = require('./img/terminal.webp')
 
@@ -37,20 +35,6 @@ export default function App() {
                 source={dna}
                 tintColor={color}
                 style={{ width: size * 1.2, height: size * 1.2 }}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="Benchmarks"
-          component={BenchmarksScreen}
-          options={{
-            tabBarLabel: 'Benchmarks',
-            tabBarIcon: ({ size, color }) => (
-              <Image
-                source={rocket}
-                tintColor={color}
-                style={{ width: size * 1.4, height: size * 1.4 }}
               />
             ),
           }}

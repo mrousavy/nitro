@@ -25,6 +25,8 @@
     "lint-swift": "./scripts/swift-format.sh",
     "lint-kotlin": "./scripts/kotlin-format.sh",
     "lint-all": "bun lint-cpp && bun lint-swift && bun lint-kotlin && bun lint",
+    "test:performance-tools": "bun test scripts/performance",
+    "typecheck:performance-tools": "tsc -p scripts/performance/tsconfig.json",
     "clean": "git clean -dfx",
     "release": "./scripts/release.sh",
     "docs": "bun --cwd docs",
@@ -33,7 +35,8 @@
     "nitrogen": "bun --cwd packages/nitrogen",
     "nitro-test": "bun --cwd packages/react-native-nitro-test",
     "nitro-test-external": "bun --cwd packages/react-native-nitro-test-external",
-    "example": "bun --cwd apps/example"
+    "example": "bun --cwd apps/example",
+    "benchmark": "bun --cwd apps/benchmark"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
@@ -46,6 +49,7 @@
     "@release-it/conventional-changelog": "^10.0.6",
     "@tsconfig/react-native": "^3.0.9",
     "@types/jest": "^29.5.14",
+    "@types/bun": "1.4.0",
     "@types/react": "^19.2.15",
     "eslint": "^9.39.4",
     "eslint-plugin-ft-flow": "^3.0.11",

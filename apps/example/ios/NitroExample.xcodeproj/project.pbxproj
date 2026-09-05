@@ -12,7 +12,6 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B5425A16F500085048F53261 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */; };
 		B81C701C2D42679D0010CA06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81C701B2D42679D0010CA06 /* AppDelegate.swift */; };
-		B88F64252CE4CF530079E862 /* MGLExampleTurboModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,8 +36,6 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NitroExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A98DCE138B16911E2CF8DB85 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = NitroExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		B81C701B2D42679D0010CA06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = NitroExample/AppDelegate.swift; sourceTree = "<group>"; };
-		B88F64232CE4CF480079E862 /* MGLExampleTurboModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MGLExampleTurboModule.h; sourceTree = "<group>"; };
-		B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MGLExampleTurboModule.mm; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -64,7 +61,6 @@
 		13B07FAE1A68108700A75B9A /* NitroExample */ = {
 			isa = PBXGroup;
 			children = (
-				B88F64222CE4CF3F0079E862 /* Example Turbo Module */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				B81C701B2D42679D0010CA06 /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -112,15 +108,6 @@
 				00E356EE1AD99517003FC87E /* NitroExampleTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B88F64222CE4CF3F0079E862 /* Example Turbo Module */ = {
-			isa = PBXGroup;
-			children = (
-				B88F64242CE4CF4F0079E862 /* MGLExampleTurboModule.mm */,
-				B88F64232CE4CF480079E862 /* MGLExampleTurboModule.h */,
-			);
-			path = "Example Turbo Module";
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -318,7 +305,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B81C701C2D42679D0010CA06 /* AppDelegate.swift in Sources */,
-				B88F64252CE4CF530079E862 /* MGLExampleTurboModule.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
