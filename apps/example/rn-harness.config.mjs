@@ -33,7 +33,8 @@ const config = {
   ],
   defaultRunner: 'android',
   resetEnvironmentBetweenTestFiles: 'runtime',
-  testTimeout: process.env.CI === 'true' ? 30000 : 10000,
+  // The async HybridObject stress test has its own 120-second deadline.
+  testTimeout: process.env.CI === 'true' ? 150000 : 10000,
   platformReadyTimeout: process.env.CI === 'true' ? 420000 : 300000,
   bridgeTimeout: process.env.CI === 'true' ? 180000 : 60000,
   bundleStartTimeout: process.env.CI === 'true' ? 120000 : 60000,
