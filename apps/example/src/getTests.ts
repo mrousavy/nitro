@@ -2064,80 +2064,142 @@ export function getTests(
         .didNotThrow()
         .didReturn('object')
     ),
-    createTest('copyArrayBuffer(JS buffer) equals', async () =>
-      it(() => {
-        // 1. Create JS buffer where value[73] is 4
-        const original = new ArrayBuffer(1024)
-        const originalArray = new Uint8Array(original)
-        originalArray[73] = 4
-        // 2. Copy the buffer
-        const copyBuffer = testObject.copyBuffer(original)
-        const copyArray = new Uint8Array(copyBuffer)
-        // 3. Compare if the value at [73] is still equal
-        return copyArray[73]
-      })
-        .didNotThrow()
-        .equals(4)
-    ),
-    createTest('copyArrayBuffer(buffer) equals', async () =>
-      it(() => {
-        // 1. Create JS buffer where value[73] is 4
-        const original = testObject.createArrayBuffer()
-        const originalArray = new Uint8Array(original)
-        originalArray[73] = 4
-        // 2. Copy the buffer
-        const copyBuffer = testObject.copyBuffer(original)
-        const copyArray = new Uint8Array(copyBuffer)
-        // 3. Compare if the value at [73] is still equal
-        return copyArray[73]
-      })
-        .didNotThrow()
-        .equals(4)
-    ),
-    createTest('copyArrayBuffer(native buffer) equals', async () =>
-      it(() => {
-        // 1. Create native buffer where value[73] is 4
-        const original = testObject.createArrayBufferFromNativeBuffer(false)
-        const originalArray = new Uint8Array(original)
-        originalArray[73] = 4
-        // 2. Copy the buffer
-        const copyBuffer = testObject.copyBuffer(original)
-        const copyArray = new Uint8Array(copyBuffer)
-        // 3. Compare if the value at [73] is still equal
-        return copyArray[73]
-      })
-        .didNotThrow()
-        .equals(4)
-    ),
-    createTest('bounceArrayBuffer(js buffer) equals [73]', async () =>
-      it(() => {
-        // 1. Create js buffer where value[73] is 4
-        const originalArray = new Uint8Array(100)
-        originalArray[73] = 4
-        // 2. Do JS -> native -> JS roundtrip
-        const bouncedBuffer = testObject.bounceArrayBuffer(originalArray.buffer)
-        const bouncedArray = new Uint8Array(bouncedBuffer)
-        // 3. Compare if the value at [73] is still equal
-        return bouncedArray[73]
-      })
-        .didNotThrow()
-        .equals(4)
-    ),
-    createTest('bounceArrayBuffer(native buffer) equals [73]', async () =>
-      it(() => {
-        // 1. Create js buffer where value[73] is 4
-        const original = testObject.createArrayBuffer()
-        const originalArray = new Uint8Array(original)
-        originalArray[73] = 4
-        // 2. Do JS -> native -> JS roundtrip
-        const bouncedBuffer = testObject.bounceArrayBuffer(originalArray.buffer)
-        const bouncedArray = new Uint8Array(bouncedBuffer)
-        // 3. Compare if the value at [73] is still equal
-        return bouncedArray[73]
-      })
-        .didNotThrow()
-        .equals(4)
-    ),
+    ...[
+      { name: 'JS', create: () => new ArrayBuffer(1024) },
+      {
+        name: 'native allocation',
+        create: () => testObject.createArrayBuffer(),
+      },
+      {
+        name: 'native buffer',
+        create: () => testObject.createArrayBufferFromNativeBuffer(false),
+      },
+    ].flatMap(({ name, create }) => [
+      createTest(
+        `copyBuffer(${name}) copies bytes into independent memory`,
+        () =>
+          it(() => {
+            const original = create()
+            const originalArray = new Uint8Array(original)
+            originalArray.fill(17)
+            originalArray[0] = 0
+            originalArray[73] = 255
+            const last = originalArray.length - 1
+            const indices = [0, 73, Math.floor(originalArray.length / 2), last]
+            originalArray[last] = 42
+
+            const copy = testObject.copyBuffer(original)
+            const copyArray = new Uint8Array(copy)
+            const copiedBytes =
+              copy.byteLength === original.byteLength &&
+              indices.every(
+                (index) => copyArray[index] === originalArray[index]
+              )
+
+            // JS writes to either buffer must leave the other buffer unchanged.
+            originalArray[73] = 11
+            originalArray[last] = 12
+            const copyAfterOriginalWrite = [
+              copyArray[73],
+              testObject.getBufferLastItem(copy),
+            ]
+            copyArray[73] = 21
+            copyArray[last] = 22
+            const originalAfterCopyWrite = [
+              originalArray[73],
+              testObject.getBufferLastItem(original),
+            ]
+
+            // Native writes must also stay within the chosen allocation.
+            testObject.setAllValuesTo(original, 31)
+            const copyAfterNativeOriginalWrite = [
+              copyArray[73],
+              testObject.getBufferLastItem(copy),
+            ]
+            testObject.setAllValuesTo(copy, 41)
+            return {
+              copiedBytes,
+              copyAfterOriginalWrite,
+              originalAfterCopyWrite,
+              copyAfterNativeOriginalWrite,
+              originalUnchanged: indices.every(
+                (index) => originalArray[index] === 31
+              ),
+              copyUpdated: indices.every((index) => copyArray[index] === 41),
+            }
+          })
+            .didNotThrow()
+            .equals({
+              copiedBytes: true,
+              copyAfterOriginalWrite: [255, 42],
+              originalAfterCopyWrite: [11, 12],
+              copyAfterNativeOriginalWrite: [21, 22],
+              originalUnchanged: true,
+              copyUpdated: true,
+            })
+      ),
+      createTest(
+        `bounceArrayBuffer(${name}) shares memory across roundtrips`,
+        () =>
+          it(() => {
+            const original = create()
+            const originalArray = new Uint8Array(original)
+            originalArray.fill(17)
+            originalArray[0] = 0
+            originalArray[73] = 255
+            const last = originalArray.length - 1
+            const indices = [0, 73, Math.floor(originalArray.length / 2), last]
+            originalArray[last] = 42
+
+            const bounced = testObject.bounceArrayBuffer(original)
+            const bouncedAgain = testObject.bounceArrayBuffer(bounced)
+            const bouncedArray = new Uint8Array(bounced)
+            const bouncedAgainArray = new Uint8Array(bouncedAgain)
+            const preservedBytes = [bouncedArray, bouncedAgainArray].every(
+              (array) =>
+                array.length === originalArray.length &&
+                indices.every((index) => array[index] === originalArray[index])
+            )
+
+            // Mutating the original must reach both aliases and native readers.
+            originalArray[73] = 11
+            originalArray[last] = 12
+            const aliasesAfterOriginalWrite = [
+              bouncedArray[73],
+              testObject.getBufferLastItem(bounced),
+              bouncedAgainArray[73],
+              testObject.getBufferLastItem(bouncedAgain),
+            ]
+
+            // Mutating the latest alias must reach the original and earlier alias.
+            bouncedAgainArray[73] = 21
+            bouncedAgainArray[last] = 22
+            const buffersAfterAliasWrite = [
+              originalArray[73],
+              testObject.getBufferLastItem(original),
+              bouncedArray[73],
+              testObject.getBufferLastItem(bounced),
+            ]
+
+            testObject.setAllValuesTo(bounced, 31)
+            return {
+              preservedBytes,
+              aliasesAfterOriginalWrite,
+              buffersAfterAliasWrite,
+              nativeWriteShared:
+                indices.every((index) => originalArray[index] === 31) &&
+                indices.every((index) => bouncedAgainArray[index] === 31),
+            }
+          })
+            .didNotThrow()
+            .equals({
+              preservedBytes: true,
+              aliasesAfterOriginalWrite: [11, 12, 11, 12],
+              buffersAfterAliasWrite: [21, 22, 21, 22],
+              nativeWriteShared: true,
+            })
+      ),
+    ]),
     createTest('bounceArrayBuffer(js buffer) strict equals', async () =>
       it(() => {
         // 1. Create js buffer where value[73] is 4
