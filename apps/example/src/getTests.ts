@@ -572,6 +572,34 @@ export function getTests(
         .didNotThrow()
         .equals(18)
     ),
+    createTest('addNumbers(...) one-too-few', () =>
+      it(() =>
+        // @ts-expect-error - Exercise the native argument-count check.
+        testObject.addNumbers(5)
+      ).didThrow(
+        `Error: \`${testObject.name}.addNumbers(...)\` expected 2 arguments, but received 1!`
+      )
+    ),
+    createTest('addNumbers(...) one-too-many', () =>
+      it(() =>
+        // @ts-expect-error - Exercise the native argument-count check.
+        testObject.addNumbers(5, 13, 21)
+      ).didThrow(
+        `Error: \`${testObject.name}.addNumbers(...)\` expected 2 arguments, but received 3!`
+      )
+    ),
+    createTest('addNumbers(...) explicit undefined throws', () =>
+      it(() =>
+        // @ts-expect-error - Required arguments still validate their types.
+        testObject.addNumbers(5, undefined)
+      ).didThrow()
+    ),
+    createTest('addNumbers(...) wrong type throws', () =>
+      it(() =>
+        // @ts-expect-error - Required arguments still validate their types.
+        testObject.addNumbers('5', 13)
+      ).didThrow()
+    ),
     createTest('addStrings("hello ", "world") = "hello world"', () =>
       it(() => testObject.addStrings('hello ', 'world'))
         .didNotThrow()
@@ -581,6 +609,14 @@ export function getTests(
       it(() => testObject.simpleFunc())
         .didNotThrow()
         .didReturn('undefined')
+    ),
+    createTest('simpleFunc(...) one-too-many', () =>
+      it(() =>
+        // @ts-expect-error - Zero-argument methods still validate their count.
+        testObject.simpleFunc(1)
+      ).didThrow(
+        `Error: \`${testObject.name}.simpleFunc(...)\` expected 0 arguments, but received 1!`
+      )
     ),
     createTest('multipleArguments(...)', () =>
       it(() => testObject.multipleArguments(13, 'hello!', true))
@@ -994,6 +1030,11 @@ export function getTests(
         .didReturn('string')
         .equals('value omitted!')
     ),
+    createTest('tryOptionalParams(...) explicit undefined', () =>
+      it(() => testObject.tryOptionalParams(13, true, undefined))
+        .didNotThrow()
+        .equals('value omitted!')
+    ),
     createTest('tryOptionalParams(...) provided', () =>
       it(() => testObject.tryOptionalParams(13, true, 'hello'))
         .didNotThrow()
@@ -1030,6 +1071,14 @@ export function getTests(
         .didNotThrow()
         .equals('hello!')
     ),
+    createTest('tryMiddleParam(...) missing required last argument', () =>
+      it(() =>
+        // @ts-expect-error - An optional in the middle cannot shorten the argument list.
+        testObject.tryMiddleParam(13, undefined)
+      ).didThrow(
+        `Error: \`${testObject.name}.tryMiddleParam(...)\` expected 3 arguments, but received 2!`
+      )
+    ),
     createTest('tryMiddleParam(...) true', () =>
       it(() => testObject.tryMiddleParam(13, true, 'passed'))
         .didNotThrow()
@@ -1042,6 +1091,11 @@ export function getTests(
     ),
     createTest('tryOptionalEnum(...) undefined', () =>
       it(() => testObject.tryOptionalEnum(undefined))
+        .didNotThrow()
+        .equals(undefined)
+    ),
+    createTest('tryOptionalEnum(...) omitted', () =>
+      it(() => testObject.tryOptionalEnum())
         .didNotThrow()
         .equals(undefined)
     ),
