@@ -228,7 +228,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: margelo/nitro
-          ref: 479c01702c8162e415b6f5a9cc7c3a8fab05e199
+          ref: f5857e95af6c07a67a6604c44ecbfc6bc365e234
           persist-credentials: false
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
