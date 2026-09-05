@@ -162,6 +162,10 @@ interface SharedTestObjectProps {
   readonly isBoolean: boolean
   hasBooleanWritable: boolean
   isBooleanWritable: boolean
+  // Kotlin only simplifies `is*` when it is not followed by a lowercase letter,
+  // and it does so for every type - not just booleans.
+  isolatedBoolean: boolean
+  isTextValue: string
 
   // Basic function tests
   simpleFunc(): void

@@ -159,6 +159,10 @@ namespace margelo::nitro::test {
       virtual void setHasBooleanWritable(bool hasBooleanWritable) = 0;
       virtual bool getIsBooleanWritable() = 0;
       virtual void setIsBooleanWritable(bool isBooleanWritable) = 0;
+      virtual bool getIsolatedBoolean() = 0;
+      virtual void setIsolatedBoolean(bool isolatedBoolean) = 0;
+      virtual std::string getIsTextValue() = 0;
+      virtual void setIsTextValue(const std::string& isTextValue) = 0;
       virtual std::variant<double, std::string> getSomeVariant() = 0;
       virtual void setSomeVariant(const std::variant<double, std::string>& someVariant) = 0;
 

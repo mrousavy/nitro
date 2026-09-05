@@ -183,6 +183,22 @@ void HybridTestObjectCpp::setHasBooleanWritable(bool hasBooleanWritable) {
   _hasBooleanWritable = hasBooleanWritable;
 }
 
+bool HybridTestObjectCpp::getIsolatedBoolean() {
+  return _isolatedBoolean;
+}
+
+void HybridTestObjectCpp::setIsolatedBoolean(bool isolatedBoolean) {
+  _isolatedBoolean = isolatedBoolean;
+}
+
+std::string HybridTestObjectCpp::getIsTextValue() {
+  return _isTextValue;
+}
+
+void HybridTestObjectCpp::setIsTextValue(const std::string& isTextValue) {
+  _isTextValue = isTextValue;
+}
+
 void HybridTestObjectCpp::setOptionalCallback(const std::optional<std::function<void(double)>>& callback) {
   _optionalCallback = callback;
 }

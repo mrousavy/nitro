@@ -53,6 +53,10 @@ namespace margelo::nitro::test {
       prototype.registerHybridSetter("hasBooleanWritable", &HybridTestObjectCppSpec::setHasBooleanWritable);
       prototype.registerHybridGetter("isBooleanWritable", &HybridTestObjectCppSpec::getIsBooleanWritable);
       prototype.registerHybridSetter("isBooleanWritable", &HybridTestObjectCppSpec::setIsBooleanWritable);
+      prototype.registerHybridGetter("isolatedBoolean", &HybridTestObjectCppSpec::getIsolatedBoolean);
+      prototype.registerHybridSetter("isolatedBoolean", &HybridTestObjectCppSpec::setIsolatedBoolean);
+      prototype.registerHybridGetter("isTextValue", &HybridTestObjectCppSpec::getIsTextValue);
+      prototype.registerHybridSetter("isTextValue", &HybridTestObjectCppSpec::setIsTextValue);
       prototype.registerHybridGetter("someVariant", &HybridTestObjectCppSpec::getSomeVariant);
       prototype.registerHybridSetter("someVariant", &HybridTestObjectCppSpec::setSomeVariant);
       prototype.registerHybridMethod("getVariantTuple", &HybridTestObjectCppSpec::getVariantTuple);

@@ -49,6 +49,8 @@ class HybridTestObjectSwift: HybridTestObjectSwiftKotlinSpec {
   let isBoolean = false
   var hasBooleanWritable = false
   var isBooleanWritable = false
+  var isolatedBoolean = false
+  var isTextValue = ""
 
   var thisObject: any HybridTestObjectSwiftKotlinSpec {
     return self

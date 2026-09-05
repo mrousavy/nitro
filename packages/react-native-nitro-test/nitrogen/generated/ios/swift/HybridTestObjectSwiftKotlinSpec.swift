@@ -31,6 +31,8 @@ public protocol HybridTestObjectSwiftKotlinSpec_protocol: HybridObject {
   var isBoolean: Bool { get }
   var hasBooleanWritable: Bool { get set }
   var isBooleanWritable: Bool { get set }
+  var isolatedBoolean: Bool { get set }
+  var isTextValue: String { get set }
   var someVariant: Variant_Double_String { get set }
 
   // Methods
