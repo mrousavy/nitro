@@ -70,7 +70,7 @@ body:
     attributes:
       label: Can you reproduce this issue in the Nitro Example app here?
       description: >
-        Try to build the example app (`example/`) and see if the issue is reproduceable here.
+        Try to build the example app (`apps/example/`) and see if the issue is reproduceable here.
         **Note:** If you don't try this in the example app, I most likely won't help you with your issue.
       options:
         - I didn't try (⚠️ your issue might get ignored & closed if you don't try this)

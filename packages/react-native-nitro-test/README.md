@@ -4,7 +4,7 @@ NitroTest is an example nitro module we use for testing various Nitro features.
 
 ## Usage
 
-NitroTest is installed in the [`example/`](../../example) app.
+NitroTest is installed in the [`apps/example/`](../../apps/example) app.
 The main C++ testing hybrid object is exported;
 
 ```ts

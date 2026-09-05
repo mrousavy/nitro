@@ -27,7 +27,7 @@ on:
       - main
     paths:
       - ".github/workflows/harness-android.yml"
-      - "example/android/**"
+      - "apps/example/android/**"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/android/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -40,16 +40,16 @@ on:
       - "**/bun.lock"
       - "**/react-native.config.js"
       - "**/nitro.json"
-      - "example/__tests__/**"
-      - "example/src/getTests.ts"
-      - "example/src/testing/**"
-      - "example/jest.harness.config.mjs"
-      - "example/package.json"
-      - "example/rn-harness.config.mjs"
+      - "apps/example/__tests__/**"
+      - "apps/example/src/getTests.ts"
+      - "apps/example/src/testing/**"
+      - "apps/example/jest.harness.config.mjs"
+      - "apps/example/package.json"
+      - "apps/example/rn-harness.config.mjs"
   pull_request:
     paths:
       - ".github/workflows/harness-android.yml"
-      - "example/android/**"
+      - "apps/example/android/**"
       - "**/nitrogen/generated/shared/**"
       - "**/nitrogen/generated/android/**"
       - "packages/react-native-nitro-test/cpp/**"
@@ -62,12 +62,12 @@ on:
       - "**/bun.lock"
       - "**/react-native.config.js"
       - "**/nitro.json"
-      - "example/__tests__/**"
-      - "example/src/getTests.ts"
-      - "example/src/testing/**"
-      - "example/jest.harness.config.mjs"
-      - "example/package.json"
-      - "example/rn-harness.config.mjs"
+      - "apps/example/__tests__/**"
+      - "apps/example/src/getTests.ts"
+      - "apps/example/src/testing/**"
+      - "apps/example/jest.harness.config.mjs"
+      - "apps/example/package.json"
+      - "apps/example/rn-harness.config.mjs"
 
 env:
   # Device configuration - can be overridden by workflow_dispatch inputs
@@ -111,7 +111,7 @@ jobs:
         run: bun install
 
       - name: Set minSdk in build.gradle
-        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" example/android/build.gradle
+        run: sed -i "s/minSdkVersion = 24/minSdkVersion = ${{ matrix.min-sdk }}/g" apps/example/android/build.gradle
 
       - name: Setup JDK 17
         uses: actions/setup-java@v5.7.0
@@ -126,25 +126,25 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            example/android/.gradle
-            example/android/app/.cxx
+            apps/example/android/.gradle
+            apps/example/android/app/.cxx
           key: ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ matrix.sanitizer.name }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/CMakeLists.txt', '**/*.cmake') }}
           restore-keys: |
             ${{ runner.os }}-gradle-${{ matrix.min-sdk }}-${{ env.DEVICE_ARCH }}-${{ matrix.sanitizer.name }}-
             ${{ runner.os }}-gradle-
       - name: Build Android app
-        working-directory: example/android
+        working-directory: apps/example/android
         run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ env.DEVICE_ARCH }} -PnitroSanitizer=${{ matrix.sanitizer.gradle_property }}
 
       - name: Run Harness E2E tests
         uses: callstackincubator/react-native-harness@v1.4.1
         with:
           runner: android
-          projectRoot: example
+          projectRoot: apps/example
           app: android/app/build/outputs/apk/debug/app-debug.apk
           packageManager: bun
 
       # Gradle cache doesn't like daemons
       - name: Stop Gradle Daemon
-        working-directory: example/android
+        working-directory: apps/example/android
         run: ./gradlew --stop

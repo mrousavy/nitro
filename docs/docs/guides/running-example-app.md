@@ -20,7 +20,7 @@ This guide will help you understand the [Nitro Example app](https://github.com/m
 
 ## The Example app's purpose
 
-Nitro's development always targets the example app (under `example/`). It narrows down user bugs by the following criteria;
+Nitro's development always targets the example app (under `apps/example/`). It narrows down user bugs by the following criteria;
 
 - If you have a bug in your code, but the same code works in the Nitro example app, it's a **user error** and won't/can't be fixed.
 - If you have a bug in your code that can also be reproduced inside the Nitro example app, it's a **Nitro bug**, which might get fixed in a future PR.
@@ -88,7 +88,7 @@ Then, simply clone (potentially also fork?) the Nitro repository and install its
 
     #### iOS
 
-    To run the iOS app of Nitro Example, open `example/ios/NitroExample.xcworkspace` in Xcode, and hit run.
+    To run the iOS app of Nitro Example, open `apps/example/ios/NitroExample.xcworkspace` in Xcode, and hit run.
 
     The `bun bootstrap` command should have ensured that Pods are installed.
 
@@ -100,7 +100,7 @@ Then, simply clone (potentially also fork?) the Nitro repository and install its
     open -a "Android Studio"
     ```
 
-    Then, open `example/android/` in Android Studio.
+    Then, open `apps/example/android/` in Android Studio.
 
   </TabItem>
   <TabItem value="other" label="Windows/Linux">
@@ -120,7 +120,7 @@ Then, simply clone (potentially also fork?) the Nitro repository and install its
     open -a "Android Studio"
     ```
 
-    Then, open `example/android/` in Android Studio.
+    Then, open `apps/example/android/` in Android Studio.
 
   </TabItem>
 </Tabs>
