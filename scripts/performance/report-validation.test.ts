@@ -116,6 +116,8 @@ async function createFixture(root: string): Promise<{
   await writeJson(trustedEvent, {
     repository: { full_name: REPOSITORY },
     workflow_run: {
+      id: 123456789,
+      html_url: 'https://github.com/margelo/nitro/actions/runs/123456789',
       event: 'pull_request',
       head_sha: HEAD_SHA,
       head_repository: { full_name: FORK_REPOSITORY },
@@ -168,7 +170,17 @@ describe('trusted performance report validation', () => {
         path.join(fixture.output, 'performance-summary.md'),
         'utf8'
       )
-      expect(markdown).toContain('| Benchmark | Base | Head |')
+      expect(markdown).toContain('## Performance Report')
+      expect(markdown).toContain('### iOS')
+      expect(markdown).toContain('### Android')
+      expect(markdown).toContain('**C++** · `addNumbers()`')
+      expect(markdown).toContain('<summary>All Benchmarks</summary>')
+      expect(markdown).toContain(
+        '[📊 View the workflow run and raw benchmark artifacts](https://github.com/margelo/nitro/actions/runs/123456789)'
+      )
+      expect(markdown).toContain(
+        `https://github.com/margelo/nitro/compare/${BASE_SHA}..${HEAD_SHA}`
+      )
       const bmf = JSON.parse(
         await readFile(path.join(fixture.output, 'bencher-ios.json'), 'utf8')
       )
@@ -194,6 +206,20 @@ describe('trusted performance report validation', () => {
       )
       pullRequest.head.sha = 'd'.repeat(40)
       await writeJson(fixture.trustedPullRequest, pullRequest)
+      const result = await validate(fixture)
+      expect(result.exitCode).not.toBe(0)
+    } finally {
+      await rm(root, { recursive: true, force: true })
+    }
+  })
+
+  test('rejects a forged workflow run URL', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'nitro-performance-'))
+    try {
+      const fixture = await createFixture(root)
+      const event = JSON.parse(await readFile(fixture.trustedEvent, 'utf8'))
+      event.workflow_run.html_url = 'https://example.com/forged'
+      await writeJson(fixture.trustedEvent, event)
       const result = await validate(fixture)
       expect(result.exitCode).not.toBe(0)
     } finally {

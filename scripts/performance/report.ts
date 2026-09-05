@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { parseArguments, repeatedArgument, requiredArgument } from './args'
 import type { PlatformComparison } from './comparison'
+import { renderPerformanceReportMarkdown } from './report-markdown'
 
 interface PerformanceReport {
   schemaVersion: 1
@@ -28,7 +29,6 @@ function isComparison(value: unknown): value is PlatformComparison {
 
 const argumentsMap = parseArguments(Bun.argv.slice(2))
 const comparisonFiles = repeatedArgument(argumentsMap, 'comparison')
-const markdownFiles = repeatedArgument(argumentsMap, 'markdown')
 const output = requiredArgument(argumentsMap, 'output')
 const markdownOutput = requiredArgument(argumentsMap, 'markdown-output')
 const repository = requiredArgument(argumentsMap, 'repository')
@@ -73,22 +73,11 @@ const report: PerformanceReport = {
   generatedAt: new Date().toISOString(),
   comparisons,
 }
-const platformMarkdown = await Promise.all(
-  markdownFiles.map((file) => readFile(file, 'utf8'))
-)
 const advisory = comparisons.every((comparison) => comparison.advisoryMode)
-const summary = [
-  '## Nitro performance',
-  '',
-  advisory
-    ? '> Performance changes are advisory while the baseline is being calibrated.'
-    : '> Stable metrics are enforced against their calibrated regression budgets.',
-  '',
-  ...platformMarkdown.map((markdown) => markdown.trim()),
-  '',
-  `<sub>Base \`${baseSha.slice(0, 8)}\` · Head \`${headSha.slice(0, 8)}\` · lower is better</sub>`,
-  '',
-].join('\n')
+const summary = renderPerformanceReportMarkdown(
+  comparisons.map((comparison) => ({ comparison })),
+  { advisory, repository, baseSha, headSha }
+)
 
 await Promise.all([
   Bun.write(output, `${JSON.stringify(report, null, 2)}\n`),

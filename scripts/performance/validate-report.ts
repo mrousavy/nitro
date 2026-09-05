@@ -3,11 +3,11 @@ import path from 'node:path'
 import { parseArguments, requiredArgument } from './args'
 import {
   compareRuns,
-  renderPlatformMarkdown,
   type MetricComparison,
   type PlatformComparison,
   toBencherMetricFormat,
 } from './comparison'
+import { renderPerformanceReportMarkdown } from './report-markdown'
 import { isSafeSha, validateBenchmarkRun } from './schema'
 import type { BenchmarkRunResult } from '../../apps/benchmark/src/benchmarks/types'
 
@@ -17,6 +17,8 @@ const METRIC_ID_PATTERN = /^[a-z0-9][a-z0-9/._-]{0,199}$/
 interface TrustedWorkflowRunEvent {
   repository: { full_name: string }
   workflow_run: {
+    id: number
+    html_url: string
     event: 'pull_request' | 'push' | 'schedule' | 'workflow_dispatch'
     head_sha: string
     head_repository: { full_name: string }
@@ -80,6 +82,7 @@ function validateTrustedWorkflowRunEvent(
     'event.workflow_run.head_repository'
   )
   const eventName = workflowRun.event
+  const id = finiteNumber(workflowRun.id, 'event.workflow_run.id')
   if (
     eventName !== 'pull_request' &&
     eventName !== 'push' &&
@@ -92,12 +95,19 @@ function validateTrustedWorkflowRunEvent(
     workflowRun.head_sha,
     'event.workflow_run.head_sha'
   )
-  if (!isSafeSha(headSha)) throw new Error('Trusted head SHA is invalid.')
+  if (!Number.isSafeInteger(id) || id < 1 || !isSafeSha(headSha)) {
+    throw new Error('Trusted workflow run identity is invalid.')
+  }
   return {
     repository: {
       full_name: boundedString(repository.full_name, 'repository.full_name'),
     },
     workflow_run: {
+      id,
+      html_url: boundedString(
+        workflowRun.html_url,
+        'event.workflow_run.html_url'
+      ),
       event: eventName,
       head_sha: headSha,
       head_repository: {
@@ -315,6 +325,10 @@ if (
     'Artifact event metadata does not match the triggering workflow.'
   )
 }
+const workflowRunUrl = `https://github.com/${expectedRepository}/actions/runs/${trustedWorkflowEvent.workflow_run.id}`
+if (trustedWorkflowEvent.workflow_run.html_url !== workflowRunUrl) {
+  throw new Error('Trusted workflow run URL is invalid.')
+}
 
 if (report.eventName === 'pull_request') {
   const trustedPullRequestPath = requiredArgument(
@@ -408,18 +422,19 @@ const rebuiltComparisons = await Promise.all(
 )
 
 await mkdir(outputDirectory, { recursive: true })
-const markdown = [
-  '## Nitro performance',
-  '',
-  '> Performance changes are advisory while the baseline is being calibrated.',
-  '',
-  ...rebuiltComparisons.map(({ comparison }) =>
-    renderPlatformMarkdown(comparison)
-  ),
-  '',
-  `<sub>Base \`${report.baseSha.slice(0, 8)}\` · Head \`${report.headSha.slice(0, 8)}\` · lower is better</sub>`,
-  '',
-].join('\n')
+const markdown = renderPerformanceReportMarkdown(
+  rebuiltComparisons.map(({ comparison, baseRuns }) => ({
+    comparison,
+    pairedRunCount: baseRuns.length,
+  })),
+  {
+    advisory: true,
+    repository: expectedRepository,
+    baseSha: report.baseSha,
+    headSha: report.headSha,
+    workflowRunUrl,
+  }
+)
 await Bun.write(path.join(outputDirectory, 'performance-summary.md'), markdown)
 await Bun.write(
   path.join(outputDirectory, 'metadata.json'),
@@ -430,6 +445,7 @@ await Bun.write(
       pullRequestNumber: report.pullRequestNumber,
       baseSha: report.baseSha,
       headSha: report.headSha,
+      workflowRunUrl,
       platforms: rebuiltComparisons.map(
         ({ comparison }) => comparison.platform
       ),

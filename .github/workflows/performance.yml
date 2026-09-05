@@ -479,8 +479,6 @@ jobs:
           bun scripts/performance/report.ts \
             --comparison artifacts/android/comparison-android.json \
             --comparison artifacts/ios/comparison-ios.json \
-            --markdown artifacts/android/summary-android.md \
-            --markdown artifacts/ios/summary-ios.md \
             --output performance-report/performance-report.json \
             --markdown-output performance-report/performance-summary.md \
             --repository "$REPOSITORY" \
