@@ -174,8 +174,30 @@ jobs:
 
       - name: Run Harness E2E tests
         uses: callstackincubator/react-native-harness@v1.4.1
+        env:
+          SIMCTL_CHILD_TSAN_OPTIONS: ${{ matrix.sanitizer.name == 'TSan' && 'halt_on_error=1:log_path=/tmp/nitro-tsan' || '' }}
         with:
           runner: ios
           projectRoot: apps/example
           app: ios/build/Build/Products/Debug-iphonesimulator/NitroExample.app
           packageManager: bun
+
+      - name: Check TSan reports
+        if: always() && matrix.sanitizer.name == 'TSan'
+        shell: bash
+        run: |
+          shopt -s nullglob
+          reports=(/tmp/nitro-tsan.*)
+          if [ ${#reports[@]} -gt 0 ]; then
+            cat "${reports[@]}"
+            echo "::error::ThreadSanitizer reported an error."
+            exit 1
+          fi
+
+      - name: Upload TSan reports
+        if: always() && matrix.sanitizer.name == 'TSan'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: tsan-reports-ios
+          path: /tmp/nitro-tsan.*
+          if-no-files-found: ignore
