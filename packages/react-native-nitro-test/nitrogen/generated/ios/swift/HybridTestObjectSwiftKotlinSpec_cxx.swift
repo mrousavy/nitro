@@ -2872,6 +2872,21 @@ open class HybridTestObjectSwiftKotlinSpec_cxx {
   }
   
   @inline(__always)
+  public final func getSyncNumberCallback() -> bridge.Result_std__function_double____ {
+    do {
+      let __result = try self.__implementation.getSyncNumberCallback()
+      let __resultCpp = { () -> bridge.Func_double in
+        let __closureWrapper = Func_double(__result)
+        return bridge.create_Func_double(__closureWrapper.toUnsafe())
+      }()
+      return bridge.create_Result_std__function_double____(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__function_double____(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
   public final func getIsViewBlue(view: bridge.std__shared_ptr_HybridTestViewSpec_) -> bridge.Result_bool_ {
     do {
       let __result = try self.__implementation.getIsViewBlue(view: { () -> any HybridTestViewSpec in

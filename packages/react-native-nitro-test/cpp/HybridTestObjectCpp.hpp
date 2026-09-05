@@ -239,6 +239,7 @@ public:
 
   bool getIsViewBlue(const std::shared_ptr<HybridTestViewSpec>& view) override;
   double callbackSync(const std::function<double()>& callback) override;
+  std::function<double()> getSyncNumberCallback() override;
 
   std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>
   bounceExternalHybrid(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& externalObject) override;

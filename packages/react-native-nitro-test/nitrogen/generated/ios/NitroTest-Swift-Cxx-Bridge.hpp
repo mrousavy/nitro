@@ -2304,6 +2304,15 @@ namespace margelo::nitro::test::bridge::swift {
     return Result<std::shared_ptr<HybridBaseSpec>>::withError(error);
   }
   
+  // pragma MARK: Result<std::function<double()>>
+  using Result_std__function_double____ = Result<std::function<double()>>;
+  inline Result_std__function_double____ create_Result_std__function_double____(const std::function<double()>& value) noexcept {
+    return Result<std::function<double()>>::withValue(value);
+  }
+  inline Result_std__function_double____ create_Result_std__function_double____(const std::exception_ptr& error) noexcept {
+    return Result<std::function<double()>>::withError(error);
+  }
+  
   // pragma MARK: Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>
   using Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ = Result<std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>>;
   inline Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__ create_Result_std__shared_ptr_margelo__nitro__test__external__HybridSomeExternalObjectSpec__(const std::shared_ptr<margelo::nitro::test::external::HybridSomeExternalObjectSpec>& value) noexcept {

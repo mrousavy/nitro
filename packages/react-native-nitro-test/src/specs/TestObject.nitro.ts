@@ -346,6 +346,7 @@ interface SharedTestObjectProps {
 
   // Sync funcs
   callbackSync(callback: Sync<() => number>): number
+  getSyncNumberCallback(): Sync<() => number>
 
   // Views
   getIsViewBlue(view: TestView): boolean

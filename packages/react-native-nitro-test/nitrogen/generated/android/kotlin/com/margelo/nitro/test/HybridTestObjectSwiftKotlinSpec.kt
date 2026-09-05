@@ -660,6 +660,15 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
     return __result
   }
   
+  abstract fun getSyncNumberCallback(): () -> Double
+  
+  @DoNotStrip
+  @Keep
+  private fun getSyncNumberCallback_cxx(): Func_double {
+    val __result = getSyncNumberCallback()
+    return Func_double_java(__result)
+  }
+  
   @DoNotStrip
   @Keep
   abstract fun getIsViewBlue(view: HybridTestViewSpec): Boolean

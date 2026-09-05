@@ -2366,6 +2366,14 @@ export function getTests(
         .didNotThrow()
         .equals(55)
     ),
+    createTest('getSyncNumberCallback()() returns a number', () =>
+      it(() => {
+        const callback = testObject.getSyncNumberCallback()
+        return callback()
+      })
+        .didNotThrow()
+        .equals(55)
+    ),
     createTest('bounceExternalHybrid(...) works', () =>
       it(() => {
         return testObject.bounceExternalHybrid(HybridSomeExternalObject)
