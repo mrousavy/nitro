@@ -2,7 +2,6 @@ import type { MetricComparison, PlatformComparison } from './comparison'
 
 export interface PlatformReportMarkdownInput {
   comparison: PlatformComparison
-  pairedRunCount?: number
 }
 
 export interface PerformanceReportMarkdownOptions {
@@ -62,7 +61,16 @@ function benchmarkName(
 ): string {
   const operation = metricId.split('/').at(-1)!
   const name = OPERATION_NAMES[operation] ?? fallbackOperationName(operation)
-  return `**${implementationName(metricId, platform)}** · \`${name}\``
+  return `<strong>${escapeHtml(implementationName(metricId, platform))}</strong> <code>${escapeHtml(name)}</code>`
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
 }
 
 function formatNumber(value: number): string {
@@ -108,27 +116,46 @@ function measurement(
   const value = revision === 'base' ? before : after
   const isFaster = revision === 'base' ? before < after : after < before
   const formatted = formatNumber(value)
-  return isFaster ? `**${formatted}**` : formatted
+  return isFaster ? `<strong>${formatted}</strong>` : formatted
 }
 
 function renderMetricTable(
   metrics: readonly MetricComparison[],
-  platform: PlatformComparison['platform']
+  platform: PlatformComparison['platform'],
+  indentation = 0
 ): string {
+  const indent = ' '.repeat(indentation)
+  const level1 = ' '.repeat(indentation + 2)
+  const level2 = ' '.repeat(indentation + 4)
+  const level3 = ' '.repeat(indentation + 6)
   const lines = [
-    '| Benchmark | Before | After | Difference |',
-    '| --- | ---: | ---: | --- |',
+    `${indent}<table>`,
+    `${level1}<thead>`,
+    `${level2}<tr>`,
+    `${level3}<th align="left">Benchmark</th>`,
+    `${level3}<th align="right">Before</th>`,
+    `${level3}<th align="right">After</th>`,
+    `${level3}<th align="left">Difference</th>`,
+    `${level2}</tr>`,
+    `${level1}</thead>`,
+    `${level1}<tbody>`,
   ]
   for (const metric of metrics) {
     lines.push(
-      `| ${benchmarkName(metric.id, platform)} | ${measurement(metric, 'base')} | ${measurement(metric, 'head')} | ${difference(metric)} |`
+      `${level2}<tr>`,
+      `${level3}<td>${benchmarkName(metric.id, platform)}</td>`,
+      `${level3}<td align="right">${measurement(metric, 'base')}</td>`,
+      `${level3}<td align="right">${measurement(metric, 'head')}</td>`,
+      `${level3}<td>${difference(metric)}</td>`,
+      `${level2}</tr>`
     )
   }
+  lines.push(`${level1}</tbody>`, `${indent}</table>`)
   return lines.join('\n')
 }
 
 function renderPlatform(input: PlatformReportMarkdownInput): string[] {
-  const { comparison, pairedRunCount } = input
+  const { comparison } = input
   const name = platformName(comparison.platform)
   const lines = [`### ${name}`]
   if (!comparison.suiteComparable) {
@@ -154,17 +181,12 @@ function renderPlatform(input: PlatformReportMarkdownInput): string[] {
       : renderMetricTable(changed, comparison.platform),
     '',
     '<details>',
-    '<summary>All Benchmarks</summary>',
-    '',
+    '  <summary>All Benchmarks</summary>',
     other.length === 0
-      ? 'Every benchmark had a decisive change.'
-      : renderMetricTable(other, comparison.platform),
-    '',
+      ? '  <p>Every benchmark had a decisive change.</p>'
+      : renderMetricTable(other, comparison.platform, 2),
     '</details>'
   )
-  if (pairedRunCount != null) {
-    lines.push('', `<sub>${pairedRunCount} paired app-process runs</sub>`)
-  }
   return lines
 }
 
@@ -188,19 +210,13 @@ export function renderPerformanceReportMarkdown(
   }
 
   const compareUrl = `https://github.com/${options.repository}/compare/${options.baseSha}..${options.headSha}`
+  const rawOutput =
+    options.workflowRunUrl == null
+      ? ''
+      : ` ([view raw output](${options.workflowRunUrl}))`
   lines.push(
     '',
-    `[🔍 View the code diff between Before and After](${compareUrl})`
-  )
-  if (options.workflowRunUrl != null) {
-    lines.push(
-      '',
-      `[📊 View the workflow run and raw benchmark artifacts](${options.workflowRunUrl})`
-    )
-  }
-  lines.push(
-    '',
-    `<sub>Before \`${options.baseSha.slice(0, 8)}\` · After \`${options.headSha.slice(0, 8)}\` · lower is better</sub>`,
+    `Benchmarking Code Diff [\`${options.baseSha.slice(0, 8)}\`...\`${options.headSha.slice(0, 8)}\`](${compareUrl})${rawOutput}`,
     ''
   )
   return lines.join('\n')

@@ -173,13 +173,12 @@ describe('trusted performance report validation', () => {
       expect(markdown).toContain('## Performance Report')
       expect(markdown).toContain('### iOS')
       expect(markdown).toContain('### Android')
-      expect(markdown).toContain('**C++** · `addNumbers()`')
+      expect(markdown).toContain(
+        '<strong>C++</strong> <code>addNumbers()</code>'
+      )
       expect(markdown).toContain('<summary>All Benchmarks</summary>')
       expect(markdown).toContain(
-        '[📊 View the workflow run and raw benchmark artifacts](https://github.com/margelo/nitro/actions/runs/123456789)'
-      )
-      expect(markdown).toContain(
-        `https://github.com/margelo/nitro/compare/${BASE_SHA}..${HEAD_SHA}`
+        `Benchmarking Code Diff [\`${BASE_SHA.slice(0, 8)}\`...\`${HEAD_SHA.slice(0, 8)}\`](https://github.com/margelo/nitro/compare/${BASE_SHA}..${HEAD_SHA}) ([view raw output](https://github.com/margelo/nitro/actions/runs/123456789))`
       )
       const bmf = JSON.parse(
         await readFile(path.join(fixture.output, 'bencher-ios.json'), 'utf8')

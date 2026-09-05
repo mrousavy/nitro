@@ -423,9 +423,8 @@ const rebuiltComparisons = await Promise.all(
 
 await mkdir(outputDirectory, { recursive: true })
 const markdown = renderPerformanceReportMarkdown(
-  rebuiltComparisons.map(({ comparison, baseRuns }) => ({
+  rebuiltComparisons.map(({ comparison }) => ({
     comparison,
-    pairedRunCount: baseRuns.length,
   })),
   {
     advisory: true,
