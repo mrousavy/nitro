@@ -617,6 +617,10 @@ abstract class HybridTestObjectSwiftKotlinSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun bounceVehicle(vehicle: Vehicle): Vehicle
+  
+  @DoNotStrip
+  @Keep
   abstract fun passAllEmptyObjectVariant(variant: Variant_HybridBaseSpec_OptionalWrapper): Variant_HybridBaseSpec_OptionalWrapper
   
   @DoNotStrip
