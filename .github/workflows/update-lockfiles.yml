@@ -44,7 +44,7 @@ jobs:
           cd apps/example
           bundle install
           bun pods
-          cd ..
+          cd "$GITHUB_WORKSPACE"
 
           cd docs
           bun install
